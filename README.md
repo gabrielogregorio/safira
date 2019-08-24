@@ -1,4 +1,4 @@
 # projeto_h11
-**status** = em estudos  
+**status** = em andamento  
 
-**objetivo** = Desenvolvimento de uma linguagem de programação em português para iniciantes
+**objetivo** = Desenvolvimento de uma linguagem de programação em português para novatos
