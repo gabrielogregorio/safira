@@ -1,4 +1,4 @@
-# projeto converse com seu computador
+# Uma linguagem de programação natural
 
 **status** = Desenvolvimento 
 
