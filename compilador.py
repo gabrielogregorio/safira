@@ -185,8 +185,8 @@ def executar_script():
     IniciarCompilador()
     Iniciar()
     btn_ativado = True
-    # os.system('start executar.bat')
-    os.system('python3 programa.py')
+    os.system('python3.6 programa.py')
+    #os.system('python3 programa.py')
     
 def executar():
     IniciarCompilador()
@@ -300,6 +300,5 @@ ano    = Label(frConfig,text="2019",font=("Arial",10),bg='#343434',fg='#ffffff')
 titulo.grid(row=1,column=1,sticky=NSEW)
 autor.grid(row=2,column=1,sticky=NSEW)
 ano.grid(row=3,column=1,sticky=NSEW)
-
 
 tela.mainloop()
