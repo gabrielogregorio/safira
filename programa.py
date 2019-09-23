@@ -1,8 +1,8 @@
 from tkinter import filedialog
 from tkinter import *          
-import os
 from funcoes import funcao
 from design import design
+from design import Sintaxe
 
 try:
     from PIL import ImageTk, Image
@@ -10,21 +10,20 @@ except:
     print('bibliteca PIL não encontrada')
 
 ############################# DIALOGS #########################################
-def dialog_salvar_como_arquivo():
-    file = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
+def dialog_salvar():
+    arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
 
-    if file is None:
+    if arquivo is None:
         print('Operação salvar como cancelada.')
-        return
+        return None
 
-    # Captura o texto o programa escrito
-    text2save = str(txTelaProgramacao.get(1.0, END))
-    file.write(text2save)
-    file.close()
+    text2save = str(tx_codificacao.get(1.0, END))
+    arquivo.write(text2save)
+    arquivo.close()
 
-    print(file.name)
+    return arquivo.name
 
-def dialog_abrir_arquivo():
+def dialog_abrir():
     ftypes = [('Arquivos ec', '*.ec'), ('Todos os arquivos', '*')]
     dlg = filedialog.Open(filetypes = ftypes)
     filename = dlg.show()
@@ -34,18 +33,19 @@ def dialog_abrir_arquivo():
         arquivo = funcao.abrir_arquivo(filename) 
 
         if arquivo != None:
-            txTelaProgramacao.delete(1.0, END)
-            txTelaProgramacao.insert(END,arquivo)
+            tx_codificacao.delete(1.0, END)
+            tx_codificacao.insert(END,arquivo)
     else:
         print('Nenhum arquivo escolhido')
 
 ############################# COLORINDO O CÓDIGO #########################################
 def colorir_palavra(palavra,linha,valor1,valor2,cor):
+
     linha1 = '{}.{}'.format(linha , valor1)
     linha2 = '{}.{}'.format(linha , valor2)
 
-    txTelaProgramacao.tag_add(palavra, linha1 , linha2)        
-    txTelaProgramacao.tag_config(palavra,foreground = cor)
+    tx_codificacao.tag_add(palavra, linha1 , linha2)        
+    tx_codificacao.tag_config(palavra, foreground = cor)
 
 def sintaxe_linha(palavra,cor,frase,linha):
     quantidade_de_caracteres = len(frase)
@@ -86,112 +86,129 @@ def sintaxe_linha_string(palavra,cor,frase,linha):
             save_position_evento.append(caractere)
 
     if evento_string == True:
+        tx_codificacao.tag_delete(palavra)
         colorir_palavra(palavra,linha,save_position_evento[0],len(frase),cor)
-
 
 def sintaxe_linha_numerico(palavra,cor,frase,linha):
     for caractere in range(len(frase)):
         if frase[caractere].isnumeric():
-            colorir_palavra(palavra,linha,caractere,caractere+1,cor)
-
+            colorir_palavra(str(palavra),linha,caractere,caractere+1,cor)
 
 def sintaxe_linha_comentario(palavra,cor,frase,linha):
     for caractere in range(len(frase)):
         if frase[caractere:caractere+2] == '//':
             colorir_palavra(palavra,linha,caractere,len(frase),cor)
 
-
-def sintaxe(palavra,cor,txTelaProgramacao):
-    lista = txTelaProgramacao.get(1.0,END).split('\n')
+def sintaxe(palavra,cor,tx_codificacao):
+    cor = cor['foreground']
+    tx_codificacao.tag_delete(palavra)
+    lista = tx_codificacao.get(1.0,END).split('\n')
     for linha in range(len(lista)):
 
         if palavra == '"':
             sintaxe_linha_string(palavra,cor,lista[linha],str(linha+1))
+
         elif palavra == "numerico":
             sintaxe_linha_numerico(palavra,cor,lista[linha],str(linha+1))        
+
         elif palavra == "comentario":
             sintaxe_linha_comentario(palavra,cor,lista[linha],str(linha+1))        
+
         else:
             sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
 
 def atualizar_sintaxe():
-    # remoção de todas as tags de cores
-    for tag in txTelaProgramacao.tag_names():
-        txTelaProgramacao.tag_delete(tag)
-    
-    sintaxe('vale'               , 'orange',txTelaProgramacao)
-    sintaxe('recebe'             , 'orange',txTelaProgramacao)
-    sintaxe('é igual a'          , 'orange',txTelaProgramacao)
+    # ADICIONAR : leia | vetor
+    sintaxe('numerico'                  , Sintaxe.numerico() ,tx_codificacao)
 
-    sintaxe('enquanto'           , '#fe468a',txTelaProgramacao)
-    sintaxe('e'                  , '#f9264a',txTelaProgramacao)
-    sintaxe('ou'                 , '#f9264a',txTelaProgramacao)
+    sintaxe('vale'                      , Sintaxe.atribuicao() ,tx_codificacao)
+    sintaxe('recebe'                    , Sintaxe.atribuicao() ,tx_codificacao)
+    sintaxe('é igual a'                 , Sintaxe.atribuicao() ,tx_codificacao)
+    sintaxe('na cor'                    , Sintaxe.atribuicao() ,tx_codificacao)
   
-    sintaxe('for diferente de'   , '#66d9ef',txTelaProgramacao)
-    sintaxe('for menor que'      , '#66d9ef',txTelaProgramacao)
-    sintaxe('for maior que'      , '#66d9ef',txTelaProgramacao)
-    sintaxe('for igual a'        , '#66d9ef',txTelaProgramacao)
+    sintaxe('enquanto'                  , Sintaxe.loops() ,tx_codificacao)
+    sintaxe('para'                      , Sintaxe.loops() ,tx_codificacao)
+    sintaxe('de'                        , Sintaxe.loops() ,tx_codificacao)
+    sintaxe('até'                       , Sintaxe.loops() ,tx_codificacao)
 
-    sintaxe('exiba nessa linha'  , '#22ee22',txTelaProgramacao)
-    sintaxe('exiba'              , '#22ee22',txTelaProgramacao)
-    sintaxe('mostre nessa linha' , '#22ee22',txTelaProgramacao)
-    sintaxe('mostre'             , '#22ee22',txTelaProgramacao)
+    sintaxe('e'                         , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('ou'                        , Sintaxe.logico() ,tx_codificacao)
 
-    sintaxe('senao'              , '#e2d872',txTelaProgramacao)
-    sintaxe('se'                 , '#e2d872',txTelaProgramacao)
-    sintaxe('digitado'           , '#e2d872',txTelaProgramacao)
+    sintaxe('for diferente de'          , Sintaxe.comparacao() ,tx_codificacao)
+    sintaxe('for menor que'             , Sintaxe.comparacao() ,tx_codificacao)
+    sintaxe('for maior que'             , Sintaxe.comparacao() ,tx_codificacao)
+    sintaxe('for igual a'               , Sintaxe.comparacao() ,tx_codificacao)
 
-    sintaxe('espere'            ,'#63f1d8',txTelaProgramacao)
-    sintaxe('segundos'           ,'#63f1d8',txTelaProgramacao)
+    sintaxe('método'                    , Sintaxe.metodo() ,tx_codificacao)
+    sintaxe('função'                    , Sintaxe.metodo() ,tx_codificacao)
 
-    # Análise de númerso
-    sintaxe('numerico'           , '#ff5de2',txTelaProgramacao)
+    sintaxe('recebe parametro'          , Sintaxe.parametro() ,tx_codificacao)
+    sintaxe('recebe parametros'         , Sintaxe.parametro() ,tx_codificacao)
+    
+    sintaxe('exiba nessa linha'         , Sintaxe.exibicao() ,tx_codificacao)
+    sintaxe('exiba'                     , Sintaxe.exibicao() ,tx_codificacao)
+    sintaxe('mostre nessa linha'        , Sintaxe.exibicao() ,tx_codificacao)
+    sintaxe('mostre'                    , Sintaxe.exibicao() ,tx_codificacao)
 
-    # analise de string
-    sintaxe('"'                  ,'yellow',txTelaProgramacao)
+    sintaxe('senao'                     , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('se'                        , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('digitado'                  , Sintaxe.condicionais() ,tx_codificacao)
 
-    # analise de comentario, tem que ser a ultima
-    sintaxe('comentario'         ,'gray',txTelaProgramacao)
+    sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
+
+    sintaxe('número aleatório entre'    , Sintaxe.aleatorio() ,tx_codificacao)
+
+    sintaxe('azul'                      , Sintaxe.azul()  ,tx_codificacao)
+    sintaxe('roxo'                      , Sintaxe.roxo()  ,tx_codificacao)
+    sintaxe('verde'                     , Sintaxe.verde() ,tx_codificacao)
+
+    sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
+
+    # COMENTÁRIO > ULTIMA LINHA
+    sintaxe('comentario'                , Sintaxe.comentario() ,tx_codificacao)
 
 ############################# BRINCANDO COM AS INTERFACES #########################################
 tela = Tk()
 tela.title('Linguagem ec beta 0.2')
 tela.configure(bg='#343434')
+tela.grid_columnconfigure(1,weight=1)
+tela.rowconfigure(1,weight=1)
+
 try:
     tela.call('wm', 'iconphoto', tela._w, ImageTk.PhotoImage(Image.open('icone.gif')))
 except:
     pass
-tela.grid_columnconfigure(1,weight=1)
-tela.rowconfigure(1,weight=1)
 
-menubar = Menu(tela,design.cor_menu())
-tela.config(menu=menubar)
+menu_barra = Menu(tela,design.cor_menu())
+tela.config(menu=menu_barra)
 
-menu_arquivo     = Menu(menubar,design.cor_menu())
-menu_executar    = Menu(menubar,design.cor_menu())
-menu_localizar   = Menu(menubar,design.cor_menu())
-menu_editar      = Menu(menubar,design.cor_menu())
-menu_ferramentas = Menu(menubar,design.cor_menu())
-menu_interface   = Menu(menubar,design.cor_menu())
-menu_ajuda       = Menu(menubar,design.cor_menu())
-menu_sobre       = Menu(menubar,design.cor_menu())
+menu_arquivo     = Menu(menu_barra, design.cor_menu())
+menu_executar    = Menu(menu_barra, design.cor_menu())
+menu_localizar   = Menu(menu_barra, design.cor_menu())
+menu_editar      = Menu(menu_barra, design.cor_menu())
+menu_ferramentas = Menu(menu_barra, design.cor_menu())
+menu_interface   = Menu(menu_barra, design.cor_menu())
+menu_ajuda       = Menu(menu_barra, design.cor_menu())
+menu_sobre       = Menu(menu_barra, design.cor_menu())
 
-menubar.add_cascade(label='Arquivo'   , menu=menu_arquivo)
-menubar.add_cascade(label='Executar'  , menu=menu_executar)
-menubar.add_cascade(label='Localizar' , menu=menu_localizar)
-menubar.add_cascade(label='Editar'    , menu=menu_editar)
-menubar.add_cascade(label='Interface' , menu=menu_interface)
-menubar.add_cascade(label='Ajuda'     , menu=menu_ajuda)
-menubar.add_cascade(label='sobre'     , menu=menu_sobre)
+menu_barra.add_cascade(label='Arquivo'   , menu=menu_arquivo)
+menu_barra.add_cascade(label='Executar'  , menu=menu_executar)
+menu_barra.add_cascade(label='Localizar' , menu=menu_localizar)
+menu_barra.add_cascade(label='Editar'    , menu=menu_editar)
+menu_barra.add_cascade(label='Interface' , menu=menu_interface)
+menu_barra.add_cascade(label='Ajuda'     , menu=menu_ajuda)
+menu_barra.add_cascade(label='sobre'     , menu=menu_sobre)
 
 ############################### ARQUIVO #######################################
-menu_arquivo.add_command(label='Abrir arquivo (Ctrl+O)',command=dialog_abrir_arquivo)
+menu_arquivo.add_command(label='Abrir arquivo (Ctrl+O)',command=dialog_abrir)
 menu_arquivo.add_command(label='Nova Guia (Ctrl-N)')
 menu_arquivo.add_command(label='Abrir pasta')
 menu_arquivo.add_command(label='Recentes')
 menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Salvar (Ctrl-S)',)
-menu_arquivo.add_command(label='Salvar Como (Ctrl-Shift-S)',command=dialog_salvar_como_arquivo)
+menu_arquivo.add_command(label='Salvar Como (Ctrl-Shift-S)',command=dialog_salvar)
 menu_arquivo.add_separator()
 menu_arquivo.add_command(label='imprimir (Ctrl-P)')
 menu_arquivo.add_command(label='Exportar (Ctrl-E)')
@@ -234,41 +251,40 @@ menu_ajuda.add_command(label='Comunidade')
 
 ############################### Sobre #######################################
 menu_sobre.add_command(label='Projeto')
-menu_sobre.add_command(label='Desenvolvedores',command=lambda:trocar_de_tela(frTelaPrincipal,frConfig))
+menu_sobre.add_command(label='Desenvolvedores',command=lambda:trocar_de_tela(fr_InPrincipal,fr_sobDesenvol))
 
 def trocar_de_tela(fechar,carregar):
     fechar.grid_forget()
     carregar.grid(row=1,column=1,sticky=NSEW)
 
 # INTERFACE GERAL
-frTelaPrincipal = Frame(tela)
-frTelaPrincipal.grid_columnconfigure((0,1),weight=2)
-frTelaPrincipal.rowconfigure(1,weight=1)
+fr_InPrincipal = Frame(tela)
+fr_InPrincipal.grid_columnconfigure((0,1),weight=2)
+fr_InPrincipal.rowconfigure(1,weight=1)
 
 # TELA DE LOGS
-txTelaLogs = Text(frTelaPrincipal,width=40,bg='#343434',fg='#ffffff',font=('',15))
+tx_informacoes = Text(fr_InPrincipal,design.tx_informacoes())
 
 # TELA DE CODIFICAÇÃO
-txTelaProgramacao = Text(frTelaPrincipal,bg='#343434',fg='#ffffff',font=('',15))
-txTelaProgramacao.bind("<KeyRelease>",lambda txTelaProgramacao:atualizar_sintaxe())
-txTelaProgramacao.delete(1.0, END)
-
-txTelaLogs.grid(row=1,column=0,sticky=NSEW)
+tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao())
+tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao:atualizar_sintaxe())
+tx_codificacao.delete(1.0, END)
 
 # SOBRE > DESENVOLVEDORES
-frConfig = Frame(tela)
-frConfig.rowconfigure(1,weight=15)
-frConfig.rowconfigure((2,3),weight=1)
-frConfig.grid_columnconfigure(1,weight=2)
+fr_sobDesenvol = Frame(tela)
+fr_sobDesenvol.rowconfigure(1,weight=15)
+fr_sobDesenvol.rowconfigure((2,3),weight=1)
+fr_sobDesenvol.grid_columnconfigure(1,weight=2)
 
-titulo = Label(frConfig,text=" COMBRATEC ",font=("Arial",70,"bold"),height=5,bg='#343434',fg='#ffffff')
-autores= Label(frConfig,text="Gabriel Gregório da Silva",font=("Arial",15),bg='#343434',fg='#ffffff')
-ano    = Label(frConfig,text="2019",font=("Arial",10),bg='#343434',fg='#ffffff')
+lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo() ,text=" COMBRATEC ")
+lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores() ,text="Gabriel Gregório da Silva")
+lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno() ,text="2019")
 
-txTelaProgramacao.grid(row=1,column=1,sticky=NSEW)
-frTelaPrincipal.grid(row=1,column=1,sticky=NSEW)
-titulo.grid(row=1,column=1,sticky=NSEW)
-autores.grid(row=2,column=1,sticky=NSEW)
-ano.grid(row=3,column=1,sticky=NSEW)
+tx_informacoes.grid(row=1,column=0,sticky=NSEW)
+tx_codificacao.grid(row=1,column=1,sticky=NSEW)
+fr_InPrincipal.grid(row=1,column=1,sticky=NSEW)
+lb_sobDeTitulo.grid(row=1,column=1,sticky=NSEW)
+lb_sobDAutores.grid(row=2,column=1,sticky=NSEW)
+lb_sobDesenAno.grid(row=3,column=1,sticky=NSEW)
 
 tela.mainloop()
