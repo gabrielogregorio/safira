@@ -3,12 +3,13 @@ from tkinter import *
 import os
 from funcoes import funcao
 from design import design
-#from PIL import ImageTk, Image # Icone
-#tela.call('wm', 'iconphoto', tela._w, ImageTk.PhotoImage(Image.open('icone.gif')))
 
-global aconteceu   # Caso o print(' para colocar ')
-aconteceu = [False,'']
+try:
+    from PIL import ImageTk, Image
+except:
+    print('bibliteca PIL não encontrada')
 
+############################# DIALOGS #########################################
 def dialog_salvar_como_arquivo():
     file = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
 
@@ -38,51 +39,128 @@ def dialog_abrir_arquivo():
     else:
         print('Nenhum arquivo escolhido')
 
+############################# COLORINDO O CÓDIGO #########################################
+def colorir_palavra(palavra,linha,valor1,valor2,cor):
+    linha1 = '{}.{}'.format(linha , valor1)
+    linha2 = '{}.{}'.format(linha , valor2)
+
+    txTelaProgramacao.tag_add(palavra, linha1 , linha2)        
+    txTelaProgramacao.tag_config(palavra,foreground = cor)
+
 def sintaxe_linha(palavra,cor,frase,linha):
-    conteudo = frase
-    if palavra in frase:
+    quantidade_de_caracteres = len(frase)
+    for caractere in range(len(frase)):
+        if caractere+len(palavra) <= quantidade_de_caracteres:                 
+            if frase[caractere:caractere+len(palavra)] == palavra:
 
-        linha1 = str(linha) + str('.') + str(conteudo.find(palavra))
-        linha2 = str(linha) + str('.') + str(conteudo.find(palavra) + len(palavra))
+                # Análisa se a palavra não está em outro contexto
+                validacao = 0
+                if caractere > 0:
+                     if frase[caractere-1:caractere+len(palavra)] == ' '+palavra:
+                        validacao += 1 
+                else:
+                        validacao += 1
 
-        txTelaProgramacao.tag_add(palavra, linha1 , linha2)        
-        txTelaProgramacao.tag_config(palavra,foreground = cor)
+                if caractere + len(palavra) < quantidade_de_caracteres:     
+                     if frase[caractere:caractere+1+len(palavra)] == palavra+' ':
+                        validacao += 1 
+                else:
+                        validacao += 1
+
+                if validacao == 2:
+                    colorir_palavra(palavra,linha,caractere,caractere + len(palavra),cor)
+
+def sintaxe_linha_string(palavra,cor,frase,linha):
+    evento_string = False
+    save_position_evento = []        
+    for caractere in range(len(frase)):
+
+        if frase[caractere] == '"' and evento_string == True:
+            evento_string = False
+            save_position_evento.append(caractere+1)
+            colorir_palavra(palavra,linha,save_position_evento[0],save_position_evento[1],cor)
+            save_position_evento = []
+
+        elif frase[caractere] == '"':
+            evento_string = True
+            save_position_evento.append(caractere)
+
+    if evento_string == True:
+        colorir_palavra(palavra,linha,save_position_evento[0],len(frase),cor)
+
+
+def sintaxe_linha_numerico(palavra,cor,frase,linha):
+    for caractere in range(len(frase)):
+        if frase[caractere].isnumeric():
+            colorir_palavra(palavra,linha,caractere,caractere+1,cor)
+
+
+def sintaxe_linha_comentario(palavra,cor,frase,linha):
+    for caractere in range(len(frase)):
+        if frase[caractere:caractere+2] == '//':
+            colorir_palavra(palavra,linha,caractere,len(frase),cor)
+
 
 def sintaxe(palavra,cor,txTelaProgramacao):
     lista = txTelaProgramacao.get(1.0,END).split('\n')
     for linha in range(len(lista)):
-        sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
+
+        if palavra == '"':
+            sintaxe_linha_string(palavra,cor,lista[linha],str(linha+1))
+        elif palavra == "numerico":
+            sintaxe_linha_numerico(palavra,cor,lista[linha],str(linha+1))        
+        elif palavra == "comentario":
+            sintaxe_linha_comentario(palavra,cor,lista[linha],str(linha+1))        
+        else:
+            sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
 
 def atualizar_sintaxe():
-    sintaxe('vale','orange',txTelaProgramacao)
-    sintaxe('recebe','orange',txTelaProgramacao)
-    sintaxe('é igual a','orange',txTelaProgramacao)
+    # remoção de todas as tags de cores
+    for tag in txTelaProgramacao.tag_names():
+        txTelaProgramacao.tag_delete(tag)
+    
+    sintaxe('vale'               , 'orange',txTelaProgramacao)
+    sintaxe('recebe'             , 'orange',txTelaProgramacao)
+    sintaxe('é igual a'          , 'orange',txTelaProgramacao)
 
-    sintaxe('enquanto','#fe468a',txTelaProgramacao)
-    sintaxe(' e ',     '#f9264a',txTelaProgramacao)
-    sintaxe(' ou ',    '#f9264a',txTelaProgramacao)
+    sintaxe('enquanto'           , '#fe468a',txTelaProgramacao)
+    sintaxe('e'                  , '#f9264a',txTelaProgramacao)
+    sintaxe('ou'                 , '#f9264a',txTelaProgramacao)
   
-    sintaxe('for diferente de', '#66d9ef',txTelaProgramacao)
-    sintaxe('for menor que'   , '#66d9ef',txTelaProgramacao)
-    sintaxe('for maior que'   , '#66d9ef',txTelaProgramacao)
-    sintaxe('for igual a'     , '#66d9ef',txTelaProgramacao)
+    sintaxe('for diferente de'   , '#66d9ef',txTelaProgramacao)
+    sintaxe('for menor que'      , '#66d9ef',txTelaProgramacao)
+    sintaxe('for maior que'      , '#66d9ef',txTelaProgramacao)
+    sintaxe('for igual a'        , '#66d9ef',txTelaProgramacao)
 
-    sintaxe('exiba nessa linha',  '#22ee22',txTelaProgramacao)
-    sintaxe('exiba',              '#22ee22',txTelaProgramacao)
-    sintaxe('mostre nessa linha ','#22ee22',txTelaProgramacao)
-    sintaxe('mostre',             '#22ee22',txTelaProgramacao)
+    sintaxe('exiba nessa linha'  , '#22ee22',txTelaProgramacao)
+    sintaxe('exiba'              , '#22ee22',txTelaProgramacao)
+    sintaxe('mostre nessa linha' , '#22ee22',txTelaProgramacao)
+    sintaxe('mostre'             , '#22ee22',txTelaProgramacao)
 
-    sintaxe('senao','#e2d872',txTelaProgramacao)
-    sintaxe('se','#e2d872',txTelaProgramacao)
-    sintaxe('digitado','#e2d872',txTelaProgramacao)
+    sintaxe('senao'              , '#e2d872',txTelaProgramacao)
+    sintaxe('se'                 , '#e2d872',txTelaProgramacao)
+    sintaxe('digitado'           , '#e2d872',txTelaProgramacao)
 
-    sintaxe('espere','#fc00ff',txTelaProgramacao)
-    sintaxe('segundos','#fc00ff',txTelaProgramacao)
+    sintaxe('espere'            ,'#63f1d8',txTelaProgramacao)
+    sintaxe('segundos'           ,'#63f1d8',txTelaProgramacao)
 
+    # Análise de númerso
+    sintaxe('numerico'           , '#ff5de2',txTelaProgramacao)
+
+    # analise de string
+    sintaxe('"'                  ,'yellow',txTelaProgramacao)
+
+    # analise de comentario, tem que ser a ultima
+    sintaxe('comentario'         ,'gray',txTelaProgramacao)
+
+############################# BRINCANDO COM AS INTERFACES #########################################
 tela = Tk()
 tela.title('Linguagem ec beta 0.2')
 tela.configure(bg='#343434')
-
+try:
+    tela.call('wm', 'iconphoto', tela._w, ImageTk.PhotoImage(Image.open('icone.gif')))
+except:
+    pass
 tela.grid_columnconfigure(1,weight=1)
 tela.rowconfigure(1,weight=1)
 
@@ -172,19 +250,18 @@ txTelaLogs = Text(frTelaPrincipal,width=40,bg='#343434',fg='#ffffff',font=('',15
 
 # TELA DE CODIFICAÇÃO
 txTelaProgramacao = Text(frTelaPrincipal,bg='#343434',fg='#ffffff',font=('',15))
-txTelaProgramacao.bind("<Key>",lambda txTelaProgramacao:atualizar_sintaxe())
+txTelaProgramacao.bind("<KeyRelease>",lambda txTelaProgramacao:atualizar_sintaxe())
 txTelaProgramacao.delete(1.0, END)
 
 txTelaLogs.grid(row=1,column=0,sticky=NSEW)
 
-
-#SOBRE>DESENVOLVEDORES
+# SOBRE > DESENVOLVEDORES
 frConfig = Frame(tela)
 frConfig.rowconfigure(1,weight=15)
 frConfig.rowconfigure((2,3),weight=1)
 frConfig.grid_columnconfigure(1,weight=2)
 
-titulo = Label(frConfig,text=" combratec ",font=("Arial",70,"bold"),height=5,bg='#343434',fg='#ffffff')
+titulo = Label(frConfig,text=" COMBRATEC ",font=("Arial",70,"bold"),height=5,bg='#343434',fg='#ffffff')
 autores= Label(frConfig,text="Gabriel Gregório da Silva",font=("Arial",15),bg='#343434',fg='#ffffff')
 ano    = Label(frConfig,text="2019",font=("Arial",10),bg='#343434',fg='#ffffff')
 
