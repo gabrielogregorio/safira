@@ -9,6 +9,7 @@ try:
 except:
     print('bibliteca PIL não encontrada')
 
+
 ############################# DIALOGS #########################################
 def dialog_salvar():
     arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
