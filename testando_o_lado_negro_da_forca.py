@@ -30,19 +30,12 @@ def analisa_comandos(linha):
 
 def verifica_condicionais(condicao):
     print('<condicional> ',end = '')
-    # ************* SO VALE PARA ITEN RELACAO COM ITEN ********************
-
-    # ABSTRAIR COMPARADORES
-    ignorar_leitura_antes_de = -1
-
     # COMANDOS DISPONÍVEIS PARA O SE
-    comparadores = [' for igual a ',' for diferente de ',' for maior que ',' for menor que ',' e ',' ou ']
+    comandos_comparadores = [' for igual a ',' for diferente de ',' for maior que ',' for menor que ',' e ',' ou ']
     operacoes = []
-
-    valor1 = ''
-    valor2 = ''
-    analise1 = False
-    analise2 = False
+    ignorar_leitura_antes_de = -1
+    valor = ''
+    analise_valor = False
 
     for caractere in range(0,len(condicao)):
         # Caso uma condicional seja identificada (pule ela)
@@ -50,105 +43,75 @@ def verifica_condicionais(condicao):
             continue
 
         total_caracteres_restantes = len(condicao) - caractere
+        encontrou_comando = False
 
         # VERIFICAR COMANDO
-        for comando in comparadores:
+        for comando in comandos_comparadores:
+            # COMANDO ENCONTRADO
             if ((condicao[caractere:caractere + len(comando)] == comando) and ( len(comando) <= total_caracteres_restantes )):
+                # O QUE FAZER, DEPENDENDO DO COMANDO
+                if (analise_valor == True):
+                    analise_valor = False
+                    operacoes.append('({})'.format(valor))
+                    valor = ''
+
                 if comando == ' for igual a ':
-                    if ((analise1 == True) and (analise2 == False)):
-                        analibse1 = False
-                        analise2 = True
-                        operacoes.append('({})'.format(valor1))
-                        valor1 = ''
-
-                    elif ((analise1 == False) and (analise2 == True)):
-                        operacoes.append('({})'.format(valor2))
-                        valor2 = ''
-                        analise2 = False
-
                     operacoes.append('==')
+                    [ ignorar_leitura_antes_de , encontrou_comando ] = [caractere + len(comando),True]
                     break
 
                 elif comando == ' for diferente de ':
-                    if ((analise1 == True) and (analise2 == False)):
-                        analise1 = False
-                        analise2 = True
-                        operacoes.append('({})'.format(valor1))
-                        valor1 = ''
-                    elif ((analise1 == False) and (analise2 == True)):
-                        operacoes.append('({})'.format(valor2))
-                        valor2 = ''
-                        analise2 = False
                     operacoes.append('!=')
+                    [ ignorar_leitura_antes_de , encontrou_comando ] = [caractere + len(comando),True]
                     break
 
                 elif comando == ' for menor que ':
-                    if ((analise1 == True) and (analise2 == False)):
-                        analise2 = True
-                        operacoes.append('({})'.format(valor1))
-                        valor1 = ''
-                    elif ((analise1 == False) and (analise2 == True)):
-                        operacoes.append('({})'.format(valor2))
-                        valor2 = ''
-                        analise2 = False
                     operacoes.append('<')
+                    [ ignorar_leitura_antes_de , encontrou_comando ] = [caractere + len(comando),True]
                     break
 
                 elif comando == ' e ':
-                    if ((analise1 == True) and (analise2 == False)):
-                        analise2 = True
-                        operacoes.append('({})'.format(valor1))
-                        valor1 = ''
-                    elif ((analise1 == False) and (analise2 == True)):
-                        operacoes.append('({})'.format(valor2))
-                        valor1 = ''
-                        valor2 = ''
-                        analise2 = False
                     operacoes.append('e')
+                    [ ignorar_leitura_antes_de , encontrou_comando ] = [caractere + len(comando),True]
                     break
+
                 elif comando == ' ou ':
-                    if ((analise1 == True) and (analise2 == False)):
-                        analise1 = False
-                        analise2 = True
-                        operacoes.append('({})'.format(valor1))
-                        valor1 = ''
-                    elif ((analise1 == False) and (analise2 == True)):
-                        operacoes.append('({})'.format(valor2))
-                        valor2 = ''
-                        analise2 = False
                     operacoes.append('ou')
+                    [ ignorar_leitura_antes_de , encontrou_comando ] = [caractere + len(comando),True]
                     break
+            
+        if encontrou_comando == False:
 
-        if ((analise1 == False) and (analise2 == False)):
-            analise1 == True
+            if (analise_valor == False):
+                analise_valor = True
 
-        if ((analise1 == True) and (analise2 == False)):
-            valor1 += condicao[caractere]
+            if (analise_valor == True):
+                valor += condicao[caractere]
+                if total_caracteres_restantes == 1:
+                    operacoes.append('({})'.format(valor))
 
-        elif ((analise1 == False) and (analise2 == True)):
-            valor2 += condicao[caractere]
-
+        encontrou_comando = False
 
     if operacoes != []:
-        for operacao in operacoes:    
-
+        for operacao in operacoes:  
             if operacao == '==':
-                print('<igualdade> ',end='')        
+                print('<IGUALDADE> ',end='')        
 
             elif operacao == '<':
-                print('<menor> ',end='')    
+                print('<MENOR> ',end='')    
 
             elif operacao == '!=':
-                print('<diferença> ',end='')    
+                print('<DIFERENCA> ',end='')    
 
             elif operacao == 'e':
                 print('<AND> ',end='')    
 
             elif operacao == 'ou':
-                print('<OR> ',end='')    
+                print('<OR > ',end='')    
 
-            elif ('(' in operacao):
-                print('({}) '.format(operacao),end='')
+            elif '(' in operacao:
+                print('__valor__ ',end='')
+
 
     else:
         print('Não foi definida uma condição')
@@ -186,11 +149,12 @@ def verifica_aleatorio():
     #pense em um número aleatório de 2 a 20
     pass
 
-linhas = '''mundo recebe 'x'
-mostre "mundo"
-se 7 for igual a 4 e 5 for diferente de 6 ou 4 for menor que 8
-se 4 for diferente de 3
-espere 4 segundos'''.split('\n')
+#linhas = '''mundo recebe 'x'
+#mostre "mundo"
+linhas = '''se numero0 for igual a numero1 ou numero2 for igual a numero3
+se numero1 for igual a numero2 e numero3 for diferente de numero4 ou numero5 for menor que numero6
+se numero7 for diferente de numero8
+espere numero9 segundos'''.split('\n')
 
 for linha in linhas:
     # garanta 1 espaço antes de cada linha
