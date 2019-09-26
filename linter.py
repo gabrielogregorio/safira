@@ -1,3 +1,6 @@
+global variaveis
+variaveis = {}
+
 # analisa se tem comandos e qual procedimento executar
 def analisa_comandos(linha):
     # RECEBE CADA LINHA DO PROGRAMA > ' ' + linha
@@ -9,7 +12,8 @@ def analisa_comandos(linha):
                 ' repita ',
                 ' enquanto ',
                 ' pare ',
-                ' recebe ']
+                ' recebe ',
+                ' vale ']
 
     for caractere in range(len(linha)):
         total_caracteres_restantes = len(linha) - caractere
@@ -22,8 +26,10 @@ def analisa_comandos(linha):
                 elif (comando == ' espere '):
                     verifica_espere( linha[caractere + len(comando):] )
 
-                elif (comando == ' recebe '):
-                    verifica_atribuicoes( linha[caractere + len(comando):] )
+                elif (comando == ' recebe ' or comando == ' vale '):
+                    valor_variavel = linha[caractere + len(comando):]
+                    variavel = linha[:caractere]
+                    definir_variaveis(variavel,valor_variavel)
 
                 elif ((comando == ' mostre ') or (comando == ' exiba ')) :
                     verifica_validacao_de_valores( linha[caractere + len(comando):] )
@@ -92,6 +98,10 @@ def verifica_condicionais(condicao):
 
         encontrou_comando = False
 
+
+
+
+
     if operacoes != []:
         for operacao in operacoes:  
             if operacao == '==':
@@ -111,15 +121,24 @@ def verifica_condicionais(condicao):
 
             elif '(' in operacao:
                 print('__valor__ ',end='')
-
-
     else:
         print('Não foi definida uma condição')
     print('')
 
 
-def abstrair_valores_de_variaveis(variavel):
-    pass
+
+
+def descobrir_valor_variavel(variavel):
+    global variaveis
+    try:
+        valor = variaveis[variavel]
+    except:
+        print('[ERRO] A variavel {} não foi definida!'.format(variavel))
+        return '[ERRO] A variavel {} não foi definida!'.format(variavel)
+    else:
+        print(valor)
+        return valor
+
 
 def verifica_validacao_de_valores(finalização):
     print('[OK] valores > ',end = '')
@@ -127,10 +146,11 @@ def verifica_validacao_de_valores(finalização):
 
     # verifica e resolve conflitos para retornar um único valor
 
-def verifica_atribuicoes(valor):
-    print('[OK] Atribuições > ',end = '')
-    # objeto recebe VALOR
-    # Verifica se o valor é consinstente ou não
+def definir_variaveis(variavel , valor_variavel):
+    global variaveis
+    variavel = variavel.strip()
+    variaveis[variavel] = valor_variavel
+    print('[OK] VARIAVEL {} SETADA para {}> '.format(variavel,valor_variavel),end = '')
     print('')
 
 def verifica_espere(finalização):
@@ -154,7 +174,9 @@ def verifica_aleatorio():
 linhas = '''se numero0 for igual a numero1 ou numero2 for igual a numero3
 se numero1 for igual a numero2 e numero3 for diferente de numero4 ou numero5 for menor que numero6
 se numero7 for diferente de numero8
-espere numero9 segundos'''.split('\n')
+espere numero9 segundos
+nome recebe 'gabriel' 
+'''.split('\n')
 
 for linha in linhas:
     # garanta 1 espaço antes de cada linha

@@ -9,7 +9,6 @@ try:
 except:
     print('bibliteca PIL não encontrada')
 
-
 ############################# DIALOGS #########################################
 def dialog_salvar():
     arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
@@ -120,6 +119,10 @@ def sintaxe(palavra,cor,tx_codificacao):
 
 def atualizar_sintaxe():
     # ADICIONAR : leia | vetor
+    # numero entre
+    # contas====++++
+    # media,maior, menor,max,min
+
     sintaxe('numerico'                  , Sintaxe.numerico() ,tx_codificacao)
 
     sintaxe('vale'                      , Sintaxe.atribuicao() ,tx_codificacao)
@@ -260,11 +263,12 @@ def trocar_de_tela(fechar,carregar):
 
 # INTERFACE GERAL
 fr_InPrincipal = Frame(tela)
-fr_InPrincipal.grid_columnconfigure((0,1),weight=2)
+#fr_InPrincipal.grid_columnconfigure((0,1),weight=2)
+fr_InPrincipal.grid_columnconfigure(1,weight=2)
 fr_InPrincipal.rowconfigure(1,weight=1)
 
-# TELA DE LOGS
-tx_informacoes = Text(fr_InPrincipal,design.tx_informacoes())
+# TELA DE LOGS 
+#tx_informacoes = Text(fr_InPrincipal,design.tx_informacoes())
 
 # TELA DE CODIFICAÇÃO
 tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao())
@@ -281,7 +285,7 @@ lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo() ,text=" COMBRATEC
 lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores() ,text="Gabriel Gregório da Silva")
 lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno() ,text="2019")
 
-tx_informacoes.grid(row=1,column=0,sticky=NSEW)
+#tx_informacoes.grid(row=1,column=0,sticky=NSEW)
 tx_codificacao.grid(row=1,column=1,sticky=NSEW)
 fr_InPrincipal.grid(row=1,column=1,sticky=NSEW)
 lb_sobDeTitulo.grid(row=1,column=1,sticky=NSEW)
