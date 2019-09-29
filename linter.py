@@ -1,3 +1,4 @@
+# modificação
 global variaveis
 variaveis = {}
 
