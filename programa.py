@@ -1,4 +1,4 @@
-from tkinter import filedialog
+from tkinter import filedialog
 from tkinter import *          
 from funcoes import funcao
 from design import design
