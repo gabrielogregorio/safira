@@ -32,7 +32,7 @@ def analisa_comandos(linha,num_linha):
                 if (comando == ' se '):
                     verifica_condicionais(' '+ linha[caractere + len(comando):] + ' ',num_linha )
 
-                if (comando == ' enquanto '):
+                elif (comando == ' enquanto '):
                     verifica_loop_enquanto( ' '+ linha[caractere + len(comando):] + ' ',num_linha )
 
                 elif (comando == ' espere '):
@@ -41,8 +41,11 @@ def analisa_comandos(linha,num_linha):
                 elif (comando == ' recebe ' or comando == ' vale '):
                     valor_variavel = linha[caractere + len(comando):]
                     variavel = linha[:caractere]
+                    print('\n\n>>',variavel)
+                    print(num_linha,'LLL',valor_variavel,'LLL')
 
                     definir_variaveis(variavel,valor_variavel,num_linha)
+                    ignorar = True
 
                 elif ((comando == ' mostre ') or (comando == ' exiba ') or (comando == ' exiba nessa linha') or (comando == ' mostre nessa linha ')):
                     verifica_mostre( linha[caractere + len(comando):],num_linha )
@@ -54,16 +57,23 @@ def analisa_comandos(linha,num_linha):
 
     # NENHUM EVENTO FOI FINALIZADO
     elif eventos == False:
-        print('[*] POR FAVOR, SEJA MAIS CLARO NA LINHA {}'.format(num_linha))
+        print('>> [*] POR FAVOR, SEJA MAIS CLARO NA LINHA {}'.format(num_linha))
 
 def abstrai_valor(objeto):
     objeto = objeto.strip()
-    # é uma string?
-    if objeto.isspace() or len(objeto) == 0:
-        return [False, 'NENHUM VALOR FOI DEFINIDO']
 
+    # Nada declarado
+    if len(objeto) == 0:
+        print(123)
+        return [False, '>> NENHUM VALOR FOI DEFINIDO']
+
+    # é uma string?
     elif objeto[0] == '"' and objeto[-1] == '"':
         return [True , objeto[1:-1]]
+
+    # Não é string e tem espaço
+    elif ' ' in objeto:
+        return [False, ">> O VALOR NÃO PODE CONTÉR ESPAÇOS!"]
 
     # é um número
     elif objeto.isnumeric():
@@ -157,16 +167,17 @@ def verifica_condicionais(condicao,num_linha):
                 else:
                     print('__valor__ ',end='')
     else:
-        print('[ERRO] Não foi definida nenhuma condição')
+        print('>> [ERRO] Não foi definida nenhuma condição')
     print('')
 
 def descobrir_valor_variavel(variavel):
     global variaveis
     variavel = variavel.strip()
+
     try:
         valor = variaveis[variavel]
     except:
-        return [False,'[ERRO] A variavel {} não foi definida!'.format(variavel)]
+        return [False,'>> [ERRO] A variavel {} não foi definida!'.format(variavel)]
     else:
         return [True,valor]
 
@@ -175,24 +186,35 @@ def definir_variaveis(variavel , valor_variavel , num_linha):
     global variaveis
     valor = valor_variavel.strip()
     variavel = variavel.strip()
+    print(valor,variavel)
 
+    # Usa palavras reservadas?
+    if (("recebe" == variavel) or ("vale" == variavel)):
+        print('>> [{}] ({}) É UMA PALAVRA RESERVADA, VOCÊ NÃO PODE USAR ELA COMO VARIAVEL.'.format(num_linha,variavel))
 
     # Tem Espaço?
-    if ' ' in variavel:
-        print('[{}] IMPOSIVEL DEFINIR VARIAVEL {}, PORQUE A VARIAVEL CONTÉM ESPAÇOS!'.format(num_linha,variavel,valor))
+    elif ' ' in variavel:
+        print('>> [{}] IMPOSIVEL DEFINIR VARIAVEL {}, PORQUE A VARIAVEL CONTÉM ESPAÇOS!'.format(num_linha,variavel,valor))
 
     elif variavel == "":
-        print('[{}] DEFINA UMA VARIAVEL PARA RECEBER ESSE VALOR!'.format(num_linha,variavel,valor))
+        print('>> [{}] DEFINA UMA VARIAVEL PARA RECEBER ESSE VALOR!'.format(num_linha,variavel,valor))
 
     elif '"' in variavel:
-        print('[{}] POR FAVOR, NÃO USE " PARA NO NOME DE UMA VARIÁVEL'.format(num_linha,variavel,valor))
+        print('>> [{}] POR FAVOR, NÃO USE " PARA NO NOME DE UMA VARIÁVEL'.format(num_linha,variavel,valor))
 
     elif valor.isspace():
-        print('[{}] IMPOSIVEL DEFINIR VARIAVEL {}, PORQUE ELA NÃO TEM UM VALOR DEFINIDO'.format(num_linha,variavel,valor))
+        print('>> [{}] IMPOSIVEL DEFINIR A VARIAVEL {}, PORQUE ELA NÃO TEM UM VALOR DEFINIDO'.format(num_linha,variavel,valor))
 
-    elif (abstrai_valor(valor)[0]) == False:
-        print(abstrai_valor(valor))
-        print('[{}] IMPOSIVEL DEFINIR VARIAVEL {}, PORQUE A VARIAVEL {} NÃO FOI DEFINIDA ANTERIORMENTE'.format(num_linha,variavel,valor))
+    # Tem Espaço?
+    elif (',' in valor) or ('//' in valor) or ('#' in valor):
+        print('>> [{}] IMPOSIVEL DEFINIR A VARIAVEL {}, PORQUE OS VALORES CONTÉM CARACTERES INVÁLIDOS'.format(num_linha,variavel))
+
+    elif (  abstrai_valor(valor)[0]  ) == False:
+
+        if abstrai_valor(valor)[1] == ">> O VALOR NÃO PODE CONTÉR ESPAÇOS!":
+            print ('>> [{}] IMPOSIVEL DEFINIR A VARIAVEL ({}), PORQUE ({}) NÃO É VÁLIDO POR CONTÉR ESPAÇOS.'.format(num_linha,variavel,valor))
+        else:
+            print('>> [{}] IMPOSIVEL DEFINIR VARIAVEL {}, PORQUE A VARIAVEL {} NÃO FOI DEFINIDA ANTERIORMENTE'.format(num_linha,variavel,valor))
 
     else:
         variaveis[variavel] = valor
@@ -255,7 +277,7 @@ def verifica_espere(condicao,num_linha):
                 else:
                     print('__valor__ ',end='')
     else:
-        print('[ERRO] Não foi definida nenhuma condição')
+        print('>> [ERRO] Não foi definida nenhuma condição')
     print('')
 
 
@@ -349,7 +371,7 @@ def verifica_loop_enquanto (condicao,num_linha):
                 else:
                     print('__valor__ ',end='')
     else:
-        print('[ERRO] Não foi definida nenhuma condição')
+        print('>> [ERRO] Não foi definida nenhuma condição')
     print('')
 
 def verifica_mostre(condicao,num_linha):
@@ -398,9 +420,13 @@ def verifica_mostre(condicao,num_linha):
     print('')
 
 linhas = '''
-gabriel vale 3
-se 3 for igual a 16 e 3 for menor que 6
-    mostre gabriel
+x vale 10
+y recebe 3
+abc vale 15
+y vale y
+
+mostre x
+mostre y
 
 '''.split('\n')
 
