@@ -96,7 +96,7 @@ def sintaxe_linha_numerico(palavra,cor,frase,linha):
 
 def sintaxe_linha_comentario(palavra,cor,frase,linha):
     for caractere in range(len(frase)):
-        if frase[caractere:caractere+2] == '//':
+        if (frase[caractere:caractere+2] == '//') or (frase[caractere:caractere+1] == '#'):
             colorir_palavra(palavra,linha,caractere,len(frase),cor)
 
 def sintaxe(palavra,cor,tx_codificacao):
@@ -118,59 +118,136 @@ def sintaxe(palavra,cor,tx_codificacao):
             sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
 
 def atualizar_sintaxe():
-    # ADICIONAR : leia | vetor
-    # numero entre
-    # contas====++++
-    # media,maior, menor,max,min
 
     sintaxe('numerico'                  , Sintaxe.numerico() ,tx_codificacao)
 
+    # ATRIBUIÇÃO
     sintaxe('vale'                      , Sintaxe.atribuicao() ,tx_codificacao)
     sintaxe('recebe'                    , Sintaxe.atribuicao() ,tx_codificacao)
     sintaxe('é igual a'                 , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('na cor'                    , Sintaxe.atribuicao() ,tx_codificacao)
-  
-    sintaxe('enquanto'                  , Sintaxe.loops() ,tx_codificacao)
-    sintaxe('para'                      , Sintaxe.loops() ,tx_codificacao)
-    sintaxe('de'                        , Sintaxe.loops() ,tx_codificacao)
-    sintaxe('até'                       , Sintaxe.loops() ,tx_codificacao)
+    sintaxe('='                         , Sintaxe.atribuicao() ,tx_codificacao)
+    sintaxe('<-'                        , Sintaxe.atribuicao() ,tx_codificacao)
 
-    sintaxe('e'                         , Sintaxe.logico() ,tx_codificacao)
+
+    # LOOPS  
+    sintaxe('lista'                     , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('a lista'                   , Sintaxe.lista() ,tx_codificacao)
+
+    sintaxe('vetor'                     , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('o vetor'                   , Sintaxe.lista() ,tx_codificacao)
+
+    sintaxe('o array'                   , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('array'                     , Sintaxe.lista() ,tx_codificacao)
+
+
+    # CONTAS
+    sintaxe('por'                       , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('+'                         , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('mais'                      , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('-'                         , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('menos'                     , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('/'                         , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('dividido por'              , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('//'                        , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('resto de'                  , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('*'                         , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('multiplicado por'          , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('**'                        , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('elevado a'                 , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('mean'                      , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('média de'                  , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('a média de'                , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('média ponderada de'        , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('a média ponderada de'      , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('max'                       , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('maior elemento'            , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('maior valor'               , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('min'                       , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('menor elemento'            , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('menor valor'               , Sintaxe.contas() ,tx_codificacao)
+
+
+    # LÓGICO
+    sintaxe('||'                        , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('or'                        , Sintaxe.logico() ,tx_codificacao)
     sintaxe('ou'                        , Sintaxe.logico() ,tx_codificacao)
 
-    sintaxe('for diferente de'          , Sintaxe.comparacao() ,tx_codificacao)
-    sintaxe('for menor que'             , Sintaxe.comparacao() ,tx_codificacao)
-    sintaxe('for maior que'             , Sintaxe.comparacao() ,tx_codificacao)
-    sintaxe('for igual a'               , Sintaxe.comparacao() ,tx_codificacao)
+    sintaxe('&&'                        , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('and'                       , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('e'                         , Sintaxe.logico() ,tx_codificacao)
 
+    sintaxe('!='                        , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('for diferente de'          , Sintaxe.logico() ,tx_codificacao)
+
+    sintaxe('<'                         , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('for menor que'             , Sintaxe.logico() ,tx_codificacao)
+
+    sintaxe('>'                         , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('for maior que'             , Sintaxe.logico() ,tx_codificacao)
+
+    sintaxe('=='                        , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('for igual a'               , Sintaxe.logico() ,tx_codificacao)
+
+
+    # CONDICIONAIS
+    sintaxe('se'                        , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('if'                        , Sintaxe.condicionais() ,tx_codificacao)
+
+    sintaxe('senao'                     , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('else'                      , Sintaxe.condicionais() ,tx_codificacao)
+
+
+    # MÉTODOS
     sintaxe('método'                    , Sintaxe.metodo() ,tx_codificacao)
-    sintaxe('função'                    , Sintaxe.metodo() ,tx_codificacao)
+    sintaxe('function'                  , Sintaxe.metodo() ,tx_codificacao)
+    sintaxe('def'                       , Sintaxe.metodo() ,tx_codificacao)
 
     sintaxe('recebe parametro'          , Sintaxe.parametro() ,tx_codificacao)
     sintaxe('recebe parametros'         , Sintaxe.parametro() ,tx_codificacao)
-    
+
+
+    # EXIBIÇÃO
     sintaxe('exiba nessa linha'         , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('exiba'                     , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('mostre nessa linha'        , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('mostre'                    , Sintaxe.exibicao() ,tx_codificacao)
 
-    sintaxe('senao'                     , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('se'                        , Sintaxe.condicionais() ,tx_codificacao)
+
+    # ENTRADA DE DADOS
     sintaxe('digitado'                  , Sintaxe.condicionais() ,tx_codificacao)
 
+
+    # DELAY
     sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
     sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
     sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
 
+    
+    # ALEATÓRIO
     sintaxe('número aleatório entre'    , Sintaxe.aleatorio() ,tx_codificacao)
 
+
+    # COLORAÇÃO
+    sintaxe('na cor'                    , Sintaxe.atribuicao() ,tx_codificacao)
     sintaxe('azul'                      , Sintaxe.azul()  ,tx_codificacao)
     sintaxe('roxo'                      , Sintaxe.roxo()  ,tx_codificacao)
     sintaxe('verde'                     , Sintaxe.verde() ,tx_codificacao)
 
+    
+    # STRINGS
     sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
 
-    # COMENTÁRIO > ULTIMA LINHA
+
+    # COMENTÁRIO
     sintaxe('comentario'                , Sintaxe.comentario() ,tx_codificacao)
 
 ############################# BRINCANDO COM AS INTERFACES #########################################

@@ -52,9 +52,17 @@ class Sintaxe():
         return {
             'foreground':'#fe468a'}
 
+    def lista():
+        return {
+            'foreground':'#fe468a'}
+
     def logico():
         return {
             'foreground':'#f9264a'}
+
+    def contas():
+        return {
+            'foreground':'#f4264a'}
 
     def comparacao():
         return {
