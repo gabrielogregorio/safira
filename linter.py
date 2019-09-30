@@ -1,3 +1,4 @@
+# modificação, testando o git com o terminal
 global variaveis
 variaveis = {}
 
