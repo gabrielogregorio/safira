@@ -3,6 +3,7 @@ from tkinter import *
 from funcoes import funcao
 from design import design
 from design import Sintaxe
+import tkinter.messagebox as tkmessagebox
 
 try:
     from PIL import ImageTk, Image
@@ -10,6 +11,17 @@ except:
     print('bibliteca PIL não encontrada')
 
 ############################# DIALOGS #########################################
+pressed_f4 = False
+#CRIAR A FUNÇÃO DE SAIR
+def EXIT():
+    result = tkmessagebox.askquestion('Deseja sair?')
+    if result == 'yes':
+        tela.destroy()
+        exit()
+def alt_f4():
+    global pressed_f4
+    pressed_f4 = True
+
 def dialog_salvar():
     arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
 
@@ -297,7 +309,7 @@ menu_arquivo.add_command(label='imprimir (Ctrl-P)')
 menu_arquivo.add_command(label='Exportar (Ctrl-E)')
 menu_arquivo.add_command(label='Enviar por e-mail ')
 menu_arquivo.add_separator()
-menu_arquivo.add_command(label='Sair (Alt-F4)')
+menu_arquivo.add_command(label='Sair (Alt-F4)', command=EXIT)
 
 ############################### EXECUTAR #######################################
 menu_executar.add_command(label='Executar Tudo (F5)')
