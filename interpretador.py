@@ -49,6 +49,9 @@ def condicional(valor1,operacao,valor2): # O valor tem que estar tratado ( valor
     else:
         return "[Erro] uma operação inválida foi repassada ao interpretador"
 
+
+print(condicional(1,'==',1),'\n\n')
+
 # Realiza contas
 def operacoes(valor1,operacoes,valor2):
 
@@ -110,7 +113,14 @@ def operacoes(valor1,operacoes,valor2):
     else:
         return "Nenhuma operacoes válida foi repadassada. O interpretador Falhou"
 
-#print(operacoes(10,"*",222))
+print('01',operacoes(10,"+",222))
+print('02',operacoes(10,"-",222))
+print('03',operacoes(10,"/",222))
+print('04',operacoes(0,"/",0))
+print('05',operacoes(0,"//",22))
+print('06',operacoes(10,"*",222))
+print('07',operacoes(10,"**",2))
+print('08',operacoes(10,"",222),'\n\n')
 
 def operacoes_fatorial(valor):
     if str(valor).isnumeric() == False:
@@ -125,4 +135,7 @@ def operacoes_fatorial(valor):
     else:
         return valor
 
-print(operacoes_fatorial(311))
+print('a',operacoes_fatorial(5))
+print('b',operacoes_fatorial("5"))
+print('c',operacoes_fatorial("A"),'\n\n')
+
