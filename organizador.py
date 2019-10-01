@@ -1,0 +1,2 @@
+def nada():
+    pass
