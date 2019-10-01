@@ -1,4 +1,4 @@
-from tkinter import filedialog
+from tkinter import filedialog
 from tkinter import *          
 from funcoes import funcao
 from design import design
@@ -224,7 +224,9 @@ def atualizar_sintaxe():
 
     # ENTRADA DE DADOS
     sintaxe('digitado'                  , Sintaxe.condicionais() ,tx_codificacao)
-
+    sintaxe('tiver'                     , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('em'                        , Sintaxe.condicionais() ,tx_codificacao)
+ 
 
     # DELAY
     sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
