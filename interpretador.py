@@ -1,4 +1,5 @@
 # Exibir conteúdo na tela
+# nova mudança
 def mostre(conteudo): # "string" ou numero {tem que ser algo definido}
     try:
         print(conteudo)
