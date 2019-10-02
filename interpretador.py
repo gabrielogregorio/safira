@@ -53,6 +53,41 @@ def condicional(valor1,operacao,valor2): # O valor tem que estar tratado ( valor
 
 print(condicional(1,'==',1),'\n\n')
 
+
+print('\n\n\n\n\n')
+
+def resolver_prioridades(prioridade):
+    print(prioridade)
+
+def abstrair_prioridades(lista):
+    l_prioridade = [{0:[False,0]}]
+
+    n_prioridade = 0
+    m_esperar = 0
+    for item in range(len(lista)):
+        if l_prioridade[0][0][0] == True:
+
+            if (lista[item]) == ")":
+                if m_esperar == 0:
+                    resolver_prioridades(lista[l_prioridade[0][0][1]+1:item])
+                    l_prioridade = [{0:[False,0]}]
+                    n_prioridade = 0
+                    m_esperar = 0
+                else:
+                    m_esperar -= 1
+
+        if (lista[item]) == "(":
+            if n_prioridade == 0:
+                l_prioridade = [{0:[True,item]}]
+                n_prioridade += 1
+            else:
+                m_esperar += 1
+
+abstrair = ['(','(', 1 , '==' , 2 , ')', 1 , '==' , 2 ,')' , 'and' , 3 , '!=' , 4 , 5 , 'or' , '(' , 4 ,'>' , 2 , 'or' , 5 , '<' , 7 , ')' , 'and' , 3 , '==' , 'string']
+abstrair_prioridades(abstrair)
+
+i = input()
+
 # Realiza contas
 def operacoes(valor1,operacoes,valor2):
 
