@@ -56,7 +56,15 @@ class Sintaxe():
         return {
             'foreground':'#fe468a'}
 
+    def vetor():
+        return {
+            'foreground':'#fe468a'}
+
     def logico():
+        return {
+            'foreground':'#f9264a'}
+
+    def entrada():
         return {
             'foreground':'#f9264a'}
 

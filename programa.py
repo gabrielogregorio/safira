@@ -151,6 +151,22 @@ def atualizar_sintaxe():
     sintaxe('array'                     , Sintaxe.lista() ,tx_codificacao)
 
 
+    # VETORES
+    sintaxe('recebe uma lista'          , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('recebe um vetor'           , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('com os intens'             , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('com os valores'            , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('* '                        , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('- '                        , Sintaxe.vetor() ,tx_codificacao)
+
+    # ENTRADA
+    sintaxe('oque o usuario digitar'    , Sintaxe.entrada() ,tx_codificacao)
+    sintaxe('oque a pessoa digitar'     , Sintaxe.entrada() ,tx_codificacao) 
+    sintaxe('oque o for digitado'       , Sintaxe.entrada() ,tx_codificacao)
+    sintaxe('numero digitado'           , Sintaxe.entrada() ,tx_codificacao)
+    sintaxe('string digitada'           , Sintaxe.entrada() ,tx_codificacao)
+    sintaxe('caracter digitado'         , Sintaxe.entrada() ,tx_codificacao)
+
     # CONTAS
     sintaxe('por'                       , Sintaxe.contas() ,tx_codificacao)
 
