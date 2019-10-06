@@ -1,9 +1,14 @@
+from time import sleep
 # OS VALORES DEVEM ESTAR CORRETOS!
 # NÃO SÃO SUPORTADOS ERROS NESSE PROGRAMA
 
 # MOSTRA STRING OU NÚMERO
 def mostre(conteudo):
     print(conteudo)
+
+# MOSTRA STRING OU NÚMERO
+def mostre_nessa_linha(conteudo):
+    print(conteudo,end="")
 
 # COMPARA VALORES VÁLIDOS E RETORNA TRUE OU FALSE
 def condicional(valor1,operacao,valor2):
@@ -75,3 +80,7 @@ def entrada_de_dados(tipo):
         digite = input()
 
     return digite
+
+def espera(segundos):
+    sleep(segundos)
+    return True
