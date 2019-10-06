@@ -20,7 +20,6 @@ def dialog_salvar():
     arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
 
     if arquivo is None:
-        print('Operação salvar como cancelada.')
         return None
 
     text2save = str(tx_codificacao.get(1.0, END))
