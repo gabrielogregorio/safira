@@ -2,7 +2,7 @@
 
 ## objetivo  
 
-Pretendemos desenvolver uma linguagem de programação em português para crianças. A longo prazo, pretendemos criar uma IDE com uma linguagem de programação simples, para que crianças e iniciantes nesse universo dos códigos possam a ter uma base no assunto. 
+Desenvolvimento uma linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE (feynman_code) com uma linguagem de programação simples (feynman), para que crianças e iniciantes nesse universo dos códigos possam a ter uma base no assunto. 
 
 A linguagem funciona utilizando termos relativamente simples, como: **mostre**,**exiba**, **mostre nessa linha**, **exiba nessa linha**, etc. Também pretendemos permitir o uso de palavras chaves em múltiplos idiomas.
 
