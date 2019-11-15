@@ -5,17 +5,6 @@ from design import design
 from design import Sintaxe
 import tkinter.messagebox as tkmessagebox
 
-pressed_f4 = False
-def EXIT():
-	result = tkmessagebox.askquestion('Deseja sair?')
-	if result == 'yes':
-		tela.destroy()
-		exit()
-
-def alt_f4():
-	global pressed_f4
-	pressed_f4 = True		
-
 def dialog_salvar():
     arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
 
@@ -123,109 +112,38 @@ def sintaxe(palavra,cor,tx_codificacao):
             sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
 
 def atualizar_sintaxe():
-
     sintaxe('numerico'                  , Sintaxe.numerico() ,tx_codificacao)
 
     # ATRIBUIÇÃO
     sintaxe('vale'                      , Sintaxe.atribuicao() ,tx_codificacao)
     sintaxe('recebe'                    , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('é igual a'                 , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('='                         , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('<-'                        , Sintaxe.atribuicao() ,tx_codificacao)
 
     # LOOPS  
-    sintaxe('lista'                     , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('percorra '                 , Sintaxe.lista() ,tx_codificacao)
     sintaxe('a lista'                   , Sintaxe.lista() ,tx_codificacao)
-
-    sintaxe('vetor'                     , Sintaxe.lista() ,tx_codificacao)
-    sintaxe('o vetor'                   , Sintaxe.lista() ,tx_codificacao)
-
-    sintaxe('o array'                   , Sintaxe.lista() ,tx_codificacao)
-    sintaxe('array'                     , Sintaxe.lista() ,tx_codificacao)
 
     # VETORES
     sintaxe('recebe uma lista'          , Sintaxe.vetor() ,tx_codificacao)
-    sintaxe('recebe um vetor'           , Sintaxe.vetor() ,tx_codificacao)
     sintaxe('com os intens'             , Sintaxe.vetor() ,tx_codificacao)
-    sintaxe('com os valores'            , Sintaxe.vetor() ,tx_codificacao)
-    sintaxe('* '                        , Sintaxe.vetor() ,tx_codificacao)
-    sintaxe('- '                        , Sintaxe.vetor() ,tx_codificacao)
 
     # ENTRADA
-    sintaxe('oque o usuario digitar'    , Sintaxe.entrada() ,tx_codificacao)
-    sintaxe('oque a pessoa digitar'     , Sintaxe.entrada() ,tx_codificacao) 
     sintaxe('oque o for digitado'       , Sintaxe.entrada() ,tx_codificacao)
-    sintaxe('numero digitado'           , Sintaxe.entrada() ,tx_codificacao)
-    sintaxe('string digitada'           , Sintaxe.entrada() ,tx_codificacao)
-    sintaxe('caracter digitado'         , Sintaxe.entrada() ,tx_codificacao)
 
     # CONTAS
     sintaxe('por'                       , Sintaxe.contas() ,tx_codificacao)
 
-    sintaxe('+'                         , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('mais'                      , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('-'                         , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('menos'                     , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('/'                         , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('dividido por'              , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('//'                        , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('resto de'                  , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('*'                         , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('multiplicado por'          , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('**'                        , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('elevado a'                 , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('mean'                      , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('média de'                  , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('a média de'                , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('média ponderada de'        , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('a média ponderada de'      , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('max'                       , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('maior elemento'            , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('maior valor'               , Sintaxe.contas() ,tx_codificacao)
-
-    sintaxe('min'                       , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('menor elemento'            , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('menor valor'               , Sintaxe.contas() ,tx_codificacao)
-
     # LÓGICO
-    sintaxe('||'                        , Sintaxe.logico() ,tx_codificacao)
-    sintaxe('or'                        , Sintaxe.logico() ,tx_codificacao)
     sintaxe('ou'                        , Sintaxe.logico() ,tx_codificacao)
-
-    sintaxe('&&'                        , Sintaxe.logico() ,tx_codificacao)
-    sintaxe('and'                       , Sintaxe.logico() ,tx_codificacao)
     sintaxe('e'                         , Sintaxe.logico() ,tx_codificacao)
 
-    sintaxe('!='                        , Sintaxe.logico() ,tx_codificacao)
-    sintaxe('for diferente de'          , Sintaxe.logico() ,tx_codificacao)
-
-    sintaxe('<'                         , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('for diferente de'          , Sintaxe.logico() ,tx_codificacao)    
     sintaxe('for menor que'             , Sintaxe.logico() ,tx_codificacao)
-
-    sintaxe('>'                         , Sintaxe.logico() ,tx_codificacao)
     sintaxe('for maior que'             , Sintaxe.logico() ,tx_codificacao)
-
-    sintaxe('=='                        , Sintaxe.logico() ,tx_codificacao)
     sintaxe('for igual a'               , Sintaxe.logico() ,tx_codificacao)
 
     # CONDICIONAIS
     sintaxe('se'                        , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('if'                        , Sintaxe.condicionais() ,tx_codificacao)
-
     sintaxe('senao'                     , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('else'                      , Sintaxe.condicionais() ,tx_codificacao)
-
-    # MÉTODOS
-    sintaxe('método'                    , Sintaxe.metodo() ,tx_codificacao)
-    sintaxe('function'                  , Sintaxe.metodo() ,tx_codificacao)
-    sintaxe('def'                       , Sintaxe.metodo() ,tx_codificacao)
 
     sintaxe('recebe parametro'          , Sintaxe.parametro() ,tx_codificacao)
     sintaxe('recebe parametros'         , Sintaxe.parametro() ,tx_codificacao)
@@ -233,27 +151,10 @@ def atualizar_sintaxe():
     # EXIBIÇÃO
     sintaxe('exiba nessa linha'         , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('exiba'                     , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('mostre nessa linha'        , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('mostre'                    , Sintaxe.exibicao() ,tx_codificacao)
-
-    # ENTRADA DE DADOS
-    sintaxe('digitado'                  , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('tiver'                     , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('em'                        , Sintaxe.condicionais() ,tx_codificacao)
  
     # DELAY
     sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
     sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
-    
-    # ALEATÓRIO
-    sintaxe('número aleatório entre'    , Sintaxe.aleatorio() ,tx_codificacao)
-
-    # COLORAÇÃO
-    sintaxe('na cor'                    , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('azul'                      , Sintaxe.azul()  ,tx_codificacao)
-    sintaxe('roxo'                      , Sintaxe.roxo()  ,tx_codificacao)
-    sintaxe('verde'                     , Sintaxe.verde() ,tx_codificacao)
     
     # STRINGS
     sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
@@ -261,14 +162,123 @@ def atualizar_sintaxe():
     # COMENTÁRIO
     sintaxe('comentario'                , Sintaxe.comentario() ,tx_codificacao)
 
+
+###########################################################################################################################
+global variaveis
+variaveis = {}
+# variavel : valor. Ambas tem que ser strings
+
+# Define uma variavel
+def definirValorVariavel(linha):
+    # print(definirValorVariavel('gabriela vale 13'))
+    lista = linha.split(' ')
+
+    variavelADefinir = lista[0]
+    valor = lista[-1]    
+    atribuicao = ' '
+    for palavra in lista[1:-1]:
+        atribuicao += palavra + ' '
+
+    if (atribuicao == ' vale '):
+        global variaveis
+        variaveis[variavelADefinir] = valor
+        return True
+
+    return [None, "ERRO: Você digitou uma atribuição que não existe:{}:".format(atribuicao)]
+
+# Obter o valor de uma variável
+def extrairValorVariavel(string):
+    # É um número
+    if string.isnumeric():
+        return string
+
+    # É uma string
+    if ((string[0] == '"') and(string[-1] == '"')):
+        return string
+
+    global variaveis
+    for k,v in variaveis.items():
+        if k == string:
+            return extrairValorVariavel(v)
+
+    return [None, "ERRO: A variável: {} Não foi definida".format(string)]
+
+# Testa uma condicional e retorna True ou False
+def condicional(linha):
+    # condicional('se var1 for diferente de 15')
+    lista = linha.split(' ')
+
+    if lista[0] == 'se':
+        print(lista,'>>>>>>>')
+        valor1 = extrairValorVariavel(lista[1])
+        valor2 = extrairValorVariavel(lista[-1])
+
+        if valor1[0] == None:
+            return valor1[1]
+
+        if valor2[0] == None:
+            return valor2[1]
+
+        condicao = ' '
+        for palavra in lista[2:-1]:
+            condicao += palavra + ' '
+
+        if condicao == ' for diferente de ':      
+            if valor1 != valor2:
+                return True
+            else:
+                return False
+
+        elif condicao == ' for menor que ':
+            if valor1 < valor2:
+                return True
+            else:
+                return False
+
+        elif condicao == ' for maior que ':
+            if valor1 > valor2:
+                return True
+            else:
+                return False
+
+        elif condicao == ' for igual a ':
+            if valor1 == valor2:
+                return True
+            else:
+                return False
+
+        return [None, "ERRO: Você digitou uma condição que não existe:{}:".format(condicao)]
+###########################################################################################################################
+
+def iniciarInterpretador(event = None):
+    programa = tx_codificacao.get("1.0",END)
+    programa = programa.strip()
+    lista = programa.split('\n')
+
+    for linha in range(len(lista)):
+
+        lista_linha = lista[linha].split(' ')
+
+        if (len(lista_linha) < 1):
+            continue
+
+        if (lista[linha][0:3] == 'se '):
+            print(lista[linha])
+            tx_informacoes.insert(END, condicional(lista[linha]))
+
+        elif (lista_linha[1] == 'vale'):
+            print(lista[linha])
+            tx_informacoes.insert(END, definirValorVariavel(lista[linha]))
+
 tela = Tk()
+tela.bind('<F5>',lambda event: iniciarInterpretador(event))
 tela.title('Linguagem ec beta 0.3')
 tela.configure(bg='#343434')
 tela.grid_columnconfigure(1,weight=1)
 tela.rowconfigure(1,weight=1)
-tela.config(menu=menu_barra)
 
 menu_barra = Menu(tela,design.cor_menu())
+tela.config(menu=menu_barra)
 
 menu_arquivo     = Menu(menu_barra, design.cor_menu())
 menu_executar    = Menu(menu_barra, design.cor_menu())
@@ -300,10 +310,10 @@ menu_arquivo.add_command(label='imprimir (Ctrl-P)')
 menu_arquivo.add_command(label='Exportar (Ctrl-E)')
 menu_arquivo.add_command(label='Enviar por e-mail ')
 menu_arquivo.add_separator()
-menu_arquivo.add_command(label='Sair (Alt-F4)',command=EXIT)
+menu_arquivo.add_command(label='Sair (Alt-F4)')
 
 # =================================== EXECUTAR =================================== #
-menu_executar.add_command(label='Executar Tudo (F5)')
+menu_executar.add_command(label='Executar Tudo (F5)',command=iniciarInterpretador)
 menu_executar.add_command(label='Executar linha (F6)')
 menu_executar.add_command(label='Executar até breakpoint (F7)')
 menu_executar.add_command(label='Executar com delay (F8)')
@@ -354,6 +364,7 @@ tx_informacoes = Text(fr_InPrincipal,design.tx_informacoes())
 
 # =================================== TELA DE CODIFICAÇÃO =================================== #
 tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao())
+
 tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao:atualizar_sintaxe())
 tx_codificacao.delete(1.0, END)
 
@@ -363,9 +374,9 @@ fr_sobDesenvol.rowconfigure(1,weight=15)
 fr_sobDesenvol.rowconfigure((2,3),weight=1)
 fr_sobDesenvol.grid_columnconfigure(1,weight=2)
 
-lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo() ,text=" COMBRATEC ")
-lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores() ,text="Gabriel Gregório da Silva")
-lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno() ,text="2019")
+lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo(), text=" COMBRATEC ")
+lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores(), text="Gabriel Gregório da Silva")
+lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno(), text="2019")
 
 tx_informacoes.grid(row=1,column=0,sticky=NSEW)
 tx_codificacao.grid(row=1,column=1,sticky=NSEW)
