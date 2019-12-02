@@ -9,20 +9,20 @@ class design():
 
     def lb_sobDeTitulo():
         return {
-            'font':("Arial",70,"bold"),
+            'font':("Loma",70,"bold"),
             'height':5,
             'background':'#343434',
             'foreground':'#ffffff'}
 
     def lb_sobDAutores():
         return {
-            'font':("Arial",15),
+            'font':("Loma",15),
             'background':'#343434',
             'foreground':'#ffffff'}
 
     def lb_sobDesenAno():
         return {
-            'font':("Arial",10),
+            'font':("Loma",10),
             'background':'#343434',
             'foreground':'#ffffff'}
 
@@ -30,7 +30,10 @@ class design():
         return {
             'bg':'#343434',
             'fg':'#ffffff',
-            'font':('',15)}
+            'insertbackground': '#ddddff',
+            'selectbackground':'#565656',
+            'selectforeground':'#343434',
+            'font':('Loma',14)}
 
     def tx_informacoes():
         return {
@@ -56,10 +59,6 @@ class Sintaxe():
         return {
             'foreground':'#fe468a'}
 
-    def vetor():
-        return {
-            'foreground':'#fe468a'}
-
     def logico():
         return {
             'foreground':'#f9264a'}
@@ -68,49 +67,17 @@ class Sintaxe():
         return {
             'foreground':'#f9264a'}
 
-    def contas():
-        return {
-            'foreground':'#f4264a'}
-
-    def comparacao():
-        return {
-            'foreground':'#66d9ef'}
-
-    def metodo():
-        return {
-            'foreground':'#66d9ef'}
-
-    def parametro():
-        return {
-            'foreground':'#D35400'}
-
     def exibicao():
         return {
-            'foreground':'#22ee22'}
-
-    def condicionais():
-        return {
-            'foreground':'#e2d872'}
+            'foreground':'#8fc78f'}
 
     def tempo():
         return {
             'foreground':'#63f1d8'}
 
-    def aleatorio():
+    def condicionais():
         return {
-            'foreground':'#63f1d8'}
-
-    def azul():
-        return {
-            'foreground':'#1166ff'}
-
-    def roxo():
-        return {
-            'foreground':'#dd11dd'}
-
-    def verde():
-        return {
-            'foreground':'#11dd11'}
+            'foreground':'#e2d872'}
 
     def string():
         return {

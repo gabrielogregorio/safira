@@ -1,12 +1,24 @@
 from tkinter import filedialog
 from tkinter import *          
 from funcoes import funcao
-from design import design
-from design import Sintaxe
+from design  import design
+from design  import Sintaxe
+from tkinter import messagebox
+from threading import Thread
+
 import tkinter.messagebox as tkmessagebox
+import time
+
+global contadorThreads                       # impede que o programa seja iniciado enquanto outro está sendo executado
+global repetirAtivado                        # Se um comando de repetição tiver sido ativado 
+global variaveis                             # Variáveis usadas durante a interpretação do programa
+
+contadorThreads = 0                          # Conta quantas vezes o interpretador foi iniciado, e decrementa quando ele é finalizado
+repetirAtivado = False                       # Define como falso
+variaveis = {}                               # Variáveis usadas durante a interpretação do programa
 
 def dialog_salvar():
-    arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".ec",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.ec"),("all files","*.*")))
+    arquivo = filedialog.asksaveasfile(mode='w', defaultextension=".fyn",title = "Selecione o arquivo",filetypes = (("Meus projetos","*.fyn"),("all files","*.*")))
 
     if arquivo is None:
         return None
@@ -18,7 +30,7 @@ def dialog_salvar():
     return arquivo.name
 
 def dialog_abrir():
-    ftypes = [('Arquivos ec', '*.ec'), ('Todos os arquivos', '*')]
+    ftypes = [('Arquivos fyn', '*.fyn'), ('Todos os arquivos', '*')]
     dlg = filedialog.Open(filetypes = ftypes)
     filename = dlg.show()
 
@@ -34,10 +46,10 @@ def dialog_abrir():
 
 def colorir_palavra(palavra,linha,valor1,valor2,cor):
 
-    linha1 = '{}.{}'.format(linha , valor1)
-    linha2 = '{}.{}'.format(linha , valor2)
+    linha1 = '{}.{}'.format(linha , valor1) # linha.coluna(revisar)
+    linha2 = '{}.{}'.format(linha , valor2) # linha.coluna(revisar)
 
-    tx_codificacao.tag_add(palavra, linha1 , linha2)        
+    tx_codificacao.tag_add(palavra, linha1 , linha2) 
     tx_codificacao.tag_config(palavra, foreground = cor)
 
 def sintaxe_linha(palavra,cor,frase,linha):
@@ -49,13 +61,13 @@ def sintaxe_linha(palavra,cor,frase,linha):
                 # Análisa se a palavra não está em outro contexto
                 validacao = 0
                 if caractere > 0:
-                     if frase[caractere-1:caractere+len(palavra)] == ' '+palavra:
+                    if frase[caractere-1:caractere+len(palavra)] == ' '+palavra:
                         validacao += 1 
                 else:
                         validacao += 1
 
                 if caractere + len(palavra) < quantidade_de_caracteres:     
-                     if frase[caractere:caractere+1+len(palavra)] == palavra+' ':
+                    if frase[caractere:caractere+1+len(palavra)] == palavra+' ':
                         validacao += 1 
                 else:
                         validacao += 1
@@ -68,13 +80,13 @@ def sintaxe_linha_string(palavra,cor,frase,linha):
     save_position_evento = []        
     for caractere in range(len(frase)):
 
-        if frase[caractere] == '"' and evento_string == True:
+        if (frase[caractere] == '"' or frase[caractere] == "'") and evento_string == True:
             evento_string = False
             save_position_evento.append(caractere+1)
             colorir_palavra(palavra,linha,save_position_evento[0],save_position_evento[1],cor)
             save_position_evento = []
 
-        elif frase[caractere] == '"':
+        elif frase[caractere] == '"' or frase[caractere] == "'":
             evento_string = True
             save_position_evento.append(caractere)
 
@@ -119,18 +131,11 @@ def atualizar_sintaxe():
     sintaxe('recebe'                    , Sintaxe.atribuicao() ,tx_codificacao)
 
     # LOOPS  
-    sintaxe('percorra '                 , Sintaxe.lista() ,tx_codificacao)
-    sintaxe('a lista'                   , Sintaxe.lista() ,tx_codificacao)
-
-    # VETORES
-    sintaxe('recebe uma lista'          , Sintaxe.vetor() ,tx_codificacao)
-    sintaxe('com os intens'             , Sintaxe.vetor() ,tx_codificacao)
+    sintaxe('enquanto'                  , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('repita'                    , Sintaxe.lista() ,tx_codificacao)
 
     # ENTRADA
     sintaxe('oque o for digitado'       , Sintaxe.entrada() ,tx_codificacao)
-
-    # CONTAS
-    sintaxe('por'                       , Sintaxe.contas() ,tx_codificacao)
 
     # LÓGICO
     sintaxe('ou'                        , Sintaxe.logico() ,tx_codificacao)
@@ -145,16 +150,9 @@ def atualizar_sintaxe():
     sintaxe('se'                        , Sintaxe.condicionais() ,tx_codificacao)
     sintaxe('senao'                     , Sintaxe.condicionais() ,tx_codificacao)
 
-    sintaxe('recebe parametro'          , Sintaxe.parametro() ,tx_codificacao)
-    sintaxe('recebe parametros'         , Sintaxe.parametro() ,tx_codificacao)
-
     # EXIBIÇÃO
-    sintaxe('exiba nessa linha'         , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('exiba'                     , Sintaxe.exibicao() ,tx_codificacao)
- 
-    # DELAY
-    sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('mostre'                    , Sintaxe.exibicao() ,tx_codificacao)
     
     # STRINGS
     sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
@@ -162,117 +160,322 @@ def atualizar_sintaxe():
     # COMENTÁRIO
     sintaxe('comentario'                , Sintaxe.comentario() ,tx_codificacao)
 
+    # DELAY
+    sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('milisegundos'              , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
 
-###########################################################################################################################
-global variaveis
-variaveis = {}
-# variavel : valor. Ambas tem que ser strings
 
-# Define uma variavel
-def definirValorVariavel(linha):
-    # print(definirValorVariavel('gabriela vale 13'))
-    lista = linha.split(' ')
-
-    variavelADefinir = lista[0]
-    valor = lista[-1]    
-    atribuicao = ' '
-    for palavra in lista[1:-1]:
-        atribuicao += palavra + ' '
-
-    if (atribuicao == ' vale '):
-        global variaveis
-        variaveis[variavelADefinir] = valor
-        return True
-
-    return [None, "ERRO: Você digitou uma atribuição que não existe:{}:".format(atribuicao)]
-
-# Obter o valor de uma variável
-def extrairValorVariavel(string):
-    # É um número
-    if string.isnumeric():
-        return string
-
-    # É uma string
-    if ((string[0] == '"') and(string[-1] == '"')):
-        return string
-
-    global variaveis
-    for k,v in variaveis.items():
-        if k == string:
-            return extrairValorVariavel(v)
-
-    return [None, "ERRO: A variável: {} Não foi definida".format(string)]
-
-# Testa uma condicional e retorna True ou False
-def condicional(linha):
-    # condicional('se var1 for diferente de 15')
-    lista = linha.split(' ')
-
-    if lista[0] == 'se':
-        print(lista,'>>>>>>>')
-        valor1 = extrairValorVariavel(lista[1])
-        valor2 = extrairValorVariavel(lista[-1])
-
-        if valor1[0] == None:
-            return valor1[1]
-
-        if valor2[0] == None:
-            return valor2[1]
-
-        condicao = ' '
-        for palavra in lista[2:-1]:
-            condicao += palavra + ' '
-
-        if condicao == ' for diferente de ':      
-            if valor1 != valor2:
-                return True
-            else:
-                return False
-
-        elif condicao == ' for menor que ':
-            if valor1 < valor2:
-                return True
-            else:
-                return False
-
-        elif condicao == ' for maior que ':
-            if valor1 > valor2:
-                return True
-            else:
-                return False
-
-        elif condicao == ' for igual a ':
-            if valor1 == valor2:
-                return True
-            else:
-                return False
-
-        return [None, "ERRO: Você digitou uma condição que não existe:{}:".format(condicao)]
 ###########################################################################################################################
 
 def iniciarInterpretador(event = None):
-    programa = tx_codificacao.get("1.0",END)
-    programa = programa.strip()
-    lista = programa.split('\n')
+    global contadorThreads
+    if contadorThreads != 0:                                   # Se algum programa já estiver rodando
+        messagebox.showinfo("Alerta","Um programa está ativo nesse momento, Aguarde o outro programa se finalizado")
+        return 0 # Não continue
 
-    for linha in range(len(lista)):
+    global variaveis 
+    variaveis = {}                                             # Reinicia as variaveis do interpretador
 
-        lista_linha = lista[linha].split(' ')
+    contadorThreads = 0                                        # Reinicia o contador de Threads
 
-        if (len(lista_linha) < 1):
-            continue
+    tx_informacoes.delete('1.0',END)                           # Limpa o conteudo da tela lateral
+    linhas = tx_codificacao.get('1.0',END)                     # Obtem o código do programa
 
-        if (lista[linha][0:3] == 'se '):
-            print(lista[linha])
-            tx_informacoes.insert(END, condicional(lista[linha]))
+    t = Thread(target=lambda valor = linhas: inter(valor))     # Define um Thread para iniciar o interpretadort
+    t.start()                                                  # Inicia o interpretador em um Thread
 
-        elif (lista_linha[1] == 'vale'):
-            print(lista[linha])
-            tx_informacoes.insert(END, definirValorVariavel(lista[linha]))
+    while  contadorThreads != 0:                               # Enquanto todos os Threads não forem finalizados
+        tela.update()                                          # Atualize a tela
+
+    tx_informacoes.insert(END, '\n [OK] finalizado')           # Informe que o programa foi finalizado
+
+
+def inter(linhas):
+    global contadorThreads
+    global repetirAtivado
+
+    contadorThreads += 1             # Aumenta para +1
+    linhaComando = ''                # Reseta a linha de comando (enquanto x for menor que 6)
+
+    contador = 0                     # contador para andar por todos os caracteres
+    registradorLinhas = ''           # Armazena blocos de código
+    blocoDeCodigo = False            # Bloco de código entre chaves
+    penetracao = 0                   # Penetracao dos {
+    lerBloco = False                 # Ler um bloco de código
+
+    while contador < len(linhas):                                               # Andar por todo o código
+        if linhas[contador] == '{' and blocoDeCodigo == False:                  # Se começar um bloco e não tiver começado nenhum
+            penetracao +=1                                                      # penetração de chaves aumentada {{{}}}
+            if not registradorLinhas.isspace() and  registradorLinhas != '':    # Se não tiver espaço e nem for vazio
+                lerBloco = interpretar(registradorLinhas.strip())               # Inicie o interpretador da linha
+
+                if str(type(lerBloco))!= "<class 'bool'>":                      # se for diferente de verdadeiro ou false
+                    tx_informacoes.insert(END, str(lerBloco)+'\n')              # Insere no menu lateral
+
+            registradorLinhas = ''                                              # Recomeçar o registrador
+            contador += 1                                                       # Incrementar o contador
+            blocoDeCodigo = True                                                # Começar a salvar o bloco de código
+            continue                                                            # Ir para o próximo loop
+ 
+        if linhas[contador] == '{':                                             # Se encontrar mais um nível de profundidade de blobo
+            penetracao +=1                                                      # Penetração de chaves aumentada {{{}}}
+
+        if linhas[contador] == '}':                                             # Se um bloco ser finalizado
+            penetracao -=1                                                      # Penetração de chaves diminuida {{{}}}
+
+        if linhas[contador] == '}' and blocoDeCodigo and penetracao == 0:       # Se o bloco principal finalizar
+
+            if lerBloco == True:                                                # Se a condição for verdadeira
+                print(linhaComando,registradorLinhas,repetirAtivado) 
+                if repetirAtivado:                                              # Se o modo de repetição estiver ativo
+                    
+                    while boolLinhaDeComando:                                   # Enquanto a condição for verdadeira
+                        inter(registradorLinhas)                                # Envia um bloco completo de forma recursiva {comandos1 comando2}
+                        boolLinhaDeComando = interpretar(linhaComando)          # Testa a condição novamente
+                else:
+                        inter(registradorLinhas)                                # Envia um bloco completo de forma recursiva {comandos1 comando2}
+ 
+            registradorLinhas = ''                                              # Armazena cada caractere em análise 
+            contador += 1                                                       # Aumenta o contador
+            blocoDeCodigo = False                                               # Não estamos buscando um bloco de código
+
+        if (((contador == len(linhas)) or (linhas[contador] == '\n')) ) and not blocoDeCodigo:
+            if not registradorLinhas.isspace() and  registradorLinhas != '':    # Se não tiver espaço e nem for vazio
+                lerBloco = interpretar(registradorLinhas.strip())               # Inicie o interpretador da linha
+                boolLinhaDeComando = lerBloco
+                linhaComando = registradorLinhas.strip()                        # Salva a linha que foi testada
+
+                if str(type(lerBloco))!= "<class 'bool'>" and lerBloco != None: # Se for diferente de verdadeiro ou false
+                    tx_informacoes.insert(END, str(lerBloco)+'\n' )             # Insere no menu lateral 2
+            registradorLinhas = ''                                              # Armazena cada caractere em análise 
+            contador += 1                                                       # Aumenta o contador
+            continue                                                            # Volta ao loop para a próxima posição
+
+        registradorLinhas += linhas[contador]                                   # Armazena cada caractere em análise 
+        contador += 1                                                           # Aumenta o contador
+
+    contadorThreads -= 1                                                        # Libera uma unidade no contador de Threads
+
+# Interpreta um conjunto de linhas
+def interpretar(codigo):
+    global repetirAtivado
+    global variaveis
+
+    repetirAtivado = False                          # Remove o modo repetir
+
+    if (codigo == '' or codigo.isspace()):          # Se o código estiver vazio
+        return ''
+
+    else:
+        linhas = codigo.split('\n')                 # Obtem todas as linhas 
+
+        mostre = ['mostre','exiba']  
+        for linha in linhas:
+            for comando in mostre:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return exibicao(linha[len(comando):])
+
+        se = ['se']
+        for linha in linhas:
+            for comando in se:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return condicional(linha[len(comando):])
+
+        loopsss = ['enquanto']
+        for linha in linhas:
+            for comando in loopsss:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return loopsFunction(linha[len(comando):])
+
+        declaraVariaveis = [' vale ',' recebe ']
+        for linha in linhas:
+            for comando in declaraVariaveis:
+                if comando in linha:
+                    return atribuicao(linha,comando)
+
+        aguarde = ['espere','aguarde']
+        for linha in linhas:
+            for comando in aguarde:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return tempo(linha[len(comando):])
+
+def tempo(codigo):
+    codigo = codigo.strip()
+
+    # Como segundos está incluido dento de milisegundos, use o maior primeiro
+    tiposEspera = [' milisegundos',' segundos']
+    for comando in tiposEspera:
+        if len(comando) < len(codigo):                                               # Se o comando não estrapolar o código
+            if comando == codigo[len(codigo)-len(comando):]:                         # Se o comando estiver no código
+                resultado = abstrairValorVariavel(codigo[:len(codigo)-len(comando)]) # Tente obter o real valor no código
+                if resultado != False:                                               # Se foi possível obter
+                    if comando == " segundos":                                       # Se está em segunso
+                        time.sleep(resultado)                                        # Tempo em segundos
+
+                    elif comando == " milisegundos":                                 # Se está em milisegundos
+                        time.sleep(resultado/1000)                                   # Tempo em milisegundos
+                else:
+                    print('Erro ao obter um valor no tempo')
+                    return False
+
+    return True
+
+def obterValor(variavel):                                  # obter o valor de uma variável
+    global variaveis
+
+    variavel = variavel.replace('\n','')
+
+    print(variavel,'><',variaveis)
+
+    try:
+        variaveis[variavel]
+    except:
+        return '[erro] - variavel não definida'
+    else:
+        return variaveis[variavel]
+
+def abstrairValorVariavel(possivelVariavel):
+    possivelVariavel = str(possivelVariavel)
+    possivelVariavel = possivelVariavel.replace('\n','')
+    possivelVariavel = possivelVariavel.strip()
+
+    contas = [' mais ',' menos ']
+    for conta in contas:
+        if conta in possivelVariavel:
+            valor1,valor2 = possivelVariavel.split(comando)
+            valor1 = abstrairValorVariavel(valor1)
+            valor2 = abstrairValorVariavel(valor2)
+
+            if conta == ' mais ':
+                return (float(valor1)+float(valor2))
+
+            elif conta == ' menos ':
+                return (float(valor1)-float(valor2))
+
+
+    if '"' in possivelVariavel or "'" in possivelVariavel: # é uma string
+        return possivelVariavel
+
+    elif possivelVariavel.isnumeric():
+        return float(possivelVariavel)
+
+    else:
+        resultado = obterValor(possivelVariavel)
+        print(resultado)
+
+        if '[erro]' in str(resultado):
+            print('Erro de variavel')
+            return False
+
+        return resultado
+
+def atribuicao(linha,comando):
+    global variaveis
+
+    variavel, valor = linha.split(comando)
+    print(linha,comando,variaveis)
+
+    valor = valor.replace('\n','')
+    variavel = variavel.strip()
+    valor = valor.strip()
+
+    contas = [' mais ',' menos ']
+    for conta in contas:
+        if conta in valor:
+            valor1 , valor2 = valor.split(conta)
+            valor1 = abstrairValorVariavel(str(valor1))
+            valor2 = abstrairValorVariavel(str(valor2))
+
+            if conta == ' mais ':
+                variaveis[variavel] = float(valor1)+float(valor2)
+
+            elif conta == ' menos ':
+                variaveis[variavel] =  float(valor1)-float(valor2)
+            else:
+                return False
+            return True
+
+    if '"' in valor or "'" in valor: # é uma string
+        variaveis[variavel] = valor
+
+    elif valor.isnumeric():
+        variaveis[variavel] = float(valor)
+
+    else: # é uma variavel
+        resultado = obterValor(valor)
+        if '[erro]' in str(resultado): # Se encontrar um erro
+            print('Erro ao declaraVariaveis')
+            return False
+
+        variaveis[variavel] = resultado
+    print("variavel declaradas ", variaveis)
+    return True
+
+def exibicao(linha):
+    codigo = linha.strip()
+    resultado = abstrairValorVariavel(codigo)
+    return resultado
+
+def loopsFunction(linha):
+    global repetirAtivado
+    repetirAtivado = True
+
+    condicoes = ['for maior que','for menor que','for igual a','for diferente de']
+    for condicao in condicoes:
+        if condicao in linha:
+
+            valo1, valo2 = linha.split(condicao)
+
+            valo1 = abstrairValorVariavel(valo1)
+            valo2 = abstrairValorVariavel(valo2)
+
+            if condicao == "for maior que":
+                return valo1 > valo2
+
+            elif condicao == "for menor que":
+                return valo1 < valo2
+
+            elif condicao == "for igual a":
+                return valo1 == valo2
+
+            elif condicao == "for diferente de":
+                return valo1 != valo2
+            else:
+                print('Erro nas condicoes')
+
+def condicional(linha):
+    condicoes = ['for maior que','for menor que','for igual a','for diferente de']
+    for condicao in condicoes:
+        if condicao in linha:
+
+            valo1, valo2 = linha.split(condicao)
+
+            valo1 = abstrairValorVariavel(valo1)
+            valo2 = abstrairValorVariavel(valo2)
+
+            if condicao == "for maior que":
+                return valo1 > valo2
+
+            elif condicao == "for menor que":
+                return valo1 < valo2
+
+            elif condicao == "for igual a":
+                return valo1 == valo2
+
+            elif condicao == "for diferente de":
+                return valo1 != valo2
+            else:
+                print('Erro nas condicoes')
 
 tela = Tk()
 tela.bind('<F5>',lambda event: iniciarInterpretador(event))
-tela.title('Linguagem ec beta 0.3')
+tela.title('Linguagem feynman beta 0.4')
 tela.configure(bg='#343434')
 tela.grid_columnconfigure(1,weight=1)
 tela.rowconfigure(1,weight=1)
