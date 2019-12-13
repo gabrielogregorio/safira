@@ -30,9 +30,17 @@ class design():
         return {
             'bg':'#343434',
             'fg':'#ffffff',
+            'highlightthickness':0,
             'insertbackground': '#ddddff',
             'selectbackground':'#565656',
             'selectforeground':'#343434',
+            'font':('Loma',14)}
+
+    def lb_linhas():
+        return {
+            'width':5,
+            'bg':'#333333',
+            'fg':'#888888',
             'font':('Loma',14)}
 
     def tx_informacoes():
@@ -78,6 +86,10 @@ class Sintaxe():
     def condicionais():
         return {
             'foreground':'#e2d872'}
+            
+    def contas():
+        return {
+            'foreground':'#f4264a'}
 
     def string():
         return {
@@ -85,5 +97,4 @@ class Sintaxe():
 
     def comentario():
         return {
-            'foreground':'#616A6B'}
-            
+            'foreground':'#616A6B'}         
