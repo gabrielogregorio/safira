@@ -15,6 +15,9 @@ global contadorThreads
 # Se um comando de repetição tiver sido ativado 
 global repetirAtivado
 
+# Se um comendo de funcao tiver sido ativado
+global funcaoAtivada
+
 # Variáveis usadas durante a interpretação do programa
 global variaveis
 
@@ -27,10 +30,19 @@ global tx_informacoes
 # Contador de linhas do programa
 global lb_linhas
 
+# Dicionario com todas as funcoes
+global dicFuncoes
+
+# funcao que está sendo analisada
+global funcaoQueEstaSendoAnalisada
+
+dicFuncoes = {}
+
 arquivoAbertoAtualmente = {'link':None,'texto':None}
 
 contadorThreads = 0
 repetirAtivado = False
+funcaoAtivada = False
 variaveis = {}
 
 def salvarArquivoComoDialog(event = None):
@@ -138,6 +150,7 @@ def sintaxe_linha_string(palavra,cor,frase,linha):
     lstPosicoesEvento = [] 
 
     for caractere in range(len(frase)): # Ande por todos os caracteres da frase
+
         # Se aconteceu uma string e elá já estiver sido iniciada
         if (frase[caractere] == '"' or frase[caractere] == "'") and evento_string == True: 
 
@@ -186,14 +199,13 @@ def sintaxe(palavra,cor,tx_codificacao):
         else: # Se for uma palavra especial
             sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
 
-
 def contadorDeLinhas():
     global lb_linhas
 
     linhas = ''
     linhasContadas = tx_codificacao.get(1.0,END)
     for x in range(1,linhasContadas.count('\n') + 1):
-        linhas += '{}\n'.format(x)
+        linhas += ' {}\n'.format(x)
 
     lb_linhas.config(state=NORMAL)
     lb_linhas.delete(1.0,'end')
@@ -205,8 +217,6 @@ def sintaxeDasPalavras():
 
     threadContadorLinhas = Thread(target=contadorDeLinhas())
     threadContadorLinhas.start()
-
-    sintaxe('numerico'                   , Sintaxe.numerico() ,tx_codificacao)
 
     # ATRIBUIÇÃO
     sintaxe('vale'                       , Sintaxe.atribuicao() ,tx_codificacao)
@@ -252,6 +262,18 @@ def sintaxeDasPalavras():
     sintaxe('+'                          , Sintaxe.contas() ,tx_codificacao)
     sintaxe('mais'                       , Sintaxe.contas() ,tx_codificacao)
 
+    sintaxe('/'                          , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('divide'                     , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('dividido por'               , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('**'                          , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('elevado'                , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('elevado por'           , Sintaxe.contas() ,tx_codificacao)
+
+    sintaxe('*'                          , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('multiplique'                , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('multiplicado por'           , Sintaxe.contas() ,tx_codificacao)
+
     sintaxe('-'                          , Sintaxe.contas() ,tx_codificacao)
     sintaxe('menos'                      , Sintaxe.contas() ,tx_codificacao)
 
@@ -259,10 +281,18 @@ def sintaxeDasPalavras():
     sintaxe('exiba'                      , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('mostre'                     , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('escreva'                    , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('escreva na tela'                    , Sintaxe.exibicao() ,tx_codificacao)
+    sintaxe('escreva na tela'            , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('print'                      , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('imprima'                    , Sintaxe.exibicao() ,tx_codificacao)
     sintaxe('display'                    , Sintaxe.exibicao() ,tx_codificacao)
+
+    sintaxe('funcao'                     , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('retorne'                    , Sintaxe.tempo() ,tx_codificacao)
+
+    sintaxe('recebe parametros'          , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('passando parametros'        , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('parametros'                 , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('parametro'                  , Sintaxe.tempo() ,tx_codificacao)
 
     # STRINGS
     sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
@@ -280,20 +310,29 @@ def sintaxeDasPalavras():
     sintaxe('milisegundo'               , Sintaxe.tempo() ,tx_codificacao)
     sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
 
+
 ###########################################################################################################################
 
 # inicia o interpretador
 def iniciarInterpretador(event = None):
     global contadorThreads
     global variaveis
+    global repetirAtivado
+    global funcaoAtivada
 
     # Se algum programa já estiver rodando
     if contadorThreads != 0:
-        messagebox.showinfo("Alerta","Um programa está ativo nesse momento, Aguarde o outro programa se finalizado")
+        print("Alerta","Um programa está ativo nesse momento, Aguarde o outro programa se finalizado")
         return 0
 
     # Reinicia as variaveis do interpretador
     variaveis = {}
+
+    # Reinicia as funcoes do interpretador
+    dicFuncoes = {}
+
+    repetirAtivado = False
+    funcaoAtivada = False
 
     # Reinicia o contador de Threads
     contadorThreads = 0
@@ -322,6 +361,10 @@ def interpretador(linhas):
     global contadorThreads
     global repetirAtivado
 
+    global funcaoAtivada
+    global dicFuncoes
+    global funcaoQueEstaSendoAnalisada
+
     contadorThreads += 1  # Aumenta o número de vezes que o interpretador foi chamado
     linhaComando = ''     # Reseta a linha de comando (enquanto >>x for menor que 6<<)
 
@@ -341,7 +384,7 @@ def interpretador(linhas):
                 lerBloco = interpretar(registradorLinhas.strip())
 
                 if lerBloco[0] == False:
-                    messagebox.showinfo("Ops",lerBloco[1])
+                    print("Ops",lerBloco[1])
                     break
 
                 if lerBloco[1] != None and "<class 'bool'>" not in str(type(lerBloco[1])):
@@ -385,13 +428,16 @@ def interpretador(linhas):
                         boolLinhaDeComando = interpretar(linhaComando)
 
                         if lerBloco[0] == False:
-                            messagebox.showinfo("Ops",lerBloco[1])
+                            print("Ops",lerBloco[1])
                             break
+                elif funcaoAtivada:
+                    dicFuncoes[funcaoQueEstaSendoAnalisada] = [dicFuncoes[funcaoQueEstaSendoAnalisada][0],registradorLinhas]
+                    funcaoAtivada = False
 
                 else:
                     # Envia um bloco completo para ser executado
                     interpretador(registradorLinhas)
- 
+
             registradorLinhas = ''
             contador += 1
             blocoDeCodigo = False
@@ -405,7 +451,7 @@ def interpretador(linhas):
                 lerBloco = interpretar(registradorLinhas.strip())
 
                 if lerBloco[0] == False:
-                    messagebox.showinfo("Ops",lerBloco[1])
+                    print("Ops",lerBloco[1])
                     break
 
                 # Salva o resultado da ultima linha executada
@@ -452,6 +498,12 @@ def interpretar(codigo):
         aguarde = ['espere ','aguarde ']
         mostre = ['mostre ','exiba ','escreva ','print ','imprima ','escreva na tela ','display ']
         se = ['se ','if ']
+        funcoes = ['funcao','function']
+        chamarFuncoes = ['passando parametros','parametros','parametro']
+
+        entrada = ['pegue o que o usuário digitar','capture','leia','input','entrada']
+        vetor = ['vetor','crie uma lista chamada','lista']
+        sorteio = ['sortei um número entre','sorteie um número inteiro entre']
 
         # Ande por todas as linhas e teste os comandos
         for linha in linhas:
@@ -470,14 +522,99 @@ def interpretar(codigo):
                     if comando == linha[0:len(comando)]:
                        return loopsFunction(linha[len(comando):])
 
-            for comando in declaraVariaveis:
-                if comando in linha:
-                    return atribuicao(linha,comando)
-
             for comando in aguarde:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return tempo(linha[len(comando):])
+
+            for comando in funcoes:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return Declarafuncao(linha[len(comando):])
+
+
+            # Tem que ser o ultimo
+            for comando in declaraVariaveis:
+                if comando in linha:
+                    return atribuicao(linha,comando)
+
+            # É funcao:
+            for comando in chamarFuncoes:
+                if comando in linha:
+                    print('Executar Função')
+                    return executarFuncoes(linha,comando)
+
+def executarFuncoes(linha,comando):
+    global dicFuncoes
+    nomeDaFuncao, parametros = linha.split(comando)
+    nomeDaFuncao = nomeDaFuncao.strip()
+    parametros = parametros.strip()
+    try:
+        dicFuncoes[nomeDaFuncao]
+
+    except:
+        return [False,"Essa função não existe"]
+
+    else:
+
+        if ',' in parametros: # Se tiver multiplos parametros
+            print('mais parametros')
+            listaDeParametros = parametros.split(',')
+            listaFinalDeParametros = []
+            for parametro in listaDeParametros:
+                listaFinalDeParametros.append(parametro.strip())
+
+            # Se tiver a mesma quantiade de parametros
+            if len(dicFuncoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
+                print('multiplos parametros iguais')
+                for parametroDeclarar in range(len(dicFuncoes[nomeDaFuncao][0])):
+                    resultado = atribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0][parametroDeclarar],listaFinalDeParametros[parametroDeclarar]),'recebe')
+                    # se não conseguir atribuir
+                    if resultado[0] == False:
+                        return resultado
+
+        else:
+            print('um parametro')
+            if len(dicFuncoes[nomeDaFuncao][0]) == 1:
+                resultado = atribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0],parametros),'recebe')
+
+                # se não conseguir atribuir
+                if resultado[0] == False:
+                    return resultado
+
+
+        interpretador(dicFuncoes[nomeDaFuncao][1])
+        return [True,None]
+
+
+def Declarafuncao(linha):
+    global funcaoAtivada
+    global funcaoQueEstaSendoAnalisada
+
+    print(linha)
+    recebe = ['recebe parametros','recebe']
+
+    for comando in recebe:
+        if comando in linha:
+            lista = linha.split(comando)
+
+            nomeDaFuncao = lista[0].strip()
+            parametros = lista[1].strip()
+
+            if ',' in parametros: # Se tiver multiplos parametros
+                listaDeParametros = parametros.split(',')
+
+                listaFinalDeParametros = []
+                for parametro in listaDeParametros:
+                    listaFinalDeParametros.append(parametro.strip())
+
+                dicFuncoes[nomeDaFuncao] = [listaFinalDeParametros,'bloco']
+            else:
+                dicFuncoes[nomeDaFuncao] = [parametros,'bloco']
+
+            funcaoQueEstaSendoAnalisada = nomeDaFuncao
+            funcaoAtivada = True
+            return [True,True]
 
 # Comando de exibição
 def exibicao(linha):
@@ -524,7 +661,8 @@ def abstrairValorVariavel(possivelVariavel):
     possivelVariavel = str(possivelVariavel).replace('\n','')
     possivelVariavel = possivelVariavel.strip()
 
-    contas = [' mais ',' menos ', ' + ',' - ']
+    contas = [' mais ',' menos ', ' divide ',' elevado ',' multiplique ',' elevado por ',' dividido por ',' multiplicado por ',' ** ',' + ',' - ',' / ',' * ']
+
     for conta in contas:
         if conta in possivelVariavel:
             valor1,valor2 = possivelVariavel.split(conta)
@@ -555,6 +693,32 @@ def abstrairValorVariavel(possivelVariavel):
                 else:
                     return [True,(float(valor1[1])-float(valor2[1]))]
 
+            elif conta == ' elevado ' or conta == ' elevado por ' or conta == ' ** ' :
+                try:
+                    float(valor1[1])
+                    float(valor2[1])
+                except:
+                    return [False,"[ERRO] - Strings não podem ser elevadas "]
+                else:
+                    return [True,(float(valor1[1])**float(valor2[1]))]
+
+            elif conta == ' multiplicado por ' or conta == ' multiplique ' or conta == ' * ' :
+                try:
+                    float(valor1[1])
+                    float(valor2[1])
+                except:
+                    return [False,"[ERRO] - Strings não podem ser multiplicadas "]
+                else:
+                    return [True,(float(valor1[1])*float(valor2[1]))]
+
+            elif conta == ' divide ' or conta == ' dividido por ' or conta == ' / ':
+                try:
+                    float(valor1[1])
+                    float(valor2[1])
+                except:
+                    return [False,"[ERRO] - Strings não podem ser divididas "]
+                else:
+                    return [True,(float(valor1[1])/float(valor2[1]))]
 
     if '"' in possivelVariavel or "'" in possivelVariavel: # é uma string
         return [True,possivelVariavel]
@@ -699,7 +863,6 @@ def modoFullScreen(event=None):
 
     tela.attributes("-fullscreen", boolTelaEmFullScreen)
 
-
 tela = Tk()
 tela.title('Linguagem feynman beta 0.4')
 tela.configure(bg='#565656')
@@ -803,7 +966,7 @@ def create_topExecutando():
     tx_informacoes.grid(row=1,column=1,sticky=NSEW)
 
 lb_linhas = Text(fr_InPrincipal,design.lb_linhas())
-lb_linhas.insert('end','1\n')
+lb_linhas.insert('end',' 1\n')
 lb_linhas.config(state=DISABLED,relief = SUNKEN,border= 0, highlightthickness=0)
 # =================================== TELA DE CODIFICAÇÃO =================================== #
 tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao())
@@ -820,13 +983,11 @@ lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo(), text=" COMBRATEC
 lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores(), text="Gabriel Gregório da Silva")
 lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno(), text="2019")
 
-lb_linhas.grid(row=1,column=0,sticky=N)
+lb_linhas.grid(row=1,column=0,sticky=NSEW)
 tx_codificacao.grid(row=1,column=1,sticky=NSEW)
 fr_InPrincipal.grid(row=1,column=1,sticky=NSEW)
 lb_sobDeTitulo.grid(row=1,column=1,sticky=NSEW)
 lb_sobDAutores.grid(row=2,column=1,sticky=NSEW)
 lb_sobDesenAno.grid(row=3,column=1,sticky=NSEW)
-
-
 
 tela.mainloop()

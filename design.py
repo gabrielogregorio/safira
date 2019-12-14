@@ -34,14 +34,14 @@ class design():
             'insertbackground': '#ddddff',
             'selectbackground':'#565656',
             'selectforeground':'#343434',
-            'font':('Loma',14)}
+            'font':('helvetica',14)}
 
     def lb_linhas():
         return {
             'width':5,
             'bg':'#333333',
             'fg':'#888888',
-            'font':('Loma',14)}
+            'font':('helvetica',14)}
 
     def tx_informacoes():
         return {

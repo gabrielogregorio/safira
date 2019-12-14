@@ -1,9 +1,16 @@
 nome vale "gabriel"
 
+funcao calculaMedia recebe parametros num1, num2 
+{
+     num3 = num1 + num2
+    mostre "A média é "
+    mostre num3 / 2
+}
+
 se nome for igual a "gabriel"
 {
     mostre "Linguagem Fynman"
-    espere 2 segundos
+    espere 1 segundos
 }
 
 contador recebe 0
@@ -14,4 +21,8 @@ enquanto contador for menor que 10
     contador recebe contador mais 1
 }
 
+calculaMedia passando parametros 10, 5
+
 mostre "Programa Finalizado"
+
+
