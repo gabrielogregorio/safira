@@ -180,7 +180,7 @@ def sintaxe_linha_comentario(palavra,cor,frase,linha):                       # A
             colorirUmaPalavra(palavra,linha,caractere,len(frase),cor)                       # Colore a região do comentário
 
 # Analisa o contexto da palavra, separa número, string, comentário e palavras no geral
-def sintaxe(palavra,cor,tx_codificacao):
+def sintaxe(palavra,cor):
     cor = cor['foreground']
     tx_codificacao.tag_delete(palavra) # remove todas as colorações da palavra
     lista = tx_codificacao.get(1.0,END).split('\n') # obtem uma lista com todas as linhas
@@ -219,97 +219,104 @@ def sintaxeDasPalavras():
     threadContadorLinhas.start()
 
     # ATRIBUIÇÃO
-    sintaxe('vale'                       , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('recebe'                     , Sintaxe.atribuicao() ,tx_codificacao)
-    sintaxe('='                          , Sintaxe.atribuicao() ,tx_codificacao)
+    sintaxe('vale'                       , Sintaxe.atribuicao())
+    sintaxe('recebe'                     , Sintaxe.atribuicao())
+    sintaxe('='                          , Sintaxe.atribuicao())
 
     # LOOPS  
-    sintaxe('enquanto'                   , Sintaxe.lista() ,tx_codificacao)
-    sintaxe('while'                      , Sintaxe.lista() ,tx_codificacao)
-    sintaxe('repita'                     , Sintaxe.lista() ,tx_codificacao)
+    sintaxe('enquanto'                   , Sintaxe.lista())
+    sintaxe('while'                      , Sintaxe.lista())
+    sintaxe('repita'                     , Sintaxe.lista())
 
     # ENTRADA
-    sintaxe('oque o for digitado'        , Sintaxe.entrada() ,tx_codificacao)
+    sintaxe('oque o for digitado'        , Sintaxe.entrada())
 
     # LÓGICO
-    sintaxe('ou'                         , Sintaxe.logico() ,tx_codificacao)
-    sintaxe('e'                         , Sintaxe.logico() ,tx_codificacao)
+    sintaxe('ou'                         , Sintaxe.logico())
+    sintaxe('e'                         , Sintaxe.logico())
  
-    sintaxe('for maior que'             , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('>'                         , Sintaxe.logico()       ,tx_codificacao)    
+    sintaxe('for maior que'             , Sintaxe.logico())    
+    sintaxe('>'                         , Sintaxe.logico())    
  
-    sintaxe('for menor que'             , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('<'                         , Sintaxe.logico() ,tx_codificacao)    
+    sintaxe('for menor que'             , Sintaxe.logico())    
+    sintaxe('<'                         , Sintaxe.logico())    
  
-    sintaxe('for igual a'               , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('=='                        , Sintaxe.logico() ,tx_codificacao)    
+    sintaxe('for igual a'               , Sintaxe.logico())    
+    sintaxe('=='                        , Sintaxe.logico())    
  
-    sintaxe('for maior ou igual a'       , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('>='                         , Sintaxe.logico()  ,tx_codificacao)    
+    sintaxe('for maior ou igual a'       , Sintaxe.logico())    
+    sintaxe('>='                         , Sintaxe.logico())    
 
-    sintaxe('for menor ou igual a'       , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('<='                         , Sintaxe.logico() ,tx_codificacao)    
+    sintaxe('for menor ou igual a'       , Sintaxe.logico())    
+    sintaxe('<='                         , Sintaxe.logico())    
 
-    sintaxe('for diferente de'           , Sintaxe.logico() ,tx_codificacao)    
-    sintaxe('!='                         , Sintaxe.logico() ,tx_codificacao)    
+    sintaxe('for diferente de'           , Sintaxe.logico())    
+    sintaxe('!='                         , Sintaxe.logico())    
 
     # CONDICIONAIS
-    sintaxe('se'                         , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('if'                         , Sintaxe.condicionais() ,tx_codificacao)
-    sintaxe('senao'                      , Sintaxe.condicionais() ,tx_codificacao)
+    sintaxe('se'                         , Sintaxe.condicionais())
+    sintaxe('if'                         , Sintaxe.condicionais())
+    sintaxe('senao'                      , Sintaxe.condicionais())
 
     # CONTAS
-    sintaxe('+'                          , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('mais'                       , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('+'                          , Sintaxe.contas())
+    sintaxe('mais'                       , Sintaxe.contas())
 
-    sintaxe('/'                          , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('divide'                     , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('dividido por'               , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('/'                          , Sintaxe.contas())
+    sintaxe('divide'                     , Sintaxe.contas())
+    sintaxe('dividido por'               , Sintaxe.contas())
 
-    sintaxe('**'                          , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('elevado'                , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('elevado por'           , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('**'                          , Sintaxe.contas())
+    sintaxe('elevado'                , Sintaxe.contas())
+    sintaxe('elevado por'           , Sintaxe.contas())
 
-    sintaxe('*'                          , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('multiplique'                , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('multiplicado por'           , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('*'                          , Sintaxe.contas())
+    sintaxe('multiplique'                , Sintaxe.contas())
+    sintaxe('multiplicado por'           , Sintaxe.contas())
 
-    sintaxe('-'                          , Sintaxe.contas() ,tx_codificacao)
-    sintaxe('menos'                      , Sintaxe.contas() ,tx_codificacao)
+    sintaxe('-'                          , Sintaxe.contas())
+    sintaxe('menos'                      , Sintaxe.contas())
 
     # EXIBIÇÃO
-    sintaxe('exiba'                      , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('mostre'                     , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('escreva'                    , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('escreva na tela'            , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('print'                      , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('imprima'                    , Sintaxe.exibicao() ,tx_codificacao)
-    sintaxe('display'                    , Sintaxe.exibicao() ,tx_codificacao)
+    sintaxe('exiba'                      , Sintaxe.exibicao())
+    sintaxe('mostre'                     , Sintaxe.exibicao())
+    sintaxe('escreva'                    , Sintaxe.exibicao())
+    sintaxe('escreva na tela'            , Sintaxe.exibicao())
+    sintaxe('print'                      , Sintaxe.exibicao())
+    sintaxe('imprima'                    , Sintaxe.exibicao())
+    sintaxe('display'                    , Sintaxe.exibicao())
 
-    sintaxe('funcao'                     , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('retorne'                    , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('funcao'                     , Sintaxe.tempo())
+    sintaxe('retorne'                    , Sintaxe.tempo())
 
-    sintaxe('recebe parametros'          , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('passando parametros'        , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('parametros'                 , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('parametro'                  , Sintaxe.tempo() ,tx_codificacao)
-
-    # STRINGS
-    sintaxe('"'                         , Sintaxe.string() ,tx_codificacao)
-    sintaxe("'"                         , Sintaxe.string() ,tx_codificacao)
-
-    # COMENTÁRIO
-    sintaxe('comentario'                , Sintaxe.comentario() ,tx_codificacao)
+    sintaxe('recebe parametros'          , Sintaxe.tempo())
+    sintaxe('passando parametros'        , Sintaxe.tempo())
+    sintaxe('parametros'                 , Sintaxe.tempo())
+    sintaxe('parametro'                  , Sintaxe.tempo())
 
     # DELAY
-    sintaxe('espere'                    , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('segundos'                  , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('segundo'                   , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('milisegundos'              , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('ms'                        , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('milisegundo'               , Sintaxe.tempo() ,tx_codificacao)
-    sintaxe('s'                         , Sintaxe.tempo() ,tx_codificacao)
+    sintaxe('espere'                    , Sintaxe.tempo())
+    sintaxe('segundos'                  , Sintaxe.tempo())
+    sintaxe('segundo'                   , Sintaxe.tempo())
+    sintaxe('milisegundos'              , Sintaxe.tempo())
+    sintaxe('ms'                        , Sintaxe.tempo())
+    sintaxe('milisegundo'               , Sintaxe.tempo())
+    sintaxe('s'                         , Sintaxe.tempo())
 
+    sintaxe('número aleatório entre', Sintaxe.tempo())
+    sintaxe('número aleatorio entre', Sintaxe.tempo())
+    sintaxe('numero aleatório entre', Sintaxe.tempo())
+    sintaxe('numero aleatorio entre', Sintaxe.tempo())
+
+    # Números
+    sintaxe('numerico'                  , Sintaxe.numerico())
+
+    # STRINGS
+    sintaxe('"'                         , Sintaxe.string())
+    sintaxe("'"                         , Sintaxe.string())
+
+    # COMENTÁRIO
+    sintaxe('comentario'                , Sintaxe.comentario())
 
 ###########################################################################################################################
 
@@ -492,7 +499,7 @@ def interpretar(codigo):
 
         # Obtem todas as linhas 
         linhas = codigo.split('\n')
-
+        aleatorio = ['número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre']
         declaraVariaveis = [' vale ',' recebe ',' = ']
         loopsss = ['enquanto ','while ']
         aguarde = ['espere ','aguarde ']
@@ -532,17 +539,57 @@ def interpretar(codigo):
                     if comando == linha[0:len(comando)]:
                        return Declarafuncao(linha[len(comando):])
 
+            for comando in aleatorio:
+                if len(comando) < len(linha):
+                    if comando == linha[0:len(comando)]:
+                       return numeroAleatorio(linha[len(comando):])
 
-            # Tem que ser o ultimo
-            for comando in declaraVariaveis:
-                if comando in linha:
-                    return atribuicao(linha,comando)
 
             # É funcao:
             for comando in chamarFuncoes:
                 if comando in linha:
                     print('Executar Função')
                     return executarFuncoes(linha,comando)
+
+            # Tem que ser o ultimo
+            for comando in declaraVariaveis:
+                if comando in linha:
+                    return atribuicao(linha,comando)
+
+
+def numeroAleatorio(linha):
+    linha = linha.strip()
+    if ' e ' in linha:
+        num1, num2 = linha.split(' e ')
+ 
+        num1 = abstrairValorVariavel(num1)
+        num2 = abstrairValorVariavel(num2)
+
+        # Se deu para obter o valor de ambos
+        if num1[0] == False:
+            # False e True embutido
+            return num1
+
+        if num2[0] == False:
+            # False e True embutido
+            return num2
+
+        # Se são numéricos
+        try:
+            float(num1[1])
+        except:
+            return [False,"O valor 1 não é numérico"]
+
+        try:
+            float(num2[1])
+        except:
+            return [False,"O valor 2 não é numérico"]
+
+        import random
+        return [True,random.randint(num1[1],num2[1])]
+
+    else:
+        return [False,"Erro, você precisa definir o segundo valor!"]
 
 def executarFuncoes(linha,comando):
     global dicFuncoes
@@ -929,7 +976,7 @@ menu_editar.add_command(label='colar (CTRL + V)')
 menu_editar.add_command(label='desfazer (CTRL + Z)')
 menu_editar.add_command(label='refazer (CTRL + Y)')
 menu_editar.add_command(label='selecionar tudo (CTRL + A)')
-    
+
 # =================================== FERRAMENTAS =================================== #
 menu_ferramentas.add_command(label='corrigir identação')
 menu_ferramentas.add_command(label='Numero de espaços para o tab')
