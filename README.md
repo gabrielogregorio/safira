@@ -1,6 +1,7 @@
-# Uma linguagem de programação natural
+# Linguagem Feynman
+### Uma linguagem de programação natural
 
-## objetivo  
+#### objetivo  
 
 Desenvolvimento uma linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE (feynman_code) com uma linguagem de programação simples (feynman), para que crianças e iniciantes nesse universo dos códigos possam a ter uma base no assunto. 
 
