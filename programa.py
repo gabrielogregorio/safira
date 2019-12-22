@@ -235,24 +235,24 @@ def sintaxeDasPalavras():
     sintaxe('while'                      , Sintaxe.lista())
 
     sintaxe('repita'                     , Sintaxe.lista())
-    sintaxe('vezes'                     , Sintaxe.lista())
-    sintaxe('vez'                       , Sintaxe.lista())
+    sintaxe('vezes'                      , Sintaxe.lista())
+    sintaxe('vez'                        , Sintaxe.lista())
 
     # ENTRADA
     sintaxe('oque o for digitado'        , Sintaxe.entrada())
 
     # LÓGICO
     sintaxe('ou'                         , Sintaxe.logico())
-    sintaxe('e'                         , Sintaxe.logico())
+    sintaxe('e'                          , Sintaxe.logico())
  
-    sintaxe('for maior que'             , Sintaxe.logico())    
-    sintaxe('>'                         , Sintaxe.logico())    
+    sintaxe('for maior que'              , Sintaxe.logico())    
+    sintaxe('>'                          , Sintaxe.logico())    
  
-    sintaxe('for menor que'             , Sintaxe.logico())    
-    sintaxe('<'                         , Sintaxe.logico())    
+    sintaxe('for menor que'              , Sintaxe.logico())    
+    sintaxe('<'                          , Sintaxe.logico())    
  
-    sintaxe('for igual a'               , Sintaxe.logico())    
-    sintaxe('=='                        , Sintaxe.logico())    
+    sintaxe('for igual a'                , Sintaxe.logico())    
+    sintaxe('=='                         , Sintaxe.logico())    
  
     sintaxe('for maior ou igual a'       , Sintaxe.logico())    
     sintaxe('>='                         , Sintaxe.logico())    
@@ -274,9 +274,9 @@ def sintaxeDasPalavras():
     sintaxe('divide'                     , Sintaxe.contas())
     sintaxe('dividido por'               , Sintaxe.contas())
 
-    sintaxe('**'                          , Sintaxe.contas())
-    sintaxe('elevado'                , Sintaxe.contas())
-    sintaxe('elevado por'           , Sintaxe.contas())
+    sintaxe('**'                         , Sintaxe.contas())
+    sintaxe('elevado'                    , Sintaxe.contas())
+    sintaxe('elevado por'                , Sintaxe.contas())
 
     sintaxe('*'                          , Sintaxe.contas())
     sintaxe('multiplique'                , Sintaxe.contas())
@@ -284,6 +284,8 @@ def sintaxeDasPalavras():
 
     sintaxe('-'                          , Sintaxe.contas())
     sintaxe('menos'                      , Sintaxe.contas())
+
+    sintaxe('%'                          , Sintaxe.contas())
 
     sintaxe('exiba'                      , Sintaxe.exibicao())
     sintaxe('mostre'                     , Sintaxe.exibicao())
@@ -305,25 +307,25 @@ def sintaxeDasPalavras():
     sintaxe('parametros'                 , Sintaxe.tempo())
     sintaxe('parametro'                  , Sintaxe.tempo())
 
-    sintaxe('espere'                    , Sintaxe.tempo())
-    sintaxe('segundos'                  , Sintaxe.tempo())
-    sintaxe('segundo'                   , Sintaxe.tempo())
-    sintaxe('milisegundos'              , Sintaxe.tempo())
-    sintaxe('ms'                        , Sintaxe.tempo())
-    sintaxe('milisegundo'               , Sintaxe.tempo())
-    sintaxe('s'                         , Sintaxe.tempo())
+    sintaxe('espere'                     , Sintaxe.tempo())
+    sintaxe('segundos'                   , Sintaxe.tempo())
+    sintaxe('segundo'                    , Sintaxe.tempo())
+    sintaxe('milisegundos'               , Sintaxe.tempo())
+    sintaxe('ms'                         , Sintaxe.tempo())
+    sintaxe('milisegundo'                , Sintaxe.tempo())
+    sintaxe('s'                          , Sintaxe.tempo())
 
-    sintaxe('número aleatório entre', Sintaxe.tempo())
-    sintaxe('número aleatorio entre', Sintaxe.tempo())
-    sintaxe('numero aleatório entre', Sintaxe.tempo())
-    sintaxe('numero aleatorio entre', Sintaxe.tempo())
+    sintaxe('número aleatório entre'     , Sintaxe.tempo())
+    sintaxe('número aleatorio entre'     , Sintaxe.tempo())
+    sintaxe('numero aleatório entre'     , Sintaxe.tempo())
+    sintaxe('numero aleatorio entre'     , Sintaxe.tempo())
 
-    sintaxe('numerico'                  , Sintaxe.numerico())
+    sintaxe('numerico'                   , Sintaxe.numerico())
 
-    sintaxe('"'                         , Sintaxe.string())
-    sintaxe("'"                         , Sintaxe.string())
+    sintaxe('"'                          , Sintaxe.string())
+    sintaxe("'"                          , Sintaxe.string())
 
-    sintaxe('comentario'                , Sintaxe.comentario())
+    sintaxe('comentario'                 , Sintaxe.comentario())
 
 # inicia o interpretador
 def iniciarOrquestradorDoInterpretador(event = None):
@@ -392,16 +394,15 @@ def orquestradorDoInterpretador(linhas):
                 lerBloco = interpretador(registradorLinhas.strip())
 
                 if lerBloco[0] == False:
-                    print("Ops",lerBloco[1])
                     aconteceuUmErro = True
                     break
 
                 if lerBloco[1] != None and "<class 'bool'>" not in str(type(lerBloco[1])):
 
                     # Insere no menu lateral
-                    if len(lerBloco[1]) > len(":nessaLinha:"):
+                    if len(str(lerBloco[1])) > len(":nessaLinha:"):
 
-                        if lerBloco[1][:len(":nessaLinha:")] == ":nessaLinha:":
+                        if str(lerBloco[1])[:len(":nessaLinha:")] == ":nessaLinha:":
                             tx_informacoes.insert(END, str(lerBloco[1][len(":nessaLinha:"):]))
                         else:
                             tx_informacoes.insert(END, str(lerBloco[1])+'\n')
@@ -430,7 +431,6 @@ def orquestradorDoInterpretador(linhas):
         if linhas[contador] == '}' and blocoDeCodigo and penetracao == 0:
 
             if lerBloco[0] == False:
-                print("Ops2",lerBloco[1])
                 aconteceuUmErro = True
                 break
 
@@ -450,7 +450,6 @@ def orquestradorDoInterpretador(linhas):
                         boolLinhaDeComando = interpretador(linhaComando)
 
                         if lerBloco[0] == False:
-                            print("Ops",lerBloco[1])
                             break
 
                 elif funcaoRepita != 0:
@@ -489,7 +488,6 @@ def orquestradorDoInterpretador(linhas):
                 linhaComando = registradorLinhas.strip()
 
                 if lerBloco[0] == False:
-                    print("Ops",lerBloco[1])
                     aconteceuUmErro = True
                     break
 
@@ -497,7 +495,7 @@ def orquestradorDoInterpretador(linhas):
                     # Insere no menu lateral
                     if len(str(lerBloco[1])) > len(":nessaLinha:"):
 
-                        if lerBloco[1][:len(":nessaLinha:")] == ":nessaLinha:":
+                        if str(lerBloco[1])[:len(":nessaLinha:")] == ":nessaLinha:":
                             tx_informacoes.insert(END, str(lerBloco[1][len(":nessaLinha:"):]))
                         else:
                             tx_informacoes.insert(END, str(lerBloco[1])+'\n')
@@ -762,6 +760,65 @@ def funcaoTempo(codigo):
 
     return [True,None]
 
+def fazerContas(linha):
+    linha = str(linha)
+    print("...",linha)
+    # Do maior para o menor
+    linha = linha.replace(' multiplicado por ',' * ')
+    linha = linha.replace(' dividido por ',' / ')
+    linha = linha.replace(' multiplique ', ' * ')
+    linha = linha.replace(' elevado por ',' ** ')
+    linha = linha.replace(' elevado ',' ** ')
+    linha = linha.replace(' divide ',' / ')
+    linha = linha.replace(' mais ',' + ')
+    linha = linha.replace(' menos ', ' - ')
+
+    if "'" in linha or '"' in linha:
+        # Não mude esse texto
+        print("CERTO")
+        return [False, "Isso é uma string"]
+
+    # Removendo os espaços laterais
+    linha = ' {} '.format(linha)
+
+    simbolosEspeciais = ['+','-','*','/','%','(',')']
+    qtdSimbolosEspeciais = 0
+
+    # Deixando todos os itens especiais com espaço em relação aos valores
+    for iten in simbolosEspeciais:
+        if iten in linha:
+            qtdSimbolosEspeciais += 1
+        linha = linha.replace(iten,' {} '.format(iten))
+
+    # Se não tiver nenhuma operação
+    if qtdSimbolosEspeciais == 0:
+        return [False, "Não foi possivel realizar a conta, porque não tem nenhum valor aqui. "]
+
+    # Correção do potenciação
+    linha = linha.replace('*  *','**')
+
+    # Abstração de variáveis
+    anterior = 0
+    for valor in re.finditer(' ',linha):
+        palavra = linha[anterior:valor.start()]
+        palavra = palavra.strip()
+
+        if palavra.isalnum() and palavra[0].isalpha():
+            variavelDessaVez = obterValorDeUmaVariavel(palavra)
+            if variavelDessaVez[0] == False:
+                return variavelDessaVez
+            linha = str(linha[:anterior]) + str(variavelDessaVez[1]) + str(linha[valor.start():]) 
+
+        anterior = valor.end()
+
+    # Tente fazer uma conta com isso
+    try:
+        resutadoFinal = eval(linha)
+    except Exception as erro:
+        return [False, "Não foi possivel realizar a conta |{}|".format(linha)]
+    else:
+        return [True, resutadoFinal]
+
 def obterValorDeUmaVariavel(variavel):
     global variaveis
 
@@ -777,65 +834,14 @@ def obterValorDeUmaVariavel(variavel):
 def abstrairValoresDaLinhaInteira(possivelVariavel):
     possivelVariavel = str(possivelVariavel).replace('\n','')
     possivelVariavel = possivelVariavel.strip()
-
-    contas = [' mais ',' menos ', ' divide ',' elevado ',' multiplique ',' elevado por ',' dividido por ',' multiplicado por ',' ** ',' + ',' - ',' / ',' * ']
-
-    for conta in contas:
-        if conta in possivelVariavel:
-            valor1,valor2 = possivelVariavel.split(conta)
-            valor1 = abstrairValoresDaLinhaInteira(valor1)
-            valor2 = abstrairValoresDaLinhaInteira(valor2)
-
-            if valor1[0] == False:
-                return valor1
-
-            if valor2[0] == False:
-                return valor2
-
-            if conta == ' mais ' or conta == ' + ':
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [True,str(valor1[1])+str(valor2[1])]
-                else:
-                    return [True,float(valor1[1])+float(valor2[1])]
-
-            elif conta == ' menos ' or conta == ' - ' :
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [False,"[ERRO] - Strings não podem ser subtraidas"]
-                else:
-                    return [True,(float(valor1[1])-float(valor2[1]))]
-
-            elif conta == ' elevado ' or conta == ' elevado por ' or conta == ' ** ' :
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [False,"[ERRO] - Strings não podem ser elevadas "]
-                else:
-                    return [True,(float(valor1[1])**float(valor2[1]))]
-
-            elif conta == ' multiplicado por ' or conta == ' multiplique ' or conta == ' * ' :
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [False,"[ERRO] - Strings não podem ser multiplicadas "]
-                else:
-                    return [True,(float(valor1[1])*float(valor2[1]))]
-
-            elif conta == ' divide ' or conta == ' dividido por ' or conta == ' / ':
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [False,"[ERRO] - Strings não podem ser divididas "]
-                else:
-                    return [True,(float(valor1[1])/float(valor2[1]))]
+    
+    resultado = fazerContas(possivelVariavel)
+    # Se deu erro, mas tem uma mensagem diferente do esperado
+    if resultado[0] == False and resultado[1] != "Não foi possivel realizar a conta, porque não tem nenhum valor aqui. " and resultado[1] != "Isso é uma string":
+        return resultado
+    # Se deu certo
+    elif resultado[0] == True:
+        return resultado
 
     if '"' in possivelVariavel or "'" in possivelVariavel:
         return [True,possivelVariavel]
@@ -859,41 +865,14 @@ def funcaoAtribuicao(linha,comando):
     valor    = valor.strip()
     print('variavel: ',variavel,' valor ',valor)
 
-    contas = [' mais ',' menos ',' + ',' - ']
+    resultado = fazerContas(valor)
+    if resultado[0] == True:
+        variaveis[variavel] = resultado[1]
+        return [True,None]
 
-    for conta in contas:
-        if conta in valor:
-            valor1,valor2 = valor.split(conta)
-
-            valor1 = abstrairValoresDaLinhaInteira(valor1)
-            valor2 = abstrairValoresDaLinhaInteira(valor2)
-
-            if valor1[0] == False:
-                return valor1
-
-            if valor2[0] == False:
-                return valor2
-
-            if conta == ' mais ' or conta == ' + ' :
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    variaveis[variavel] = str(valor1[1]) + str(valor2[1])
-                    return [True,None]
-                else:
-                    variaveis[variavel] = float(valor1[1])+float(valor2[1])
-                    return [True,None]
-
-            elif conta == ' menos ' or conta == ' - ':
-                try:
-                    float(valor1[1])
-                    float(valor2[1])
-                except:
-                    return [False,"Você não pode subtrarir strings"]
-                else:
-                    variaveis[variavel] =  float(valor1[1]) - float(valor2[1])
-                    return [True,None]
+    if resultado[0] == False and resultado[1] != "Não foi possivel realizar a conta, porque não tem nenhum valor aqui. " and resultado[1] != "Isso é uma string":
+        print("NAÔ ERRo")
+        return resultado
 
     if '"' in valor or "'" in valor: # é uma string
         variaveis[variavel] = valor
