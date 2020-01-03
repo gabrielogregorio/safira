@@ -34,14 +34,14 @@ class design():
             'insertbackground': '#ddddff',
             'selectbackground':'#565656',
             'selectforeground':'#343434',
-            'font':('helvetica',14)}
+            'font':('helvetica',12)}
 
     def lb_linhas():
         return {
             'width':5,
             'bg':'#333333',
             'fg':'#888888',
-            'font':('helvetica',14)}
+            'font':('helvetica',12)}
 
     def tx_informacoes():
         return {
@@ -57,7 +57,7 @@ class Sintaxe():
 
     def atribuicao():
         return {
-            'foreground':'#D35400'}
+            'foreground':'#f57600'}
 
     def loops():
         return {
@@ -77,7 +77,7 @@ class Sintaxe():
 
     def exibicao():
         return {
-            'foreground':'#8fc78f'}
+            'foreground':'#43ff69'}
 
     def tempo():
         return {

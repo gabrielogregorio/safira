@@ -168,39 +168,39 @@ def sintaxe_linha(palavra,cor,frase,linha):
                     # colora a palavra
                     colorirUmaPalavra(palavra,linha,caractere,caractere + len(palavra),cor)
 
-# Tratamento para strings
-def sintaxe_linha_string(palavra,cor,frase,linha):
-    for valor in re.finditer("""('.*')|(".*")""",frase):
-        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
-
-def sintaxe_linha_numerico(palavra,cor,frase,linha):
-    for valor in re.finditer('(\\s|^)([0-9\\.\\s]+)(\\s|$)',frase):
-        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
-
-def sintaxe_linha_comentario(palavra,cor,frase,linha):
-    for valor in re.finditer('(#|\\/\\/).*$',frase):
-        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
-
-# Analisa o contexto da palavra, separa número, string, comentário e palavras no geral
 def sintaxe(palavra,cor):
-    cor = cor['foreground']                         # Acessar a cor de frente
-    tx_codificacao.tag_delete(palavra)              # remove todas as colorações da palavra
-    lista = tx_codificacao.get(1.0,END).split('\n') # obtem uma lista com todas as linhas
+    cor = cor['foreground']
+    tx_codificacao.tag_delete(palavra)
+    lista = tx_codificacao.get(1.0,END).split('\n')
 
     # Ande por todas as linhas do programa
     for linha in range(len(lista)):
 
-        if palavra == '"' or palavra == "'":  # se a palavra for apontada como string
-            sintaxe_linha_string(palavra,cor,lista[linha],str(linha+1))
+        # Se a palavra for apontada como string
+        if palavra == '"' or palavra == "'":
+            for valor in re.finditer(""""[^"]*"|'[^']*'""",lista[linha]):
+                colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
 
-        elif palavra == "numerico": # se a palavra foi apontada como numérico
-            sintaxe_linha_numerico(palavra,cor,lista[linha],str(linha+1))        
+        # se a palavra foi apontada como numérico
+        elif palavra == "numerico":
+            for valor in re.finditer('(\\s|^)([0-9\\.\\,\\s]+)(\\s|$)',lista[linha]):
+                colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
 
-        elif palavra == "comentario": # Se a palavra foi apontada como comentário
-            sintaxe_linha_comentario(palavra,cor,lista[linha],str(linha+1))        
+        # Se a palavra foi apontada como comentário
+        elif palavra == "comentario":
+            for valor in re.finditer('(#|\\/\\/).*$',lista[linha]):
+                colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
 
-        else: # Se for uma palavra especial
-            sintaxe_linha(palavra,cor,lista[linha],str(linha+1))
+        # Se for uma palavra especial
+        else:
+            # Remoção de bugs no regex
+            palavra = palavra.replace('+','\\+')
+            palavra = palavra.replace('/','\\/')
+            palavra = palavra.replace('*','\\*')
+
+            for valor in re.finditer('(^|\\s){}(\\s|$)'.format(palavra),lista[linha]):
+                colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
+
 
 def contadorDeLinhas():
     global lb_linhas
@@ -634,8 +634,6 @@ def interpretador(codigo):
                     if comando == linha[0:len(comando)]:
                        return funcaoNumeroAleatorio(linha[len(comando):])
 
-
-
             for comando in repita:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
@@ -726,10 +724,9 @@ def funcaoNumeroAleatorio(linha):
 
 # calcMedia passando parametros nota1, nota2
 def funcaoExecutaFuncoes(linha):
-    chamarFuncoes    = ['passando parametros','passando parametro','parametros','parametro','passando']
-
-    print('executar funcoes')
     global dicFuncoes
+    chamarFuncoes    = ['passando parametros','passando parametro','parametros','parametro','passando']
+ 
     nomeDaFuncao = None
     parametros = None
     for comando in chamarFuncoes:
@@ -743,8 +740,6 @@ def funcaoExecutaFuncoes(linha):
         nomeDaFuncao = linha
 
     try:
-        print('Nome da função tentado:',nomeDaFuncao)
-        print('Funcoes declaradas:',dicFuncoes)
         dicFuncoes[nomeDaFuncao]
     except:
         return [False,"Essa função não existe"]
@@ -842,11 +837,11 @@ def funcaoTempo(codigo):
     tiposEspera = [' milisegundos',' milisegundo',' segundos',' segundo',' ms',' s']
 
     for comando in tiposEspera:
-        if len(comando) < len(codigo):                                                      # Se o comando não estrapolar o código
-            if comando == codigo[len(codigo)-len(comando):]:                                # Se o comando estiver no código
-                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)])        # Tente obter o real valor no código
-                if resultado != False:                                                      # Se foi possível obter
-                    if comando == " segundos" or comando == " s" or comando == " segundo":  # Se está em segunso
+        if len(comando) < len(codigo):                                                         # Se o comando não estrapolar o código
+            if comando == codigo[len(codigo)-len(comando):]:                                   # Se o comando estiver no código
+                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)])   # Tente obter o real valor no código
+                if resultado != False:                                                         # Se foi possível obter
+                    if comando == " segundos" or comando == " s" or comando == " segundo":     # Se está em segunso
                         time.sleep(resultado[1])                                               # Tempo em segundos
                         return [True,None]
 
@@ -858,6 +853,32 @@ def funcaoTempo(codigo):
                     return [False,'Erro ao obter um valor no tempo']
 
     return [True,None]
+
+def obterValorDeString(string):
+    print(">>>",string)
+    valorFinal = ''
+    anterior = 0
+
+    for valor in re.finditer(""""[^"]*"|'[^']*'""",string):
+        print(valor.group())
+        print(string[anterior:valor.start()],'>>>>>>>>>>>...')
+        abstrair = abstrairValoresDaLinhaInteira(string[anterior:valor.start()])
+        if abstrair[0] == False:
+            print("EROOOOOO")
+            return abstrair
+
+        valorFinal = valorFinal + str(abstrair[1]) + string[valor.start():valor.end()]
+        anterior = valor.end()
+
+    # Capturar o resto        
+    abstrair = abstrairValoresDaLinhaInteira(string[anterior:])
+    if abstrair[0] == False:
+        print("EROOOOOO2")
+        return abstrair
+
+    valorFinal = valorFinal + str(abstrair[1])
+
+    return [True,valorFinal]
 
 def fazerContas(linha):
     print('Fazer contas')
@@ -938,8 +959,28 @@ def obterValorDeUmaVariavel(variavel):
 
 def abstrairValoresDaLinhaInteira(possivelVariavel):
     print('abstrairValoresDaLinhaInteira')
-    possivelVariavel = str(possivelVariavel).replace('\n','')
+    print(possivelVariavel)
+    possivelVariavel = str(possivelVariavel)
+    possivelVariavel = possivelVariavel.replace('\n','')
     possivelVariavel = possivelVariavel.strip()
+    if possivelVariavel == '':
+        return [True,possivelVariavel]
+
+    print(possivelVariavel,'::')
+    # caso existam contas entre strings
+    if possivelVariavel[0] == ',':
+        possivelVariavel = possivelVariavel[1:]
+        print("Nova",possivelVariavel)
+
+    if len(possivelVariavel) > 1:
+        if possivelVariavel[-1] == ',':
+            possivelVariavel = possivelVariavel[0:len(possivelVariavel)-1]
+
+    print(possivelVariavel,'nova2')
+
+    possivelVariavel = possivelVariavel.strip()
+    if possivelVariavel == '':
+        return [True,possivelVariavel]
 
     resultado = fazerContas(possivelVariavel)
 
@@ -948,7 +989,7 @@ def abstrairValoresDaLinhaInteira(possivelVariavel):
         return resultado
 
     if '"' in possivelVariavel or "'" in possivelVariavel:
-        return [True,possivelVariavel]
+        return obterValorDeString(possivelVariavel)
 
     try:
         float(possivelVariavel)
@@ -974,7 +1015,11 @@ def funcaoAtribuicao(linha,comando):
         return [True,None]
 
     if '"' in valor or "'" in valor: # é uma string
-        variaveis[variavel] = valor
+        valor = obterValorDeString(valor)
+        if valor[0] == False:
+            return valor
+
+        variaveis[variavel] = valor[1]
         return [True,None]
 
     try:
@@ -1035,6 +1080,7 @@ def funcaoCondicional(linha):
 
         if palavra.isalnum() and palavra[0].isalpha() and len(palavra) != 0 and palavra not in simbolos:
             variavelDessaVez = obterValorDeUmaVariavel(palavra)
+            print(palavra,variavelDessaVez)
             if variavelDessaVez[0] == False:
                 return variavelDessaVez
 
@@ -1051,6 +1097,7 @@ def funcaoCondicional(linha):
         anterior = valor.end() + atualizarPosicaoReferencia
 
     # Tente fazer uma conta com isso
+    print(linha)
     try:
         resutadoFinal = eval(linha)
     except Exception as erro:
