@@ -134,6 +134,14 @@ def colorirUmaPalavra(palavra,linha,valor1,valor2,cor):
     tx_codificacao.tag_add(palavra, linha1 , linha2) 
     tx_codificacao.tag_config(palavra, foreground = cor)
 
+def colorirUmErro(palavra,linha,valor1,valor2,cor='red'):
+
+    linha1 = '{}.{}'.format(linha , valor1) # linha.coluna(revisar)
+    linha2 = '{}.{}'.format(linha , valor2) # linha.coluna(revisar)
+
+    tx_informacoes.tag_add(palavra, linha1 , linha2) 
+    tx_informacoes.tag_config(palavra, foreground = cor)
+
 # Tratamentos para uma possível palavra especial
 def sintaxe_linha(palavra,cor,frase,linha):
     quantidade_de_caracteres = len(frase)
@@ -162,44 +170,25 @@ def sintaxe_linha(palavra,cor,frase,linha):
 
 # Tratamento para strings
 def sintaxe_linha_string(palavra,cor,frase,linha):
-    evento_string = False # houve uma string?
-    lstPosicoesEvento = [] 
+    for valor in re.finditer("""('.*')|(".*")""",frase):
+        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
 
-    for caractere in range(len(frase)): # Ande por todos os caracteres da frase
+def sintaxe_linha_numerico(palavra,cor,frase,linha):
+    for valor in re.finditer('(\\s|^)([0-9\\.\\s]+)(\\s|$)',frase):
+        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
 
-        # Se aconteceu uma string e elá já estiver sido iniciada
-        if (frase[caractere] == '"' or frase[caractere] == "'") and evento_string == True: 
-
-            evento_string = False # Resete o evento string
-            lstPosicoesEvento.append(caractere+1) # Salve a posição que finalizou
-            colorirUmaPalavra(palavra,linha,lstPosicoesEvento[0],lstPosicoesEvento[1],cor) # Aplique a coloração
-            lstPosicoesEvento = [] # Resete a posição
-
-        elif frase[caractere] == '"' or frase[caractere] == "'": # Se vai acontecer um evento string
-            evento_string = True # Marque como evento string iniciado
-            lstPosicoesEvento.append(caractere) # Salve a posição que começou
-
-    if evento_string == True: # Se está contecendo um evento string
-        tx_codificacao.tag_delete(palavra) # Remova as marcações
-        colorirUmaPalavra(palavra,linha,lstPosicoesEvento[0],len(frase),cor) # Colore uma palavra
-
-def sintaxe_linha_numerico(palavra,cor,frase,linha):                         # Aplica o tratamento para números
-    for caractere in range(len(frase)):                                      # Ande por todos os caracteres da frase
-        if frase[caractere].isnumeric():                                     # Verifique se é numérico
-            colorirUmaPalavra(str(palavra),linha,caractere,caractere+1,cor)  # Colore uma palavra
-
-def sintaxe_linha_comentario(palavra,cor,frase,linha):                       # Aplica o tratamento para comentários
-    for caractere in range(len(frase)):                                      # Ande por todos os caracteres da frase
-        if (frase[caractere:caractere+2] == '//') or (frase[caractere:caractere+1] == '#'): # Se tiver um caractere de comentário
-            colorirUmaPalavra(palavra,linha,caractere,len(frase),cor)                       # Colore a região do comentário
+def sintaxe_linha_comentario(palavra,cor,frase,linha):
+    for valor in re.finditer('(#|\\/\\/).*$',frase):
+        colorirUmaPalavra(str(palavra),linha,valor.start(),valor.end(),cor)
 
 # Analisa o contexto da palavra, separa número, string, comentário e palavras no geral
 def sintaxe(palavra,cor):
-    cor = cor['foreground']
-    tx_codificacao.tag_delete(palavra) # remove todas as colorações da palavra
+    cor = cor['foreground']                         # Acessar a cor de frente
+    tx_codificacao.tag_delete(palavra)              # remove todas as colorações da palavra
     lista = tx_codificacao.get(1.0,END).split('\n') # obtem uma lista com todas as linhas
 
-    for linha in range(len(lista)): # Ande por todas as linhas
+    # Ande por todas as linhas do programa
+    for linha in range(len(lista)):
 
         if palavra == '"' or palavra == "'":  # se a palavra for apontada como string
             sintaxe_linha_string(palavra,cor,lista[linha],str(linha+1))
@@ -311,8 +300,11 @@ def sintaxeDasPalavras():
 
     sintaxe('recebe parametros'          , Sintaxe.tempo())
     sintaxe('passando parametros'        , Sintaxe.tempo())
+    sintaxe('passando parametro'        , Sintaxe.tempo())
+
     sintaxe('parametros'                 , Sintaxe.tempo())
     sintaxe('parametro'                  , Sintaxe.tempo())
+    sintaxe('passando'                  , Sintaxe.tempo())
 
     sintaxe('espere'                     , Sintaxe.tempo())
     sintaxe('segundos'                   , Sintaxe.tempo())
@@ -403,8 +395,9 @@ def orquestradorDoInterpretador(linhas):
                 # A execucao do bloco foi bem suscedida?
                 if estadoDaCondicional[0] == False:
                     aconteceuUmErro = True
-                    print(estadoDaCondicional)
-                    return estadoDaCondicional
+                    tx_informacoes.insert(END,str(estadoDaCondicional[1]))
+                    colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
+                    break
 
                 if estadoDaCondicional[1] != None and "<class 'bool'>" not in str(type(estadoDaCondicional[1])):
 
@@ -441,8 +434,10 @@ def orquestradorDoInterpretador(linhas):
 
             if estadoDaCondicional[0] == False:
                 aconteceuUmErro = True
+                tx_informacoes.insert(END,str(estadoDaCondicional[1]))
+                colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
                 print(estadoDaCondicional)
-                return estadoDaCondicional
+                break
 
             # Se a confição chamadora do bloco for verdadeira
             if estadoDaCondicional[1] == True:
@@ -458,16 +453,23 @@ def orquestradorDoInterpretador(linhas):
 
                         # Se der erro na exeução do bloco
                         if resultadoExecucao[0] == False:
-                            print(resultadoExecucao)
-                            return resultadoExecucao
+                            aconteceuUmErro = True
+                            tx_informacoes.insert(END,str(resultadoExecucao[1]))
+                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoExecucao[1]))+1,cor='#dd4444')
+                            break
 
                         # Testa novamente a condição do loop
                         linhaComOResultadoDaExecucao = interpretador(linhaComCodigoQueFoiExecutado)
 
                         # Se der erro na exeução do teste
                         if linhaComOResultadoDaExecucao[0] == False:
-                            print(linhaComOResultadoDaExecucao)
-                            return linhaComOResultadoDaExecucao
+                            aconteceuUmErro = True
+                            tx_informacoes.insert(END,str(linhaComOResultadoDaExecucao[1]))
+                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(linhaComOResultadoDaExecucao[1]))+1,cor='#dd4444')
+                            break
+
+                    if aconteceuUmErro:
+                        break
 
                 elif funcaoRepita != 0:
 
@@ -478,8 +480,13 @@ def orquestradorDoInterpretador(linhas):
 
                         # Se acontecer um erro
                         if resultadoOrquestrador[0] == False:
-                            print(resultadoOrquestrador)
-                            return resultadoOrquestrador
+                            aconteceuUmErro = True
+                            tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
+                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
+                            break
+
+                    if aconteceuUmErro:
+                        break
 
                     funcaoRepita = 0
                     linhaComOResultadoDaExecucao = [True,False]
@@ -496,8 +503,10 @@ def orquestradorDoInterpretador(linhas):
 
                     # Se acontecer um erro
                     if resultadoOrquestrador[0] == False:
-                        print(resultadoOrquestrador)
-                        return resultadoOrquestrador
+                        aconteceuUmErro = True
+                        tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
+                        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
+                        break
 
             blocoComOsComando = ''
             contador += 1
@@ -513,8 +522,10 @@ def orquestradorDoInterpretador(linhas):
                 # Inicie o interpretador da linha
                 estadoDaCondicional = interpretador(blocoComOsComando.strip())
                 if estadoDaCondicional[0] == False:
-                    print(estadoDaCondicional)
-                    return estadoDaCondicional
+                    aconteceuUmErro = True
+                    tx_informacoes.insert(END,str(estadoDaCondicional[1]))
+                    colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
+                    break
 
                 # Salva o resultado da ultima linha executada
                 linhaComOResultadoDaExecucao = estadoDaCondicional
@@ -575,7 +586,7 @@ def interpretador(codigo):
         aleatorio        = ['número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre']
         mostreNessa      = ['mostre nessa linha ','exiba nessa linha ','escreva nessa linha ','imprima nessa linha ']
         mostre           = ['mostre ','exiba ','escreva ','print ','imprima ','escreva na tela ','display ']
-        chamarFuncoes    = ['passando parametros ','parametros ','parametro ']
+        
         declaraVariaveis = [' vale ',' recebe ',' = ']
         funcoes          = ['funcao ','function ']
         loopsss          = ['enquanto ','while ']
@@ -623,9 +634,7 @@ def interpretador(codigo):
                     if comando == linha[0:len(comando)]:
                        return funcaoNumeroAleatorio(linha[len(comando):])
 
-            for comando in chamarFuncoes:
-                if comando in linha:
-                    return funcaoExecutaFuncoes(linha,comando)
+
 
             for comando in repita:
                 if len(comando) < len(linha):
@@ -636,7 +645,7 @@ def interpretador(codigo):
                 if comando in linha:
                     return funcaoAtribuicao(linha,comando)
 
-
+        return funcaoExecutaFuncoes(linha)
 # repita 10 vezes \n{\nmostre 'oi'\n}
 def funcaoRepitir(linha):
     print('funcao repetir')
@@ -716,21 +725,33 @@ def funcaoNumeroAleatorio(linha):
         return [False,"Erro, você precisa definir o segundo valor, tipo 'entre 2 e 5'!"]
 
 # calcMedia passando parametros nota1, nota2
-def funcaoExecutaFuncoes(linha,comando):
+def funcaoExecutaFuncoes(linha):
+    chamarFuncoes    = ['passando parametros','passando parametro','parametros','parametro','passando']
+
     print('executar funcoes')
     global dicFuncoes
+    nomeDaFuncao = None
+    parametros = None
+    for comando in chamarFuncoes:
+        if comando in linha:
+            nomeDaFuncao, parametros = linha.split(comando)
+            nomeDaFuncao = nomeDaFuncao.strip()
+            parametros = parametros.strip()
+            break
 
-    nomeDaFuncao, parametros = linha.split(comando)
-    nomeDaFuncao = nomeDaFuncao.strip()
-    parametros = parametros.strip()
+    if nomeDaFuncao == None:
+        nomeDaFuncao = linha
+
     try:
+        print('Nome da função tentado:',nomeDaFuncao)
+        print('Funcoes declaradas:',dicFuncoes)
         dicFuncoes[nomeDaFuncao]
     except:
         return [False,"Essa função não existe"]
     else:
 
         # Se tiver multiplos parametros
-        if ',' in parametros:
+        if ',' in str(parametros):
             listaDeParametros = parametros.split(',')
             listaFinalDeParametros = []
 
@@ -749,7 +770,7 @@ def funcaoExecutaFuncoes(linha,comando):
                 return [False,"A função '{}' tem {} parametros, mas você passou {} parametros!".format(nomeDaFuncao,len(dicFuncoes[nomeDaFuncao][0]),len(listaFinalDeParametros))]
 
         # Se tiver só um parametro
-        else:
+        elif parametros != None:
             if len(dicFuncoes[nomeDaFuncao][0]) == 1:
                 resultado = funcaoAtribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0],parametros),'recebe')
 
@@ -762,16 +783,15 @@ def funcaoExecutaFuncoes(linha,comando):
 
         return [True,None]
 
-# parei aqui
 # funcao gabriel recebe paramentros nota1, nota2
 def funcaoDeclararFuncoes(linha):
     print('declarar funcoes')
     global funcaoAtivada
     global funcaoQueEstaSendoAnalisada
 
-    recebe = ['recebe parametros','recebe']
+    recebeParametros = ['recebe parametros','recebe']
 
-    for comando in recebe:
+    for comando in recebeParametros:
         if comando in linha:
             lista = linha.split(comando)
 
@@ -791,8 +811,16 @@ def funcaoDeclararFuncoes(linha):
 
             funcaoQueEstaSendoAnalisada = nomeDaFuncao
             funcaoAtivada = True
+            print('funcoes declaradas:',dicFuncoes)
             return [True,True]
+    
+    dicFuncoes[linha.strip()] = ['','bloco']
+    funcaoQueEstaSendoAnalisada = linha.strip()
+    funcaoAtivada = True
+    print('funcoes declaradas:',dicFuncoes)
+    return [True,True]
 
+# parei aqui
 def funcaoExibicao(linha):
     print('funcao exibição nessa linha ')
     codigo = linha.strip()
@@ -926,7 +954,7 @@ def abstrairValoresDaLinhaInteira(possivelVariavel):
         float(possivelVariavel)
     except:
         resultado = obterValorDeUmaVariavel(possivelVariavel)
-        return resultado # False/True já embutido
+        return resultado
     else:
         return [True,float(possivelVariavel)]
 
