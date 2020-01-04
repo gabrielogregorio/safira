@@ -1,7 +1,7 @@
 # Uma linguagem de programação natural
 Uma linguagem de programação universal, simples e focada em na lógica.
 
-> Atenção: Esse projeto está na versão beta, contém erros, códigos ineficientes e não possui versões comppiladas, dependendo de um interpretador Python
+> Atenção: Esse projeto está na versão beta, contém erros, códigos ineficientes e não possui versões compiladas, dependendo de um interpretador Python
 
 # Introdução
 
