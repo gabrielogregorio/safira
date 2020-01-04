@@ -1,9 +1,8 @@
 nome vale "gabriel"
 
-funcao calculaMedia recebe parametros num1, num2 
+funcao calculaMedia recebe parametros num1,num2 
 {
-    mostre nessa linha "A média é: "
-    mostre (num1 + num2) / 2
+    mostre "A média é: ", (num1 + num2) / 2
 }
 
 se nome for igual a "gabriel"
@@ -14,7 +13,7 @@ se nome for igual a "gabriel"
 
 contador recebe 0
 
-enquanto contador for menor que 10
+enquanto contador for menor que 10-9
 {
     mostre contador
     contador recebe contador mais 1
@@ -33,3 +32,5 @@ calculaMedia passando parametros 10, 6
 calculaMedia passando parametros 10, 7
 
 mostre "Programa Finalizado"
+
+

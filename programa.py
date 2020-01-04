@@ -234,6 +234,7 @@ def sintaxeDasPalavras():
     sintaxe('while'                      , Sintaxe.lista())
 
     sintaxe('repita'                     , Sintaxe.lista())
+    sintaxe('repeat'                     , Sintaxe.lista())
     sintaxe('vezes'                      , Sintaxe.lista())
     sintaxe('vez'                        , Sintaxe.lista())
 
@@ -300,6 +301,7 @@ def sintaxeDasPalavras():
     sintaxe('imprima nessa linha'        , Sintaxe.exibicao())
 
     sintaxe('funcao'                     , Sintaxe.tempo())
+    sintaxe('function'                    , Sintaxe.tempo())
     sintaxe('retorne'                    , Sintaxe.tempo())
 
     sintaxe('recebe parametros'          , Sintaxe.tempo())
@@ -311,6 +313,7 @@ def sintaxeDasPalavras():
     sintaxe('passando'                  , Sintaxe.tempo())
 
     sintaxe('espere'                     , Sintaxe.tempo())
+    sintaxe('aguarde'                     , Sintaxe.tempo())
     sintaxe('segundos'                   , Sintaxe.tempo())
     sintaxe('segundo'                    , Sintaxe.tempo())
     sintaxe('milisegundos'               , Sintaxe.tempo())
@@ -402,7 +405,7 @@ def orquestradorDoInterpretador(linhas):
                     aconteceuUmErro = True
                     tx_informacoes.insert(END,str(estadoDaCondicional[1]))
                     colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                    break
+                    return [False,'']
 
                 if estadoDaCondicional[1] != None and "<class 'bool'>" not in str(type(estadoDaCondicional[1])):
 
@@ -441,7 +444,7 @@ def orquestradorDoInterpretador(linhas):
                 aconteceuUmErro = True
                 tx_informacoes.insert(END,str(estadoDaCondicional[1]))
                 colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                break
+                return [False,'']
 
             # Se a confição chamadora do bloco for verdadeira
             if estadoDaCondicional[1] == True:
@@ -460,7 +463,7 @@ def orquestradorDoInterpretador(linhas):
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(resultadoExecucao[1]))
                             colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoExecucao[1]))+1,cor='#dd4444')
-                            break
+                            return [False,'']
 
                         # Testa novamente a condição do loop
                         linhaComOResultadoDaExecucao = interpretador(linhaComCodigoQueFoiExecutado)
@@ -470,7 +473,7 @@ def orquestradorDoInterpretador(linhas):
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(linhaComOResultadoDaExecucao[1]))
                             colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(linhaComOResultadoDaExecucao[1]))+1,cor='#dd4444')
-                            break
+                            return [False,'']
 
                     if aconteceuUmErro:
                         break
@@ -487,7 +490,7 @@ def orquestradorDoInterpretador(linhas):
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
                             colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
-                            break
+                            return [False,'']
 
                     if aconteceuUmErro:
                         break
@@ -510,7 +513,7 @@ def orquestradorDoInterpretador(linhas):
                         aconteceuUmErro = True
                         tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
                         colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
-                        break
+                        return [False,'']
 
             blocoComOsComando = ''
             contador += 1
@@ -529,7 +532,7 @@ def orquestradorDoInterpretador(linhas):
                     aconteceuUmErro = True
                     tx_informacoes.insert(END,str(estadoDaCondicional[1]))
                     colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                    break
+                    return [False,'']
 
                 # Salva o resultado da ultima linha executada
                 linhaComOResultadoDaExecucao = estadoDaCondicional
@@ -564,10 +567,38 @@ def orquestradorDoInterpretador(linhas):
     # Libera uma unidade no contador de Threads
     contadorThreads -= 1
 
+    if penetracao > 0:
+        aconteceuUmErro = True
+        if penetracao == 1:
+            vezesEsquecidas = '1 vez'
+        else:
+            vezesEsquecidas = '{} vezes'.format(penetracao)
+
+        msgErro = """Você abriu uma chave'{' e esqueceu de fecha-la '}' """ + str(vezesEsquecidas) + """, por favor, analise o código navamente e corrija"""
+
+        tx_informacoes.insert(END,msgErro)
+        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        return [False,'']
+
+    elif penetracao < 0:
+        aconteceuUmErro = True
+        if penetracao == -1:
+            vezesEsquecidas = 'uma vez'
+        else:
+            vezesEsquecidas = '{} vezes'.format(penetracao*-1)
+
+        msgErro = """Você abriu uma chave '{' e fechou ela '}' """ + str(vezesEsquecidas) + """, por favor, analise o código navamente e corrija"""
+
+        tx_informacoes.insert(END,msgErro)
+        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        return [False,'']
+
     return [True,"Não acontecera erros durante a execução do interpretador"]
 
 # Interpreta um conjunto de linhas
 def interpretador(codigo):
+    codigo = codigo.strip()
+    
     global repetirAtivado
     global variaveis
     global funcaoRepita
@@ -577,9 +608,10 @@ def interpretador(codigo):
 
     # Limpa o número de repeticoes
     funcaoRepita = 0
+    simbolosEspeciais = ['{','}']
 
     # Se o código estiver vazio
-    if (codigo == '' or codigo.isspace()):
+    if (codigo == '' or codigo.isspace()) or codigo in simbolosEspeciais:
         return [True,None]
 
     else:
@@ -647,7 +679,11 @@ def interpretador(codigo):
                 if comando in linha:
                     return funcaoAtribuicao(linha,comando)
 
-        return funcaoExecutaFuncoes(linha)
+            if linha.isalnum():
+                return funcaoExecutaFuncoes(linha)
+
+            return [False,"Um comando desconhecido foi localizado:'{}'".format(linha)]
+
 # repita 10 vezes \n{\nmostre 'oi'\n}
 def funcaoRepitir(linha):
     print('funcao repetir')
@@ -921,6 +957,9 @@ def fazerContas(linha):
 
     # Correção do potenciação
     linha = linha.replace('*  *','**')
+    linha = linha.replace('< =','<=')
+    linha = linha.replace('> =','>=')
+    linha = linha.replace("! =",'!=')
 
     # Abstração de variáveis
     anterior = 0
@@ -1070,19 +1109,25 @@ def funcaoCondicional(linha):
         if item in linha:
             qtdSimbolosEspeciais += 1
         linha = linha.replace(item,' {} '.format(item))
+    linha = linha.replace('* *','**')
+    linha = linha.replace('> =','>=')
+    linha = linha.replace('< =','<=')
+    linha = linha.replace('! =','!=')
 
     # Se não tiver nenhuma operação
     if qtdSimbolosEspeciais == 0:
         return [False, "Não foi possivel realizar a condição por que não tem nenhum simbolo condicional"]
 
+    print("\n\npalavras")
     # Abstração de variáveis
     anterior = 0
-    linha = linha.strip()
+    linha = linha.strip() + " " # Esse espaço é para analisar o ultimo caractere
     atualizarPosicaoReferencia = 0
-    for valor in re.finditer(' ',linha):
+    for valor in re.finditer('\\s',linha):
+        print(linha[anterior: valor.start()])
         palavra = linha[anterior:valor.start()+atualizarPosicaoReferencia]
         palavra = palavra.strip()
-
+        print("PALAVRAS",palavra)
         if palavra.isalnum() and palavra[0].isalpha() and len(palavra) != 0 and palavra not in simbolos:
             variavelDessaVez = obterValorDeUmaVariavel(palavra)
             print(palavra,variavelDessaVez)
@@ -1102,10 +1147,12 @@ def funcaoCondicional(linha):
         anterior = valor.end() + atualizarPosicaoReferencia
 
     # Tente fazer uma conta com isso
-    print(linha)
+    print(linha,'>>>>>>.')
     try:
         resutadoFinal = eval(linha)
+        print(resutadoFinal)
     except Exception as erro:
+        print("EROOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         return [False, "Não foi possivel realizar a condicao |{}|".format(linha)]
     else:
         return [True, resutadoFinal]
