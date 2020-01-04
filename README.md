@@ -15,18 +15,12 @@ Esperamos que ela possa suavizar o aprendizado de linguagens como Python, Javasc
 Isso não significa que ela será pensada apenas para quem quer entrar no assunto, ela é principalmente focada na lógica de programação, portanto, qualquer pessoa poderá escrever seus algorítimos de forma muito rápida.
 
 ## Como fazer um print
-``
+```
 n = 10  
-
 imprima 10 + 20  
-
 escreva na tela 'string'   
-
 display "string"  
-
 mostre n / n  
-
 escreva n  
-
 exiba n elevado a 4  
-``
+```
