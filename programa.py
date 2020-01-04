@@ -135,6 +135,10 @@ def colorirUmaPalavra(palavra,linha,valor1,valor2,cor):
     tx_codificacao.tag_config(palavra, foreground = cor)
 
 def colorirUmErro(palavra,linha,valor1,valor2,cor='red'):
+    global tx_informacoes
+
+    linha = tx_informacoes.get(1.0,END)
+    linha = len(linha.split('\n'))-1
 
     linha1 = '{}.{}'.format(linha , valor1) # linha.coluna(revisar)
     linha2 = '{}.{}'.format(linha , valor2) # linha.coluna(revisar)
@@ -200,7 +204,6 @@ def sintaxe(palavra,cor):
 
             for valor in re.finditer('(^|\\s){}(\\s|$)'.format(palavra),lista[linha]):
                 colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
-
 
 def contadorDeLinhas():
     global lb_linhas
@@ -273,6 +276,7 @@ def sintaxeDasPalavras():
     sintaxe('**'                         , Sintaxe.contas())
     sintaxe('elevado'                    , Sintaxe.contas())
     sintaxe('elevado por'                , Sintaxe.contas())
+    sintaxe('elevado a'                , Sintaxe.contas())
 
     sintaxe('*'                          , Sintaxe.contas())
     sintaxe('multiplique'                , Sintaxe.contas())
@@ -328,6 +332,8 @@ def sintaxeDasPalavras():
 
 # inicia o interpretador
 def iniciarOrquestradorDoInterpretador(event = None):
+    inicio = time.time() # Marca o inicio do programa
+
     global contadorThreads
     global variaveis
     global repetirAtivado
@@ -361,8 +367,7 @@ def iniciarOrquestradorDoInterpretador(event = None):
     while contadorThreads != 0:
         tela.update()
 
-    aconteceuUmErro = False    
-    tx_informacoes.insert(END, '\n [OK] finalizado')
+    tx_informacoes.insert(END, '\n<script finalizado em {:.3} segundos>'.format(time.time() - inicio))
     tx_informacoes.see("end")
 
 def orquestradorDoInterpretador(linhas):
@@ -436,7 +441,6 @@ def orquestradorDoInterpretador(linhas):
                 aconteceuUmErro = True
                 tx_informacoes.insert(END,str(estadoDaCondicional[1]))
                 colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                print(estadoDaCondicional)
                 break
 
             # Se a confição chamadora do bloco for verdadeira
@@ -585,7 +589,7 @@ def interpretador(codigo):
 
         aleatorio        = ['número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre']
         mostreNessa      = ['mostre nessa linha ','exiba nessa linha ','escreva nessa linha ','imprima nessa linha ']
-        mostre           = ['mostre ','exiba ','escreva ','print ','imprima ','escreva na tela ','display ']
+        mostre           = ['escreva na tela ','mostre ','exiba ','print ','imprima ','display ','escreva ']
         
         declaraVariaveis = [' vale ',' recebe ',' = ']
         funcoes          = ['funcao ','function ']
@@ -889,6 +893,7 @@ def fazerContas(linha):
     linha = linha.replace(' dividido por ',' / ')
     linha = linha.replace(' multiplique ', ' * ')
     linha = linha.replace(' elevado por ',' ** ')
+    linha = linha.replace(' elevado a ',' ** ')    
     linha = linha.replace(' elevado ',' ** ')
     linha = linha.replace(' divide ',' / ')
     linha = linha.replace(' mais ',' + ')

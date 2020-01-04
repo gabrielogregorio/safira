@@ -1,7 +1,6 @@
-# Linguagem Feynman
-### Uma linguagem de programação natural
+# Uma linguagem de programação natural
 
-#### objetivo  
+## objetivo  
 
 Desenvolvimento uma linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE (feynman_code) com uma linguagem de programação simples (feynman), para que crianças e iniciantes nesse universo dos códigos possam a ter uma base no assunto. 
 
@@ -14,3 +13,20 @@ Porém, não queremos permitir o caos, portanto, não será possível programar 
 Esperamos que ela possa suavizar o aprendizado de linguagens como Python, Javascript, R, C#,etc...
 
 Isso não significa que ela será pensada apenas para quem quer entrar no assunto, ela é principalmente focada na lógica de programação, portanto, qualquer pessoa poderá escrever seus algorítimos de forma muito rápida.
+
+## Como fazer um print
+
+<p>n <span style="color: rgb(243, 121, 52);">=</span> <span style="color: rgb(85, 57, 130);">10</span></p>
+<p>
+  <br>
+</p>
+<p><span style="color: rgb(65, 168, 95);">imprima&nbsp;</span><span style="color: rgb(85, 57, 130);">10 </span><span style="color: rgb(184, 49, 47);">+</span><span style="color: rgb(85, 57, 130);"> 20</span></p>
+<p><span style="color: rgb(65, 168, 95);">escreva na tela</span> <span style="color: rgb(251, 160, 38);"><strong>'string'</strong> </span></p>
+<p><span style="color: rgb(65, 168, 95);">display</span><span style="color: rgb(251, 160, 38);"> <strong>"string"</strong></span></p>
+<p><span style="color: rgb(65, 168, 95);">mostre</span> n <span style="color: rgb(184, 49, 47);">/</span> n</p>
+<p><span style="color: rgb(65, 168, 95);">escreva</span> n</p>
+<p><span style="color: rgb(65, 168, 95);">exiba</span> n <span style="color: rgb(184, 49, 47);">elevado a</span> <span style="color: rgb(85, 57, 130);">4</span></p>
+<p><span style="color: rgb(65, 168, 95);">print</span> <span style="color: rgb(85, 57, 130);">20</span> <span style="color: rgb(184, 49, 47);">mais</span> <span style="color: rgb(85, 57, 130);">15 </span></p>
+<p>
+  <br>
+</p>
