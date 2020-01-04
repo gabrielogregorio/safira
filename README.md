@@ -16,11 +16,11 @@ Isso não significa que ela será pensada apenas para quem quer entrar no assunt
 
 ## Como fazer um print
 ``
-n = 10
-imprima 10 + 20
-escreva na tela 'string' 
-display "string"
-mostre n / n
-escreva n
-exiba n elevado a 4
+n = 10  
+imprima 10 + 20  
+escreva na tela 'string'   
+display "string"  
+mostre n / n  
+escreva n  
+exiba n elevado a 4  
 ``
