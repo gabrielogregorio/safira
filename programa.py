@@ -1,13 +1,15 @@
+from tkinter.font import nametofont
 from tkinter import filedialog
-from tkinter import *          
+from threading import Thread
+from design  import Sintaxe
 from funcoes import funcao
 from design  import design
-from design  import Sintaxe
-from tkinter import messagebox
-from threading import Thread
-
-import tkinter.messagebox as tkmessagebox
+from tkinter import *
+import os
 import time
+
+# Altura da janela em linhas
+global alturaDoWidget
 
 # impede que o programa seja iniciado enquanto outro está sendo executado
 global contadorThreads
@@ -48,6 +50,12 @@ global aconteceuUmErro
 # A tela está em full screen
 global boolTelaEmFullScreen
 
+# Comandos internos a cada função
+global dicSubComandos
+
+# Dicionário com toodos os comandos disponíveis
+global dicComandos
+
 # Botões das guias
 global btnsGuias
 
@@ -60,6 +68,27 @@ contadorThreads = 0
 dicFuncoes = {}
 variaveis = {}
 btnsGuias = []
+
+dicComandos = {
+    'aleatorio':['um número aleatório entre','um número aleatorio entre','um numero aleatório entre','um numero aleatorio entre','número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre'],
+    'mostreNessa':['mostre nessa linha ','exiba nessa linha ','escreva nessa linha ','imprima nessa linha '],
+    'mostre':['escreva na tela ','mostre ','exiba ','print ','imprima ','display ','escreva '],
+    'declaraVariaveis':[' vale ',' recebe ',' = '],
+    'funcoes':['funcao ','function '],
+    'loopsss':['enquanto ','while '],
+    'aguarde':['espere ','aguarde '],
+    'repita':['repita ','repeat ','repetir ','repitir '],
+    'se':['se ','if '],
+    'digitado':['o numero que for digitado','o numero que o usuario digitar','numero digitado','entrada','input','o que for digitado','o que o usuario digitar','digitado','entrada','input']}
+
+# Corrigindo bugs
+dicSubComandos = {
+    'repitaVezes':['vezes','vez'],
+    'logico':['ou','e','for maior que','>','for menor que','<','for igual a','==','for maior ou igual a','>=','for menor ou igual a','<=','for diferente de','!='],
+    'matematica':    ['+','mais','/','divide','dividido por','**','elevado','elevado por','elevado a','*','multiplique','multiplicado por','-','menos','%'],
+    'esperaEm': ['segundos','segundo','milisegundos','ms','milisegundo','s'],
+    'passandoParametros':['passando parametros','passando parametro','parametros','parametro','passando'],
+    'recebeParametros':['recebe parametros']}
 
 def salvarArquivoComoDialog(event = None):
     global arquivoAbertoAtualmente
@@ -134,7 +163,7 @@ def colorirUmaPalavra(palavra,linha,valor1,valor2,cor):
     tx_codificacao.tag_add(palavra, linha1 , linha2) 
     tx_codificacao.tag_config(palavra, foreground = cor)
 
-def colorirUmErro(palavra,linha,valor1,valor2,cor='red'):
+def colorirUmErro(palavra,valor1,valor2,cor='red'):
     global tx_informacoes
 
     linha = tx_informacoes.get(1.0,END)
@@ -177,6 +206,11 @@ def sintaxe(palavra,cor):
     tx_codificacao.tag_delete(palavra)
     lista = tx_codificacao.get(1.0,END).split('\n')
 
+    # Remoção de bugs no regex, deixe ele aqui para eviar um \* \\* \\\* \\\\* no loop
+    palavra_comando = palavra.replace('+','\\+')
+    palavra_comando = palavra_comando.replace('/','\\/')
+    palavra_comando = palavra_comando.replace('*','\\*')
+
     # Ande por todas as linhas do programa
     for linha in range(len(lista)):
 
@@ -197,12 +231,7 @@ def sintaxe(palavra,cor):
 
         # Se for uma palavra especial
         else:
-            # Remoção de bugs no regex
-            palavra = palavra.replace('+','\\+')
-            palavra = palavra.replace('/','\\/')
-            palavra = palavra.replace('*','\\*')
-
-            for valor in re.finditer('(^|\\s){}(\\s|$)'.format(palavra),lista[linha]):
+            for valor in re.finditer('(^|\\s){}(\\s|$)'.format(palavra_comando),lista[linha]):
                 colorirUmaPalavra(str(palavra),str(linha+1),valor.start(),valor.end(),cor)
 
 def contadorDeLinhas():
@@ -220,117 +249,69 @@ def contadorDeLinhas():
 
 # Cores que as palavras vão assumir
 def sintaxeDasPalavras():
+    global dicComandos
 
     threadContadorLinhas = Thread(target=contadorDeLinhas())
     threadContadorLinhas.start()
 
-    # ATRIBUIÇÃO
-    sintaxe('vale'                       , Sintaxe.atribuicao())
-    sintaxe('recebe'                     , Sintaxe.atribuicao())
-    sintaxe('='                          , Sintaxe.atribuicao())
+    # Principais comandos
+    for comando in dicComandos['declaraVariaveis']:
+        sintaxe(comando.strip(), Sintaxe.atribuicao())
 
-    # LOOPS  
-    sintaxe('enquanto'                   , Sintaxe.lista())
-    sintaxe('while'                      , Sintaxe.lista())
+    for comando in dicComandos['digitado']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('repita'                     , Sintaxe.lista())
-    sintaxe('repeat'                     , Sintaxe.lista())
-    sintaxe('vezes'                      , Sintaxe.lista())
-    sintaxe('vez'                        , Sintaxe.lista())
+    for comando in dicComandos['loopsss']:
+        sintaxe(comando.strip(), Sintaxe.lista())
 
-    # ENTRADA
-    sintaxe('oque o for digitado'        , Sintaxe.entrada())
+    for comando in dicComandos['repita']:
+        sintaxe(comando.strip(), Sintaxe.lista())
 
-    # LÓGICO
-    sintaxe('ou'                         , Sintaxe.logico())
-    sintaxe('e'                          , Sintaxe.logico())
- 
-    sintaxe('for maior que'              , Sintaxe.logico())    
-    sintaxe('>'                          , Sintaxe.logico())    
- 
-    sintaxe('for menor que'              , Sintaxe.logico())    
-    sintaxe('<'                          , Sintaxe.logico())    
- 
-    sintaxe('for igual a'                , Sintaxe.logico())    
-    sintaxe('=='                         , Sintaxe.logico())    
- 
-    sintaxe('for maior ou igual a'       , Sintaxe.logico())    
-    sintaxe('>='                         , Sintaxe.logico())    
+    for comando in dicComandos['se']:
+        sintaxe(comando.strip(), Sintaxe.condicionais())
 
-    sintaxe('for menor ou igual a'       , Sintaxe.logico())    
-    sintaxe('<='                         , Sintaxe.logico())    
+    for comando in dicComandos['mostre']:
+        sintaxe(comando.strip(), Sintaxe.exibicao())
 
-    sintaxe('for diferente de'           , Sintaxe.logico())    
-    sintaxe('!='                         , Sintaxe.logico())    
+    for comando in dicComandos['mostreNessa']:
+        sintaxe(comando.strip(), Sintaxe.exibicao())
 
-    sintaxe('se'                         , Sintaxe.condicionais())
-    sintaxe('if'                         , Sintaxe.condicionais())
-    sintaxe('senao'                      , Sintaxe.condicionais())
+    for comando in dicComandos['funcoes']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('+'                          , Sintaxe.contas())
-    sintaxe('mais'                       , Sintaxe.contas())
+    for comando in dicComandos['aguarde']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('/'                          , Sintaxe.contas())
-    sintaxe('divide'                     , Sintaxe.contas())
-    sintaxe('dividido por'               , Sintaxe.contas())
+    for comando in dicComandos['aleatorio']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('**'                         , Sintaxe.contas())
-    sintaxe('elevado'                    , Sintaxe.contas())
-    sintaxe('elevado por'                , Sintaxe.contas())
-    sintaxe('elevado a'                , Sintaxe.contas())
+    # Comandos internos a cada função
+    for comando in dicSubComandos['passandoParametros']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('*'                          , Sintaxe.contas())
-    sintaxe('multiplique'                , Sintaxe.contas())
-    sintaxe('multiplicado por'           , Sintaxe.contas())
+    for comando in dicSubComandos['recebeParametros']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
 
-    sintaxe('-'                          , Sintaxe.contas())
-    sintaxe('menos'                      , Sintaxe.contas())
+    for comando in dicSubComandos['esperaEm']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
+    
+    for comando in dicSubComandos['matematica']:
+        sintaxe(comando.strip(), Sintaxe.contas())
 
-    sintaxe('%'                          , Sintaxe.contas())
+    for comando in dicSubComandos['repitaVezes']:
+        sintaxe(comando.strip(), Sintaxe.lista())
 
-    sintaxe('exiba'                      , Sintaxe.exibicao())
-    sintaxe('mostre'                     , Sintaxe.exibicao())
-    sintaxe('escreva'                    , Sintaxe.exibicao())
-    sintaxe('escreva na tela'            , Sintaxe.exibicao())
-    sintaxe('print'                      , Sintaxe.exibicao())
-    sintaxe('imprima'                    , Sintaxe.exibicao())
-    sintaxe('display'                    , Sintaxe.exibicao())
-    sintaxe('mostre nessa linha'         , Sintaxe.exibicao())
-    sintaxe('exiba nessa linha'          , Sintaxe.exibicao())
-    sintaxe('escreva nessa linha'        , Sintaxe.exibicao())
-    sintaxe('imprima nessa linha'        , Sintaxe.exibicao())
+    for comando in dicSubComandos['logico']:
+        sintaxe(comando.strip(), Sintaxe.logico())
 
-    sintaxe('funcao'                     , Sintaxe.tempo())
-    sintaxe('function'                    , Sintaxe.tempo())
-    sintaxe('retorne'                    , Sintaxe.tempo())
-
-    sintaxe('recebe parametros'          , Sintaxe.tempo())
-    sintaxe('passando parametros'        , Sintaxe.tempo())
-    sintaxe('passando parametro'        , Sintaxe.tempo())
-
-    sintaxe('parametros'                 , Sintaxe.tempo())
-    sintaxe('parametro'                  , Sintaxe.tempo())
-    sintaxe('passando'                  , Sintaxe.tempo())
-
-    sintaxe('espere'                     , Sintaxe.tempo())
-    sintaxe('aguarde'                     , Sintaxe.tempo())
-    sintaxe('segundos'                   , Sintaxe.tempo())
-    sintaxe('segundo'                    , Sintaxe.tempo())
-    sintaxe('milisegundos'               , Sintaxe.tempo())
-    sintaxe('ms'                         , Sintaxe.tempo())
-    sintaxe('milisegundo'                , Sintaxe.tempo())
-    sintaxe('s'                          , Sintaxe.tempo())
-
-    sintaxe('número aleatório entre'     , Sintaxe.tempo())
-    sintaxe('número aleatorio entre'     , Sintaxe.tempo())
-    sintaxe('numero aleatório entre'     , Sintaxe.tempo())
-    sintaxe('numero aleatorio entre'     , Sintaxe.tempo())
-
+    # Numero
     sintaxe('numerico'                   , Sintaxe.numerico())
 
+    # String
     sintaxe('"'                          , Sintaxe.string())
     sintaxe("'"                          , Sintaxe.string())
 
+    # Comentários
     sintaxe('comentario'                 , Sintaxe.comentario())
 
 # inicia o interpretador
@@ -382,13 +363,13 @@ def orquestradorDoInterpretador(linhas):
     global dicFuncoes
     global funcaoQueEstaSendoAnalisada
 
-    contadorThreads += 1    # Aumenta o número de vezes que o interpretador foi chamado
-    linhaComCodigoQueFoiExecutado = ''       # Reseta a linha de comando (enquanto >>x for menor que 6<<)
-    contador = 0            # contador para andar por todos os caracteres
-    blocoComOsComando = ''  # Armazena blocos de código {}
-    blocoDeCodigo = False   # Tem um bloco de código sendo armazenado?
-    penetracao = 0          # Penetracao dos {{{{}}}} de forma recursiva
-    estadoDaCondicional = [False,None] # Ler um bloco de código (Condição verdadeira)
+    contadorThreads += 1                # Aumenta o número de vezes que o interpretador foi chamado
+    linhaComCodigoQueFoiExecutado = ''  # Reseta a linha de comando (enquanto >>x for menor que 6<<)
+    contador = 0                        # contador para andar por todos os caracteres
+    blocoComOsComando = ''              # Armazena blocos de código {}
+    blocoDeCodigo = False               # Tem um bloco de código sendo armazenado?
+    penetracao = 0                      # Penetracao dos {{{{}}}} de forma recursiva
+    estadoDaCondicional = [False,None]  # Ler um bloco de código (Condição verdadeira)
 
     while contador < len(linhas) and not aconteceuUmErro:
 
@@ -404,8 +385,8 @@ def orquestradorDoInterpretador(linhas):
                 if estadoDaCondicional[0] == False:
                     aconteceuUmErro = True
                     tx_informacoes.insert(END,str(estadoDaCondicional[1]))
-                    colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                    return [False,'']
+                    colorirUmErro('codigoErro',valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
+                    break
 
                 if estadoDaCondicional[1] != None and "<class 'bool'>" not in str(type(estadoDaCondicional[1])):
 
@@ -443,8 +424,8 @@ def orquestradorDoInterpretador(linhas):
             if estadoDaCondicional[0] == False:
                 aconteceuUmErro = True
                 tx_informacoes.insert(END,str(estadoDaCondicional[1]))
-                colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                return [False,'']
+                colorirUmErro('codigoErro',valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
+                break
 
             # Se a confição chamadora do bloco for verdadeira
             if estadoDaCondicional[1] == True:
@@ -462,8 +443,8 @@ def orquestradorDoInterpretador(linhas):
                         if resultadoExecucao[0] == False:
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(resultadoExecucao[1]))
-                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoExecucao[1]))+1,cor='#dd4444')
-                            return [False,'']
+                            colorirUmErro('codigoErro',valor1=0,valor2=len(str(resultadoExecucao[1]))+1,cor='#dd4444')
+                            break
 
                         # Testa novamente a condição do loop
                         linhaComOResultadoDaExecucao = interpretador(linhaComCodigoQueFoiExecutado)
@@ -472,8 +453,8 @@ def orquestradorDoInterpretador(linhas):
                         if linhaComOResultadoDaExecucao[0] == False:
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(linhaComOResultadoDaExecucao[1]))
-                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(linhaComOResultadoDaExecucao[1]))+1,cor='#dd4444')
-                            return [False,'']
+                            colorirUmErro('codigoErro',valor1=0,valor2=len(str(linhaComOResultadoDaExecucao[1]))+1,cor='#dd4444')
+                            break
 
                     if aconteceuUmErro:
                         break
@@ -489,8 +470,8 @@ def orquestradorDoInterpretador(linhas):
                         if resultadoOrquestrador[0] == False:
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
-                            colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
-                            return [False,'']
+                            colorirUmErro('codigoErro',valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
+                            break
 
                     if aconteceuUmErro:
                         break
@@ -512,8 +493,8 @@ def orquestradorDoInterpretador(linhas):
                     if resultadoOrquestrador[0] == False:
                         aconteceuUmErro = True
                         tx_informacoes.insert(END,str(resultadoOrquestrador[1]))
-                        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
-                        return [False,'']
+                        colorirUmErro('codigoErro',valor1=0,valor2=len(str(resultadoOrquestrador[1]))+1,cor='#dd4444')
+                        break
 
             blocoComOsComando = ''
             contador += 1
@@ -531,8 +512,8 @@ def orquestradorDoInterpretador(linhas):
                 if estadoDaCondicional[0] == False:
                     aconteceuUmErro = True
                     tx_informacoes.insert(END,str(estadoDaCondicional[1]))
-                    colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
-                    return [False,'']
+                    colorirUmErro('codigoErro',valor1=0,valor2=len(str(estadoDaCondicional[1]))+1,cor='#dd4444')
+                    break
 
                 # Salva o resultado da ultima linha executada
                 linhaComOResultadoDaExecucao = estadoDaCondicional
@@ -577,7 +558,7 @@ def orquestradorDoInterpretador(linhas):
         msgErro = """Você abriu uma chave'{' e esqueceu de fecha-la '}' """ + str(vezesEsquecidas) + """, por favor, analise o código navamente e corrija"""
 
         tx_informacoes.insert(END,msgErro)
-        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        colorirUmErro('codigoErro',valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
         return [False,'']
 
     elif penetracao < 0:
@@ -590,15 +571,16 @@ def orquestradorDoInterpretador(linhas):
         msgErro = """Você abriu uma chave '{' e fechou ela '}' """ + str(vezesEsquecidas) + """, por favor, analise o código navamente e corrija"""
 
         tx_informacoes.insert(END,msgErro)
-        colorirUmErro('codigoErro',linha=1,valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        colorirUmErro('codigoErro',valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
         return [False,'']
 
     return [True,"Não acontecera erros durante a execução do interpretador"]
 
 # Interpreta um conjunto de linhas
 def interpretador(codigo):
+
     codigo = codigo.strip()
-    
+    global dicComandos    
     global repetirAtivado
     global variaveis
     global funcaoRepita
@@ -619,70 +601,97 @@ def interpretador(codigo):
         # Obtem todas as linhas 
         linhas = codigo.split('\n')
 
-        aleatorio        = ['número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre']
-        mostreNessa      = ['mostre nessa linha ','exiba nessa linha ','escreva nessa linha ','imprima nessa linha ']
-        mostre           = ['escreva na tela ','mostre ','exiba ','print ','imprima ','display ','escreva ']
-        
-        declaraVariaveis = [' vale ',' recebe ',' = ']
-        funcoes          = ['funcao ','function ']
-        loopsss          = ['enquanto ','while ']
-        aguarde          = ['espere ','aguarde ']
-        repita           = ['repita ','repeat ']
-        se               = ['se ','if ']
-
         #entrada = ['recebe o que o usuario digitar','capture o que o usuario digitar','recebe o que for digitado','leia o que for digitado','input']
         #vetor = ['vetor','crie uma lista chamada','lista']
 
         for linha in linhas:
-            for comando in mostreNessa:
+            for comando in dicComandos['mostreNessa']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoExibicaoNessaLinha(linha[len(comando):])
 
         for linha in linhas:
-            for comando in mostre:
+            for comando in dicComandos['mostre']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoExibicao(linha[len(comando):])
 
-            for comando in se:
+            for comando in dicComandos['se']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoCondicional(linha[len(comando):])
 
-            for comando in loopsss:
+            for comando in dicComandos['loopsss']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoLoopsEnquanto(linha[len(comando):])
 
-            for comando in aguarde:
+            for comando in dicComandos['aguarde']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoTempo(linha[len(comando):])
 
-            for comando in funcoes:
+            for comando in dicComandos['funcoes']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoDeclararFuncoes(linha[len(comando):])
 
-            for comando in aleatorio:
+            for comando in dicComandos['aleatorio']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoNumeroAleatorio(linha[len(comando):])
 
-            for comando in repita:
+            for comando in dicComandos['repita']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
                        return funcaoRepitir(linha[len(comando):])
 
-            for comando in declaraVariaveis:
+            for comando in dicComandos['digitado']:
+                if len(comando) <= len(linha):
+                    if comando == linha:
+                       return funcaoDigitado(linha)
+
+            for comando in dicComandos['declaraVariaveis']:
                 if comando in linha:
                     return funcaoAtribuicao(linha,comando)
 
-            if linha.isalnum():
+            if linha[0].isalnum():
                 return funcaoExecutaFuncoes(linha)
 
             return [False,"Um comando desconhecido foi localizado:'{}'".format(linha)]
+
+global estaEsperandoPressionarEnter
+estaEsperandoPressionarEnter = False
+
+def aperouEnter(event=None):
+    global estaEsperandoPressionarEnter
+    if estaEsperandoPressionarEnter:
+        estaEsperandoPressionarEnter = False
+
+def funcaoDigitado(linha):
+    print('funcaoDigitado')
+    global tx_informacoes
+
+    textoOriginal = len(tx_informacoes.get(1.0,END))
+
+    # Esperar o usuário digitar algo e pressionar enter?
+    global estaEsperandoPressionarEnter
+    estaEsperandoPressionarEnter = True
+
+    while estaEsperandoPressionarEnter:
+        pass
+
+    digitado = tx_informacoes.get(1.0,END)
+    digitado = digitado[textoOriginal-1:-2]
+    if 'numero' in linha:
+        try:
+            float(digitado)
+        except:
+            return[False,"Você disse que queria digitar um número, mas digitou um texto '{}'".format(digitado)]
+        else:
+            return [True,float(digitado)]
+    else:
+        return [True,'"'+str(digitado)+'"']
 
 # repita 10 vezes \n{\nmostre 'oi'\n}
 def funcaoRepitir(linha):
@@ -757,7 +766,14 @@ def funcaoNumeroAleatorio(linha):
 
         # Retorne um valo aleatório
         import random
-        return [True,random.randint(int(num1[1]),int(num2[1]))]
+        n1 = int(num1[1])
+        n2 = int(num2[1])
+        if n1 == n2:
+            return [False,"O valor 1 e o valor 2 da função aleatório tem que ser diferentes"]
+        elif n1 > n2:
+            return [False,"O valor 1 é maior que o valor 2, o valor 1 tem que ser maior"]
+
+        return [True,random.randint(n1,n2)]
 
     else:
         return [False,"Erro, você precisa definir o segundo valor, tipo 'entre 2 e 5'!"]
@@ -782,7 +798,7 @@ def funcaoExecutaFuncoes(linha):
     try:
         dicFuncoes[nomeDaFuncao]
     except:
-        return [False,"Essa função não existe"]
+        return [False,"A função '{}' não existe".format(nomeDaFuncao)]
     else:
 
         # Se tiver multiplos parametros
@@ -811,6 +827,8 @@ def funcaoExecutaFuncoes(linha):
 
                 if resultado[0] == False:
                     return resultado
+            else:
+                return [False,"A função '{}' tem {} parametros, mas você passou 1 parametro!".format(nomeDaFuncao,len(dicFuncoes[nomeDaFuncao][0]))]
 
         resultadoOrquestrador = orquestradorDoInterpretador(dicFuncoes[nomeDaFuncao][1])
         if resultadoOrquestrador[0] == False:
@@ -852,7 +870,6 @@ def funcaoDeclararFuncoes(linha):
     dicFuncoes[linha.strip()] = ['','bloco']
     funcaoQueEstaSendoAnalisada = linha.strip()
     funcaoAtivada = True
-    print('funcoes declaradas:',dicFuncoes)
     return [True,True]
 
 # parei aqui
@@ -895,16 +912,12 @@ def funcaoTempo(codigo):
     return [True,None]
 
 def obterValorDeString(string):
-    print(">>>",string)
     valorFinal = ''
     anterior = 0
 
     for valor in re.finditer(""""[^"]*"|'[^']*'""",string):
-        print(valor.group())
-        print(string[anterior:valor.start()],'>>>>>>>>>>>...')
         abstrair = abstrairValoresDaLinhaInteira(string[anterior:valor.start()])
         if abstrair[0] == False:
-            print("EROOOOOO")
             return abstrair
 
         valorFinal = valorFinal + str(abstrair[1]) + string[valor.start():valor.end()]
@@ -913,7 +926,6 @@ def obterValorDeString(string):
     # Capturar o resto        
     abstrair = abstrairValoresDaLinhaInteira(string[anterior:])
     if abstrair[0] == False:
-        print("EROOOOOO2")
         return abstrair
 
     valorFinal = valorFinal + str(abstrair[1])
@@ -990,6 +1002,7 @@ def fazerContas(linha):
 
 def obterValorDeUmaVariavel(variavel):
     print('obterValorDeUmaVariavel')
+    variavel = variavel.strip()
     global variaveis
 
     variavel = variavel.replace('\n','')
@@ -1003,24 +1016,39 @@ def obterValorDeUmaVariavel(variavel):
 
 def abstrairValoresDaLinhaInteira(possivelVariavel):
     print('abstrairValoresDaLinhaInteira')
-    print(possivelVariavel)
     possivelVariavel = str(possivelVariavel)
     possivelVariavel = possivelVariavel.replace('\n','')
     possivelVariavel = possivelVariavel.strip()
     if possivelVariavel == '':
         return [True,possivelVariavel]
 
-    print(possivelVariavel,'::')
+    for comandoDigitado in dicComandos['digitado']:
+        if len(comandoDigitado) <= len(possivelVariavel):
+            if possivelVariavel == comandoDigitado:
+
+                resultado = funcaoDigitado(comandoDigitado)
+                if resultado[0] == False:
+                    return resultado
+                else:
+                    return [True,resultado[1]]
+
+    for comandoAleatorio in dicComandos['aleatorio']:
+        if len(comandoAleatorio) <= len(possivelVariavel):
+            if possivelVariavel[0:len(comandoAleatorio)] == comandoAleatorio:
+
+                resultado = funcaoNumeroAleatorio(possivelVariavel[len(comandoAleatorio):])
+                if resultado[0] == False:
+                    return resultado
+                else:
+                    return [True,resultado[1]]
+
     # caso existam contas entre strings
     if possivelVariavel[0] == ',':
         possivelVariavel = possivelVariavel[1:]
-        print("Nova",possivelVariavel)
 
     if len(possivelVariavel) > 1:
         if possivelVariavel[-1] == ',':
             possivelVariavel = possivelVariavel[0:len(possivelVariavel)-1]
-
-    print(possivelVariavel,'nova2')
 
     possivelVariavel = possivelVariavel.strip()
     if possivelVariavel == '':
@@ -1052,8 +1080,31 @@ def funcaoAtribuicao(linha,comando):
     valor    = valor.replace('\n','')
     valor    = valor.strip()
 
-    resultado = fazerContas(valor)
+    for comandoDigitado in dicComandos['digitado']:
+        if len(comandoDigitado) <= len(valor):
+            if valor == comandoDigitado:
 
+                resultado = funcaoDigitado(comandoDigitado)
+                if resultado[0] == False:
+                    return resultado
+                else:
+                    variaveis[variavel] = resultado[1]
+                    print(variaveis)
+ 
+                    return [True,None]
+
+    for comandoAleatorio in dicComandos['aleatorio']:
+        if len(comandoAleatorio) <= len(valor):
+            if valor[0:len(comandoAleatorio)] == comandoAleatorio:
+
+                resultado = funcaoNumeroAleatorio(valor[len(comandoAleatorio):])
+                if resultado[0] == False:
+                    return resultado
+                else:
+                    variaveis[variavel] = resultado[1]
+                    return [True,None]
+
+    resultado = fazerContas(valor)
     if resultado[0] == True:
         variaveis[variavel] = resultado[1]
         return [True,None]
@@ -1087,6 +1138,7 @@ def funcaoLoopsEnquanto(linha):
     return funcaoCondicional(linha)
 
 def funcaoCondicional(linha):
+    print('funcaoCondicional')
     linha = linha.replace(' for maior ou igual a ',' >= ')
     linha = linha.replace(' for menor ou igual a ',' <= ')
     linha = linha.replace(' for diferente de ',' != ')
@@ -1118,41 +1170,35 @@ def funcaoCondicional(linha):
     if qtdSimbolosEspeciais == 0:
         return [False, "Não foi possivel realizar a condição por que não tem nenhum simbolo condicional"]
 
-    print("\n\npalavras")
     # Abstração de variáveis
     anterior = 0
     linha = linha.strip() + " " # Esse espaço é para analisar o ultimo caractere
     atualizarPosicaoReferencia = 0
-    for valor in re.finditer('\\s',linha):
-        print(linha[anterior: valor.start()])
-        palavra = linha[anterior:valor.start()+atualizarPosicaoReferencia]
+    for valor in re.finditer(' ',linha):
+        palavra = str(linha[anterior:valor.start()+atualizarPosicaoReferencia])
         palavra = palavra.strip()
-        print("PALAVRAS",palavra)
-        if palavra.isalnum() and palavra[0].isalpha() and len(palavra) != 0 and palavra not in simbolos:
+        if palavra.isalnum() and palavra[0].isalpha() and palavra not in simbolos and len(palavra) != 0:
             variavelDessaVez = obterValorDeUmaVariavel(palavra)
-            print(palavra,variavelDessaVez)
             if variavelDessaVez[0] == False:
                 return variavelDessaVez
 
             linha = str(linha[:anterior]) + str(variavelDessaVez[1]) + str(linha[valor.start() + atualizarPosicaoReferencia:]) 
 
             # Se a variavel for maior que o valor
-            if len(palavra) < len(variavelDessaVez):
+            if len(palavra) < len(str(variavelDessaVez[1])):
                 atualizarPosicaoReferencia += (len(str(variavelDessaVez[1])) - len(palavra))
 
             # Se a variavel for menor que a variável
-            elif len(palavra) > len(variavelDessaVez):
+            elif len(palavra) > len(str(variavelDessaVez[1])):
                 atualizarPosicaoReferencia -= (len(palavra) - len(str(variavelDessaVez[1])))
 
         anterior = valor.end() + atualizarPosicaoReferencia
 
+    print(linha)
     # Tente fazer uma conta com isso
-    print(linha,'>>>>>>.')
     try:
         resutadoFinal = eval(linha)
-        print(resutadoFinal)
     except Exception as erro:
-        print("EROOOOOOOOOOOOOOOOOOOOOOOOOOOO")
         return [False, "Não foi possivel realizar a condicao |{}|".format(linha)]
     else:
         return [True, resutadoFinal]
@@ -1171,11 +1217,37 @@ def trocar_de_tela(fechar,carregar):
     fechar.grid_forget()
     carregar.grid(row=1,column=1,sticky=NSEW)
 
+
+def create_topExecutando():
+    global tx_informacoes
+
+    topExecutando = Toplevel(tela)
+    topExecutando.grid_columnconfigure(1,weight=1)
+    topExecutando.rowconfigure(1,weight=1)
+    topExecutando.geometry("600x300+100+100")
+
+    tx_informacoes = Text(topExecutando,design.tx_informacoes(),relief = FLAT)
+    tx_informacoes.bind('<Return>',lambda event:aperouEnter(event))
+    tx_informacoes.focus_force()
+    tx_informacoes.grid(row=1,column=1,sticky=NSEW)
+
+def atualizaLinhasLaterais(linhas):
+    global lb_linhas
+    lb_linhas.config(state=NORMAL)
+    lb_linhas.delete(1.0,END)
+    lb_linhas.insert(END,linhas)
+    lb_linhas.config(state=DISABLED)
+
+def configuracoes(ev):
+    global alturaDoWidget
+    alturaDoWidget = int( ev.height / 24 )
+    print("Altura",alturaDoWidget)
+
 tela = Tk()
-tela.title('Linguagem feynman beta 0.4')
-tela.configure(bg='#565656')
-tela.grid_columnconfigure(1,weight=1)
+tela.title('Linguagem feynman')
+tela.configure(bg='#393944')
 tela.rowconfigure(1,weight=1)
+tela.grid_columnconfigure(1,weight=1)
 
 tela.bind('<F11>',lambda event: modoFullScreen(event))
 tela.bind('<F5>',       lambda event: iniciarOrquestradorDoInterpretador(event))
@@ -1183,17 +1255,17 @@ tela.bind('<Control-s>',lambda event: salvarArquivo(event))
 tela.bind('<Control-o>',lambda event: abrirArquivoDialog(event))
 tela.bind('<Control-S>',lambda event: salvarArquivoComoDialog(event))
 
-menu_barra = Menu(tela,design.cor_menu())
+menu_barra = Menu(tela,design.cor_menu(),relief=FLAT)
 tela.config(menu=menu_barra)
 
-menu_arquivo     = Menu(menu_barra, design.cor_menu())
-menu_executar    = Menu(menu_barra, design.cor_menu())
-menu_localizar   = Menu(menu_barra, design.cor_menu())
-menu_editar      = Menu(menu_barra, design.cor_menu())
-menu_ferramentas = Menu(menu_barra, design.cor_menu())
-menu_interface   = Menu(menu_barra, design.cor_menu())
-menu_ajuda       = Menu(menu_barra, design.cor_menu())
-menu_sobre       = Menu(menu_barra, design.cor_menu())
+menu_ferramentas = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_interface   = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_localizar   = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_executar    = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_arquivo     = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_editar      = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_ajuda       = Menu(menu_barra, design.cor_menu(),relief=FLAT)
+menu_sobre       = Menu(menu_barra, design.cor_menu(),relief=FLAT)
 
 menu_barra.add_cascade(label='Arquivo'   , menu=menu_arquivo)
 menu_barra.add_cascade(label='Executar'  , menu=menu_executar)
@@ -1204,18 +1276,27 @@ menu_barra.add_cascade(label='Ajuda'     , menu=menu_ajuda)
 menu_barra.add_cascade(label='sobre'     , menu=menu_sobre)
 
 # =================================== ARQUIVO =================================== #
+menu_arquivo_cascate = Menu(menu_arquivo, design.cor_menu(),relief=FLAT)
 menu_arquivo.add_command(label='Abrir arquivo (Ctrl+O)',command=abrirArquivoDialog)
 menu_arquivo.add_command(label='Nova Guia (Ctrl-N)')
 menu_arquivo.add_command(label='Abrir pasta')
 menu_arquivo.add_command(label='Recentes')
-menu_arquivo.add_separator()
+menu_arquivo.add_cascade(label='Exemplos', menu=menu_arquivo_cascate)
+
+
+for file in os.listdir('scripts/'):
+    if len(file) > 5:       
+        if file[-3:] == 'fyn':
+            menu_arquivo_cascate.add_command(label=file[:-4])
+
+#menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Salvar (Ctrl-S)',command=salvarArquivo)
 menu_arquivo.add_command(label='Salvar Como (Ctrl-Shift-S)',command=salvarArquivoComoDialog)
-menu_arquivo.add_separator()
+#menu_arquivo.add_separator()
 menu_arquivo.add_command(label='imprimir (Ctrl-P)')
 menu_arquivo.add_command(label='Exportar (Ctrl-E)')
 menu_arquivo.add_command(label='Enviar por e-mail ')
-menu_arquivo.add_separator()
+#menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Sair (Alt-F4)')
 
 # =================================== EXECUTAR =================================== #
@@ -1256,156 +1337,19 @@ menu_sobre.add_command(label='Projeto')
 menu_sobre.add_command(label='Desenvolvedores',command=lambda:trocar_de_tela(fr_InPrincipal,fr_sobDesenvol))
 
 # =================================== INTERFACE GERAL =================================== #
-fr_InPrincipal = Frame(tela,bg='#565656')
+fr_InPrincipal = Frame(tela,bg='#393944')
 fr_InPrincipal.grid_columnconfigure(1,weight=1)
 fr_InPrincipal.rowconfigure(2,weight=1)
 
-def atualizaCor(btn):
-    global arquivoAbertoAtualmente
-    global btnsGuias
-
-    for frame,titulo,botao in btnsGuias:
-        if botao == btn:
-            frame.configure(bg='#565656')
-            titulo['text'] = str(arquivoAbertoAtualmente['link'])
-            titulo.configure(bg='#565656',activebackground='#565656',activeforeground='#dddddd')
-            botao.configure(bg='#565656',activebackground='#565656',activeforeground='#dddddd')
-        else:
-            frame.configure(bg='#343434')
-            titulo.configure(bg='#343434',activebackground='#343434',activeforeground='#343434')
-            botao.configure(bg='#343434',activebackground='#343434',activeforeground='#343434')
-
-fr_guias = Frame(fr_InPrincipal,bg='#232323')
-for x in range(1,5):
-    if x == 1:
-        cor = '#565656'
-    else:
-        cor = '#343434'
-
-    FrGuia = Frame(fr_guias,bg=cor)
-    lblGuiaTitulo = Label(FrGuia,bg=cor,fg='#dddddd',text='arquivo.fyn')
-    btnGuiaFechar = Button(FrGuia,bg=cor,fg=cor,text='x',relief=SUNKEN,activebackground=cor,activeforeground='white',highlightthickness=0,bd=0,justify='center')
-    btnGuiaFechar['command'] = lambda botao = btnGuiaFechar : atualizaCor(botao)
-
-    btnsGuias.append([FrGuia,lblGuiaTitulo,btnGuiaFechar])
-
-    FrGuia.grid(row=1,column=x+1,sticky=NSEW)
-    lblGuiaTitulo.grid(row=1,column=x+1,sticky=NSEW)
-    btnGuiaFechar.grid(row=1,column=x+2,sticky=NSEW)
-
-fr_guias.grid(row=1,column=0,columnspan=2,sticky=NSEW)
-
-
-def create_topExecutando():
-    global tx_informacoes
-
-    topExecutando = Toplevel(tela)
-    topExecutando.grid_columnconfigure(1,weight=1)
-    topExecutando.rowconfigure(1,weight=1)
-    topExecutando.geometry("600x300+100+100")
-
-    tx_informacoes = Text(topExecutando,design.tx_informacoes())
-    tx_informacoes.focus_force()
-    tx_informacoes.grid(row=1,column=1,sticky=NSEW)
-
-from tkinter.font import nametofont
-global alturaDoWidget
-
-def atualizaLinhasLaterais(linhas):
-    global lb_linhas
-    lb_linhas.config(state=NORMAL)
-    lb_linhas.delete(1.0,END)
-    lb_linhas.insert(END,linhas)
-    lb_linhas.config(state=DISABLED)
-
-def configuracoes(ev):
-    global alturaDoWidget
-    alturaDoWidget = int( ev.height / 24 )
-    print("Altura",alturaDoWidget)
-
-def scroolUp(event = None):
-    return 0
-    global lb_linhas
-    global tx_codificacao
-    global alturaDoWidget
-
-    lstLinhasContadas  = str(lb_linhas.get(1.0,END)).strip()
-    lstLinhasContadas = lstLinhasContadas.split('\n')
-    if lstLinhasContadas == ['']:
-        lstLinhasContadas = ['1']
-
-    lstLinhasPrograma = str(tx_codificacao.get(1.0,END))
-    lstLinhasPrograma = lstLinhasPrograma.strip()
-    lstLinhasPrograma = lstLinhasPrograma.split('\n')
-    print(lstLinhasPrograma)
-    if len(lstLinhasPrograma) == 0:
-        print('teste33333')
-        lstLinhasPrograma = ['1']
-
-    # Se estiver na linha 2
-    if int(lstLinhasContadas[0]) == 2:
-        print('teste4644')
-        linhaInicial = int(lstLinhasContadas[0]) - 1
-        linhaFinal = int(lstLinhasContadas[0]) + alturaDoWidget -1
-    # Se estiver no limite
-    elif int(lstLinhasContadas[0]) == 1:
-        print('teste553')
-        linhaInicial = int(lstLinhasContadas[0])
-        linhaFinal = int(lstLinhasContadas[0]) + alturaDoWidget 
-
-    # Subida normal
-    else:
-        print('teste22')
-        linhaInicial = int(lstLinhasContadas[0]) - 2
-        linhaFinal = int(lstLinhasContadas[0]) + alturaDoWidget - 2
-
-    if linhaFinal > len(lstLinhasPrograma):
-
-        linhaFinal = len(lstLinhasPrograma)+1
-
-
-    linhas = ''
-    for numLinha in range(linhaInicial,linhaFinal):
-        linhas = linhas + '{}\n'.format(numLinha)
-
-    print(len(lstLinhasPrograma))
-    atualizaLinhasLaterais(linhas)
-
-def scroolDown(event = None):
-    return 0
-    global lb_linhas
-    global tx_codificacao
-    global alturaDoWidget
-
-    lstLinhasContadas  = str(lb_linhas.get(1.0,END)).strip()
-    lstLinhasContadas = lstLinhasContadas.split('\n')
-    if len(lstLinhasContadas) == 0:
-        lstLinhasContadas = ['1']
-
-    lstLinhasPrograma = str(tx_codificacao.get(1.0,END))
-    lstLinhasPrograma = lstLinhasPrograma.strip()
-    lstLinhasPrograma = lstLinhasPrograma.split('\n')
-    if len(lstLinhasPrograma) == 0:
-        lstLinhasPrograma = ['1']
-
-    linhaInicial = int(lstLinhasContadas[0]) + 2
-    linhaFinal = int(lstLinhasContadas[0]) + alturaDoWidget + 2
-
-    linhas = ''
-    for numLinha in range(linhaInicial,linhaFinal):
-        linhas = linhas + '{}\n'.format(numLinha)
-
-    # Eliminar o ultimo \n
-    #atualizaLinhasLaterais(linhas)
-
 lb_linhas = Text(fr_InPrincipal,design.lb_linhas())
-lb_linhas.insert('end','1\n2\n3\n4\n5\n6\n7\n8')
-lb_linhas.config(state=DISABLED,relief = SUNKEN,border= 0, highlightthickness=0)
+lb_linhas.insert('end',' 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8')
+lb_linhas.config(state=DISABLED,relief = FLAT,border= 0, highlightthickness=0)
 # =================================== TELA DE CODIFICAÇÃO =================================== #
-tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao())
+tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao(),relief=FLAT)
+tx_codificacao.focus_force()
 tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao:sintaxeDasPalavras())
-tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
-tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
+#tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
+#tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
 tx_codificacao.bind('<Configure>',configuracoes)
 tx_codificacao.delete(1.0, END)
 
