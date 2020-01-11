@@ -1,67 +1,70 @@
 class design():
     def cor_menu(): 
         return {
-            'font':('',11),
-            'background':'#343434',
+            'font':('',12),
+            'background':'#494954',
             'foreground':'white',
-            'activebackground':'#464646',
+            'activebackground':'#5a5a65',
+            'activeborderwidth':0,
+            'tearoff':False, # Separador
             'activeforeground':'white'}
 
     def lb_sobDeTitulo():
         return {
             'font':("Loma",70,"bold"),
             'height':5,
-            'background':'#343434',
+            'background':'#393944',
             'foreground':'#ffffff'}
 
     def lb_sobDAutores():
         return {
             'font':("Loma",15),
-            'background':'#343434',
+            'background':'#393944',
             'foreground':'#ffffff'}
 
     def lb_sobDesenAno():
         return {
             'font':("Loma",10),
-            'background':'#343434',
+            'background':'#393944',
             'foreground':'#ffffff'}
 
     def tx_codificacao():
         return {
-            'bg':'#343434',
+            'bg':'#393944',
             'fg':'#ffffff',
             'highlightthickness':0,
-            'insertbackground': '#ddddff',
-            'selectbackground':'#565656',
-            'selectforeground':'#343434',
+            'insertbackground': '#ffffff',
+            'selectbackground':'#494954',
+            'selectforeground':'#dddddd',
             'font':('helvetica',12)}
 
     def lb_linhas():
         return {
             'width':5,
-            'bg':'#333333',
-            'fg':'#888888',
+            'bg':'#393944',
+            'fg':'#9999bb',
             'font':('helvetica',12)}
 
     def tx_informacoes():
         return {
-            'width':40,
-            'bg':'#343434',
+            'width':50,
+            'bg':'#393944',
             'fg':'#ffffff',
-            'font':('',15)}
+            'highlightthickness':0,
+            'font':('helvetica',12)}
 
 class Sintaxe():
     def numerico():
         return {
-            'foreground':'#ff5de2'}
+            'foreground':'#99ffcc'}
 
     def atribuicao():
         return {
-            'foreground':'#f57600'}
+            'foreground':'#aaff80'}
 
     def loops():
         return {
-            'foreground':'#fe468a'}
+            'foreground':'#ffcc88'}
 
     def lista():
         return {
@@ -69,31 +72,33 @@ class Sintaxe():
 
     def logico():
         return {
-            'foreground':'#f9264a'}
+            'foreground':'#eb99ff'}
 
     def entrada():
         return {
-            'foreground':'#f9264a'}
+            'foreground':'#eb99ff'}
 
     def exibicao():
         return {
-            'foreground':'#43ff69'}
+            'foreground':'#00e68a'}
 
     def tempo():
         return {
-            'foreground':'#63f1d8'}
+            'foreground':'#80d4ff'}
 
     def condicionais():
         return {
-            'foreground':'#e2d872'}
+            'foreground':'#ffcc88'}
+
+
             
     def contas():
         return {
-            'foreground':'#f4264a'}
+            'foreground':'#eb99ff'}
 
     def string():
         return {
-            'foreground':'#F1C40F'}
+            'foreground':'#ffff68'}
 
     def comentario():
         return {

@@ -79,6 +79,7 @@ dicComandos = {
     'aguarde':['espere ','aguarde '],
     'repita':['repita ','repeat ','repetir ','repitir '],
     'se':['se ','if '],
+    'limpatela':['limpar a tela','limpatela','clear'],
     'digitado':['o numero que for digitado','o numero que o usuario digitar','numero digitado','entrada','input','o que for digitado','o que o usuario digitar','digitado','entrada','input']}
 
 # Corrigindo bugs
@@ -189,13 +190,13 @@ def sintaxe_linha(palavra,cor,frase,linha):
                     if frase[caractere-1 : caractere+len(palavra)] == ' '+palavra: # Analise o contexto da palavra
                         validacao += 1 
                 else:
-                        validacao += 1
+                    validacao += 1
 
                 if caractere + len(palavra) < quantidade_de_caracteres: # Se não estourar os caracteres
                     if frase[caractere:caractere+1+len(palavra)] == palavra+' ':   # Analise o contexto da palavra
                         validacao += 1 
                 else:
-                        validacao += 1
+                    validacao += 1
 
                 if validacao == 2: # Se tiver sido validado
                     # colora a palavra
@@ -283,6 +284,9 @@ def sintaxeDasPalavras():
         sintaxe(comando.strip(), Sintaxe.tempo())
 
     for comando in dicComandos['aleatorio']:
+        sintaxe(comando.strip(), Sintaxe.tempo())
+
+    for comando in dicComandos['limpatela']:
         sintaxe(comando.strip(), Sintaxe.tempo())
 
     # Comandos internos a cada função
@@ -605,60 +609,99 @@ def interpretador(codigo):
         #vetor = ['vetor','crie uma lista chamada','lista']
 
         for linha in linhas:
+            linha = linha.strip()
+
+            ignoraComentario = linha.find('#')
+            if ignoraComentario != -1:
+                linha = linha[0:ignoraComentario]
+
+            if linha == '':
+                continue
+
             for comando in dicComandos['mostreNessa']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoExibicaoNessaLinha(linha[len(comando):])
+                       print('\n> Função exibicao nessa linha "{}"'.format(codigo))
+                       return funcaoExibicaoNessaLinha(linha[len(comando):],logs='> ')
 
         for linha in linhas:
+            linha = linha.strip()
+
+            ignoraComentario = linha.find('#')
+            if ignoraComentario != -1:
+                linha = linha[0:ignoraComentario]
+
+            if linha == '':
+                continue
+
             for comando in dicComandos['mostre']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoExibicao(linha[len(comando):])
+                       print('\n> Função exibicao "{}"'.format(codigo))
+                       return funcaoExibicao(linha[len(comando):],logs='> ')
+
+            for comando in dicComandos['limpatela']:
+                if len(comando) <= len(linha):
+                    if comando == linha:
+                       print('\n> Função limpa a tela "{}"'.format(codigo))
+                       return funcaoLimpaTela(logs='> ')
 
             for comando in dicComandos['se']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoCondicional(linha[len(comando):])
+                       print('\n> Função condicional "{}"'.format(codigo))
+                       return funcaoCondicional(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['loopsss']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoLoopsEnquanto(linha[len(comando):])
+                       print('\n> Função loops enquanto "{}"'.format(codigo))
+                       return funcaoLoopsEnquanto(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['aguarde']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoTempo(linha[len(comando):])
+                       print('\n> Função tempo "{}"'.format(codigo))
+                       return funcaoTempo(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['funcoes']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoDeclararFuncoes(linha[len(comando):])
+                       print('\n> Função declarar funções "{}"'.format(codigo))
+                       return funcaoDeclararFuncoes(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['aleatorio']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoNumeroAleatorio(linha[len(comando):])
+                       print('\n> Função numero aleatório "{}"'.format(codigo))
+                       return funcaoNumeroAleatorio(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['repita']:
                 if len(comando) < len(linha):
                     if comando == linha[0:len(comando)]:
-                       return funcaoRepitir(linha[len(comando):])
+                       print('\n> Função repetir "{}"'.format(codigo))
+                       return funcaoRepitir(linha[len(comando):],logs='> ')
 
             for comando in dicComandos['digitado']:
                 if len(comando) <= len(linha):
                     if comando == linha:
-                       return funcaoDigitado(linha)
+                       print('\n> Função digitado "{}"'.format(codigo))
+                       return funcaoDigitado(linha,logs='> ')
 
             for comando in dicComandos['declaraVariaveis']:
                 if comando in linha:
-                    return funcaoAtribuicao(linha,comando)
+                    print('\n> Função atribuição "{}"'.format(codigo))
+                    return funcaoAtribuicao(linha,comando,logs='> ')
+
 
             if linha[0].isalnum():
-                return funcaoExecutaFuncoes(linha)
+                print('\n> Função executar funções "{}"'.format(codigo))
+                return funcaoExecutaFuncoes(linha,logs='> ')
 
+            print('Comando desconhecido "{}"'.format(codigo))
             return [False,"Um comando desconhecido foi localizado:'{}'".format(linha)]
+
+    return [True,None]
 
 global estaEsperandoPressionarEnter
 estaEsperandoPressionarEnter = False
@@ -668,14 +711,16 @@ def aperouEnter(event=None):
     if estaEsperandoPressionarEnter:
         estaEsperandoPressionarEnter = False
 
-def funcaoDigitado(linha):
-    print('funcaoDigitado')
+def funcaoDigitado(linha,logs):
+    logs = '  ' + logs
+
+    print(logs+'funcaoDigitado',linha)
+
     global tx_informacoes
+    global estaEsperandoPressionarEnter
 
     textoOriginal = len(tx_informacoes.get(1.0,END))
 
-    # Esperar o usuário digitar algo e pressionar enter?
-    global estaEsperandoPressionarEnter
     estaEsperandoPressionarEnter = True
 
     while estaEsperandoPressionarEnter:
@@ -683,19 +728,28 @@ def funcaoDigitado(linha):
 
     digitado = tx_informacoes.get(1.0,END)
     digitado = digitado[textoOriginal-1:-2]
+
     if 'numero' in linha:
         try:
             float(digitado)
         except:
             return[False,"Você disse que queria digitar um número, mas digitou um texto '{}'".format(digitado)]
         else:
-            return [True,float(digitado)]
+            return [True,float(digitado),'float']
     else:
-        return [True,'"'+str(digitado)+'"']
+        return [True,digitado,'string']
+
+def funcaoLimpaTela(logs):
+    logs = '  ' + logs
+    print(logs+'limpatela')
+    global tx_informacoes
+    tx_informacoes.delete(1.0,END)
+    return [True,None]
 
 # repita 10 vezes \n{\nmostre 'oi'\n}
-def funcaoRepitir(linha):
-    print('funcao repetir')
+def funcaoRepitir(linha,logs):
+    logs = '  ' + logs
+    print(logs+'funcao repetir',linha)
     global funcaoRepita
 
     # Remoção de lixo
@@ -706,19 +760,22 @@ def funcaoRepitir(linha):
     linha = linha.strip()
 
     # Obter o valor da variável
-    linha = abstrairValoresDaLinhaInteira(linha)
+    linha = abstrairValoresDaLinhaInteira(linha,logs)
 
     # Deu erro?
     if linha[0] == False:
         return linha
 
+    if linha[1][1] != 'float':
+        return[False,'Você precisa passar um número inteiro para usar a função repetir: "{}"'.format(linha)]
+
     # É inteiro
     try:
-        int(linha[1])
+        int(linha[1][0])
     except:
-        return [False,"O valor precisa ser inteiro!"]
+        return [False,"Para usar a função repetir, você precisa passar um número inteiro. Você passou '{}'".format(linha[1][0])]
     else:
-        funcaoRepita = int(linha[1])
+        funcaoRepita = int(linha[1][0])
 
         if funcaoRepita == 0:
             # Se for zero, não reproduza nenhuma vez
@@ -728,8 +785,9 @@ def funcaoRepitir(linha):
         return [True,True]
 
 # numero aleatório entre 10 e 20
-def funcaoNumeroAleatorio(linha):
-    print('funcao aleatório')
+def funcaoNumeroAleatorio(linha,logs):
+    logs = '  ' + logs
+    print(logs+'funcao aleatório',linha)
 
     # Remova os espaços da linha
     linha = linha.strip()
@@ -741,8 +799,8 @@ def funcaoNumeroAleatorio(linha):
         num1, num2 = linha.split(' e ')
  
         # Obtendo ambos os valores
-        num1 = abstrairValoresDaLinhaInteira(num1)
-        num2 = abstrairValoresDaLinhaInteira(num2)
+        num1 = abstrairValoresDaLinhaInteira(num1,logs)
+        num2 = abstrairValoresDaLinhaInteira(num2,logs)
 
         # Se deu para obter o valor do primeiro
         if num1[0] == False:
@@ -773,13 +831,15 @@ def funcaoNumeroAleatorio(linha):
         elif n1 > n2:
             return [False,"O valor 1 é maior que o valor 2, o valor 1 tem que ser maior"]
 
-        return [True,random.randint(n1,n2)]
+        return [True,random.randint(n1,n2),'float']
 
     else:
         return [False,"Erro, você precisa definir o segundo valor, tipo 'entre 2 e 5'!"]
 
 # calcMedia passando parametros nota1, nota2
-def funcaoExecutaFuncoes(linha):
+def funcaoExecutaFuncoes(linha,logs):
+    logs = '  ' + logs
+    print(logs+'Executar funcoes',linha)
     global dicFuncoes
     chamarFuncoes    = ['passando parametros','passando parametro','parametros','parametro','passando']
  
@@ -813,7 +873,7 @@ def funcaoExecutaFuncoes(linha):
             if len(dicFuncoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
 
                 for parametroDeclarar in range(len(dicFuncoes[nomeDaFuncao][0])):
-                    resultado = funcaoAtribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0][parametroDeclarar],listaFinalDeParametros[parametroDeclarar]),'recebe')
+                    resultado = funcaoAtribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0][parametroDeclarar],listaFinalDeParametros[parametroDeclarar]),'recebe',logs)
 
                     if resultado[0] == False:
                         return resultado
@@ -823,7 +883,7 @@ def funcaoExecutaFuncoes(linha):
         # Se tiver só um parametro
         elif parametros != None:
             if len(dicFuncoes[nomeDaFuncao][0]) == 1:
-                resultado = funcaoAtribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0],parametros),'recebe')
+                resultado = funcaoAtribuicao('{} recebe {} '.format(dicFuncoes[nomeDaFuncao][0],parametros),'recebe',logs)
 
                 if resultado[0] == False:
                     return resultado
@@ -837,8 +897,9 @@ def funcaoExecutaFuncoes(linha):
         return [True,None]
 
 # funcao gabriel recebe paramentros nota1, nota2
-def funcaoDeclararFuncoes(linha):
-    print('declarar funcoes')
+def funcaoDeclararFuncoes(linha,logs):
+    logs = '  ' + logs
+    print(logs+'declarar funcoes',linha)
     global funcaoAtivada
     global funcaoQueEstaSendoAnalisada
 
@@ -864,7 +925,7 @@ def funcaoDeclararFuncoes(linha):
 
             funcaoQueEstaSendoAnalisada = nomeDaFuncao
             funcaoAtivada = True
-            print('funcoes declaradas:',dicFuncoes)
+            print(logs+'funcoes declaradas:',dicFuncoes)
             return [True,True]
     
     dicFuncoes[linha.strip()] = ['','bloco']
@@ -873,22 +934,25 @@ def funcaoDeclararFuncoes(linha):
     return [True,True]
 
 # parei aqui
-def funcaoExibicao(linha):
-    print('funcao exibição nessa linha ')
+def funcaoExibicao(linha,logs):
+    logs = '  ' + logs
+    print(logs+'funcao exibição  ',linha)
     codigo = linha.strip()
-    return abstrairValoresDaLinhaInteira(codigo)
+    return abstrairValoresDaLinhaInteira(codigo,logs)
 
-def funcaoExibicaoNessaLinha(linha):
-    print('funcao exibir nessa linha')
+def funcaoExibicaoNessaLinha(linha,logs):
+    logs = '  ' + logs
+    print(logs+'funcao exibir nessa linha ativada',linha)
     codigo = linha.strip()
-    retorno = abstrairValoresDaLinhaInteira(codigo)
+    retorno = abstrairValoresDaLinhaInteira(codigo,logs)
 
     if retorno[0] == False:
         return retorno
     return [retorno[0],':nessaLinha:'+str(retorno[1])]
 
-def funcaoTempo(codigo):
-    print('funcao tempo')
+def funcaoTempo(codigo,logs):
+    logs = '  ' + logs
+    print(logs+'funcao tempo',codigo)
     codigo = codigo.strip()
 
     tiposEspera = [' milisegundos',' milisegundo',' segundos',' segundo',' ms',' s']
@@ -896,7 +960,7 @@ def funcaoTempo(codigo):
     for comando in tiposEspera:
         if len(comando) < len(codigo):                                                         # Se o comando não estrapolar o código
             if comando == codigo[len(codigo)-len(comando):]:                                   # Se o comando estiver no código
-                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)])   # Tente obter o real valor no código
+                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)],logs)   # Tente obter o real valor no código
                 if resultado != False:                                                         # Se foi possível obter
                     if comando == " segundos" or comando == " s" or comando == " segundo":     # Se está em segunso
                         time.sleep(resultado[1])                                               # Tempo em segundos
@@ -910,30 +974,68 @@ def funcaoTempo(codigo):
                     return [False,'Erro ao obter um valor no tempo']
 
     return [True,None]
+# A string deve estar crua
+def obterValorDeString(string,logs):    
+    logs = '  ' + logs
+    print(logs+'Obter valor de uma string',string)
 
-def obterValorDeString(string):
     valorFinal = ''
     anterior = 0
 
     for valor in re.finditer(""""[^"]*"|'[^']*'""",string):
-        abstrair = abstrairValoresDaLinhaInteira(string[anterior:valor.start()])
+        abstrair = abstrairValoresDaLinhaInteira(string[anterior:valor.start()],logs)
         if abstrair[0] == False:
+            print(logs+'Erro ao abstrair um valor da linha inteira')
             return abstrair
+        print(logs,'Abstrair vale',abstrair)
 
         valorFinal = valorFinal + str(abstrair[1]) + string[valor.start():valor.end()]
         anterior = valor.end()
 
     # Capturar o resto        
-    abstrair = abstrairValoresDaLinhaInteira(string[anterior:])
+    abstrair = abstrairValoresDaLinhaInteira(string[anterior:],logs)
     if abstrair[0] == False:
+        print(logs+'Erro ao abstrair ultimo valor ')
         return abstrair
 
     valorFinal = valorFinal + str(abstrair[1])
 
     return [True,valorFinal]
 
-def fazerContas(linha):
-    print('Fazer contas')
+def encontrarETransformarVariaveis(linha,logs):
+    logs = '  ' + logs
+    print(logs+'Encontrar e transformar variaveis',linha)
+    # Abstração de variáveis
+    anterior = 0
+    normalizacao = 0
+    linha_base = linha
+    tipos_obtidos = []
+    for valor in re.finditer(' ',linha_base):
+        palavra = linha[anterior : valor.start() + normalizacao]
+
+        if palavra.isalnum() and palavra[0].isalpha():
+            variavelDessaVez = obterValorDeUmaVariavel(palavra,logs)
+            print(logs + str('Variavel da vez ') + str(variavelDessaVez))
+            if variavelDessaVez[0] == False:
+                return variavelDessaVez
+            tipos_obtidos.append(variavelDessaVez[1][1])
+
+            linha = str(linha[:anterior]) + str(variavelDessaVez[1][0]) + str(linha[valor.start() + normalizacao:]) 
+            if len(palavra) < len(str(variavelDessaVez[1][0])):
+                normalizacao += (len(str(variavelDessaVez[1][0])) - len(palavra))
+
+            elif len(palavra) > len(str(variavelDessaVez[1][0])):
+                normalizacao -= (len(palavra) - len(str(variavelDessaVez[1][0])))
+
+        anterior = valor.end() + normalizacao
+    print(logs+'Suscesso',linha)
+
+    return [True,linha]
+
+# A string deve estar crua
+def fazerContas(linha,logs):
+    logs = '  ' + logs
+    print(logs+'Fazer contas',linha)
     linha = str(linha)
 
     # Do maior para o menor
@@ -949,6 +1051,7 @@ def fazerContas(linha):
 
     if "'" in linha or '"' in linha:
         # Não mude esse texto
+        print(logs+'Isso é uma string, não dá para fazer contas com elas')
         return [False, "Isso é uma string"]
 
     # Removendo os espaços laterais
@@ -962,9 +1065,11 @@ def fazerContas(linha):
         if iten in linha:
             qtdSimbolosEspeciais += 1
         linha = linha.replace(iten,' {} '.format(iten))
+    print(logs+'simbolos especiais removidos',linha)
 
     # Se não tiver nenhuma operação
     if qtdSimbolosEspeciais == 0:
+        print(logs+'Não tem simbolos especiais')
         return [False, "Não foi possivel realizar a conta, porque não tem nenhum valor aqui. "]
 
     # Correção do potenciação
@@ -972,106 +1077,119 @@ def fazerContas(linha):
     linha = linha.replace('< =','<=')
     linha = linha.replace('> =','>=')
     linha = linha.replace("! =",'!=')
+    print(logs+'Simbolos especiais corrigidos',linha)
 
-    # Abstração de variáveis
-    anterior = 0
-    normalizacao = 0
-    linha_base = linha
-    for valor in re.finditer(' ',linha_base):
-        palavra = linha[anterior : valor.start() + normalizacao]
+    linha = encontrarETransformarVariaveis(linha,logs)
+    if linha[0] == False:
+        return linha
 
-        if palavra.isalnum() and palavra[0].isalpha():
-            variavelDessaVez = obterValorDeUmaVariavel(palavra)
-            linha = str(linha[:anterior]) + str(variavelDessaVez[1]) + str(linha[valor.start() + normalizacao:]) 
-
-            if len(palavra) < len(str(variavelDessaVez[1])):
-                normalizacao += (len(str(variavelDessaVez[1])) - len(palavra))
-
-            elif len(palavra) > len(str(variavelDessaVez[1])):
-                normalizacao -= (len(palavra) - len(str(variavelDessaVez[1])))
-
-        anterior = valor.end() + normalizacao
-
+    for caractere in linha[1]:
+        if str(caractere).isalpha():
+            return [False, 'não é possível fazer contas com strings',linha[1]]
+    print(logs+'A linha vale',linha)
     # Tente fazer uma conta com isso
     try:
-        resutadoFinal = eval(linha)
+        resutadoFinal = eval(linha[1])
     except Exception as erro:
-        return [False, "Não foi possivel realizar a conta |{}|".format(linha)]
+        return [False, "Não foi possivel realizar a conta |{}|".format(linha[1])]
     else:
-        return [True, resutadoFinal]
+        return [True, resutadoFinal,'float']
 
-def obterValorDeUmaVariavel(variavel):
-    print('obterValorDeUmaVariavel')
+def obterValorDeUmaVariavel(variavel,logs):
+    logs = '  ' + logs
+    print(logs+'Obter valor da variável:',variavel)
+
     variavel = variavel.strip()
     global variaveis
 
     variavel = variavel.replace('\n','')
+    print(logs+'Variaveis disponíveis:',variaveis)
 
     try:
         variaveis[variavel]
     except:
+        print(logs+'Não foi possível obter o valor dessa variável')
         return [False,'[erro] - variavel:{} não definida'.format(variavel)]
     else:
+        print(logs+'Valor da variável obtido com sucesso!')
         return [True,variaveis[variavel]]
 
-def abstrairValoresDaLinhaInteira(possivelVariavel):
-    print('abstrairValoresDaLinhaInteira')
-    possivelVariavel = str(possivelVariavel)
-    possivelVariavel = possivelVariavel.replace('\n','')
-    possivelVariavel = possivelVariavel.strip()
-    if possivelVariavel == '':
-        return [True,possivelVariavel]
-
+def obterDigitadoOuAleatorio(possivelVariavel,logs):
+    logs = '  ' + logs
+    print(logs+'Obter comando digitado ou aleatório',possivelVariavel)
     for comandoDigitado in dicComandos['digitado']:
         if len(comandoDigitado) <= len(possivelVariavel):
             if possivelVariavel == comandoDigitado:
-
-                resultado = funcaoDigitado(comandoDigitado)
-                if resultado[0] == False:
-                    return resultado
-                else:
-                    return [True,resultado[1]]
+                resultado = funcaoDigitado(comandoDigitado,logs)
+                print(logs+'Resultado obtido da função Digitado:',resultado)
+                return resultado
 
     for comandoAleatorio in dicComandos['aleatorio']:
         if len(comandoAleatorio) <= len(possivelVariavel):
             if possivelVariavel[0:len(comandoAleatorio)] == comandoAleatorio:
+                resultado = funcaoNumeroAleatorio(possivelVariavel[len(comandoAleatorio):],logs)
+                print(logs+'Resultado obtido da função Aleatorio:',resultado)
+                return resultado
+    # Não é nem um e nem o outro                
+    return [False,None]
 
-                resultado = funcaoNumeroAleatorio(possivelVariavel[len(comandoAleatorio):])
-                if resultado[0] == False:
-                    return resultado
-                else:
-                    return [True,resultado[1]]
+# Os valores aqui ainda estão crus, como: mostre "oi",2 + 2
+def abstrairValoresDaLinhaInteira(possivelVariavel,logs):
+    logs = '  ' + logs
+    print(logs+'Abstrar valor de uma linha inteira com possivelVariavel = "{}"'.format(possivelVariavel))
+    possivelVariavel = possivelVariavel.strip()
 
-    # caso existam contas entre strings
+    if possivelVariavel == '':
+        print(logs+'Possivel variavel é uma linha vazia')
+        return [True,possivelVariavel,'string']
+
+    resultado = obterDigitadoOuAleatorio(possivelVariavel,logs)
+    if resultado[0] == True:
+        print(logs+'Resultado obtido do digitado ou aleatorio',resultado)
+        return resultado
+
+    # É digitado ou aleatório, porém, deu erro:
+    elif resultado != [False,None]:
+        return resultado
+
+    # Caso existam contas entre strings ( Formatação )
     if possivelVariavel[0] == ',':
+        print(logs+'Existem ,')
         possivelVariavel = possivelVariavel[1:]
 
+    # Caso existam contas entre strings ( Formatação )
     if len(possivelVariavel) > 1:
         if possivelVariavel[-1] == ',':
+            print(logs+'Existem ,')
             possivelVariavel = possivelVariavel[0:len(possivelVariavel)-1]
 
     possivelVariavel = possivelVariavel.strip()
     if possivelVariavel == '':
+        print(logs+'Depois dos processos de filtro, não sobrou nada para analisar')
         return [True,possivelVariavel]
 
-    resultado = fazerContas(possivelVariavel)
-
-    # Se deu certo
+    resultado = fazerContas(possivelVariavel,logs)
     if resultado[0] == True:
+        print(logs+'Deu certo para fazer as contas, resultado:',resultado)
         return resultado
 
     if '"' in possivelVariavel or "'" in possivelVariavel:
-        return obterValorDeString(possivelVariavel)
+        print(logs+'Foi encontrado aspas, obtendo valor de string')
+        return obterValorDeString(possivelVariavel,logs)
 
     try:
         float(possivelVariavel)
     except:
-        resultado = obterValorDeUmaVariavel(possivelVariavel)
+        print(logs+'Não é um float:',possivelVariavel)
+        resultado = obterValorDeUmaVariavel(possivelVariavel,logs)
         return resultado
     else:
-        return [True,float(possivelVariavel)]
+        print(logs+"  É um Float",possivelVariavel)
+        return [True,float(possivelVariavel),'float']
 
-def funcaoAtribuicao(linha,comando):
+def funcaoAtribuicao(linha,comando,logs):
+    logs = '  ' + logs
+    print(logs+'Função atribuição',linha)
     global variaveis
 
     variavel, valor = linha.split(comando)
@@ -1080,65 +1198,27 @@ def funcaoAtribuicao(linha,comando):
     valor    = valor.replace('\n','')
     valor    = valor.strip()
 
-    for comandoDigitado in dicComandos['digitado']:
-        if len(comandoDigitado) <= len(valor):
-            if valor == comandoDigitado:
-
-                resultado = funcaoDigitado(comandoDigitado)
-                if resultado[0] == False:
-                    return resultado
-                else:
-                    variaveis[variavel] = resultado[1]
-                    print(variaveis)
- 
-                    return [True,None]
-
-    for comandoAleatorio in dicComandos['aleatorio']:
-        if len(comandoAleatorio) <= len(valor):
-            if valor[0:len(comandoAleatorio)] == comandoAleatorio:
-
-                resultado = funcaoNumeroAleatorio(valor[len(comandoAleatorio):])
-                if resultado[0] == False:
-                    return resultado
-                else:
-                    variaveis[variavel] = resultado[1]
-                    return [True,None]
-
-    resultado = fazerContas(valor)
+    resultado = abstrairValoresDaLinhaInteira(valor,logs)
+    print('resultado do abstrair valores da linha interira',resultado)
     if resultado[0] == True:
-        variaveis[variavel] = resultado[1]
+        print(logs+'variavel',variavel,'declarada como',[resultado[1],resultado[2]])
+        variaveis[variavel] = [resultado[1],resultado[2]]
         return [True,None]
+    print(logs+'Erro ao abstrair valor da variável')
+    return resultado         
 
-    if '"' in valor or "'" in valor: # é uma string
-        valor = obterValorDeString(valor)
-        if valor[0] == False:
-            return valor
+def funcaoLoopsEnquanto(linha,logs):
+    logs = '  ' + logs
+    print(logs+'Função loops enquanto',linha)
 
-        variaveis[variavel] = valor[1]
-        return [True,None]
-
-    try:
-        float(valor)
-    except:
-        resultado = obterValorDeUmaVariavel(valor)
-        if resultado[0] == False:
-            return resultado # True e False embutidos            
-
-        variaveis[variavel] = resultado[1]
-        return [True,None]
-
-    else:
-        variaveis[variavel] = float(valor)
-        return [True,None]
-
-def funcaoLoopsEnquanto(linha):
     global repetirAtivado
     repetirAtivado = True
 
-    return funcaoCondicional(linha)
+    return funcaoCondicional(linha,logs)
 
-def funcaoCondicional(linha):
-    print('funcaoCondicional')
+def funcaoCondicional(linha,logs):
+    logs = '  ' + logs
+    print(logs + 'função condicional',linha)
     linha = linha.replace(' for maior ou igual a ',' >= ')
     linha = linha.replace(' for menor ou igual a ',' <= ')
     linha = linha.replace(' for diferente de ',' != ')
@@ -1178,23 +1258,27 @@ def funcaoCondicional(linha):
         palavra = str(linha[anterior:valor.start()+atualizarPosicaoReferencia])
         palavra = palavra.strip()
         if palavra.isalnum() and palavra[0].isalpha() and palavra not in simbolos and len(palavra) != 0:
-            variavelDessaVez = obterValorDeUmaVariavel(palavra)
+            variavelDessaVez = obterValorDeUmaVariavel(palavra,logs)
             if variavelDessaVez[0] == False:
                 return variavelDessaVez
+            print(logs+'A variável dessa vez vale ',variavelDessaVez)
+            if str(variavelDessaVez[1][1]) == 'string':
+                variavelDessaVez[1][0] = '"'+str(variavelDessaVez[1][0])+'"'
 
-            linha = str(linha[:anterior]) + str(variavelDessaVez[1]) + str(linha[valor.start() + atualizarPosicaoReferencia:]) 
+
+            linha = str(linha[:anterior]) + str(variavelDessaVez[1][0]) + str(linha[valor.start() + atualizarPosicaoReferencia:]) 
 
             # Se a variavel for maior que o valor
-            if len(palavra) < len(str(variavelDessaVez[1])):
-                atualizarPosicaoReferencia += (len(str(variavelDessaVez[1])) - len(palavra))
+            if len(palavra) < len(str(variavelDessaVez[1][0])):
+                atualizarPosicaoReferencia += (len(str(variavelDessaVez[1][0])) - len(palavra))
 
             # Se a variavel for menor que a variável
-            elif len(palavra) > len(str(variavelDessaVez[1])):
-                atualizarPosicaoReferencia -= (len(palavra) - len(str(variavelDessaVez[1])))
+            elif len(palavra) > len(str(variavelDessaVez[1][0])):
+                atualizarPosicaoReferencia -= (len(palavra) - len(str(variavelDessaVez[1][0])))
 
         anterior = valor.end() + atualizarPosicaoReferencia
 
-    print(linha)
+    print(logs+linha)
     # Tente fazer uma conta com isso
     try:
         resutadoFinal = eval(linha)
@@ -1347,7 +1431,31 @@ lb_linhas.config(state=DISABLED,relief = FLAT,border= 0, highlightthickness=0)
 # =================================== TELA DE CODIFICAÇÃO =================================== #
 tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao(),relief=FLAT)
 tx_codificacao.focus_force()
-tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao:sintaxeDasPalavras())
+tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao :sintaxeDasPalavras())
+
+import tkinter as tk
+
+def check_pos(event=None):
+    global tx_codificacao
+
+    numPosicao = str(tx_codificacao.index(tk.INSERT)) # Obter posicao
+    if '.' not in numPosicao:
+        numPosicao = numPosicao + '.0'
+
+    linha, coluna = numPosicao.split('.')
+
+    print(tx_codificacao.get('{}.{}'.format( int(linha),int(coluna)-1 )))
+
+def poschave(event=None):
+    global tx_codificacao
+    numPosicao = str(tx_codificacao.index(tk.INSERT)) # Obter posicao
+    if '.' not in numPosicao:
+        numPosicao = numPosicao + '.0'
+
+    linha, coluna = str(numPosicao).split('.')
+    tx_codificacao.insert(float("{}.{}".format(int(linha)+1,int(coluna))),'\n}')
+
+#tx_codificacao.bind("<{>", poschave)
 #tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
 #tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
 tx_codificacao.bind('<Configure>',configuracoes)
