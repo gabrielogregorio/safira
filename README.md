@@ -12,9 +12,12 @@ Uma linguagem de programação universal, simples e focada em na lógica.
 - [Como declarar uma variável](#Como-declarar-variáveis)
 - [Como fazer uma condicional](#Como-fazer-uma-condicional)
 - [como declarar funcoes](#Como-declarar-funções)
+- [Como ler o que o usuário digitar](#Como-ler-o-queo-usuário-digitar)
 - [Como fazer um loop enquanto](#Como-fazer-um-loop-enquanto)
 - [como fazer um loop repetir](#Como-fazer-um-loop-repetir)
 - [como fazer um delay](#Como-fazer-um-Delay)
+- [Como sortear um número aleatório](#Como-sortear-um-número-aleatório)
+- [Como limpar a tela](#Como-limpar-a-tela)
 
 ## Objetivo  
 
@@ -81,7 +84,7 @@ if x >= 10
 }
 ```
 
-## Como declarar funções
+## Como usar funções
 ```
 funcao calculaMedia recebe parametros nota1, nota2, nota3
 {
@@ -101,7 +104,18 @@ calculaMedia passando parametros nota1,nota2,nota3
 mostraIdade
 ```
 
-## Como fazer um loop enquanto
+## Como ler o que o usuário digitar
+```
+mostre nessa linha 'Digite seu nome: '
+nome recebe o que for digitado
+
+se nome == 'Catiana'
+{
+    mostre "Seu nome é: ", nome
+}
+```
+
+## Como fazer um loop enquanto  
 ```
 x recebe 0
 enquanto 10 for maior que x
@@ -142,3 +156,20 @@ mostre "Tudo bem?"
 espere 5000 ms
 mostre 'Como você vai?'
 ```
+
+## Como sortear um número aleatório
+```
+sorteado recebe um numero aleatorio entre 10 e 20
+mostre sorteado
+```
+
+## Como limpar a tela
+```
+mostre "Pressione enter"
+
+i = o que o usuario digitar
+limpatela
+
+mostre "Tela limpa"
+```
+
