@@ -1,67 +1,32 @@
 from tkinter.font import nametofont
-from tkinter import filedialog
-from threading import Thread
-from design  import Sintaxe
-from funcoes import funcao
-from design  import design
-from random import randint
-from time import sleep, time
-from os import listdir
-from tkinter import *
+from threading    import Thread
+from tkinter      import filedialog
+from funcoes      import funcao
+from tkinter      import *
+from design       import Sintaxe
+from design       import design
+from random       import randint
+from time         import sleep, time
+from os           import listdir
 
-# Altura da janela em linhas
-global alturaDoWidget
-
-# impede que o programa seja iniciado enquanto outro está sendo executado
-global contadorThreads
-
-# Se um comando de repetição tiver sido ativado 
-global repetirAtivado
-
-# Se a função repita for ativada
-global funcaoRepita
-
-# Se um comendo de funcao tiver sido ativado
-global funcaoAtivada
-
-# Variáveis usadas durante a interpretação do programa
-global variaveis
-
-# Contém o link e o texto do arquivo
-global arquivoAbertoAtualmente
-
-# Exibe as informações do interpretador em tempo real
-global tx_informacoes
-
-# Local onde o programa é codificado
-global tx_codificacao
-
-# Contador de linhas do programa
-global lb_linhas
-
-# Dicionario com todas as funcoes
-global dicFuncoes
-
-# Posição do log registrado
-global numeroDoLog
-
-# funcao que está sendo analisada
-global funcaoQueEstaSendoAnalisada
-
-# Aconteceu algum erro durante a execução do programa
-global aconteceuUmErro
-
-# A tela está em full screen
-global boolTelaEmFullScreen
-
-# Comandos internos a cada função
-global dicSubComandos
-
-# Dicionário com toodos os comandos disponíveis
-global dicComandos
-
-# Botões das guias
-global btnsGuias
+global funcaoQueEstaSendoAnalisada # funcao que está sendo analisada
+global arquivoAbertoAtualmente     # Contém o link e o texto do arquivo
+global boolTelaEmFullScreen        # A tela está em full screen
+global aconteceuUmErro             # Aconteceu algum erro durante a execução do programa
+global contadorThreads             # impede que o programa seja iniciado enquanto outro está sendo executado
+global alturaDoWidget              # Altura da janela em linhas
+global repetirAtivado              # Se um comando de repetição tiver sido ativado 
+global tx_informacoes              # Exibe as informações do interpretador em tempo real
+global tx_codificacao              # Local onde o programa é codificado
+global dicSubComandos              # Comandos internos a cada função
+global funcaoAtivada               # Se um comendo de funcao tiver sido ativado
+global funcaoRepita                # Se a função repita for ativada
+global dicComandos                 # Dicionário com toodos os comandos disponíveis
+global numeroDoLog                 # Posição do log registrado
+global dicFuncoes                  # Dicionario com todas as funcoes
+global variaveis                   # Variáveis usadas durante a interpretação do programa
+global lb_linhas                   # Contador de linhas do programa
+global btnsGuias                   # Botões das guias
 
 arquivoAbertoAtualmente = {'link':None,'texto':None}
 boolTelaEmFullScreen = False 
@@ -75,26 +40,163 @@ variaveis = {}
 btnsGuias = []
 
 dicComandos = {
-    'aleatorio':['um número aleatório entre','um número aleatorio entre','um numero aleatório entre','um numero aleatorio entre','número aleatório entre','número aleatorio entre','numero aleatório entre','numero aleatorio entre'],
-    'mostreNessa':['mostre nessa linha ','exiba nessa linha ','escreva nessa linha ','imprima nessa linha '],
-    'mostre':['escreva na tela ','mostre ','exiba ','print ','imprima ','display ','escreva '],
-    'declaraVariaveis':[' vale ',' recebe ',' = '],
-    'funcoes':['funcao ','function '],
-    'loopsss':['enquanto ','while '],
-    'aguarde':['espere ','aguarde '],
-    'repita':['repita ','repeat ','repetir ','repitir '],
-    'se':['se ','if '],
-    'limpatela':['limpar a tela','limpatela','clear'],
-    'digitado':['o numero que for digitado','o numero que o usuario digitar','numero digitado','entrada','input','o que for digitado','o que o usuario digitar','digitado','entrada','input']}
+    'listas':
+        [
+            'lista de ',
+            'vetor de ',
+            'lista ',
+            'vetor ',
+        ],
+    'aleatorio':
+        [
+            'um número aleatório entre',
+            'um número aleatorio entre',
+            'um numero aleatório entre',
+            'um numero aleatorio entre',
+            'número aleatório entre',
+            'número aleatorio entre',
+            'numero aleatório entre',
+            'numero aleatorio entre'
+        ],
+    'mostreNessa':
+        [
+            'mostre nessa linha ',
+            'exiba nessa linha ',
+            'escreva nessa linha ',
+            'imprima nessa linha '
+        ],
+    'mostre':
+        [
+            'escreva na tela ',
+            'mostre ',
+            'exiba ',
+            'print ',
+            'imprima ',
+            'display ',
+            'escreva '
+        ],
+    'declaraVariaveis':
+        [
+            ' vale ',
+            ' recebe ',
+            ' = '
+        ],
+    'funcoes':
+        [
+            'funcao ',
+            'function '
+        ],
+    'loopsss':
+        [
+            'enquanto ',
+            'while '
+        ],
+    'aguarde':
+        [
+            'espere ',
+            'aguarde '
+        ],
+    'repita':
+        [
+            'repita ',
+            'repeat ',
+            'repetir ',
+            'repitir '
+        ],
+    'se':
+        [
+            'se ',
+            'if '
+        ],
+    'limpatela':
+        [
+            'limpar a tela',
+            'limpatela',
+            'clear'
+        ],
+    'digitado':
+        [
+            'o numero que for digitado',
+            'o numero que o usuario digitar',
+            'numero digitado',
+            'entrada',
+            'input',
+            'o que for digitado',
+            'o que o usuario digitar',
+            'digitado',
+            'entrada',
+            'input'
+        ]
+    }
 
 # Corrigindo bugs
 dicSubComandos = {
-    'repitaVezes':['vezes','vez'],
-    'logico':['ou','e','for maior que','>','for menor que','<','for igual a','==','for maior ou igual a','>=','for menor ou igual a','<=','for diferente de','!='],
-    'matematica':    ['+','mais','/','divide','dividido por','**','elevado','elevado por','elevado a','*','multiplique','multiplicado por','-','menos','%'],
-    'esperaEm': ['segundos','segundo','milisegundos','ms','milisegundo','s'],
-    'passandoParametros':['passando parametros','passando parametro','parametros','parametro','passando'],
-    'recebeParametros':['recebe parametros']}
+    'repitaVezes':
+        [
+            'vezes',
+            'vez'
+        ],
+    'logico':
+        [
+            'and',
+            '&&',
+            'e',
+            'ou',
+            'or',
+            '||',
+            'for maior que',
+            '>',
+            'for menor que',
+            '<',
+            'for igual a',
+            '==',
+            'for maior ou igual a',
+            '>=',
+            'for menor ou igual a',
+            '<=',
+            'for diferente de',
+            '!='
+        ],
+    'matematica':
+        [
+            'multiplicado por',
+            'dividido por',
+            'multiplique',
+            'elevado por',
+            'elevado a',
+            'elevado',
+            'divide',
+            'menos',
+            'mais',
+            '**',
+            '-',
+            '*',
+            '%',
+            '/',
+            '+'
+        ],
+    'esperaEm':
+        [
+            ' milisegundos',
+            ' milisegundo',
+            ' segundos',
+            ' segundo',
+            ' ms',
+            ' s'
+        ],
+    'passandoParametros':
+        [
+            'passando parametros',
+            'passando parametro',
+            'parametros',
+            'parametro',
+            'passando'
+        ],
+    'recebeParametros':
+        [
+            'recebe parametros'
+        ]
+    }
 
 def salvarArquivoComoDialog(event = None):
     global arquivoAbertoAtualmente
@@ -143,23 +245,24 @@ def salvarArquivo(event=None):
 def abrirArquivoDialog(event=None):
     global arquivoAbertoAtualmente
 
-    ftypes = [('Arquivos fyn', '*.fyn'), ('Todos os arquivos', '*')]
+    ftypes = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]
     dlg = filedialog.Open(filetypes = ftypes)
     filename = dlg.show()
 
     if filename != ():
-        print('arquivo {} escolhido'.format(filename))        
+        log(' Arquivo "{}" escolhido'.format(filename))        
         arquivo = funcao.abrir_arquivo(filename) 
 
         if arquivo != None:
             tx_codificacao.delete(1.0, END)
             tx_codificacao.insert(END,arquivo)
 
-        sintaxeDasPalavras() # atualizar a sintaxe
+        sintaxeDasPalavras()
+
         arquivoAbertoAtualmente['link'] = filename
         arquivoAbertoAtualmente['texto'] = arquivo
     else:
-        print('Nenhum arquivo escolhido')
+        log(' Nenhum arquivo escolhido')
 
 def colorirUmaPalavra(palavra,linha,valor1,valor2,cor):
 
@@ -191,19 +294,23 @@ def sintaxe_linha(palavra,cor,frase,linha):
 
                 # Análisa se a palavra não está em outro contexto
                 validacao = 0 
-                if caractere > 0: # Se não estiver no primeiro caractere
-                    if frase[caractere-1 : caractere+len(palavra)] == ' '+palavra: # Analise o contexto da palavra
+
+                # Se não estiver no primeiro caractere
+                if caractere > 0:
+                    if frase[caractere-1 : caractere+len(palavra)] == ' '+palavra:
                         validacao += 1 
                 else:
                     validacao += 1
 
-                if caractere + len(palavra) < quantidade_de_caracteres: # Se não estourar os caracteres
-                    if frase[caractere:caractere+1+len(palavra)] == palavra+' ':   # Analise o contexto da palavra
+                if caractere + len(palavra) < quantidade_de_caracteres:
+                    if frase[caractere:caractere+1+len(palavra)] == palavra+' ':
                         validacao += 1 
                 else:
                     validacao += 1
 
-                if validacao == 2: # Se tiver sido validado
+                # Se tiver sido validado
+                if validacao == 2:
+
                     # colora a palavra
                     colorirUmaPalavra(palavra,linha,caractere,caractere + len(palavra),cor)
 
@@ -264,6 +371,9 @@ def sintaxeDasPalavras():
     for comando in dicComandos['declaraVariaveis']:
         sintaxe(comando.strip(), Sintaxe.atribuicao())
 
+    for comando in dicComandos['listas']:
+        sintaxe(comando.strip(), Sintaxe.lista())
+
     for comando in dicComandos['digitado']:
         sintaxe(comando.strip(), Sintaxe.tempo())
 
@@ -314,14 +424,14 @@ def sintaxeDasPalavras():
         sintaxe(comando.strip(), Sintaxe.logico())
 
     # Numero
-    sintaxe('numerico'                   , Sintaxe.numerico())
+    sintaxe('numerico'     , Sintaxe.numerico())
 
     # String
-    sintaxe('"'                          , Sintaxe.string())
-    sintaxe("'"                          , Sintaxe.string())
+    sintaxe('"'            , Sintaxe.string())
+    sintaxe("'"            , Sintaxe.string())
 
     # Comentários
-    sintaxe('comentario'                 , Sintaxe.comentario())
+    sintaxe('comentario'   , Sintaxe.comentario())
 
 # inicia o interpretador
 def iniciarOrquestradorDoInterpretador(event = None):
@@ -610,7 +720,6 @@ def interpretador(codigo):
         # Obtem todas as linhas 
         linhas = codigo.split('\n')
 
-        #entrada = ['recebe o que o usuario digitar','capture o que o usuario digitar','recebe o que for digitado','leia o que for digitado','input']
         #vetor = ['vetor','crie uma lista chamada','lista']
 
         for linha in linhas:
@@ -940,7 +1049,7 @@ def funcaoDeclararFuncoes(linha,logs):
 
             funcaoQueEstaSendoAnalisada = nomeDaFuncao
             funcaoAtivada = True
-            log(logs + '...Funcoes declaradas: {}'.format(dicFuncoes))
+            log(logs + 'Funcoes declaradas: {}'.format(dicFuncoes))
             return [True,True,'booleano']
     
     dicFuncoes[linha.strip()] = ['','bloco']
@@ -949,7 +1058,6 @@ def funcaoDeclararFuncoes(linha,logs):
 
     return [True,True,'booleano']
 
-# parei aqui
 def funcaoExibicao(linha,logs):
     logs = '  ' + logs
     log(logs + 'funcao exibição: {}'.format(linha))
@@ -970,25 +1078,25 @@ def funcaoExibicaoNessaLinha(linha,logs):
 def funcaoTempo(codigo,logs):
     logs = '  ' + logs
     log(logs + 'Função tempo: {}'.format(codigo))
+    global dicSubComandos
     codigo = codigo.strip()
+   
+    for comando in  dicSubComandos['esperaEm']:
+        log(logs + comando)
 
-    tiposEspera = [' milisegundos',' milisegundo',' segundos',' segundo',' ms',' s']
+        if len(comando) < len(codigo):
 
-    for comando in tiposEspera:
+            if comando == codigo[len(codigo)-len(comando):]:
 
-        if len(comando) < len(codigo):                                                         # Se o comando não estrapolar o código
+                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)],logs)
+                if resultado != False:
 
-            if comando == codigo[len(codigo)-len(comando):]:                                   # Se o comando estiver no código
-
-                resultado = abstrairValoresDaLinhaInteira(codigo[:len(codigo)-len(comando)],logs)   # Tente obter o real valor no código
-                if resultado != False:                                                         # Se foi possível obter
-
-                    if comando == " segundos" or comando == " s" or comando == " segundo":     # Se está em segunso
-                        sleep(resultado[1])                                               # Tempo em segundos
+                    if comando == " segundos" or comando == " s" or comando == " segundo":
+                        sleep(resultado[1])
                         return [True,None,'booleano']
 
-                    elif comando == " milisegundos" or comando == " ms" or comando == "milisegundo": # Se está em milisegundos
-                        sleep(resultado[1]/1000)                                   # Tempo em milisegundos
+                    elif comando == " milisegundos" or comando == " ms" or comando == "milisegundo":
+                        sleep(resultado[1]/1000)
                         return [True,None,'booleano']
 
                 else:
@@ -1474,7 +1582,7 @@ tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao :sintaxeDasPalavras())
 
 import tkinter as tk
 
-def check_pos(event=None):
+def obterPosicaoDoCursor(event=None):
     global tx_codificacao
 
     numPosicao = str(tx_codificacao.index(tk.INSERT)) # Obter posicao
@@ -1485,19 +1593,10 @@ def check_pos(event=None):
 
     print(tx_codificacao.get('{}.{}'.format( int(linha),int(coluna)-1 )))
 
-def poschave(event=None):
-    global tx_codificacao
-    numPosicao = str(tx_codificacao.index(tk.INSERT)) # Obter posicao
-    if '.' not in numPosicao:
-        numPosicao = numPosicao + '.0'
-
-    linha, coluna = str(numPosicao).split('.')
-    tx_codificacao.insert(float("{}.{}".format(int(linha)+1,int(coluna))),'\n}')
-
-#tx_codificacao.bind("<{>", poschave)
-#tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
-#tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
+tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
+tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
 tx_codificacao.bind('<Configure>',configuracoes)
+tx_codificacao.bind('<KeyRelease>',obterPosicaoDoCursor)
 tx_codificacao.delete(1.0, END)
 
 # =================================== SOBRE > DESENVOLVEDORES =================================== #

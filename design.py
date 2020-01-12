@@ -68,7 +68,7 @@ class Sintaxe():
 
     def lista():
         return {
-            'foreground':'#fe468a'}
+            'foreground':'#aaff80'}
 
     def logico():
         return {
