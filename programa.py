@@ -1,6 +1,7 @@
 from tkinter.font import nametofont
 from threading    import Thread
 from tkinter      import filedialog
+from tkinter      import INSERT
 from funcoes      import funcao
 from tkinter      import *
 from design       import Sintaxe
@@ -40,13 +41,20 @@ variaveis = {}
 btnsGuias = []
 
 dicComandos = {
+    'pare':
+        [
+            'interrompa',
+            'break',
+            'stop',
+            'pare',
+        ],        
     'listas':
         [
             'lista de ',
             'vetor de ',
             'lista ',
             'vetor ',
-        ],
+        ],        
     'aleatorio':
         [
             'um número aleatório entre',
@@ -106,6 +114,7 @@ dicComandos = {
     'se':
         [
             'se ',
+            'quando ',
             'if '
         ],
     'limpatela':
@@ -264,6 +273,24 @@ def abrirArquivoDialog(event=None):
     else:
         log(' Nenhum arquivo escolhido')
 
+def abrirArquivo(link):
+    global arquivoAbertoAtualmente
+
+    log(' Abrindo arquivo "{}" escolhido'.format(link))        
+
+    arquivo = funcao.abrir_arquivo(link) 
+
+    if arquivo != None: 
+        tx_codificacao.delete(1.0, END) 
+        tx_codificrt(END,arquivo)
+
+        sintaxeDasPalavras()
+
+        arquivoAbertoAtualmente['link'] = link
+        arquivoAbertoAtualmente['texto'] = arquivo
+    else:
+        print('Arquivo não selecionado')
+
 def colorirUmaPalavra(palavra,linha,valor1,valor2,cor):
 
     linha1 = '{}.{}'.format(linha , valor1) # linha.coluna(revisar)
@@ -368,6 +395,9 @@ def sintaxeDasPalavras():
     threadContadorLinhas.start()
 
     # Principais comandos
+    for comando in dicComandos['pare']:
+        sintaxe(comando.strip(), Sintaxe.pare())
+
     for comando in dicComandos['declaraVariaveis']:
         sintaxe(comando.strip(), Sintaxe.atribuicao())
 
@@ -470,7 +500,7 @@ def iniciarOrquestradorDoInterpretador(event = None):
     while contadorThreads != 0:
         tela.update()
 
-    tx_informacoes.insert(END, '\n<script finalizado em {:.3} segundos>'.format(time() - inicio))
+    tx_informacoes.insert(END, '\nscript finalizado em {:.3} segundos'.format(time() - inicio))
     tx_informacoes.see("end")
 
 def orquestradorDoInterpretador(linhas):
@@ -554,12 +584,18 @@ def orquestradorDoInterpretador(linhas):
                     
                     # Enquanto a condição for verdadeira
                     while linhaComOResultadoDaExecucao[1]:
+                        if aconteceuUmErro:
+                            break
 
                         # Envia um bloco completo para ser novamente executado
                         resultadoExecucao = orquestradorDoInterpretador(blocoComOsComando)
 
+                        # Comando pare localizado
+                        print('>>>>>>>>>>.',resultadoExecucao)
+
                         # Se der erro na exeução do bloco
                         if resultadoExecucao[0] == False:
+
                             aconteceuUmErro = True
                             tx_informacoes.insert(END,str(resultadoExecucao[1]))
                             colorirUmErro('codigoErro',valor1=0,valor2=len(str(resultadoExecucao[1]))+1,cor='#dd4444')
@@ -579,6 +615,8 @@ def orquestradorDoInterpretador(linhas):
                         break
 
                 elif funcaoRepita != 0:
+                    if aconteceuUmErro:
+                        break
 
                     # Se for maior que zero, aconteceu um repit
                     for valor in range(0,funcaoRepita):
@@ -628,6 +666,8 @@ def orquestradorDoInterpretador(linhas):
 
                 # Inicie o interpretador da linha
                 estadoDaCondicional = interpretador(blocoComOsComando.strip())
+
+                    
                 if estadoDaCondicional[0] == False:
                     aconteceuUmErro = True
                     tx_informacoes.insert(END,str(estadoDaCondicional[1]))
@@ -664,8 +704,6 @@ def orquestradorDoInterpretador(linhas):
         blocoComOsComando += linhas[contador]
         contador += 1
 
-    # Libera uma unidade no contador de Threads
-    contadorThreads -= 1
 
     if penetracao > 0:
         aconteceuUmErro = True
@@ -678,6 +716,7 @@ def orquestradorDoInterpretador(linhas):
 
         tx_informacoes.insert(END,msgErro)
         colorirUmErro('codigoErro',valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        contadorThreads -= 1
         return [False,'']
 
     elif penetracao < 0:
@@ -691,12 +730,22 @@ def orquestradorDoInterpretador(linhas):
 
         tx_informacoes.insert(END,msgErro)
         colorirUmErro('codigoErro',valor1=0,valor2=len(msgErro)+1,cor='#dd4444')
+        contadorThreads -= 1
         return [False,'']
+
+    # Libera uma unidade no contador de Threads
+    contadorThreads -= 1
 
     return [True,"Não acontecera erros durante a execução do interpretador"]
 
+
 # Interpreta um conjunto de linhas
 def interpretador(codigo):
+
+    global aconteceuUmErro
+    if aconteceuUmErro:
+        return [False,'Um erro foi encontrado ao iniciar o interpretador','string']
+
     log(' > Interpretador acionado!')
 
     codigo = codigo.strip()
@@ -722,6 +771,7 @@ def interpretador(codigo):
 
         #vetor = ['vetor','crie uma lista chamada','lista']
 
+
         for linha in linhas:
             linha = linha.strip()
 
@@ -731,6 +781,7 @@ def interpretador(codigo):
 
             if linha == '':
                 continue
+
 
             for comando in dicComandos['mostreNessa']:
                 if len(comando) < len(linha):
@@ -738,15 +789,11 @@ def interpretador(codigo):
                        log(' > Função exibicao nessa linha: "{}"'.format(codigo))
                        return funcaoExibicaoNessaLinha(linha[len(comando):],logs='> ')
 
-        for linha in linhas:
-            linha = linha.strip()
-
-            ignoraComentario = linha.find('#')
-            if ignoraComentario != -1:
-                linha = linha[0:ignoraComentario]
-
-            if linha == '':
-                continue
+            for comando in dicComandos['pare']:
+                if len(comando) <= len(linha):
+                    if comando == linha:
+                       log(' > Função pare: "{}"'.format(codigo))
+                       return funcaoPare(logs='> ')
 
             for comando in dicComandos['mostre']:
                 if len(comando) < len(linha):
@@ -843,7 +890,7 @@ def funcaoDigitado(linha,logs):
     estaEsperandoPressionarEnter = True
 
     while estaEsperandoPressionarEnter:
-        pass
+        tx_informacoes.update()
 
     digitado = tx_informacoes.get(1.0,END)
     digitado = digitado[textoOriginal-1:-2]
@@ -903,6 +950,15 @@ def funcaoRepitir(linha,logs):
 
         # Não houve erros e é para repetir
         return [True,True,'booleano']
+
+
+# numero aleatório entre 10 e 20
+def funcaoPare(logs):
+
+    logs = '  ' + logs
+    log(logs + 'funcao pare')
+
+    return [True,'loop interrompido','string']
 
 # numero aleatório entre 10 e 20
 def funcaoNumeroAleatorio(linha,logs):
@@ -1474,10 +1530,29 @@ def configuracoes(ev):
     alturaDoWidget = int( ev.height / 24 )
     print("Altura",alturaDoWidget)
 
+def atualizarListaDeScripts():
+    for file in listdir('scripts/'):
+        if len(file) > 5:       
+            if file[-3:] == 'fyn':
+                menu_arquivo_cascate.add_command(label=file,command= lambda link = file: abrirArquivo('scripts/' + str(file)))
+
+def obterPosicaoDoCursor(event=None):
+    global tx_codificacao
+
+    numPosicao = str(tx_codificacao.index(INSERT)) # Obter posicao
+    if '.' not in numPosicao:
+        numPosicao = numPosicao + '.0'
+
+    linha, coluna = numPosicao.split('.')
+
+    print(tx_codificacao.get('{}.{}'.format( int(linha),int(coluna)-1 )))
+
+
 tela = Tk()
+tela.attributes('-zoomed', True)
 tela.title('Linguagem feynman')
 tela.configure(bg='#393944')
-tela.rowconfigure(1,weight=1)
+tela.rowconfigure(2,weight=1)
 tela.grid_columnconfigure(1,weight=1)
 
 tela.bind('<F11>',lambda event: modoFullScreen(event))
@@ -1501,7 +1576,6 @@ menu_sobre       = Menu(menu_barra, design.cor_menu(),relief=FLAT)
 menu_barra.add_cascade(label='Arquivo'   , menu=menu_arquivo)
 menu_barra.add_cascade(label='Executar'  , menu=menu_executar)
 menu_barra.add_cascade(label='Localizar' , menu=menu_localizar)
-menu_barra.add_cascade(label='Editar'    , menu=menu_editar)
 menu_barra.add_cascade(label='Interface' , menu=menu_interface)
 menu_barra.add_cascade(label='Ajuda'     , menu=menu_ajuda)
 menu_barra.add_cascade(label='sobre'     , menu=menu_sobre)
@@ -1511,24 +1585,19 @@ menu_arquivo_cascate = Menu(menu_arquivo, design.cor_menu(),relief=FLAT)
 menu_arquivo.add_command(label='Abrir arquivo (Ctrl+O)',command=abrirArquivoDialog)
 menu_arquivo.add_command(label='Nova Guia (Ctrl-N)')
 menu_arquivo.add_command(label='Abrir pasta')
+menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Recentes')
 menu_arquivo.add_cascade(label='Exemplos', menu=menu_arquivo_cascate)
 
+atualizarListaDeScripts()
 
-for file in listdir('scripts/'):
-    if len(file) > 5:       
-        if file[-3:] == 'fyn':
-            menu_arquivo_cascate.add_command(label=file[:-4])
-
-#menu_arquivo.add_separator()
+menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Salvar (Ctrl-S)',command=salvarArquivo)
 menu_arquivo.add_command(label='Salvar Como (Ctrl-Shift-S)',command=salvarArquivoComoDialog)
-#menu_arquivo.add_separator()
+menu_arquivo.add_separator()
 menu_arquivo.add_command(label='imprimir (Ctrl-P)')
 menu_arquivo.add_command(label='Exportar (Ctrl-E)')
 menu_arquivo.add_command(label='Enviar por e-mail ')
-#menu_arquivo.add_separator()
-menu_arquivo.add_command(label='Sair (Alt-F4)')
 
 # =================================== EXECUTAR =================================== #
 menu_executar.add_command(label='Executar Tudo (F5)',command=iniciarOrquestradorDoInterpretador)
@@ -1541,14 +1610,6 @@ menu_executar.add_command(label='Inserir breakpoint (F10)')
 # =================================== LOCALIZAR =================================== #
 menu_localizar.add_command(label='Localizar (CTRL + F)')
 menu_localizar.add_command(label='Substituir (CTRL + R)')
-
-# =================================== EDITAR =================================== #
-menu_editar.add_command(label='copiar (CTRL + C)')
-menu_editar.add_command(label='cortar (CTRL + X)')
-menu_editar.add_command(label='colar (CTRL + V)')
-menu_editar.add_command(label='desfazer (CTRL + Z)')
-menu_editar.add_command(label='refazer (CTRL + Y)')
-menu_editar.add_command(label='selecionar tudo (CTRL + A)')
 
 # =================================== FERRAMENTAS =================================== #
 menu_ferramentas.add_command(label='corrigir identação')
@@ -1565,55 +1626,63 @@ menu_ajuda.add_command(label='Comunidade')
 
 # =================================== SOBRE =================================== #
 menu_sobre.add_command(label='Projeto')
-menu_sobre.add_command(label='Desenvolvedores',command=lambda:trocar_de_tela(fr_InPrincipal,fr_sobDesenvol))
 
+fr_opcoesRapidas = Frame(tela,background='#353544')
+fr_opcoesRapidas.grid(row=1,column=1,sticky=NSEW)
+
+icone_play      = PhotoImage(file='imagens/icon_play.png')
+icone_break     = PhotoImage(file='imagens/icon_break.png')
+icone_save      = PhotoImage(file='imagens/icon_save.png')
+icone_continue  = PhotoImage(file='imagens/icon_continue.png')
+icone_pre_save  = PhotoImage(file='imagens/icon_pre_save.png')
+icone_new_file  = PhotoImage(file='imagens/icon_new_file.png')
+
+icone_play      = icone_play.subsample(2,2) 
+icone_break     = icone_break.subsample(2,2) 
+icone_save      = icone_save.subsample(2,2) 
+icone_continue  = icone_continue.subsample(2,2) 
+icone_pre_save  = icone_pre_save.subsample(2,2) 
+icone_new_file  = icone_new_file.subsample(2,2) 
+
+btn_play = Button(fr_opcoesRapidas,image=icone_play,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_play.grid(row=1,column=1)
+
+btn_break = Button(fr_opcoesRapidas,image=icone_break,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_break.grid(row=1,column=2)
+
+btn_save = Button(fr_opcoesRapidas,image=icone_save,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_save.grid(row=1,column=3)
+
+btn_continue = Button(fr_opcoesRapidas,image=icone_continue,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_continue.grid(row=1,column=4)
+
+btn_pre_save = Button(fr_opcoesRapidas,image=icone_pre_save,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_pre_save.grid(row=1,column=5)
+
+btn_new_file = Button(fr_opcoesRapidas,image=icone_new_file,relief=FLAT,background='#353544',highlightthickness=0,activebackground='#353544')
+btn_new_file.grid(row=1,column=6)
 # =================================== INTERFACE GERAL =================================== #
 fr_InPrincipal = Frame(tela,bg='#393944')
-fr_InPrincipal.grid_columnconfigure(1,weight=1)
-fr_InPrincipal.rowconfigure(2,weight=1)
+fr_InPrincipal.grid_columnconfigure(2,weight=1)
+fr_InPrincipal.rowconfigure(1,weight=1)
+fr_InPrincipal.grid(row=2,column=1,sticky=NSEW)
 
 lb_linhas = Text(fr_InPrincipal,design.lb_linhas())
 lb_linhas.insert('end',' 1\n 2\n 3\n 4\n 5\n 6\n 7\n 8')
 lb_linhas.config(state=DISABLED,relief = FLAT,border= 0, highlightthickness=0)
+lb_linhas.grid(row=1,column=1,sticky=NSEW)
+
 # =================================== TELA DE CODIFICAÇÃO =================================== #
 tx_codificacao = Text(fr_InPrincipal,design.tx_codificacao(),relief=FLAT)
 tx_codificacao.focus_force()
-tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao :sintaxeDasPalavras())
+tx_codificacao.grid(row=1,column=2,sticky=NSEW)
 
-import tkinter as tk
-
-def obterPosicaoDoCursor(event=None):
-    global tx_codificacao
-
-    numPosicao = str(tx_codificacao.index(tk.INSERT)) # Obter posicao
-    if '.' not in numPosicao:
-        numPosicao = numPosicao + '.0'
-
-    linha, coluna = numPosicao.split('.')
-
-    print(tx_codificacao.get('{}.{}'.format( int(linha),int(coluna)-1 )))
-
-tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
-tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
+#tx_codificacao.bind("<Button-4>",lambda tx_codificacao:scroolUp())
+#tx_codificacao.bind("<Button-5>",lambda tx_codificacao:scroolDown())
 tx_codificacao.bind('<Configure>',configuracoes)
-tx_codificacao.bind('<KeyRelease>',obterPosicaoDoCursor)
+tx_codificacao.bind("<KeyRelease>",lambda tx_codificacao :sintaxeDasPalavras())
+tx_codificacao.bind('<KeyPress>',obterPosicaoDoCursor)
 tx_codificacao.delete(1.0, END)
 
-# =================================== SOBRE > DESENVOLVEDORES =================================== #
-fr_sobDesenvol = Frame(tela)
-fr_sobDesenvol.rowconfigure(2,weight=15)
-fr_sobDesenvol.rowconfigure((3,4),weight=1)
-fr_sobDesenvol.grid_columnconfigure(1,weight=2)
-
-lb_sobDeTitulo = Label(fr_sobDesenvol, design.lb_sobDeTitulo(), text=" COMBRATEC ")
-lb_sobDAutores = Label(fr_sobDesenvol, design.lb_sobDAutores(), text="Gabriel Gregório da Silva")
-lb_sobDesenAno = Label(fr_sobDesenvol, design.lb_sobDesenAno(), text="2019")
-
-fr_InPrincipal.grid(row=1,column=1,sticky=NSEW)
-tx_codificacao.grid(row=2,column=1,sticky=NSEW)
-lb_linhas.grid(row=2,column=0,sticky=NSEW)
-lb_sobDeTitulo.grid(row=1,column=1,sticky=NSEW)
-lb_sobDAutores.grid(row=2,column=1,sticky=NSEW)
-lb_sobDesenAno.grid(row=3,column=1,sticky=NSEW)
 
 tela.mainloop()

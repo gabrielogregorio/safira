@@ -48,10 +48,10 @@ class design():
     def tx_informacoes():
         return {
             'width':50,
-            'bg':'#393944',
+            'bg':'#494944',
             'fg':'#ffffff',
             'highlightthickness':0,
-            'font':('helvetica',12)}
+            'font':('helvetica',14)}
 
 class Sintaxe():
     def numerico():
@@ -90,8 +90,6 @@ class Sintaxe():
         return {
             'foreground':'#ffcc88'}
 
-
-            
     def contas():
         return {
             'foreground':'#eb99ff'}
@@ -102,4 +100,9 @@ class Sintaxe():
 
     def comentario():
         return {
-            'foreground':'#616A6B'}         
+            'foreground':'#616A6B'}
+
+    def pare():
+        return {
+            'foreground':'#fda0a0'}
+        
