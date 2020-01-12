@@ -12,7 +12,7 @@ Uma linguagem de programação universal, simples e focada em na lógica.
 - [Como declarar uma variável](#Como-declarar-variáveis)
 - [Como fazer uma condicional](#Como-fazer-uma-condicional)
 - [como declarar funcoes](#Como-declarar-funções)
-- [Como ler o que o usuário digitar](#Como-ler-o-queo-usuário-digitar)
+- [Como ler o que o usuário digitar](#Como-ler-o-que-o-usuário-digitar)
 - [Como fazer um loop enquanto](#Como-fazer-um-loop-enquanto)
 - [como fazer um loop repetir](#Como-fazer-um-loop-repetir)
 - [como fazer um delay](#Como-fazer-um-Delay)
