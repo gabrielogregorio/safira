@@ -48,7 +48,7 @@ class design():
     def tx_informacoes():
         return {
             'width':50,
-            'bg':'#494944',
+            'bg':'#191914',
             'fg':'#ffffff',
             'highlightthickness':0,
             'font':('helvetica',14)}
@@ -68,7 +68,7 @@ class Sintaxe():
 
     def lista():
         return {
-            'foreground':'#aaff80'}
+            'foreground':'#80d4ff'}
 
     def logico():
         return {
