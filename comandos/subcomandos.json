@@ -1,0 +1,78 @@
+{
+  "repitaVezes": [
+    " vezes",
+    " vez"
+  ],
+  "logico": [
+    " for maior ou igual a ",
+    " for menor ou igual a ",
+    " for diferente de ",
+    " for maior que ",
+    " for menor que ",
+    " for igual a ",
+    " and ",
+    " && ",
+    " ou ",
+    " or ",
+    " || ",
+    " == ",
+    " >= ",
+    " <= ",
+    " != ",
+    " e ",
+    " > ",
+    " < "
+  ],
+  "matematica": [
+    " multiplicado por ",
+    " dividido por ",
+    " multiplique ",
+    " elevado por ",
+    " elevado a ",
+    " elevado ",
+    " divide ",
+    " menos ",
+    " mais ",
+    " ** ",
+    " - ",
+    " * ",
+    " % ",
+    " / ",
+    " + "
+  ],
+  "esperaEm": [
+    " milisegundos",
+    " milisegundo",
+    " segundos",
+    " segundo",
+    " ms",
+    " s"
+  ],
+  "passandoParametros": [
+    " passando parametros ",
+    " passando parametro ",
+    " parametros ",
+    " parametro ",
+    " passando "
+  ],
+  "recebeParametros": [
+    " recebe parametros "
+  ],
+  "declaraListas": [
+    " recebe "
+  ],
+  "adicionarItensListas": [
+    " na lista de ",
+    " a lista de ",
+    " na lista ",
+    " a lista "
+  ],
+  "RemoverItensListas": [
+    " da lista de ",
+    " da lista "
+  ],
+  "tiverLista": [
+    "na lista",
+    "em"
+  ]
+}

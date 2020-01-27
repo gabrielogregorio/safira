@@ -1,153 +1,70 @@
 {
-  "design":
-  {
-    "cor_menu":
-    {
-      "font": ["Arial",11],
-      "background":"#343434",
-      "foreground":"white",
-      "activebackground":"#464646",
-      "activeforeground":"white"
-    },
-
-    "lb_sobDeTitulo":
-    {
-      "font":["Arial",70,"bold"],
-      "height":5,
-      "background":"#343434",
-      "foreground":"#ffffff"
-    },
-
-    "lb_sobDAutores":
-    {
-      "font":["Arial",15],
-      "background":"#343434",
-      "foreground":"#ffffff"
-    },
-  
-    "lb_sobDesenAno":
-    {
-      "font":["Arial",10],
-      "background":"#343434",
-      "foreground":"#ffffff"
-    },
-  
-    "tx_codificacao":
-    {
-      "bg":"#343434",
-     "fg":"#ffffff",
-      "font":"(15)"
-    },
-   
-    "tx_informacoes":
-    {
-      "width":40,
-      "bg":"#343434",
-      "fg":"#ffffff",
-      "font":["15"]
-    },
-
-
-  "sintaxe":
-  {
-    "numerico":
-    {
-      "foreground":"#ff5de2"
-    },
-
-    "atribuicao":
-    {
-      "foreground":"#D35400"
-    },
-
-    "loops":
-    {
-      "foreground":"#fe468a"
-    },
-
-    "lista":
-    {
-      "foreground":"#fe468a"
-    },
-
-    "vetor":
-    {
-      "foreground":"#fe468a"
-    },
-
-    "logico":
-    {
-      "foreground":"#f9264a"
-    },
-
-    "entrada":
-    {
-      "foreground":"#f9264a"
-    },
-
-    "contas":
-    {
-      "foreground":"#f4264a"
-    },
-
-    "comparacao":
-    {
-      "foreground":"#66d9ef"
-    },
-
-    "metodo":
-    {
-      "foreground":"#66d9ef"
-    },
-
-    "parametro":
-    {
-      "foreground":"#D35400"
-    },
-
-    "exibicao":
-    {
-      "foreground":"#22ee22"
-    },
-
-    "condicionais":
-    {
-      "foreground":"#e2d872"
-    },
-
-    "tempo":
-    {
-      "foreground":"#63f1d8"
-    },
-
-    "aleatorio":
-    {
-      "foreground":"#63f1d8"
-    },
-
-    "azul":
-    {
-      "foreground":"#1166ff"
-    },
-
-    "roxo":
-    {
-      "foreground":"#dd11dd"
-    },
-      
-    "verde":
-    {
-      "foreground":"#11dd11"
-    },
-
-    "string":
-    {
-      "foreground":"#F1C40F"
-    },
-
-    "comentario":
-    {
-      "foreground":"#616A6B"
-    }         
+  "cor_menu": {
+    "font": [
+      "",
+      12
+    ],
+    "background": "#494954",
+    "foreground": "white",
+    "activebackground": "#5a5a65",
+    "activeborderwidth": 0,
+    "activeforeground": "white"
+  },
+  "lb_sobDeTitulo": {
+    "font": [
+      "Loma",
+      70,
+      "bold"
+    ],
+    "height": 5,
+    "background": "#393944",
+    "foreground": "#ffffff"
+  },
+  "lb_sobDAutores": {
+    "font": [
+      "Loma",
+      15
+    ],
+    "background": "#393944",
+    "foreground": "#ffffff"
+  },
+  "lb_sobDesenAno": {
+    "font": [
+      "Loma",
+      10
+    ],
+    "background": "#393944",
+    "foreground": "#ffffff"
+  },
+  "tx_codificacao": {
+    "bg": "#393944",
+    "fg": "#ffffff",
+    "highlightthickness": 0,
+    "insertbackground": "#ffffff",
+    "selectbackground": "#494954",
+    "selectforeground": "#dddddd",
+    "font": [
+      "helvetica",
+      12
+    ]
+  },
+  "lb_linhas": {
+    "width": 5,
+    "bg": "#353542",
+    "fg": "#9999bb",
+    "font": [
+      "helvetica",
+      12
+    ]
+  },
+  "tx_informacoes": {
+    "width": 50,
+    "bg": "#191914",
+    "fg": "#ffffff",
+    "highlightthickness": 0,
+    "font": [
+      "helvetica",
+      14
+    ]
   }
 }
