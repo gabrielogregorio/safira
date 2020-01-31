@@ -61,6 +61,12 @@
   "declaraListas": [
     " recebe "
   ],
+  "acesarListas": [
+    " na posição ",
+    " na posiçao ",
+    " na posicão ",
+    " na posicao "
+  ],
   "adicionarItensListas": [
     " na lista de ",
     " a lista de ",
@@ -72,6 +78,7 @@
     " da lista "
   ],
   "tiverLista": [
+    "na lista de",
     "na lista",
     "em"
   ]

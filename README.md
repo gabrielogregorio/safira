@@ -18,6 +18,8 @@ Uma linguagem de programação universal, simples e focada em na lógica.
 - [como fazer um delay](#Como-fazer-um-Delay)
 - [Como sortear um número aleatório](#Como-sortear-um-número-aleatório)
 - [Como limpar a tela](#Como-limpar-a-tela)
+- [Como trabalhar com listas](#Como-trabalhar-com-listas)
+
 
 ## Objetivo  
 
@@ -171,5 +173,25 @@ i = o que o usuario digitar
 limpatela
 
 mostre "Tela limpa"
+```
+
+## Como trabalhar com listas
+```
+lista de nomes recebe "Peter", "Mariana"
+mostre nomes
+
+remova "Mariana" da lista de nomes
+mostre nomes
+
+tamanho da lista nomes
+
+adicione "Jacson" a lista de nomes
+mostre nomes
+
+se 1 for igual a 1 e tiver "Peter" na lista de nomes
+{
+    mostre "Tem sim!"
+}
+
 ```
 

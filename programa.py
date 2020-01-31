@@ -283,6 +283,9 @@ def sintaxeDasPalavras(event=None):
     for comando in dicSubComandos['passandoParametros']:
         sintaxe(comando.strip(), Sintaxe["tempo"])
 
+    for comando in dicSubComandos['acesarListas']:
+        sintaxe(comando.strip(), Sintaxe["lista"])
+
     for comando in dicSubComandos['adicionarItensListas']:
         sintaxe(comando.strip(), Sintaxe["lista"])
 
@@ -343,7 +346,7 @@ def iniciarOrquestradorDoInterpretador(event = None):
     aconteceuUmErro = False  # Não aconteceu nenhum erro
     contadorThreads = 0      # Reinicia o contador de Threads
 
-    create_topExecutando()   # Inicia a tela do programa
+    iniciarTerminal()   # Inicia a tela do programa
 
     tx_informacoes.delete('1.0', END)        # Limpa o conteudo da tela de execução.
     linhas = tx_codificacao.get('1.0', END)  # Obtem o código do programa
@@ -754,6 +757,14 @@ def obterVariavelLista(linha, logs):
 
     return teste
 
+
+def obterValorDeLista(logs, linha = "nomes na posicao 2", subcomando = " na posicao "):
+    variavel, posicao = linha.split(subcomando)
+
+    # Verifica se existe:
+    variavel = variavel.strip()
+    teste = obterVariavelLista(variavel)
+
 def funcaoTiverEm(linha, logs):
     logs = '  ' + logs
     log(logs + 'Função tiver na lista, com a linha: "{}"'.format(linha))
@@ -788,9 +799,9 @@ def funcaoTiverEm(linha, logs):
         return resultado
 
     if [resultado[1], resultado[2]] in variaveis[variavel][0]:
-        return [True, 'sim', 'string']
+        return [True, 'sim', 'booleano']
     else:
-        return [True, 'não', 'string']
+        return [True, 'não', 'booleano']
 
 def funcaoTamanhoDaLista(linha, logs):
     global variaveis
@@ -1118,7 +1129,7 @@ def funcaoExecutaFuncoes(linha, logs):
 
         return [True, None, 'vazio']
 
-# funcao gabriel recebe paramentros nota1, nota2
+# Funcao gabriel recebe paramentros nota1, nota2
 def funcaoDeclararFuncoes(linha, logs):
     logs = '  ' + logs
     log(logs + 'Declarar funcoes: {}'.format(linha))
@@ -1338,6 +1349,7 @@ def obterValorDeUmaVariavel(variavel, logs):
 
     variavel = variavel.strip()
     global variaveis
+    global dicComandos
     print('variaveis', variaveis)
 
     variavel = variavel.replace('\n', '')
@@ -1382,6 +1394,12 @@ def abstrairValoresDaLinhaInteira(possivelVariavel, logs):
     logs = '  ' + logs
     log(logs + 'Abstrar valor de uma linha inteira com possivelVariavel: "{}"'.format(possivelVariavel))
     possivelVariavel = possivelVariavel.strip()
+
+    if possivelVariavel == 'True':
+        return [True,'True','booleano']
+
+    if possivelVariavel == 'False':
+        return [True,'False','booleano']
 
     if possivelVariavel == '':
         log(logs + 'Possivel variavel é uma linha vazia')
@@ -1478,6 +1496,21 @@ def funcaoLoopsEnquanto(linha, logs):
 
     return funcaoCondicional(linha, logs)
 
+
+def analisaTiverListas(linha,logs):
+    linha = linha.strip()
+    logs = '  ' + logs
+    log(logs + 'Função condicional: {}'.format(linha))
+
+    for comando in dicComandos['tiverLista']:
+        if comando in linha:
+            if comando == linha[0:len(comando)]:
+                log(' > Função tiver listas: "{}"'.format(linha))
+                return funcaoTiverEm(linha[len(comando):], logs='> ')
+
+    return [True,None,'booleano']
+
+
 def funcaoCondicional(linha, logs):
     logs = '  ' + logs
     log(logs + 'Função condicional: {}'.format(linha))
@@ -1498,7 +1531,7 @@ def funcaoCondicional(linha, logs):
     linha = ' ' + str(linha) + ' '
 
     # Todos os caracteres especiais de 
-    simbolosEspeciais = ['>=', '<=', '!=', '>', '<', '==', '(', ')',' and ', ' or ']
+    simbolosEspeciais = ['>=', '<=', '!=', '>', '<', '==', '(', ')',' and ', ' or ',' tiver ']
  
     # Quantidade de simbolos localizados
     qtdSimbolosEspeciais = 0
@@ -1514,6 +1547,8 @@ def funcaoCondicional(linha, logs):
     linha = linha.replace('> =', '>=')
     linha = linha.replace('< =', '<=')
     linha = linha.replace('! =', '!=')
+    linha = linha.replace('   tiver   ',' tiver ')
+    linha = linha.strip()
 
     # Se não tiver nenhuma operação a fazer
     if qtdSimbolosEspeciais == 0:
@@ -1533,30 +1568,66 @@ def funcaoCondicional(linha, logs):
     # Obter os valores fora dos simbolos marcados
     for item in re.finditer("_\\._[^_]*_\\._", linha):
 
+        resultado = analisaTiverListas(linha[anterior:item.start()],logs)
+        if resultado[0] == False:
+            return resultado
+
+        if resultado[2] == 'booleano':
+
+            if resultado[1] == 'sim':
+                final += ' True ' + linha[ item.start() + 3 : item.end() - 3]
+                anterior = item.end()
+                continue
+
+            elif resultado[1] == 'nao':
+                final += ' False ' + linha[ item.start() + 3 : item.end() - 3]
+                anterior = item.end()
+                continue
+
         resultado = abstrairValoresDaLinhaInteira(linha[anterior:item.start()],logs)
         if resultado[0] == False:
             return resultado
 
         saida = resultado[1]
+
         # Marcar strings
         if resultado[2] == 'string':
             saida = '"'+resultado[1]+'"'
 
         # Reover marcadores de simbolos
         final += str(saida) + linha[item.start() + 3:item.end() - 3]
+
         anterior = item.end()
 
-    resultado = abstrairValoresDaLinhaInteira(linha[anterior:],logs)
+    boolTemTiverLista = False
+    resultado = analisaTiverListas(linha[anterior:].strip(),logs)
     if resultado[0] == False:
         return resultado
 
-    # Obter ultima string
-    saida = resultado[1]
-    if resultado[2] == 'string':
-        saida = '"'+resultado[1]+'"'
+    if resultado[2] == 'booleano':
 
-    # Finalizar nova linha
-    final += str(saida)
+        if resultado[1] == 'sim':
+            final += ' True '
+            boolTemTiverLista = True
+
+        elif resultado[1] == 'nao':
+            final += ' False '
+            boolTemTiverLista = True
+
+    if not boolTemTiverLista:
+
+        resultado = abstrairValoresDaLinhaInteira(linha[anterior:],logs)
+        if resultado[0] == False:
+            return resultado
+
+        # Obter ultima string
+        saida = resultado[1]
+        if resultado[2] == 'string':
+            saida = '"'+resultado[1]+'"'
+
+        # Finalizar nova linha
+        final += str(saida)
+
 
     # Tente fazer a condição com isso
     try:
@@ -1572,8 +1643,6 @@ def funcaoCondicional(linha, logs):
 
 def log(msg):
     print(msg)
-
-print(funcaoCondicional("3 for maior que 2",'> '))
 
 def modoFullScreen(event=None):
     global boolTelaEmFullScreen
@@ -1598,7 +1667,7 @@ def on_closing(event=None):
     aconteceuUmErro = True
     print('Fechou!')
 
-def create_topExecutando():
+def iniciarTerminal():
     global tx_informacoes
     global topExecutando
 
@@ -1622,8 +1691,18 @@ def atualizaLinhasLaterais(linhas):
 
 def configuracoes(ev):
     global alturaDoWidget
-    alturaDoWidget = int( ev.height / 24 )
-    print("Altura", alturaDoWidget)
+    global lb_linhas
+
+    alturaDoWidget = int( ev.height / 18 )
+    add_linha = ''
+
+    for linha in range(alturaDoWidget):
+        add_linha = add_linha + str(linha) + '\n'
+
+    lb_linhas.config(state=NORMAL)
+    lb_linhas.delete(1.0, END)
+    lb_linhas.insert('end', add_linha[:-1])
+    lb_linhas.config(state=DISABLED)
 
 def atualizarListaDeScripts():
     for file in listdir('scripts/'):
@@ -1648,8 +1727,8 @@ tela.configure(bg='#393944')
 tela.rowconfigure(2, weight=1)
 tela.grid_columnconfigure(1, weight=1)
 #tela.attributes('-fullscreen', True)
-tela.bind('<F11>', lambda event: modoFullScreen(event))
-tela.bind('<F5>',       lambda event: iniciarOrquestradorDoInterpretador(event))
+tela.bind('<F11>',       lambda event: modoFullScreen(event))
+tela.bind('<F5>',        lambda event: iniciarOrquestradorDoInterpretador(event))
 tela.bind('<Control-s>', lambda event: salvarArquivo(event))
 tela.bind('<Control-o>', lambda event: abrirArquivoDialog(event))
 tela.bind('<Control-S>', lambda event: salvarArquivoComoDialog(event))
@@ -1785,7 +1864,7 @@ tx_codificacao.grid(row=1, column=2, sticky=NSEW)
 
 #tx_codificacao.bind("<Button-4>", lambda tx_codificacao:scroolUp())
 #tx_codificacao.bind("<Button-5>", lambda tx_codificacao:scroolDown())
-#tx_codificacao.bind('<Configure>', configuracoes)
+tx_codificacao.bind('<Configure>', configuracoes)
 
 tx_codificacao.bind('<KeyRelease>', sintaxeDasPalavras)
 
