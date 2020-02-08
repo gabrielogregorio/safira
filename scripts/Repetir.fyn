@@ -1,0 +1,11 @@
+x recebe 10
+
+repita x vezes
+{
+     mostre "Repetindo ",x, " vezes"
+}
+
+repita 2 vezes
+{
+    exiba "Repetindo 2 vezes"
+}

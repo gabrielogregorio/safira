@@ -1,0 +1,7 @@
+mostre nessa linha "Digite seu nome: "
+nome recebe o que for digitado
+
+se nome == "Catiana"
+{
+    mostre "Seu nome é: ", nome
+}

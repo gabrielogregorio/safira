@@ -1,0 +1,16 @@
+lista de nomes recebe "Peter", "Mariana"
+mostre nomes
+
+remova "Mariana" da lista de nomes
+mostre nomes
+
+tamanho da lista nomes
+
+adicione "Jacson" a lista de nomes
+mostre nomes
+
+se 1 for igual a 1 e tiver "Peter" na lista de nomes
+{
+    mostre "Tem sim!"
+}
+

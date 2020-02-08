@@ -1,0 +1,35 @@
+nome = "Anonymous"
+
+# Declaração
+lista de nomes recebe "parte 2", "parte 3"
+mostre nomes
+
+# Adição de dados
+adicione "parte 4" no final da lista de nomes
+adicione "parte 5" na lista de nomes
+adicione "parte 1" no inicio da lista de nomes
+adicione "ola" na posicao 2 da lista de nomes
+mostre nomes
+
+# Remoção de dados
+remova "parte 1" da lista de nomes
+remova "parte 4" da lista de nomes
+mostre nomes
+
+# Condicional com o tamanho da lista
+se tamanho da lista de nomes for igual a 4
+{
+    mostre "O tamanho da lista de nomes é 4!"
+}
+
+# Tem na condição
+se tiver "ola" na lista nomes
+{
+     mostre "Tem ola na lista de nomes"
+}
+
+# Não tem na condição
+se tiver "Ola" na lista nomes
+{
+     mostre 1
+}

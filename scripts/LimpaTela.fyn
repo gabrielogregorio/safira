@@ -1,0 +1,6 @@
+mostre "Pressione enter"
+
+i = o que o usuario digitar
+limpatela
+
+mostre "Tela limpa"

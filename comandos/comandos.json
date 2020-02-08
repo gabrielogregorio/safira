@@ -1,75 +1,77 @@
 {
   "declaraListas": [
-    "lista de ",
-    "lista "
+    ["lista de ","pt-br"],
+    ["lista ","pt-br"]
   ],
   "adicionarItensListas": [
-    "adicione "
+    ["adicione ","pt-br"]
   ],
   "RemoverItensListas": [
-    "remova "
+    ["remova ","pt-br"]
   ],
   "tamanhoDaLista": [
-    "o tamanho da lista",
-    "tamanho da lista"
+    ["o tamanho da lista de","pt-br"],
+    ["o tamanho da lista","pt-br"],
+    ["tamanho da lista de","pt-br"],
+    ["tamanho da lista","pt-br"]
   ],
   "tiverLista": [
-    "tiver"
+    ["tiver","pt-br"]
   ],
   "aleatorio": [
-    "um número aleatório entre ",
-    "um número aleatorio entre ",
-    "um numero aleatório entre ",
-    "um numero aleatorio entre ",
-    "número aleatório entre ",
-    "número aleatorio entre ",
-    "numero aleatório entre ",
-    "numero aleatorio entre "
+    ["um numero aleatorio entre ","pt-br"],
+    ["numero aleatorio entre ","pt-br"]
   ],
   "mostreNessa": [
-    "mostre nessa linha ",
-    "exiba nessa linha "
+    ["mostre nessa linha ","pt-br"],
+    ["exiba nessa linha ","pt-br"]
   ],
   "mostre": [
-    "mostre ",
-    "exiba "
+    ["mostre ","pt-br"],
+    ["exiba ","pt-br"],
+    ["print ","en-us"]
   ],
   "declaraVariaveis": [
-    " recebe ",
-    " vale ",
-    " = "
+    [" recebe ","pt-br"],
+    [" vale ","pt-br"],
+    [" = ","all"]
   ],
   "funcoes": [
-    "funcao "
+    ["funcao ","pt-br"]
   ],
   "loopsss": [
-    "enquanto ",
-    "while "
+    ["enquanto ","pt-br"],
+    ["while ","pt-br"]
   ],
   "aguarde": [
-    "espere ",
-    "aguarde "
+    ["espere ","pt-br"],
+    ["aguarde ","pt-br"]
   ],
   "repita": [
-    "repita ",
-    "repitir "
+    ["repita ","pt-br"],
+    ["repitir ","pt-br"]
   ],
   "se": [
-    "quando ",
-    "se ",
-    "if "
+    ["quando ","pt-br"],
+    ["se ","pt-br"],
+    ["if ","en-us"]
   ],
   "limpatela": [
-    "limpar a tela",
-    "limpatela"
+    ["limpar a tela","pt-br"],
+    ["limpatela","pt-br"],
+    ["clear","en-us"]
   ],
   "digitado":[
-    "o numero que o usuario digitar",
-    "o numero que for digitado",
-    "o que o usuario digitar",
-    "o que for digitado",
-    "numero digitado",
-    "digitado",
-    "entrada"
+    ["o numero que o usuario digitar","pt-br"],
+    ["numero que o usuario digitar","pt-br"],
+    ["o numero que for digitado","pt-br"],
+    ["numero que for digitado","pt-br"],
+    ["o que o usuario digitar","pt-br"],
+    ["que o usuario digitar","pt-br"],
+    ["o que for digitado","pt-br"],
+    ["que for digitado","pt-br"],
+    ["numero digitado","pt-br"],
+    ["digitado","pt-br"],
+    ["entrada","pt-br"]
   ]
 }

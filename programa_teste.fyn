@@ -1,0 +1,67 @@
+lista de nomes recebe "Mariana", "Alexa", "Maria"
+mostre "lista de nomes: ", nomes
+
+remova "Mariana" da lista de nomes
+mostre "Removendo a Mariana: ", nomes
+
+mostre "Qtd lista: ", tamanho da lista nomes
+
+adicione "Juno" a lista de nomes
+mostre "Adicionando Juno: ", nomes
+
+adicione "Matos" na posicao 2 da lista de nomes
+mostre "Adicionando Matos na posição 2: ", nomes
+
+lista de nomes na posicao 2 recebe "Lili"
+mostre "Adicionando Lili na posição 2: ", nomes
+
+mostre nessa linha "Digite seu nome: "
+nome recebe o que o usuario digitar
+
+limpatela 
+
+funcao calculaMedia recebe parametros num1, num2 
+{
+   mostre "A média é: ", (num1 + num2) / 2
+}
+
+se nome for igual a "Alexa" e tiver "Alexa" na lista de nomes
+{
+  mostre "Linguagem Fynman Alexa!"
+  espere 1 segundos
+}
+
+contador recebe 0
+
+enquanto contador for menor que 10 
+{
+  mostre "Contador vale: ", contador
+  contador recebe contador mais 1
+  quando contador for igual a 5
+  {
+      contador = 10
+  }
+}
+
+andante recebe 1
+enquanto andante for menor ou igual a tamanho da lista nomes
+{
+   lista de nomes na posicao andante recebe "nome ", andante
+   andante recebe andante mais 1
+}
+mostre "Nomes substituido vale: ", nomes
+
+y recebe  numero aleatorio entre  2 e 3
+mostre "Numero aleatório escolhido foi: ", y
+
+repita y vezes
+{
+  mostre y
+}
+
+mostre "Chamando funções"
+calculaMedia passando parametros 10, 5
+calculaMedia passando parametros 10, 6
+calculaMedia passando parametros 10, 7
+
+mostre "Programa Finalizado ", nome

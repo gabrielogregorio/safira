@@ -1,0 +1,76 @@
+{
+  "cor_menu": {
+    "font": [
+      "monospace",
+      14
+    ],
+    "background": "#232323",
+    "foreground": "#efefef",
+    "activebackground": "#333333",
+    "activeborderwidth": 0,
+    "activeforeground": "#ffffff"
+  },
+  "lb_sobDeTitulo": {
+    "font": [
+      "monospace",
+      14,
+      "bold"
+    ],
+    "height": 5,
+    "background": "#cccccc",
+    "foreground": "#555555"
+  },
+  "lb_sobDAutores": {
+    "font": [
+      "monospace",
+      14
+    ],
+    "background": "#ffffff",
+    "foreground": "#223322"
+  },
+  "lb_sobDesenAno": {
+    "font": [
+      "monospace",
+      14
+    ],
+    "background": "#ffffff",
+    "foreground": "#223322"
+  },
+  "tx_codificacao": {
+    "bg": "#ffffff",
+    "fg": "#444444",
+    "highlightthickness": 0,
+    "insertbackground": "#223322",
+    "selectbackground": "#494954",
+    "selectforeground": "#ffffff",
+    "font": [
+      "monospace",
+      14
+    ]
+  },
+  "dicBtnMenus": {
+    "highlightcolor": "green",
+    "background": "#aaaaaa",
+    "highlightthickness": 0,
+    "border":0,
+    "activebackground":"#aaaaaa"
+  },
+  "lb_linhas": {
+    "bg": "#cccccc",
+    "fg": "#555555",
+    "font": [
+      "monospace",
+      14
+    ]
+  },
+  "tx_terminal": {
+    "width": 50,
+    "bg": "#191914",
+    "fg": "#ffffff",
+    "highlightthickness": 0,
+    "font": [
+      "monospace",
+      14
+    ]
+  }
+}

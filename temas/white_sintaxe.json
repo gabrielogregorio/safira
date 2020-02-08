@@ -1,0 +1,41 @@
+{
+  "numerico": {
+    "foreground": "#00994d"
+  },
+  "atribuicao": {
+    "foreground": "#4d9900"
+  },
+  "loops": {
+    "foreground": "#e68200"
+  },
+  "lista": {
+    "foreground": "#00aaff"
+  },
+  "logico": {
+    "foreground": "#e98fff"
+  },
+  "entrada": {
+    "foreground": "#e98fff"
+  },
+  "exibicao": {
+    "foreground": "#0099cc"
+  },
+  "tempo": {
+    "foreground": "#00aaff"
+  },
+  "condicionais": {
+    "foreground": "#e68200"
+  },
+  "contas": {
+    "foreground": "#e98fff"
+  },
+  "string": {
+    "foreground": "#ff1a1a"
+  },
+  "comentario": {
+    "foreground": "#616A6B"
+  },
+  "pare": {
+    "foreground": "#e60000"
+  }
+}

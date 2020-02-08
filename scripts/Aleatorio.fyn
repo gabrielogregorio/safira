@@ -1,0 +1,13 @@
+x = 10
+
+sorteado recebe um numero aleatorio entre x e o numero que o usuario digitar 
+mostre sorteado
+
+sorteado recebe um numero aleatorio entre 10 e 20 + 2
+mostre sorteado
+
+sorteado recebe um numero aleatorio entre -10 e 13
+mostre sorteado
+
+sorteado recebe um numero aleatorio entre x e x + 2
+mostre sorteado
