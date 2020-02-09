@@ -48,15 +48,18 @@
       14
     ]
   },
-
   "dicBtnMenus": {
-    "highlightcolor": "green",
-    "background": "#aaaaaa",
-    "highlightthickness": 0,
+    "width":30,
     "border":0,
-    "activebackground":"#aaaaaa"
+    "highlightthickness": 2,
+    "highlightbackground":"#505050",
+    "activebackground":"#555555",
+    "background": "#505050",
+    "foreground":"#fa0104"
   },
-
+  "fr_opcoes_rapidas": {
+    "background": "#505050"
+  },
   "lb_linhas": {
     "bg": "#353542",
     "fg": "#9999bb",
@@ -65,8 +68,6 @@
       14
     ]
   },
-
-
   "tx_terminal": {
     "width": 50,
     "bg": "#191914",

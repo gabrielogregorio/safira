@@ -10,10 +10,10 @@ adicione "Juno" a lista de nomes
 mostre "Adicionando Juno: ", nomes
 
 adicione "Matos" na posicao 2 da lista de nomes
-mostre "Adicionando Matos na posição 2: ", nomes
+mostre "Adicionando Matosna posicao 2: ", nomes
 
 lista de nomes na posicao 2 recebe "Lili"
-mostre "Adicionando Lili na posição 2: ", nomes
+mostre "Adicionando Lili na posicao 2: ", nomes
 
 mostre nessa linha "Digite seu nome: "
 nome recebe o que o usuario digitar
@@ -25,9 +25,9 @@ funcao calculaMedia recebe parametros num1, num2
    mostre "A média é: ", (num1 + num2) / 2
 }
 
-se nome for igual a "Alexa" e tiver "Alexa" na lista de nomes
+se nome for igual a "Alexa" e  tiver "Alexa" na lista de nomes
 {
-  mostre "Linguagem Fynman Alexa!"
+  mostre "Linguagem mostre Fynman Alexa!"
   espere 1 segundos
 }
 
@@ -51,7 +51,7 @@ enquanto andante for menor ou igual a tamanho da lista nomes
 }
 mostre "Nomes substituido vale: ", nomes
 
-y recebe  numero aleatorio entre  2 e 3
+y recebe  numero aleatorio entre  2 e 5
 mostre "Numero aleatório escolhido foi: ", y
 
 repita y vezes
