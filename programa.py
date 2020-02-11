@@ -12,6 +12,7 @@ from tkinter import DISABLED
 from tkinter import Toplevel
 from tkinter import CURRENT
 from tkinter import INSERT
+from tkinter import Scrollbar
 from tkinter import RAISED
 from tkinter import Button
 from tkinter import NORMAL
@@ -58,9 +59,6 @@ global numeros_thread_interpretador
 # Altura da janela em linhas
 global altura_widget
 
-# Se um comando de repetição tiver sido ativado
-global loop_enquanto_ativo
-
 # Exibe as informações do interpretador em tempo real
 global tx_terminal
 
@@ -69,12 +67,6 @@ global tx_codificacao
 
 # Comandos internos a cada função
 global dic_sub_com
-
-# Se um comendo de funcao tiver sido ativado
-global funcao_declarar_funcoes_ativo
-
-# Se a função repita for ativada
-global funcao_repita
 
 # Dicionário com toodos os comandos disponíveis
 global dic_com
@@ -115,12 +107,10 @@ global posCorrente
 # Posicao absoluta na tela de codificacao
 global posAbsuluta
 
-funcao_declarar_funcoes_ativo  = False
 numeros_thread_interpretador   = 0
 esperar_pressionar_enter     = False
 arquivo_aberto_atualmente      = {'link': None,'texto': None}
 bool_tela_em_fullscreen        = False
-loop_enquanto_ativo            = False
 aconteceu_erro                 = False
 dic_variaveis                  = {}
 dic_funcoes                    = {}
@@ -398,13 +388,10 @@ def log(mensagem):
 
 # inicia o interpretador
 def inicializador_orquestrador_interpretador(event = None):
-    global funcao_declarar_funcoes_ativo
     global numeros_thread_interpretador
-    global loop_enquanto_ativo
     global aconteceu_erro
     global tx_codificacao
     global dic_variaveis
-    global funcao_repita
     global erro_alertado
     global linhaExecucao
 
@@ -416,23 +403,14 @@ def inicializador_orquestrador_interpretador(event = None):
         messagebox.showinfo('Problemas',"Já existe um programa sendo executado!")
         return 0
 
-    # FUNÇÃO SENDO DECLARADA
-    funcao_declarar_funcoes_ativo = False
-
     # CONTADOR DE THREADS
     numeros_thread_interpretador = 0
-
-    # LOOP WHILE ATIVO
-    loop_enquanto_ativo = False
 
     # ALERTA DE ERROS
     aconteceu_erro = False
 
     # VARIÁVEIS DO PROGRAMA
     dic_variaveis = {}
-
-    # FUNÇÃO REPETIÇÃO
-    funcao_repita = 0
 
     # NENHUM ERRO REPORTADO DESENVOLVEDOR
     erro_alertado = False
@@ -466,10 +444,7 @@ def inicializador_orquestrador_interpretador(event = None):
 
 def orquestrador_interpretador(linhas):
     global numeros_thread_interpretador
-    global loop_enquanto_ativo
-    global funcao_repita
     global aconteceu_erro
-    global funcao_declarar_funcoes_ativo
     global dic_funcoes
     global funcao_em_analise
     global linhaExecucao
@@ -555,13 +530,14 @@ def orquestrador_interpretador(linhas):
         if linhas[contador] == '}' and BlocoDeCodigoEstaEmAnalise and penetracao == 0:
 
             # Se a condição do começo do bloco era verdadeira
-            if estadoDaCondicional[1] == True:
-
+            if estadoDaCondicional[1] == True or estadoDaCondicional[1] != 0:
+                print(estadoDaCondicional)
                 # Se acontecer um loop repetir
-                if loop_enquanto_ativo:
+                if estadoDaCondicional[3] == 'declararLoop':
+                    estadoDaCondicional[3] = 'fazerNada'
 
                     # Enquanto a condição for verdadeira
-                    while linhaComOResultadoDaExecucao[1]:
+                    while linhaComOResultadoDaExecucao[1] and not aconteceu_erro:
 
                         # Envia um bloco completo para ser novamente executado
                         resultadoExecucao = orquestrador_interpretador(
@@ -596,10 +572,13 @@ def orquestrador_interpretador(linhas):
                             return linhaComOResultadoDaExecucao
 
                 # SE A FUNÇÃO FOR ATIVADA
-                elif funcao_repita != 0:
+                elif estadoDaCondicional[3] == "declararLoopRepetir":
+                    estadoDaCondicional[3] = 'fazerNada'
+
+                    print(estadoDaCondicional,'looooooooooop')
 
                     # Se for maior que zero, aconteceu um repit
-                    for valor in range(0, funcao_repita):
+                    for valor in range(0, estadoDaCondicional[1]):
 
                         # Envia um bloco completo para ser novamente executado
                         resultadoOrquestrador = orquestrador_interpretador(
@@ -617,15 +596,15 @@ def orquestrador_interpretador(linhas):
                             numeros_thread_interpretador -= 1
                             return resultadoOrquestrador
 
-                    funcao_repita = 0
+                    estadoDaCondicional[1] = 0
                     linhaComOResultadoDaExecucao = [True, False, 'booleano']
 
                 # Se uma função foi ativada
-                elif funcao_declarar_funcoes_ativo:
+                elif estadoDaCondicional[3] == "declararFuncao":
+                    estadoDaCondicional[3] = "fazerNada"
 
                     # Atualize o dicionário de funções
                     dic_funcoes[funcao_em_analise] = [dic_funcoes[funcao_em_analise][0], ComandosParaAnalise]
-                    funcao_declarar_funcoes_ativo = False
 
                 # Se for uma condição normal
                 else:
@@ -748,9 +727,7 @@ def interpretador(codigo):
     global linhaExecucao
     global aconteceu_erro
     global dic_com
-    global loop_enquanto_ativo
     global dic_variaveis
-    global funcao_repita
 
     logs = '  > '
 
@@ -763,11 +740,7 @@ def interpretador(codigo):
 
     codigo = codigo.strip()
 
-    # Remove o modo repetir
-    loop_enquanto_ativo = False
-
     # Limpa o número de repeticoes
-    funcao_repita = 0
     simbolosEspeciais = ['{', '}']
 
     # Se o código estiver vazio
@@ -1312,6 +1285,7 @@ def pressionou_enter(event=None):
 def funcao_digitado(linha, logs):
     global tx_terminal
     global esperar_pressionar_enter
+    global aconteceu_erro
 
     logs = '  ' + logs
     log(logs + 'Função digitado: "{}"'.format(linha))
@@ -1321,8 +1295,16 @@ def funcao_digitado(linha, logs):
     esperar_pressionar_enter = True
 
     while esperar_pressionar_enter:
-        tx_terminal.update()
+        print('lendo', aconteceu_erro)
+        sleep(0.01)
+        if aconteceu_erro:
+            print("Houve erros")
+            return [False, "Interrompido","string","exibirNaTela"]
 
+        else:
+            tx_terminal.update()
+
+    print("Sem erros")
     digitado = tx_terminal.get(1.0, END)
     digitado = digitado[textoOriginal-1:-2]
 
@@ -1348,7 +1330,6 @@ def funcao_limpar_tela(logs):
 
 # repita 10 vezes \n{\nmostre 'oi'\n}
 def funcao_repetir(linha, logs):
-    global funcao_repita
 
     logs = '  ' + logs
     log(logs + 'funcao repetir: "{}"'.format(linha))
@@ -1378,12 +1359,8 @@ def funcao_repetir(linha, logs):
     else:
         funcao_repita = int(linha[1])
 
-        if funcao_repita == 0:
-            # Se for zero, não reproduza nenhuma vez
-            return [True, False, 'booleano', 'declararLoop']
-
         # Não houve erros e é para repetir
-        return [True, True, 'booleano', 'declararLoop']
+        return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
 # numero aleatório entre 10 e 20
 def funcao_numero_aleatorio(linha, logs):
@@ -1403,12 +1380,11 @@ def funcao_numero_aleatorio(linha, logs):
  
         # Obtendo ambos os valores
         num1 = abstrair_valor_linha(num1, logs)
-        num2 = abstrair_valor_linha(num2, logs)
-
         # Se deu para obter o valor do primeiro
         if num1[0] == False:
             return [num1[0], num1[1], num1[2], 'exibirNaTela']
- 
+
+        num2 = abstrair_valor_linha(num2, logs)
         # Se deu erro para obter o valor do segundo
         if num2[0] == False:
             return [num2[0], num2[1], num2[2], 'exibirNaTela']
@@ -1520,7 +1496,6 @@ def funcao_executar_funcoes(linha, logs):
 
 # FUNCAO CALCULAMEDIA RECEBE PARAMENTOS NOTA1, NOTA2
 def funcao_declarar_funcao(linha, logs):
-    global funcao_declarar_funcoes_ativo
     global funcao_em_analise
 
     logs = '  ' + logs
@@ -1581,15 +1556,13 @@ def funcao_declarar_funcao(linha, logs):
                 dic_funcoes[nomeDaFuncao] = [parametros, 'bloco']
 
             funcao_em_analise = nomeDaFuncao
-            funcao_declarar_funcoes_ativo = True
 
-            return [True, True, 'booleano', 'fazerNada']
+            return [True, True, 'booleano', 'declararFuncao']
     
     dic_funcoes[linha.strip()] = ['', 'bloco']
     funcao_em_analise = linha.strip()
-    funcao_declarar_funcoes_ativo = True
 
-    return [True, True, 'booleano', 'fazerNada']
+    return [True, True, 'booleano', 'declararFuncao']
 
 def funcao_exibir(linha, logs):
     logs = '  ' + logs
@@ -1597,6 +1570,8 @@ def funcao_exibir(linha, logs):
 
     codigo = linha.strip()
     resultado = abstrair_valor_linha(codigo, logs)
+    if resultado[0] == False:
+        return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
 
     lista = []
     # Se for lista
@@ -1615,6 +1590,8 @@ def funcao_exibir_na_linha(linha, logs):
     log(logs + 'Função exibir nessa linha ativada'.format(linha))
     codigo = linha.strip()
     resultado = abstrair_valor_linha(codigo, logs)
+    if resultado[0] == False:
+        return resultado
 
     lista = []
     ############################################################################
@@ -1900,7 +1877,7 @@ def abstrair_valor_linha(possivelVariavel, logs):
         return resultado
 
     # Era um digitado ou aleatório, mas deu errado
-    elif resultado[0] == False and resultado[1] != None:
+    elif resultado[0] == False:
         return resultado
 
     # =========  COMANDOS DIVERSOS  =========== #
@@ -1953,6 +1930,8 @@ def funcao_fazer_atribuicao(linha, comando, logs):
     valor = valor.strip()
 
     resultado = abstrair_valor_linha(valor, logs)
+    if resultado[0] == False:
+        return resultado
 
     if resultado[0] == True:
         dic_variaveis[variavel] = [resultado[1], resultado[2]]
@@ -1962,12 +1941,9 @@ def funcao_fazer_atribuicao(linha, comando, logs):
     return [ resultado[0], resultado[1], resultado[2], 'fazerNada']
 
 def funcao_loops_enquanto(linha, logs):
-    global loop_enquanto_ativo
-
     logs = '  ' + logs
     log(logs + 'Função loops enquanto: {}'.format(linha))
 
-    loop_enquanto_ativo = True
     resultado = funcao_condicional(linha, logs)
 
     return [resultado[0], resultado[1], resultado[2], 'declararLoop']
@@ -2133,9 +2109,16 @@ def trocar_de_tela(fechar, carregar):
 def on_closing(event=None):
     global top_janela_terminal
     global aconteceu_erro
+    global numeros_thread_interpretador
+
+    aconteceu_erro = True
+
+    while numeros_thread_interpretador != 0:
+        tela.update()
+        sleep(0.01)
+        print("Tentando para interpretador: ",numeros_thread_interpretador)
 
     top_janela_terminal.destroy()
-    aconteceu_erro = True
     print('Fechou!')
 
 def inicializador_terminal():
@@ -2230,6 +2213,7 @@ def atualiza_design_interface():
     try:
         menu_interface_cascate_sintaxe.configure(dic_design["cor_menu"])
         menu_interface_cascate_temas.configure(dic_design["cor_menu"])
+        menu_interface_cascate_fontes.configure(dic_design["cor_menu"])
         fr_opcoes_rapidas.configure(dic_design["fr_opcoes_rapidas"])
         menu_arquivo_cascate.configure(dic_design["cor_menu"])
         tx_codificacao.configure(dic_design["tx_codificacao"])
@@ -2244,6 +2228,8 @@ def atualiza_design_interface():
         menu_sobre.configure(dic_design["cor_menu"])
         menu_barra.configure(dic_design["cor_menu"])
         lb_linhas.configure(dic_design["lb_linhas"])
+
+        scrollbar_text.configure(dic_design['scrollbar_text'])
 
         btn_salva.configure(dic_design["dicBtnMenus"])
         btn_corrige.configure(dic_design["dicBtnMenus"])
@@ -2317,7 +2303,7 @@ tela.configure(bg='#393944')
 tela.rowconfigure(2, weight=1)
 tela.geometry("1100x600+100+100")
 tela.grid_columnconfigure(1, weight=1)
-tela.attributes('-fullscreen', True)
+#tela.attributes('-fullscreen', True)
 tela.bind('<F11>', lambda event: modoFullScreen(event))
 tela.bind('<F5>', lambda event: inicializador_orquestrador_interpretador(event))
 tela.bind('<Control-s>', lambda event: salvarArquivo(event))
@@ -2357,7 +2343,6 @@ menu_arquivo.add_command(label='Abrir pasta')
 menu_arquivo.add_separator()
 menu_arquivo.add_command(label='Recentes')
 menu_arquivo.add_cascade(label='Exemplos', menu=menu_arquivo_cascate)
-
 atualizarListaDeScripts()
 
 menu_arquivo.add_separator()
@@ -2388,11 +2373,9 @@ menu_interface_cascate_sintaxe = Menu(menu_interface, tearoff = False)
 menu_interface.add_cascade(label='sintaxe', menu=menu_interface_cascate_sintaxe)
 atualizarListasintaxe()
 
-
 menu_interface_cascate_fontes = Menu(menu_interface, tearoff = False)
 menu_interface.add_cascade(label='fontes', menu=menu_interface_cascate_fontes)
 atualizarListasfontes()
-
 
 menu_ajuda.add_command(label='Ajuda (F1)')
 menu_ajuda.add_command(label='Comandos Disponíveis')
@@ -2465,17 +2448,29 @@ lb_linhas.grid(row=1, column=1, sticky=NSEW)
 
 # TELA DE CODIFICAÇÃO
 tx_codificacao = Text(fr_principal)
+
+from tkinter import FLAT, SUNKEN, RAISED, GROOVE, RIDGE
+
+scrollbar_text = Scrollbar(fr_principal, relief = FLAT)
+
+tx_codificacao['yscrollcommand'] = scrollbar_text.set
+scrollbar_text.config(command = tx_codificacao.yview)
+
 tx_codificacao.focus_force()
 tx_codificacao.bind('<Configure>', configuracoes )
 tx_codificacao.bind('<KeyRelease>', atualiza_cor_sintaxe)
 tx_codificacao.grid(row=1, column=2, sticky=NSEW)
+scrollbar_text.grid(row=1, column=3, sticky=NSEW)
 
 atualiza_design_interface()
 
-tela.mainloop()
+#abrirArquivo('programa_teste.fyn')
+abrirArquivo('loop.fyn')
 
 #tx_codificacao.bind("<Button-4>", lambda tx_codificacao:scroolUp())
 #tx_codificacao.bind("<Button-5>", lambda tx_codificacao:scroolDown())
 #tx_codificacao.bind('<KeyRelease>', obterPosicaoDoCursor)
-#abrirArquivo('programa_teste.fyn')
+
+tela.mainloop()
+
 
