@@ -29,7 +29,10 @@
   "mostre": [
     ["mostre ","pt-br"],
     ["exiba ","pt-br"],
+    ["printf ","en-us"],
+    ["display ","en-us"],
     ["print ","en-us"]
+
   ],
   "declaraVariaveis": [
     [" recebe ","pt-br"],
@@ -73,5 +76,11 @@
     ["numero digitado","pt-br"],
     ["digitado","pt-br"],
     ["entrada","pt-br"]
+  ],
+  "incremente": [
+    ["incremente","pt-br"]
+  ],
+  "decremente": [
+    ["decremente","pt-br"]
   ]
-}
+} 

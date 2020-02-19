@@ -86,5 +86,19 @@
     ["na lista de","pt-br"],
     ["na lista","pt-br"],
     ["em","pt-br"]
+  ],
+  "incremente": [
+    [" na variavel ","pt-br"],
+    [" da variavel ","pt-br"],
+    [" no ","pt-br"],
+    [" na ","pt-br"],
+    [" em ","pt-br"]
+  ],
+  "decremente": [
+    [" na variavel ","pt-br"],
+    [" da variavel ","pt-br"],
+    [" no ","pt-br"],
+    [" na ","pt-br"],
+    [" em ","pt-br"]
   ]
 }
