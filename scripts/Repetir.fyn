@@ -1,8 +1,12 @@
-x recebe 10
+x recebe 3
 
 repita x vezes
 {
-     mostre "Repetindo ",x, " vezes"
+     repita 2 vezes
+     {
+          mostre "_______Repetindo 2 vezes"
+     }
+     mostre "Repetindo x = 3 vezes"
 }
 
 repita 2 vezes

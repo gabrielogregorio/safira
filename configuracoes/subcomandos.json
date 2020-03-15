@@ -1,0 +1,98 @@
+{
+  "repitaVezes": [
+    [" vezes","pt-br"],
+    [" vez","pt-br"]
+  ],
+  "logico": [
+    [" for maior ou igual a ","pt-br"],
+    [" for menor ou igual a ","pt-br"],
+    [" for diferente de ","pt-br"],
+    [" for maior que ","pt-br"],
+    [" for menor que ","pt-br"],
+    [" for igual a ","pt-br"],
+    [" and ","en-us"],
+    [" && ","all"],
+    [" ou ","pt-br"],
+    [" or ","en-us"],
+    [" || ","all"],
+    [" == ","all"],
+    [" >= ","all"],
+    [" <= ","all"],
+    [" != ","all"],
+    [" e ","pt-br"],
+    [" > ","all"],
+    [" < ","all"]
+  ],
+  "matematica": [
+    [" multiplicado por ","pt-br"],
+    [" dividido por ","pt-br"],
+    [" multiplique ","pt-br"],
+    [" elevado por ","pt-br"],
+    [" elevado a ","pt-br"],
+    [" elevado ","pt-br"],
+    [" divide ","pt-br"],
+    [" menos ","pt-br"],
+    [" mais ","pt-br"],
+    [" ** ","all"],
+    [" - ","all"],
+    [" * ","all"],
+    [" % ","all"],
+    [" / ","all"],
+    [" + ","all"]
+  ],
+  "esperaEm": [
+    [" milisegundos","pt-br"],
+    [" milisegundo","pt-br"],
+    [" segundos","pt-br"],
+    [" segundo","pt-br"],
+    [" ms","pt-br"],
+    [" s","pt-br"]
+  ],
+  "passandoParametros": [
+    [" passando parametros ","pt-br"],
+    [" passando parametro ","pt-br"],
+    [" parametros ","pt-br"],
+    [" parametro ","pt-br"],
+    [" passando ","pt-br"]
+  ],
+  "recebeParametros": [
+    [" recebe parametros ","pt-br"]
+  ],
+  "declaraListas": [
+    [" recebe ","pt-br"],
+    [" com ","pt-br"]
+  ],
+  "acesarListas": [
+    [" na posicao ","pt-br"]
+  ],
+  "adicionarItensNaListas": [
+    [" no inicio da lista de ","pt-br"],
+    [" no inicio a lista de ","pt-br"],
+    [" no final da lista de ","pt-br"],
+    [" no final a lista de ","pt-br"],
+    [" no inicio na lista ","pt-br"],
+    [" no final na lista ","pt-br"],
+    [" na lista de ","pt-br"],
+    [" da lista de ","pt-br"],
+    [" na posicao ","pt-br"],
+    [" a lista de ","pt-br"],
+    [" na lista ","pt-br"],
+    [" a lista ","pt-br"]
+  ],
+  "RemoverItensListas": [
+    [" da lista de ","pt-br"],
+    [" da lista ","pt-br"]
+  ],
+  "tiverLista": [
+    ["na lista de","pt-br"],
+    ["na lista","pt-br"],
+    ["em","pt-br"]
+  ],
+  "incremente_decremente": [
+    [" na variavel ","pt-br"],
+    [" da variavel ","pt-br"],
+    [" no ","pt-br"],
+    [" na ","pt-br"],
+    [" em ","pt-br"]
+  ]
+}

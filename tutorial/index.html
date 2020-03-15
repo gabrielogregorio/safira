@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="style.css">
-    <script type="text/javascript" src="script.js"></script>
+    <!--<script type="text/javascript" src="script.js"></script>-->
     <title>Tutorial Intuise</title>
 </head>
 
@@ -65,156 +65,231 @@
     <h2>Comandos</h3><hr>
 
     <h3>Como exibir uma mensagem na tela</h3>
-    <div id="codigo"><pre><code>mostre "Hello World"
-    exiba "Olá mundo"
+    <script type="text/javascript">
+        function copyToClipboard(text) {
+            window.prompt("Copie para área de transferência: Ctrl+C e tecle Enter", text);
+        }
+    </script>
+    <div id="codigo">
+<button onclick="copyToClipboard()">Copiar</button>
+<pre>
+mostre "Hello World"
+exiba "Olá mundo"
 
-    n = 10
-    imprima 10 + 20
-    escreva na tela 'string'
-    display "string"
-    mostre n / n
-    escreva n
-    exiba n elevado a 4
-    </code></pre></div>
-
-    <hr>
-    <h3>Como fazer um print nessa linha</h3>
-    <div id="codigo"><pre><code>escola = "Fatec"
-    seunome = "Denise"
-    semestre = 1
-
-    mostre "--------------- Exemplos --------------- "
-    mostre nessa linha "Sala de aula: ", 09
-    exiba nessa linha " | Escola: ", escola
-    escreva nessa linha " |  Aluno: ",seunome
-    imprima nessa linha " | Semestre: ", semestre</code></pre></div>
+n = 10
+imprima 10 + 20
+escreva na tela "string"
+display "string"
+mostre n / n
+escreva n
+exiba n elevado a 4
+</pre>
+    </div>
 
     <hr>
-    <h3>Como declarar variáveis</h3>
-    <div id="codigo"><pre><code>base = 2
-    numero vale base ** 2
-    idade recebe 20 + 1
-    curso = "ADS"
-    nome recebe "gabriel"</code></pre></div>
+
+    <h3>Como fazer um print na mesma linha</h3>
+    <div id="codigo">
+<pre>
+escola = "Fatec"
+seunome = "Denise"
+semestre = 1
+
+mostre "--------------- Exemplos --------------- "
+mostre nessa linha "Sala de aula: ", 09
+exiba nessa linha " | Escola: ", escola
+escreva nessa linha " |  Aluno: ",seunome
+imprima nessa linha " | Semestre: ", semestre
+</pre>
+    </div>
 
     <hr>
-    <h3>Como fazer uma condicional</h3>
-    <div id="codigo"><pre><code>nome2 = "Carolina"
-    x = 10
 
-    se "Carolina" for igual a nome2
-    {
-        mostre "Esse nome é legal"
-    }
-
-    if x &gt;= 10
-    {
-        mostre "É verdade esse bilhete"
-    }</code></pre></div>
+    <h3 id="como-declarar-variáveis">Como declarar variáveis</h3>
+    <div id="codigo">
+<pre>
+base = 2
+numero vale base ** 2
+idade recebe 20 + 1
+curso = "ADS"
+nome recebe "gabriel"
+</pre>
+    </div>
 
     <hr>
+
+    <h3 id = "como-fazer-uma-condicional">Como fazer uma condicional</h3>
+    <div id="codigo">
+<pre>
+nome2 = "Carolina"
+x = 10
+
+se "Carolina" for igual a nome2
+{
+    mostre "Esse nome é legal"
+}
+
+if x &gt;= 10
+{
+    mostre "É verdade esse bilhete"
+}
+</pre>
+    </div>
+
+    <hr>
+
     <h3></a>Como usar funções</h3>
-    <div id="codigo"><pre><code>funcao calculaMedia recebe parametros nota1, nota2, nota3
-    {
-        mostre (nota1 + nota2 + nota3) / 3
-    }
+    <div id="codigo">
+<pre>
+funcao calculaMedia recebe parametros nota1, nota2, nota3
+{
+    mostre (nota1 + nota2 + nota3) / 3
+}
 
-    function mostraIdade
-    {
-        mostre 9999
-    }
+function mostraIdade
+{
+    mostre 9999
+}
 
-    nota1 = 9.8 
-    nota2 = 8.7
-    nota3 = 7.9
+nota1 = 9.8
+nota2 = 8.7
+nota3 = 7.9
 
-    calculaMedia passando parametros nota1,nota2,nota3
-    mostraIdade</code></pre></div>
+calculaMedia passando parametros nota1,nota2,nota3
+mostraIdade
+</pre>
+    </div>
 
     <hr>
+
     <h3>Como ler o que o usuário digitar</h3>
-    <div id="codigo"><pre><code>mostre nessa linha 'Digite seu nome: '
-    nome recebe o que for digitado
+    <div id="codigo">
+<pre>
+mostre nessa linha "Digite seu nome: "
+nome recebe o que for digitado
 
-    se nome == 'Catiana'
-    {
-        mostre "Seu nome é: ", nome
-    }</code></pre></div>
+se nome == "Catiana"
+{
+    mostre "Seu nome é: ", nome
+}
+</pre>
+    </div>
 
     <hr>
+
     <h3>Como fazer um loop enquanto</h3>
-    <div id="codigo"><pre><code>x recebe 0
-    enquanto 10 for maior que x
-    {
-        x recebe x mais 1
-        mostre x
-    }
+    <div id="codigo">
+<pre>
+x recebe 0
+enquanto 10 for maior que x
+{
+    x recebe x mais 1
+    mostre x
+}
 
-    while x &gt; 1
-    {
-        x = x - 1
-        mostre x 
-    }</code></pre></div>
+while x &gt; 1
+{
+    x = x - 1
+    mostre x 
+}
+</pre>
+    </div>
 
     <hr>
+
     <h3>Como fazer um loop repetir</h3>
-    <div id="codigo"><pre><code>repita 10 vezes
-    {
-        mostre "Repetindo 10 vezes"
-    }
+    <div id="codigo">
+<pre>
+repita 10 vezes
+{
+    mostre "Repetindo 10 vezes"
+}
 
-    x = 4
-    repeat x vezes
-    {
-        mostre "Repetindo x vezes"
-    }</code></pre></div>
+x = 4
+repeat x vezes
+{
+    mostre "Repetindo x vezes"
+}
+</pre>
+    </div>
 
     <hr>
+
     <h3>Como fazer um Delay</h3>
-    <div id="codigo"><pre><code>espere 1 segundo
-    mostre "olá?"
+    <div id="codigo">
+<pre>
+espere 1 segundo
+mostre "olá?"
 
-    aguarde 2 segundos
-    mostre "Tudo bem?"
+aguarde 2 segundos
+mostre "Tudo bem?"
 
-    espere 5000 ms
-    mostre 'Como você vai?'</code></pre></div>
+espere 5000 ms
+mostre "Como você vai?"
+</pre>
+    </div>
 
     <hr>
 
     <h3>Como sortear um número aleatório</h3>
     <div id="codigo">
-        <pre><code>sorteado recebe um numero aleatorio entre 10 e 20
-        mostre sorteado</code></pre></div><hr>
+<pre>
+sorteado recebe um numero aleatorio entre 10 e 20
+mostre sorteado
+</pre>
+    </div>
 
-        <h3>Como limpar a tela</h3>
-        <div id="codigo"><pre><code>mostre "Pressione enter"
+    <hr>
 
-        i = o que o usuario digitar
-        limpatela
+    <h3>Como limpar a tela</h3>
+    <div id="codigo">
+<pre>
+mostre "Pressione enter"
 
-        mostre "Tela limpa"
-        </code></pre>
-    </div><hr>
+i = o que o usuario digitar
+limpatela
 
-    <h3>Como trabalhar com listas</h3>
+mostre "Tela limpa"
+</pre>
+    </div>
+
+    <hr>
+
+    <h3 id = "como-usar-o-incremente-decremente">Como usar o incremente/Decremente</h3>
+    <p>O programa abaixo declara uma variável, chamada de "numero" com o valor 10. O comando incremente é usado logo abaixo para aumentar 2 na variável "numero", fazendo ela valer 12. O comando decremente é usado para subtrair 20 da variável numero, fazendo ela valer -8</p>
 
     <div id="codigo">
-        <pre><code>lista de nomes recebe "Peter", "Mariana"
-        mostre nomes
+<pre>
+numero = 10
+incremente 2 na variavel numero
+mostre numero
 
-        remova "Mariana" da lista de nomes
-        mostre nomes
+decremente 20 na variavel numero
+mostre numero
+</pre>
+    </div>
 
-        tamanho da lista nomes
+    <hr>
 
-        adicione "Jacson" a lista de nomes
-        mostre nomes
+    <h3>Como trabalhar com listas</h3>
+    <div id="codigo">
+<pre>
+lista de nomes recebe "Peter", "Mariana"
+mostre nomes
 
-        se 1 for igual a 1 e tiver "Peter" na lista de nomes
-        {
-            mostre "Tem sim!"
-        }</code></pre>
+remova "Mariana" da lista de nomes
+mostre nomes
+
+tamanho da lista nomes
+
+adicione "Jacson" a lista de nomes
+mostre nomes
+
+se 1 for igual a 1 e tiver "Peter" na lista de nomes
+{
+    mostre "Tem sim!"
+}
+</pre>
     </div>
 
 </body>

@@ -5,3 +5,11 @@ funcao somaNumeros recebe parametros n1, n2, n3
 }
 
 somaNumeros passando parametros 20, 30, 10
+
+
+funcao calculaMedia recebe parametros nome, sobrenome
+{
+    mostre nome , " ", sobrenome
+}
+
+calculaMedia passando parametros "gabriel", "gregório"

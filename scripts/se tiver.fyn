@@ -7,6 +7,8 @@ mostre nomes
 tamanho da lista nomes
 
 adicione "Jacson" a lista de nomes
+adicione "final" no final da lista de nomes
+adicione "inicio" no inicio da lista de nomes
 mostre nomes
 
 se 1 for igual a 1 e tiver "Peter" na lista de nomes

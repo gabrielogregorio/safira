@@ -50,7 +50,7 @@ mostre contador, "Depois"
 andante recebe 1
 enquanto andante for menor ou igual a tamanho da lista nomes
 {
-   lista de nomes na posicao andante recebe "nome ", andante
+  lista de nomes na posicao andante recebe "nome "
    andante recebe andante mais 1
 }
 mostre "Nomes substituido vale: ", nomes

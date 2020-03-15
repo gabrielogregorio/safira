@@ -1,0 +1,91 @@
+{
+  "declaraListas": [
+    ["lista de ","pt-br"],
+    ["lista ","pt-br"]
+  ],
+  "declaraAdicionarListas": [
+    ["lista de ","pt-br"],
+    ["lista ","pt-br"],
+    ["","all"]
+  ],
+  "adicionarItensListas": [
+    ["adicione ","pt-br"]
+  ],
+  "RemoverItensListas": [
+    ["remova ","pt-br"]
+  ],
+  "tamanhoDaLista": [
+    ["o tamanho da lista de","pt-br"],
+    ["o tamanho da lista","pt-br"],
+    ["tamanho da lista de","pt-br"],
+    ["tamanho da lista","pt-br"]
+  ],
+  "tiverLista": [
+    ["tiver","pt-br"]
+  ],
+  "aleatorio": [
+    ["um numero aleatorio entre ","pt-br"],
+    ["numero aleatorio entre ","pt-br"]
+  ],
+  "mostreNessa": [
+    ["mostre nessa linha ","pt-br"],
+    ["exiba nessa linha ","pt-br"]
+  ],
+  "mostre": [
+    ["mostre ","pt-br"],
+    ["exiba ","pt-br"],
+    ["printf ","en-us"],
+    ["display ","en-us"],
+    ["print ","en-us"]
+
+  ],
+  "declaraVariaveis": [
+    [" recebe ","pt-br"],
+    [" vale ","pt-br"],
+    [" = ","all"]
+  ],
+  "funcoes": [
+    ["funcao ","pt-br"]
+  ],
+  "loopsss": [
+    ["enquanto ","pt-br"],
+    ["while ","pt-br"]
+  ],
+  "aguarde": [
+    ["espere ","pt-br"],
+    ["aguarde ","pt-br"]
+  ],
+  "repita": [
+    ["repita ","pt-br"],
+    ["repitir ","pt-br"]
+  ],
+  "se": [
+    ["quando ","pt-br"],
+    ["se ","pt-br"],
+    ["if ","en-us"]
+  ],
+  "limpatela": [
+    ["limpar a tela","pt-br"],
+    ["limpatela","pt-br"],
+    ["clear","en-us"]
+  ],
+  "digitado":[
+    ["o numero que o usuario digitar","pt-br"],
+    ["numero que o usuario digitar","pt-br"],
+    ["o numero que for digitado","pt-br"],
+    ["numero que for digitado","pt-br"],
+    ["o que o usuario digitar","pt-br"],
+    ["que o usuario digitar","pt-br"],
+    ["o que for digitado","pt-br"],
+    ["que for digitado","pt-br"],
+    ["numero digitado","pt-br"],
+    ["digitado","pt-br"],
+    ["entrada","pt-br"]
+  ],
+  "incremente": [
+    ["incremente","pt-br"]
+  ],
+  "decremente": [
+    ["decremente","pt-br"]
+  ]
+} 
