@@ -2,7 +2,16 @@
 # -*- coding: utf-8 -*-
 
 """
-Copiar código na Wiki na área de transferência
+Futuro
+[ ] Copiar código na Wiki na área de transferência
+[ ] Analise de comandos por posição
+[ ] Controle em linhas, mostre na linha 12 para gráficos
+
+Ambiente:
+[X] Windows 10, Ubuntu 19.10, Kali Linux
+[X] Sublime text 3
+[X] color Schema = Dracula
+[X] Theme = Darkmatter
 """
 
 from tkinter.font import nametofont
@@ -48,7 +57,7 @@ __github__      = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
-__last_update__ = '14/03/2020'
+__last_update__ = '21/03/2020'
 __version__     = '0.1'
 
 # Contém o link e o texto do arquivo
@@ -325,9 +334,9 @@ def atualiza_cor_sintaxe(event = None, fazer = 'tudo'):
 
     try:
         # Atualizar tudo
-        if fazer == 'tudo':
-            th = Thread(target=obterPosicaoDoCursor)
-            th.start()
+        #if fazer == 'tudo':
+        #    th = Thread(target=obterPosicaoDoCursor)
+        #    th.start()
 
         # OBTEM O TEXTO DO Programa
         lista = tx_codificacao.get(1.0, END).lower().split('\n')
@@ -397,6 +406,9 @@ def atualiza_cor_sintaxe(event = None, fazer = 'tudo'):
         for comando in dic_sub_com['acesarListas']:
             sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
 
+        sintaxe('com', cor_da_sintaxe["lista"], lista)
+        sintaxe('posicoes', cor_da_sintaxe["lista"], lista)
+
         for comando in dic_sub_com['adicionarItensNaListas']:
             sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
 
@@ -448,42 +460,39 @@ def inicializador_orquestrador_interpretador(event = None):
     global dic_funcoes
     global esperar_pressionar_enter
 
-    # MARCA O INICIO DO PROGRAMA
+    # Inicio do programa
     inicio = time()
 
-    # SE ALGUM PROGRAMA JÁ ESTIVER SENDO EXECUTADO
+    # Se algum programa já estava sendo executado
     if numeros_thread_interpretador != 0:
         messagebox.showinfo('Problemas',"Já existe um programa sendo executado!")
         return 0
 
-    # CONTADOR DE THREADS
+    # Sinaliza que o interpretador está livre
     numeros_thread_interpretador = 0
 
-    # ALERTA DE ERROS
+    # Não aconteceram erros
     aconteceu_erro = False
 
-    # VARIÁVEIS DO PROGRAMA
-    dic_variaveis = {}
-
-    # NENHUM ERRO REPORTADO DESENVOLVEDOR
+    # Nenhum erro reportado ao usuário
     erro_alertado = False
     
-    # NÃO ESTÁ ESPERANDO O ENTER SER PRESSIONADO
+    # Não está esperando o usuário apertar enter
     esperar_pressionar_enter = False
 
-    # FUNÇÕES DO INTERPRETADOR
+    # Todas as variáveis do programa
+    dic_variaveis = {}
+
+    # Funções do interpretador
     dic_funcoes = {}
 
-    # INICIA O TERMINAL
     inicializador_terminal()
-
-    # LIMPA O TERMINAL
     tx_terminal.delete('1.0', END)
 
-    # OBTÊM O CÓDIGO DO PROGRAMA
+    # Obtem o código do programa
     linhas = tx_codificacao.get('1.0', END)
 
-    """Marcação da linha"""
+    # Marca as linhas do código
     nova_linha = []
 
     lista = linhas.split('\n')
@@ -491,32 +500,29 @@ def inicializador_orquestrador_interpretador(event = None):
         nova_linha += '[{}]{}\n'.format(str(linha + 1), lista[linha])
     linhas = nova_linha
 
+    # Apontador de logs
     logs = '> '
-    # INICIA O INTERPRETADOR
+
+    # Inicia o orquestador do interpretador
     t = Thread(target=lambda codigoPrograma = linhas, logs = logs: orquestrador_interpretador(codigoPrograma, logs))
     t.start()
 
-    # ENQUANTO O INTERPRETADOR NÃO FOR FINALIZADO
+    # Mantém o programa preso enquanto o interpretador estiver acionado
     while numeros_thread_interpretador != 0:
         tela.update()
 
-    # INFORMAÇÕES DE FINALIZAÇÃO
+    # Informa que o interpretador foi finalizado
     tx_terminal.insert(END, '\nScript finalizado em {:.3} segundos'.format(time() - inicio))
     tx_terminal.see("end")
 
 def orquestrador_interpretador(linhas, logs):
-    logs = '  ' + logs
-    #log(logs + 'orquestrador_interpretador, linhas:', linhas)
-
     global numeros_thread_interpretador
     global aconteceu_erro
     global dic_funcoes
 
-    # CONTADOR DE CARACTERES
+    logs = '  ' + logs
     contador = 0
-
-    # PENETRAÇÃO DE BLOCO DE FORMA RECURSIVA {{{}}}
-    penetracao = 0
+    penetracao = 0 # {{}}
 
     # BLOCOS DE CÓDIGO
     ComandosParaAnalise = ''
@@ -533,7 +539,7 @@ def orquestrador_interpretador(linhas, logs):
     # LER UM BLOCO DE CÓDIGO
     estadoDaCondicional = [False, None, 'vazio']
 
-    # ENQUANTO NÃO LER TODOS OS CARACTERES  E NÃO ACONTECER UM ERRO
+    # Enquanto não acontecer nenhum erro e todos os caracteres não serem analisados
     while contador < len(linhas) and not aconteceu_erro:
 
         # Se começar um bloco e não tiver começado nenhum anteriormente
@@ -558,8 +564,6 @@ def orquestrador_interpretador(linhas, logs):
             penetracao -=1
         # Se o bloco principal finalizar, se ele estava em análise e a penetração chegou a 0
         if linhas[contador] == '}' and BlocoDeCodigoEstaEmAnalise and penetracao == 0:
-            print("}")
-            print("> estadoDaCondicional = ", estadoDaCondicional )
 
             # Se a condição do começo do bloco era verdadeira e tem condição para repetir
             if estadoDaCondicional[1] == True or estadoDaCondicional[1] != 0:
@@ -593,8 +597,6 @@ def orquestrador_interpretador(linhas, logs):
                         linhaAnalise = linhaComOResultadoDaExecucao[1]
                         linhaComOResultadoDaExecucao = linhaComOResultadoDaExecucao[0]
 
-                        print(">linhaComOResultadoDaExecucao =", linhaComOResultadoDaExecucao)
-
                         # Se der erro na exeução do teste
                         if linhaComOResultadoDaExecucao[0] == False:
                             aconteceu_erro = True
@@ -609,7 +611,6 @@ def orquestrador_interpretador(linhas, logs):
                 # SE A FUNÇÃO FOR ATIVADA
                 elif estadoDaCondicional[3] == "declararLoopRepetir":
                     estadoDaCondicional[3] = 'fazerNada'
-                    print("CAIU LOOP REPETIR")
 
                     # Se for maior que zero, aconteceu um repit
                     for valor in range(0, estadoDaCondicional[1]):
@@ -670,7 +671,6 @@ def orquestrador_interpretador(linhas, logs):
                 estadoDaCondicional = interpretador(ComandosParaAnalise.strip(), logs)
                 linhaAnalise = estadoDaCondicional[1]
                 estadoDaCondicional = estadoDaCondicional[0]
-                print(">estadoDaCondicional = ", estadoDaCondicional)
 
                 # Se deu errado ao executar
                 if estadoDaCondicional[0] == False:
@@ -686,9 +686,6 @@ def orquestrador_interpretador(linhas, logs):
 
                 # Salva o resultado da condição testada
                 linhaComOResultadoDaExecucao = estadoDaCondicional
-                print(">linhaComOResultadoDaExecucao = ", linhaComOResultadoDaExecucao)
-                # [True, 10, 'float', 'declararLoopRepetir']
-                # IMPLEMNTAR LISTAS, valores com virgula fora da string
 
                 # Salva o código testado
                 linhaComCodigoQueFoiExecutado = ComandosParaAnalise.strip()
@@ -721,7 +718,6 @@ def orquestrador_interpretador(linhas, logs):
 
     # Se chegar ao final do loop e a penetração ficar positiva
     if penetracao > 0:
-
         aconteceu_erro = True
 
         if penetracao == 1:
@@ -760,8 +756,6 @@ def orquestrador_interpretador(linhas, logs):
     # Libera uma unidade no contador de Threads
     numeros_thread_interpretador -= 1
     return [True, 'Não aconteceram erros durante a execução do interpretador', 'string']
-
-# Interpreta um conjunto de linhas
 
 def interpretador(codigo, logs):
     global aconteceu_erro
@@ -931,6 +925,27 @@ def interpretador(codigo, logs):
                         # Função digitado
                         return [funcao_digitado(linha, logs), num_linha]
 
+
+
+            #lista de nomes com 5 posicoes
+            for comando in dic_com['declaraListas']:
+                "lista de nomes com 5 posicoes"
+
+                # Se o comando não estourar
+                if len(comando[0]) < len(linha):
+
+                    # Se o comando estiver no começo da linha
+                    if linha[ 0 : len(comando[0]) ] == comando[0]:
+
+                        # Verifica se tem na posicao, porque não é declaração
+                        testaCom = verifica_se_tem(linha, ' com ', logs)
+                        testaPosicao = verifica_se_tem(linha, ' posicoes', logs)
+
+                        if testaCom != [] and testaPosicao != []:
+
+                            # Declaração de uma lista
+                            return [funcao_declarar_listas_posicoes(linha[len(comando[0]):], logs), num_linha]
+
             for comando in dic_com['declaraListas']:
                 "lista de nomes recebe 1, 2, 3, 4, 5"
 
@@ -946,6 +961,7 @@ def interpretador(codigo, logs):
 
                             # Declaração de uma lista
                             return [funcao_declarar_listas(linha[len(comando[0]):], logs), num_linha]
+
 
 
 
@@ -1440,6 +1456,42 @@ def funcao_adicionar_itens(linha, logs):
     dic_variaveis[variavel][0][ posicao - 1 ] = [obtemValorVariavel[1], obtemValorVariavel[2]]
 
     return [True, True, 'booleano','fazerNada']
+
+
+def funcao_declarar_listas_posicoes(linha, logs):
+    #nomes com 5 posicoes"
+    global dic_variaveis
+    logs = '  ' + logs
+    log(logs + 'Função declarar listas posicoes: "{}"'.format(linha))
+    
+    testaCom = verifica_se_tem(linha, ' com ', logs)
+    variavel = linha[ : testaCom[0][0]].strip() # nomes
+    linha = linha[testaCom[0][1] : ].strip() #5 posicoes
+
+    testaPosicao = verifica_se_tem(linha, ' posicoes', logs)
+    posicoes = linha[0 :  testaPosicao[0][0]].strip()
+
+    # Se a variável estier fora de padrao
+    teste = analisa_padrao_variavel(logs, variavel, 'Lista ')
+    if teste[1] != True:
+        return [False, teste[1], teste[2], 'exibirNaTela']
+
+    resultado = abstrair_valor_linha(posicoes, logs)
+    if resultado[0] == False:
+        return resultado
+
+    if resultado[2] != 'float':
+        return [False, 'O valor da posição não é numérico', 'string', 'exibirNaTela']
+
+    listaItensDeclarar = []
+    for posicao in range(int(posicoes)):
+        listaItensDeclarar.append(['', 'string'])
+
+    dic_variaveis[variavel] = [listaItensDeclarar, 'lista']
+    return [True, None, 'vazio', 'fazerNada']
+
+
+
 
 def funcao_declarar_listas(linha, logs):
     global dic_variaveis
@@ -2788,7 +2840,7 @@ tx_pesquisa.grid(row=0, column=1, sticky = NSEW)
 
 atualiza_design_interface()
 
-#abrirArquivo('teste.fyn')
+abrirArquivo('listaPosicoes.fyn')
 
 tela_ajuda("")
 
