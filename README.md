@@ -1,4 +1,4 @@
-# <ALERTA>. O interpretador está sendo refeito para atender melhor as necessidades
+# \<ALERTA\>O interpretador está sendo refeito para atender melhor as necessidades
 # Uma linguagem de programação natural
 Uma linguagem de programação universal, simples e focada em na lógica.
 
