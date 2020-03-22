@@ -1,4 +1,6 @@
 # \<ALERTA\>O interpretador está sendo refeito para atender melhor as necessidades
+# O interpretador atual contém bugs que podem atrapalhar uma excelente experiência.
+
 # Uma linguagem de programação natural
 Uma linguagem de programação universal, simples e focada em na lógica.
 
