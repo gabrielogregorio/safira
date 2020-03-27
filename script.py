@@ -447,8 +447,8 @@ def atualiza_cor_sintaxe(event = None, fazer = 'tudo'):
 
 def log(mensagem):
     global numero_log
-    numero_log += 1
-    print(str(numero_log) + mensagem)
+    #numero_log += 1
+    #print(str(numero_log) + mensagem)
 
 # inicia o interpretador
 def inicializador_orquestrador_interpretador(event = None):
@@ -910,7 +910,7 @@ def interpretador(codigo, logs):
                     if comando[0] == linha[ 0 : len(comando[0])]:
 
                         # Função repetir
-                        print("Função repetiro ..................")
+                        #print("Função repetiro ..................")
                         return [funcao_repetir(linha[len(comando[0]):], logs), num_linha]
 
             for comando in dic_com['digitado']:
@@ -1048,8 +1048,8 @@ def interpretador(codigo, logs):
 
             # Listas
             for comando in dic_sub_com['acesarListas']:
-                print("lista de nomes na posicao 2 recebe 1")
-                print("nomes na posicao 2 recebe 1")
+                #print("lista de nomes na posicao 2 recebe 1")
+                #print("nomes na posicao 2 recebe 1")
                 testa2 = verifica_se_tem(linha, comando[0], logs)
                 if testa2 != []:
                     return [funcao_obter_valor_lista(linha, comando[0], logs), num_linha]
@@ -1608,7 +1608,7 @@ def funcao_limpar_tela(logs):
 
 # repita 10 vezes \n{\nmostre 'oi'\n}
 def funcao_repetir(linha, logs):
-    print(linha, "LINNHHAAA")
+    #print(linha, "LINNHHAAA")
 
     logs = '  ' + logs
     log(logs + 'funcao repetir: "{}"'.format(linha))
@@ -1636,7 +1636,7 @@ def funcao_repetir(linha, logs):
     except:
         return [False, "Para usar a função repetir, você precisa passar um número inteiro. Você passou '{}'".format(linha[1]), 'string', 'exibirNaTela']
     else:
-        print("Unverse,", int(linha[1]))
+        #print("Unverse,", int(linha[1]))
         funcao_repita = int(linha[1])
       
         # Não houve erros e é para repetir
@@ -2169,7 +2169,7 @@ def abstrair_valor_linha(possivelVariavel, logs):
     try:
         float(possivelVariavel)
     except:
-        print("DESNECESSÁRIO?")
+        #print("DESNECESSÁRIO?")
         return obter_valor_variavel(possivelVariavel, logs)
     else:
         return [True, float(possivelVariavel), 'float']
