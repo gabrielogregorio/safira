@@ -57,7 +57,7 @@ __github__      = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
-__last_update__ = '21/03/2020'
+__last_update__ = '27/03/2020'
 __version__     = '0.1'
 
 # Contém o link e o texto do arquivo
