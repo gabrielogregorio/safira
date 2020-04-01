@@ -2342,7 +2342,7 @@ tx_pesquisa.grid(row=0, column=1, sticky = NSEW)
 
 atualiza_design_interface()
 
-abrirArquivo('programa_teste.fyn')
+#abrirArquivo('programa_teste.fyn')
 
 tela_ajuda("")
 
