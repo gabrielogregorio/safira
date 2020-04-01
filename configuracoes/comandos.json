@@ -3,6 +3,13 @@
     ["lista de ","pt-br"],
     ["lista ","pt-br"]
   ],
+
+  "declaraListasObterPosicao": [
+    ["lista de ","pt-br"],
+    ["lista ","pt-br"],
+    ["","pt-br"]
+  ],
+
   "declaraAdicionarListas": [
     ["lista de ","pt-br"],
     ["lista ","pt-br"],
@@ -11,9 +18,21 @@
   "adicionarItensListas": [
     ["adicione ","pt-br"]
   ],
+  "listaPosicoesCom": [
+    [" posicoes","pt-br"]
+  ],
+
+  "listaNaPosicao": [
+    [" na posicao ","pt-br"]
+  ],
+
   "RemoverItensListas": [
     ["remova ","pt-br"]
   ],
+  "listaCom": [
+    [" com ","pt-br"]
+  ],
+
   "tamanhoDaLista": [
     ["o tamanho da lista de","pt-br"],
     ["o tamanho da lista","pt-br"],
@@ -21,12 +40,18 @@
     ["tamanho da lista","pt-br"]
   ],
   "tiverLista": [
-    ["tiver","pt-br"]
+    ["tiver ","pt-br"]
   ],
+
   "aleatorio": [
     ["um numero aleatorio entre ","pt-br"],
     ["numero aleatorio entre ","pt-br"]
   ],
+
+  "aleatorioEntre": [
+    [" e ","pt-br"]
+  ],
+
   "mostreNessa": [
     ["mostre nessa linha ","pt-br"],
     ["exiba nessa linha ","pt-br"]
@@ -45,9 +70,11 @@
     [" = ","all"]
   ],
   "funcoes": [
-    ["funcao ","pt-br"]
+    ["function ","pt-br"],
+    ["funcao ","pt-br"],
+    ["def ","pt-br"]
   ],
-  "loopsss": [
+  "enquanto": [
     ["enquanto ","pt-br"],
     ["while ","pt-br"]
   ],
@@ -87,5 +114,124 @@
   ],
   "decremente": [
     ["decremente","pt-br"]
+  ],
+  "repitaVezes": [
+    [" vezes","pt-br"],
+    [" vez","pt-br"]
+  ],
+  "logico": [
+    [" for maior ou igual a ","pt-br"],
+    [" for menor ou igual a ","pt-br"],
+    [" for diferente de ","pt-br"],
+    [" for maior que ","pt-br"],
+    [" for menor que ","pt-br"],
+    [" for igual a ","pt-br"],
+    [" and ","en-us"],
+    [" && ","all"],
+    [" ou ","pt-br"],
+    [" or ","en-us"],
+    [" || ","all"],
+    [" == ","all"],
+    [" >= ","all"],
+    [" <= ","all"],
+    [" != ","all"],
+    [" e ","pt-br"],
+    [" > ","all"],
+    [" < ","all"]
+  ],
+  "matematica": [
+    [" multiplicado por ","pt-br"],
+    [" dividido por ","pt-br"],
+    [" multiplique ","pt-br"],
+    [" elevado por ","pt-br"],
+    [" elevado a ","pt-br"],
+    [" elevado ","pt-br"],
+    [" divide ","pt-br"],
+    [" menos ","pt-br"],
+    [" mais ","pt-br"],
+    [" ** ","all"],
+    [" - ","all"],
+    [" * ","all"],
+    [" % ","all"],
+    [" / ","all"],
+    [" + ","all"]
+  ],
+  "esperaEm": [
+    [" milisegundos","pt-br"],
+    [" milisegundo","pt-br"],
+    [" segundos","pt-br"],
+    [" segundo","pt-br"],
+    [" ms","pt-br"],
+    [" s","pt-br"]
+  ],
+  "passandoParametros": [
+    [" passando parametros ","pt-br"],
+    [" parametros ","pt-br"],
+    [" passando parametro ","pt-br"],
+    [" passando ","pt-br"],
+    [" parametro ","pt-br"]
+  ],
+  "recebeParametros": [
+    [" recebe parametros ","pt-br"]
+  ],
+  "recebeDeclaraListas": [
+    [" recebe ","pt-br"],
+    [" com ","pt-br"]
+  ],
+  "acesarListas": [
+    [" na posicao ","pt-br"]
+  ],
+
+
+
+  "addItensListaInterno": [
+    [" na lista de ","pt-br"],
+    [" da lista de ","pt-br"],
+    [" a lista de ","pt-br"],
+    [" na lista ","pt-br"],
+    [" a lista ","pt-br"]
+  ],
+
+
+  "addItensListaInternoPosicaoFinaliza": [
+      [" da lista de ","pt-br"]
+  ],
+
+  "addItensListaInternoPosicao": [
+    [" na posicao ","pt-br"]
+  ],
+
+  "addItensListaInternoInicio": [
+    [" no inicio da lista de ","pt-br"],
+    [" no inicio a lista de ","pt-br"],
+    [" no inicio na lista ","pt-br"]
+  ],
+
+
+  "addItensListaInternoFinal": [
+    [" no final da lista de ","pt-br"],
+    [" no final a lista de ","pt-br"],
+    [" no final na lista ","pt-br"]
+  ],
+
+
+
+
+  "RemoverItensListasInterno": [
+    [" da lista de ","pt-br"],
+    [" da lista ","pt-br"]
+  ],
+  "tiverInternoLista": [
+    [" na lista de ","pt-br"],
+    [" na lista ","pt-br"],
+    [" em ","pt-br"]
+  ],
+
+  "incrementeDecremente": [
+    [" na variavel ","pt-br"],
+    [" da variavel ","pt-br"],
+    [" no ","pt-br"],
+    [" na ","pt-br"],
+    [" em ","pt-br"]
   ]
 } 

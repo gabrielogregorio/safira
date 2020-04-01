@@ -4,8 +4,10 @@
 """
 Futuro
 [ ] Copiar código na Wiki na área de transferência
-[ ] Analise de comandos por posição
+[X] Analise de comandos por posição
 [ ] Controle em linhas, mostre na linha 12 para gráficos
+[ ] lista posto na posicao i ate a posicao 3 no passo de 2
+
 
 Ambiente:
 [X] Windows 10, Ubuntu 19.10, Kali Linux
@@ -47,8 +49,8 @@ from os import listdir
 from os import getcwd
 from re import finditer
 from re import findall
-import webbrowser
 from tkinter import N, S, E, W, Entry
+import webbrowser
 
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
@@ -57,74 +59,31 @@ __github__      = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
-__last_update__ = '27/03/2020'
+__last_update__ = '31/03/2020'
 __version__     = '0.1'
 
-# Contém o link e o texto do arquivo
 global arquivo_aberto_atualmente
-
-# A tela está em full screen
 global bool_tela_em_fullscreen
-
-# Aconteceu algum erro durante a execução do programa
 global aconteceu_erro
-
-# Lista com os todos os botões da ajuda
 global lista_titulos_frames
-
-# Frame da ajuda
 global fr_help
-
-# impede que o programa seja iniciado enquanto outro está sendo executado
 global numeros_thread_interpretador
-
-# Altura da janela em linhas
 global altura_widget
-
-# Exibe as informações do interpretador em tempo real
 global tx_terminal
-
-# Local onde o programa é codificado
 global tx_codificacao
 
-# Comandos internos a cada função
-global dic_sub_com
-
-# Dicionário com toodos os comandos disponíveis
-global dic_com
-
-# Posição do log registrado
 global numero_log
-
-# Detecta quando o usurio pressionou enter em um comando de entrada
 global esperar_pressionar_enter
-
-# Dicionario com todas as funcoes
 global dic_funcoes
-
-# Variáveis usadas durante a interpretação do programa
 global dic_variaveis
-
-# Contador de linhas do programa
 global lb_linhas
-
-# Tema da interface principal
 global dic_design
-
-# Tema de sintaxe
-global cor_da_sintaxe
-
-# Janela do interpretador
+global cor_do_comando
 global top_janela_terminal
-
-# Erro já foi alertado para o usuário
 global erro_alertado
-
-# Posicao corrente
 global posCorrente
-
-# Posicao absoluta na tela de codificacao
 global posAbsuluta
+global boo_orquestrador_iniciado
 
 numeros_thread_interpretador = 0
 esperar_pressionar_enter = False
@@ -139,26 +98,28 @@ posCorrente = 0
 numero_log = 1
 path = abspath(getcwd())
 
-dic_sub_com, dic_com, dic_design, cor_da_sintaxe = atualiza_configuracoes_temas()
+dic_comandos, dic_design, cor_do_comando = atualiza_configuracoes_temas()
 
 def salvarArquivoComoDialog(event = None):
     global arquivo_aberto_atualmente
 
-    # Escolha um local
     arquivo = filedialog.asksaveasfile(mode='w',
         defaultextension=".fyn",
         title = "Selecione o script",
         filetypes = (("Meus scripts", "*.fyn"), ("all files", "*.*")))
 
-    # Se não for feito nenhuma escolha
+    lnk_arquivo_salvar = str(arquivo.name)
+
     if arquivo is None:
         return None
 
-    # Busque o conteudo da tela principal
+    arquivo.close()
+
     text2save = str(tx_codificacao.get(1.0, END))
 
     try:
-        # Salve no arquivo escolhido
+
+        arquivo = open(lnk_arquivo_salvar, 'w', encoding='utf8')
         arquivo.write(text2save[0:-1])
         arquivo.close()
 
@@ -167,27 +128,29 @@ def salvarArquivoComoDialog(event = None):
         log(" Erro ao salvar o arquivo, erro: {}".format(erro))
 
     else:
-        # Atualize os dados globais do arquivo aberto atualmente
         arquivo_aberto_atualmente['link'] = arquivo.name
         arquivo_aberto_atualmente['texto'] = text2save
         return arquivo.name
 
 def salvarArquivo(event=None):
+    '''
+    Salva um arquivo que já está aberto
+    '''
+
     global arquivo_aberto_atualmente
 
-    # Se nenhum arquivo foi salvo
     if arquivo_aberto_atualmente['link'] == None:
         salvarArquivoComoDialog()
 
-    else: # Se o arquivo já estava aberto
+    else:
         programaCodigo = tx_codificacao.get(1.0, END)
 
-        # Vamos salvar o arquivo por que o texto está diferente
         if arquivo_aberto_atualmente['texto'] != programaCodigo:
             try:
                 arquivo = open(arquivo_aberto_atualmente['link'], 'w', encoding='utf8')
                 arquivo.write(programaCodigo[0:-1])
                 arquivo.close()
+
             except Exception as erro:
                 messagebox.showinfo('Erro', 'Não foi possível salvar essa versão do código, erro: {}'.format(erro))
                 log(" Não foi possível salvar essa versão do código")
@@ -210,10 +173,11 @@ def abrirArquivoDialog(event=None):
         if arquivo[0] != None:
             tx_codificacao.delete(1.0, END)
             tx_codificacao.insert(END, arquivo[0])
-        else:
-            messagebox.showinfo("ops","Aconteceu um erro ao abrir o arquivo, erro:",arquivo[1])
 
-        atualiza_cor_sintaxe(None, fazer = 'nada')
+        else:
+            messagebox.showinfo("ops","Aconteceu um erro ao abrir o arquivo" + arquivo[1])
+
+        coordena_coloracao(None, fazer = 'nada')
 
         arquivo_aberto_atualmente['link'] = filename
         arquivo_aberto_atualmente['texto'] = arquivo[0]
@@ -230,10 +194,12 @@ def abrirArquivo(link):
     if arquivo[0] != None:
         tx_codificacao.delete(1.0, END)
         tx_codificacao.insert(END, arquivo[0])
-        atualiza_cor_sintaxe(None, fazer = 'nada')
+
+        coordena_coloracao(None, fazer = 'nada')
 
         arquivo_aberto_atualmente['link'] = link
         arquivo_aberto_atualmente['texto'] = arquivo[0]
+
     else:
         if "\'utf-8' codec can\'t decode byte" in arquivo[1]:
             messagebox.showinfo("Erro de codificação", "Por favor, converta seu arquivo para a codificação UTF-8. Não foi possível abrir o arquivo: \"{}\", erro: \"{}\"".format(link, arquivo[1]))
@@ -242,8 +208,10 @@ def abrirArquivo(link):
 
         print('Arquivo não selecionado')
 
-def colorir_uma_palavra(palavra, linha, valor1, valor2, cor):
-    "Realiza a coloracao de uma unica palavra"
+def realiza_coloracao(palavra, linha, valor1, valor2, cor):
+    """
+        Realiza a coloracao de uma unica palavra
+    """
 
     linha1 = '{}.{}'.format(linha , valor1)
     linha2 = '{}.{}'.format(linha , valor2)
@@ -251,7 +219,11 @@ def colorir_uma_palavra(palavra, linha, valor1, valor2, cor):
     tx_codificacao.tag_add(palavra, linha1 , linha2)
     tx_codificacao.tag_config(palavra, foreground = cor)
 
-def colorir_erro(palavra, valor1, valor2, cor='red', linhaErro = None):
+def realiza_coloracao_erro(palavra, valor1, valor2, cor='red', linhaErro = None):
+    """
+        Colore uma linha de erro no terminal
+    """
+
     global tx_terminal
     global tx_codificacao
     global erro_alertado
@@ -265,12 +237,11 @@ def colorir_erro(palavra, valor1, valor2, cor='red', linhaErro = None):
     tx_terminal.tag_add(palavra, linha1 , linha2)
     tx_terminal.tag_config(palavra, foreground = cor)
 
-    # Marca a linha do erro
     if linhaErro != None:
-        # Obtém os valores da linhas
+
         lista = tx_codificacao.get(1.0, END).split("\n")
         
-        palavra = "********erroAlertado******"
+        palavra = "**_erro_alertado_**"
         linha1 = str(linhaErro) + ".0"
         linha2 = str(linhaErro) + "." + str(len(lista[int(linhaErro) - 1]))
 
@@ -279,179 +250,134 @@ def colorir_erro(palavra, valor1, valor2, cor='red', linhaErro = None):
 
     erro_alertado = True
 
-def sintaxe(palavra, cor, lista):
+def analisa_coloracao(palavra, cor, lista):
+    """
+        Realiza a coloração seguindo instruções
+    """
+
     global tx_codificacao
 
     cor = cor['foreground']
     tx_codificacao.tag_delete(palavra)
 
-    # Remoção de bugs no regex, deixe ele aqui para evitar um \* \\* \\\*\\\\* no loop
     palavra_comando = palavra.replace('+', '\\+')
     palavra_comando = palavra_comando.replace('/', '\\/')
     palavra_comando = palavra_comando.replace('*', '\\*')
 
-    # Ande por todas as linhas do programa
+
     for linha in range(len(lista)):
 
-        # Se a palavra for apontada como string
-        if palavra == '"':
-            for valor in finditer("""\"[^"]*\"""", lista[linha]):
-                colorir_uma_palavra(
-                    str(palavra), str(linha+1), valor.start(), valor.end(), cor)
-
-        # se a palavra foi apontada como numérico
-        elif palavra == "numerico":
+        if palavra == "numerico":
             for valor in finditer(
                 '(^|\\s|\\,)([0-9\\.]\\s*){1,}($|\\s|\\,)', lista[linha]):
-                colorir_uma_palavra(
+                realiza_coloracao(
                     str(palavra), str(linha+1), valor.start(), valor.end(), cor)
 
-        # Se a palavra foi apontada como comentário
         elif palavra == "comentario":
             for valor in finditer('(#|\\/\\/).*$', lista[linha]):
-                colorir_uma_palavra(
+                realiza_coloracao(
                     str(palavra), str(linha+1), valor.start(), valor.end(), cor)
 
-        # Se for uma palavra especial
+            # Comentário longo /**/
+            for valor in finditer('(\\/\\*[^\\*\\/]*\\*\\/)', lista[linha]):
+                realiza_coloracao(
+                    str(palavra+'longa'), str(linha+1), valor.start(), valor.end(), cor)
+
+        elif palavra == '"':
+            for valor in finditer("""\"[^"]*\"""", lista[linha]):
+                realiza_coloracao(
+                    str(palavra), str(linha+1), valor.start(), valor.end(), cor)
+
         else:
             palavra_comando = palavra_comando.replace(' ','\\s*')
             for valor in finditer('(^|\\s){}(\\s|$)'.format(palavra_comando), lista[linha]):
-                colorir_uma_palavra(
+                realiza_coloracao(
                     str(palavra), str(linha+1), valor.start(), valor.end(), cor)
 
-# Cores que as palavras vão assumir
-def atualiza_cor_sintaxe(event = None, fazer = 'tudo'):
-    global dic_com
-    global cor_da_sintaxe
+def define_coloracao(chave_comando, chave_cor, lista):
+    for comando in dic_comandos[ chave_comando ]:
+        analisa_coloracao(comando[0].strip(), cor_do_comando[ chave_cor ], lista)
+
+def coordena_coloracao(event = None, fazer = 'tudo'):
+    """
+        Coordena a coloração de todos os comandos
+    """
+
+    
+    global cor_do_comando
     global tx_codificacao
 
     configuracoes(ev = None)
 
-    # SE O EVENTO NÃO MODIFICAR O CÓDIGO
-    if event != None:
+    if event != None: # não modifica o código
         if event.keysym in ('Down','Up','Left','Right'):
             return 0
 
     try:
-        # Atualizar tudo
+
         #if fazer == 'tudo':
         #    th = Thread(target=obterPosicaoDoCursor)
         #    th.start()
 
-        # OBTEM O TEXTO DO Programa
         lista = tx_codificacao.get(1.0, END).lower().split('\n')
 
-        # PRINCIPAIS COMANDOS
-        for comando in dic_com['declaraVariaveis']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["atribuicao"], lista)
+        define_coloracao('addItensListaInternoPosicaoFinaliza', "lista", lista)
+        define_coloracao('addItensListaInternoFinal', "lista", lista)
+        define_coloracao('addItensListaInternoPosicao', "lista", lista)
+        define_coloracao('addItensListaInternoInicio', "lista", lista)
+        define_coloracao('declaraListasObterPosicao', "lista", lista)
+        define_coloracao('RemoverItensListasInterno', "lista", lista)
+        define_coloracao('declaraVariaveis', "atribuicao", lista)
+        define_coloracao('passandoParametros', "tempo", lista)
+        define_coloracao('RemoverItensListas', "lista", lista)
+        define_coloracao('incrementeDecremente', "tempo", lista)
+        define_coloracao('recebeDeclaraListas', "lista", lista)
+        define_coloracao('tiverInternoLista', "lista", lista)
+        define_coloracao('aleatorioEntre', "lista", lista)
+        define_coloracao('listaPosicoesCom', "lista", lista)
+        define_coloracao('listaNaPosicao', "lista", lista)
+        define_coloracao('listaCom', "lista", lista)
+        define_coloracao('declaraListas', "lista", lista)
+        define_coloracao('adicionarItensListas', "lista", lista)
+        define_coloracao('tamanhoDaLista', "lista", lista)
+        define_coloracao('digitado', "tempo", lista)
+        define_coloracao('enquanto', "lista", lista)
+        define_coloracao('mostreNessa', "exibicao", lista)
+        define_coloracao('funcoes', "tempo", lista)
+        define_coloracao('aguarde', "tempo", lista)
+        define_coloracao('aleatorio', "tempo", lista)
+        define_coloracao('limpatela', "tempo", lista)
+        define_coloracao('incremente', "tempo", lista)
+        define_coloracao('decremente', "logico", lista)
+        define_coloracao('tiverLista', "lista", lista)
+        define_coloracao('recebeParametros', "tempo", lista)
+        define_coloracao('esperaEm', "tempo", lista)
+        define_coloracao('matematica', "contas", lista)
+        define_coloracao('repitaVezes', "lista", lista)
+        define_coloracao('logico', "logico", lista)
+        define_coloracao('repita', "lista", lista)
+        define_coloracao('mostre', "exibicao", lista)
+        define_coloracao('se', "condicionais", lista)
 
-        for comando in dic_com['declaraListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['declaraAdicionarListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['adicionarItensListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['tiverLista']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['RemoverItensListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["logico"], lista)
-
-        for comando in dic_com['tamanhoDaLista']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['digitado']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['loopsss']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['repita']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_com['se']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["condicionais"], lista)
-
-        for comando in dic_com['mostre']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["exibicao"], lista)
-
-        for comando in dic_com['mostreNessa']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["exibicao"], lista)
-
-        for comando in dic_com['funcoes']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['aguarde']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['aleatorio']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['limpatela']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['incremente']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_com['decremente']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["logico"], lista)
-
-        # COMANDOS INTERNOS DE CADA COMANDO
-        for comando in dic_sub_com['passandoParametros']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_sub_com['acesarListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        sintaxe('com', cor_da_sintaxe["lista"], lista)
-        sintaxe('posicoes', cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_sub_com['adicionarItensNaListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_sub_com['RemoverItensListas']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_sub_com['tiverLista']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_sub_com['recebeParametros']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_sub_com['esperaEm']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        for comando in dic_sub_com['matematica']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["contas"], lista)
-
-        for comando in dic_sub_com['repitaVezes']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["lista"], lista)
-
-        for comando in dic_sub_com['logico']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["logico"], lista)
-
-        for comando in dic_sub_com['incremente_decremente']:
-            sintaxe(comando[0].strip(), cor_da_sintaxe["tempo"], lista)
-
-        sintaxe('numerico'     , cor_da_sintaxe["numerico"], lista)
-        sintaxe('"'            , cor_da_sintaxe["string"], lista)
-        sintaxe('comentario'   , cor_da_sintaxe["comentario"], lista)
+        analisa_coloracao('numerico'     , cor_do_comando["numerico"], lista)
+        analisa_coloracao('comentario'   , cor_do_comando["comentario"], lista)
+        analisa_coloracao('"'            , cor_do_comando["string"], lista)
 
         tx_codificacao.update()
 
     except Exception as erro:
-        print("Erro ao atualizar sintaxe", erro)
+        print("Erro ao atualizar coloracao", erro)
 
 def log(mensagem):
     global numero_log
     #numero_log += 1
-    #print(str(numero_log) + mensagem)
 
-# inicia o interpretador
+    #print(str(numero_log) + '-' + mensagem)
+
 def inicializador_orquestrador_interpretador(event = None):
+    """
+        Inicicaliza o orquestrador que analisa blocos de código
+    """
     global numeros_thread_interpretador
     global aconteceu_erro
     global tx_codificacao
@@ -459,658 +385,502 @@ def inicializador_orquestrador_interpretador(event = None):
     global erro_alertado
     global dic_funcoes
     global esperar_pressionar_enter
+    global boo_orquestrador_iniciado
 
-    # Inicio do programa
     inicio = time()
 
-    # Se algum programa já estava sendo executado
     if numeros_thread_interpretador != 0:
         messagebox.showinfo('Problemas',"Já existe um programa sendo executado!")
         return 0
 
-    # Sinaliza que o interpretador está livre
     numeros_thread_interpretador = 0
-
-    # Não aconteceram erros
     aconteceu_erro = False
-
-    # Nenhum erro reportado ao usuário
     erro_alertado = False
-    
-    # Não está esperando o usuário apertar enter
     esperar_pressionar_enter = False
-
-    # Todas as variáveis do programa
     dic_variaveis = {}
-
-    # Funções do interpretador
     dic_funcoes = {}
 
     inicializador_terminal()
     tx_terminal.delete('1.0', END)
 
-    # Obtem o código do programa
     linhas = tx_codificacao.get('1.0', END)
-
-    # Marca as linhas do código
-    nova_linha = []
+    nova_linha = ''
 
     lista = linhas.split('\n')
     for linha in range(len(lista)):
         nova_linha += '[{}]{}\n'.format(str(linha + 1), lista[linha])
+    
     linhas = nova_linha
 
-    # Apontador de logs
     logs = '> '
 
-    # Inicia o orquestador do interpretador
+    boo_orquestrador_iniciado = False
+
     t = Thread(target=lambda codigoPrograma = linhas, logs = logs: orquestrador_interpretador(codigoPrograma, logs))
     t.start()
 
-    # Mantém o programa preso enquanto o interpretador estiver acionado
-    while numeros_thread_interpretador != 0:
+    while numeros_thread_interpretador != 0 or not boo_orquestrador_iniciado:
         tela.update()
 
-    # Informa que o interpretador foi finalizado
-    tx_terminal.insert(END, '\nScript finalizado em {:.3} segundos'.format(time() - inicio))
+    try:
+        tx_terminal.insert(END, '\nScript finalizado em {:.3} segundos'.format(time() - inicio))
+        tx_terminal.see("end")
+ 
+    except Exception as erro:
+        log(logs + 'Impossível exibir mensagem de finalização, erro: '+ str(erro))
+
+def orq_erro(mensagem, linhaAnalise):
+    global aconteceu_erro
+    global erro_alertado
+
+    aconteceu_erro = True
+
+    if not erro_alertado:
+        tx_terminal.insert(END, "\n" + "[" + linhaAnalise + "]" + mensagem)
+        realiza_coloracao_erro('codigoErro', valor1=0, valor2=len(mensagem)+1, cor='#ffabab', linhaErro = linhaAnalise )
+
+def orq_exibir_tela(lst_retorno_ultimo_comando):
+    global tx_terminal
+
+    if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
+        tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1][len(":nessaLinha:"):]))
+    else:
+        tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1])+'\n')
     tx_terminal.see("end")
 
-def orquestrador_interpretador(linhas, logs):
+def orquestrador_interpretador(txt_codigo, logs):
+    logs = '  ' + logs
+    log(logs + '<orquestrador_interpretador>:' + txt_codigo)
+
     global numeros_thread_interpretador
     global aconteceu_erro
     global dic_funcoes
+    global boo_orquestrador_iniciado
 
-    logs = '  ' + logs
-    contador = 0
-    penetracao = 0 # {{}}
-
-    # BLOCOS DE CÓDIGO
-    ComandosParaAnalise = ''
-
-    # NUMERO DE VEZES QUE O INTERPRETADOR FOI CHAMADO
     numeros_thread_interpretador += 1
+    boo_orquestrador_iniciado = True
 
-    # INSTRUÇÕES PARA TESTES: ENQUANTO X FOR MENOR QUE Y
-    linhaComCodigoQueFoiExecutado = ''
+    int_tamanho_codigo = len(txt_codigo)
 
-    # BLOCO DE CÓDIGO SENDO SALVO
-    BlocoDeCodigoEstaEmAnalise = False
+    bool_comentario_longo = False
+    bool_salvar_bloco = False
+    bool_comentario = False
+    bool_texto = False
 
-    # LER UM BLOCO DE CÓDIGO
-    estadoDaCondicional = [False, None, 'vazio']
+    str_bloco = ""
+    str_linha = ""
+    caractere = ""
 
-    # Enquanto não acontecer nenhum erro e todos os caracteres não serem analisados
-    while contador < len(linhas) and not aconteceu_erro:
+    int_profundidade = 0
+    for int_cont, caractere in enumerate(txt_codigo):
+        
+        dois_caracteres = txt_codigo[int_cont : int_cont + 2]
 
-        # Se começar um bloco e não tiver começado nenhum anteriormente
-        if linhas[contador] == '{' and BlocoDeCodigoEstaEmAnalise == False:
-            # Aumente a penetração
-            penetracao +=1
-
-            # Limpa os comandos para analise
-            ComandosParaAnalise = ''
-            # Aumenta o contador
-            contador += 1
-            # Começar a salvar o bloco de código
-            BlocoDeCodigoEstaEmAnalise = True
+        # Ignorar tudo entre /**/
+        if dois_caracteres == '/*' and not bool_texto and not bool_comentario:
+            bool_comentario_longo = True
             continue
 
-        # Se tiver mais um {, aumenta a penetração
-        if linhas[contador] == '{':
-            penetracao +=1
+        if bool_comentario_longo and txt_codigo[int_cont - 2:int_cont] == '*/':
+            bool_comentario_longo = False
+          
+        if bool_comentario_longo:
+            continue
 
-        # Se tiver um }, diminui a penetração
-        if linhas[contador] == '}':
-            penetracao -=1
-        # Se o bloco principal finalizar, se ele estava em análise e a penetração chegou a 0
-        if linhas[contador] == '}' and BlocoDeCodigoEstaEmAnalise and penetracao == 0:
+        # Ignorar comentário
+        if( caractere == '#' or dois_caracteres == '//') and not bool_texto:
+            bool_comentario = True
 
-            # Se a condição do começo do bloco era verdadeira e tem condição para repetir
-            if estadoDaCondicional[1] == True or estadoDaCondicional[1] != 0:
+        if bool_comentario and caractere == "\n":
+            bool_comentario = False
 
-                # Se acontecer um loop repetir
-                if estadoDaCondicional[3] == 'declararLoop':
-                    estadoDaCondicional[3] = 'fazerNada'
+        elif bool_comentario:
+            continue
 
-                    # Enquanto a condição for verdadeira
-                    while linhaComOResultadoDaExecucao[1] and not aconteceu_erro:
+        # Se chegar no fim da linha ou iniciar um bloco
+        if ( caractere == "\n" or ( caractere == "{" and not bool_comentario) ) and not bool_salvar_bloco and not bool_texto :
 
-                        # Envia um bloco completo para ser novamente executado
-                        resultadoExecucao = orquestrador_interpretador(
-                            ComandosParaAnalise, logs)
+            if len(str_linha.strip()) > 0:
+                str_linha = str_linha.replace("\n","").strip()
 
-                        # Se der erro na exeução do bloco
-                        if resultadoExecucao[0] == False:
+                lst_analisa = interpretador(str_linha, logs)
 
-                            aconteceu_erro = True
-
-                            if not erro_alertado:
-                                erro_texto = str(resultadoExecucao[1])
-                                tx_terminal.insert(END, "\n" + erro_texto)
-                                colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab')
-
-                            numeros_thread_interpretador -= 1
-                            return resultadoExecucao
-
-                        # Testa novamente a condição do loop
-                        linhaComOResultadoDaExecucao = interpretador(linhaComCodigoQueFoiExecutado, logs)
-                        linhaAnalise = linhaComOResultadoDaExecucao[1]
-                        linhaComOResultadoDaExecucao = linhaComOResultadoDaExecucao[0]
-
-                        # Se der erro na exeução do teste
-                        if linhaComOResultadoDaExecucao[0] == False:
-                            aconteceu_erro = True
-                            if not erro_alertado:
-                                erro_texto = str("[" + linhaAnalise + "]" + linhaComOResultadoDaExecucao[1])
-                                tx_terminal.insert(END, "\n" + erro_texto)
-                                colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab', linhaErro = linhaAnalise)
-
-                            numeros_thread_interpretador -= 1
-                            return linhaComOResultadoDaExecucao
-
-                # SE A FUNÇÃO FOR ATIVADA
-                elif estadoDaCondicional[3] == "declararLoopRepetir":
-                    estadoDaCondicional[3] = 'fazerNada'
-
-                    # Se for maior que zero, aconteceu um repit
-                    for valor in range(0, estadoDaCondicional[1]):
-
-                        # Envia um bloco completo para ser novamente executado
-                        resultadoOrquestrador = orquestrador_interpretador(
-                            ComandosParaAnalise, logs)
-
-                        # Se acontecer um erro
-                        if resultadoOrquestrador[0] == False:
-                            aconteceu_erro = True
-
-                            if not erro_alertado:
-                                erro_texto = str(resultadoOrquestrador[1])
-                                tx_terminal.insert(END, "\n" + erro_texto)
-                                colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab')
-
-                            numeros_thread_interpretador -= 1
-                            return resultadoOrquestrador
-
-                    estadoDaCondicional[1] = 0
-                    linhaComOResultadoDaExecucao = [True, False, 'booleano']
-
-                # Se uma função foi ativada
-                elif estadoDaCondicional[3] == "declararFuncao":
-                    estadoDaCondicional[3] = "fazerNada"
-                    # Atualize o dicionário de funções
-                    dic_funcoes[estadoDaCondicional[4]] = [dic_funcoes[estadoDaCondicional[4]][0], ComandosParaAnalise]
-
-                # Se for uma condição normal
+                if lst_analisa[0][3] == 'linhaVazia':
+                    str_linha = ""
                 else:
-                    # Envia um bloco completo para ser executado
-                    resultadoOrquestrador = orquestrador_interpretador(
-                        ComandosParaAnalise, logs)
+                    lst_ultimo_ret = lst_analisa
+                    linhaComCodigoQueFoiExecutado = str_linha
+                    linhaAnalise = lst_ultimo_ret[1]
+                    lst_ultimo_ret = lst_ultimo_ret[0]
 
-                    # Se acontecer um erro
-                    if resultadoOrquestrador[0] == False:
-                        aconteceu_erro = True
+                    # SE DEU ERRO
+                    if lst_ultimo_ret[0] == False:
 
-                        if not erro_alertado:
-                            erro_texto = str(resultadoOrquestrador[1])
-                            tx_terminal.insert(END, "\n" + erro_texto)
-                            colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab')
+                        if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
+                            numeros_thread_interpretador -= 1
+                            return [True, 'Orquestrador Finalizado', 'string']
+
+                        orq_erro(lst_ultimo_ret[1], linhaAnalise)
                         numeros_thread_interpretador -= 1
-                        return resultadoOrquestrador
+                        return lst_ultimo_ret
 
-            ComandosParaAnalise = ''
-            contador += 1
-            BlocoDeCodigoEstaEmAnalise = False
+                    if lst_ultimo_ret[3] == 'exibirNaTela':
+                        orq_exibir_tela(lst_ultimo_ret)
 
-        # Se chegar no final do código, ou no final da linha e o bloco de código não está em análise
-        if (((contador == len(linhas)) or (linhas[contador] == '\n')) ) and not BlocoDeCodigoEstaEmAnalise:
+                    str_linha = ""
 
-            # Se não for uma linha vazia
-            if not ComandosParaAnalise.isspace() and  ComandosParaAnalise != '':
+                    if caractere == "\n" and lst_ultimo_ret[3] == 'fazerNada':
+                        continue
 
-                # Inicie o interpretador com a linha
-                estadoDaCondicional = interpretador(ComandosParaAnalise.strip(), logs)
-                linhaAnalise = estadoDaCondicional[1]
-                estadoDaCondicional = estadoDaCondicional[0]
+        # Quando começar uma string
+        if caractere == '"' and not bool_texto and not bool_comentario and not bool_salvar_bloco:
+            bool_texto = True
 
-                # Se deu errado ao executar
-                if estadoDaCondicional[0] == False:
-                    aconteceu_erro = True
+        elif caractere == '"' and bool_texto and not bool_comentario and not bool_salvar_bloco:
+            bool_texto = False
 
-                    if not erro_alertado:
-                        erro_texto = str("[" + linhaAnalise + "]" + estadoDaCondicional[1])
-                        tx_terminal.insert(END, "\n" + erro_texto)
-                        colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab', linhaErro = linhaAnalise )
+        # Quando começar um bloco
+        if caractere == "{" and not bool_texto and not bool_comentario:
+            int_profundidade += 1
+            bool_salvar_bloco = True
 
-                    numeros_thread_interpretador -= 1
-                    return estadoDaCondicional
+        elif caractere == "}" and not bool_texto and not bool_comentario:
+            int_profundidade -= 1
 
-                # Salva o resultado da condição testada
-                linhaComOResultadoDaExecucao = estadoDaCondicional
+        # Quando finalizar um bloco
+        if caractere == "}" and not bool_texto and not bool_comentario and int_profundidade == 0:
+            log(logs + '!<Analisa bloco salvo>:"' + str_bloco + '"')
 
-                # Salva o código testado
-                linhaComCodigoQueFoiExecutado = ComandosParaAnalise.strip()
+            bool_salvar_bloco = False
 
-                # Se não for um aviso de estado
-                if (estadoDaCondicional[0] == True and estadoDaCondicional[3] == 'exibirNaTela'):
+            if lst_ultimo_ret[3] == 'declararLoop':
 
-                    # Insere no menu lateral
-                    if ":nessaLinha:" in str(estadoDaCondicional[1]):
-                        tx_terminal.insert(END, str(estadoDaCondicional[1][len(":nessaLinha:"):]))
-                    else:
-                        tx_terminal.insert(END, str(estadoDaCondicional[1])+'\n')
+                # Enquanto a condição for verdadeira
+                while lst_ultimo_ret[1] and not aconteceu_erro:
 
-                    tx_terminal.see("end")
+                    lst_resultado_execucao = orquestrador_interpretador(
+                        str_bloco[1:].strip(), logs)
 
-            # Limpar o bloco de comandos
-            ComandosParaAnalise = ''
+                    if lst_resultado_execucao[0] == False:
+                        if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                            numeros_thread_interpretador -= 1
+                            return [True, 'Orquestrador Finalizado', 'string']
 
-            # Avançar para os próximos caracteres
-            contador += 1
+                        orq_erro(lst_resultado_execucao[1], "xx")
+                        numeros_thread_interpretador -= 1
+                        return lst_resultado_execucao
 
-            # Chegou ao final de uma execução
+                    # Testa novamente a condição do loo
+                    lst_ultimo_ret = interpretador(linhaComCodigoQueFoiExecutado, logs)
+                    linhaAnalise = lst_ultimo_ret[1]
+                    lst_ultimo_ret = lst_ultimo_ret[0]
+
+                    if lst_ultimo_ret[0] == False:
+
+                        if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
+                                numeros_thread_interpretador -= 1
+                                return [True, 'Orquestrador Finalizado', 'string']
+
+                        orq_erro(lst_ultimo_ret[1], linhaAnalise)
+                        numeros_thread_interpretador -= 1
+                        return lst_ultimo_ret
+
+            elif lst_ultimo_ret[3] == "declararLoopRepetir":
+                lst_ultimo_ret[3] = 'fazerNada'
+
+                for valor in range(0, lst_ultimo_ret[1]):
+                    lst_resultado_execucao = orquestrador_interpretador(
+                        str_bloco[1:].strip(), logs)
+
+                    if lst_resultado_execucao[0] == False:
+                        if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                            numeros_thread_interpretador -= 1
+                            return [True, 'Orquestrador Finalizado', 'string']
+
+                        orq_erro(lst_resultado_execucao[1], "xx2")
+                        numeros_thread_interpretador -= 1
+                        return lst_resultado_execucao
+
+                lst_ultimo_ret[1] = 0
+                lst_ultimo_ret = [True, False, 'booleano']
+
+            elif lst_ultimo_ret[3] == "declararFuncao":
+                lst_ultimo_ret[3] = "fazerNada"
+                dic_funcoes[lst_ultimo_ret[4]] = [dic_funcoes[lst_ultimo_ret[4]][0], str_bloco[1:].strip()]
+
+
+            elif lst_ultimo_ret[3] == 'declararCondicional':
+                if lst_ultimo_ret[1] == True:
+
+                    lst_resultado_execucao = orquestrador_interpretador(str_bloco[1:].strip(), logs)
+
+                    if lst_resultado_execucao[0] == False:
+                        if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                            numeros_thread_interpretador -= 1
+                            return [True, 'Orquestrador Finalizado', 'string']
+
+                        orq_erro(lst_resultado_execucao[1], "xx3")
+                        numeros_thread_interpretador -= 1
+                        return lst_resultado_execucao
+
+            str_bloco = ""
             continue
 
-        # Armazena os caracteres de uma linha
-        ComandosParaAnalise += linhas[contador]
+        # Se for para salvar bloco, salve o caractere
+        if bool_salvar_bloco:
+            str_bloco += caractere
 
-        # Aumenta o contador
-        contador += 1
+        # Armazene os comandos
+        elif not bool_comentario:
+            str_linha += caractere
 
-    # Se chegar ao final do loop e a penetração ficar positiva
-    if penetracao > 0:
-        aconteceu_erro = True
+    # Se chegar no final do código e tiver comando para analisar
+    if len(str_linha.strip()) > 0 and int_tamanho_codigo -1 == int_cont:
 
-        if penetracao == 1:
-            vezesEsquecidas = '1 vez'
-        else:
-            vezesEsquecidas = '{} vezes'.format(penetracao)
+        str_linha = str_linha.replace("\n","").strip()
+        lst_ultimo_ret = interpretador(str_linha, logs)
+        linhaComCodigoQueFoiExecutado = str_linha
+        linhaAnalise = lst_ultimo_ret[1]
+        lst_ultimo_ret = lst_ultimo_ret[0]
 
-        msgErro = "Você abriu uma chave '{' e esqueceu de fecha-la '}'  " + str(vezesEsquecidas)
+        if lst_ultimo_ret[0] == False:
+            if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
+                numeros_thread_interpretador -= 1
+                return [True, 'Orquestrador Finalizado', 'string']
 
-        if not erro_alertado:
-            erro_texto = msgErro
-            tx_terminal.insert(END, "\n" + erro_texto)
-            colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab')
+            orq_erro(lst_ultimo_ret[1], linhaAnalise)
+            numeros_thread_interpretador -= 1
+            return lst_ultimo_ret
 
+        if lst_ultimo_ret[3] == 'exibirNaTela':
+            orq_exibir_tela(lst_ultimo_ret)
+
+    # Aviso de erros de profundidade
+    if int_profundidade > 0:
         numeros_thread_interpretador -= 1
         return [False, None, 'vazia']
 
-    # Se chegar ao final do loop e a penetração ficar negativa
-    elif penetracao < 0:
-        aconteceu_erro = True
-        if penetracao == -1:
-            vezesEsquecidas = 'uma vez'
-        else:
-            vezesEsquecidas = '{} vezes'.format(penetracao*-1)
-
-        msgErro = "Você abriu uma chave '{' e fechou ela '}' " + str(vezesEsquecidas)
-
-        if not erro_alertado:
-            erro_texto = msgErro
-            tx_terminal.insert(END, "\n" + erro_texto)
-            colorir_erro('codigoErro', valor1=0, valor2=len(erro_texto)+1, cor='#ffabab')
-
+    elif int_profundidade < 0:
         numeros_thread_interpretador -= 1
         return [False, None, 'vazia']
 
-    # Libera uma unidade no contador de Threads
     numeros_thread_interpretador -= 1
-    return [True, 'Não aconteceram erros durante a execução do interpretador', 'string']
+    return [True, 'Orquestrador Finalizado', 'string']
 
-def interpretador(codigo, logs):
+def analisa_instrucao(comando, texto, grupos_analisar):
+
+    re_comandos = "(\\<[a-zA-Z]*\\>)"
+    re_groups = findall(re_comandos, comando)
+    if re_groups == None:
+        return False
+
+    dic_options = {}
+   
+    # Anda pelos grupos <se>, <esperar>
+    for grupo in re_groups:
+
+        # Anda pelos comandos no dicionários, [se], [if]...
+        for n_comando in range(0, len(dic_comandos[ grupo[1:-1] ])):
+
+            # Obtem um comando. se, if
+            txt_comando_analisar = dic_comandos[ grupo[1:-1] ][n_comando][0]
+
+            # Substitui o grupo pelo comando. <se>, if
+            comando_analise = comando.replace(grupo, txt_comando_analisar)
+            try:
+                dic_options[grupo] = dic_options[grupo] +"|" + str(txt_comando_analisar)
+            except Exception as err:
+                dic_options[grupo] = txt_comando_analisar
+ 
+
+    for k,v in dic_options.items():
+        v_add = v.replace(' ','\\s{1,}')
+
+        comando = comando.replace(k, v_add )
+    # o ? evita a gulidisse do .*, ele pode remover um passando parametros e considerar só o parametros, por exemplo
+    comando = comando.replace('(.*)','(\\"[^\\"]*\\"|.*?)')
+
+    # Aplicar no texto
+    re_texto = findall(comando, texto)
+    if re_texto == []:
+        return False
+
+    re_texto= re_texto[0]
+    lst_retorno = []
+    for n_grupo in grupos_analisar:
+        lst_retorno.append(re_texto[n_grupo-1].strip())
+
+    return lst_retorno
+
+def interpretador(linha, logs):
+    global tx_terminal
     global aconteceu_erro
-    global dic_com
-    global dic_variaveis
+    try:
+        tx_terminal.get(1.0, 1.1)
+    except:
+        return [[False, 'indisponibilidade_terminal', 'string','exibirNaTela'], "1"]
 
     logs = '  ' + logs
-    log(logs + 'interpretador, código:' + codigo)
+    log(logs + '<interpretador>:"' + linha + '"')
 
     if aconteceu_erro:
-        return [[False, 'Erro ao iniciar o Interpretador', 'string','exibirNaTela'], -1]
+        return [[False, 'Erro ao iniciar o Interpretador', 'string','exibirNaTela'], "1"]
 
-    # Limpa o número de repeticoes
-    simbolosEspeciais = ['{', '}']
+    linha = linha.replace('\n', '')
+    linha = linha.strip()
 
-    # Se o código estiver vazio
-    if (codigo == '' or codigo.isspace()) or codigo in simbolosEspeciais:
-        return [[True, None, 'vazio','fazerNada'], -2]
+    # Se for uma linha vazia
+    if linha == '':
+        return [[True, None, 'vazio','linhaVazia'], "1"]
 
     else:
-        # Obtem todas as linhas
-        linhas = codigo.split('\n')
+        num_linha = "0"
+        posicoes = finditer(r'^(\[\d*\])', linha)
 
-        for linha in linhas:
+        # Obter o número da linha
+        for uma_posicao in posicoes:
+            num_linha = linha[1 : uma_posicao.end()-1]
+            linha = linha[uma_posicao.end() : ]
             linha = linha.strip()
+            break
+
+        # Se a linha continuar vazia
+        if linha == '':
+            return [[True, None, 'vazio','linhaVazia'],"1"]
+
+        analisa = analisa_instrucao('^(<limpatela>)$', linha, grupos_analisar = [1])
+        if analisa != False:
+            return [funcao_limpar_tela(logs), num_linha]
+
+        analisa = analisa_instrucao('^(<mostreNessa>)(.*)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_exibir_na_linha(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<mostre>)(.*)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_exibir(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<se>)(.*)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_condicional(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<enquanto>)(.*)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_loops_enquanto(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<aguarde>)(.*)(<esperaEm>)$', linha, grupos_analisar = [2,3])
+        if analisa != False:
+            return [funcao_tempo(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<repita>)(.*)(<repitaVezes>)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_repetir(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [incremente_em(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [decremente_em(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_declarar_funcao(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha, grupos_analisar = [2, 4, 6])
+        if analisa != False:
+            return [funcao_adicione_na_lista_na_posicao(analisa[0], analisa[1], analisa[2], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha, grupos_analisar = [2,4])
+        if analisa != False:
+            return [funcao_declarar_listas_posicoes(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_declarar_listas(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_remover_itens_na_lista(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha, grupos_analisar = [2, 4, 6])
+        if analisa != False:
+            return [funcao_adicionar_itens_na_lista_posicao(analisa[0], analisa[1], analisa[2], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_adicionar_itens_na_lista(analisa[0], analisa[1], logs), num_linha]
+            
+        analisa = analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_adicionar_itens_na_lista_inicio(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_adicionar_itens_na_lista(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_numero_aleatorio(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_obter_valor_lista(analisa[0], analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<digitado>)$', linha, grupos_analisar = [1])
+        if analisa != False:
+            return [funcao_digitado(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha, grupos_analisar = [2, 4])
+        if analisa != False:
+            return [funcao_tiver_na_lista(analisa[0],analisa[1], logs), num_linha]
+
+        analisa = analisa_instrucao('^(<tamanhoDaLista>)(.*)$', linha, grupos_analisar = [2])
+        if analisa != False:
+            return [funcao_tamanho_da_lista(analisa[0], logs), num_linha]
+
+        analisa = analisa_instrucao('^(\\s*[a-zA-Z\\_]*)(<declaraVariaveis>)(.*)$', linha, grupos_analisar = [1, 3])
+        if analisa != False:
+            return [funcao_fazer_atribuicao(analisa[0], analisa[1], logs), num_linha]
 
-            # Separação da linha do comando e do comando
-            num_linha = 'erro'
-            posicoes = finditer(r'^(\[\d*\])', linha)
+        analisa = analisa_instrucao('^(.*)(<passandoParametros>)(.*)$', linha, grupos_analisar = [1,3])
+        if analisa != False:
+            return [funcao_executar_funcoes(analisa[0],analisa[1], logs), num_linha]
 
-            for uma_posicao in posicoes:
-                num_linha = linha[1 : uma_posicao.end()-1]
-                linha = linha[uma_posicao.end() : ]
-                linha = linha.strip()
-                break
-
-            # -1 não existe
-            ignoraComentario = linha.find('#')
-            if ignoraComentario != -1:
-                linha = linha[0 : ignoraComentario]
-
-            # -1 não existe
-            ignoraComentario = linha.find('//')
-            if ignoraComentario != -1:
-                linha = linha[0 : ignoraComentario]
-
-            if linha == '':
-                continue
-
-            for comando in dic_com['mostreNessa']:
-                "mostre nessa linha 123"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                        # Função nessa linha
-                        return [funcao_exibir_na_linha(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['mostre']:
-                "mostre 123"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no inicio da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                        # Função Exibir
-                        return [funcao_exibir( linha[len(comando[0]) : ], logs), num_linha]
-
-            for comando in dic_com['limpatela']:
-                "limpatela"
-
-                # Se o comando não estourar
-                if len(comando[0]) <= len(linha):
-
-                    # Se for a linha inteira
-                    if comando[0] == linha:
-
-                        # Função limpar a tela
-                        return [funcao_limpar_tela(logs), num_linha]
-
-            for comando in dic_com['se']:
-                "se 4 for maior que 2 ou 3 for menor que 1"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                        # Função condicional
-                        return [funcao_condicional(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['loopsss']:
-                "enquanto x for maior que 10"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                        # Função enquanto
-                        return [funcao_loops_enquanto(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['aguarde']:
-                "espere 2 segundos"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                        # Função tempo
-                        return [funcao_tempo(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['funcoes']:
-                "funcao calculaMedia recebe parametros nota1, nota2"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                       # Função declarar tempo
-                       return [funcao_declarar_funcao(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['aleatorio']:
-                "Um número aleatorio entre 3 e 5"
-                # Se o comando não estoura
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0]) ]:
-
-                       # Função aleatória 
-                       return [funcao_numero_aleatorio(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['repita']:
-                "repita x vezes"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se estiver no começo da linha
-                    if comando[0] == linha[ 0 : len(comando[0])]:
-
-                        # Função repetir
-                        #print("Função repetiro ..................")
-                        return [funcao_repetir(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['digitado']:
-                "o que for digitado"
-
-                # Se o comando não estourar
-                if len(comando[0]) <= len(linha):
-
-                    # Se estiver na linha inteira
-                    if comando[0] == linha:
-
-                        # Função digitado
-                        return [funcao_digitado(linha, logs), num_linha]
-
-
-
-            #lista de nomes com 5 posicoes
-            for comando in dic_com['declaraListas']:
-                "lista de nomes com 5 posicoes"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se o comando estiver no começo da linha
-                    if linha[ 0 : len(comando[0]) ] == comando[0]:
-
-                        # Verifica se tem na posicao, porque não é declaração
-                        testaCom = verifica_se_tem(linha, ' com ', logs)
-                        testaPosicao = verifica_se_tem(linha, ' posicoes', logs)
-
-                        if testaCom != [] and testaPosicao != []:
-
-                            # Declaração de uma lista
-                            return [funcao_declarar_listas_posicoes(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['declaraListas']:
-                "lista de nomes recebe 1, 2, 3, 4, 5"
-
-                # Se o comando não estourar
-                if len(comando[0]) < len(linha):
-
-                    # Se o comando estiver no começo da linha
-                    if linha[ 0 : len(comando[0])] == comando[0]:
-
-                        # Verifica se tem na posicao, porque não é declaração
-                        testa = verifica_se_tem(linha, ' na posicao ', logs)
-                        if testa == []:
-
-                            # Declaração de uma lista
-                            return [funcao_declarar_listas(linha[len(comando[0]):], logs), num_linha]
-
-
-
-
-            # lista de
-            for comando in dic_com['declaraAdicionarListas']:
- 
-                # na posicao
-                testaPosicao = verifica_se_tem(linha, ' na posicao ', logs)
-
-                # recebe
-                for comandoSub in dic_sub_com['declaraListas']:
-
-                    # recebe
-                    testaComando = verifica_se_tem(linha, comandoSub[0], logs)
-
-                    # tem na posição e o recebe. Tem o comando ou vazio
-                    if testaPosicao != [] and testaComando != [] and (comando[0] == linha[ : len(comando[0])] or comando[0] == "" ):
-
-                        # lista de
-                        if comando[0] == "":
-                            return [funcao_adicionar_itens(linha, logs), num_linha]
-                        else:
-                            return [funcao_adicionar_itens(linha[len(comando[0]):], logs), num_linha]
-
-            # tiver
-            for comando in dic_com['tiverLista']:
-           
-                # tem o tiver e o comando tiver esta no inicio da linha
-                if comando[0] == linha[0:len(comando[0])]:
-
-                    "tiver 1 na lista de nomes"
-                    return [funcao_tiver_na_lista(linha[len(comando[0]):], logs), num_linha]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-            for comando in dic_com['adicionarItensListas']:
-                "adicione 10 na posicao 2 da lista de nomes"
-                if linha[ 0 : len(comando[0]) ] == comando[0]:
-                    return [funcao_adicione_na_lista( linha[ len(comando[0]) : ], logs), num_linha]
-
-            for comando in dic_com['RemoverItensListas']:
-                "remova 1 da lista de nomes"
-                testa = verifica_se_tem(linha, comando[0], logs)
-                if testa != []:
-                    if comando[0] == linha[0:len(comando[0])]:
-                        return [funcao_remover_itens_na_lista(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['tamanhoDaLista']:
-                "o tamanho da lista de nomes"
-                testa = verifica_se_tem(linha, comando[0], logs)
-                if testa != []:
-                    if comando[0] == linha[0:len(comando[0])]:
-                        return [funcao_tamanho_da_lista(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['incremente']:
-                "incremente 10 em n"
-                testa = verifica_se_tem(linha, comando[0], logs)
-                if testa != [] and comando[0] == linha[0:len(comando[0])]:
-                    return [incremente_em(linha[len(comando[0]):], logs), num_linha]
-
-            for comando in dic_com['decremente']:
-                "decremente 1 em n"
-                testa = verifica_se_tem(linha, comando[0], logs)
-                if testa != [] and comando[0] == linha[0:len(comando[0])]:
-                    return [decremente_em(linha[len(comando[0]):], logs), num_linha]
-
-            # Listas
-            for comando in dic_sub_com['acesarListas']:
-                #print("lista de nomes na posicao 2 recebe 1")
-                #print("nomes na posicao 2 recebe 1")
-                testa2 = verifica_se_tem(linha, comando[0], logs)
-                if testa2 != []:
-                    return [funcao_obter_valor_lista(linha, comando[0], logs), num_linha]
-
-            for comando in dic_com['declaraVariaveis']:
-                "nome recebe 123"
-                testa = verifica_se_tem(linha, comando[0], logs)
-                if testa != []:
-                    return [funcao_fazer_atribuicao(linha, comando[0], logs), num_linha]
-
-            if linha[0].isalpha():
-                "mostraNome recebe parametros nome, sobrenome"
-                return [ funcao_executar_funcoes(linha, logs), num_linha]
-
-            return [[False, "Um comando desconhecido foi localizado: '{}'".format(linha), 'string','exibirNaTela'], num_linha]
-
+        return [[False, "Um comando desconhecido foi localizado: '{}'".format(linha), 'string','exibirNaTela'], num_linha]
     return [[True, None, 'vazio', 'fazerNada'], num_linha]
 
-def incremente_em(linha, logs):
-    return incremente_decremente(linha, logs, 'incremente')
+def incremente_em(valor, variavel, logs):
+    return incremente_decremente(valor, variavel, logs, 'incremente')
 
-def decremente_em(linha, logs):
-    return incremente_decremente(linha, logs, 'decremente')
+def decremente_em(valor, variavel, logs):
+    return incremente_decremente(valor, variavel, logs, 'decremente')
 
-def incremente_decremente(linha, logs, acao):
-
+def incremente_decremente(valor, variavel, logs, acao):
     logs = '  ' + logs
-    log(logs + 'decremente:' + linha)
+    log(logs + 'decremente:' + valor+str(variavel))
 
-    for comando in dic_sub_com['incremente_decremente']:
-        testa = verifica_se_tem(linha, comando[0], logs)
+    teste_existencia = obter_valor_variavel(variavel, logs)
+    if teste_existencia[0] == False:
+        return teste_existencia
 
-        # Se tiver a variável de atribuição
-        if testa != []:
-            valor, variavel = linha.split(comando[0])
+    if teste_existencia[2] != 'float':
+        return [False, "A variável \"{}\" não é numérica!".format(variavel), 'string', 'exibirNaTela']
 
-            # VERIFICA SE A VARIÁVEL EXISTE
-            teste_existencia = obter_valor_variavel(variavel, logs)
-            if teste_existencia[0] == False:
-                return teste_existencia
+    teste_valor = abstrair_valor_linha(valor, logs)
+    if teste_valor[0] == False:
+        return teste_valor
 
-            # Verifica se a variável é numérica
-            if teste_existencia[2] != 'float':
-                return [False, "A variável \"{}\" não é numérica!".format(variavel), 'string', 'exibirNaTela']
+    if teste_valor[2] != 'float':
+        return [False, "O valor de \"{}\" não é numérico!".format(teste_valor[1]), 'string', 'exibirNaTela']
 
-            # Obter o valor do valor
-            teste_valor = abstrair_valor_linha(valor, logs)
-            if teste_valor[0] == False:
-                return teste_valor
+    if acao == "incremente":
+        dic_variaveis[variavel][0] = dic_variaveis[variavel][0] + teste_valor[1]
+    else:
+        dic_variaveis[variavel][0] = dic_variaveis[variavel][0] - teste_valor[1]
 
-            if teste_valor[2] != 'float':
-                return [False, "O valor de \"{}\" não é numérico!".format(teste_valor[1]), 'string', 'exibirNaTela']
-
-            if acao == "incremente":
-                dic_variaveis[variavel][0] = dic_variaveis[variavel][0] + teste_valor[1]
-            else:
-                dic_variaveis[variavel][0] = dic_variaveis[variavel][0] - teste_valor[1]
-
-            return [True, True, "booleano", "fazerNada"]
-
-    return [False, "É necessário passar um comando como \"na variavel\":" + linha, "string", "exibirNaTela"]
+    return [True, True, "booleano", "fazerNada"]
 
 def verifica_se_tem(linha, a_buscar, logs):
     logs = '  ' + logs
@@ -1136,107 +906,46 @@ def verifica_se_tem(linha, a_buscar, logs):
 
     return lista
 
-def funcao_adicione_na_lista(linha, logs):
+def funcao_adicione_na_lista_na_posicao(variavelLista, posicao, valor, logs):
     logs = '  ' + logs
-    log(logs + 'Função adicione na lista: "{}"'.format(linha))
+    log(logs + '<funcao_adicione_lista> "{}"'.format(variavelLista))
 
-    resto = ''
-    variavelLista = ''
-
-    "1 a lista de nomes"
-    for sub_comando in dic_sub_com["adicionarItensNaListas"]:
-
-        " a lista de "
-        testa = verifica_se_tem(linha, sub_comando[0], logs)
-        if testa != []:
-
-            "1"
-            resto = linha[ : testa[0][0] ].strip()
-
-            "nome"
-            variavelLista = linha[testa[0][1] : ].strip()
-            break
-
-    # Se não estiver na estrutura proposta
-    if resto == '' or variavelLista == '':
+    if variavelLista == '' or posicao == '' or valor == '':
         return [ False, 'Necessário comando separador como " no meio da lista de "', 'string',' exibirNaTela']
 
-    # Analisa se a variável existe de verdade
     teste_existencia = obter_valor_variavel(variavelLista, logs)
-
     if teste_existencia[0] == False:
         return teste_existencia
 
-    # Se a variável não for uma lista
     if teste_existencia[2] != 'lista':
         return[False, 'A variável "{}" não é uma lista.'.format(variavelLista), 'string']
 
-    # Se estiver na posição
-    testa = verifica_se_tem(resto, ' na posicao ', logs)
+    testePosicao = abstrair_valor_linha(posicao, logs)
 
-    " 2 na posicao 4 "
-    if testa != []:
-        "2"
-        valor = resto[ : testa[0][0]].strip()
+    if testePosicao[0] == False:
+        return testePosicao
 
-        "4"
-        posicao = resto[testa[0][1] : ].strip()
+    if testePosicao[2] != 'float':
+        return [False, 'O valor da posição precisa ser numérico',' string', 'exibirNaTela']
 
-        # Obter o valor do 4
-        testePosicao = abstrair_valor_linha(posicao, logs)
+    posicao = int(testePosicao[1])
 
-        # Se deu erro
-        if testePosicao[0] == False:
-            return testePosicao
-
-        "se não for numérico"
-        if testePosicao[2] != 'float':
-            return [False, 'O valor da posição precisa ser numérico',' string', 'exibirNaTela']
-
-        # Converta a posiçãp para inteiro
-        posicao = int(testePosicao[1])
-
-    else: # Se não estiver o na posição
-        valor = resto
-
-    # Verifica se o valor é válido
     teste_valor = abstrair_valor_linha(valor, logs)
-
-    # Se deu algum erro
     if teste_valor[0] == False:
         return teste_valor
 
-    # Verifica se tem o na posição
-    testa = verifica_se_tem(resto, ' na posicao ', logs)
+    if posicao - 1 > len(dic_variaveis[variavelLista][0]):
+        return [False, 'A posição está acima do tamanho da lista', 'string', 'exibirNaTela']
 
-    # Se tem o na posição
-    if testa != []:
-        
-        if posicao - 1 > len(dic_variaveis[variavelLista][0]):
-            return [False, 'A posição está acima do tamanho da lista', 'string', 'exibirNaTela']
+    if posicao < 1 :
+        return [False, 'A posição está abaixo do tamanho da lista', 'string', 'exibirNaTela']
 
-        if posicao < 1 :
-            return [False, 'A posição está abaixo do tamanho da lista', 'string', 'exibirNaTela']
-
-        dic_variaveis[variavelLista][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
-        return [ True, True, 'booleano', 'fazerNada' ]
-
-    # ADICIONAR NO COMEÇO DA LISTA
-    testa  = verifica_se_tem(linha, ' no inicio ', logs)
-    testa2 = verifica_se_tem(linha, ' no comeco ', logs)
-
-    if testa != [] or testa2 != []:
-        dic_variaveis[variavelLista][0].insert(0, [teste_valor[1], teste_valor[2]])
-    else:
-        dic_variaveis[variavelLista][0].append([teste_valor[1], teste_valor[2]])
-
+    dic_variaveis[variavelLista][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
     return [ True, True, 'booleano', 'fazerNada' ]
 
 def obter_valor_lista(linha, logs):
     logs = '  ' + logs
     log(logs + 'obter_valor_lista: "{}"'.format(linha))
-
-    # Ver se a variável está disponível
 
     teste = obter_valor_variavel(linha, logs)
 
@@ -1248,20 +957,10 @@ def obter_valor_lista(linha, logs):
 
     return teste
 
-def funcao_obter_valor_lista(linha, subcomando, logs):
+def funcao_obter_valor_lista(variavel, posicao, logs):
     logs = '  ' + logs
-    log(logs + 'Função Valor de lista: "{}", subcomandos: "{}"'.format(linha, subcomando))
+    log(logs + 'Função Valor de lista: "{}", subcomandos: "{}"'.format(variavel, posicao))
 
-    variavel = ''
-    posicao = ''
-
-    testa = verifica_se_tem(linha, subcomando, logs)
-
-    if testa != []:
-        variavel = linha[ : testa[0][0] ].strip()
-        posicao = linha[ testa[0][1] : ].strip()
-
-    # SE DER ERRO
     if variavel == '' or posicao == '':
         return [ False, 'Sem variavel passada','string','exibirNaTela']
 
@@ -1274,47 +973,26 @@ def funcao_obter_valor_lista(linha, subcomando, logs):
     except:
         return [False, '\'{}\' não é um valor númerico'.format(busca[1]),'string', 'exibirNaTela']
 
-    # Verifica se existe:
-    variavel = variavel.strip()
-
-    # Tentar obter o valor da lista
     teste = obter_valor_lista(variavel, logs)
     if teste[0] == False:
         return [teste[0], teste[1], teste[2], 'exibirNaTela']
 
-    # Obtem os valores da lista
     resultado = teste[1]
 
-    # Se estive fora do escopo
     if len(resultado) < posicao or posicao < 1:
         return [False, 'Posição \'{}\' está fora do escopo da lista {}'.format(posicao, resultado), 'exibirNaTela']
 
-    return [True, resultado[posicao-1][0], resultado[posicao-1][1], 'fazerNada']
+    return [True, resultado[posicao-1][0], resultado[posicao-1][1], 'exibirNaTela']
 
-def funcao_tiver_na_lista(linha, logs):
+def funcao_tiver_na_lista(valor, variavel, logs):
     global dic_variaveis
-    global dic_sub_com
+    
 
     logs = '  ' + logs
-    log(logs + 'Função tiver na lista: "{}"'.format(linha))
-
-    valor = ''
-    variavel = ''
-
-    # "'olá' em nomes"
-    for comando in dic_sub_com['tiverLista']:
-
-        testa = verifica_se_tem(linha, comando[0], logs)
-        if testa != []:
-
-            valor = linha[ : testa[0][0] ].strip()
-            variavel =  linha[ testa[0][1] : ].strip()
-            break
+    log(logs + 'Função tiver na lista: "{}"'.format(valor))
 
     if variavel == '' or valor == '':
         return [False, 'É necessário passar um comando de referência, para indicar o que é valor e o que é variável', 'exibirNaTela']
-
-    variavel = variavel.strip()
 
     teste = obter_valor_variavel(variavel, logs)
 
@@ -1342,7 +1020,6 @@ def funcao_tamanho_da_lista(linha, logs):
 
     linha = linha.strip()
 
-    # Analisa se lista foi decarada e se é lista
     teste = obter_valor_lista(linha, logs)
     if teste[0] == False:
         return [teste[0], teste[1], teste[2], 'exibirNaTela']
@@ -1353,29 +1030,15 @@ def funcao_tamanho_da_lista(linha, logs):
     except Exception as erro:
         return [True, 'Erro ao obter o tamanho da lista. Erro: {}'.format(erro), 'string', 'exibirNaTela']
 
-def funcao_remover_itens_na_lista(linha, logs):
+def funcao_remover_itens_na_lista(valor, variavel, logs):
     global dic_variaveis
-    global dic_sub_com
+    
 
     logs = '  ' + logs
-    log(logs + 'Função remover itens da lista: "{}"'.format(linha))
-
-    valor = ''
-    variavel = ''
-
-    for comando in dic_sub_com['RemoverItensListas']:
-
-        testa = verifica_se_tem(linha, comando[0], logs)
-        if testa != []:
-
-            valor = linha[ : testa[0][0]].strip()
-            variavel = linha[ testa[0][1] : ].strip()
-            break
+    log(logs + 'Função remover itens da lista: "{}"'.format(valor))
 
     if variavel == '' or valor == '':
-        return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
-
-    variavel = variavel.strip()
+        return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Remova 1 a lista de nomes ', 'exibirNaTela']
 
     # Analisa se lista foi decarada e se é lista
     teste = obter_valor_lista(variavel, logs)
@@ -1395,81 +1058,105 @@ def funcao_remover_itens_na_lista(linha, logs):
 
     return [True, None, 'vazio', 'fazerNada']
 
-def funcao_adicionar_itens(linha, logs):
-    # nomes na posicao 1
+def funcao_adicionar_itens_na_lista(valor, variavel, logs):
     global dic_variaveis
-    global dic_sub_com
-
-    logs = '  ' + logs
-    log(logs + 'funcao_adicionar_itens: "{}"'.format(linha))
-
-    variavel = ''
-    resto = ''
-
-    testa = verifica_se_tem(linha, ' na posicao ', logs)
-    if testa != []:
-        variavel = linha[ : testa[0][0] ].strip()
-        resto = linha[ testa[0][1] : ].strip()
-    else:
-        return [False, 'É necessário o comando \" na posicao \"', 'string', 'exibirNaTela']
-
-    if variavel == '' or resto == '':
-        return [False, 'Sem comando de referência', 'string', 'exibirNaTela']
-
-    testa = verifica_se_tem(resto, ' recebe ', logs)
-    if testa != []:
-        posicao = resto[ : testa[0][0]].strip()
-        valor = resto[ testa[0][1] : ].strip()
-    else:
-        return [False, 'É necessário o comando \"recebe\"', 'string', 'exibirNaTela']
-
-    if posicao == '' or resto == '':
-        return [False, 'Sem comando de referência 2', 'string', 'exibirNaTela']
-
-    # VERIFICA SE A LISTA EXISTE
-    listaExiste = obter_valor_lista(variavel, logs)
-    if listaExiste[0] == False:
-        return [listaExiste[0], listaExiste[1], listaExiste[2], 'exibirNaTela']
-
-    # OBTEM O VALOR DA POSICAO
-    obterValor = abstrair_valor_linha(posicao, logs)
-    if obterValor[0] == False:
-        return [obterValor[0], obterValor[0], obterValor[0], 'exibirNaTela']
-
-    else:
-        posicao = int(obterValor[1])
-
-    # POSIÇÃO ESTÁ DENTRO DO INDICE
-    if posicao > len(listaExiste[1]):
-        return [False,'A posição "{}" é maior que a quantidade de itens da lista, que possui "{}" posições'.format(posicao,len(listaExiste[1]))]
-
-    elif posicao < 1:
-        return [False,'A posição "{}" não pode ser menor que zero'.format(posicao)]
-
-    # OBTEM O VALOR DO VALOR
-    obtemValorVariavel = abstrair_valor_linha(valor, logs)
-    if obtemValorVariavel[0] == False:
-        return [obtemValorVariavel[0], obtemValorVariavel[0], obtemValorVariavel[0], 'exibirNaTela']
-    else:
-        valor = obtemValorVariavel[1]
-
-    dic_variaveis[variavel][0][ posicao - 1 ] = [obtemValorVariavel[1], obtemValorVariavel[2]]
-
-    return [True, True, 'booleano','fazerNada']
-
-
-def funcao_declarar_listas_posicoes(linha, logs):
-    #nomes com 5 posicoes"
-    global dic_variaveis
-    logs = '  ' + logs
-    log(logs + 'Função declarar listas posicoes: "{}"'.format(linha))
     
-    testaCom = verifica_se_tem(linha, ' com ', logs)
-    variavel = linha[ : testaCom[0][0]].strip() # nomes
-    linha = linha[testaCom[0][1] : ].strip() #5 posicoes
 
-    testaPosicao = verifica_se_tem(linha, ' posicoes', logs)
-    posicoes = linha[0 :  testaPosicao[0][0]].strip()
+    logs = '  ' + logs
+    log(logs + 'Função remover itens da lista: "{}"'.format(valor))
+
+    if variavel == '' or valor == '':
+        return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
+
+    # Analisa se lista foi decarada e se é lista
+    teste_variavel = obter_valor_lista(variavel, logs)
+    teste_valor = abstrair_valor_linha(valor, logs)
+
+    if teste_variavel[0] == False:
+        return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+
+    if teste_valor[0] == False:
+        return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+
+    try:
+        dic_variaveis[variavel][0].append([teste_valor[1], teste_valor[2]])
+
+    except Exception as erro:
+        return [ False, '"{}" Não está na lista "{}"!'.format(teste_valor[1], variavel), 'string', 'exibirNaTela']
+
+    return [True, None, 'vazio', 'fazerNada']
+
+def funcao_adicionar_itens_na_lista_inicio(valor, variavel, logs):
+    global dic_variaveis
+    
+
+    logs = '  ' + logs
+    log(logs + 'Função remover itens da lista: "{}"'.format(valor))
+
+    if variavel == '' or valor == '':
+        return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
+
+    # Analisa se lista foi decarada e se é lista
+    teste_variavel = obter_valor_lista(variavel, logs)
+    teste_valor = abstrair_valor_linha(valor, logs)
+
+    if teste_variavel[0] == False:
+        return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+
+    if teste_valor[0] == False:
+        return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+
+    try:
+        dic_variaveis[variavel][0].insert(0, [teste_valor[1], teste_valor[2]])
+
+    except Exception as erro:
+        return [ False, '"{}" Não foi possivel inserir o elemento na posição inicial"{}"!'.format(teste_valor[1], variavel), 'string', 'exibirNaTela']
+
+    return [True, None, 'vazio', 'fazerNada']
+
+def funcao_adicionar_itens_na_lista_posicao(valor, posicao, variavel, logs):
+    global dic_variaveis
+    
+
+    logs = '  ' + logs
+    log(logs + 'Função remover itens da lista: "{}"'.format(valor))
+
+    if variavel == '' or valor == '':
+        return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
+
+    # Analisa se lista foi decarada e se é lista
+    teste_variavel = obter_valor_lista(variavel, logs)
+    teste_valor = abstrair_valor_linha(valor, logs)
+    teste_posicao = abstrair_valor_linha(posicao, logs)
+
+    if teste_variavel[0] == False:
+        return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+
+    if teste_valor[0] == False:
+        return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+
+    if teste_posicao[0] == False:
+        return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
+
+    if teste_posicao[2] != 'float':
+        return [False, 'A variável posição não é numérica', 'string', 'exibirNaTela']
+
+    posicao = int(teste_posicao[1])
+
+    if posicao - 1 > len(dic_variaveis[variavel][0]):
+        return [False, 'A posição está acima do tamanho da lista', 'string', 'exibirNaTela']
+
+    if posicao < 1 :
+        return [False, 'A posição está abaixo do tamanho da lista', 'string', 'exibirNaTela']
+
+    dic_variaveis[variavel][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
+    return [ True, True, 'booleano', 'fazerNada' ]
+
+def funcao_declarar_listas_posicoes(variavel, posicoes, logs):
+    # nomes com 5 posicoes"
+    global dic_variaveis
+    logs = '  ' + logs
+    log(logs + 'Função declarar listas posicoes: "{}"'.format(variavel))
 
     # Se a variável estier fora de padrao
     teste = analisa_padrao_variavel(logs, variavel, 'Lista ')
@@ -1490,27 +1177,11 @@ def funcao_declarar_listas_posicoes(linha, logs):
     dic_variaveis[variavel] = [listaItensDeclarar, 'lista']
     return [True, None, 'vazio', 'fazerNada']
 
-
-
-
-def funcao_declarar_listas(linha, logs):
+def funcao_declarar_listas(variavel,itens , logs):
     global dic_variaveis
     logs = '  ' + logs
-    log(logs + 'Função declarar listas: "{}"'.format(linha))
+    log(logs + 'Função declarar listas: "{}"'.format(variavel + str(itens) ))
 
-    variavel = ''
-    itens = ''
-
-    for comando in dic_sub_com['declaraListas']:
-        testa = verifica_se_tem(linha, comando[0], logs)
-        if testa != []:
-
-            variavel = linha[ : testa[0][0] ].strip()
-            itens = linha[ testa[0][1] : ].strip()
-            break
-
-    #     variavel)|        itens
-    # linha 2 nomes|"Mariana", "Alexa", "Maria"
     if itens == '' or variavel == '':
         return [False, 'É necessário um comando de atribuição ao declar uma lista!', 'string', 'exibirNaTela']
 
@@ -1546,15 +1217,16 @@ def funcao_declarar_listas(linha, logs):
             listaItensDeclarar.append([obterValor[1], obterValor[2]])
 
         dic_variaveis[variavel] = [listaItensDeclarar, 'lista']
-        # {'nomes': [[['', 'string'], ['', 'string']], 'lista']}
         return [True, None, 'vazio', 'fazerNada']
 
     else:
         obterValor = abstrair_valor_linha(itens, logs)
         if obterValor[0] == False:
             return [obterValor[0], obterValor[1], obterValor[2], 'exibirNaTela']
+        lista = []
+        lista.append([obterValor[1], obterValor[2]])
 
-        dic_variaveis[variavel] = [[obterValor[1], obterValor[2]], 'lista']
+        dic_variaveis[variavel] = [lista, 'lista']
         return [True, None, 'vazio', 'fazerNada']
 
 def pressionou_enter(event=None):
@@ -1606,242 +1278,175 @@ def funcao_limpar_tela(logs):
     tx_terminal.delete(1.0, END)
     return [True, None, 'vazio','fazerNada']
 
-# repita 10 vezes \n{\nmostre 'oi'\n}
 def funcao_repetir(linha, logs):
-    #print(linha, "LINNHHAAA")
-
     logs = '  ' + logs
     log(logs + 'funcao repetir: "{}"'.format(linha))
 
-    # Remoção de lixo
     linha = linha.replace('vezes', '')
     linha = linha.replace('vez', '')
 
-    # Eliminação de espaços laterais
     linha = linha.strip()
 
-    # Obter o valor da variável
     linha = abstrair_valor_linha(linha, logs)
 
-    # Deu erro?
     if linha[0] == False:
         return [linha[0], linha[1], linha[2], 'exibirNaTela']
 
     if linha[2] != 'float':
         return[False, 'Você precisa passar um número inteiro para usar a função repetir: "{}"'.format(linha), 'string', 'exibirNaTela']
 
-    # É inteiro
     try:
         int(linha[1])
     except:
         return [False, "Para usar a função repetir, você precisa passar um número inteiro. Você passou '{}'".format(linha[1]), 'string', 'exibirNaTela']
     else:
-        #print("Unverse,", int(linha[1]))
         funcao_repita = int(linha[1])
       
-        # Não houve erros e é para repetir
         return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
-# numero aleatório entre 10 e 20
-def funcao_numero_aleatorio(linha, logs):
+def funcao_numero_aleatorio(num1, num2, logs):
+    """
+        numero aleatório entre 10 e 20
+    """
+
     logs = '  ' + logs
-    log(logs + 'funcao aleatório: {}'.format(linha))
+    log(logs + 'funcao aleatório: {}'.format(num1))
 
-    # Remova os espaços da linha
-    linha = linha.strip()
+    # Obtendo ambos os valores
+    num1 = abstrair_valor_linha(num1, logs)
+    num2 = abstrair_valor_linha(num2, logs)
 
-    # Se tiver  e que indica intervalo
-    testa = verifica_se_tem(linha, ' e ', logs)
-    if testa != []:
+    if num1[0] == False:
+        return [num1[0], num1[1], num1[2], 'exibirNaTela']
 
-        # Obtenção dos dois valores
-        num1 = linha[ : testa[0][0]]
-        num2 = linha[ testa[0][1] : ]
+    if num2[0] == False:
+        return [num2[0], num2[1], num2[2], 'exibirNaTela']
 
-        # Obtendo ambos os valores
-        num1 = abstrair_valor_linha(num1, logs)
-        # Se deu para obter o valor do primeiro
-        if num1[0] == False:
-            return [num1[0], num1[1], num1[2], 'exibirNaTela']
+    try:
+        int(num1[1])
+    except:
+        return [False, "O valor 1 não é numérico", 'string', 'exibirNaTela']
 
-        num2 = abstrair_valor_linha(num2, logs)
-        # Se deu erro para obter o valor do segundo
-        if num2[0] == False:
-            return [num2[0], num2[1], num2[2], 'exibirNaTela']
+    try:
+        int(num2[1])
+    except:
+        return [False, "O valor 2 não é numérico", 'string', 'exibirNaTela']
 
-        # Se o primeiro for numéricos
-        try:
-            int(num1[1])
-        except:
-            return [False, "O valor 1 não é numérico", 'string', 'exibirNaTela']
+    n1 = int(num1[1])
+    n2 = int(num2[1])
 
-        # Se o segundo for numéricos
-        try:
-            int(num2[1])
-        except:
-            return [False, "O valor 2 não é numérico", 'string', 'exibirNaTela']
+    if n1 == n2:
+        return [False, "O valor 1 e o valor 2 da função aleatório tem que ser diferentes", 'string', 'exibirNaTela']
+    elif n1 > n2:
+        return [False, "O valor 1 é maior que o valor 2, o valor 1 tem que ser maior", 'string', 'exibirNaTela']
 
-        n1 = int(num1[1])
-        n2 = int(num2[1])
+    return [True, randint(n1, n2), 'float', 'fazerNada']
 
-        if n1 == n2:
-            return [False, "O valor 1 e o valor 2 da função aleatório tem que ser diferentes", 'string', 'exibirNaTela']
-        elif n1 > n2:
-            return [False, "O valor 1 é maior que o valor 2, o valor 1 tem que ser maior", 'string', 'exibirNaTela']
+def funcao_executar_funcoes(nomeDaFuncao, parametros, logs):
+    """
+        calcMedia passando parametros nota1, nota2
+    """
 
-        return [True, randint(n1, n2), 'float', 'fazerNada']
-
-    else:
-        return [False, "Erro, você precisa definir o segundo valor, tipo 'entre 2 e 5'!", 'string', 'exibirNaTela']
-
-# calcMedia passando parametros nota1, nota2
-def funcao_executar_funcoes(linha, logs):
     global dic_funcoes
-
-    logs = '  ' + logs
-    log(logs + 'Executar funções: {}'.format(linha))
-
-    # ATUMAR AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-    chamarFuncoes    = ['passando parametros', 'passando parametro', 'parametros', 'parametro', 'passando']
-
-    nomeDaFuncao = ''
-    parametros = None
-
-    for comando in chamarFuncoes:
-
-        testa = verifica_se_tem(linha, comando, logs)
-        if testa != []:
-            nomeDaFuncao = linha[ : testa[0][0] ].strip()
-            parametros = linha[testa[0][1] : ].strip()
-            break
-
-    if nomeDaFuncao == '':
-        nomeDaFuncao = linha
 
     try:
         dic_funcoes[nomeDaFuncao]
     except:
         return [False, "A função '{}' não existe".format(nomeDaFuncao), 'string', 'exibirNaTela']
-    else:
 
-        testa = verifica_se_tem(parametros, ', ', logs)
-        if testa != []:
-            anterior = 0
-            listaDeParametros = []
+    testa = verifica_se_tem(parametros, ', ', logs)
+    if testa != []:
+        anterior = 0
+        listaDeParametros = []
 
-            for valorItem in testa:
-                if len(parametros[anterior : valorItem[0]]) > 0:
-                    listaDeParametros.append( parametros[anterior : valorItem[0]] )
-                    anterior = valorItem[1]
+        for valorItem in testa:
+            if len(parametros[anterior : valorItem[0]]) > 0:
+                listaDeParametros.append( parametros[anterior : valorItem[0]] )
+                anterior = valorItem[1]
 
-            if len(parametros[anterior : ]) > 0:
-                listaDeParametros.append( parametros[anterior : ] )
+        if len(parametros[anterior : ]) > 0:
+            listaDeParametros.append( parametros[anterior : ] )
 
-            listaFinalDeParametros = []
+        listaFinalDeParametros = []
 
-            for parametro in listaDeParametros:
-                listaFinalDeParametros.append(parametro.strip())
+        for parametro in listaDeParametros:
+            listaFinalDeParametros.append(parametro.strip())
 
-            # Se tiver a mesma quantiade de parametros
-            if len(dic_funcoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
+        # Se tiver a mesma quantiade de parametros
+        if len(dic_funcoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
 
-                for parametroDeclarar in range(len(dic_funcoes[nomeDaFuncao][0])):
-                    resultado = funcao_fazer_atribuicao('{} recebe {} '.format(dic_funcoes[nomeDaFuncao][0][parametroDeclarar], listaFinalDeParametros[parametroDeclarar]), 'recebe', logs)
-
-                    if resultado[0] == False:
-                        return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
-            else:
-                return [False, "A função '{}' tem {} parametros, mas você passou {} parametros!".format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0]), len(listaFinalDeParametros)), 'string', 'fazerNada']
-
-        # Se tiver só um parametro
-        elif parametros != None:
-
-            if len(dic_funcoes[nomeDaFuncao][0]) == 1:
-                resultado = funcao_fazer_atribuicao(
-                    '{} recebe {} '.format(
-                        dic_funcoes[nomeDaFuncao][0], parametros), 'recebe', logs)
+            for parametroDeclarar in range(len(dic_funcoes[nomeDaFuncao][0])):
+                resultado = funcao_fazer_atribuicao(dic_funcoes[nomeDaFuncao][0][parametroDeclarar], listaFinalDeParametros[parametroDeclarar], logs)
 
                 if resultado[0] == False:
                     return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
-            else:
-                return [False, "A função '{}' tem {} parametros, mas você passou 1 parametro!".format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0])), 'string', 'exibirNaTela']
+        else:
+            return [False, "A função '{}' tem {} parametros, 2mas você passou {} parametros!".format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0]), len(listaFinalDeParametros)), 'string', 'fazerNada']
 
-        resultadoOrquestrador = orquestrador_interpretador(
-            dic_funcoes[nomeDaFuncao][1], logs)
+    # Se tiver só um parametro
+    elif parametros != None:
 
-        if resultadoOrquestrador[0] == False:
-            return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
+        if len(dic_funcoes[nomeDaFuncao][0]) == 1:
+            resultado = funcao_fazer_atribuicao(dic_funcoes[nomeDaFuncao][0], parametros, logs)
 
-        return [True, None, 'vazio', 'fazerNada']
+            if resultado[0] == False:
+                return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+        else:
+            return [False, "A função '{}' tem {} parametros, mas você passou 1 parametro!".format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0])), 'string', 'exibirNaTela']
 
-# FUNCAO CALCULAMEDIA RECEBE PARAMENTOS NOTA1, NOTA2
-def funcao_declarar_funcao(linha, logs):
+    resultadoOrquestrador = orquestrador_interpretador( dic_funcoes[nomeDaFuncao][1], logs)
+
+    if resultadoOrquestrador[0] == False:
+        return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
+
+    return [True, None, 'vazio', 'fazerNada']
+
+def funcao_declarar_funcao(nomeDaFuncao, parametros, logs):
+    """
+        FUNCAO CALCULAMEDIA RECEBE PARAMENTOS NOTA1, NOTA2
+    """
+
+    global dic_funcoes
 
     logs = '  ' + logs
-    log(logs + 'Declarar funcoes: {}'.format(linha))
-    recebeParametros = ['recebe parametros', 'recebe']
+    log(logs + 'Declarar funcoes: {}'.format(nomeDaFuncao + str(parametros)))
 
-    for comando in recebeParametros:
+    teste = analisa_padrao_variavel(logs, nomeDaFuncao,'Função')
 
-        testa = verifica_se_tem(linha, comando, logs)
-        if testa != []:
+    if teste[1] != True:
+        return [False, teste[1], teste[2], 'exibirNaTela']
 
-            lista = []
-            anterior = 0
-            for valorItem in testa:
-                if len(linha[ anterior : valorItem[0] ] ) > 0:
-                    lista.append(linha[anterior : valorItem[0]])
-                anterior = valorItem[1]
+    testa = verifica_se_tem(parametros, ', ', logs)
+    if testa != []:
+        listaDeParametros = []
+        anterior = 0
+        for valorItem in testa:
+            if parametros[anterior : valorItem[0]]:
+                listaDeParametros.append(parametros[ anterior : valorItem[0]])
+            anterior = valorItem[1]
 
-            if len( linha[ anterior: ] ) > 0:
-                lista.append(linha[anterior : ])
+        if len( parametros[anterior : ]) > 0:
+            listaDeParametros.append(parametros[ anterior : ])
 
-            nomeDaFuncao = lista[0].strip()
+        listaFinalDeParametros = []
+        for parametro in listaDeParametros:
+            listaFinalDeParametros.append(parametro.strip())
 
-            teste = analisa_padrao_variavel(logs,nomeDaFuncao,'Função')
-
+            teste = analisa_padrao_variavel(logs,parametro.strip(),'Parametro ')
             if teste[1] != True:
                 return [False, teste[1], teste[2], 'exibirNaTela']
 
-            parametros = lista[1].strip()
+        dic_funcoes[nomeDaFuncao] = [listaFinalDeParametros, 'bloco']
 
-            testa = verifica_se_tem(parametros, ', ', logs)
-            if testa != []:
-                listaDeParametros = []
-                anterior = 0
-                for valorItem in testa:
-                    if parametros[anterior : valorItem[0]]:
-                        listaDeParametros.append(parametros[ anterior : valorItem[0]])
-                    anterior = valorItem[1]
+    else:
+        teste = analisa_padrao_variavel(logs,parametros,'Parametro ')
+        if teste[1] != True:
+            return [False, teste[1], teste[2], 'exibirNaTela']
 
-                if len( parametros[anterior : ]) > 0:
-                    listaDeParametros.append(parametros[ anterior : ])
+        dic_funcoes[nomeDaFuncao] = [parametros, 'bloco']
 
-                listaFinalDeParametros = []
-                for parametro in listaDeParametros:
-                    listaFinalDeParametros.append(parametro.strip())
-
-                    teste = analisa_padrao_variavel(logs,parametro.strip(),'Parametro ')
-                    if teste[1] != True:
-                        return [False, teste[1], teste[2], 'exibirNaTela']
-
-                dic_funcoes[nomeDaFuncao] = [listaFinalDeParametros, 'bloco']
-
-            else:
-                teste = analisa_padrao_variavel(logs,parametros,'Parametro ')
-                if teste[1] != True:
-                    return [False, teste[1], teste[2], 'exibirNaTela']
-
-                dic_funcoes[nomeDaFuncao] = [parametros, 'bloco']
-
-            funcao_em_analise = nomeDaFuncao
-
-            return [True, True, 'booleano', 'declararFuncao',funcao_em_analise]
-
-    dic_funcoes[linha.strip()] = ['', 'bloco']
-    funcao_em_analise = linha.strip()
-
-    return [True, True, 'booleano', 'declararFuncao', funcao_em_analise]
+    funcao_em_analise = nomeDaFuncao
+    return [True, True, 'booleano', 'declararFuncao',funcao_em_analise]
 
 def funcao_exibir(linha, logs):
     logs = '  ' + logs
@@ -1852,17 +1457,8 @@ def funcao_exibir(linha, logs):
     if resultado[0] == False:
         return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
 
-    lista = []
-    # Se for lista
-    if resultado[2] == 'lista':
-        # Ande pelos valores
-        for value in resultado[1]:
-            lista.append(value[0])
-    else:
-        lista = resultado[1]
-
     ''' | sucesso | saida | tipoSaida | ordem | '''
-    return [resultado[0],lista, resultado[2],'exibirNaTela']
+    return [resultado[0],resultado[1], resultado[2],'exibirNaTela']
 
 def funcao_exibir_na_linha(linha, logs):
     logs = '  ' + logs
@@ -1874,41 +1470,29 @@ def funcao_exibir_na_linha(linha, logs):
     if resultado[0] == False:
         return resultado
 
-    "------[---sucesso---,---------------saida--------------,--tipoSaida--,------ação------]"
     return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
-def funcao_tempo(codigo, logs):
-    global dic_sub_com
+def funcao_tempo(tempo, tipo_espera, logs):
 
     logs = '  ' + logs
-    log(logs + 'Função tempo: {}'.format(codigo))
-    codigo = codigo.strip()
+    log(logs + 'Função tempo: {}'.format(tempo))
 
-    for comando in  dic_sub_com['esperaEm']:
+    resultado = abstrair_valor_linha(tempo, logs)
+    if resultado != False:
 
-        if len(comando[0]) < len(codigo):
+        if tipo_espera == "segundos" or tipo_espera == "s" or tipo_espera == "segundo":
+            sleep(resultado[1])
+            return [True, None, 'vazio', 'fazerNada']
 
-            if comando[0] == codigo[len(codigo)-len(comando[0]):]:
+        elif tipo_espera == "milisegundos" or tipo_espera == "ms" or tipo_espera == "milisegundo":
+            sleep(resultado[1]/1000)
+            return [True, None, 'vazio', 'fazerNada']
 
-                resultado = abstrair_valor_linha(
-                    codigo[:len(codigo)-len(comando[0])], logs)
-
-                if resultado != False:
-
-                    if comando[0] == " segundos" or comando[0] == " s" or comando[0] == " segundo":
-                        sleep(resultado[1])
-                        return [True, None, 'vazio', 'fazerNada']
-
-                    elif comando[0] == " milisegundos" or comando[0] == " ms" or comando[0] == "milisegundo":
-                        sleep(resultado[1]/1000)
-                        return [True, None, 'vazio', 'fazerNada']
-
-                else:
-                    return [False, 'Erro ao obter um valor no tempo', 'string', 'exibirNaTela']
+    else:
+        return [False, 'Erro ao obter um valor no tempo', 'string', 'exibirNaTela']
 
     return [True, None, 'vazio', 'fazerNada']
 
-# A STRING DEVE ESTAR CRUA
 def obter_valor_string(string, logs):
 
     logs = '  ' + logs
@@ -1928,8 +1512,6 @@ def obter_valor_string(string, logs):
             abstrair[1]) + string[valor.start()+1:valor.end()-1]
         anterior = valor.end()
 
-    # Capturar o resto
-
     abstrair = abstrair_valor_linha(string[anterior:], logs)
     if abstrair[0] == False:
         return abstrair
@@ -1941,7 +1523,7 @@ def obter_valor_string(string, logs):
 def localiza_transforma_variavel(linha, logs):
     logs = '  ' + logs
     log(logs + 'Encontrar e transformar dic_variaveis: {}'.format(linha))
-    # Abstração de variáveis
+
     anterior = 0
     normalizacao = 0
     linha_base = linha
@@ -1972,8 +1554,10 @@ def localiza_transforma_variavel(linha, logs):
 
     return [True, linha, 'string']
 
-# A string deve estar crua
 def fazer_contas(linha, logs):
+    """
+        A string deve estar crua
+    """
     logs = '  ' + logs
     log(logs + 'Fazer contas: {}'.format(linha))
 
@@ -1993,7 +1577,6 @@ def fazer_contas(linha, logs):
         # Não mude esse texto
         return [False, "Isso é uma string", 'string']
 
-    # Removendo os espaços laterais
     linha = ' {} '.format(linha)
 
     simbolosEspeciais = ['+', '-', '*', '/', '%', '(', ')']
@@ -2011,7 +1594,7 @@ def fazer_contas(linha, logs):
     if qtd_simbolos_especiais == 0:
         return [False, "Não foi possivel realizar a conta, porque não tem nenhum valor aqui. ", 'string']
 
-    # Correção do potenciação
+    # Correção de caracteres
     linha = linha.replace('*  *', '**')
     linha = linha.replace('< =', '<=')
     linha = linha.replace('> =', '>=')
@@ -2042,7 +1625,7 @@ def obter_valor_variavel(variavel, logs):
     log(logs + 'Obter valor da variável: "{}"'.format(variavel))
 
     global dic_variaveis
-    global dic_com
+    
     variavel = variavel.strip()
 
     variavel = variavel.replace('\n', '')
@@ -2050,54 +1633,36 @@ def obter_valor_variavel(variavel, logs):
     try:
         dic_variaveis[variavel]
     except:
-        return [False, "Você precisa definir a variável '{}'".format(variavel), 'string']
+        return [False, "Você precisa definir a variável '{}'".format(variavel), 'string', 'fazerNada']
     else:
-        return [True, dic_variaveis[variavel][0], dic_variaveis[variavel][1]]
+        return [True, dic_variaveis[variavel][0], dic_variaveis[variavel][1], 'fazerNada']
 
 def comandos_uso_geral(possivelVariavel, logs):
     logs = '  ' + logs
+    log(logs + 'comandos_uso_geral: >{}<'.format(possivelVariavel))
+
     possivelVariavel = str(possivelVariavel).strip()
-    log(logs + '>>Obter comando digitado ou aleatório: {}'.format(possivelVariavel))
 
-    # Entradas
-    for comandoDigitado in dic_com['digitado']:
+    analisa = analisa_instrucao('^(<digitado>)$', possivelVariavel, grupos_analisar = [1])
+    if analisa != False:
+        return funcao_digitado(analisa[0], logs)
 
-        if len(comandoDigitado[0]) <= len(possivelVariavel):
-            if possivelVariavel == comandoDigitado[0]:
-                resultado = funcao_digitado(comandoDigitado[0], logs)
-                return resultado
+    analisa = analisa_instrucao('^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$',  possivelVariavel, grupos_analisar = [2, 4])
+    if analisa != False:
+        return funcao_numero_aleatorio(analisa[0], analisa[1], logs)
 
-    # Aleatório
-    for comandoAleatorio in dic_com['aleatorio']:
+    analisa = analisa_instrucao('^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel, grupos_analisar = [2, 4])
+    if analisa != False:
+        return funcao_obter_valor_lista(analisa[0], analisa[1], logs)
 
-        if len(comandoAleatorio[0]) <= len(possivelVariavel):
+    analisa = analisa_instrucao('^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel, grupos_analisar = [2, 4])
+    if analisa != False:
+        return funcao_tiver_na_lista(analisa[0],analisa[1], logs)
 
-            if possivelVariavel[0:len(comandoAleatorio[0])] == comandoAleatorio[0]:
-                resultado = funcao_numero_aleatorio(
-                    possivelVariavel[len(comandoAleatorio[0]):], logs)
-                return resultado
+    analisa = analisa_instrucao('^(<tamanhoDaLista>)(.*)$', possivelVariavel, grupos_analisar = [2])
+    if analisa != False:
+        return funcao_tamanho_da_lista(analisa[0], logs)
 
-    # Listas
-    for comando in dic_sub_com['acesarListas']:
-        testa2 = verifica_se_tem(possivelVariavel, comando[0], logs)
-        if testa2 != []:
-            teste = funcao_obter_valor_lista(possivelVariavel, comando[0], logs)
-            return teste
-
-    # Comando tiver
-    resultado = tiver_valor_lista(possivelVariavel,logs)
-    if resultado[0] == True and resultado[1] != None:
-        return [True, resultado[1],resultado[2]]
-
-    # Tamanho da lista
-    for comando in dic_com['tamanhoDaLista']:
-
-        testa = verifica_se_tem(possivelVariavel, comando[0], logs)
-        if testa != []:
-            if comando[0] == possivelVariavel[0:len(comando[0])]:
-                return funcao_tamanho_da_lista(possivelVariavel[len(comando[0]):], logs)
-
-    # Não é nem um e nem o outro
     return [True, None, 'vazio']
 
 # Os valores aqui ainda estão crus, como: mostre "oi", 2 + 2
@@ -2145,13 +1710,10 @@ def abstrair_valor_linha(possivelVariavel, logs):
     if possivelVariavel == '':
         return [True, possivelVariavel, 'string']
 
-    # ========== FAZER CONTAS  ================== #
     resultado = fazer_contas(possivelVariavel, logs)
     if resultado[0] == True:
         return resultado
-    # ========== FAZER CONTAS  ================== #
 
-    # ========== COMANDOS DIVERSOS  ================== #
     resultado = comandos_uso_geral(possivelVariavel, logs)
 
     if resultado[0] == True and resultado[1] != None:
@@ -2160,7 +1722,6 @@ def abstrair_valor_linha(possivelVariavel, logs):
     # Era um digitado ou aleatório, mas deu errado
     elif resultado[0] == False:
         return resultado
-    # =========  COMANDOS DIVERSOS  =========== #
 
     testa = verifica_se_tem(possivelVariavel, '"', logs)
     if testa != []:
@@ -2175,7 +1736,7 @@ def abstrair_valor_linha(possivelVariavel, logs):
         return [True, float(possivelVariavel), 'float']
 
 def analisa_padrao_variavel(logs,variavelAnalise, msg):
-    # ANALISE ESSE NEGÓCIO DIREITO
+    # ANALISE ESSE NEGÓCIO DIREITO MEU FI
     variavel = variavelAnalise
     logs = '  ' + logs
 
@@ -2190,17 +1751,11 @@ def analisa_padrao_variavel(logs,variavelAnalise, msg):
 
     return [True,True,'booleano']
 
-def funcao_fazer_atribuicao(linha, comando, logs):
+def funcao_fazer_atribuicao(variavel, valor, logs):
     global dic_variaveis
 
     logs = '  ' + logs
-    log(logs + 'Função atribuição: {}'.format(linha))
-
-    testa = verifica_se_tem(linha, comando, logs)
-    if testa != []:
-
-        variavel = linha[ : testa[0][0] ].strip()
-        valor = linha[ testa[0][1] : ].strip()
+    log(logs + 'Função atribuição: {}'.format(variavel + str(valor)))
 
     if variavel == '' or valor == '':
         return [False, 'É necessario cum comando de atribuição', 'string', 'exibirNaTela']
@@ -2231,16 +1786,14 @@ def funcao_loops_enquanto(linha, logs):
 
     return [resultado[0], resultado[1], resultado[2], 'declararLoop']
 
-def tiver_valor_lista(linha,logs):
+def tiver_valor_lista(linha, logs):
     linha = linha.strip()
     logs = '  ' + logs
     log(logs + 'Função condicional: {}'.format(linha))
 
-    for comando in dic_com['tiverLista']:
-
-        if comando[0] in linha:
-            if comando[0] == linha[0:len(comando[0])]:
-                return funcao_tiver_na_lista(linha[len(comando[0]):], logs)
+    analisa = analisa_instrucao('^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha, grupos_analisar = [2, 4])
+    if analisa != False:
+        return funcao_tiver_na_lista(analisa[0],analisa[1], logs)
 
     return [True,None,'booleano']
 
@@ -2268,7 +1821,6 @@ def funcao_condicional(linha, logs):
 
     simbolosEspeciais = ['>=', '<=', '!=', '>', '<', '==', '(', ')',' and ', ' or ',' tiver ']
 
-    # Quantidade de simbolos localizados
     qtd_simbolos_especiais = 0
 
     # Deixando todos os itens especiais com espaço em relação aos valores
@@ -2277,7 +1829,6 @@ def funcao_condicional(linha, logs):
         # Se tiver o simbolo especial na linha, some +1
         if item in linha:
 
-            # Aumente a quantidade de simbolos registrados
             qtd_simbolos_especiais += 1
 
             # Adiciona espaço para cada simbolos
@@ -2294,10 +1845,7 @@ def funcao_condicional(linha, logs):
     linha = linha.replace('! =', '!=')
     linha = linha.replace('   tiver   ',' tiver ')
 
-    # Remoçãp das linhas laterais
     linha = linha.strip()
-
-    # Obter valor de cada valor
     simbolosArrumados = [' >= ', ' <= ', ' != ', ' > ', ' < ', ' == ', ' ( ', ' ) ',' and ', ' or ']
 
     # Marcar os simbolos para correta captura do regex
@@ -2373,7 +1921,7 @@ def funcao_condicional(linha, logs):
         return [False, "Não foi possivel realizar a condicao |{}|".format(final), 'string', 'exibirNaTela']
 
     else:
-        return [True, resutadoFinal, 'booleano', 'fazerNada']
+        return [True, resutadoFinal, 'booleano', 'declararCondicional']
 
 def modoFullScreen(event=None):
     global bool_tela_em_fullscreen
@@ -2396,17 +1944,15 @@ def on_closing(event=None):
     while numeros_thread_interpretador != 0:
         tela.update()
         sleep(0.1)
-        print("Tentando para interpretador: ",numeros_thread_interpretador)
 
     top_janela_terminal.destroy()
-    print('Fechou!')
 
 def inicializador_terminal():
     global tx_terminal
     global top_janela_terminal
 
     top_janela_terminal = Toplevel(tela)
-    top_janela_terminal.protocol("WM_DELETE_WINDOW", on_closing)
+    #top_janela_terminal.protocol("WM_DELETE_WINDOW", on_closing)
     top_janela_terminal.grid_columnconfigure(1, weight=1)
     top_janela_terminal.rowconfigure(1, weight=1)
     top_janela_terminal.geometry("720x450+150+150")
@@ -2425,7 +1971,6 @@ def inicializador_terminal():
 def atualizarListaDeScripts():
     for file in listdir('scripts/'):
         if len(file) > 5:
-
             if file[-3:] == 'fyn':
                 menu_arquivo_cascate.add_command(
                     label=file, command= lambda link = file: abrirArquivo(
@@ -2434,7 +1979,6 @@ def atualizarListaDeScripts():
 def atualizarListaTemas():
     for file in listdir('temas/'):
         if len(file) > 11:
-
             if file[-10:] == 'theme.json':
                 menu_interface_cascate_temas.add_command(
                     label=file,
@@ -2481,10 +2025,10 @@ def arquivoConfiguracao(chave, novo = None):
 def atualizaInterface(chave, novo):
     global tela
     global tx_codificacao
-    global dic_sub_com
-    global dic_com
+    
+    
     global dic_design
-    global cor_da_sintaxe
+    global cor_do_comando
 
     try:
         arquivoConfiguracao(chave, novo)
@@ -2492,10 +2036,10 @@ def atualizaInterface(chave, novo):
     except Exception as e:
         return [None,'Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas']
 
-    dic_sub_com, dic_com, dic_design, cor_da_sintaxe = atualiza_configuracoes_temas()
+    dic_comandos, dic_design, cor_do_comando = atualiza_configuracoes_temas()
     try:
         atualiza_design_interface()
-        atualiza_cor_sintaxe(None, fazer = 'nada')
+        coordena_coloracao(None, fazer = 'nada')
     except Exception as erro:
         print('ERRO: ', erro)
     else:
@@ -2748,7 +2292,6 @@ menu_sobre.add_command(label='  Projeto', command= lambda event = None: webbrows
 
 menu_desenvolvedor.add_command(label='  Logs')
 
-
 # OPÇÕES RÁPIDAS
 fr_opcoes_rapidas = Frame(tela)
 fr_opcoes_rapidas.grid(row = 1, column =1, sticky=NSEW, columnspan=2)
@@ -2825,7 +2368,7 @@ scrollbar_text.config(command = tx_codificacao.yview)
 
 tx_codificacao.focus_force()
 #tx_codificacao.bind('<Configure>', configuracoes )
-tx_codificacao.bind('<KeyRelease>', atualiza_cor_sintaxe)
+tx_codificacao.bind('<KeyRelease>', coordena_coloracao)
 tx_codificacao.grid(row=1, column=2, sticky=NSEW)
 scrollbar_text.grid(row=1, column=3, sticky=NSEW)
 
@@ -2840,7 +2383,7 @@ tx_pesquisa.grid(row=0, column=1, sticky = NSEW)
 
 atualiza_design_interface()
 
-#abrirArquivo('listaPosicoes.fyn')
+#abrirArquivo('programa_teste.fyn')
 
 tela_ajuda("")
 

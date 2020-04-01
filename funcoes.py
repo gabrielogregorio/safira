@@ -7,10 +7,9 @@ def abrir_arquivo(filename):
         arquivo.close()
 
     except Exception as erro:
-        # Texto, erro
         return [None, str(erro)]
+
     else:
-        # Texto, erro
         return [text, None]
 
 def carregar_json(arquivo):
@@ -21,24 +20,15 @@ def carregar_json(arquivo):
     return dic_json
 
 def atualiza_configuracoes_temas():
-    dicionario_sub_comandos = None
     dicionario_comandos = None
     dicionario_design = None
     cor_da_sintaxe = None
 
-    # CARREGAMENTO DOS COMANDOS DA LINGUAGEM
     try:
         with open('configuracoes/comandos.json', encoding='utf8') as json_file:
             dicionario_comandos = load(json_file)
     except Exception as e1:
         print('Erro ao carregar o arquivo \'configuracoes/comandos.json\':',e1)
-
-    # CARREGAMENTO DOS COMANDOS DENTRO DOS COMANDOS
-    try:
-        with open('configuracoes/subcomandos.json', encoding='utf8') as json_file:
-            dicionario_sub_comandos = load(json_file)
-    except Exception as e2:
-        print('Erro ao carregar o arquivo \'configuracoes/subcomandos.json\':',e2)
 
     # BUSCA PELAS CONFIGURAÇÕES DO PROGRAMA
     try:
@@ -65,4 +55,4 @@ def atualiza_configuracoes_temas():
     except Exception as e1:
         print('Erro ao carregar o arquivo \'configuracoes/configuracoes.json\':',e1)
 
-    return [dicionario_sub_comandos, dicionario_comandos, dicionario_design, cor_da_sintaxe]
+    return [dicionario_comandos , dicionario_design, cor_da_sintaxe]
