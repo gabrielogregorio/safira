@@ -2327,7 +2327,7 @@ def obterPosicaoDoCursor(event=None):
 
 tx_codificacao.bind('<Configure>', configuracoes )
 tx_codificacao.bind('<Button>', obterPosicaoDoCursor)
-#tx_codificacao.bind('<KeyRelease>', coordena_coloracao)
+tx_codificacao.bind('<KeyRelease>', coordena_coloracao)
 tx_codificacao.grid(row=1, column=2, sticky=NSEW)
 scrollbar_text.grid(row=1, column=3, sticky=NSEW)
 
