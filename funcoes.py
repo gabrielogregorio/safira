@@ -12,6 +12,13 @@ def abrir_arquivo(filename):
     else:
         return [text, None]
 
+def salvar_arquivo(arquivo, texto):
+
+    arquivo = open(arquivo, 'w', encoding='utf8')
+    arquivo.write(texto)
+    arquivo.close()
+
+
 def carregar_json(arquivo):
 
     with open(arquivo, encoding='utf8') as json_file:
