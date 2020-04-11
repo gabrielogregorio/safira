@@ -6,6 +6,9 @@ class Colorir():
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
         self.tx_codfc = None
+        
+    def alterar_cor_comando(self, novo_cor_do_comando):
+        self.cor_do_comando = novo_cor_do_comando
 
     def realiza_coloracao(self, palavra, linha, valor1, valor2, cor):
         """
@@ -110,3 +113,5 @@ class Colorir():
 
         except Exception as erro:
             print("Erro ao atualizar coloracao", erro)
+
+        return tx_codfc

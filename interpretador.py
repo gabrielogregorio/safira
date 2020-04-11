@@ -1,10 +1,19 @@
+__author__      = 'Gabriel Gregório da Silva'
+__email__       = 'gabriel.gregorio.1@outlook.com'
+__project__     = 'Combratec'
+__github__      = 'https://github.com/Combratec/'
+__description__ = 'Interpretador de comandos'
+__status__      = 'Desenvolvimento'
+__version__     = '0.1'
+
 from re import findall, finditer
 from tkinter import END
 from random import randint
+from time import sleep
 import funcoes
 
 class Run():
-    def __init__(self, terminal, tx_codficac, bool_logs = False):
+    def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
         self.aconteceu_erro = False
         self.erro_alertado = False
         self.esperar_pressionar_enter = False
@@ -16,7 +25,14 @@ class Run():
         self.bool_logs = bool_logs
         self.tx_codficac = tx_codficac
         self.dic_comandos = funcoes.carregar_json('configuracoes/comandos.json')
+        self.lst_breakpoints = lst_breakpoints
+        self.bool_break_point_liberado = None
+        self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
 
+    def aguardar_liberacao_breakPoint(self):
+        self.bool_break_point_liberado = False
+        while not self.bool_break_point_liberado and not self.bool_ignorar_todos_breakpoints:
+            pass
 
     def realiza_coloracao_erro(self, palavra, valor1, valor2, cor='red', linhaErro = None):
         """
@@ -35,7 +51,7 @@ class Run():
         if linhaErro != None:
 
             lista = self.tx_codficac.get(1.0, END).split("\n")
-            
+
             palavra = "**_erro_alertado_**"
             linha1 = str(linhaErro) + ".0"
             linha2 = str(linhaErro) + "." + str(len(lista[int(linhaErro) - 1]))
@@ -57,7 +73,7 @@ class Run():
             Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
-        
+
         try:
             if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
                 self.tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1][len(":nessaLinha:"):]))
@@ -70,7 +86,7 @@ class Run():
             print('ERRO:', erro)
             return [[False, 'indisponibilidade_terminal', 'string','exibirNaTela'], "1"]
 
-    def orquestrador_interpretador(self, txt_codigo):        
+    def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
 
         self.boo_orquestrador_iniciado = True
@@ -88,7 +104,7 @@ class Run():
 
         int_profundidade = 0
         for int_cont, caractere in enumerate(txt_codigo):
-            
+
             dois_caracteres = txt_codigo[int_cont : int_cont + 2]
 
             # Ignorar tudo entre /**/
@@ -98,7 +114,6 @@ class Run():
 
             if bool_comentario_longo and txt_codigo[int_cont - 2:int_cont] == '*/':
                 bool_comentario_longo = False
-              
             if bool_comentario_longo:
                 continue
 
@@ -288,7 +303,6 @@ class Run():
             return False
 
         dic_options = {}
-       
         # Anda pelos grupos <se>, <esperar>
         for grupo in re_groups:
 
@@ -304,7 +318,6 @@ class Run():
                     dic_options[grupo] = dic_options[grupo] +"|" + str(txt_comando_analisar)
                 except Exception as err:
                     dic_options[grupo] = txt_comando_analisar
-     
         for k,v in dic_options.items():
             v_add = v.replace(' ','\\s{1,}')
 
@@ -322,7 +335,7 @@ class Run():
         lista_itens = list(re_texto[0])
         lista_itens.insert(0, "")
 
-        return lista_itens
+        return [ saida.strip() for saida in lista_itens]
 
     def interpretador(self, linha):
         Run.log(self, 'Interpretador iniciado')
@@ -352,11 +365,12 @@ class Run():
                 linha = linha.strip()
                 break
 
+            # Se estiver em um breakpoint, aguarde.
+            if int(num_linha) in self.lst_breakpoints:
+                Run.aguardar_liberacao_breakPoint(self)
+
             if linha == '':
                 return [[True, None, 'vazio','linhaVazia'], "1"]
- 
-
-
 
             analisa = Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
             if analisa: return [ Run.funcao_limpar_tela(self, ), num_linha ]
@@ -393,7 +407,7 @@ class Run():
 
             analisa = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
             if analisa: return [ Run.funcao_declarar_listas_posicoes(self, analisa[2], analisa[4]), num_linha ]
- 
+
             analisa = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa: return [ Run.funcao_declarar_listas(self, analisa[2], analisa[4]), num_linha ]
 
@@ -405,7 +419,7 @@ class Run():
 
             analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
             if analisa: return [ Run.funcao_adicionar_itens_na_lista(self, analisa[2], analisa[4]), num_linha ]
-                
+
             analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
             if analisa: return [ Run.funcao_adicionar_itens_na_lista_inicio(self, analisa[2], analisa[4]), num_linha ]
 
@@ -527,7 +541,6 @@ class Run():
 
         if posicao < 1 :
             return [False, 'A posição está abaixo do tamanho da lista', 'string', 'exibirNaTela']
-
 
         self.dic_variaveis[variavelLista][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
         return [ True, True, 'booleano', 'fazerNada' ]
@@ -848,7 +861,6 @@ class Run():
             return [False, "Para usar a função repetir, você precisa passar um número inteiro. Você passou '{}'".format(linha[1]), 'string', 'exibirNaTela']
         else:
             funcao_repita = int(linha[1])
-          
             return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
     def funcao_numero_aleatorio(self, num1, num2):
@@ -1002,6 +1014,7 @@ class Run():
         return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
     def funcao_tempo(self, tempo, tipo_espera):
+        print(tipo_espera)
         Run.log(self, 'Função tempo: {}'.format(tempo))
 
         resultado = Run.abstrair_valor_linha(self, tempo)
@@ -1139,7 +1152,6 @@ class Run():
 
     def obter_valor_variavel(self, variavel):
         Run.log(self, 'Obter valor da variável: "{}"'.format(variavel))
-        
         variavel = variavel.strip()
         variavel = variavel.replace('\n', '')
 

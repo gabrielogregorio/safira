@@ -5,27 +5,28 @@ remova "Mariana" da lista de nomes
 mostre "Removendo a Mariana: ", nomes
 
 mostre "Qtd lista: ", tamanho da lista nomes
-
+   
 adicione "Juno" a lista de nomes
 mostre "Adicionando Juno: ", nomes
 
 adicione "Matos" na posicao 2 da lista de nomes
 mostre "Adicionando Matosna posicao 2: ", nomes
 
-lista de nomes na posicao 2 recebe "Lili"
-mostre "Adicionando Lili na posicao 2: ", nomes
+lista de nomes na posicao 2 recebe "qww"
+
+mostre "add" , nomes
 
 mostre nessa linha "Digite seu nome: "
 nome recebe o que o usuario digitar
 
 limpatela 
 
-funcao calculaMedia recebe parametros num1, num2 
-{
+funcao calculaMedia recebe parametros num1, num2 {
    mostre "A média é: ", (num1 + num2) / 2
 }
 
-se nome for igual a "Alexa" e  tiver "Alexa" na lista de nomes
+temanalisa = tiver "Alexa" na lista de nomes
+se nome for igual a "Alexa" e  temanalisa 
 {
   mostre "Linguagem mostre Fynman Alexa!"
   espere 1 segundos
@@ -33,12 +34,10 @@ se nome for igual a "Alexa" e  tiver "Alexa" na lista de nomes
 
 contador recebe 0
 
-enquanto contador for menor que 10 
-{
+enquanto contador for menor que 10 {
   mostre "Contador vale: ", contador
   incremente 1 no contador
-  quando contador for igual a 5
-  {
+  quando contador for igual a 5 {
       contador = 10
   }
 }
@@ -48,18 +47,18 @@ decremente 1 no contador
 mostre contador, "Depois"
 
 andante recebe 1
-enquanto andante for menor ou igual a tamanho da lista nomes
-{
-  lista de nomes na posicao andante recebe "nome "
-   andante recebe andante mais 1
+enquanto andante for menor ou igual a tamanho da lista nomes {
+    se andante for igual a 1000 {
+        andante = 100000
+    }
+    incremente 1 em andante
 }
 mostre "Nomes substituido vale: ", nomes
 
 y recebe  numero aleatorio entre  2 e 5
 mostre "Numero aleatório escolhido foi: ", y
 
-repita y vezes
-{
+repita y vezes {
   mostre y
 }
 
