@@ -56,20 +56,39 @@ global top_janela_terminal
 global posCorrente
 global posAbsuluta
 global instancia
-global lst_breakpoints
+global linha_para_break_point
+global dic_abas
+global lst_abas
+global fr_abas
+global aba_focada
+aba_focada = 1
+
+linha_para_break_point = 0
+lst_abas = []
 
 bool_tela_em_fullscreen = False
 lst_titulos_frames = []
-dic_info_arquivo = {'link': None,'texto': None}
+
 posAbsuluta = 0
 posCorrente = 0
 path = abspath(getcwd())
 dic_comandos, dic_design, cor_do_comando = funcoes.atualiza_configuracoes_temas()
 colorir_codigo = Colorir(cor_do_comando, dic_comandos)
-lst_breakpoints = [] # linhas com breakpoint
+
+
+dic_abas = {
+    1:{
+        "nome":"",
+        "foco":True,
+        "lst_breakpoints":[],
+        "arquivoSalvo":{'link': "",'texto': ""},
+        "arquivoAtual":{'texto': ""}
+    }
+}
 
 def salvar_arquivo_como_dialog(event = None):
-    global dic_info_arquivo
+    global dic_abas
+    global aba_focada
 
     opt = {
     }
@@ -79,26 +98,30 @@ def salvar_arquivo_como_dialog(event = None):
                                    title = "Selecione o script",
                                    filetypes = (("Meus scripts", "*.fyn"), ("all files", "*.*")))
 
-    lnk_arquivo_salvar = str(arq.name)
+
 
     if arq is None:
         return None
 
+    lnk_arquivo_salvar = str(arq.name)
+
     arq.close()
 
-    text2save = str(tx_codfc.get(1.0, END))
+    text2save = str(tx_codfc.get(1.0, END))[0:-1]
     try:
         arq = open(lnk_arquivo_salvar, 'w', encoding='utf8')
-        arq.write(text2save[0:-1])
+        arq.write(text2save)
         arq.close()
 
     except Exception as erro:
         messagebox.showinfo('Erro', 'Erro ao salvar programa, erro: {}'.format(erro))
 
     else:
-        dic_info_arquivo['link'] = arq.name
-        dic_info_arquivo['texto'] = text2save
-
+        dic_abas[aba_focada]["arquivoSalvo"]['link'] = arq.name
+        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = text2save
+        dic_abas[aba_focada]["arquivoAtual"]['texto'] = text2save
+        renderizar_aba(dic_abas)
+        
         return arq.name
 
 def salvar_arquivo(event=None):
@@ -106,34 +129,38 @@ def salvar_arquivo(event=None):
     Salva um arquivo que já está aberto
     """
 
-    global dic_info_arquivo
-
-    if dic_info_arquivo['link'] == None:
+    global dic_abas
+    global aba_focada
+    if dic_abas[aba_focada]["arquivoSalvo"]['link'] == "":
         salvar_arquivo_como_dialog()
 
     else:
-        programaCodigo = tx_codfc.get(1.0, END)
+        programaCodigo = tx_codfc.get(1.0, END)[0:-1]
 
-        if dic_info_arquivo['texto'] == programaCodigo:
+        if dic_abas[aba_focada]["arquivoSalvo"]['texto'] == programaCodigo:
             print(" Programa não sofreu modificações para ser salvo novamente....")
 
         else:
             try:
-                funcoes.salvar_arquivo(arquivo = dic_info_arquivo['link'], texto = programaCodigo[0:-1])
+                funcoes.salvar_arquivo(arquivo = dic_abas[aba_focada]["arquivoSalvo"]['link'], texto = programaCodigo[0:-1])
 
             except Exception as erro:
                 messagebox.showinfo('Erro', 'Não foi possível salvar essa versão do código, erro: {}'.format(erro))
 
             else:
-                dic_info_arquivo['texto'] = programaCodigo
-
+                dic_abas[aba_focada]["arquivoSalvo"]['texto'] = programaCodigo
+                dic_abas[aba_focada]["arquivoAtual"]['texto'] = programaCodigo
+                renderizar_aba(dic_abas)
+                    
 def salvar_arquivo_dialog(event=None):
-    global dic_info_arquivo
+    global dic_abas
+    global aba_focada
     global tx_codfc
 
     arq_tips = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]
     arq_dial = filedialog.Open(filetypes = arq_tips)
     arq_nome = arq_dial.show()
+
 
     if arq_nome == ():
         print(' Nenhum arquivo escolhido')
@@ -151,11 +178,14 @@ def salvar_arquivo_dialog(event=None):
 
         colorir_codigo.coordena_coloracao(None,tx_codfc = tx_codfc)
 
-        dic_info_arquivo['link'] = arq_nome
-        dic_info_arquivo['texto'] = arq_txts[0]
-
+        dic_abas[aba_focada]["arquivoSalvo"]['link'] = arq_nome
+        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = arq_txts[0]
+        dic_abas[aba_focada]["arquivoAtual"]['texto'] = arq_txts[0]
+        renderizar_aba(dic_abas)
+        
 def abrirArquivo(link):
-    global dic_info_arquivo
+    global dic_abas
+    global aba_focada
     global tx_codfc
 
     print(' Abrindo arquivo "{}" escolhido'.format(link))
@@ -168,8 +198,11 @@ def abrirArquivo(link):
 
         colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc)
 
-        dic_info_arquivo['link'] = link
-        dic_info_arquivo['texto'] = arq[0]
+        dic_abas[aba_focada]["arquivoSalvo"]['link'] = link
+        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = arq[0]
+        dic_abas[aba_focada]["arquivoAtual"]['texto'] = arq[0]
+
+        renderizar_aba(dic_abas)
 
     else:
         if "\'utf-8' codec can\'t decode byte" in arq[1]:
@@ -184,7 +217,8 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
     global tx_codfc
     global instancia
     global tx_terminal
-    global lst_breakpoints
+    global dic_abas
+    global aba_focada
 
     # Se for executar até o breakpoint
     if libera_break_point_executa:
@@ -213,7 +247,7 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
 
     tx_terminal.delete('1.0', END)
 
-    linhas = tx_codfc.get('1.0', END)
+    linhas = tx_codfc.get('1.0', END)[0:-1]
     nova_linha = ''
 
     lista = linhas.split('\n')
@@ -222,7 +256,7 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
 
     linhas = nova_linha
 
-    instancia = Run(tx_terminal, tx_codfc, True, lst_breakpoints, bool_ignorar_todos_breakpoints)
+    instancia = Run(tx_terminal, tx_codfc, False, dic_abas[aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
     t = Thread(target=lambda codigoPrograma = linhas: instancia.orquestrador_interpretador(codigoPrograma))
     t.start()
 
@@ -455,6 +489,8 @@ def tela_ajuda(pesquisa):
 class ContadorLinhas(Canvas):
     def __init__(self, *args, **kwargs):
         Canvas.__init__(self, *args, **kwargs)
+        global dic_abas
+        global aba_focada
         self.textwidget = None
 
     def atribuir(self, text_widget):
@@ -478,7 +514,7 @@ class ContadorLinhas(Canvas):
             linenum = str(i).split(".")[0]
 
             cor_padrao = "#777777"
-            if int(linenum) in lst_breakpoints:
+            if int(linenum) in dic_abas[aba_focada]["lst_breakpoints"]:
                 linenum = linenum + " * "
                 cor_padrao = "red"
 
@@ -505,9 +541,6 @@ class EditorDeCodigo(Text):
 def atualizacao_linhas(event):
     misterio_linhas.desenhar_linhas()
 
-global linha_para_break_point
-linha_para_break_point = 0
-
 def obterPosicaoDoCursor(event=None):
     global misterio_linhas
     global tx_codfc
@@ -520,20 +553,195 @@ def obterPosicaoDoCursor(event=None):
     print('posicao do cursor: ', posCorrente)
     linha_para_break_point = posCorrente
 
+def atualiza_texto_tela(num_aba):
+    global tx_codfc
+    global dic_abas
+
+    tx_codfc.delete(1.0, END)
+    tx_codfc.insert(END, str(dic_abas[num_aba]["arquivoAtual"]["texto"]))
+    colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc)
 
 def adiciona_remove_breakpoint(event = None):
     global misterio_linhas
     global linha_para_break_point
-    global lst_breakpoints
+    global dic_abas
+    global aba_focada
 
-    if int(linha_para_break_point) in lst_breakpoints:
-        lst_breakpoints.remove(int(linha_para_break_point))
+    if int(linha_para_break_point) in dic_abas[aba_focada]["lst_breakpoints"]:
+        dic_abas[aba_focada]["lst_breakpoints"].remove(int(linha_para_break_point))
     else:
-        lst_breakpoints.append(int(linha_para_break_point))
+        dic_abas[aba_focada]["lst_breakpoints"].append(int(linha_para_break_point))
 
-    print(lst_breakpoints)
+    print(dic_abas[aba_focada]["lst_breakpoints"])
     atualizacao_linhas(event = None)
 
+def atualiza_aba(lb_aba = None, numero=0):
+    global lst_abas
+    global dic_abas
+    print(dic_abas)
+    global tx_codfc
+
+    if lb_aba != None:
+        for itens in lst_abas:
+            if itens[2] == lb_aba:
+                dic_abas[itens[0]]["foco"] = True
+                atualiza_texto_tela(itens[0])
+            else:
+                dic_abas[itens[0]]["foco"] = False
+    else:
+        for itens in lst_abas:
+            if itens[0] == numero:
+                dic_abas[itens[0]]["foco"] = True
+                atualiza_texto_tela(itens[0])
+            else:
+                dic_abas[itens[0]]["foco"] = False
+    
+    renderizar_aba(dic_abas)
+    atualizacao_linhas(event = None)
+
+
+def fecha_aba(bt_fechar):
+    global dic_abas
+    global aba_focada
+    global lst_abas
+
+    focou_nova_aba = False
+    item_para_deletar = 0
+
+    print("Removendo: ", lst_abas, "<")
+    print("Removendo2: ", dic_abas, "<")
+    posicao_remover = 1
+    posicoes_analisadas = 1
+
+  
+    for itens in lst_abas:
+
+        if itens[3] == bt_fechar:
+            posicao_remover = posicoes_analisadas
+            item_para_deletar = itens[0]
+
+        elif not focou_nova_aba:
+            focou_nova_aba = True
+            dic_abas[itens[0]]["foco"] = True
+            aba_focada = itens[0]
+            atualiza_texto_tela(itens[0])
+
+        else:
+            dic_abas[itens[0]]["foco"] = False
+
+        posicoes_analisadas += 1
+
+   
+
+    if len(lst_abas) == 1:
+        dic_abas = {1:{
+            "nome":"",
+            "foco":True,
+            "lst_breakpoints":[],
+            "arquivoSalvo":{'link': "",'texto': ""},
+            "arquivoAtual":{'texto': ""}
+            }
+        }
+        atualiza_texto_tela(1)
+
+
+    else:
+
+        # removendo o frame
+        lst_abas[posicao_remover -1][1].grid_forget()
+        lst_abas[posicao_remover -1][2].grid_forget()
+        lst_abas[posicao_remover -1 ][3].grid_forget()
+
+        # deletando os respectivos valores
+        del dic_abas[item_para_deletar]
+        del lst_abas[posicao_remover -1]
+    
+    dic_copia = {}
+    inicio = 1
+
+    for k, v in dic_abas.items():
+        dic_copia[inicio] = dic_abas[k]
+        inicio += 1
+    dic_abas = dic_copia
+    renderizar_aba(dic_abas)
+
+def renderizar_aba(dic_abas):
+    global lst_abas
+    global fr_abas
+    global aba_focada
+
+    inicio = 2
+    dic_cor_abas = {"background":"#c5d4fc", "foreground":"#565656"}
+
+    # Destruindo as abas anteriores
+    if lst_abas != []:
+        for item in lst_abas:
+            item[1].grid_forget()
+            item[2].grid_forget()
+            item[3].grid_forget()
+        lst_abas = []
+
+    for k, v in dic_abas.items():
+        if v["foco"] == True:
+            aba_focada = k
+            dic_cor_abas["background"] = "#e6edff"
+            bg_padrao = "#e6edff"
+        else:
+            dic_cor_abas["background"] = "#c5d4fc"
+            bg_padrao = "#c5d4fc"
+
+        fr_uma_aba = Frame(fr_abas, height=20, background='#adc4ff')
+        fr_uma_aba.rowconfigure(1, weight=1)
+        nome_arquivo = str(v["arquivoSalvo"]["link"]).split("/")
+        nome_arquivo = str(nome_arquivo[-1])
+        print(len(v["arquivoSalvo"]["texto"]), len(v["arquivoAtual"]["texto"]))
+        if v["arquivoSalvo"]["texto"] != v["arquivoAtual"]["texto"]:
+            txt_btn = "*"
+        else:
+            txt_btn = "x"
+        lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao)
+        
+        bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0)
+       
+        fr_uma_aba.grid(row=1, column=inicio, sticky=N)
+        lb_aba.grid(row=1, column=1, sticky=NSEW)
+        bt_fechar.grid(row=1, column=2)
+
+        lst_abas.append([inicio -1, fr_uma_aba, lb_aba, bt_fechar])
+        lb_aba['command'] = lambda lb_aba=lb_aba: atualiza_aba(lb_aba)
+        bt_fechar['command'] = lambda bt_fechar=bt_fechar: fecha_aba(bt_fechar)
+
+        inicio += 1
+def ativar_coordernar_coloracao():
+    global tx_codfc
+    global dic_abas
+    global aba_focada
+    renderizar_aba(dic_abas)
+
+    dic_abas[aba_focada]["arquivoAtual"]['texto'] = tx_codfc.get(1.0, END)[0:-1]
+
+    colorir_codigo.coordena_coloracao(None, tx_codfc=tx_codfc)
+
+def nova_aba(event=None):
+    global dic_abas
+    global aba_focada
+    posicao_final_maior = 0
+
+    for k, v in dic_abas.items():
+        if k > posicao_final_maior:
+            posicao_final_maior = k
+
+        dic_abas[k]["foco"] = False
+
+    dic_abas[posicao_final_maior + 1] = {"nome":"",
+                                   "foco":True,
+                                   "lst_breakpoints":[],
+                                   "arquivoSalvo":{'link': "",'texto': ""},
+                                   "arquivoAtual":{'texto': ""}}
+    print(dic_abas)
+    aba_focada= posicao_final_maior + 1
+    renderizar_aba(dic_abas)
+    atualiza_aba(numero = posicao_final_maior + 1)
 
 # tela.attributes('-fullscreen', True)
 tela = Tk()
@@ -541,6 +749,14 @@ tela.title('Combratec - Linguagem feynman')
 tela.rowconfigure(2, weight=1)
 tela.geometry("1100x600")
 tela.grid_columnconfigure(1, weight=1)
+tela.bind('<F11>', lambda event: modoFullScreen(event))
+tela.bind('<F5>', lambda event: inicializa_orquestrador(event))
+tela.bind('<Control-s>', lambda event: salvar_arquivo(event))
+tela.bind('<Control-o>', lambda event: salvar_arquivo_dialog(event))
+tela.bind('<Control-S>', lambda event: salvar_arquivo_como_dialog(event))
+tela.bind('<F7>', lambda event: inicializa_orquestrador(libera_break_point_executa = True))
+tela.bind('<F10>', lambda event: adiciona_remove_breakpoint())
+tela.bind('<Control-n>', nova_aba)
 
 try:
     imgicon = PhotoImage(file='icone.png')
@@ -573,7 +789,7 @@ mn_barra.add_cascade(label='  Ferramentas', menu=mn_ferrm)
 
 mn_arq_casct = Menu(mn_arqui, tearoff = False)
 mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command=salvar_arquivo_dialog)
-mn_arqui.add_command(label='  Nova Guia (Ctrl-N)')
+mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = nova_aba)
 mn_arqui.add_command(label='  Abrir pasta')
 mn_arqui.add_separator()
 mn_arqui.add_command(label='  Recentes')
@@ -621,9 +837,7 @@ mn_sobre.add_command(label='  Projeto', command= lambda event:webbrowser.open("h
 
 mn_devel.add_command(label='  Logs', command= lambda event = None: ativar_logs())
 
-fr_opc_rapidas = Frame(tela)
-fr_opc_rapidas.grid(row = 1, column =1, sticky=NSEW, columnspan=2)
-
+# ========================================************===========================================
 ic_salva = PhotoImage(file='imagens/ic_salvar.png')
 ic_ident = PhotoImage(file='imagens/ic_arrumar.png')
 ic_break = PhotoImage(file='imagens/ic_parar.png')
@@ -651,7 +865,9 @@ ic_idiom = ic_idiom.subsample(4,4)
 ic_ajuda = ic_ajuda.subsample(4,4)
 ic_pesqu = ic_pesqu.subsample(4,4)
 ic_atena = ic_atena.subsample(4,4)
+# ========================================************===========================================
 
+fr_opc_rapidas = Frame(tela)
 
 bt_salva = Button(fr_opc_rapidas, image=ic_salva, relief = RAISED)
 bt_ident = Button(fr_opc_rapidas, image=ic_ident, relief = RAISED)
@@ -667,36 +883,34 @@ bt_ajuda = Button(fr_opc_rapidas, image=ic_ajuda, relief = RAISED)
 bt_pesqu = Button(fr_opc_rapidas, image=ic_pesqu, relief = RAISED)
 bt_atena = Button(fr_opc_rapidas, image=ic_atena, relief = RAISED)
 
-
-tela.bind('<F11>', lambda event: modoFullScreen(event))
-tela.bind('<F5>', lambda event: inicializa_orquestrador(event))
-tela.bind('<Control-s>', lambda event: salvar_arquivo(event))
-tela.bind('<Control-o>', lambda event: salvar_arquivo_dialog(event))
-tela.bind('<Control-S>', lambda event: salvar_arquivo_como_dialog(event))
-tela.bind('<F7>', lambda event: inicializa_orquestrador(libera_break_point_executa = True))
-tela.bind('<F10>', lambda event: adiciona_remove_breakpoint())
-
 fr_princ = Frame(tela)
 fr_princ.grid_columnconfigure(2, weight=1)
 fr_princ.rowconfigure(1, weight=1)
 
-tx_codfc = EditorDeCodigo(fr_princ)
-tx_codfc.focus_force()
+fr_abas = Frame(fr_princ, height=20, background='#adc4ff')
+fr_abas.rowconfigure(1, weight=1)
+fr_espaco = Label(fr_abas, width=4, background='#adc4ff')
 
-sb_codfc = tk.Scrollbar(fr_princ, orient="vertical", command=tx_codfc.yview, relief = FLAT)
+renderizar_aba(dic_abas = dic_abas)
+
+fr_espaco.grid(row=1, column=0, sticky=NSEW)
+
+tx_codfc = EditorDeCodigo(fr_princ)
+tx_codfc.bind("<<Change>>", atualizacao_linhas)
+tx_codfc.bind("<Configure>", atualizacao_linhas)
+tx_codfc.bind('<Button>', obterPosicaoDoCursor)
+tx_codfc.bind('<KeyRelease>', lambda event = None: ativar_coordernar_coloracao())
+tx_codfc.focus_force()
+ 
+sb_codfc = Scrollbar(fr_princ, orient="vertical", command=tx_codfc.yview, relief = FLAT)
 tx_codfc.configure(yscrollcommand=sb_codfc.set)
 misterio_linhas = ContadorLinhas(fr_princ)
 misterio_linhas.atribuir(tx_codfc)
 
-tx_codfc.bind("<<Change>>", atualizacao_linhas)
-tx_codfc.bind("<Configure>", atualizacao_linhas)
-tx_codfc.bind('<Button>', obterPosicaoDoCursor)
-tx_codfc.bind('<KeyRelease>', lambda event = None: colorir_codigo.coordena_coloracao(event, tx_codfc=tx_codfc))
-
- 
 fr_ajuda = Frame(fr_princ)
 tx_pesqu = Entry(fr_ajuda)
 
+fr_opc_rapidas.grid(row = 1, column =1, sticky=NSEW, columnspan=2)
 bt_salva.grid(row=1,column=1)
 bt_ident.grid(row=1,column=2)
 bt_break.grid(row=1,column=3)
@@ -710,16 +924,18 @@ bt_ajuda.grid(row=1, column=10)
 bt_pesqu.grid(row=1, column=11)
 bt_atena.grid(row=1, column=12)
 bt_comme.grid(row=1, column=13)
+
 fr_princ.grid(row=2, column=1, sticky=NSEW)
+fr_abas.grid(row=0, column=1, columnspan=3, sticky=NSEW)
+misterio_linhas.grid(row=1, column=1, sticky=NSEW)
 tx_codfc.grid(row=1, column=2, sticky=NSEW)
 sb_codfc.grid(row=1, column=3, sticky=NSEW)
-misterio_linhas.grid(row=1, column=1, sticky=NSEW)
 
 #fr_ajuda.grid(row=1, column=4, sticky=NSEW)
 #tx_pesqu.grid(row=0, column=1, sticky=NSEW)
 
 atualiza_design_interface()
 tela_ajuda("")
-abrirArquivo('bkp.fyn')
+#abrirArquivo('bkp.fyn')
 tela.mainloop()
 

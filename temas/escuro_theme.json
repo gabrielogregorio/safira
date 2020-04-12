@@ -2,7 +2,7 @@
   "cor_menu": {
     "font": [
       "monospace regular",
-      15
+      12
     ],
     "background": "#333333",
     "foreground": "white",
@@ -14,7 +14,7 @@
   "lb_sobDeTitulo": {
     "font": [
       "monospace regular",
-      15,
+      12,
       "bold"
     ],
     "height": 5,
@@ -24,7 +24,7 @@
   "lb_sobDAutores": {
     "font": [
       "monospace regular",
-      15
+      12
     ],
     "background": "#393944",
     "foreground": "#ffffff"
@@ -32,14 +32,14 @@
   "lb_sobDesenAno": {
     "font": [
       "monospace regular",
-      15
+      12
     ],
     "background": "#393944",
     "foreground": "#ffffff"
   },
   "tx_codificacao": {
-    "bg": "#393944",
-    "fg": "#ffffff",
+    "background": "#393944",
+    "foreground": "#ffffff",
     "border":0,
     "highlightthickness": 0,
     "insertbackground": "#ffffff",
@@ -47,7 +47,7 @@
     "selectforeground": "#dddddd",
     "font": [
       "monospace regular",
-      15
+      12
     ]
   },
   "scrollbar_text": {
@@ -73,21 +73,59 @@
     "background": "#393939"
   },
   "lb_linhas": {
-    "bg": "#353542",
-    "fg": "#9999bb",
-    "font": [
-      "monospace regular",
-      15
-    ]
+    "border":0,
+    "width":40,
+    "highlightthickness":0,
+    "background": "#353542"
   },
   "tx_terminal": {
     "width": 50,
-    "bg": "#191915",
-    "fg": "#ffffff",
+    "background": "#191912",
+    "foreground": "#ffffff",
     "highlightthickness": 0,
     "font": [
       "monospace regular",
-      15
+      12
     ]
+  },
+  "tx_pesqu": {
+    "foreground": "#676767",
+    "font": [
+      "monospace regular",
+      12
+    ]
+  },
+  "fr_ajuda": {
+    "width":25,
+    "background":"#ababab",
+    "padx":0,
+    "pady":0
+  },
+  "fr_princ": {
+    "background":"#393944"
+  },
+  "tela": {
+    "background":"#393944"
+  },
+  "fr_ajuda_comando":{
+    "pady":10,
+    "padx":0,
+    "background":"#fefefe",
+    "highlightbackground":"#ababab",
+    "highlightthickness": 2
+  },
+  "lb_ajuda_texto_c": {
+    "background":"#fefefe", 
+    "font":["", 12],
+    "width": 25,
+    "anchor":"w"
+  },
+  "lb_ajuda_descr_c":{
+    "wraplength":200,
+    "justify":"left",
+    "background":"#fefefe",
+    "font":["", 10],
+    "width": 25,
+    "anchor":"w"
   }
 }
