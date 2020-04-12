@@ -11,9 +11,10 @@ from tkinter import END
 from random import randint
 from time import sleep
 import funcoes
-
+from json import load
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
+
         self.aconteceu_erro = False
         self.erro_alertado = False
         self.esperar_pressionar_enter = False
@@ -28,6 +29,10 @@ class Run():
         self.lst_breakpoints = lst_breakpoints
         self.bool_break_point_liberado = None
         self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
+        self.idioma = "pt-br"
+
+        with open('configuracoes/mensagens.json') as json_file:
+            self.mensagens = load(json_file)
 
     def aguardar_liberacao_breakPoint(self):
         self.bool_break_point_liberado = False
@@ -84,7 +89,7 @@ class Run():
 
         except Exception as erro:
             print('ERRO:', erro)
-            return [[False, 'indisponibilidade_terminal', 'string','exibirNaTela'], "1"]
+            return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
 
     def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
@@ -300,7 +305,7 @@ class Run():
         re_comandos = "(\\<[a-zA-Z]*\\>)"
         re_groups = findall(re_comandos, comando)
         if re_groups == None:
-            return False
+            return [False]
 
         dic_options = {}
         # Anda pelos grupos <se>, <esperar>
@@ -318,6 +323,7 @@ class Run():
                     dic_options[grupo] = dic_options[grupo] +"|" + str(txt_comando_analisar)
                 except Exception as err:
                     dic_options[grupo] = txt_comando_analisar
+
         for k,v in dic_options.items():
             v_add = v.replace(' ','\\s{1,}')
 
@@ -329,13 +335,16 @@ class Run():
         # Aplicar no texto
         re_texto = findall(comando, texto)
         if re_texto == []:
-            return False
+            return [False, 0]
+        if str(type(re_texto[0])) == "<class 'str'>":
+            lista_itens = [re_texto[0]]
+        else:
+            # Para remover a indexação a partir do zero
+            lista_itens = list(re_texto[0])
 
-        # Para remover a indexação a partir do zero
-        lista_itens = list(re_texto[0])
         lista_itens.insert(0, "")
 
-        return [ saida.strip() for saida in lista_itens]
+        return [True, [saida.strip() for saida in lista_itens]]
 
     def interpretador(self, linha):
         Run.log(self, 'Interpretador iniciado')
@@ -372,80 +381,57 @@ class Run():
             if linha == '':
                 return [[True, None, 'vazio','linhaVazia'], "1"]
 
-            analisa = Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
-            if analisa: return [ Run.funcao_limpar_tela(self, ), num_linha ]
+            analisa000 = Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
+            analisa001 = Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
+            analisa002 = Run.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
+            analisa003 = Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
+            analisa004 = Run.analisa_instrucao(self, '^(<enquanto>)(.*)$', linha)
+            analisa005 = Run.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
+            analisa006 = Run.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha)
+            analisa007 = Run.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+            analisa008 = Run.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+            analisa009 = Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
+            analisa010 = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            analisa011 = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
+            analisa012 = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            analisa013 = Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
+            analisa014 = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
+            analisa015 = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
+            analisa016 = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
+            analisa017 = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
+            analisa018 = Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
+            analisa019 = Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
+            analisa020 = Run.analisa_instrucao(self, '^(<digitado>)$', linha)
+            analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
+            analisa022 = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
+            analisa023 = Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_]*)(<declaraVariaveis>)(.*)$', linha)
+            analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
 
-            analisa = Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
-            if analisa: return [ Run.funcao_exibir_na_linha(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
-            if analisa: return [ Run.funcao_exibir(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
-            if analisa: return [ Run.funcao_condicional(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<enquanto>)(.*)$', linha)
-            if analisa: return [ Run.funcao_loops_enquanto(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
-            if analisa: return [ Run.funcao_tempo(self, analisa[2], analisa[3]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha)
-            if analisa: return [ Run.funcao_repetir(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-            if analisa: return [ Run.incremente_em(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-            if analisa: return [ Run.decremente_em(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
-            if analisa: return [ Run.funcao_declarar_funcao(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-            if analisa: return [ Run.funcao_adicione_na_lista_na_posicao(self, analisa[2], analisa[4], analisa[6]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
-            if analisa: return [ Run.funcao_declarar_listas_posicoes(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-            if analisa: return [ Run.funcao_declarar_listas(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
-            if analisa: return [ Run.funcao_remover_itens_na_lista(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
-            if analisa: return [ Run.funcao_adicionar_itens_na_lista_posicao(self, analisa[2], analisa[4], analisa[6]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
-            if analisa: return [ Run.funcao_adicionar_itens_na_lista(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
-            if analisa: return [ Run.funcao_adicionar_itens_na_lista_inicio(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
-            if analisa: return [ Run.funcao_adicionar_itens_na_lista(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
-            if analisa: return [ Run.funcao_numero_aleatorio(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
-            if analisa: return [ Run.funcao_obter_valor_lista(self, analisa[2], analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<digitado>)$', linha)
-            if analisa: return [ Run.funcao_digitado(self, analisa[1]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
-            if analisa: return [ Run.funcao_tiver_na_lista(self, analisa[2],analisa[4]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
-            if analisa:return [ Run.funcao_tamanho_da_lista(self, analisa[2]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_]*)(<declaraVariaveis>)(.*)$', linha)
-            if analisa: return [ Run.funcao_fazer_atribuicao(self, analisa[1], analisa[3]), num_linha ]
-
-            analisa = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
-            if analisa: return [ Run.funcao_executar_funcoes(self, analisa[1],analisa[3]), num_linha ]
+            if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), num_linha ]
+            if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), num_linha ]
+            if analisa002[0]: return [ Run.funcao_exibir_outra_ln(self, analisa002[1][2]), num_linha ]
+            if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), num_linha ]
+            if analisa004[0]: return [ Run.funcao_loops_enquantox(self, analisa004[1][2]), num_linha ]
+            if analisa005[0]: return [ Run.funcao_esperar_n_tempo(self, analisa005[1][2],  analisa005[1][3]), num_linha ]
+            if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), num_linha ]
+            if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), num_linha ]
+            if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), num_linha ]
+            if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), num_linha ]
+            if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  num_linha ]
+            if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), num_linha ]
+            if analisa012[0]: return [ Run.funcao_declarar_listas(self, analisa012[1][2],  analisa012[1][4]), num_linha ]
+            if analisa013[0]: return [ Run.funcao_rem_itns_na_lst(self, analisa013[1][2],  analisa013[1][4]), num_linha ]
+            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2],  analisa014[1][4],  analisa014[1][6]),  num_linha ]
+            if analisa015[0]: return [ Run.funcao_add_itns_na_lst(self, analisa015[1][2],  analisa015[1][4]), num_linha ]
+            if analisa016[0]: return [ Run.funcao_add_itns_lst_in(self, analisa016[1][2],  analisa016[1][4]), num_linha ]
+            if analisa017[0]: return [ Run.funcao_add_itns_na_lst(self, analisa017[1][2],  analisa017[1][4]), num_linha ]
+            if analisa018[0]: return [ Run.funcao_numer_aleatorio(self, analisa018[1][2],  analisa018[1][4]), num_linha ]
+            if analisa019[0]: return [ Run.funcao_obter_valor_lst(self, analisa019[1][2],  analisa019[1][4]), num_linha ]
+            if analisa020[0]: return [ Run.funcao_ovalor_digitado(self, analisa020[1][1]), num_linha ]
+            if analisa021[0]: return [ Run.funcao_tiver_valor_lst(self, analisa021[1][2],  analisa021[1][4]), num_linha ]
+            if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), num_linha ]
+            if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), num_linha ]
+            if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), num_linha ]
 
             return [ [False, "Um comando desconhecido foi localizado: '{}'".format(linha), 'string','exibirNaTela'], num_linha ]
         return [ [True, None, 'vazio', 'fazerNada'], num_linha ]
@@ -455,46 +441,43 @@ class Run():
 
         possivelVariavel = str(possivelVariavel).strip()
 
-        analisa = Run.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
-        if analisa: return Run.funcao_digitado(self, analisa[1])
+        analisa018 = Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$',  possivelVariavel)
+        analisa019 = Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
+        analisa020 = Run.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
+        analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
+        analisa022 = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
 
-        analisa = Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$',  possivelVariavel)
-        if analisa: return Run.funcao_numero_aleatorio(self, analisa[2], analisa[4])
-
-        analisa = Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
-        if analisa: return Run.funcao_obter_valor_lista(self, analisa[2], analisa[4])
-
-        analisa = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
-        if analisa: return Run.funcao_tiver_na_lista(self, analisa[2],analisa[4])
-
-        analisa = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
-        if analisa: return Run.funcao_tamanho_da_lista(self, analisa[2])
+        if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
+        if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
+        if analisa020[0]: return Run.funcao_ovalor_digitado(self, analisa020[1][1])
+        if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2],analisa021[1][4])
+        if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
 
         return [True, None, 'vazio']
-
-    def incremente_em(self, valor, variavel):
-        return Run.incremente_decremente(self, valor, variavel,  'incremente')
-
-    def decremente_em(self, valor, variavel):
-        return Run.incremente_decremente(self, valor, variavel, 'decremente')
 
     def msg_variavel_numerica(self, msg, variavel):
         if msg == 'naoNumerico':
             return [False, "A variável '{}' não é numérica!".format(variavel), 'string', 'exibirNaTela']
 
+    def funcao_incremente_vari(self, valor, variavel):
+        return Run.incremente_decremente(self, valor, variavel,  'incremente')
+
+    def funcao_decremente_vari(self, valor, variavel):
+        return Run.incremente_decremente(self, valor, variavel, 'decremente')
+
     def incremente_decremente(self, valor, variavel, acao):
         Run.log(self, 'decremente:' + valor+str(variavel))
 
-        teste_existencia = Run.obter_valor_variavel(self, variavel)
+        teste_exist = Run.obter_valor_variavel(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_existencia[0] == False:
-            return teste_existencia
+        if teste_exist[0] == False:
+            return teste_exist
 
         if teste_valor[0] == False:
             return teste_valor
 
-        if teste_existencia[2] != 'float':
+        if teste_exist[2] != 'float':
             return Run.msg_variavel_numerica(self, 'naoNumerico', variavel)
 
         if teste_valor[2] != 'float':
@@ -508,32 +491,32 @@ class Run():
 
         return [True, True, "booleano", "fazerNada"]
 
-    def funcao_adicione_na_lista_na_posicao(self, variavelLista, posicao, valor):
-        Run.log(self, 'funcao_adicione_na_lista_na_posicao:' + str(variavelLista))
+    def funcao_add_lst_na_posi(self, variavelLista, posicao, valor):
+        Run.log(self, 'funcao_add_lst_na_posi:' + str(variavelLista))
 
         if variavelLista == '' or posicao == '' or valor == '': # Veio sem dados
             return [ False, 'Necessário comando separador como " no meio da lista de "', 'string',' exibirNaTela']
 
-        teste_existencia = Run.obter_valor_variavel(self, variavelLista)
-        testePosicao = Run.abstrair_valor_linha(self, posicao)
+        teste_exist = Run.obter_valor_variavel(self, variavelLista)
+        teste_posic = Run.abstrair_valor_linha(self, posicao)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_existencia[0] == False:
-            return teste_existencia
+        if teste_exist[0] == False:
+            return teste_exist
 
-        if testePosicao[0] == False:
-            return testePosicao
+        if teste_posic[0] == False:
+            return teste_posic
 
         if teste_valor[0] == False:
             return teste_valor
 
-        if teste_existencia[2] != 'lista':
+        if teste_exist[2] != 'lista':
             return[False, 'A variável "{}" não é uma lista.'.format(variavelLista), 'string']
 
-        if testePosicao[2] != 'float':
-            return  Run.msg_variavel_numerica(self, 'naoNumerico',  testePosicao[1])
+        if teste_posic[2] != 'float':
+            return  Run.msg_variavel_numerica(self, 'naoNumerico',  teste_posic[1])
 
-        posicao = int(testePosicao[1])
+        posicao = int(teste_posic[1])
 
         # Posição estoura posições da lista
         if posicao - 1 > len(self.dic_variaveis[variavelLista][0]):
@@ -558,7 +541,7 @@ class Run():
 
         return teste
 
-    def funcao_obter_valor_lista(self, variavel, posicao):
+    def funcao_obter_valor_lst(self, variavel, posicao):
         Run.log(self, 'Função Valor de lista: "{}", subcomandos: "{}"'.format(variavel, posicao))
 
         if variavel == '' or posicao == '':
@@ -584,7 +567,7 @@ class Run():
 
         return [True, resultado[posicao-1][0], resultado[posicao-1][1], 'exibirNaTela']
 
-    def funcao_tiver_na_lista(self, valor, variavel):
+    def funcao_tiver_valor_lst(self, valor, variavel):
         Run.log(self, "Função tiver na lista: " + valor)
 
         if variavel == '' or valor == '':
@@ -607,7 +590,7 @@ class Run():
 
         return [True, False, 'booleano', 'fazerNada']
 
-    def funcao_tamanho_da_lista(self, linha):
+    def funcao_otamanho_da_lst(self, linha):
         Run.log(self, 'Função obter o tamanho da lista: "{}"'.format(linha))
 
         linha = linha.strip()
@@ -622,13 +605,13 @@ class Run():
         except Exception as erro:
             return [True, 'Erro ao obter o tamanho da lista. Erro: {}'.format(erro), 'string', 'exibirNaTela']
 
-    def funcao_remover_itens_na_lista(self, valor, variavel):
+    def funcao_rem_itns_na_lst(self, valor, variavel):
         Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
 
         if variavel == '' or valor == '':
             return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Remova 1 a lista de nomes ', 'exibirNaTela']
 
-        # Analisa se lista foi decarada e se é lista
+        # analisa[1] se lista foi decarada e se é lista
         teste = Run.obter_valor_lista(self, variavel)
         if teste[0] == False:
             return [teste[0], teste[1], teste[2], 'exibirNaTela']
@@ -646,13 +629,13 @@ class Run():
 
         return [True, None, 'vazio', 'fazerNada']
 
-    def funcao_adicionar_itens_na_lista(self, valor, variavel):
+    def funcao_add_itns_na_lst(self, valor, variavel):
         Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
 
         if variavel == '' or valor == '':
             return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
 
-        # Analisa se lista foi decarada e se é lista
+        # analisa[1] se lista foi decarada e se é lista
         teste_variavel = Run.obter_valor_lista(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
@@ -670,13 +653,13 @@ class Run():
 
         return [True, None, 'vazio', 'fazerNada']
 
-    def funcao_adicionar_itens_na_lista_inicio(self, valor, variavel):
+    def funcao_add_itns_lst_in(self, valor, variavel):
         Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
 
         if variavel == '' or valor == '':
             return [False, '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ', 'exibirNaTela']
 
-        # Analisa se lista foi decarada e se é lista
+        # analisa[1] se lista foi decarada e se é lista
         teste_variavel = Run.obter_valor_lista(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
@@ -694,7 +677,7 @@ class Run():
 
         return [True, None, 'vazio', 'fazerNada']
 
-    def funcao_adicionar_itens_na_lista_posicao(self, valor, posicao, variavel):
+    def funcao_add_itns_lst_ps(self, valor, posicao, variavel):
         Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
 
         if variavel == '' or valor == '':
@@ -727,7 +710,7 @@ class Run():
         self.dic_variaveis[variavel][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
         return [ True, True, 'booleano', 'fazerNada' ]
 
-    def funcao_declarar_listas_posicoes(self, variavel, posicoes):
+    def funcao_dec_lst_posicoe(self, variavel, posicoes):
         Run.log(self, 'Função declarar listas posicoes: "{}"'.format(variavel))
 
         teste = Run.analisa_padrao_variavel(self, variavel, 'Lista ')
@@ -803,7 +786,7 @@ class Run():
         if self.esperar_pressionar_enter:
             self.esperar_pressionar_enter = False
 
-    def funcao_digitado(self, linha):
+    def funcao_ovalor_digitado(self, linha):
         Run.log(self, 'Função digitado: "{}"'.format(linha))
 
         textoOriginal = len(self.tx_terminal.get(1.0, END))
@@ -825,6 +808,7 @@ class Run():
         digitado = digitado[textoOriginal-1:-2]
 
         # SE FOR NUMÉRICO
+        print('´´´', linha)
         if ' numero ' in linha:
             try:
                 float(digitado)
@@ -835,13 +819,13 @@ class Run():
         else:
             return [True, digitado, 'string', 'fazerNada']
 
-    def funcao_limpar_tela(self):
+    def funcao_limpar_o_termin(self):
         Run.log(self, 'Limpatela ativado!')
 
         self.tx_terminal.delete(1.0, END)
         return [True, None, 'vazio','fazerNada']
 
-    def funcao_repetir(self, linha):
+    def funcao_repetir_n_vezes(self, linha):
         Run.log(self, "funcao repetir: '{}'".format(linha))
 
         linha = linha.replace('vezes', '')
@@ -863,7 +847,7 @@ class Run():
             funcao_repita = int(linha[1])
             return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
-    def funcao_numero_aleatorio(self, num1, num2):
+    def funcao_numer_aleatorio(self, num1, num2):
         Run.log(self,  'funcao aleatório: {}'.format(num1))
 
         num1 = Run.abstrair_valor_linha(self, num1)
@@ -896,7 +880,7 @@ class Run():
 
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
-    def funcao_executar_funcoes(self, nomeDaFuncao, parametros):
+    def funcao_executar_funcao(self, nomeDaFuncao, parametros):
 
         try:
             self.dic_funcoes[nomeDaFuncao]
@@ -926,7 +910,7 @@ class Run():
             if len(self.dic_funcoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
 
                 for parametroDeclarar in range(len(self.dic_funcoes[nomeDaFuncao][0])):
-                    resultado = Run.funcao_fazer_atribuicao(self, self.dic_funcoes[nomeDaFuncao][0][parametroDeclarar], listaFinalDeParametros[parametroDeclarar])
+                    resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0][parametroDeclarar], listaFinalDeParametros[parametroDeclarar])
 
                     if resultado[0] == False:
                         return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
@@ -936,7 +920,7 @@ class Run():
         elif parametros != None:
 
             if len(self.dic_funcoes[nomeDaFuncao][0]) == 1:
-                resultado = Run.funcao_fazer_atribuicao(self, self.dic_funcoes[nomeDaFuncao][0], parametros)
+                resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0], parametros)
 
                 if resultado[0] == False:
                     return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
@@ -991,7 +975,7 @@ class Run():
         funcao_em_analise = nomeDaFuncao
         return [True, True, 'booleano', 'declararFuncao',funcao_em_analise]
 
-    def funcao_exibir(self, linha):
+    def funcao_exibir_outra_ln(self, linha):
         Run.log(self, 'funcao exibição: {}'.format(linha))
 
         codigo = linha.strip()
@@ -1002,7 +986,7 @@ class Run():
 
         return [resultado[0],resultado[1], resultado[2],'exibirNaTela']
 
-    def funcao_exibir_na_linha(self, linha):
+    def funcao_exibir_mesma_ln(self, linha):
         Run.log(self, 'Função exibir nessa linha ativada'.format(linha))
 
         linha = linha.strip()
@@ -1013,7 +997,7 @@ class Run():
 
         return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
-    def funcao_tempo(self, tempo, tipo_espera):
+    def funcao_esperar_n_tempo(self, tempo, tipo_espera):
         print(tipo_espera)
         Run.log(self, 'Função tempo: {}'.format(tempo))
 
@@ -1163,6 +1147,7 @@ class Run():
             return [True, self.dic_variaveis[variavel][0], self.dic_variaveis[variavel][1], 'fazerNada']
 
 
+
     def abstrair_valor_linha(self, possivelVariavel):
         Run.log(self, "Abstrar valor de uma linha inteira com possivelVariavel: '{}'".format(possivelVariavel))
 
@@ -1247,7 +1232,7 @@ class Run():
 
         return [True,True,'booleano']
 
-    def funcao_fazer_atribuicao(self, variavel, valor):
+    def funcao_realizar_atribu(self, variavel, valor):
         Run.log(self, 'Função atribuição: {}'.format(variavel + str(valor)))
 
         if variavel == '' or valor == '':
@@ -1271,10 +1256,10 @@ class Run():
 
         return [ resultado[0], resultado[1], resultado[2], 'fazerNada']
 
-    def funcao_loops_enquanto(self, linha):
+    def funcao_loops_enquantox(self, linha):
         Run.log(self, 'Função loops enquanto: {}'.format(linha))
 
-        resultado = Run.funcao_condicional(self, linha)
+        resultado = Run.funcao_testar_condicao(self, linha)
         return [resultado[0], resultado[1], resultado[2], 'declararLoop']
 
     def tiver_valor_lista(self, linha):
@@ -1282,9 +1267,9 @@ class Run():
 
         linha = linha.strip()
 
-        analisa = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
-        if analisa != False:
-            return Run.funcao_tiver_na_lista(self, analisa[2],analisa[4])
+        analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
+        if analisa021[0]:
+            return Run.funcao_tiver_valor_lst(self, analisa021[1][2],analisa021[1][4])
 
         return [True,None,'booleano']
 
@@ -1307,7 +1292,7 @@ class Run():
 
         return lista
 
-    def funcao_condicional(self, linha):
+    def funcao_testar_condicao(self, linha):
         Run.log(self, 'Função condicional: {}'.format(linha))
 
         # Padronização geral

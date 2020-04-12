@@ -107,7 +107,7 @@ def salvar_arquivo_como_dialog(event = None):
 
     arq.close()
 
-    text2save = str(tx_codfc.get(1.0, END))[0:-1]
+    text2save = str(tx_codfc.get(1.0, END))
     try:
         arq = open(lnk_arquivo_salvar, 'w', encoding='utf8')
         arq.write(text2save)
@@ -135,7 +135,7 @@ def salvar_arquivo(event=None):
         salvar_arquivo_como_dialog()
 
     else:
-        programaCodigo = tx_codfc.get(1.0, END)[0:-1]
+        programaCodigo = tx_codfc.get(1.0, END)
 
         if dic_abas[aba_focada]["arquivoSalvo"]['texto'] == programaCodigo:
             print(" Programa não sofreu modificações para ser salvo novamente....")
@@ -256,7 +256,7 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
 
     linhas = nova_linha
 
-    instancia = Run(tx_terminal, tx_codfc, False, dic_abas[aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
+    instancia = Run(tx_terminal, tx_codfc, True, dic_abas[aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
     t = Thread(target=lambda codigoPrograma = linhas: instancia.orquestrador_interpretador(codigoPrograma))
     t.start()
 
@@ -718,7 +718,7 @@ def ativar_coordernar_coloracao():
     global aba_focada
     renderizar_aba(dic_abas)
 
-    dic_abas[aba_focada]["arquivoAtual"]['texto'] = tx_codfc.get(1.0, END)[0:-1]
+    dic_abas[aba_focada]["arquivoAtual"]['texto'] = tx_codfc.get(1.0, END)
 
     colorir_codigo.coordena_coloracao(None, tx_codfc=tx_codfc)
 
