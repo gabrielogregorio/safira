@@ -15,7 +15,6 @@ import tkinter as tk
 import webbrowser
 
 from threading import Thread
-from tkinter import filedialog
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
@@ -32,6 +31,7 @@ from tkinter import NSEW, Canvas
 from tkinter import Text
 from tkinter import font
 from tkinter import END
+from tkinter import N, S, E, W, Entry
 from tkinter import Tk
 import funcoes
 from time import time
@@ -39,9 +39,10 @@ from json import load
 from os import listdir
 from os import getcwd
 from os.path import abspath
-from colorir import Colorir
+
+from Arquivo import Arquivo
+from Colorir import Colorir
 from interpretador import Run
-from tkinter import N, S, E, W, Entry
 
 global dic_info_arquivo
 global bool_tela_em_fullscreen
@@ -61,20 +62,19 @@ global dic_abas
 global lst_abas
 global fr_abas
 global aba_focada
-aba_focada = 1
+global controle_arquivos
 
-linha_para_break_point = 0
-lst_abas = []
-
-bool_tela_em_fullscreen = False
-lst_titulos_frames = []
-
-posAbsuluta = 0
-posCorrente = 0
-path = abspath(getcwd())
 dic_comandos, dic_design, cor_do_comando = funcoes.atualiza_configuracoes_temas()
 colorir_codigo = Colorir(cor_do_comando, dic_comandos)
-
+bool_tela_em_fullscreen = False
+linha_para_break_point = 0
+lst_titulos_frames = []
+path = abspath(getcwd())
+controle_arquivos = None
+posAbsuluta = 0
+posCorrente = 0
+aba_focada = 1
+lst_abas = []
 
 dic_abas = {
     1:{
@@ -86,134 +86,38 @@ dic_abas = {
     }
 }
 
-def salvar_arquivo_como_dialog(event = None):
-    global dic_abas
-    global aba_focada
-
-    opt = {
-    }
-
-    arq = filedialog.asksaveasfile(mode='w',
-                                   defaultextension = ".fyn",
-                                   title = "Selecione o script",
-                                   filetypes = (("Meus scripts", "*.fyn"), ("all files", "*.*")))
-
-
-
-    if arq is None:
-        return None
-
-    lnk_arquivo_salvar = str(arq.name)
-
-    arq.close()
-
-    text2save = str(tx_codfc.get(1.0, END))
-    try:
-        arq = open(lnk_arquivo_salvar, 'w', encoding='utf8')
-        arq.write(text2save)
-        arq.close()
-
-    except Exception as erro:
-        messagebox.showinfo('Erro', 'Erro ao salvar programa, erro: {}'.format(erro))
-
-    else:
-        dic_abas[aba_focada]["arquivoSalvo"]['link'] = arq.name
-        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = text2save
-        dic_abas[aba_focada]["arquivoAtual"]['texto'] = text2save
-        renderizar_aba(dic_abas)
-        
-        return arq.name
-
-def salvar_arquivo(event=None):
-    """
-    Salva um arquivo que já está aberto
-    """
-
-    global dic_abas
-    global aba_focada
-    if dic_abas[aba_focada]["arquivoSalvo"]['link'] == "":
-        salvar_arquivo_como_dialog()
-
-    else:
-        programaCodigo = tx_codfc.get(1.0, END)
-
-        if dic_abas[aba_focada]["arquivoSalvo"]['texto'] == programaCodigo:
-            print(" Programa não sofreu modificações para ser salvo novamente....")
-
-        else:
-            try:
-                funcoes.salvar_arquivo(arquivo = dic_abas[aba_focada]["arquivoSalvo"]['link'], texto = programaCodigo[0:-1])
-
-            except Exception as erro:
-                messagebox.showinfo('Erro', 'Não foi possível salvar essa versão do código, erro: {}'.format(erro))
-
-            else:
-                dic_abas[aba_focada]["arquivoSalvo"]['texto'] = programaCodigo
-                dic_abas[aba_focada]["arquivoAtual"]['texto'] = programaCodigo
-                renderizar_aba(dic_abas)
-                    
-def salvar_arquivo_dialog(event=None):
+def funcoes_arquivos_configurar(event, comando, link=None):
+    global controle_arquivos
     global dic_abas
     global aba_focada
     global tx_codfc
 
-    arq_tips = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]
-    arq_dial = filedialog.Open(filetypes = arq_tips)
-    arq_nome = arq_dial.show()
+    if controle_arquivos == None:
+        return 0
 
+    controle_arquivos.atualiza_infos(dic_abas, aba_focada, tx_codfc)
 
-    if arq_nome == ():
-        print(' Nenhum arquivo escolhido')
+    if comando == "abrirArquivo":
+        controle_arquivos.abrirArquivo(link)
 
-    else:
-        print(' Arquivo "{}" escolhido'.format(arq_nome))
-        arq_txts = funcoes.abrir_arquivo(arq_nome)
+    elif comando == "salvar_arquivo_dialog":
+        controle_arquivos.salvar_arquivo_dialog(event)
 
-        if arq_txts[0] != None:
-            tx_codfc.delete(1.0, END)
-            tx_codfc.insert(END, arq_txts[0])
+    elif comando == "salvar_arquivo":
+        controle_arquivos.salvar_arquivo(event)
 
-        else:
-            messagebox.showinfo("ops","Aconteceu um erro ao abrir o arquivo" + arq_txts[1])
+    elif comando == "salvar_arquivo_como_dialog":
+        controle_arquivos.salvar_arquivo_como_dialog(event)
 
-        colorir_codigo.coordena_coloracao(None,tx_codfc = tx_codfc)
+    aba_focada = controle_arquivos.aba_focada
+    dic_abas = controle_arquivos.dic_abas
 
-        dic_abas[aba_focada]["arquivoSalvo"]['link'] = arq_nome
-        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = arq_txts[0]
-        dic_abas[aba_focada]["arquivoAtual"]['texto'] = arq_txts[0]
-        renderizar_aba(dic_abas)
-        
-def abrirArquivo(link):
-    global dic_abas
-    global aba_focada
-    global tx_codfc
-
-    print(' Abrindo arquivo "{}" escolhido'.format(link))
-
-    arq = funcoes.abrir_arquivo(link)
-
-    if arq[0] != None:
-        tx_codfc.delete(1.0, END)
-        tx_codfc.insert(END, arq[0])
-
-        colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc)
-
-        dic_abas[aba_focada]["arquivoSalvo"]['link'] = link
-        dic_abas[aba_focada]["arquivoSalvo"]['texto'] = arq[0]
-        dic_abas[aba_focada]["arquivoAtual"]['texto'] = arq[0]
-
-        renderizar_aba(dic_abas)
-
-    else:
-        if "\'utf-8' codec can\'t decode byte" in arq[1]:
-            messagebox.showinfo("Erro de codificação", "Por favor, converta seu arquivo para a codificação UTF-8. Não foi possível abrir o arquivo: \"{}\", erro: \"{}\"".format(link, arq[1]))
-        else:
-            messagebox.showinfo('Erro', 'Aconteceu um erro ao tentar abrir o script: {}, erro: {}'.format(link, arq[1]))
-
-        print('Arquivo não selecionado')
+    colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc)
+    renderizar_aba(dic_abas)
 
 def inicializa_orquestrador(event = None, libera_break_point_executa = False):
     print("\n Orquestrador iniciado")
+ 
     global tx_codfc
     global instancia
     global tx_terminal
@@ -237,8 +141,10 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
     inicio = time()
     try:
         print(instancia.numero_threads)
+
     except:
         pass
+
     else:
         messagebox.showinfo('Problemas',"Já existe um programa sendo executado!")
         return 0
@@ -277,7 +183,6 @@ def modoFullScreen(event=None):
 
     if bool_tela_em_fullscreen:
         bool_tela_em_fullscreen = False
-
     else:
         bool_tela_em_fullscreen = True
 
@@ -294,7 +199,6 @@ def ativar_logs(event=None):
             instancia.bool_logs = True
     except:
         print("Interpretador não iniciado")
-
 
 def pressionar_enter_terminal(event = None):
     try:
@@ -327,7 +231,7 @@ def atualizarListaDeScripts():
     for file in listdir('scripts/'):
         if len(file) > 5:
             if file[-3:] == 'fyn':
-                funcao = lambda link = file: abrirArquivo('scripts/' + str(link))
+                funcao = lambda link = file:  funcoes_arquivos_configurar(None, "abrirArquivo" , 'scripts/' + str(link))
                 mn_arq_casct.add_command(label=file, command = funcao)
  
 def atualizarListaTemas():
@@ -389,8 +293,10 @@ def atualizaInterface(chave, novo):
 
         colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc).update()
         atualiza_design_interface()
+
     except Exception as erro:
         print('ERRO: ', erro)
+
     else:
         print('Temas atualizados')
 
@@ -431,13 +337,10 @@ def atualiza_design_interface():
         tx_pesqu.configure(dic_design["tx_pesqu"])
         fr_ajuda.configure(dic_design["fr_ajuda"])
         fr_princ.configure(dic_design["fr_princ"])
-
         tela.configure(dic_design["tela"])
-
         misterio_linhas.configure(dic_design["lb_linhas"])
         tx_codfc.configure(dic_design["tx_codificacao"])
         sb_codfc.configure(dic_design['scrollbar_text'])
-
         fr_opc_rapidas.configure(dic_design["fr_opcoes_rapidas"])
 
     except Exception as erro:
@@ -578,7 +481,6 @@ def adiciona_remove_breakpoint(event = None):
 def atualiza_aba(lb_aba = None, numero=0):
     global lst_abas
     global dic_abas
-    print(dic_abas)
     global tx_codfc
 
     if lb_aba != None:
@@ -598,7 +500,6 @@ def atualiza_aba(lb_aba = None, numero=0):
     
     renderizar_aba(dic_abas)
     atualizacao_linhas(event = None)
-
 
 def fecha_aba(bt_fechar):
     global dic_abas
@@ -631,8 +532,6 @@ def fecha_aba(bt_fechar):
 
         posicoes_analisadas += 1
 
-   
-
     if len(lst_abas) == 1:
         dic_abas = {1:{
             "nome":"",
@@ -644,9 +543,7 @@ def fecha_aba(bt_fechar):
         }
         atualiza_texto_tela(1)
 
-
     else:
-
         # removendo o frame
         lst_abas[posicao_remover -1][1].grid_forget()
         lst_abas[posicao_remover -1][2].grid_forget()
@@ -694,15 +591,15 @@ def renderizar_aba(dic_abas):
         fr_uma_aba.rowconfigure(1, weight=1)
         nome_arquivo = str(v["arquivoSalvo"]["link"]).split("/")
         nome_arquivo = str(nome_arquivo[-1])
-        print(len(v["arquivoSalvo"]["texto"]), len(v["arquivoAtual"]["texto"]))
+
         if v["arquivoSalvo"]["texto"] != v["arquivoAtual"]["texto"]:
             txt_btn = "*"
         else:
             txt_btn = "x"
+
         lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao)
-        
         bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0)
-       
+ 
         fr_uma_aba.grid(row=1, column=inicio, sticky=N)
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
@@ -712,19 +609,20 @@ def renderizar_aba(dic_abas):
         bt_fechar['command'] = lambda bt_fechar=bt_fechar: fecha_aba(bt_fechar)
 
         inicio += 1
+
 def ativar_coordernar_coloracao():
     global tx_codfc
     global dic_abas
     global aba_focada
+
     renderizar_aba(dic_abas)
-
     dic_abas[aba_focada]["arquivoAtual"]['texto'] = tx_codfc.get(1.0, END)
-
     colorir_codigo.coordena_coloracao(None, tx_codfc=tx_codfc)
 
 def nova_aba(event=None):
     global dic_abas
     global aba_focada
+
     posicao_final_maior = 0
 
     for k, v in dic_abas.items():
@@ -738,7 +636,7 @@ def nova_aba(event=None):
                                    "lst_breakpoints":[],
                                    "arquivoSalvo":{'link': "",'texto': ""},
                                    "arquivoAtual":{'texto': ""}}
-    print(dic_abas)
+
     aba_focada= posicao_final_maior + 1
     renderizar_aba(dic_abas)
     atualiza_aba(numero = posicao_final_maior + 1)
@@ -749,11 +647,12 @@ tela.title('Combratec - Linguagem feynman')
 tela.rowconfigure(2, weight=1)
 tela.geometry("1100x600")
 tela.grid_columnconfigure(1, weight=1)
+
 tela.bind('<F11>', lambda event: modoFullScreen(event))
 tela.bind('<F5>', lambda event: inicializa_orquestrador(event))
-tela.bind('<Control-s>', lambda event: salvar_arquivo(event))
-tela.bind('<Control-o>', lambda event: salvar_arquivo_dialog(event))
-tela.bind('<Control-S>', lambda event: salvar_arquivo_como_dialog(event))
+tela.bind('<Control-s>', lambda event:funcoes_arquivos_configurar(None, "salvar_arquivo"))
+tela.bind('<Control-o>', lambda event: funcoes_arquivos_configurar(None, "salvar_arquivo_dialog"))
+tela.bind('<Control-S>', lambda event: funcoes_arquivos_configurar(None, "salvar_arquivo_como_dialog"))
 tela.bind('<F7>', lambda event: inicializa_orquestrador(libera_break_point_executa = True))
 tela.bind('<F10>', lambda event: adiciona_remove_breakpoint())
 tela.bind('<Control-n>', nova_aba)
@@ -788,7 +687,7 @@ mn_barra.add_cascade(label='  Dev'        , menu=mn_devel)
 mn_barra.add_cascade(label='  Ferramentas', menu=mn_ferrm)
 
 mn_arq_casct = Menu(mn_arqui, tearoff = False)
-mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command=salvar_arquivo_dialog)
+mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: funcoes_arquivos_configurar(None, "salvar_arquivo_dialog"))
 mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = nova_aba)
 mn_arqui.add_command(label='  Abrir pasta')
 mn_arqui.add_separator()
@@ -797,8 +696,8 @@ mn_arqui.add_cascade(label='  Exemplos', menu=mn_arq_casct)
 atualizarListaDeScripts()
 
 mn_arqui.add_separator()
-mn_arqui.add_command(label='  Salvar (Ctrl-S)', command=salvar_arquivo)
-mn_arqui.add_command(label='  Salvar Como (Ctrl-Shift-S)', command=salvar_arquivo_como_dialog)
+mn_arqui.add_command(label='  Salvar (Ctrl-S)', command= lambda event=None: funcoes_arquivos_configurar(None, "salvar_arquivo"))
+mn_arqui.add_command(label='  Salvar Como (Ctrl-Shift-S)', command=lambda event=None: funcoes_arquivos_configurar(None, "salvar_arquivo_como_dialog"))
 mn_arqui.add_separator()
 mn_arqui.add_command(label='  imprimir (Ctrl-P)')
 mn_arqui.add_command(label='  Exportar (Ctrl-E)')
@@ -817,17 +716,14 @@ mn_ferrm.add_command(label='  Numero de espaços para o tab')
 
 mn_intfc_casct_temas = Menu(mn_intfc, tearoff = False)
 mn_intfc.add_cascade(label='  Temas', menu=mn_intfc_casct_temas)
-
 atualizarListaTemas()
 
 mn_intfc_casct_sintx = Menu(mn_intfc, tearoff = False)
 mn_intfc.add_cascade(label='  sintaxe', menu=mn_intfc_casct_sintx)
-
 atualizarListasintaxe()
 
 mn_intfc_casct_fonts = Menu(mn_intfc, tearoff = False)
 mn_intfc.add_cascade(label='  fontes', menu=mn_intfc_casct_fonts)
-
 atualizarListasfontes()
 
 mn_ajuda.add_command(label='  Ajuda (F1)', command = lambda event:webbrowser.open(path + "/tutorial/index.html"))
@@ -936,6 +832,9 @@ sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
 atualiza_design_interface()
 tela_ajuda("")
-#abrirArquivo('bkp.fyn')
+
+controle_arquivos = Arquivo(dic_abas, aba_focada, tx_codfc)
+#funcoes_arquivos_configurar(None, "abrirArquivo", 'bkp.fyn')
+
 tela.mainloop()
 

@@ -1,26 +1,102 @@
 {
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "comando_desconhecido":{
+    "pt-br":"Um comando desconhecido foi localizado: ",
+    "en-us":"An unknown command was found: "
   },
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "add_lst_posicao_separador":{
+    "pt-br":"Comando não possui um separador, exemplo: lista de nomes na posicao 2 recebe \"Maria\"",
+    "en-us":"Command does not have a separator, example: list of names in position 2 receives \"Maria \""
   },
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "nao_e_lista":{
+    "pt-br":"não é uma lista",
+    "en-us":"it's not a list"
   },
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "posicao_maior_limite_lista":{
+    "pt-br":"A posição está acima do tamanho da lista:",
+    "en-us":"The position is above the list size:"
   },
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "posicao_menor_limite_lista":{
+    "pt-br":"A posição está abaixo do tamanho da lista: ",
+    "en-us":"The position is below the list size: "
   },
-  "terminal_indisponivel":{
-    "pt-br":"terminal indisponível, provavelmente foi fechado!",
-    "en-us":"terminal unavailable, probably closed!"
+  "variavel_posicao_nao_informada":{
+    "pt-br":"Variável ou posição não foi informada.",
+    "en-us":"Variable or position was not informed."
+  },
+  "variavel_valor_nao_informado":{
+    "pt-br":"Variável ou valor não foi informada.",
+    "en-us":"Variable or value was not reported."
+  },
+  "erro_obter_tamanho_lista":{
+    "pt-br":"Erro ao obter o tamanho da lista: ",
+    "en-us":"Error getting list size: "
+  },
+  "nao_esta_na_lista":{
+    "pt-br":"não está na lista",
+    "en-us":"is not on the list"
+  },
+  "digitou_caractere":{
+    "pt-br":"Você disse que queria digitar um número, mas digitou um texto: ",
+    "en-us":"You said you wanted to enter a number, but you entered text:"
+  },
+  "repetir_nao_informou_inteiro":{
+    "pt-br":"Para usar a função repetir, você precisa passar um número inteiro. Você informou ",
+    "en-us":"To use the repeat function, you need to pass an integer. You reported "
+  },
+ "aleatorio_valor1_nao_numerico":{
+    "pt-br":"O valor 1 não é numérico",
+    "en-us":"The value 1 is not numeric"
+  },
+ "aleatorio_valor2_nao_numerico":{
+    "pt-br":"O valor 2 não é numérico",
+    "en-us":"The value 2 is not numeric"
+  },
+ "aleatorio_valor1_igual_valo2":{
+    "pt-br":"O valor 1 e o valor 2 da função aleatório tem que ser diferentes",
+    "en-us":"The value 1 and value 2 of the random function must be different"
+  },
+ "aleatorio_valor1_maior_valo2":{
+    "pt-br":"O valor 1 é maior que o valor 2, o valor 1 tem que ser maior",
+    "en-us":"Value 1 is greater than value 2, value 1 must be greater"
+  },
+ "funcao_nao_existe":{
+    "pt-br":"A função não existe: ",
+    "en-us":"The function does not exist:"
+  },
+ "funcao_tem_parametros_divergentes":{
+    "pt-br":"A função \"{}\" tem {} parametros, mas você passou {} parametros!",
+    "en-us":"The \"{}\" function has {} parameters, but you passed {} parameters!"
+  },
+ "funcao_passou_um_parametros":{
+    "pt-br":"A função \"{}\" tem {} parametros, mas você passou 1 parametro",
+    "en-us":"The \"{}\" function has {} parameters, but you passed 1 parameter"
+  },
+ "nao_possivel_conta_string":{
+    "pt-br":"Não é possível fazer contas com strings: ",
+    "en-us":"It is not possible to do accounts with strings: "
+  },
+ "nao_possivel_fazer_conta":{
+    "pt-br":"Não foi possivel realizar a conta ",
+    "en-us":"Unable to complete account "
+  },
+ "voce_precisa_definir_variavel":{
+    "pt-br":"Você precisa definir a variável ",
+    "en-us":"You need to define the variable "
+  },
+ "variaveis_comecar_por_letra":{
+    "pt-br":"Variáveis devem começar por uma letra.",
+    "en-us":"Variables must start with a letter."
+  },
+ "variaveis_devem_conter":{
+    "pt-br":"Variáveis devem conter apenas letras, numeros ou underline \"_\".",
+    "en-us":"Variables must contain only letters, numbers or underline \"_\"."
+  },
+ "condicao_nao_possui_condicao":{
+    "pt-br":"A condição não possui nenhuma condição!.",
+    "en-us":"The condition has no condition!"
+  },
+ "nao_possivel_fazer_condicao":{
+    "pt-br":"Não foi possível realizar a condição: ",
+    "en-us":"The condition could not be fulfilled: "
   }
 }
