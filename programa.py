@@ -1,19 +1,8 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__author__      = 'Gabriel Gregório da Silva'
-__email__       = 'gabriel.gregorio.1@outlook.com'
-__project__     = 'Combratec'
-__github__      = 'https://github.com/Combratec/'
-__description__ = 'Linguagem de programação focada em lógica'
-__status__      = 'Desenvolvimento'
-__date__        = '01/08/2019'
-__last_update__ = '10/04/2020'
-__version__     = '0.1'
-
 import tkinter as tk
 import webbrowser
-
 from threading import Thread
 from tkinter import PhotoImage
 from tkinter import messagebox
@@ -39,10 +28,20 @@ from json import load
 from os import listdir
 from os import getcwd
 from os.path import abspath
-
 from Arquivo import Arquivo
 from Colorir import Colorir
 from interpretador import Run
+
+
+__author__ = 'Gabriel Gregório da Silva'
+__email__ = 'gabriel.gregorio.1@outlook.com'
+__project__ = 'Combratec'
+__github__ = 'https://github.com/Combratec/'
+__description__ = 'Linguagem de programação focada em lógica'
+__status__ = 'Desenvolvimento'
+__date__ = '01/08/2019'
+__last_update__ = '10/04/2020'
+__version__ = '0.1'
 
 global dic_info_arquivo
 global bool_tela_em_fullscreen
@@ -664,18 +663,18 @@ try:
 except Exception as erro:
     print('Erro ao carregar icone do app:', erro)
 
-mn_barra = Menu(tela, tearoff = False)
+mn_barra = Menu(tela, tearoff=False)
 tela.config(menu=mn_barra)
 
-mn_ferrm = Menu(mn_barra, tearoff = False)
-mn_intfc = Menu(mn_barra, tearoff = False)
-mn_loclz = Menu(mn_barra, tearoff = False)
-mn_exect = Menu(mn_barra, tearoff = False)
-mn_arqui = Menu(mn_barra, tearoff = False)
-mn_edita = Menu(mn_barra, tearoff = False)
-mn_ajuda = Menu(mn_barra, tearoff = False)
-mn_sobre = Menu(mn_barra, tearoff = False)
-mn_devel = Menu(mn_barra, tearoff = False)
+mn_ferrm = Menu(mn_barra, tearoff=False)
+mn_intfc = Menu(mn_barra, tearoff=False)
+mn_loclz = Menu(mn_barra, tearoff=False)
+mn_exect = Menu(mn_barra, tearoff=False)
+mn_arqui = Menu(mn_barra, tearoff=False)
+mn_edita = Menu(mn_barra, tearoff=False)
+mn_ajuda = Menu(mn_barra, tearoff=False)
+mn_sobre = Menu(mn_barra, tearoff=False)
+mn_devel = Menu(mn_barra, tearoff=False)
 
 mn_barra.add_cascade(label='  Arquivo'    , menu=mn_arqui)
 mn_barra.add_cascade(label='  Executar'   , menu=mn_exect)
@@ -714,24 +713,24 @@ mn_loclz.add_command(label='  Substituir (CTRL + R)')
 mn_ferrm.add_command(label='  corrigir identação')
 mn_ferrm.add_command(label='  Numero de espaços para o tab')
 
-mn_intfc_casct_temas = Menu(mn_intfc, tearoff = False)
+mn_intfc_casct_temas = Menu(mn_intfc, tearoff=False)
 mn_intfc.add_cascade(label='  Temas', menu=mn_intfc_casct_temas)
 atualizarListaTemas()
 
-mn_intfc_casct_sintx = Menu(mn_intfc, tearoff = False)
+mn_intfc_casct_sintx = Menu(mn_intfc, tearoff=False)
 mn_intfc.add_cascade(label='  sintaxe', menu=mn_intfc_casct_sintx)
 atualizarListasintaxe()
 
-mn_intfc_casct_fonts = Menu(mn_intfc, tearoff = False)
+mn_intfc_casct_fonts = Menu(mn_intfc, tearoff=False)
 mn_intfc.add_cascade(label='  fontes', menu=mn_intfc_casct_fonts)
 atualizarListasfontes()
 
-mn_ajuda.add_command(label='  Ajuda (F1)', command = lambda event:webbrowser.open(path + "/tutorial/index.html"))
-mn_ajuda.add_command(label='  Comandos Disponíveis', command = lambda event:webbrowser.open(path + "/tutorial/index.html"))
-mn_ajuda.add_command(label='  Comunidade', command = lambda event:webbrowser.open("https://feynmancode.blogspot.com/p/comunidade.html"))
-mn_sobre.add_command(label='  Projeto', command= lambda event:webbrowser.open("http://feynmancode.blogspot.com/"))
+mn_ajuda.add_command(label='  Ajuda (F1)', command=lambda event:webbrowser.open(path + "/tutorial/index.html"))
+mn_ajuda.add_command(label='  Comandos Disponíveis', command=lambda event:webbrowser.open(path + "/tutorial/index.html"))
+mn_ajuda.add_command(label='  Comunidade', command=lambda event:webbrowser.open("https://feynmancode.blogspot.com/p/comunidade.html"))
+mn_sobre.add_command(label='  Projeto', command=lambda event:webbrowser.open("http://feynmancode.blogspot.com/"))
 
-mn_devel.add_command(label='  Logs', command= lambda event = None: ativar_logs())
+mn_devel.add_command(label='  Logs', command= lambda event=None: ativar_logs())
 
 # ========================================************===========================================
 ic_salva = PhotoImage(file='imagens/ic_salvar.png')
@@ -748,36 +747,36 @@ ic_ajuda = PhotoImage(file='imagens/ic_duvida.png')
 ic_pesqu = PhotoImage(file='imagens/ic_pesquisa.png')
 ic_atena = PhotoImage(file='imagens/ic_atena.png')
 
-ic_salva = ic_salva.subsample(4,4)
-ic_ident = ic_ident.subsample(4,4)
-ic_break = ic_break.subsample(4,4)
-ic_playP = ic_playP.subsample(4,4)
-ic_breaP = ic_breaP.subsample(4,4)
-ic_brk_p = ic_brk_p.subsample(4,4)
-ic_desfz = ic_desfz.subsample(4,4)
-ic_redsf = ic_redsf.subsample(4,4)
-ic_comme = ic_comme.subsample(4,4)
-ic_idiom = ic_idiom.subsample(4,4)
-ic_ajuda = ic_ajuda.subsample(4,4)
-ic_pesqu = ic_pesqu.subsample(4,4)
-ic_atena = ic_atena.subsample(4,4)
+ic_salva = ic_salva.subsample(4, 4)
+ic_ident = ic_ident.subsample(4, 4)
+ic_break = ic_break.subsample(4, 4)
+ic_playP = ic_playP.subsample(4, 4)
+ic_breaP = ic_breaP.subsample(4, 4)
+ic_brk_p = ic_brk_p.subsample(4, 4)
+ic_desfz = ic_desfz.subsample(4, 4)
+ic_redsf = ic_redsf.subsample(4, 4)
+ic_comme = ic_comme.subsample(4, 4)
+ic_idiom = ic_idiom.subsample(4, 4)
+ic_ajuda = ic_ajuda.subsample(4, 4)
+ic_pesqu = ic_pesqu.subsample(4, 4)
+ic_atena = ic_atena.subsample(4, 4)
 # ========================================************===========================================
 
 fr_opc_rapidas = Frame(tela)
 
-bt_salva = Button(fr_opc_rapidas, image=ic_salva, relief = RAISED)
-bt_ident = Button(fr_opc_rapidas, image=ic_ident, relief = RAISED)
-bt_break = Button(fr_opc_rapidas, image=ic_break, relief = RAISED)
-bt_playP = Button(fr_opc_rapidas, image=ic_playP, relief = RAISED, command = inicializa_orquestrador)
-bt_breaP = Button(fr_opc_rapidas, image=ic_breaP, relief = RAISED, command = lambda event=None: inicializa_orquestrador(libera_break_point_executa = True))
-bt_brk_p = Button(fr_opc_rapidas, image=ic_brk_p, relief = RAISED, command = adiciona_remove_breakpoint)
-bt_desfz = Button(fr_opc_rapidas, image=ic_desfz, relief = RAISED)
-bt_redsf = Button(fr_opc_rapidas, image=ic_redsf, relief = RAISED)
-bt_comme = Button(fr_opc_rapidas, image=ic_comme, relief = RAISED)
-bt_idiom = Button(fr_opc_rapidas, image=ic_idiom, relief = RAISED)
-bt_ajuda = Button(fr_opc_rapidas, image=ic_ajuda, relief = RAISED)
-bt_pesqu = Button(fr_opc_rapidas, image=ic_pesqu, relief = RAISED)
-bt_atena = Button(fr_opc_rapidas, image=ic_atena, relief = RAISED)
+bt_salva = Button(fr_opc_rapidas, image=ic_salva, relief=RAISED)
+bt_ident = Button(fr_opc_rapidas, image=ic_ident, relief=RAISED)
+bt_break = Button(fr_opc_rapidas, image=ic_break, relief=RAISED)
+bt_playP = Button(fr_opc_rapidas, image=ic_playP, relief=RAISED, command = inicializa_orquestrador)
+bt_breaP = Button(fr_opc_rapidas, image=ic_breaP, relief=RAISED, command = lambda event=None: inicializa_orquestrador(libera_break_point_executa = True))
+bt_brk_p = Button(fr_opc_rapidas, image=ic_brk_p, relief=RAISED, command = adiciona_remove_breakpoint)
+bt_desfz = Button(fr_opc_rapidas, image=ic_desfz, relief=RAISED)
+bt_redsf = Button(fr_opc_rapidas, image=ic_redsf, relief=RAISED)
+bt_comme = Button(fr_opc_rapidas, image=ic_comme, relief=RAISED)
+bt_idiom = Button(fr_opc_rapidas, image=ic_idiom, relief=RAISED)
+bt_ajuda = Button(fr_opc_rapidas, image=ic_ajuda, relief=RAISED)
+bt_pesqu = Button(fr_opc_rapidas, image=ic_pesqu, relief=RAISED)
+bt_atena = Button(fr_opc_rapidas, image=ic_atena, relief=RAISED)
 
 fr_princ = Frame(tela)
 fr_princ.grid_columnconfigure(2, weight=1)
@@ -798,7 +797,7 @@ tx_codfc.bind('<Button>', obterPosicaoDoCursor)
 tx_codfc.bind('<KeyRelease>', lambda event = None: ativar_coordernar_coloracao())
 tx_codfc.focus_force()
  
-sb_codfc = Scrollbar(fr_princ, orient="vertical", command=tx_codfc.yview, relief = FLAT)
+sb_codfc = Scrollbar(fr_princ, orient="vertical", command=tx_codfc.yview, relief=FLAT)
 tx_codfc.configure(yscrollcommand=sb_codfc.set)
 misterio_linhas = ContadorLinhas(fr_princ)
 misterio_linhas.atribuir(tx_codfc)
@@ -806,14 +805,14 @@ misterio_linhas.atribuir(tx_codfc)
 fr_ajuda = Frame(fr_princ)
 tx_pesqu = Entry(fr_ajuda)
 
-fr_opc_rapidas.grid(row = 1, column =1, sticky=NSEW, columnspan=2)
-bt_salva.grid(row=1,column=1)
-bt_ident.grid(row=1,column=2)
-bt_break.grid(row=1,column=3)
-bt_playP.grid(row=1,column=4)
-bt_breaP.grid(row=1,column=5)
+fr_opc_rapidas.grid(row=1, column=1, sticky=NSEW, columnspan=2)
+bt_salva.grid(row=1, column=1)
+bt_ident.grid(row=1, column=2)
+bt_break.grid(row=1, column=3)
+bt_playP.grid(row=1, column=4)
+bt_breaP.grid(row=1, column=5)
 bt_brk_p.grid(row=1, column=6)
-bt_desfz.grid(row=1,column=7)
+bt_desfz.grid(row=1, column=7)
 bt_redsf.grid(row=1, column=8)
 bt_idiom.grid(row=1, column=9)
 bt_ajuda.grid(row=1, column=10)
@@ -837,4 +836,3 @@ controle_arquivos = Arquivo(dic_abas, aba_focada, tx_codfc)
 #funcoes_arquivos_configurar(None, "abrirArquivo", 'bkp.fyn')
 
 tela.mainloop()
-

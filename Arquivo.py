@@ -1,8 +1,8 @@
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import END
-
 import funcoes
+
 
 class Arquivo():
     def __init__(self, dic_abas, aba_focada, tx_codfc):
@@ -15,11 +15,12 @@ class Arquivo():
         self.aba_focada = aba_focada
         self.tx_codfc = tx_codfc
 
-    def salvar_arquivo_como_dialog(self, event = None):
-        arq = filedialog.asksaveasfile(mode='w',
-                                       defaultextension = ".fyn",
-                                       title = "Selecione o script",
-                                       filetypes = (("Meus scripts", "*.fyn"), ("all files", "*.*")))
+    def salvar_arquivo_como_dialog(self, event=None):
+        arq = filedialog.asksaveasfile(
+            mode='w',
+            defaultextension=".fyn",
+            title="Selecione o script",
+            filetypes=(("Meus scripts", "*.fyn"), ("all files", "*.*")))
 
         if arq is None:
             return None
@@ -35,13 +36,14 @@ class Arquivo():
             arq.close()
 
         except Exception as erro:
-            messagebox.showinfo('Erro', 'Erro ao salvar programa, erro: {}'.format(erro))
+            messagebox.showinfo(
+                'Erro', 'Erro ao salvar programa, erro: {}'.format(erro))
 
         else:
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'] = arq.name
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = text2save
             self.dic_abas[self.aba_focada]["arquivoAtual"]['texto'] = text2save
-            
+
             return arq.name
 
     def salvar_arquivo(self, event=None):
@@ -56,23 +58,27 @@ class Arquivo():
             programaCodigo = self.tx_codfc.get(1.0, END)
 
             if self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] == programaCodigo:
-                print(" Programa não sofreu modificações para ser salvo novamente....")
+                print("Nnão sofreu modificações")
 
             else:
                 try:
-                    funcoes.salvar_arquivo(arquivo = self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'], texto = programaCodigo[0:-1])
+                    funcoes.salvar_arquivo(
+                        arquivo=self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'],
+                        texto=programaCodigo[0:-1])
 
                 except Exception as erro:
-                    messagebox.showinfo('Erro', 'Não foi possível salvar essa versão do código, erro: {}'.format(erro))
+                    messagebox.showinfo(
+                        'Erro',
+                        'Impossivel salvar essa verso, erro: {}'.format(erro))
 
                 else:
                     self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = programaCodigo
                     self.dic_abas[self.aba_focada]["arquivoAtual"]['texto'] = programaCodigo
-                        
+
     def salvar_arquivo_dialog(self, event=None):
 
         arq_tips = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]
-        arq_dial = filedialog.Open(filetypes = arq_tips)
+        arq_dial = filedialog.Open(filetypes=arq_tips)
         arq_nome = arq_dial.show()
 
         if arq_nome == ():
@@ -82,12 +88,14 @@ class Arquivo():
             print(' Arquivo "{}" escolhido'.format(arq_nome))
             arq_txts = funcoes.abrir_arquivo(arq_nome)
 
-            if arq_txts[0] != None:
+            if arq_txts[0] is not None:
                 self.tx_codfc.delete(1.0, END)
                 self.tx_codfc.insert(END, arq_txts[0])
 
             else:
-                messagebox.showinfo("ops","Aconteceu um erro ao abrir o arquivo" + arq_txts[1])
+                messagebox.showinfo(
+                    "ops",
+                    "Aconteceu um erro ao abrir o arquivo" + arq_txts[1])
 
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'] = arq_nome
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = arq_txts[0]
@@ -98,7 +106,7 @@ class Arquivo():
 
         arq = funcoes.abrir_arquivo(link)
 
-        if arq[0] != None:
+        if arq[0] is not None:
             self.tx_codfc.delete(1.0, END)
             self.tx_codfc.insert(END, arq[0])
 
@@ -108,8 +116,16 @@ class Arquivo():
 
         else:
             if "\'utf-8' codec can\'t decode byte" in arq[1]:
-                messagebox.showinfo("Erro de codificação", "Por favor, converta seu arquivo para a codificação UTF-8. Não foi possível abrir o arquivo: \"{}\", erro: \"{}\"".format(link, arq[1]))
+                messagebox.showinfo(
+                    "Erro de codificação",
+                    'Converta  para UTF-8. arquivo: "{}", erro: "{}"'.format(
+                        link,
+                        arq[1]))
             else:
-                messagebox.showinfo('Erro', 'Aconteceu um erro ao tentar abrir o script: {}, erro: {}'.format(link, arq[1]))
+                messagebox.showinfo(
+                    'Erro',
+                    'Error ao abrir o script: {}, erro: {}'.format(
+                        link,
+                        arq[1]))
 
             print('Arquivo não selecionado')
