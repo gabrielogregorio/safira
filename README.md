@@ -4,7 +4,7 @@ Uma linguagem de programação universal, simples e focada em na lógica.
 > Atenção: Esse projeto está na versão beta, contém erros, códigos ineficientes e não possui versões compiladas, dependendo de um interpretador Python
 
 # Introdução
-
+![Imagem](feynman_beta.png)
 ## Tópicos
 - [objetivo](#Objetivo)
 - [Como fazer um print](#Como-fazer-um-print)
@@ -21,9 +21,7 @@ Uma linguagem de programação universal, simples e focada em na lógica.
 - [Como trabalhar com listas](#Como-trabalhar-com-listas)
 
 
-## Objetivo  
-
-Desenvolvimento uma linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE com uma linguagem de programação simples. A idéia é que ela seja uma ponte simples para que possoas possam aprender uma linguagem de programação com pouca ou sem nenhuma base do assunto.
+Linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE com uma linguagem de programação simples. A idéia é que ela seja uma ponte simples para que possoas possam aprender uma linguagem de programação com pouca ou sem nenhuma base do assunto.
 
 A linguagem funciona utilizando termos relativamente simples, como: **mostre**,**exiba**, **mostre nessa linha**, **exiba nessa linha**, etc. Também pretendemos permitir o uso de palavras chaves em múltiplos idiomas.
 
