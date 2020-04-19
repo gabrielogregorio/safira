@@ -1,63 +1,59 @@
-# Uma linguagem de programação natural
-Uma linguagem de programação universal, simples e focada em na lógica.
-
-> Atenção: Esse projeto está na versão beta, contém erros, códigos ineficientes e não possui versões compiladas, dependendo de um interpretador Python
-
 # Introdução
+Uma linguagem de programação introdutória universal, simples e focada em na lógica.
+
 ![Imagem](feynman_beta.png)
+
+# Como executar  
+1. Baixe o Python3.7 no seu computador
+2. Execute o arquivo "programa.py"
+3. Programe!
 
 ## Tópicos
 - [objetivo](#Objetivo)
-- [Como fazer um print](#Como-fazer-um-print)
-- [Como fazer um print nessa linha](#Como-fazer-um-print-nessa-linha)
+- [Como-trabalhar-com-listas](#Trabalhando-com-listas)
+- [Como exibir algo na tela](#Como-fazer-um-print)
+- [Como exibir na mesma linha](#Como-fazer-um-print-nessa-linha)
 - [Como declarar uma variável](#Como-declarar-variáveis)
-- [Como fazer uma condicional](#Como-fazer-uma-condicional)
-- [como usar funcoes](#Como-usar-funções)
+- [Como testar uma condição](#Como-fazer-uma-condicional)
+- [Como criar e usar uma função](#Como-usar-funções)
 - [Como ler o que o usuário digitar](#Como-ler-o-que-o-usuário-digitar)
-- [Como fazer um loop enquanto](#Como-fazer-um-loop-enquanto)
-- [como fazer um loop repetir](#Como-fazer-um-loop-repetir)
-- [como fazer um delay](#Como-fazer-um-Delay)
-- [Como sortear um número aleatório](#Como-sortear-um-número-aleatório)
+- [Como fazer um loop testando uma condição](#Como-fazer-um-loop-enquanto)
+- [Como fazer um loop for](#Loop-para-cada)
+- [Como fazer um loop por x vezes](#Como-fazer-um-loop-repetir)
+- [Como esperar um tempo](#Como-fazer-um-Delay)
+- [Como gerar um número aleatório](#Como-sortear-um-número-aleatório)
 - [Como limpar a tela](#Como-limpar-a-tela)
-- [Como trabalhar com listas](#Como-trabalhar-com-listas)
+- [Como incrementar uma variável](#Incrementar-ou-decrementar-uma-variável-numérica)
 
-
+# Objetivo  
 Linguagem de programação para crianças e para pessoas sem nenhum conhecimento em programação. A longo prazo, pretendemos criar uma IDE com uma linguagem de programação simples. A idéia é que ela seja uma ponte simples para que possoas possam aprender uma linguagem de programação com pouca ou sem nenhuma base do assunto.
 
-A linguagem funciona utilizando termos relativamente simples, como: **mostre**,**exiba**, **mostre nessa linha**, **exiba nessa linha**, etc. Também pretendemos permitir o uso de palavras chaves em múltiplos idiomas.
+A linguagem funciona utilizando termos relativamente simples, como: **mostre**,**exiba**, **mostre nessa linha**, **exiba nessa linha**, etc.
 
-Com isso, pretendemos suavizar a curva de aprendizagem de lógica de programação, e ao mesmo tempo preparando as pessoas para linguagens mais rápidas e poderosas de mais baixo nível, portanto, conceitos como sintaxe ainda estarão presentes na linguagem.
+Com isso, pretendemos suavizar a curva de aprendizagem de lógica de programação e ao mesmo tempo preparar as pessoas para linguagens mais rápidas e poderosas de mais baixo nível.
 
-Esperamos que ela possa suavizar o aprendizado de linguagens como Python, Javascript, R, C#, C, C++,etc...
+Esperamos que ela possa suavizar o aprendizado de linguagens como Python, Javascript, R, C#, C, C++, etc...
 
-Isso não significa que ela será pensada apenas para quem quer entrar no assunto, ela é principalmente focada na lógica de programação, portanto, qualquer pessoa poderá escrever seus algorítimos de forma muito rápida.
+-------------------------------------
 
 # Como fazer as coisas?
+
 ## Como fazer um print
 ```
 mostre "Hello World"
 exiba "Olá mundo"
-
-n = 10  
-imprima 10 + 20  
-escreva na tela 'string'   
-display "string"  
-mostre n / n  
-escreva n  
-exiba n elevado a 4  
+print "Hello World"
+display "Cobol"
+mostre 2 * 2
 ```
 
 ## Como fazer um print nessa linha
 ```
-escola = "Fatec"
-seunome = "Denise"
-semestre = 1
-
 mostre "--------------- Exemplos --------------- "
 mostre nessa linha "Sala de aula: ", 09
-exiba nessa linha " | Escola: ", escola
-escreva nessa linha " |  Aluno: ",seunome
-imprima nessa linha " | Semestre: ", semestre
+exiba nessa linha " | Escola: "
+escreva nessa linha " |  Aluno: "
+imprima nessa linha " | Semestre: "
 ```
 
 ## Como declarar variáveis
@@ -92,31 +88,25 @@ funcao calculaMedia recebe parametros nota1, nota2, nota3
     mostre (nota1 + nota2 + nota3) / 3
 }
 
-function mostraIdade
-{
-    mostre 9999
-}
-
 nota1 = 9.8 
 nota2 = 8.7
 nota3 = 7.9
 
 calculaMedia passando parametros nota1,nota2,nota3
-mostraIdade
 ```
 
 ## Como ler o que o usuário digitar
 ```
-mostre nessa linha 'Digite seu nome: '
+mostre nessa linha "Digite seu nome: "
 nome recebe o que for digitado
 
-se nome == 'Catiana'
+se nome == "Catiana"
 {
     mostre "Seu nome é: ", nome
 }
 ```
 
-## Como fazer um loop enquanto  
+## Como fazer um loop enquanto
 ```
 x recebe 0
 enquanto 10 for maior que x
@@ -138,12 +128,6 @@ repita 10 vezes
 {
     mostre "Repetindo 10 vezes"
 }
-
-x = 4
-repeat x vezes
-{
-    mostre "Repetindo x vezes"
-}
 ```
 
 ## Como fazer um Delay
@@ -155,7 +139,7 @@ aguarde 2 segundos
 mostre "Tudo bem?"
 
 espere 5000 ms
-mostre 'Como você vai?'
+mostre "Como você vai?"
 ```
 
 ## Como sortear um número aleatório
@@ -174,23 +158,47 @@ limpatela
 mostre "Tela limpa"
 ```
 
-## Como trabalhar com listas
+## Incrementar ou decrementar uma variável numérica
 ```
-lista de nomes recebe "Peter", "Mariana"
-mostre nomes
+numContador = 10
 
-remova "Mariana" da lista de nomes
-mostre nomes
+incremente 2 em numContador
+mostre numContador
 
-tamanho da lista nomes
+decremente 2 em numContador
+mostre numContador
 
-adicione "Jacson" a lista de nomes
-mostre nomes
 
-se 1 for igual a 1 e tiver "Peter" na lista de nomes
+```
+
+## Loop para cada
+```
+para cada x de 10 ate 20
 {
-    mostre "Tem sim!"
+    mostre x
 }
 
 ```
+
+## Trabalhando com listas
+```
+lista de nomes com 10 posicoes
+lista de nomes na posicao 2 recebe "Atena"
+
+lista de cidades recebe "Recife", "São Paulo", "Londres"
+se tiver "Los Angeles" na lista de nomes
+{
+    remova "Los Angeles" da lista de nomes    
+}
+
+adicione "Rio de Janeiro" na posicao 2 da lista de cidades
+adicione "Rio de Janeiro" no final da lista de cidades
+adicione "Rio de Janeiro" no inicio da lista de cidades
+adicione "Rio de Janeiro" na lista de cidades
+
+mostre lista de cidades na posicao 3
+mostre tamanho da lista de nomes
+
+```
+
 

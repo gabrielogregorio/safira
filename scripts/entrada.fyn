@@ -1,0 +1,12 @@
+mostre nessa linha "Digite sua idade: "
+idade recebe o numero que for digitado
+
+se idade for maior que 18
+{
+    mostre "Você é adulta!"
+}
+
+if idade <= 18
+{
+     print "você não é adulta!"
+}

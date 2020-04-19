@@ -1,6 +1,5 @@
 from json import load
 
-
 def abrir_arquivo(filename):
     try:
         arquivo = open(filename, 'r', encoding='utf8')
@@ -12,18 +11,15 @@ def abrir_arquivo(filename):
     else:
         return [text, None]
 
-
 def salvar_arquivo(arquivo, texto):
     arquivo = open(arquivo, 'w', encoding='utf8')
     arquivo.write(texto)
     arquivo.close()
 
-
 def carregar_json(arquivo):
     with open(arquivo, encoding='utf8') as json_file:
         dic_json = load(json_file)
     return dic_json
-
 
 def atualiza_configuracoes_temas():
     dicionario_comandos = None

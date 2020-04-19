@@ -3,15 +3,15 @@ enquanto 1 for igual a 1
     mostre nessa linha "Faça uma pergunta: "
     pergunta recebe o que o usuario digitar
 
-    lista resposta recebe "Olá tudo bem?", "Tudo sim e você?", "Qual é o seu nome?", "Meu nome é Maria!"
+    lista respostas recebe "Olá tudo bem?", "Tudo sim e você?", "Qual é o seu nome?", "Meu nome é Maria!"
 
-    x = tamanho da lista resposta
+    x = tamanho da lista respostas
     ponto = 1
     repita x vezes
     {
-      if pergunta == resposta na posicao ponto
+      if pergunta == lista de respostas na posicao ponto
       {
-          mostre "Resposta ", resposta na posicao ponto + 1
+          mostre "Resposta ", respostas na posicao ponto + 1
       }         
       ponto = ponto + 1
     }

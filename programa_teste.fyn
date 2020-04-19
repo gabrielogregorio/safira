@@ -3,9 +3,9 @@ mostre "lista de nomes: ", nomes
 
 remova "Mariana" da lista de nomes
 mostre "Removendo a Mariana: ", nomes
-
+ 
 mostre "Qtd lista: ", tamanho da lista nomes
-   
+ 
 adicione "Juno" a lista de nomes
 mostre "Adicionando Juno: ", nomes
 
@@ -25,8 +25,7 @@ funcao calculaMedia recebe parametros num1, num2 {
    mostre "A média é: ", (num1 + num2) / 2
 }
 
-temanalisa = tiver "Alexa" na lista de nomes
-se nome for igual a "Alexa" e  temanalisa 
+se nome for igual a "Alexa" e  tiver "Alexa" na lista de nomes
 {
   mostre "Linguagem mostre Fynman Alexa!"
   espere 1 segundos

@@ -1,0 +1,17 @@
+x = 10
+
+exiba "Digite um número: "
+
+sorteado = um numero aleatorio entre x e o numero que o usuario digitar 
+mostre sorteado
+
+sorteado = um numero aleatorio entre 10 e 20 + 2
+mostre sorteado
+
+sorteado = um numero aleatorio entre -10 e 13
+mostre sorteado
+
+varSorte = numero aleatorio entre 20 e 40
+
+sorteado recebe um numero aleatorio entre x e x / 2 + varSorte
+mostre sorteado

@@ -1,8 +1,8 @@
 {
   "cor_menu": {
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ],
     "background": "#a8c0ff",
     "foreground": "#454545",
@@ -13,8 +13,8 @@
   },
   "lb_sobDeTitulo": {
     "font": [
-      "monospace regular",
-      12,
+      "Lucida Sans",
+      13,
       "bold"
     ],
     "height": 5,
@@ -23,16 +23,16 @@
   },
   "lb_sobDAutores": {
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ],
     "background": "#e6edff",
     "foreground": "#223322"
   },
   "lb_sobDesenAno": {
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ],
     "background": "#e6edff",
     "foreground": "#223322"
@@ -46,8 +46,8 @@
     "selectbackground": "#dddddd",
     "selectforeground": "#000000",
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ]
   },
   "scrollbar_text": {
@@ -67,9 +67,16 @@
     "highlightbackground":"#c5d4fc",
     "activebackground":"#adc4ff",
     "background": "#c5d4fc",
-    "foreground":"#fa0104"
+    "foreground":"#fa0104",
+    "font": [
+      "Lucida Sans",
+      13
+    ]
   },
   "fr_opcoes_rapidas": {
+    "background": "#c5d4fc"
+  },
+  "fr_ajuda": {
     "background": "#c5d4fc"
   },
   "lb_linhas": {
@@ -80,19 +87,19 @@
   },
   "tx_terminal": {
     "width": 50,
-    "background": "#191912",
+    "background": "#191913",
     "foreground": "#e6edff",
     "highlightthickness": 0,
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ]
   },
   "tx_pesqu": {
     "foreground": "#676767",
     "font": [
-      "monospace regular",
-      12
+      "Lucida Sans",
+      13
     ]
   },
 
@@ -118,7 +125,7 @@
   },
   "lb_ajuda_texto_c": {
     "background":"#fefefe", 
-    "font":["", 12],
+    "font":["", 13],
     "width": 25,
     "anchor":"w"
   },

@@ -1,9 +1,9 @@
 se 1 for igual a 1
 {
-    mostre "obaa"
+    mostre "É igual a 1"
 }
 
-se "nome" == "nome"
+se "nome" == o que o usuario digitar
 {
     mostre "show"
 }
@@ -13,11 +13,12 @@ m = 3
 
 if n == 2
 {
-    print 657
+    print "Número é igual a 2"
 }
 
 idade = "idade"
-if ( n == 3 ou m == 3) ou "idade" == idade
+
+if n == 3 ou m == 3 ou "idade" == idade
 {
     mostre 2 + 5
 }

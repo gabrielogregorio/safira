@@ -31,6 +31,7 @@ class Run():
         self.bool_break_point_liberado = None
         self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
         self.idioma = "pt-br"
+        self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*' 
 
         with open('configuracoes/mensagens.json') as json_file:
             self.mensagens = load(json_file)
@@ -38,7 +39,7 @@ class Run():
     def aguardar_liberacao_breakPoint(self):
         self.bool_break_point_liberado = False
         while not self.bool_break_point_liberado and not self.bool_ignorar_todos_breakpoints:
-            pass
+            self.tx_codficac.update()
 
     def realiza_coloracao_erro(self, palavra, valor1, valor2, cor='red', linhaErro = None):
         """
@@ -241,6 +242,38 @@ class Run():
                     lst_ultimo_ret[1] = 0
                     lst_ultimo_ret = [True, False, 'booleano']
 
+                elif lst_ultimo_ret[3] == "declararLoopParaCada":
+                    lst_ultimo_ret[3] = 'fazerNada'
+
+                    # Valor de inicio e fim
+                    passo_para_cada = lst_ultimo_ret[1][3]
+                    if passo_para_cada == 1:
+                        inici_para_cada = lst_ultimo_ret[1][1] 
+                        final_para_cada = lst_ultimo_ret[1][2] + 1
+                    else:
+                        inici_para_cada = lst_ultimo_ret[1][1]
+                        final_para_cada = lst_ultimo_ret[1][2] - 1
+
+                    for valor in range(inici_para_cada, final_para_cada, passo_para_cada):
+
+                        criar_variavel = Run.funcao_realizar_atribu(self, lst_ultimo_ret[1][0], str(valor))
+                        if criar_variavel[0] == False: return criar_variavel
+
+                        lst_resultado_execucao = Run.orquestrador_interpretador(self, 
+                            str_bloco[1:].strip())
+
+                        if lst_resultado_execucao[0] == False:
+                            if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                                self.numero_threads -= 1
+                                return [True, 'Orquestrador Finalizado', 'string']
+
+                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
+                            self.numero_threads -= 1
+                            return lst_resultado_execucao
+
+                    lst_ultimo_ret[1] = 0
+                    lst_ultimo_ret = [True, False, 'booleano']
+
                 elif lst_ultimo_ret[3] == "declararFuncao":
                     lst_ultimo_ret[3] = "fazerNada"
                     self.dic_funcoes[lst_ultimo_ret[4]] = [self.dic_funcoes[lst_ultimo_ret[4]][0], str_bloco[1:].strip()]
@@ -288,8 +321,7 @@ class Run():
                 self.numero_threads -= 1
                 return lst_ultimo_ret
 
-            if lst_ultimo_ret[3] == 'exibirNaTela':
-                Run.orq_exibir_tela(self, lst_ultimo_ret)
+            if lst_ultimo_ret[3] == 'exibirNaTela': Run.orq_exibir_tela(self, lst_ultimo_ret)
 
         # Aviso de erros de profundidade
         if int_profundidade > 0:
@@ -303,8 +335,9 @@ class Run():
         self.numero_threads -= 1
         return [True, 'Orquestrador Finalizado', 'string']
 
+
     def analisa_instrucao(self, comando, texto):
-        re_comandos = "(\\<[a-zA-Z]*\\>)"
+        re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
         re_groups = findall(re_comandos, comando)
         if re_groups == None:
             return [False]
@@ -333,6 +366,9 @@ class Run():
 
         # o ? evita a gulidisse do .*, ele pode remover um passando parametros e considerar só o parametros, por exemplo
         comando = comando.replace('(.*)','(\\"[^\\"]*\\"|.*?)')
+
+        # Marca o padrão de variável
+        comando = comando.replace('__var__', '({})'.format(self.rgx_padrao_variavel))
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
@@ -406,8 +442,9 @@ class Run():
             analisa020 = Run.analisa_instrucao(self, '^(<digitado>)$', linha)
             analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
             analisa022 = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
-            analisa023 = Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_]*)(<declaraVariaveis>)(.*)$', linha)
+            analisa023 = Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
             analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
+            analisa025 = Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
 
             if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), num_linha ]
             if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), num_linha ]
@@ -434,6 +471,7 @@ class Run():
             if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), num_linha ]
             if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), num_linha ]
             if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), num_linha ]
+            if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), num_linha ]
 
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], num_linha ]
         return [ [True, None, 'vazio', 'fazerNada'], num_linha ]
@@ -461,6 +499,30 @@ class Run():
         if msg == 'naoNumerico':
             return [False, "A variável '{}' não é numérica!".format(variavel), 'string', 'exibirNaTela']
 
+    def funcao_para_cada(self, variavel, inicio, fim):
+
+        teste_exist = Run.obter_valor_variavel(self, variavel)
+        teste_valorI = Run.abstrair_valor_linha(self, inicio)
+        teste_valorF = Run.abstrair_valor_linha(self, fim)
+
+        if teste_valorI[0] == False: return teste_valorI
+        if teste_valorF[0] == False: return teste_valorF
+
+        if teste_valorI[2] != 'float': return Run.msg_variavel_numerica(self, 'naoNumerico', teste_valorI[1])
+        if teste_valorF[2] != 'float': return Run.msg_variavel_numerica(self, 'naoNumerico', teste_valorF[1])
+
+        # Variável não existe
+        if teste_exist[0] == False:
+            criar_variavel = Run.funcao_realizar_atribu(self, variavel, '0')
+
+            if not criar_variavel[0]:
+                return criar_variavel
+        passo = 1
+        if (int(teste_valorI[1]) > int(teste_valorF[1])):
+            passo = -1
+        
+        return [True, [variavel, int(teste_valorI[1]), int(teste_valorF[1]), passo], "lista", "declararLoopParaCada"]
+
     def funcao_incremente_vari(self, valor, variavel):
         return Run.incremente_decremente(self, valor, variavel,  'incremente')
 
@@ -473,11 +535,8 @@ class Run():
         teste_exist = Run.obter_valor_variavel(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_exist[0] == False:
-            return teste_exist
-
-        if teste_valor[0] == False:
-            return teste_valor
+        if teste_exist[0] == False: return teste_exist
+        if teste_valor[0] == False: return teste_valor
 
         if teste_exist[2] != 'float':
             return Run.msg_variavel_numerica(self, 'naoNumerico', variavel)
@@ -506,14 +565,9 @@ class Run():
         teste_posic = Run.abstrair_valor_linha(self, posicao)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_exist[0] == False:
-            return teste_exist
-
-        if teste_posic[0] == False:
-            return teste_posic
-
-        if teste_valor[0] == False:
-            return teste_valor
+        if teste_exist[0] == False: return teste_exist
+        if teste_posic[0] == False: return teste_posic
+        if teste_valor[0] == False: return teste_valor
 
         if teste_exist[2] != 'lista':
             return[False, '{} {}'.format(variavelLista, Run.msg_idioma(self, "nao_e_lista")), 'string']
@@ -538,8 +592,7 @@ class Run():
 
         teste = Run.obter_valor_variavel(self, linha)
 
-        if teste[0] == False:
-            return teste
+        if teste[0] == False: return teste
 
         if teste[2] != 'lista':
             return[False, "{} {}".format(linha, Run.msg_idioma(self, "nao_e_lista")), 'string']
@@ -689,14 +742,9 @@ class Run():
         teste_posicao = Run.abstrair_valor_linha(self, posicao)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_variavel[0] == False:
-            return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
-
-        if teste_valor[0] == False:
-            return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
-
-        if teste_posicao[0] == False:
-            return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
+        if not teste_variavel[0]: return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+        if not teste_valor[0]: return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+        if not teste_posicao[0]: return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
 
         if teste_posicao[2] != 'float':
             return Run.msg_variavel_numerica(self, 'naoNumerico',  teste_posicao[1])
@@ -718,11 +766,9 @@ class Run():
         teste = Run.analisa_padrao_variavel(self, variavel)
         resultado = Run.abstrair_valor_linha(self, posicoes)
 
-        if teste[1] != True:
-            return [False, teste[1], teste[2], 'exibirNaTela']
+        if not teste[0]: return teste
 
-        if resultado[0] == False:
-            return resultado
+        if not resultado[0]: return resultado
 
         if resultado[2] != 'float':
             return Run.msg_variavel_numerica(self, 'naoNumerico',  resultado[1]) 
@@ -745,8 +791,7 @@ class Run():
         teste = Run.analisa_padrao_variavel(self, variavel)
         testa = Run.verifica_se_tem(self, itens, ', ')
 
-        if teste[1] != True:
-            return [False, teste[1], teste[2], 'exibirNaTela']
+        if not teste[0]: return teste
 
         if testa != []:
             listaItens = []
@@ -810,8 +855,7 @@ class Run():
         digitado = digitado[textoOriginal-1:-2]
 
         # SE FOR NUMÉRICO
-        print('´´´', linha)
-        if ' numero ' in linha:
+        if 'numero ' in linha:
             try:
                 float(digitado)
             except:
@@ -835,8 +879,7 @@ class Run():
         linha = linha.strip()
         linha = Run.abstrair_valor_linha(self, linha)
 
-        if linha[0] == False:
-            return [linha[0], linha[1], linha[2], 'exibirNaTela']
+        if not linha[0]: return [linha[0], linha[1], linha[2], 'exibirNaTela']
 
         if linha[2] != 'float':
             return Run.msg_variavel_numerica(self, 'naoNumerico',  linha[1]) 
@@ -855,11 +898,8 @@ class Run():
         num1 = Run.abstrair_valor_linha(self, num1)
         num2 = Run.abstrair_valor_linha(self, num2)
 
-        if num1[0] == False:
-            return [num1[0], num1[1], num1[2], 'exibirNaTela']
-
-        if num2[0] == False:
-            return [num2[0], num2[1], num2[2], 'exibirNaTela']
+        if not num1[0]: return num1
+        if not num2[0]: return num2
 
         try:
             int(num1[1])
@@ -890,7 +930,7 @@ class Run():
         except:
             return [False, '{} "{}"'.format(Run.msg_idioma(self, "funcao_nao_existe"), nomeDaFuncao), 'string', 'exibirNaTela']
 
-        testa = Run.verifica_se_tem(self, parametros, ', ')
+        testa = Run.verifica_se_tem(self, parametros, ',')
         if testa != []:
             anterior = 0
             listaDeParametros = []
@@ -924,10 +964,9 @@ class Run():
             if len(self.dic_funcoes[nomeDaFuncao][0]) == 1:
                 resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0], parametros)
 
-                if resultado[0] == False:
-                    return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+                if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
             else:
-                return [False, Run.msg_idioma(self, "funcao_passou_um_parametros").format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0])), 'string', 'exibirNaTela']
+                return [False, Run.msg_idioma(self, "funcao_passou_um_parametros").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao][0])), 'string', 'exibirNaTela']
 
         resultadoOrquestrador = Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao][1])
 
@@ -942,8 +981,7 @@ class Run():
         teste = Run.analisa_padrao_variavel(self, nomeDaFuncao)
         testa = Run.verifica_se_tem(self, parametros, ', ')
 
-        if teste[1] != True:
-            return [False, teste[1], teste[2], 'exibirNaTela']
+        if not teste[0]: return teste
 
         if testa != []:
             listaDeParametros = []
@@ -962,15 +1000,13 @@ class Run():
                 listaFinalDeParametros.append(parametro.strip())
 
                 teste = Run.analisa_padrao_variavel(self, parametro.strip())
-                if teste[1] != True:
-                    return [False, teste[1], teste[2], 'exibirNaTela']
+                if not teste[0]: return teste
 
             self.dic_funcoes[nomeDaFuncao] = [listaFinalDeParametros, 'bloco']
 
         else:
             teste = Run.analisa_padrao_variavel(self, parametros)
-            if teste[1] != True:
-                return [False, teste[1], teste[2], 'exibirNaTela']
+            if not teste[0]: return teste
 
             self.dic_funcoes[nomeDaFuncao] = [parametros, 'bloco']
 
@@ -980,33 +1016,24 @@ class Run():
     def funcao_exibir_outra_ln(self, linha):
         Run.log(self, 'funcao exibição: {}'.format(linha))
 
-        codigo = linha.strip()
-        resultado = Run.abstrair_valor_linha(self, codigo)
-
-        if resultado[0] == False:
-            return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+        resultado = Run.abstrair_valor_linha(self, linha)
+        if not resultado[0]: return resultado
 
         return [resultado[0],resultado[1], resultado[2],'exibirNaTela']
 
     def funcao_exibir_mesma_ln(self, linha):
         Run.log(self, 'Função exibir nessa linha ativada'.format(linha))
 
-        linha = linha.strip()
         resultado = Run.abstrair_valor_linha(self, linha)
-
-        if resultado[0] == False:
-            return resultado
+        if not resultado[0]: return resultado
 
         return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
-        print(tipo_espera)
         Run.log(self, 'Função tempo: {}'.format(tempo))
 
         resultado = Run.abstrair_valor_linha(self, tempo)
-
-        if resultado == False:
-            return [False, resultado[1], resultado[2], 'exibirNaTela']
+        if not resultado[0]: return resultado
 
         if tipo_espera == "segundos" or tipo_espera == "s" or tipo_espera == "segundo":
             sleep(resultado[1])
@@ -1115,8 +1142,7 @@ class Run():
 
         # Abstrai o valor de todas as variáveis
         linha = Run.localiza_transforma_variavel(self, linha)
-        if linha[0] == False:
-            return linha
+        if not linha[0]: return linha
 
         # Se sobrou texto
         for caractere in linha[1]:
@@ -1144,7 +1170,6 @@ class Run():
             return [False, "{} '{}'".format(Run.msg_idioma(self, "voce_precisa_definir_variavel"), variavel), 'string', 'fazerNada']
         else:
             return [True, self.dic_variaveis[variavel][0], self.dic_variaveis[variavel][1], 'fazerNada']
-
 
     def abstrair_valor_linha(self, possivelVariavel):
         Run.log(self, "Abstrar valor de uma linha inteira com possivelVariavel: '{}'".format(possivelVariavel))
@@ -1180,8 +1205,7 @@ class Run():
             for linha in listaLinhas:
                 valor = Run.abstrair_valor_linha(self, linha)
 
-                if valor[0] == False:
-                    return valor
+                if not valor[0]: return valor
 
                 listaValores += str(valor[1])
 
@@ -1194,16 +1218,14 @@ class Run():
             return [True, possivelVariavel, 'string']
 
         resultado = Run.fazer_contas(self, possivelVariavel)
-        if resultado[0] == True:
-            return resultado
+        if resultado[0]: return resultado
 
         resultado = Run.comandos_uso_geral(self, possivelVariavel)
 
-        if resultado[0] == True and resultado[1] != None:
+        if resultado[0] and resultado[1] != None:
             return resultado
 
-        elif resultado[0] == False:
-            return resultado
+        elif not resultado[0]: return resultado
 
         testa = Run.verifica_se_tem(self, possivelVariavel, '"')
         if testa != []:
@@ -1216,36 +1238,34 @@ class Run():
         else:
             return [True, float(possivelVariavel), 'float']
 
-    def analisa_padrao_variavel(self, variavelAnalise):
-        variavel = variavelAnalise
-
-        variavel = variavel.replace('_','a')
-        variavel = variavel.lower()
+    def analisa_padrao_variavel(self, variavel):
+        variavel = str(variavel)
+        print(variavel,'.......')
 
         if not variavel[0].isalpha():
-            return [True, Run.msg_idioma(self, "variaveis_comecar_por_letra"), "string"]
+            return [False, Run.msg_idioma(self, "variaveis_comecar_por_letra"), "string", 'exibirNaTela']
 
         if not variavel.isalnum():
-            return [True, Run.msg_idioma(self, "variaveis_devem_conter"), 'string']
+            return [False, Run.msg_idioma(self, "variaveis_devem_conter"), 'string', 'exibirNaTela']
 
         return [True,True,'booleano']
 
     def funcao_realizar_atribu(self, variavel, valor):
+
         Run.log(self, 'Função atribuição: {}'.format(variavel + str(valor)))
 
         if variavel == '' or valor == '':
             return [False, Run.msg_idioma(self, "variavel_valor_nao_informado"), 'string', 'exibirNaTela']
 
-        teste = Run.analisa_padrao_variavel(self, variavel)
-        if teste[1] != True:
-            return [False, teste[1], teste[2], 'exibirNaTela']
+        teste_padrao = Run.analisa_padrao_variavel(self, variavel)
+        if not teste_padrao[0]:
+            return teste_padrao
 
         valor = valor.replace('\n', '')
         valor = valor.strip()
 
         resultado = Run.abstrair_valor_linha(self, valor)
-        if resultado[0] == False:
-            return resultado
+        if not resultado[0]: return resultado
 
         if resultado[0] == True:
             self.dic_variaveis[variavel] = [resultado[1], resultado[2]]
@@ -1357,8 +1377,7 @@ class Run():
             resultado = Run.abstrair_valor_linha(self, 
                 linha[anterior:item.start()])
 
-            if resultado[0] == False:
-                return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+            if resultado[0] == False: return resultado
 
             saida = resultado[1]
 
@@ -1373,8 +1392,7 @@ class Run():
         boolTemTiverLista = False
         resultado = Run.tiver_valor_lista(self, linha[anterior:].strip())
 
-        if resultado[0] == False:
-            return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+        if not resultado[0]: return resultado
 
         if resultado[2] == 'booleano':
 
@@ -1389,8 +1407,7 @@ class Run():
         if not boolTemTiverLista:
 
             resultado = Run.abstrair_valor_linha(self, linha[anterior:])
-            if resultado[0] == False:
-                return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+            if not resultado[0]: return resultado
 
             saida = resultado[1]
             if resultado[2] == 'string':

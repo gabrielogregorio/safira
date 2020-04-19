@@ -23,6 +23,16 @@
   "listaCom": [
     [" com ","pt-br"]
   ],
+  "para_cada": [
+    ["para cada ","pt-br"],
+    ["for ","en-us"]
+  ],
+  "para_cada_de": [
+    [" de ","pt-br"]
+  ],
+  "para_cada_ate": [
+    [" ate ","pt-br"]
+  ],
   "tamanhoDaLista": [
     ["o tamanho da lista de","pt-br"],
     ["o tamanho da lista","pt-br"],
@@ -41,10 +51,14 @@
   ],
   "mostreNessa": [
     ["mostre nessa linha ","pt-br"],
+    ["imprima nessa linha ","pt-br"],
+    ["escreva nessa linha ","pt-br"],
     ["exiba nessa linha ","pt-br"]
   ],
   "mostre": [
     ["mostre ","pt-br"],
+    ["imprima ","pt-br"],
+    ["escreva ","pt-br"],
     ["exiba ","pt-br"],
     ["printf ","en-us"],
     ["display ","en-us"],

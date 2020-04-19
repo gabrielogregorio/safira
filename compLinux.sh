@@ -3,7 +3,7 @@ sudo pip3.7 install pyinstaller --no-cache
 
 rm -rf feynman
 cp script.py feynman.pyw
-pyinstaller --onefile -windowed --icon=app.ico feynman.pyw
+python3.7 -m pyinstaller --onefile -windowed --icon=app.ico feynman.pyw
 
 mv dist/feynman .
 sudo chmod +x feynman

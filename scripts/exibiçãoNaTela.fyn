@@ -1,0 +1,9 @@
+escola = "Fatec"
+seunome = "Denise"
+semestre = 1
+
+mostre "--------------- Exemplos --------------- "
+mostre nessa linha "Sala de aula: ", 09
+exiba nessa linha " | Escola: ", escola
+mostre " |  Aluno: ",seunome
+mostre " | Semestre: ", semestre
