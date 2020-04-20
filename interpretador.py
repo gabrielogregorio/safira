@@ -55,7 +55,7 @@ class Run():
         self.tx_terminal.tag_add(palavra, linha1 , linha2)
         self.tx_terminal.tag_config(palavra, foreground = cor)
 
-        if linhaErro != None:
+        if linhaErro is not None:
 
             lista = self.tx_codficac.get(1.0, END).split("\n")
 
@@ -372,16 +372,12 @@ class Run():
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
-        if re_texto == []:
-            return [False, 0]
-        if str(type(re_texto[0])) == "<class 'str'>":
-            lista_itens = [re_texto[0]]
-        else:
-            # Para remover a indexação a partir do zero
-            lista_itens = list(re_texto[0])
 
+        if re_texto == []: return [False, 0]
+        if str(type(re_texto[0])) == "<class 'str'>": lista_itens = [re_texto[0]]
+        else: lista_itens = list(re_texto[0]) # Remover indexação a partir do zero
+            
         lista_itens.insert(0, "")
-
         return [True, [saida.strip() for saida in lista_itens]]
 
     def interpretador(self, linha):
@@ -399,7 +395,8 @@ class Run():
         linha = linha.strip()
 
         # Se for uma linha vazia
-        if linha == '': return [ [True, None, 'vazio','linhaVazia'], "1" ]
+        if linha == '':
+            return [ [True, None, 'vazio','linhaVazia'], "1" ]
 
         else:
             num_linha = "0"
@@ -565,9 +562,9 @@ class Run():
         teste_posic = Run.abstrair_valor_linha(self, posicao)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_exist[0] == False: return teste_exist
-        if teste_posic[0] == False: return teste_posic
-        if teste_valor[0] == False: return teste_valor
+        if not teste_exist[0]: return teste_exist
+        if not teste_posic[0]: return teste_posic
+        if not teste_valor[0]: return teste_valor
 
         if teste_exist[2] != 'lista':
             return[False, '{} {}'.format(variavelLista, Run.msg_idioma(self, "nao_e_lista")), 'string']
@@ -592,7 +589,7 @@ class Run():
 
         teste = Run.obter_valor_variavel(self, linha)
 
-        if teste[0] == False: return teste
+        if not teste[0]: return teste
 
         if teste[2] != 'lista':
             return[False, "{} {}".format(linha, Run.msg_idioma(self, "nao_e_lista")), 'string']
@@ -608,7 +605,7 @@ class Run():
         teste_posicao = Run.abstrair_valor_linha(self, posicao)
         teste_variavel = Run.obter_valor_lista(self, variavel)
 
-        if teste_posicao[0] == False:
+        if not teste_posicao[0]:
             return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
 
         elif teste_posicao[2] != 'float':
@@ -637,13 +634,13 @@ class Run():
         teste_variavel = Run.obter_valor_variavel(self, variavel)
         resultado_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_variavel[0] == False:
+        if not teste_variavel[0]:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
         if teste_variavel[2] != 'lista':
             return [False, '{} {}'.format(linha, Run.msg_idioma(self, "nao_e_lista")), 'string', 'exibirNaTela']
 
-        if resultado_valor[0] == False:
+        if not resultado_valor[0]:
             return [resultado_valor[0], resultado_valor[1], resultado_valor[2], 'exibirNaTela']
 
         if [resultado_valor[1], resultado_valor[2]] in self.dic_variaveis[variavel][0]:
@@ -657,7 +654,7 @@ class Run():
         linha = linha.strip()
 
         teste = Run.obter_valor_lista(self, linha)
-        if teste[0] == False:
+        if not teste[0]:
             return [teste[0], teste[1], teste[2], 'exibirNaTela']
 
         try:
@@ -674,12 +671,12 @@ class Run():
 
         # analisa[1] se lista foi decarada e se é lista
         teste = Run.obter_valor_lista(self, variavel)
-        if teste[0] == False:
+        if not teste[0]:
             return [teste[0], teste[1], teste[2], 'exibirNaTela']
 
         resultado = Run.abstrair_valor_linha(self, valor)
 
-        if resultado[0] == False:
+        if not resultado[0]:
             return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
 
         try:
@@ -699,10 +696,10 @@ class Run():
         teste_variavel = Run.obter_valor_lista(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_variavel[0] == False:
+        if not teste_variavel[0]:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
-        if teste_valor[0] == False:
+        if not teste_valor[0]:
             return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
 
         try:
@@ -723,10 +720,10 @@ class Run():
         teste_variavel = Run.obter_valor_lista(self, variavel)
         teste_valor = Run.abstrair_valor_linha(self, valor)
 
-        if teste_variavel[0] == False:
+        if not teste_variavel[0]:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
-        if teste_valor[0] == False:
+        if not teste_valor[0]:
             return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
 
         self.dic_variaveis[variavel][0].insert(0, [teste_valor[1], teste_valor[2]])
@@ -853,6 +850,7 @@ class Run():
 
         digitado = self.tx_terminal.get(1.0, END)
         digitado = digitado[textoOriginal-1:-2]
+        digitado = digitado.replace("\n","")
 
         # SE FOR NUMÉRICO
         if 'numero ' in linha:
@@ -933,19 +931,19 @@ class Run():
         testa = Run.verifica_se_tem(self, parametros, ',')
         if testa != []:
             anterior = 0
-            listaDeParametros = []
+            listaParametros = []
 
             for valorItem in testa:
                 if len(parametros[anterior : valorItem[0]]) > 0:
-                    listaDeParametros.append( parametros[anterior : valorItem[0]] )
+                    listaParametros.append( parametros[anterior : valorItem[0]] )
                     anterior = valorItem[1]
 
             if len(parametros[anterior : ]) > 0:
-                listaDeParametros.append( parametros[anterior : ] )
+                listaParametros.append( parametros[anterior : ] )
 
             listaFinalDeParametros = []
 
-            for parametro in listaDeParametros:
+            for parametro in listaParametros:
                 listaFinalDeParametros.append(parametro.strip())
 
             # Se tiver a mesma quantiade de parametros
@@ -959,7 +957,7 @@ class Run():
             else:
                 return [False, Run.msg_idioma(self, "funcao_tem_parametros_divergentes").format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0]), len(listaFinalDeParametros)), 'string', 'fazerNada']
 
-        elif parametros != None:
+        elif parametros is not None:
 
             if len(self.dic_funcoes[nomeDaFuncao][0]) == 1:
                 resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0], parametros)
@@ -970,7 +968,7 @@ class Run():
 
         resultadoOrquestrador = Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao][1])
 
-        if resultadoOrquestrador[0] == False:
+        if not resultadoOrquestrador[0]:
             return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
 
         return [True, None, 'vazio', 'fazerNada']
@@ -984,19 +982,19 @@ class Run():
         if not teste[0]: return teste
 
         if testa != []:
-            listaDeParametros = []
+            listaParametros = []
             anterior = 0
 
             for valorItem in testa:
                 if parametros[anterior : valorItem[0]]:
-                    listaDeParametros.append(parametros[ anterior : valorItem[0]])
+                    listaParametros.append(parametros[ anterior : valorItem[0]])
                 anterior = valorItem[1]
 
             if len( parametros[anterior : ]) > 0:
-                listaDeParametros.append(parametros[ anterior : ])
+                listaParametros.append(parametros[ anterior : ])
 
             listaFinalDeParametros = []
-            for parametro in listaDeParametros:
+            for parametro in listaParametros:
                 listaFinalDeParametros.append(parametro.strip())
 
                 teste = Run.analisa_padrao_variavel(self, parametro.strip())
@@ -1018,15 +1016,13 @@ class Run():
 
         resultado = Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
-
-        return [resultado[0],resultado[1], resultado[2],'exibirNaTela']
+        return [resultado[0], resultado[1], resultado[2],'exibirNaTela']
 
     def funcao_exibir_mesma_ln(self, linha):
         Run.log(self, 'Função exibir nessa linha ativada'.format(linha))
 
         resultado = Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
-
         return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
@@ -1053,15 +1049,14 @@ class Run():
 
             abstrair = Run.abstrair_valor_linha(self, 
                 string[anterior:valor.start()])
-            if abstrair[0] == False:
-                return abstrair
+
+            if not abstrair[0]: return abstrair
 
             valorFinal = valorFinal + str( abstrair[1] ) + string[ valor.start()+1:valor.end() -1 ]
             anterior = valor.end()
 
         abstrair = Run.abstrair_valor_linha(self, string[anterior:])
-        if abstrair[0] == False:
-            return abstrair
+        if not abstrair[0]: return abstrair
 
         valorFinal = valorFinal + str(abstrair[1])
 
@@ -1082,8 +1077,7 @@ class Run():
 
                 variavelDessaVez = Run.abstrair_valor_linha(self, palavra)
 
-                if variavelDessaVez[0] == False:
-                    return variavelDessaVez
+                if not variavelDessaVez[0]: return variavelDessaVez
 
                 tipos_obtidos.append(variavelDessaVez[2])
                 linha = str(linha[:anterior]) + str(
@@ -1114,8 +1108,7 @@ class Run():
         linha = linha.replace(' mais ', ' + ')
         linha = linha.replace(' menos ', ' - ')
 
-        if '"' in linha:
-            return [False, "Isso é uma string", 'string']
+        if '"' in linha: return [False, "Isso é uma string", 'string']
 
         linha = ' {} '.format(linha)
 
@@ -1152,10 +1145,8 @@ class Run():
         # Tente fazer uma conta com isso
         try:
             resutadoFinal = eval(linha[1])
-
         except Exception as erro:
             return [False, "{} |{}|".format(Run.msg_idioma(self, "nao_possivel_fazer_conta"), linha[1]), 'string']
-
         else:
             return [True, resutadoFinal, 'float']
 
@@ -1251,7 +1242,6 @@ class Run():
         return [True,True,'booleano']
 
     def funcao_realizar_atribu(self, variavel, valor):
-
         Run.log(self, 'Função atribuição: {}'.format(variavel + str(valor)))
 
         if variavel == '' or valor == '':
@@ -1267,7 +1257,7 @@ class Run():
         resultado = Run.abstrair_valor_linha(self, valor)
         if not resultado[0]: return resultado
 
-        if resultado[0] == True:
+        if resultado[0]:
             self.dic_variaveis[variavel] = [resultado[1], resultado[2]]
 
             return [True, None, 'vazio', 'fazerNada']
@@ -1276,7 +1266,6 @@ class Run():
 
     def funcao_loops_enquantox(self, linha):
         Run.log(self, 'Função loops enquanto: {}'.format(linha))
-
         resultado = Run.funcao_testar_condicao(self, linha)
         return [resultado[0], resultado[1], resultado[2], 'declararLoop']
 

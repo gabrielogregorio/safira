@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-import webbrowser
-from threading import Thread
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
@@ -26,16 +24,17 @@ from tkinter import E
 from tkinter import W
 from tkinter import Tk
 import tkinter as tk
-from time import time
-from json import load
-from os import listdir
-from os import getcwd
+from interpretador import Run
+from threading import Thread
+from time import time, sleep
 from os.path import abspath
 from Arquivo import Arquivo
 from Colorir import Colorir
-from interpretador import Run
+from json import load
+from os import listdir
+from os import getcwd
+import webbrowser
 import funcoes
-
 
 __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
@@ -44,7 +43,7 @@ __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
 __date__ = '01/08/2019'
-__last_update__ = '16/04/2020'
+__last_update__ = '19/04/2020'
 __version__ = '0.1'
 
 global dic_info_arquivo
@@ -65,28 +64,6 @@ global fr_abas
 global aba_focada
 global controle_arquivos
 global dic_abas
-
-dic_comandos, dic_design, cor_do_comando = funcoes.atualiza_configuracoes_temas()
-colorir_codigo = Colorir(cor_do_comando, dic_comandos)
-bool_tela_em_fullscreen = False
-linha_para_break_point = 0
-lst_titulos_frames = []
-controle_arquivos = None
-posAbsuluta = 0
-posCorrente = 0
-aba_focada = 1
-lst_abas = []
-path = abspath(getcwd())
-
-dic_abas = {
-    1:{
-        "nome":"",
-        "foco":True,
-        "lst_breakpoints":[],
-        "arquivoSalvo":{'link': "",'texto': ""},
-        "arquivoAtual":{'texto': ""}
-    }
-}
 
 def funcoes_arquivos_configurar(event, comando, link=None):
     global controle_arquivos
@@ -118,19 +95,20 @@ def funcoes_arquivos_configurar(event, comando, link=None):
     renderizar_aba(dic_abas)
 
 def inicializa_orquestrador(event = None, libera_break_point_executa = False):
+    print("\n Orquestrador iniciado")
+
     bt_playP.configure(image=ic_PStop)
     bt_playP.update()
 
-    print("\n Orquestrador iniciado")
- 
+    global dic_abas
     global tx_codfc
     global instancia
-    global tx_terminal
-    global dic_abas
     global aba_focada
+    global tx_terminal
 
     # Se for executar até o breakpoint
     if libera_break_point_executa:
+
         bool_ignorar_todos_breakpoints = False
         try:
             instancia.bool_break_point_liberado = True
@@ -140,6 +118,7 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
         else:
             print("Liberando programa.")
             return 0
+
     else:
         bool_ignorar_todos_breakpoints = True
 
@@ -147,13 +126,18 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
 
     try:
         print(instancia.numero_threads)
+
     except:
         pass
+
     else:
+
         try:
             instancia.aconteceu_erro = True
+
         except Exception as e:
             print("Impossivel para interpretador: " + str(e))
+
         return 0
 
     inicializador_terminal()
@@ -165,11 +149,17 @@ def inicializa_orquestrador(event = None, libera_break_point_executa = False):
 
     lista = linhas.split('\n')
     for linha in range(len(lista)):
-        nova_linha += '[{}]{}\n'.format(str(linha + 1), lista[linha])
+        nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
 
     linhas = nova_linha
 
-    instancia = Run(tx_terminal, tx_codfc, False, dic_abas[aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
+    instancia = Run(
+        tx_terminal,
+        tx_codfc,
+        False,
+        dic_abas[aba_focada]["lst_breakpoints"],
+        bool_ignorar_todos_breakpoints)
+
     t = Thread(target=lambda codigoPrograma = linhas: instancia.orquestrador_interpretador(codigoPrograma))
     t.start()
 
@@ -201,11 +191,21 @@ def inicializador_terminal():
     top_janela_terminal = Toplevel(tela)
     top_janela_terminal.grid_columnconfigure(1, weight=1)
     top_janela_terminal.rowconfigure(1, weight=1)
-    top_janela_terminal.geometry("720x450+150+150")
+
+    top_janela_terminal.geometry("720x450")
+    tela.update()
+    top_janela_terminal.withdraw() # Ocultar tkinter
+
+    t_width  = tela.winfo_screenwidth()
+    t_heigth = tela.winfo_screenheight()
+
+    top_janela_terminal.geometry("+{}+{}".format( int(t_width / 2 - 720 / 2), int(t_heigth / 2 - 450 / 2) ))
+    top_janela_terminal.deiconify()
+    tela.update()
 
     tx_terminal = Text(top_janela_terminal)
+
     try:
-        # Se ainda não estava carregado
         tx_terminal.configure(dic_design["tx_terminal"])
     except Exception as erro:
         print("Erro ao configurar os temas ao iniciar o terminal: ", erro)
@@ -214,29 +214,16 @@ def inicializador_terminal():
     tx_terminal.focus_force()
     tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-def atualizarListaTemas():
-    for file in listdir('temas/'):
-        if len(file) > 11:
-            if file[-10:] == 'theme.json':
-                funcao = lambda link = file: atualizaInterface('tema', str(link))
-                mn_intfc_casct_temas.add_command(label=file, command=funcao)
-
-def atualizarListasintaxe():
-    for file in listdir('temas/'):
-        if len(file) > 13:
-            if file[-12:] == 'sintaxe.json':
-                funcao = lambda link = file: atualizaInterface('sintaxe', str(link))
-                mn_intfc_casct_sintx.add_command(label=file, command=funcao)
-
 def arquivoConfiguracao(chave, novo = None):
-    if novo == None:
+
+    if novo is None:
         with open('configuracoes/configuracoes.json') as json_file:
             configArquivoJson = load(json_file)
             retorno = configArquivoJson[chave]
 
         return retorno
 
-    elif novo != None:
+    elif novo is not None:
         with open('configuracoes/configuracoes.json') as json_file:
             configArquivoJson = load(json_file)
 
@@ -255,7 +242,6 @@ def atualizaInterface(chave, novo):
 
     try:
         arquivoConfiguracao(chave, novo)
-
     except Exception as e:
         return [None,'Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas']
 
@@ -263,13 +249,10 @@ def atualizaInterface(chave, novo):
 
     try:
         colorir_codigo.alterar_cor_comando(cor_do_comando)
-
         colorir_codigo.coordena_coloracao(None, tx_codfc = tx_codfc).update()
         atualiza_design_interface()
-
     except Exception as erro:
         print('ERRO: ', erro)
-
     else:
         print('Temas atualizados')
 
@@ -278,6 +261,7 @@ def atualizaInterface(chave, novo):
 
 def atualiza_interface_config(objeto, menu):
     global dic_design
+
     try:
         objeto.configure(dic_design[menu])
     except Exception as erro:
@@ -285,7 +269,6 @@ def atualiza_interface_config(objeto, menu):
     return 0
 
 def atualiza_design_interface():
-
     atualiza_interface_config(mn_intfc_casct_sintx, "cor_menu")
     atualiza_interface_config(mn_intfc_casct_temas, "cor_menu")
     atualiza_interface_config(mn_ferrm, "cor_menu")
@@ -326,18 +309,13 @@ class ContadorLinhas(Canvas):
         self.textwidget = text_widget
 
     def desenhar_linhas(self, *args):
-        # Deletar tudo
         self.delete("all")
 
-        # Obter indice
         i = self.textwidget.index("@0,0")
         while True :
 
-            # Desenhar
             dline= self.textwidget.dlineinfo(i)
-
-            if dline is None:
-                break
+            if dline is None: break
 
             y = dline[1]
             linenum = str(i).split(".")[0]
@@ -379,10 +357,8 @@ def atualizacao_linhas(event):
 def modoFullScreen(event=None):
     global bool_tela_em_fullscreen
 
-    if bool_tela_em_fullscreen:
-        bool_tela_em_fullscreen = False
-    else:
-        bool_tela_em_fullscreen = True
+    if bool_tela_em_fullscreen: bool_tela_em_fullscreen = False
+    else: bool_tela_em_fullscreen = True
 
     tela.attributes("-fullscreen", bool_tela_em_fullscreen)
 
@@ -390,11 +366,9 @@ def ativar_logs(event=None):
     global instancia
 
     try:
-        if instancia.bool_logs:
-            instancia.bool_logs = False
+        if instancia.bool_logs: instancia.bool_logs = False
+        else: instancia.bool_logs = True
 
-        else:
-            instancia.bool_logs = True
     except:
         print("Interpretador não iniciado")
 
@@ -601,8 +575,7 @@ def renderizar_aba(dic_abas, acao = "refazer"):
             else:
                 txt_btn = "x"
 
-            if nome_arquivo == "":
-                nome_arquivo = "   "
+            if nome_arquivo == "": nome_arquivo = "   "
 
             lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
             bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
@@ -627,9 +600,7 @@ def ativar_coordernar_coloracao():
     global aba_focada
 
     dic_abas[aba_focada]["arquivoAtual"]['texto'] = tx_codfc.get(1.0, END)
-
     renderizar_aba_muda_x(dic_abas)
-
     colorir_codigo.coordena_coloracao(None, tx_codfc=tx_codfc)
 
 def nova_aba(event=None):
@@ -655,12 +626,83 @@ def nova_aba(event=None):
     atualiza_aba(numero = posicao_final_maior + 1)
     atualiza_texto_tela(posicao_final_maior + 1)
 
-# tela.attributes('-fullscreen', True)
+def centraliza_tela():
+    tela.update()
+    tela.withdraw() # Ocultar tkinter
+    j_width  = tela.winfo_reqwidth()
+    j_height = tela.winfo_reqheight()
+
+    t_width    = tela.winfo_screenwidth()
+    t_heigth   = tela.winfo_screenheight()
+
+    tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
+    tela.deiconify()
+    tela.update()
+
 tela = Tk()
-tela.title('Combratec - Linguagem feynman')
-tela.rowconfigure(2, weight=1)
-tela.geometry("1100x600")
+
+tela.rowconfigure(1, weight=1)
 tela.grid_columnconfigure(1, weight=1)
+tela.withdraw()          # Ocultar Janela
+tela.overrideredirect(1) # Remve barra de titulos
+
+frame_tela = Frame(tela)
+frame_splash = Frame(tela)
+
+frame_splash.configure(bg="#FFC000")
+frame_splash.rowconfigure(1, weight=1)
+frame_splash.grid_columnconfigure(0, weight=1)
+
+fr_splash = Frame(frame_splash, bg="#FFC000")
+l1_splash = Label(frame_splash, text=" COMBRATEC ", bg="#FFC000", fg="#404040", font=( "Lucida Sans", 90), bd=80)
+l2_splash = Label(frame_splash, text="Carregando", bg="#FFC000", fg="#404040", font=("Lucida Sans", 12))
+
+frame_splash.grid(row=1, column=1, sticky=NSEW)
+fr_splash.grid(row=0, column=1, sticky=NSEW)
+l1_splash.grid(row=1, column=1, sticky=NSEW)
+l2_splash.grid(row=2, column=1, sticky=NSEW)
+frame_splash.update()
+
+centraliza_tela()
+
+# Carregamento de Dados
+dic_comandos, dic_design, cor_do_comando = funcoes.atualiza_configuracoes_temas()
+colorir_codigo = Colorir(cor_do_comando, dic_comandos)
+bool_tela_em_fullscreen = False
+linha_para_break_point = 0
+lst_titulos_frames = []
+controle_arquivos = None
+posAbsuluta = 0
+posCorrente = 0
+aba_focada = 1
+lst_abas = []
+path = abspath(getcwd())
+
+dic_abas = {
+    1:{
+        "nome":"",
+        "foco":True,
+        "lst_breakpoints":[],
+        "arquivoSalvo":{'link': "",'texto': ""},
+        "arquivoAtual":{'texto': ""}
+    }
+}
+
+sleep(2)
+
+fr_splash.grid_forget()
+l1_splash.grid_forget()
+l2_splash.grid_forget()
+frame_splash.grid_forget()
+tela.update()
+
+tela.overrideredirect(0)
+tela.update()
+tela.withdraw() # Ocultar tkinter
+frame_tela.grid(row=1, column=1, sticky=NSEW)
+frame_tela.update()
+
+# Configurações de telas
 tela.bind('<F11>', lambda event: modoFullScreen(event))
 tela.bind('<F5>', lambda event: inicializa_orquestrador(event))
 tela.bind('<Control-s>', lambda event:funcoes_arquivos_configurar(None, "salvar_arquivo"))
@@ -669,11 +711,16 @@ tela.bind('<Control-S>', lambda event: funcoes_arquivos_configurar(None, "salvar
 tela.bind('<F7>', lambda event: inicializa_orquestrador(libera_break_point_executa = True))
 tela.bind('<F10>', lambda event: adiciona_remove_breakpoint())
 tela.bind('<Control-n>', nova_aba)
+tela.title('Combratec - Linguagem feynman')
+
+# tela.attributes('-fullscreen', True)
+
+frame_tela.rowconfigure(2, weight=1)
+frame_tela.grid_columnconfigure(1, weight=1)
 
 try:
     imgicon = PhotoImage(file='icone.png')
     tela.call('wm', 'iconphoto', tela._w, imgicon)
-
 except Exception as erro:
     print('Erro ao carregar icone do app:', erro)
 
@@ -731,11 +778,19 @@ for file in listdir('scripts/'):
 
 mn_intfc_casct_temas = Menu(mn_intfc, tearoff=False)
 mn_intfc.add_cascade(label='  Temas', menu=mn_intfc_casct_temas)
-atualizarListaTemas()
+for file in listdir('temas/'):
+    if len(file) > 11:
+        if file[-10:] == 'theme.json':
+            funcao = lambda link = file: atualizaInterface('tema', str(link))
+            mn_intfc_casct_temas.add_command(label=file, command=funcao)
 
 mn_intfc_casct_sintx = Menu(mn_intfc, tearoff=False)
 mn_intfc.add_cascade(label='  sintaxe', menu=mn_intfc_casct_sintx)
-atualizarListasintaxe()
+for file in listdir('temas/'):
+    if len(file) > 13:
+        if file[-12:] == 'sintaxe.json':
+            funcao = lambda link = file: atualizaInterface('sintaxe', str(link))
+            mn_intfc_casct_sintx.add_command(label=file, command=funcao)
 
 mn_ajuda.add_command(label='  Ajuda (F1)', command=lambda event:webbrowser.open(path + "/tutorial/index.html"))
 mn_ajuda.add_command(label='  Comandos Disponíveis', command=lambda event:webbrowser.open(path + "/tutorial/index.html"))
@@ -743,7 +798,6 @@ mn_ajuda.add_command(label='  Comunidade', command=lambda event:webbrowser.open(
 mn_sobre.add_command(label='  Projeto', command=lambda event:webbrowser.open("http://feynmancode.blogspot.com/"))
 mn_devel.add_command(label='  Logs', command= lambda event=None: ativar_logs())
 
-# =================================================================================================
 ic_salva = PhotoImage(file='imagens/ic_salvar.png')
 ic_playP = PhotoImage(file='imagens/ic_play.png')
 ic_PStop = PhotoImage(file='imagens/ic_parar.png')
@@ -763,9 +817,8 @@ ic_desfz = ic_desfz.subsample(4, 4)
 ic_redsf = ic_redsf.subsample(4, 4)
 ic_ajuda = ic_ajuda.subsample(4, 4)
 ic_pesqu = ic_pesqu.subsample(4, 4)
-# =================================================================================================
 
-fr_opc_rapidas = Frame(tela)
+fr_opc_rapidas = Frame(frame_tela)
 
 bt_salva = Button(fr_opc_rapidas, image=ic_salva, relief=RAISED, command= lambda event=None: funcoes_arquivos_configurar(None, "salvar_arquivo"))
 bt_playP = Button(fr_opc_rapidas, image=ic_playP, relief=RAISED, command = inicializa_orquestrador)
@@ -776,7 +829,7 @@ bt_redsf = Button(fr_opc_rapidas, image=ic_redsf, relief=RAISED)
 bt_ajuda = Button(fr_opc_rapidas, image=ic_ajuda, relief=RAISED)
 bt_pesqu = Button(fr_opc_rapidas, image=ic_pesqu, relief=RAISED)
 
-fr_princ = Frame(tela, bg='red')
+fr_princ = Frame(frame_tela, bg='red')
 fr_princ.grid_columnconfigure(2, weight=1)
 fr_princ.rowconfigure(1, weight=1)
 
@@ -819,6 +872,12 @@ sb_codfc.grid(row=1, column=3, sticky=NSEW)
 atualiza_design_interface()
 
 controle_arquivos = Arquivo(dic_abas, aba_focada, tx_codfc)
-funcoes_arquivos_configurar(None, "abrirArquivo", 'para_cada.fyn')
+
+tela.update()
+tela.update()
+
+centraliza_tela()
+
+#funcoes_arquivos_configurar(None, "abrirArquivo", 'para_cada.fyn')
 
 tela.mainloop()
