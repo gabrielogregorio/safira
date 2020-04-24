@@ -57,7 +57,7 @@ mostre "Nomes substituido vale: ", nomes
 y recebe  numero aleatorio entre  2 e 5
 mostre "Numero aleatório escolhido foi: ", y
 
-repita y vezes {
+repita 20 vezes {
   mostre y
 }
 

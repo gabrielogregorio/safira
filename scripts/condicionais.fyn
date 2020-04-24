@@ -17,7 +17,7 @@ if n == 2
 }
 
 idade = "idade"
-
+mostre "Bug"
 if n == 3 ou m == 3 ou "idade" == idade
 {
     mostre 2 + 5

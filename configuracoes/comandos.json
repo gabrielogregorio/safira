@@ -23,6 +23,9 @@
   "listaCom": [
     [" com ","pt-br"]
   ],
+  "ler_tecla_por": [
+    ["ler tecla por ","pt-br"]
+  ],
   "para_cada": [
     ["para cada ","pt-br"],
     ["for ","en-us"]

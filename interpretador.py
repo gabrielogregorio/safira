@@ -7,7 +7,7 @@ __status__      = 'Desenvolvimento'
 __version__     = '0.1'
 
 from re import findall, finditer
-from tkinter import END
+from tkinter import END, DISABLED, NORMAL
 from random import randint
 from time import sleep
 import funcoes
@@ -31,10 +31,18 @@ class Run():
         self.bool_break_point_liberado = None
         self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
         self.idioma = "pt-br"
-        self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*' 
+        self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
+        self.valor_tecla_pressionada = ""
 
         with open('configuracoes/mensagens.json') as json_file:
             self.mensagens = load(json_file)
+
+    def pressionou_enter(self, event=None):
+        if self.esperar_pressionar_enter:
+            self.esperar_pressionar_enter = False
+
+    def capturar_tecla(self, tecla_pressionada):
+        self.valor_tecla_pressionada = tecla_pressionada
 
     def aguardar_liberacao_breakPoint(self):
         self.bool_break_point_liberado = False
@@ -77,18 +85,22 @@ class Run():
 
         if not self.erro_alertado:
             mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
+            self.tx_terminal.config(state=NORMAL)
             self.tx_terminal.insert(END, mensagem_erro)
             Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
 
         try:
+            self.tx_terminal.config(state=NORMAL)
             if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
                 self.tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1][len(":nessaLinha:"):]))
             else:
                 self.tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1])+'\n')
 
             self.tx_terminal.see("end")
+            self.tx_terminal.update()
+            self.tx_terminal.config(state=DISABLED)
 
         except Exception as erro:
             print('ERRO:', erro)
@@ -97,8 +109,8 @@ class Run():
     def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
 
-        self.boo_orquestrador_iniciado = True
-        self.numero_threads += 1
+        self.numero_threads += 1 # Aumenta os Thread
+        self.boo_orquestrador_iniciado = True # Indica que já está contando os Thread
 
         int_tamanho_codigo = len(txt_codigo)
         bool_comentario_longo = False
@@ -257,7 +269,9 @@ class Run():
                     for valor in range(inici_para_cada, final_para_cada, passo_para_cada):
 
                         criar_variavel = Run.funcao_realizar_atribu(self, lst_ultimo_ret[1][0], str(valor))
-                        if criar_variavel[0] == False: return criar_variavel
+                        if criar_variavel[0] == False:
+                            self.numero_threads -= 1
+                            return criar_variavel
 
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, 
                             str_bloco[1:].strip())
@@ -442,6 +456,7 @@ class Run():
             analisa023 = Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
             analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             analisa025 = Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
+            analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
 
             if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), num_linha ]
             if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), num_linha ]
@@ -469,6 +484,7 @@ class Run():
             if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), num_linha ]
             if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), num_linha ]
             if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), num_linha ]
+            if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), num_linha ]
 
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], num_linha ]
         return [ [True, None, 'vazio', 'fazerNada'], num_linha ]
@@ -483,14 +499,26 @@ class Run():
         analisa020 = Run.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
         analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
         analisa022 = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
+        analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
         if analisa020[0]: return Run.funcao_ovalor_digitado(self, analisa020[1][1])
         if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2],analisa021[1][4])
         if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
+        if analisa026[0]: return Run.funcao_ler_tecla_por(self, analisa026[1][2])
 
         return [True, None, 'vazio']
+
+    def funcao_ler_tecla_por(self, tempo):
+        Run.log(self, 'ler tecla por: ' + tempo)
+        self.valor_da_tecla_pressionada = ""
+  
+        sleep(0.1)
+        tecla = self.valor_tecla_pressionada
+        self.valor_tecla_pressionada = ""
+
+        return [True, str(tecla).lower(), "string", "fazerNada"]
 
     def msg_variavel_numerica(self, msg, variavel):
         if msg == 'naoNumerico':
@@ -826,9 +854,7 @@ class Run():
             self.dic_variaveis[variavel] = [lista, 'lista']
             return [True, None, 'vazio', 'fazerNada']
 
-    def pressionou_enter(self, event=None):
-        if self.esperar_pressionar_enter:
-            self.esperar_pressionar_enter = False
+
 
     def funcao_ovalor_digitado(self, linha):
         Run.log(self, 'Função digitado: "{}"'.format(linha))
@@ -837,17 +863,23 @@ class Run():
 
         self.esperar_pressionar_enter = True
 
+        self.tx_terminal.config(state=NORMAL)
+
         while self.esperar_pressionar_enter:
 
             try:
                 self.tx_terminal.get(1.0, 1.1)
 
-                if self.aconteceu_erro: return [False, "Interrompido","string","exibirNaTela"]
-                else: self.tx_terminal.update()
+                if self.aconteceu_erro:
+                    return [False, "Interrompido","string","exibirNaTela"]
+                else:
+                    self.tx_terminal.update()
 
             except:
                 return [False, 'indisponibilidade_terminal', 'string','exibirNaTela']
 
+        print("PASSSSSSSSSSSSSSSOU")
+        self.tx_terminal.config(state=DISABLED)
         digitado = self.tx_terminal.get(1.0, END)
         digitado = digitado[textoOriginal-1:-2]
         digitado = digitado.replace("\n","")
@@ -857,6 +889,7 @@ class Run():
             try:
                 float(digitado)
             except:
+                print("BUG")
                 return[False, '{} "{}"'.format(Run.msg_idioma(self, "digitou_caractere"), digitado), 'string', 'fazerNada']
             else:
                 return [True, float(digitado), 'float', 'fazerNada']
@@ -865,8 +898,9 @@ class Run():
 
     def funcao_limpar_o_termin(self):
         Run.log(self, 'Limpatela ativado!')
-
+        self.tx_terminal.config(state=NORMAL)
         self.tx_terminal.delete(1.0, END)
+        self.tx_terminal.config(state=DISABLED)
         return [True, None, 'vazio','fazerNada']
 
     def funcao_repetir_n_vezes(self, linha):
@@ -1231,7 +1265,6 @@ class Run():
 
     def analisa_padrao_variavel(self, variavel):
         variavel = str(variavel)
-        print(variavel,'.......')
 
         if not variavel[0].isalpha():
             return [False, Run.msg_idioma(self, "variaveis_comecar_por_letra"), "string", 'exibirNaTela']

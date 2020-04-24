@@ -70,8 +70,10 @@ class Colorir():
     def coordena_coloracao(self, event, tx_codfc):
         self.tx_codfc = tx_codfc
 
+
         # não modifica o código
         if event is not None:
+            print( event.keysym )
             if event.keysym in ('Down', 'Up', 'Left', 'Right'):
                 return 0
 
@@ -117,6 +119,7 @@ class Colorir():
             Colorir.def_cor(self, 'repitaVezes', "lista", lista)
             Colorir.def_cor(self, 'logico', "logico", lista)
             Colorir.def_cor(self, 'mostre', "exibicao", lista)
+            Colorir.def_cor(self, 'ler_tecla_por', "lista", lista)
 
             Colorir.def_cor(self, 'matematica', "contas", lista)
             Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista)

@@ -1,4 +1,7 @@
 {
+  "cor_intro": {
+    "background": "#cfa655"
+  },
   "cor_menu": {
     "font": [
       "Lucida Sans",
@@ -72,6 +75,19 @@
       "Lucida Sans",
       13
     ]
+  },
+  "dic_cor_abas_frame": {
+    "background": "#474747"
+  },
+  "dic_cor_abas": {
+       "background":"#474747",
+       "foreground":"#565656"
+  },
+  "dic_cor_abas_focada": {
+       "background":"#b4b4b4"
+  },
+  "dic_cor_abas_nao_focada": {
+       "background":"#696969"
   },
   "fr_opcoes_rapidas": {
     "background": "#393939"
