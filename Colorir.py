@@ -84,7 +84,6 @@ class Colorir():
             Colorir.def_cor(self, 'para_cada_ate', "condicionais", lista)
             Colorir.def_cor(self, 'repita', "lista", lista)
             Colorir.def_cor(self, 'se', "condicionais", lista)
-
             Colorir.def_cor(self, 'addItensListaInternoPosicaoFinaliza', "lista", lista)
             Colorir.def_cor(self, 'addItensListaInternoFinal', "lista", lista)
             Colorir.def_cor(self, 'addItensListaInternoPosicao', "lista", lista)
@@ -120,7 +119,6 @@ class Colorir():
             Colorir.def_cor(self, 'logico', "logico", lista)
             Colorir.def_cor(self, 'mostre', "exibicao", lista)
             Colorir.def_cor(self, 'ler_tecla_por', "lista", lista)
-
             Colorir.def_cor(self, 'matematica', "contas", lista)
             Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista)
             Colorir.anl_cor(self, 'comentario', self.cor_do_comando["comentario"], lista)
