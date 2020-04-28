@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from time import time, sleep
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
+from threading import Thread
+from interpretador import Run
 from tkinter import Toplevel
+from os.path import abspath
+from Arquivo import Arquivo
+from Colorir import Colorir
 from tkinter import CURRENT
 from tkinter import INSERT
 from tkinter import Button
@@ -23,24 +29,15 @@ from tkinter import N
 from tkinter import S
 from tkinter import E
 from tkinter import W
-
-import tkinter.font as tkFont
-import tkinter.ttk as ttk
-import tkinter as tk
-
-from threading import Thread
-from time import time, sleep
-from os.path import abspath
 from tkinter import Tk
 from os import listdir
 from json import load
 from os import getcwd
+import tkinter.font as tkFont
+import tkinter.ttk as ttk
+import tkinter as tk
 import webbrowser
-
 import funcoes
-from Arquivo import Arquivo
-from Colorir import Colorir
-from interpretador import Run
 
 __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
@@ -49,7 +46,7 @@ __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
 __date__ = '01/08/2019'
-__last_update__ = '19/04/2020'
+__last_update__ = '27/04/2020'
 __version__ = '0.1'
 
 class Safira():
@@ -57,6 +54,7 @@ class Safira():
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.bool_tela_em_fullscreen = False
+        self.top_janela_terminal = None
         self.lst_titulos_frames = []
         self.controle_arquivos = None
         self.path = abspath(getcwd())
@@ -74,28 +72,33 @@ class Safira():
         self.aba_focada = 0
         self.lst_abas = []
         self.bt_play = None
-
         self.ic_PStop = None
         self.frame_tela = None
-
-        self.dic_abas = {
-            0:{
-                "nome":"",
-                "foco":True,
-                "lst_breakpoints":[],
-                "arquivoSalvo":{'link': "",'texto': ""},
-                "arquivoAtual":{'texto': ""},
-                "listaAbas":[]
-            }
-        }
-
         self.tela = None
-
-        self.top_janela_terminal = None
         self.fr_splash = None    # splash
         self.l1_splash = None    # splash
         self.l2_splash = None    # splash
         self.frame_splash = None # splash
+        self.fr_opc_rapidas = None
+        self.ic_salva = None
+        self.ic_playP = None
+        self.ic_PStop = None
+        self.ic_breaP = None
+        self.ic_brk_p = None
+        self.ic_desfz = None
+        self.ic_redsf = None
+        self.ic_ajuda = None
+        self.ic_pesqu = None
+        self.bt_salva = None
+        self.bt_playP = None
+        self.bt_breaP = None
+        self.bt_brk_p = None
+        self.bt_desfz = None
+        self.bt_redsf = None
+        self.bt_ajuda = None
+        self.bt_pesqu = None
+
+        self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
 
     def main(self):
         Safira.splashScreen1(self)
@@ -244,36 +247,36 @@ class Safira():
         self.mn_devel.add_command(label='  Logs', command=lambda:  Safira.ativar_logs(self))
         self.mn_devel.add_command(label='  Debug', command=lambda:  Safira.debug(self))
 
-        ic_salva = PhotoImage(file='imagens/ic_salvar.png')
+        self.ic_salva = PhotoImage(file='imagens/ic_salvar.png')
         self.ic_playP = PhotoImage(file='imagens/ic_play.png')
-        ic_PStop = PhotoImage(file='imagens/ic_parar.png')
-        ic_breaP = PhotoImage(file='imagens/ic_play_breakpoint.png')
-        ic_brk_p = PhotoImage(file='imagens/breakPoint.png')
-        ic_desfz = PhotoImage(file='imagens/left.png')
-        ic_redsf = PhotoImage(file='imagens/right.png')
-        ic_ajuda = PhotoImage(file='imagens/ic_duvida.png')
-        ic_pesqu = PhotoImage(file='imagens/ic_pesquisa.png')
+        self.ic_PStop = PhotoImage(file='imagens/ic_parar.png')
+        self.ic_breaP = PhotoImage(file='imagens/ic_play_breakpoint.png')
+        self.ic_brk_p = PhotoImage(file='imagens/breakPoint.png')
+        self.ic_desfz = PhotoImage(file='imagens/left.png')
+        self.ic_redsf = PhotoImage(file='imagens/right.png')
+        self.ic_ajuda = PhotoImage(file='imagens/ic_duvida.png')
+        self.ic_pesqu = PhotoImage(file='imagens/ic_pesquisa.png')
 
-        ic_salva = ic_salva.subsample(4, 4)
+        self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
-        ic_PStop = ic_PStop.subsample(4, 4)
-        ic_breaP = ic_breaP.subsample(4, 4)
-        ic_brk_p = ic_brk_p.subsample(4, 4)
-        ic_desfz = ic_desfz.subsample(4, 4)
-        ic_redsf = ic_redsf.subsample(4, 4)
-        ic_ajuda = ic_ajuda.subsample(4, 4)
-        ic_pesqu = ic_pesqu.subsample(4, 4)
+        self.ic_PStop = self.ic_PStop.subsample(4, 4)
+        self.ic_breaP = self.ic_breaP.subsample(4, 4)
+        self.ic_brk_p = self.ic_brk_p.subsample(4, 4)
+        self.ic_desfz = self.ic_desfz.subsample(4, 4)
+        self.ic_redsf = self.ic_redsf.subsample(4, 4)
+        self.ic_ajuda = self.ic_ajuda.subsample(4, 4)
+        self.ic_pesqu = self.ic_pesqu.subsample(4, 4)
 
         self.fr_opc_rapidas = Frame(self.frame_tela)
 
-        self.bt_salva = Button(self.fr_opc_rapidas, image=ic_salva, relief=RAISED, command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo"))
+        self.bt_salva = Button(self.fr_opc_rapidas, image=self.ic_salva, relief=RAISED, command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo"))
         self.bt_playP = Button(self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event))
-        self.bt_breaP = Button(self.fr_opc_rapidas, image=ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
-        self.bt_brk_p = Button(self.fr_opc_rapidas, image=ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event))
-        self.bt_desfz = Button(self.fr_opc_rapidas, image=ic_desfz, relief=RAISED)
-        self.bt_redsf = Button(self.fr_opc_rapidas, image=ic_redsf, relief=RAISED)
-        self.bt_ajuda = Button(self.fr_opc_rapidas, image=ic_ajuda, relief=RAISED)
-        self.bt_pesqu = Button(self.fr_opc_rapidas, image=ic_pesqu, relief=RAISED)
+        self.bt_breaP = Button(self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
+        self.bt_brk_p = Button(self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event))
+        self.bt_desfz = Button(self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED)
+        self.bt_redsf = Button(self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED)
+        self.bt_ajuda = Button(self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED)
+        self.bt_pesqu = Button(self.fr_opc_rapidas, image=self.ic_pesqu, relief=RAISED)
 
         self.fr_princ = Frame(self.frame_tela, bg='red')
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -296,7 +299,6 @@ class Safira():
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_codfc.yview, relief=FLAT)
         self.tx_codfc.configure(yscrollcommand=self.sb_codfc.set)
 
-
         self.linhas_laterais = ContadorLinhas(self.fr_princ)
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
@@ -317,9 +319,7 @@ class Safira():
         self.tx_codfc.grid(row=1, column=2, sticky=NSEW)
         self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
-
         self.controle_arquivos = Arquivo(self.dic_abas, self.aba_focada, self.tx_codfc)
-        print("FFFFFFFFFFFFFFFFFFFFFOIIIIIIII")
 
         Safira.atualiza_design_interface(self)
 
@@ -333,10 +333,9 @@ class Safira():
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'a.fyn')
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'programa_teste.fyn')
 
         self.tela.mainloop()
-
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False):
         print("\n Orquestrador iniciado")
@@ -414,7 +413,6 @@ class Safira():
             print('Impossível exibir mensagem de finalização, erro: '+ str(erro))
         
         self.bt_playP.configure(image=self.ic_playP)
-
 
     def inicializador_terminal_debug(self):
 
@@ -496,9 +494,7 @@ class Safira():
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-
     def atualiza_interface_config(self, objeto, menu):
-
         try:
             objeto.configure(self.dic_design[menu])
         except Exception as erro:
@@ -560,8 +556,7 @@ class Safira():
         nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")
         nome_arquivo = str(nome_arquivo[-1])
 
-        if nome_arquivo.strip() == "":
-            nome_arquivo = "        "
+        if nome_arquivo.strip() == "": nome_arquivo = " " * 8
 
         self.dic_abas[num_aba]["listaAbas"][1].configure(text=nome_arquivo)
 
@@ -581,7 +576,6 @@ class Safira():
                 if self.dic_abas[chave]["foco"] == True:
                     bool_era_focado = True
                 del self.dic_abas[chave]
-
                 break
 
         if len(self.dic_abas) == 0:
@@ -599,12 +593,10 @@ class Safira():
                 self.dic_abas[chave]["foco"] =True
 
                 Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-
                 Safira.atualiza_texto_tela(self, chave)
                 return 0
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
-
         #self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background=bg_padrao, height=20)
         self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground=bg_padrao)
         self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
@@ -647,12 +639,7 @@ class Safira():
 
             posicao_adicionar = max(self.dic_abas.keys()) + 1 # Maior aba + 1
 
-        self.dic_abas[ posicao_adicionar ] = {"nome":"",
-                                         "foco":True,
-                                         "lst_breakpoints":[],
-                                         "arquivoSalvo":{'link': "",'texto': ""},
-                                         "arquivoAtual":{'texto': ""},
-                                         "listaAbas":[]}
+        self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
 
         dic_cor_abas = self.dic_design["dic_cor_abas"] 
         dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
@@ -753,7 +740,6 @@ class Safira():
 
     def atualizaInterface(self, chave, novo):
         while True:
-
             try:
                 arquivoConfiguracao(chave, novo)
             except Exception as e:
@@ -776,18 +762,14 @@ class Safira():
             if not self.bool_debug_temas:
                 break
 
-    # Ativa opções de debug
     def debug(self):
         messagebox.showinfo("Aviso","Debug iniciado para todos os casos")
 
-        if self.bool_debug_temas:
-            self.bool_debug_temas = False
-        else:
-            self.bool_debug_temas = True
+        if self.bool_debug_temas: self.bool_debug_temas = False
+        else: self.bool_debug_temas = True
 
     def funcoes_arquivos_configurar(self, event, comando, link=None):
-        if self.controle_arquivos is None:
-            return 0
+        if self.controle_arquivos is None: return 0
 
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.aba_focada, self.tx_codfc)
 
@@ -810,7 +792,6 @@ class Safira():
         Safira.atualiza_texto_tela(self, self.aba_focada)
 
     def pressionar_enter_terminal(self, event = None):
-
         try:
             self.instancia.pressionou_enter(event)
         except Exception as erro:
@@ -843,7 +824,6 @@ class Safira():
                     self.arvores_grid.insert('', END, values=(k, v[1], v[0]))
 
     def arquivoConfiguracao(self, chave, novo = None):
-
         if novo is None:
             with open('configuracoes/configuracoes.json') as json_file:
                 configArquivoJson = load(json_file)
@@ -874,7 +854,6 @@ class Safira():
         self.tela.attributes("-fullscreen", self.bool_tela_em_fullscreen)
 
     def ativar_logs(self, event=None):
-
         try:
             if self.instancia.bool_logs: self.instancia.bool_logs = False
             else: self.instancia.bool_logs = True
