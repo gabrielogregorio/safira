@@ -100,11 +100,11 @@ class Run():
 
             self.tx_terminal.see("end")
             self.tx_terminal.update()
-            self.tx_terminal.config(state=DISABLED)
 
         except Exception as erro:
-            print('ERRO:', erro)
             return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
+
+        self.tx_terminal.config(state=DISABLED)
 
     def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
@@ -861,9 +861,9 @@ class Run():
 
         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
-        self.esperar_pressionar_enter = True
-
         self.tx_terminal.config(state=NORMAL)
+
+        self.esperar_pressionar_enter = True
 
         while self.esperar_pressionar_enter:
 
@@ -878,9 +878,8 @@ class Run():
             except:
                 return [False, 'indisponibilidade_terminal', 'string','exibirNaTela']
 
-        print("PASSSSSSSSSSSSSSSOU")
-        self.tx_terminal.config(state=DISABLED)
         digitado = self.tx_terminal.get(1.0, END)
+        self.tx_terminal.config(state=DISABLED)
         digitado = digitado[textoOriginal-1:-2]
         digitado = digitado.replace("\n","")
 
@@ -889,7 +888,6 @@ class Run():
             try:
                 float(digitado)
             except:
-                print("BUG")
                 return[False, '{} "{}"'.format(Run.msg_idioma(self, "digitou_caractere"), digitado), 'string', 'fazerNada']
             else:
                 return [True, float(digitado), 'float', 'fazerNada']
@@ -1265,6 +1263,8 @@ class Run():
 
     def analisa_padrao_variavel(self, variavel):
         variavel = str(variavel)
+
+        variavel = variavel.replace("_","") # _ também é valido
 
         if not variavel[0].isalpha():
             return [False, Run.msg_idioma(self, "variaveis_comecar_por_letra"), "string", 'exibirNaTela']

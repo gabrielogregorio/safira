@@ -54,12 +54,12 @@
     ]
   },
   "scrollbar_text": {
-      "background":"#EDBB99",
-      "troughcolor":"#fafafa",
+      "background":"#edbb99",
+      "troughcolor":"#cb4335",
       "border":0,
-      "width": 20,
+      "width": 10,
       "highlightthickness":0,
-      "activebackground": "#CB4335",
+      "activebackground": "#edbb99",
       "highlightbackground": "#fafafa",
       "highlightcolor": "#fafafa"
   },
