@@ -75,11 +75,13 @@ class Safira():
         self.ic_PStop = None
         self.frame_tela = None
         self.tela = None
+ 
         self.fr_splash = None    # splash
         self.l1_splash = None    # splash
         self.l2_splash = None    # splash
         self.frame_splash = None # splash
         self.fr_opc_rapidas = None
+ 
         self.ic_salva = None
         self.ic_playP = None
         self.ic_PStop = None
@@ -741,16 +743,18 @@ class Safira():
     def atualizaInterface(self, chave, novo):
         while True:
             try:
-                arquivoConfiguracao(chave, novo)
+                Safira.arquivoConfiguracao(self, chave, novo)
             except Exception as e:
-                return [None,'Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas']
+                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
+                return 0
+
 
             dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
             try:
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
                 self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc).update()
-                atualiza_design_interface(self)
+                Safira.atualiza_design_interface(self)
             except Exception as erro:
                 print('ERRO: ', erro)
             else:
