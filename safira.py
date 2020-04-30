@@ -49,7 +49,177 @@ __date__ = '01/08/2019'
 __last_update__ = '27/04/2020'
 __version__ = '0.1'
 
-class Safira():
+
+class Aba():
+    def atualiza_texto_tela(self, num_aba):
+
+        self.tx_codfc.delete(1.0, END)
+        self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"]))
+        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
+
+        nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")
+        nome_arquivo = str(nome_arquivo[-1])
+
+        if nome_arquivo.strip() == "":
+            nome_arquivo = " " * 8
+
+        self.dic_abas[num_aba]["listaAbas"][1].configure(text=nome_arquivo)
+
+        for x in range(0, 3):
+            self.dic_abas[num_aba]["listaAbas"][x].update()
+
+    def fecha_aba(self, bt_fechar):
+        bool_era_focado = False
+
+        dic_cor_abas = self.dic_design["dic_cor_abas"]
+        for chave, valor in self.dic_abas.items():
+            if self.dic_abas[chave]["listaAbas"][2] == bt_fechar:
+                self.dic_abas[chave]["listaAbas"][2].grid_forget()
+                self.dic_abas[chave]["listaAbas"][1].grid_forget()
+                self.dic_abas[chave]["listaAbas"][0].grid_forget()
+
+                if self.dic_abas[chave]["foco"] == True:
+                    bool_era_focado = True
+                del self.dic_abas[chave]
+                break
+
+        if len(self.dic_abas) == 0: # Não existe mais abas
+            Safira.nova_aba(self)
+
+        elif bool_era_focado: # Aba fechada era a focada
+
+            for chave, dados_aba in self.dic_abas.items():
+
+                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
+                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+                self.aba_focada = chave
+                self.dic_abas[chave]["foco"] =True
+
+                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+                Safira.atualiza_texto_tela(self, chave)
+                return 0
+
+    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
+        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background=bg_padrao) #, height=20)
+        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground=bg_padrao)
+        self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
+
+    def atualiza_aba_foco(self, lb_aba):
+        # Remove o foco da aba anterior
+        dic_cor_abas = self.dic_design["dic_cor_abas"]
+        
+        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_nao_focada"]["background"]
+        bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
+        Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+
+        self.dic_abas[self.aba_focada]["foco"] = False
+
+        for chave, dados_aba in self.dic_abas.items():
+
+            if dados_aba["listaAbas"][1] == lb_aba:
+                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
+                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+                self.aba_focada = chave
+                self.dic_abas[chave]["foco"] = True
+
+                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+                Safira.atualiza_texto_tela(self, chave)
+                break
+
+    def nova_aba(self, event=None):
+
+        posicao_adicionar = 0 # Adicionar na posição 0
+
+        if len(self.dic_abas) != 0:
+            dic_cor_abas = self.dic_design["dic_cor_abas"] 
+            bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
+            dic_cor_abas["background"] = bg_padrao
+
+            Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+
+            for x in range(0, 3):
+                self.dic_abas[self.aba_focada]["listaAbas"][x].update()
+
+            posicao_adicionar = max(self.dic_abas.keys()) + 1 # Maior aba + 1 => final
+
+        self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
+
+        dic_cor_abas = self.dic_design["dic_cor_abas"] 
+        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
+        bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+
+        fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
+        lb_aba = Button(fr_uma_aba, dic_cor_abas, text="     ", border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
+        bt_fechar = Button(fr_uma_aba, dic_cor_abas, text="x", relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
+
+        lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
+        bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
+
+        fr_uma_aba.rowconfigure(1, weight=1)
+             
+        fr_uma_aba.grid(row=1, column=posicao_adicionar + 2, sticky=N)
+        lb_aba.grid(row=1, column=1, sticky=NSEW)
+        bt_fechar.grid(row=1, column=2)
+
+        self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
+        self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
+        self.dic_abas[posicao_adicionar]["listaAbas"].append(bt_fechar)
+
+        self.aba_focada = posicao_adicionar
+        Safira.atualiza_texto_tela(self, self.aba_focada)
+
+    def renderizar_abas_inicio(self):
+        """
+            Usado apenas no inicio do programa *****1 VEZ*****
+        """
+        cor_aba_focada = self.dic_design["dic_cor_abas_focada"]["background"]
+        cor_aba_nao_focada = self.dic_design["dic_cor_abas_nao_focada"]["background"]
+
+        for num_aba, dados_aba in self.dic_abas.items():
+            dic_cor_abas = self.dic_design["dic_cor_abas"] 
+ 
+            # Coloração da aba
+            if dados_aba["foco"]:
+                self.aba_focada = num_aba
+                bg_padrao = cor_aba_focada
+            else:
+                bg_padrao = cor_aba_nao_focada
+
+            dic_cor_abas["background"] = bg_padrao
+
+            fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
+            fr_uma_aba.rowconfigure(1, weight=1)
+
+            nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
+            nome_arquivo = str(nome_arquivo[-1])
+
+            if dados_aba["arquivoSalvo"]["texto"] != dados_aba["arquivoAtual"]["texto"]:
+                txt_btn = "*"
+            else:
+                txt_btn = "x"
+
+            if nome_arquivo.strip() == "":
+                nome_arquivo = "      "
+
+            lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
+            bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
+     
+            fr_uma_aba.update()
+            lb_aba.update()
+            bt_fechar.update()
+
+            fr_uma_aba.grid(row=1, column=num_aba + 2, sticky=N)
+            lb_aba.grid(row=1, column=1, sticky=NSEW)
+            bt_fechar.grid(row=1, column=2)
+
+            lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
+            bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
+
+            self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
+            self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
+            self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
+
+class Safira(Aba):
     def __init__(self):
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
@@ -75,13 +245,11 @@ class Safira():
         self.ic_PStop = None
         self.frame_tela = None
         self.tela = None
- 
         self.fr_splash = None    # splash
         self.l1_splash = None    # splash
         self.l2_splash = None    # splash
         self.frame_splash = None # splash
         self.fr_opc_rapidas = None
- 
         self.ic_salva = None
         self.ic_playP = None
         self.ic_PStop = None
@@ -99,12 +267,12 @@ class Safira():
         self.bt_redsf = None
         self.bt_ajuda = None
         self.bt_pesqu = None
-
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
+        self.bool_interpretador_iniciado = False
 
     def main(self):
         Safira.splashScreen1(self)
-        sleep(0.1)
+        sleep(3)
         Safira.inicioScreen(self)
 
     def splashScreen1(self):
@@ -177,16 +345,16 @@ class Safira():
 
         dic_config_menu = {"tearoff":False, "font" : ("Lucida Sans", 13) }
 
-        self.mn_ferrm = Menu(self.mn_barra, dic_config_menu)
-        self.mn_intfc = Menu(self.mn_barra, dic_config_menu)
-        self.mn_exect = Menu(self.mn_barra, dic_config_menu)
-        self.mn_loclz = Menu(self.mn_barra, dic_config_menu)
-        self.mn_exemp = Menu(self.mn_barra, dic_config_menu)
-        self.mn_arqui = Menu(self.mn_barra, dic_config_menu)
-        self.mn_edita = Menu(self.mn_barra, dic_config_menu)
-        self.mn_ajuda = Menu(self.mn_barra, dic_config_menu)
-        self.mn_sobre = Menu(self.mn_barra, dic_config_menu)
-        self.mn_devel = Menu(self.mn_barra, dic_config_menu)
+        self.mn_ferrm = Menu( self.mn_barra, dic_config_menu )
+        self.mn_intfc = Menu( self.mn_barra, dic_config_menu )
+        self.mn_exect = Menu( self.mn_barra, dic_config_menu )
+        self.mn_loclz = Menu( self.mn_barra, dic_config_menu )
+        self.mn_exemp = Menu( self.mn_barra, dic_config_menu )
+        self.mn_arqui = Menu( self.mn_barra, dic_config_menu )
+        self.mn_edita = Menu( self.mn_barra, dic_config_menu )
+        self.mn_ajuda = Menu( self.mn_barra, dic_config_menu )
+        self.mn_sobre = Menu( self.mn_barra, dic_config_menu )
+        self.mn_devel = Menu( self.mn_barra, dic_config_menu )
 
         self.mn_barra.add_cascade(label='  Arquivo'    , menu=self.mn_arqui, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Executar'   , menu=self.mn_exect, font = ("Lucida Sans", 13))
@@ -242,22 +410,22 @@ class Safira():
                     funcao = lambda link = file: Safira.atualizaInterface(self, 'sintaxe', str(link))
                     self.mn_intfc_casct_sintx.add_command(label=file, command=funcao)
 
-        self.mn_ajuda.add_command(label='  Ajuda (F1)', command= lambda:webbrowser.open(self.path + "/tutorial/index.html"))
-        self.mn_ajuda.add_command(label='  Comandos Disponíveis', command =lambda: webbrowser.open(self.path + "/tutorial/index.html"))
-        self.mn_ajuda.add_command(label='  Comunidade', command=lambda: webbrowser.open("https://feynmancode.blogspot.com/p/comunidade.html"))
-        self.mn_sobre.add_command(label='  Projeto', command=lambda: webbrowser.open("http://feynmancode.blogspot.com/"))
-        self.mn_devel.add_command(label='  Logs', command=lambda:  Safira.ativar_logs(self))
-        self.mn_devel.add_command(label='  Debug', command=lambda:  Safira.debug(self))
+        self.mn_ajuda.add_command( label='  Ajuda (F1)', command= lambda:webbrowser.open(self.path + "/tutorial/index.html") )
+        self.mn_ajuda.add_command( label='  Comandos Disponíveis', command =lambda: webbrowser.open(self.path + "/tutorial/index.html") )
+        self.mn_ajuda.add_command( label='  Comunidade', command=lambda: webbrowser.open("https://feynmancode.blogspot.com/p/comunidade.html") )
+        self.mn_sobre.add_command( label='  Projeto', command=lambda: webbrowser.open("http://feynmancode.blogspot.com/") )
+        self.mn_devel.add_command( label='  Logs', command=lambda:  Safira.ativar_logs(self) )
+        self.mn_devel.add_command( label='  Debug', command=lambda:  Safira.debug(self) )
 
-        self.ic_salva = PhotoImage(file='imagens/ic_salvar.png')
-        self.ic_playP = PhotoImage(file='imagens/ic_play.png')
-        self.ic_PStop = PhotoImage(file='imagens/ic_parar.png')
-        self.ic_breaP = PhotoImage(file='imagens/ic_play_breakpoint.png')
-        self.ic_brk_p = PhotoImage(file='imagens/breakPoint.png')
-        self.ic_desfz = PhotoImage(file='imagens/left.png')
-        self.ic_redsf = PhotoImage(file='imagens/right.png')
-        self.ic_ajuda = PhotoImage(file='imagens/ic_duvida.png')
-        self.ic_pesqu = PhotoImage(file='imagens/ic_pesquisa.png')
+        self.ic_salva = PhotoImage( file='imagens/ic_salvar.png' )
+        self.ic_playP = PhotoImage( file='imagens/ic_play.png' )
+        self.ic_PStop = PhotoImage( file='imagens/ic_parar.png' )
+        self.ic_breaP = PhotoImage( file='imagens/ic_play_breakpoint.png' )
+        self.ic_brk_p = PhotoImage( file='imagens/breakPoint.png' )
+        self.ic_desfz = PhotoImage( file='imagens/left.png' )
+        self.ic_redsf = PhotoImage( file='imagens/right.png' )
+        self.ic_ajuda = PhotoImage( file='imagens/ic_duvida.png' )
+        self.ic_pesqu = PhotoImage( file='imagens/ic_pesquisa.png' )
 
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
@@ -271,14 +439,14 @@ class Safira():
 
         self.fr_opc_rapidas = Frame(self.frame_tela)
 
-        self.bt_salva = Button(self.fr_opc_rapidas, image=self.ic_salva, relief=RAISED, command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo"))
-        self.bt_playP = Button(self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event))
-        self.bt_breaP = Button(self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
-        self.bt_brk_p = Button(self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event))
-        self.bt_desfz = Button(self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED)
-        self.bt_redsf = Button(self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED)
-        self.bt_ajuda = Button(self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED)
-        self.bt_pesqu = Button(self.fr_opc_rapidas, image=self.ic_pesqu, relief=RAISED)
+        self.bt_salva = Button( self.fr_opc_rapidas, image=self.ic_salva, relief=RAISED, command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo") )
+        self.bt_playP = Button( self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event) )
+        self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True) )
+        self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event) )
+        self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED )
+        self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED )
+        self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED )
+        self.bt_pesqu = Button( self.fr_opc_rapidas, image=self.ic_pesqu, relief=RAISED )
 
         self.fr_princ = Frame(self.frame_tela, bg='red')
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -339,46 +507,61 @@ class Safira():
 
         self.tela.mainloop()
 
+
+
+
+
+
+
+
+
+
+
+
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False):
         print("\n Orquestrador iniciado")
 
         self.bt_playP.configure(image=self.ic_PStop)
         self.bt_playP.update()
 
+        # Se o interpretador já foi iniciado e o breakpoint for falso
+        try:
+            print(self.instancia.numero_threads)
+        except:
+            print("Thread Parou")
+        else:
+            if self.bool_interpretador_iniciado and libera_break_point_executa == False:
+                self.instancia.aconteceu_erro = True
+                return 0
+
+
+
+
+
         # Se for executar até o breakpoint
         if libera_break_point_executa:
 
-            self.bool_ignorar_todos_breakpoints = False
+            bool_ignorar_todos_breakpoints = False
             try:
                 self.instancia.bool_break_point_liberado = True
-                self.instancia.self.bool_ignorar_todos_breakpoints = False
+                self.instancia.bool_ignorar_todos_breakpoints = False
             except:
                 print("Iniciando programa até breakpoint")
             else:
                 print("Liberando programa.")
                 return 0
         else:
-            self.bool_ignorar_todos_breakpoints = True
+            bool_ignorar_todos_breakpoints = True
 
         inicio = time()
 
-        try:
-            print(self.instancia.numero_threads)
-        except:
-            pass
 
-        else:
-            try:
-                self.instancia.aconteceu_erro = True
-            except Exception as e:
-                print("Impossivel para interpretador: " + str(e))
-            return 0
 
-        # Se for executar até o breakpoint
-        if libera_break_point_executa:
-            Safira.inicializador_terminal_debug(self)
-        else:
-            Safira.inicializador_terminal_producao(self)
+
+
+        self.bool_interpretador_iniciado = True
+        if libera_break_point_executa: Safira.inicializador_terminal_debug(self)
+        else: Safira.inicializador_terminal_producao(self)
 
         self.tx_terminal.delete('1.0', END)
 
@@ -391,12 +574,11 @@ class Safira():
 
         linhas = nova_linha
 
-        self.instancia = Run(
-            self.tx_terminal,
-            self.tx_codfc,
-            False,
-            self.dic_abas[self.aba_focada]["lst_breakpoints"],
-            self.bool_ignorar_todos_breakpoints)
+        self.instancia = Run( self.tx_terminal,
+                              self.tx_codfc,
+                              False,
+                              self.dic_abas[self.aba_focada]["lst_breakpoints"],
+                              bool_ignorar_todos_breakpoints)
 
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
@@ -415,9 +597,9 @@ class Safira():
             print('Impossível exibir mensagem de finalização, erro: '+ str(erro))
         
         self.bt_playP.configure(image=self.ic_playP)
+        self.bool_interpretador_iniciado = False
 
     def inicializador_terminal_debug(self):
-
         Safira.destruir_instancia_terminal(self)
 
         frame_terminal_e_grid = Frame(self.fr_princ)
@@ -454,6 +636,7 @@ class Safira():
         vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview)
         hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview)
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
+
         for coluna in coluna_identificadores:
             self.arvores_grid.heading(coluna, text=coluna.title() )
             self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20)
@@ -501,7 +684,6 @@ class Safira():
             objeto.configure(self.dic_design[menu])
         except Exception as erro:
             print("Interface" + str(erro))
-        return 0
 
     def atualiza_design_interface(self):
 
@@ -548,176 +730,6 @@ class Safira():
         if event is not None:
             Safira.obterPosicaoDoCursor(self, event)
 
-    def atualiza_texto_tela(self, num_aba):
-        print("atualiza_texto_tela")
-
-        self.tx_codfc.delete(1.0, END)
-        self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"])[:-1])
-        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
-
-        nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")
-        nome_arquivo = str(nome_arquivo[-1])
-
-        if nome_arquivo.strip() == "": nome_arquivo = " " * 8
-
-        self.dic_abas[num_aba]["listaAbas"][1].configure(text=nome_arquivo)
-
-        for x in range(0, 3): self.dic_abas[num_aba]["listaAbas"][x].update()
-
-    def fecha_aba(self, bt_fechar):
-        print("fecha_aba")
-
-        bool_era_focado = False
-        dic_cor_abas = self.dic_design["dic_cor_abas"]
-        for chave, valor in self.dic_abas.items():
-            if self.dic_abas[chave]["listaAbas"][2] == bt_fechar:
-                self.dic_abas[chave]["listaAbas"][2].grid_forget()
-                self.dic_abas[chave]["listaAbas"][1].grid_forget()
-                self.dic_abas[chave]["listaAbas"][0].grid_forget()
-
-                if self.dic_abas[chave]["foco"] == True:
-                    bool_era_focado = True
-                del self.dic_abas[chave]
-                break
-
-        if len(self.dic_abas) == 0:
-            print("SEM NENHUMA ABA")
-            Safira.nova_aba(self)
-
-        elif bool_era_focado:
-            print("ANTIGO ERA FOCADO")
-
-            for chave, dados_aba in self.dic_abas.items():
-
-                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-                self.aba_focada = chave
-                self.dic_abas[chave]["foco"] =True
-
-                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-                Safira.atualiza_texto_tela(self, chave)
-                return 0
-
-    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
-        #self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background=bg_padrao, height=20)
-        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground=bg_padrao)
-        self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
-
-    def atualiza_aba_foco(self, lb_aba):
-        print("atualiza_aba_foco")
-
-        # Remove o foco da aba anterior
-        dic_cor_abas = self.dic_design["dic_cor_abas"]
-        
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-
-        self.dic_abas[self.aba_focada]["foco"] = False
-
-        for chave, dados_aba in self.dic_abas.items():
-
-            if dados_aba["listaAbas"][1] == lb_aba:
-                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-                self.aba_focada = chave
-                self.dic_abas[chave]["foco"] = True
-
-                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-                Safira.atualiza_texto_tela(self, chave)
-                break
-
-    def nova_aba(self, event=None):
-        print("nova_aba")
-
-        posicao_adicionar = 0
-        if len(self.dic_abas) != 0:
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
-            bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-            dic_cor_abas["background"] = bg_padrao
-
-            Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-            for x in range(0, 3): self.dic_abas[self.aba_focada]["listaAbas"][x].update()
-
-            posicao_adicionar = max(self.dic_abas.keys()) + 1 # Maior aba + 1
-
-        self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
-
-        dic_cor_abas = self.dic_design["dic_cor_abas"] 
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-
-        fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
-        lb_aba = Button(fr_uma_aba, dic_cor_abas, text="     ", border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-        bt_fechar = Button(fr_uma_aba, dic_cor_abas, text="x", relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
-
-        lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
-        bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
-
-        fr_uma_aba.rowconfigure(1, weight=1)
-             
-        fr_uma_aba.grid(row=1, column=posicao_adicionar + 2, sticky=N)
-        lb_aba.grid(row=1, column=1, sticky=NSEW)
-        bt_fechar.grid(row=1, column=2)
-
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(bt_fechar)
-
-        self.aba_focada = posicao_adicionar
-        Safira.atualiza_texto_tela(self, self.aba_focada)
-
-    def renderizar_abas_inicio(self):
-        print("renderizar_abas_inicio")
-        """
-            Usado apenas no inicio do programa *****1 VEZ*****
-        """
-        cor_aba_focada = self.dic_design["dic_cor_abas_focada"]["background"]
-        cor_aba_nao_focada = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-
-        for num_aba, dados_aba in self.dic_abas.items():
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
-
-            if dados_aba["foco"]:
-                self.aba_focada = num_aba
-                bg_padrao = cor_aba_focada
-            else:
-                bg_padrao = cor_aba_nao_focada
-
-            dic_cor_abas["background"] = bg_padrao
-
-            fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
-            fr_uma_aba.rowconfigure(1, weight=1)
-
-            nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
-            nome_arquivo = str(nome_arquivo[-1])
-
-            if dados_aba["arquivoSalvo"]["texto"] != dados_aba["arquivoAtual"]["texto"]:
-                txt_btn = "*"
-            else:
-                txt_btn = "x"
-
-            if nome_arquivo.strip() == "":
-                nome_arquivo = "      "
-
-            lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-            bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
-     
-            fr_uma_aba.update()
-            lb_aba.update()
-            bt_fechar.update()
-
-            fr_uma_aba.grid(row=1, column=num_aba + 2, sticky=N)
-            lb_aba.grid(row=1, column=1, sticky=NSEW)
-            bt_fechar.grid(row=1, column=2)
-
-            lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
-            bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
-
-            self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
-            self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
-            self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
-
     def obterPosicaoDoCursor(self, event=None):
         try:
             numPosicao = str(self.tx_codfc.index(INSERT))
@@ -747,7 +759,6 @@ class Safira():
             except Exception as e:
                 print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
                 return 0
-
 
             dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
@@ -804,8 +815,8 @@ class Safira():
     def capturar_tecla_terminal(self, event):
         try:
             self.instancia.capturar_tecla(self,  event.keysym )
-        except:
-            pass
+        except Exception as erro:
+            print("Erro ao capturar a tela", erro)
 
     def destruir_instancia_terminal(self):
         for widget in self.lista_itens_destruir:
@@ -818,7 +829,7 @@ class Safira():
         try:
             self.dic_variaveis = self.instancia.dic_variaveis
         except Exception as e:
-            print("self.instancia finalizada ", e)
+            print("instancia finalizada ", e)
         else:
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 
@@ -861,7 +872,6 @@ class Safira():
         try:
             if self.instancia.bool_logs: self.instancia.bool_logs = False
             else: self.instancia.bool_logs = True
-
         except:
             print("Interpretador não iniciado")
 

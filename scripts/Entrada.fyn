@@ -1,7 +1,12 @@
-mostre nessa linha "Digite seu nome: "
-nome recebe o que for digitado
+mostre nessa linha "Digite sua idade: "
+idade recebe o numero que for digitado
 
-se nome == "Catiana"
+se idade for maior que 18
 {
-    mostre "Seu nome é: ", nome
+    mostre "Você é adulta!"
+}
+
+if idade <= 18
+{
+     print "você não é adulta!"
 }

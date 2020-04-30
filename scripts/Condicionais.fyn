@@ -3,7 +3,7 @@ se 1 for igual a 1
     mostre "É igual a 1"
 }
 
-se "nome" == "nome"
+se "nome" == o que o usuario digitar
 {
     mostre "show"
 }
@@ -17,7 +17,7 @@ if n == 2
 }
 
 idade = "idade"
-
+mostre "Bug"
 if n == 3 ou m == 3 ou "idade" == idade
 {
     mostre 2 + 5

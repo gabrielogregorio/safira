@@ -1,5 +1,6 @@
 x recebe 3
 
+mostre x
 repita x vezes
 {
      repita 2 vezes
