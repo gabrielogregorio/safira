@@ -22,7 +22,6 @@ class ContadorLinhas(Canvas):
 
             y = dline[1]
             num_linha = str(i).split(".")[0]
-
             cor_padrao = "#777777"
 
             if int(num_linha) == self.linha_analise and not int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
@@ -62,4 +61,3 @@ class EditorDeCodigo(Text):
         except Exception as erro:
             print("Erro em _proxy: ", erro)
             return ""
-

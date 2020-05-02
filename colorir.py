@@ -116,6 +116,7 @@ class Colorir():
             Colorir.def_cor(self, 'recebeParametros', "tempo", lista)
             Colorir.def_cor(self, 'esperaEm', "tempo", lista)
             Colorir.def_cor(self, 'repitaVezes', "lista", lista)
+            Colorir.def_cor(self, 'pare', "contas", lista)
             Colorir.def_cor(self, 'logico', "logico", lista)
             Colorir.def_cor(self, 'mostre', "exibicao", lista)
             Colorir.def_cor(self, 'ler_tecla_por', "lista", lista)

@@ -5,7 +5,6 @@ from interpretador import Run
 from colorir import Colorir
 from visualizacao import ContadorLinhas
 from visualizacao import EditorDeCodigo
-
 from arquivo import Arquivo
 import funcoes
 import webbrowser
@@ -26,7 +25,6 @@ from tkinter import CURRENT
 from tkinter import INSERT
 from tkinter import Button
 from tkinter import RAISED
-
 from tkinter import NORMAL
 from tkinter import Frame
 from tkinter import Label
@@ -51,7 +49,6 @@ __status__ = 'Desenvolvimento'
 __date__ = '01/08/2019'
 __last_update__ = '02/05/2020'
 __version__ = '0.1'
-
 
 class Safira(Aba):
     def __init__(self):
@@ -107,7 +104,6 @@ class Safira(Aba):
         Safira.inicioScreen(self)
 
     def splashScreen1(self):
-
         self.tela = Tk()
 
         self.tela.rowconfigure(1, weight=1)
@@ -134,7 +130,6 @@ class Safira(Aba):
         Safira.centraliza_tela(self)
 
     def inicioScreen(self):
-
         self.fr_splash.grid_forget()
         self.l1_splash.grid_forget()
         self.l2_splash.grid_forget()
@@ -170,7 +165,7 @@ class Safira(Aba):
             imgicon = PhotoImage(file='icone.png')
             self.tela.call('wm', 'iconphoto', self.tela._w, imgicon)
         except Exception as erro:
-            print('Erro ao carregar icone do app:', erro)
+            print('>>> Erro ao carregar icone do app:', erro)
 
         self.mn_barra = Menu(self.tela, tearoff=False, font = ("Lucida Sans", 13))
         self.tela.config(menu=self.mn_barra)
@@ -326,9 +321,7 @@ class Safira(Aba):
         self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
         self.controle_arquivos = Arquivo(self.dic_abas, self.aba_focada, self.tx_codfc)
-
         Safira.atualiza_design_interface(self)
-
         self.tela.update()
 
         self.tela.withdraw() # Ocultar tkinter
@@ -339,7 +332,7 @@ class Safira(Aba):
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'programa_teste.fyn')
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", '2.fyn')
 
         self.tela.mainloop()
 
@@ -362,7 +355,6 @@ class Safira(Aba):
 
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
-
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False):
         print("\n Orquestrador iniciado")
@@ -500,8 +492,6 @@ class Safira(Aba):
         hsroolb.grid(row=3,column=1,  sticky='ew')
 
         Safira.retornar_variaveis_correspondentes(self)
-        print("CARREGOU")
-
 
         self.lista_terminal_destruir = [hsroolb, self.arvores_grid, self.campo_busca, fram_grid_variaveis, frame_terminal_e_grid]
 

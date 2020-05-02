@@ -1,4 +1,8 @@
 {
+  "pare": [
+    ["break","en-us"],
+    ["pare","pt-br"]
+  ],
   "declaraListas": [
     ["lista de ","pt-br"],
     ["lista ","pt-br"]

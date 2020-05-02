@@ -34,6 +34,7 @@ class Run():
         self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
         self.valor_tecla_pressionada = ""
         self.num_linha = "0"
+        self.historico_fluxo_de_dados = []
 
         with open('configuracoes/mensagens.json') as json_file:
             self.mensagens = load(json_file)
@@ -91,7 +92,6 @@ class Run():
             Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
-
         try:
             self.tx_terminal.config(state=NORMAL)
             if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
@@ -169,7 +169,7 @@ class Run():
 
                             if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
-                                return [True, 'Orquestrador Finalizado', 'string']
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
                             self.numero_threads -= 1
@@ -205,57 +205,81 @@ class Run():
                 bool_salvar_bloco = False
 
                 if lst_ultimo_ret[3] == 'declararLoop':
+                    self.historico_fluxo_de_dados.append('declararLoop') # Encaixa Loop
 
                     # Enquanto a condição for verdadeira
                     while lst_ultimo_ret[1] and not self.aconteceu_erro:
 
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, 
                             str_bloco[1:].strip())
+                        
+                         
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
-                                return [True, 'Orquestrador Finalizado', 'string']
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
+
                         # Testa novamente a condição do loo
                         lst_ultimo_ret = Run.interpretador(self, comando_testado)
+
                         linhaAnalise = lst_ultimo_ret[1]
                         lst_ultimo_ret = lst_ultimo_ret[0]
 
+                        
                         if lst_ultimo_ret[0] == False:
 
                             if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
                                     self.numero_threads -= 1
-                                    return [True, 'Orquestrador Finalizado', 'string']
+                                    return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_ultimo_ret
 
+
+                    if len(self.historico_fluxo_de_dados) == 1:
+                        self.historico_fluxo_de_dados = []
+                    else:
+                        self.historico_fluxo_de_dados = self.historico_fluxo_de_dados[0:-1]
+
                 elif lst_ultimo_ret[3] == "declararLoopRepetir":
+                    self.historico_fluxo_de_dados.append('declararLoopRepetir') # Encaixa Loop
+
                     lst_ultimo_ret[3] = 'fazerNada'
 
                     for valor in range(0, lst_ultimo_ret[1]):
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, 
                             str_bloco[1:].strip())
+                        
+                        
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
-                                return [True, 'Orquestrador Finalizado', 'string']
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
+
                     lst_ultimo_ret[1] = 0
                     lst_ultimo_ret = [True, False, 'booleano']
 
+                    if len(self.historico_fluxo_de_dados) == 1:
+                        self.historico_fluxo_de_dados = []
+                    else:
+                        self.historico_fluxo_de_dados = self.historico_fluxo_de_dados[0:-1]
+
                 elif lst_ultimo_ret[3] == "declararLoopParaCada":
+                    self.historico_fluxo_de_dados.append('declararLoopParaCada') # Encaixa Loop
+
                     lst_ultimo_ret[3] = 'fazerNada'
 
                     # Valor de inicio e fim
@@ -280,16 +304,23 @@ class Run():
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
-                                return [True, 'Orquestrador Finalizado', 'string']
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
+                        
 
                     lst_ultimo_ret[1] = 0
                     lst_ultimo_ret = [True, False, 'booleano']
 
+                    if len(self.historico_fluxo_de_dados) == 1:
+                        self.historico_fluxo_de_dados = []
+                    else:
+                        self.historico_fluxo_de_dados = self.historico_fluxo_de_dados[0:-1]
+
                 elif lst_ultimo_ret[3] == "declararFuncao":
+
                     lst_ultimo_ret[3] = "fazerNada"
                     self.dic_funcoes[lst_ultimo_ret[4]] = [self.dic_funcoes[lst_ultimo_ret[4]][0], str_bloco[1:].strip()]
 
@@ -297,15 +328,17 @@ class Run():
                     if lst_ultimo_ret[1] == True:
 
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco[1:].strip())
+                        
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
-                                return [True, 'Orquestrador Finalizado', 'string']
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
+
 
                 str_bloco = ""
                 continue
@@ -323,6 +356,7 @@ class Run():
 
             str_linha = str_linha.replace("\n","").strip()
             lst_ultimo_ret = Run.interpretador(self, str_linha)
+
             comando_testado = str_linha
             linhaAnalise = lst_ultimo_ret[1]
             lst_ultimo_ret = lst_ultimo_ret[0]
@@ -330,25 +364,26 @@ class Run():
             if lst_ultimo_ret[0] == False:
                 if lst_ultimo_ret[1] == 'indisponibilidade_terminal':
                     self.numero_threads -= 1
-                    return [True, 'Orquestrador Finalizado', 'string']
+                    return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                 Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
                 self.numero_threads -= 1
                 return lst_ultimo_ret
+
 
             if lst_ultimo_ret[3] == 'exibirNaTela': Run.orq_exibir_tela(self, lst_ultimo_ret)
 
         # Aviso de erros de profundidade
         if int_profundidade > 0:
             self.numero_threads -= 1
-            return [False, None, 'vazia']
+            return [False, None, 'vazia', "fazerNada"]
 
         elif int_profundidade < 0:
             self.numero_threads -= 1
-            return [False, None, 'vazia']
+            return [False, None, 'vazia', "fazerNada"]
 
         self.numero_threads -= 1
-        return [True, 'Orquestrador Finalizado', 'string']
+        return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
 
     def analisa_instrucao(self, comando, texto):
@@ -458,6 +493,7 @@ class Run():
             analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             analisa025 = Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
             analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
+            analisa027 = Run.analisa_instrucao(self, '^(<pare>)$', linha)
 
             if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha ]
             if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha ]
@@ -486,9 +522,20 @@ class Run():
             if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), self.num_linha ]
             if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), self.num_linha ]
             if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), self.num_linha ]
+            if analisa027[0]: return [ Run.funcao_pararLoop(self), self.num_linha ]
 
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha ]
         return [ [True, None, 'vazio', 'fazerNada'], self.num_linha ]
+
+    def funcao_pararLoop(self):
+        print("Parar loop")
+
+        # Não tem nenhum tipo de loop aconecendo
+        if len(self.historico_fluxo_de_dados) == 0:
+            return [False, "Para usar o comando pare, é ncessário estar dentro de um loop", "string", "fazerNada"]
+
+        return [True, "pararLoop", "string", "pararLoop"]
+
 
     def comandos_uso_geral(self, possivelVariavel):
         Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))

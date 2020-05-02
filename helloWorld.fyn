@@ -1,0 +1,26 @@
+mostre "Ola mundo"
+print "Hello World"
+
+variavel1 recebe 20
+variavel2 = 10
+variavel3 = "Combratec"
+variavel4 = o que o usuario digitar
+variavel5 = o numero que o usuario digitar
+
+lista de nomes recebe "Renata", "Marcelo", "Julia", "Teresa"
+
+enquanto variavel2 for menor que 15
+{
+    display variavel2
+    incremente 1 na variavel2
+    espere 1 s
+}
+
+se o que o usuario digitar for igual a "Miley"
+{
+    exiba "Iai"
+}
+
+mostre "Analise as variáveis"
+
+variavel5 = "vazia"
