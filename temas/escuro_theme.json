@@ -150,5 +150,9 @@
     "font":["", 10],
     "width": 25,
     "anchor":"w"
+  },
+  "fonte_ct_linha":{
+    "font":["Lucida Sans", 13],
+    "width":10
   }
 }

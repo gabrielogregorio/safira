@@ -1,21 +1,32 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+from aba import Aba
+from interpretador import Run
+from colorir import Colorir
+from visualizacao import ContadorLinhas
+from visualizacao import EditorDeCodigo
+
+from arquivo import Arquivo
+import funcoes
+import webbrowser
 from time import time, sleep
+from threading import Thread
+from os.path import abspath
+from os import listdir
+from json import load
+from os import getcwd
+import tkinter.font as tkFont
+import tkinter.ttk as ttk
+import tkinter as tk
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
-from threading import Thread
-from interpretador import Run
 from tkinter import Toplevel
-from os.path import abspath
-from Arquivo import Arquivo
-from Colorir import Colorir
 from tkinter import CURRENT
 from tkinter import INSERT
 from tkinter import Button
 from tkinter import RAISED
-from tkinter import Canvas
+
 from tkinter import NORMAL
 from tkinter import Frame
 from tkinter import Label
@@ -30,14 +41,6 @@ from tkinter import S
 from tkinter import E
 from tkinter import W
 from tkinter import Tk
-from os import listdir
-from json import load
-from os import getcwd
-import tkinter.font as tkFont
-import tkinter.ttk as ttk
-import tkinter as tk
-import webbrowser
-import funcoes
 
 __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
@@ -46,178 +49,9 @@ __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
 __date__ = '01/08/2019'
-__last_update__ = '27/04/2020'
+__last_update__ = '02/05/2020'
 __version__ = '0.1'
 
-
-class Aba():
-    def atualiza_texto_tela(self, num_aba):
-
-        self.tx_codfc.delete(1.0, END)
-        self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"]))
-        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
-
-        nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")
-        nome_arquivo = str(nome_arquivo[-1])
-
-        if nome_arquivo.strip() == "":
-            nome_arquivo = " " * 8
-
-        self.dic_abas[num_aba]["listaAbas"][1].configure(text=nome_arquivo)
-
-        for x in range(0, 3):
-            self.dic_abas[num_aba]["listaAbas"][x].update()
-
-    def fecha_aba(self, bt_fechar):
-        bool_era_focado = False
-
-        dic_cor_abas = self.dic_design["dic_cor_abas"]
-        for chave, valor in self.dic_abas.items():
-            if self.dic_abas[chave]["listaAbas"][2] == bt_fechar:
-                self.dic_abas[chave]["listaAbas"][2].grid_forget()
-                self.dic_abas[chave]["listaAbas"][1].grid_forget()
-                self.dic_abas[chave]["listaAbas"][0].grid_forget()
-
-                if self.dic_abas[chave]["foco"] == True:
-                    bool_era_focado = True
-                del self.dic_abas[chave]
-                break
-
-        if len(self.dic_abas) == 0: # Não existe mais abas
-            Safira.nova_aba(self)
-
-        elif bool_era_focado: # Aba fechada era a focada
-
-            for chave, dados_aba in self.dic_abas.items():
-
-                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-                self.aba_focada = chave
-                self.dic_abas[chave]["foco"] =True
-
-                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-                Safira.atualiza_texto_tela(self, chave)
-                return 0
-
-    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
-        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background=bg_padrao) #, height=20)
-        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground=bg_padrao)
-        self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
-
-    def atualiza_aba_foco(self, lb_aba):
-        # Remove o foco da aba anterior
-        dic_cor_abas = self.dic_design["dic_cor_abas"]
-        
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-
-        self.dic_abas[self.aba_focada]["foco"] = False
-
-        for chave, dados_aba in self.dic_abas.items():
-
-            if dados_aba["listaAbas"][1] == lb_aba:
-                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-                self.aba_focada = chave
-                self.dic_abas[chave]["foco"] = True
-
-                Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-                Safira.atualiza_texto_tela(self, chave)
-                break
-
-    def nova_aba(self, event=None):
-
-        posicao_adicionar = 0 # Adicionar na posição 0
-
-        if len(self.dic_abas) != 0:
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
-            bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-            dic_cor_abas["background"] = bg_padrao
-
-            Safira.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-
-            for x in range(0, 3):
-                self.dic_abas[self.aba_focada]["listaAbas"][x].update()
-
-            posicao_adicionar = max(self.dic_abas.keys()) + 1 # Maior aba + 1 => final
-
-        self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
-
-        dic_cor_abas = self.dic_design["dic_cor_abas"] 
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
-
-        fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
-        lb_aba = Button(fr_uma_aba, dic_cor_abas, text="     ", border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-        bt_fechar = Button(fr_uma_aba, dic_cor_abas, text="x", relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
-
-        lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
-        bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
-
-        fr_uma_aba.rowconfigure(1, weight=1)
-             
-        fr_uma_aba.grid(row=1, column=posicao_adicionar + 2, sticky=N)
-        lb_aba.grid(row=1, column=1, sticky=NSEW)
-        bt_fechar.grid(row=1, column=2)
-
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
-        self.dic_abas[posicao_adicionar]["listaAbas"].append(bt_fechar)
-
-        self.aba_focada = posicao_adicionar
-        Safira.atualiza_texto_tela(self, self.aba_focada)
-
-    def renderizar_abas_inicio(self):
-        """
-            Usado apenas no inicio do programa *****1 VEZ*****
-        """
-        cor_aba_focada = self.dic_design["dic_cor_abas_focada"]["background"]
-        cor_aba_nao_focada = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-
-        for num_aba, dados_aba in self.dic_abas.items():
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
- 
-            # Coloração da aba
-            if dados_aba["foco"]:
-                self.aba_focada = num_aba
-                bg_padrao = cor_aba_focada
-            else:
-                bg_padrao = cor_aba_nao_focada
-
-            dic_cor_abas["background"] = bg_padrao
-
-            fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
-            fr_uma_aba.rowconfigure(1, weight=1)
-
-            nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
-            nome_arquivo = str(nome_arquivo[-1])
-
-            if dados_aba["arquivoSalvo"]["texto"] != dados_aba["arquivoAtual"]["texto"]:
-                txt_btn = "*"
-            else:
-                txt_btn = "x"
-
-            if nome_arquivo.strip() == "":
-                nome_arquivo = "      "
-
-            lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-            bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
-     
-            fr_uma_aba.update()
-            lb_aba.update()
-            bt_fechar.update()
-
-            fr_uma_aba.grid(row=1, column=num_aba + 2, sticky=N)
-            lb_aba.grid(row=1, column=1, sticky=NSEW)
-            bt_fechar.grid(row=1, column=2)
-
-            lb_aba['command'] = lambda lb_aba=lb_aba: Safira.atualiza_aba_foco(self, lb_aba)
-            bt_fechar['command'] = lambda bt_fechar=bt_fechar: Safira.fecha_aba(self, bt_fechar)
-
-            self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
-            self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
-            self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
 class Safira(Aba):
     def __init__(self):
@@ -225,16 +59,13 @@ class Safira(Aba):
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.bool_tela_em_fullscreen = False
         self.top_janela_terminal = None
-        self.lst_titulos_frames = []
         self.controle_arquivos = None
         self.path = abspath(getcwd())
-        self.lista_itens_destruir = []
-        self.lista_itens_destruir = []
+        self.lista_terminal_destruir = []
         self.bool_debug_temas = False
         self.linhas_laterais = None
         self.tx_terminal = None
         self.instancia = None
-        self.ic_playP = None
         self.tx_codfc = None
         self.linha_p_brk_p = 0
         self.posAbsuluta = 0
@@ -242,7 +73,6 @@ class Safira(Aba):
         self.aba_focada = 0
         self.lst_abas = []
         self.bt_play = None
-        self.ic_PStop = None
         self.frame_tela = None
         self.tela = None
         self.fr_splash = None    # splash
@@ -269,6 +99,7 @@ class Safira(Aba):
         self.bt_pesqu = None
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
         self.bool_interpretador_iniciado = False
+        self.lst_historico_abas_focadas = []
 
     def main(self):
         Safira.splashScreen1(self)
@@ -326,6 +157,7 @@ class Safira(Aba):
         self.tela.bind('<Control-o>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
         self.tela.bind('<F7>', lambda event: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
+
         self.tela.bind('<F10>', lambda event: Safira.adiciona_remove_breakpoint(self))
         #self.tela.bind('<F9>', lambda event: Safira.inicializa_orquestrador(self))
         self.tela.bind('<Control-n>', lambda event: Safira.nova_aba(self, event))
@@ -454,7 +286,7 @@ class Safira(Aba):
 
         self.fr_abas = Frame(self.fr_princ, height=20)
         self.fr_abas.rowconfigure(1, weight=1)
-        self.fr_espaco = Label(self.fr_abas, width=4)
+        self.fr_espaco = Label(self.fr_abas, width=7)
 
         Safira.renderizar_abas_inicio(self)
 
@@ -466,10 +298,14 @@ class Safira(Aba):
         self.tx_codfc.bind('<KeyRelease>', lambda event = None: Safira.ativar_coordernar_coloracao(self, event))
         self.tx_codfc.focus_force()
 
+        ### self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
+        self.tx_codfc.bind('<Control-MouseWheel>', lambda event: Safira.mudar_fonte(self, "+") if int(event.delta) > 0 else Safira.mudar_fonte(self, "-"))
+
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_codfc.yview, relief=FLAT)
         self.tx_codfc.configure(yscrollcommand=self.sb_codfc.set)
 
-        self.linhas_laterais = ContadorLinhas(self.fr_princ)
+        self.linhas_laterais = ContadorLinhas(self.fr_princ, self.dic_design)
+
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         self.linhas_laterais.atribuir(self.tx_codfc)
@@ -507,15 +343,25 @@ class Safira(Aba):
 
         self.tela.mainloop()
 
+    def mudar_fonte(self, acao):
 
+        if acao == "+":
+            adicao = 1
+            print("+++")
+        else:
+            adicao = -1
+            print("---")
 
+        self.dic_design["cor_menu"]["font"][1] = int(self.dic_design["cor_menu"]["font"][1]) + adicao
+        #self.dic_design["lb_sobDeTitulo"]["font"][1] = int(self.dic_design["lb_sobDeTitulo"]["font"][1]) + adicao
+        #self.dic_design["dicBtnMenus"]["font"][1] = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
+        #self.dic_design["tx_terminal"]["font"][1] = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
+        self.dic_design["tx_codificacao"]["font"][1] = int(self.dic_design["tx_codificacao"]["font"][1]) + adicao
+        self.dic_design["fonte_ct_linha"]["font"][1] = int(self.dic_design["fonte_ct_linha"]["font"][1]) + adicao
+        self.dic_design["fonte_ct_linha"]["width"] = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
 
-
-
-
-
-
-
+        self.tx_codfc.configure(self.dic_design["tx_codificacao"])
+        self.linhas_laterais.desenhar_linhas()
 
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False):
@@ -534,10 +380,6 @@ class Safira(Aba):
                 self.instancia.aconteceu_erro = True
                 return 0
 
-
-
-
-
         # Se for executar até o breakpoint
         if libera_break_point_executa:
 
@@ -555,15 +397,15 @@ class Safira(Aba):
 
         inicio = time()
 
-
-
-
-
         self.bool_interpretador_iniciado = True
-        if libera_break_point_executa: Safira.inicializador_terminal_debug(self)
-        else: Safira.inicializador_terminal_producao(self)
+        if libera_break_point_executa:
+            Safira.inicializador_terminal_debug(self)
+
+        else:
+            Safira.inicializador_terminal_producao(self)
 
         self.tx_terminal.delete('1.0', END)
+        self.linha_analise = 0
 
         linhas = self.tx_codfc.get('1.0', END)[0:-1]
         nova_linha = ''
@@ -583,8 +425,19 @@ class Safira(Aba):
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
 
+        valor_antigo = 0
+
         while self.instancia.numero_threads != 0 or not self.instancia.boo_orquestrador_iniciado:
             self.tela.update()
+
+            try:
+                self.linha_analise = int(self.instancia.num_linha)
+                if self.linha_analise != valor_antigo:
+                    valor_antigo = self.linha_analise
+                    self.linhas_laterais.linha_analise = self.linha_analise
+                    self.linhas_laterais.desenhar_linhas()
+            except Exception as erro:
+                print("Erro update", erro)
 
         del self.instancia
 
@@ -629,7 +482,7 @@ class Safira(Aba):
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
         fram_grid_variaveis.rowconfigure(2, weight=1)
 
-        self.campo_busca = Entry(fram_grid_variaveis)
+        self.campo_busca = Entry(fram_grid_variaveis, font=("", 13))
         self.campo_busca.bind("<KeyRelease>",  lambda event: Safira.retornar_variaveis_correspondentes(self))
 
         self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings")
@@ -647,8 +500,10 @@ class Safira(Aba):
         hsroolb.grid(row=3,column=1,  sticky='ew')
 
         Safira.retornar_variaveis_correspondentes(self)
+        print("CARREGOU")
 
-        self.lista_itens_destruir = [hsroolb, self.arvores_grid, self.campo_busca, fram_grid_variaveis, frame_terminal_e_grid]
+
+        self.lista_terminal_destruir = [hsroolb, self.arvores_grid, self.campo_busca, fram_grid_variaveis, frame_terminal_e_grid]
 
     def inicializador_terminal_producao(self):
         Safira.destruir_instancia_terminal(self)
@@ -814,12 +669,12 @@ class Safira(Aba):
 
     def capturar_tecla_terminal(self, event):
         try:
-            self.instancia.capturar_tecla(self,  event.keysym )
+            self.instancia.capturar_tecla( event.keysym )
         except Exception as erro:
             print("Erro ao capturar a tela", erro)
 
     def destruir_instancia_terminal(self):
-        for widget in self.lista_itens_destruir:
+        for widget in self.lista_terminal_destruir:
             try:
                 widget.destroy()
             except Exception as e:
@@ -829,7 +684,7 @@ class Safira(Aba):
         try:
             self.dic_variaveis = self.instancia.dic_variaveis
         except Exception as e:
-            print("instancia finalizada ", e)
+            print("instancia não pronta ", e)
         else:
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 
@@ -894,58 +749,6 @@ class Safira(Aba):
         self.tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
         self.tela.deiconify()
         self.tela.update()
-
-class ContadorLinhas(Canvas):
-    def __init__(self, frame):
-
-        Canvas.__init__(self, frame)
-        self.textwidget = None
-
-    def atribuir(self, text_widget):
-        self.textwidget = text_widget
-
-    def desenhar_linhas(self, *args):
-        self.delete("all")
-
-        i = self.textwidget.index("@0,0")
-        while True :
-
-            dline= self.textwidget.dlineinfo(i)
-            if dline is None: break
-
-            y = dline[1]
-            num_linha = str(i).split(".")[0]
-
-            cor_padrao = "#777777"
-            if int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
-                num_linha = num_linha + " * "
-                cor_padrao = "red"
-            else:
-                num_linha = " " + str(num_linha)
-
-            self.create_text(2,y,anchor="nw", text=num_linha, font=("Lucida Sans", 13),  fill=cor_padrao)
-            i = self.textwidget.index("%s+1line" % i)
-
-class EditorDeCodigo(Text):
-    def __init__(self, *args, **kwargs):
-        Text.__init__(self, *args, **kwargs)
-
-        self._orig = self._w + "_orig"
-        self.tk.call("rename", self._w, self._orig)
-        self.tk.createcommand(self._w, self._proxy)
-
-    def _proxy(self, *args):
-        try:
-            cmd = (self._orig,) + args
-            result = self.tk.call(cmd)
-    
-            if (args[0] in ("insert", "replace", "delete") or args[0:3] == ("mark", "set", "insert") or args[0:2] == ("xview", "moveto") or args[0:2] == ("xview", "scroll") or args[0:2] == ("yview", "moveto") or args[0:2] == ("yview", "scroll")):
-                self.event_generate("<<Change>>", when="tail")
-
-            return result        
-        except Exception as erro:
-            print("Erro em _proxy: ", erro)
-            return ""
 
 if __name__ == "__main__":
     Safira().main()

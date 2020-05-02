@@ -33,6 +33,7 @@ class Run():
         self.idioma = "pt-br"
         self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
         self.valor_tecla_pressionada = ""
+        self.num_linha = "0"
 
         with open('configuracoes/mensagens.json') as json_file:
             self.mensagens = load(json_file)
@@ -413,18 +414,18 @@ class Run():
             return [ [True, None, 'vazio','linhaVazia'], "1" ]
 
         else:
-            num_linha = "0"
+            self.num_linha = "0"
             posicoes = finditer(r'^(\[\d*\])', linha)
 
             # Obter o número da linha
             for uma_posicao in posicoes:
-                num_linha = linha[1 : uma_posicao.end()-1]
+                self.num_linha = linha[1 : uma_posicao.end()-1]
                 linha = linha[uma_posicao.end() : ]
                 linha = linha.strip()
                 break
 
             # Se estiver em um breakpoint, aguarde.
-            if int(num_linha) in self.lst_breakpoints:
+            if int(self.num_linha) in self.lst_breakpoints:
                 Run.aguardar_liberacao_breakPoint(self)
 
             if linha == '':
@@ -458,36 +459,36 @@ class Run():
             analisa025 = Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
             analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
 
-            if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), num_linha ]
-            if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), num_linha ]
-            if analisa002[0]: return [ Run.funcao_exibir_outra_ln(self, analisa002[1][2]), num_linha ]
-            if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), num_linha ]
-            if analisa004[0]: return [ Run.funcao_loops_enquantox(self, analisa004[1][2]), num_linha ]
-            if analisa005[0]: return [ Run.funcao_esperar_n_tempo(self, analisa005[1][2],  analisa005[1][3]), num_linha ]
-            if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), num_linha ]
-            if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), num_linha ]
-            if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), num_linha ]
-            if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), num_linha ]
-            if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  num_linha ]
-            if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), num_linha ]
-            if analisa012[0]: return [ Run.funcao_declarar_listas(self, analisa012[1][2],  analisa012[1][4]), num_linha ]
-            if analisa013[0]: return [ Run.funcao_rem_itns_na_lst(self, analisa013[1][2],  analisa013[1][4]), num_linha ]
-            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2],  analisa014[1][4],  analisa014[1][6]),  num_linha ]
-            if analisa015[0]: return [ Run.funcao_add_itns_na_lst(self, analisa015[1][2],  analisa015[1][4]), num_linha ]
-            if analisa016[0]: return [ Run.funcao_add_itns_lst_in(self, analisa016[1][2],  analisa016[1][4]), num_linha ]
-            if analisa017[0]: return [ Run.funcao_add_itns_na_lst(self, analisa017[1][2],  analisa017[1][4]), num_linha ]
-            if analisa018[0]: return [ Run.funcao_numer_aleatorio(self, analisa018[1][2],  analisa018[1][4]), num_linha ]
-            if analisa019[0]: return [ Run.funcao_obter_valor_lst(self, analisa019[1][2],  analisa019[1][4]), num_linha ]
-            if analisa020[0]: return [ Run.funcao_ovalor_digitado(self, analisa020[1][1]), num_linha ]
-            if analisa021[0]: return [ Run.funcao_tiver_valor_lst(self, analisa021[1][2],  analisa021[1][4]), num_linha ]
-            if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), num_linha ]
-            if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), num_linha ]
-            if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), num_linha ]
-            if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), num_linha ]
-            if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), num_linha ]
+            if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha ]
+            if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha ]
+            if analisa002[0]: return [ Run.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha ]
+            if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha ]
+            if analisa004[0]: return [ Run.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha ]
+            if analisa005[0]: return [ Run.funcao_esperar_n_tempo(self, analisa005[1][2],  analisa005[1][3]), self.num_linha ]
+            if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha ]
+            if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), self.num_linha ]
+            if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), self.num_linha ]
+            if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), self.num_linha ]
+            if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  self.num_linha ]
+            if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), self.num_linha ]
+            if analisa012[0]: return [ Run.funcao_declarar_listas(self, analisa012[1][2],  analisa012[1][4]), self.num_linha ]
+            if analisa013[0]: return [ Run.funcao_rem_itns_na_lst(self, analisa013[1][2],  analisa013[1][4]), self.num_linha ]
+            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2],  analisa014[1][4],  analisa014[1][6]),  self.num_linha ]
+            if analisa015[0]: return [ Run.funcao_add_itns_na_lst(self, analisa015[1][2],  analisa015[1][4]), self.num_linha ]
+            if analisa016[0]: return [ Run.funcao_add_itns_lst_in(self, analisa016[1][2],  analisa016[1][4]), self.num_linha ]
+            if analisa017[0]: return [ Run.funcao_add_itns_na_lst(self, analisa017[1][2],  analisa017[1][4]), self.num_linha ]
+            if analisa018[0]: return [ Run.funcao_numer_aleatorio(self, analisa018[1][2],  analisa018[1][4]), self.num_linha ]
+            if analisa019[0]: return [ Run.funcao_obter_valor_lst(self, analisa019[1][2],  analisa019[1][4]), self.num_linha ]
+            if analisa020[0]: return [ Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha ]
+            if analisa021[0]: return [ Run.funcao_tiver_valor_lst(self, analisa021[1][2],  analisa021[1][4]), self.num_linha ]
+            if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha ]
+            if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), self.num_linha ]
+            if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), self.num_linha ]
+            if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), self.num_linha ]
+            if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), self.num_linha ]
 
-            return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], num_linha ]
-        return [ [True, None, 'vazio', 'fazerNada'], num_linha ]
+            return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha ]
+        return [ [True, None, 'vazio', 'fazerNada'], self.num_linha ]
 
     def comandos_uso_geral(self, possivelVariavel):
         Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))

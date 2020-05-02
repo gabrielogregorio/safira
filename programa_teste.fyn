@@ -1,7 +1,7 @@
 lista de nomes recebe "Mariana", "Alexa", "Maria"
 mostre "lista de nomes: ", nomes
 
-remova "Mariana" da lista de nomes
+remova "Mariana" da lista de nomes 
 mostre "Removendo a Mariana: ", nomes
  
 mostre "Qtd lista: ", tamanho da lista nomes
@@ -66,4 +66,10 @@ calculaMedia passando parametros 10, 5
 calculaMedia passando parametros 10, 6
 calculaMedia passando parametros 10, 7
 
-mostre "Programa Finalizado ", 
+mostre "Programa Finalizado "
+
+
+
+
+
+
