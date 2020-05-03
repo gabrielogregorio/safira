@@ -4,5 +4,7 @@
     "lst_breakpoints":[],
     "arquivoSalvo":{"link": "","texto": ""},
     "arquivoAtual":{"texto": ""},
+    "listaContextos":[],
+    "contexto":0,
     "listaAbas":[]
 }

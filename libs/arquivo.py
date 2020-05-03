@@ -90,7 +90,7 @@ class Arquivo():
 
             if arq_txts[0] is not None:
                 self.tx_codfc.delete(1.0, END)
-                self.tx_codfc.insert(END, arq_txts[0])
+                self.tx_codfc.insert(END, arq_txts[0][0:-1])
 
             else:
                 messagebox.showinfo(
@@ -108,7 +108,7 @@ class Arquivo():
 
         if arq[0] is not None:
             self.tx_codfc.delete(1.0, END)
-            self.tx_codfc.insert(END, arq[0])
+            self.tx_codfc.insert(END, arq[0][0:-1])
 
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'] = link
             self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = arq[0]

@@ -10,7 +10,7 @@ class Aba():
     def atualiza_texto_tela(self, num_aba):
 
         self.tx_codfc.delete(1.0, END)
-        self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"]))
+        self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"])[0:-1])
         self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
 
         nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")

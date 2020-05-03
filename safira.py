@@ -7,7 +7,6 @@ from libs.visualizacao import ContadorLinhas
 from libs.visualizacao import EditorDeCodigo
 from libs.arquivo import Arquivo
 import libs.funcoes as funcoes
-
 import webbrowser
 from time import time, sleep
 from threading import Thread
@@ -32,7 +31,7 @@ from tkinter import Label
 from tkinter import Entry
 from tkinter import NSEW
 from tkinter import Text
-from tkinter import FLAT
+from tkinter import FLAT 
 from tkinter import Menu
 from tkinter import END
 from tkinter import N
@@ -57,6 +56,7 @@ class Safira(Aba):
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.bool_tela_em_fullscreen = False
         self.top_janela_terminal = None
+        self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
         self.controle_arquivos = None
         self.path = abspath(getcwd())
         self.lista_terminal_destruir = []
@@ -227,6 +227,10 @@ class Safira(Aba):
             if len(file) > 11:
                 if file[-10:] == 'theme.json':
                     funcao = lambda link = file: Safira.atualizaInterface(self, 'tema', str(link))
+                    if self.arquivo_configuracoes["tema"] == file:
+                        file = "*" + file
+                    else:
+                        file = " " + file
                     self.mn_intfc_casct_temas.add_command(label=file, command=funcao)
 
         self.mn_intfc_casct_sintx = Menu(self.mn_intfc, tearoff=False)
@@ -235,6 +239,10 @@ class Safira(Aba):
             if len(file) > 13:
                 if file[-12:] == 'sintaxe.json':
                     funcao = lambda link = file: Safira.atualizaInterface(self, 'sintaxe', str(link))
+                    if self.arquivo_configuracoes["sintaxe"] == file:
+                        file = "*" + file
+                    else:
+                        file = " " + file
                     self.mn_intfc_casct_sintx.add_command(label=file, command=funcao)
 
         self.mn_ajuda.add_command( label='  Ajuda (F1)', command= lambda:webbrowser.open(self.path + "/tutorial/index.html") )
@@ -296,6 +304,9 @@ class Safira(Aba):
         ### self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
         self.tx_codfc.bind('<Control-MouseWheel>', lambda event: Safira.mudar_fonte(self, "+") if int(event.delta) > 0 else Safira.mudar_fonte(self, "-"))
 
+        self.tx_codfc.bind('<Control-z>', lambda event: Safira.mudar_contexto(self, "z"))
+        self.tx_codfc.bind('<Control-y>', lambda event: Safira.mudar_contexto(self, "y"))
+
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_codfc.yview, relief=FLAT)
         self.tx_codfc.configure(yscrollcommand=self.sb_codfc.set)
 
@@ -332,12 +343,55 @@ class Safira(Aba):
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'scripts/teste.fyn')
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
 
         self.tela.mainloop()
 
-    def mudar_fonte(self, acao):
+    def salva_contextos(self):
+        print("Salva contexto", self.dic_abas[self.aba_focada]["contexto"])
+        print("texto contexto", self.dic_abas[self.aba_focada]["listaContextos"])
 
+        '''
+            Armazena alterações de contexto do código em 
+            no máximo 10 contextos de código, para  CTRL+Z e CTRL+Y
+        '''
+
+        self.dic_abas[self.aba_focada]["listaContextos"].append( self.tx_codfc.get("1.0", END) )
+
+        if len(self.dic_abas[self.aba_focada]["listaContextos"]) > 10:
+            self.dic_abas[self.aba_focada]["listaContextos"] = self.dic_abas[self.aba_focada]["listaContextos"][-10:]
+
+    def mudar_texto_txt_codifc(self, txt_contexto):
+        self.tx_codfc.delete("1.0", END)
+        self.tx_codfc.insert("1.0", txt_contexto[0:-1])
+
+    def mudar_contexto(self, acao):
+
+        contexto = self.dic_abas[self.aba_focada]["contexto"] - 1
+
+        if acao == "z":
+            print("Desfazer")
+            print("Voltar para traz, até o zero")
+
+            # Ainda não chegou no contexto 0
+            if contexto != -1:
+                contexto -= 1
+                contexto = self.dic_abas[self.aba_focada]["contexto"] = contexto
+
+                Safira.mudar_texto_txt_codifc(self, self.dic_abas[self.aba_focada]["listaContextos"][contexto])
+
+        else:
+            print("Redesfazer")
+            print("Ir para frente até o máximo")
+
+            # Ainda não chegou no contexto maximo
+            if contexto + 1 < len(self.dic_abas[self.aba_focada]["listaContextos"]) and contexto < 10:
+                contexto += 1
+                contexto = self.dic_abas[self.aba_focada]["contexto"] = contexto
+
+                Safira.mudar_texto_txt_codifc(self, self.dic_abas[self.aba_focada]["listaContextos"][contexto])
+
+    def mudar_fonte(self, acao):
         if acao == "+":
             adicao = 1
             print("+++")
@@ -533,7 +587,7 @@ class Safira(Aba):
         try:
             objeto.configure(self.dic_design[menu])
         except Exception as erro:
-            print("Atualizar a interface config = " + str(erro))
+            print("Erro Atualiza interface config = " + str(erro))
 
     def atualiza_design_interface(self):
 
@@ -558,8 +612,8 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.bt_ajuda, "dicBtnMenus")
         Safira.atualiza_interface_config(self, self.bt_pesqu, "dicBtnMenus")
         Safira.atualiza_interface_config(self, self.bt_brk_p, "dicBtnMenus")
-        Safira.atualiza_interface_config(self, self.fr_princ, "self.fr_princ")
-        Safira.atualiza_interface_config(self, self.tela, "self.tela")
+        Safira.atualiza_interface_config(self, self.fr_princ, "fr_princ")
+        Safira.atualiza_interface_config(self, self.tela, "tela")
         Safira.atualiza_interface_config(self, self.tx_codfc, "tx_codificacao")
         Safira.atualiza_interface_config(self, self.sb_codfc, "scrollbar_text")
         Safira.atualiza_interface_config(self, self.fr_opc_rapidas, "fr_opcoes_rapidas")
@@ -572,6 +626,7 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.fr_espaco, "dic_cor_abas_frame")
 
     def ativar_coordernar_coloracao(self, event = None):
+        Safira.salva_contextos(self)
         if self.dic_abas != {}:
             self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
 
