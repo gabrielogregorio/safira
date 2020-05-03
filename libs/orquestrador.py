@@ -13,6 +13,8 @@ from time import sleep
 import libs.funcoes as funcoes
 from json import load
 
+
+
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
 
@@ -212,8 +214,6 @@ class Run():
 
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, 
                             str_bloco[1:].strip())
-                        
-                         
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -256,8 +256,6 @@ class Run():
                     for valor in range(0, lst_ultimo_ret[1]):
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, 
                             str_bloco[1:].strip())
-                        
-                        
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -309,7 +307,6 @@ class Run():
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
-                        
 
                     lst_ultimo_ret[1] = 0
                     lst_ultimo_ret = [True, False, 'booleano']
@@ -328,7 +325,6 @@ class Run():
                     if lst_ultimo_ret[1] == True:
 
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco[1:].strip())
-                        
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -338,7 +334,6 @@ class Run():
                             Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
-
 
                 str_bloco = ""
                 continue
@@ -370,7 +365,6 @@ class Run():
                 self.numero_threads -= 1
                 return lst_ultimo_ret
 
-
             if lst_ultimo_ret[3] == 'exibirNaTela': Run.orq_exibir_tela(self, lst_ultimo_ret)
 
         # Aviso de erros de profundidade
@@ -384,6 +378,26 @@ class Run():
 
         self.numero_threads -= 1
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     def analisa_instrucao(self, comando, texto):
@@ -735,7 +749,6 @@ class Run():
 
         try:
             return [True, len(self.dic_variaveis[linha][0]), 'float', 'fazerNada']
-
         except Exception as erro:
             return [True, '{} {}'.format(Run.msg_idioma(self, "erro_obter_tamanho_lista"), erro), 'string', 'exibirNaTela']
 
@@ -757,7 +770,6 @@ class Run():
 
         try:
             self.dic_variaveis[variavel][0].remove([resultado[1], resultado[2]])
-
         except Exception as erro:
             return [ False, '"{}" {} "{}"!'.format(resultado[1], Run.msg_idioma(self, "nao_esta_na_lista")  , variavel), 'string', 'exibirNaTela']
 
@@ -780,7 +792,6 @@ class Run():
 
         try:
             self.dic_variaveis[variavel][0].append([teste_valor[1], teste_valor[2]])
-
         except Exception as erro:
             return [ False, '"{}" {} "{}"!'.format(teste_valor[1], Run.msg_idioma(self, "nao_esta_na_lista"), variavel), 'string', 'exibirNaTela']
 
@@ -901,8 +912,6 @@ class Run():
 
             self.dic_variaveis[variavel] = [lista, 'lista']
             return [True, None, 'vazio', 'fazerNada']
-
-
 
     def funcao_ovalor_digitado(self, linha):
         Run.log(self, 'Função digitado: "{}"'.format(linha))
@@ -1340,7 +1349,6 @@ class Run():
 
         if resultado[0]:
             self.dic_variaveis[variavel] = [resultado[1], resultado[2]]
-
             return [True, None, 'vazio', 'fazerNada']
 
         return [ resultado[0], resultado[1], resultado[2], 'fazerNada']

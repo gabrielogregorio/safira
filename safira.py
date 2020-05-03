@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from libs.aba import Aba
-from libs.interpretador import Run
+from libs.orquestrador import Run
 from libs.colorir import Colorir
 from libs.visualizacao import ContadorLinhas
 from libs.visualizacao import EditorDeCodigo
