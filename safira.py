@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
-from aba import Aba
-from interpretador import Run
-from colorir import Colorir
-from visualizacao import ContadorLinhas
-from visualizacao import EditorDeCodigo
-from arquivo import Arquivo
-import funcoes
+from libs.aba import Aba
+from libs.interpretador import Run
+from libs.colorir import Colorir
+from libs.visualizacao import ContadorLinhas
+from libs.visualizacao import EditorDeCodigo
+from libs.arquivo import Arquivo
+import libs.funcoes as funcoes
+
 import webbrowser
 from time import time, sleep
 from threading import Thread
@@ -100,7 +101,7 @@ class Safira(Aba):
 
     def main(self):
         Safira.splashScreen1(self)
-        sleep(3)
+        sleep(1)
         Safira.inicioScreen(self)
 
     def splashScreen1(self):
@@ -119,7 +120,7 @@ class Safira(Aba):
 
         self.fr_splash = Frame(self.frame_splash, self.dic_design["cor_intro"])
         self.l1_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text=" COMBRATEC ", fg="#404040", font=( "Lucida Sans", 90), bd=80)
-        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Carregando Safira ILE", fg="#404040", font=("Lucida Sans", 12))
+        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Safira ILE", fg="#404040", font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
@@ -332,7 +333,7 @@ class Safira(Aba):
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", '2.fyn')
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'scripts/teste.fyn')
 
         self.tela.mainloop()
 
@@ -441,8 +442,13 @@ class Safira(Aba):
         except Exception as erro:
             print('Impossível exibir mensagem de finalização, erro: '+ str(erro))
         
+        self.linhas_laterais.linha_analise = 0
+        self.linhas_laterais.desenhar_linhas()
+
         self.bt_playP.configure(image=self.ic_playP)
         self.bool_interpretador_iniciado = False
+
+
 
     def inicializador_terminal_debug(self):
         Safira.destruir_instancia_terminal(self)
