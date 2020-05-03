@@ -4,7 +4,7 @@ A versão atual **contém um BUG** que faz o programa finalizar antes do interpr
 # Introdução
 Uma linguagem de programação introdutória universal, simples e focada em na lógica.
 
-![Imagem](feynman_beta.png)
+![Imagem](imagens/safira.png)
 
 # Como executar  
 1. Baixe o Python3.7 no seu computador
