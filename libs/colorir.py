@@ -26,7 +26,7 @@ class Colorir():
             Colorir.realiza_coloracao(self, str(palavra), str(linha + 1), valor.start(), valor.end(), cor)
 
     def def_cor(self, chave_comando, chave_cor, lista):
-        for comando in self.dic_comandos[chave_comando]:
+        for comando in self.dic_comandos[chave_comando]["comando"]:
             Colorir.anl_cor(
                 self,
                 comando[0].strip(),
@@ -79,48 +79,10 @@ class Colorir():
 
         try:
             lista = self.tx_codfc.get(1.0, END).lower().split('\n')
-            Colorir.def_cor(self, 'para_cada', "condicionais", lista)
-            Colorir.def_cor(self, 'para_cada_de', "condicionais", lista)
-            Colorir.def_cor(self, 'para_cada_ate', "condicionais", lista)
-            Colorir.def_cor(self, 'repita', "lista", lista)
-            Colorir.def_cor(self, 'se', "condicionais", lista)
-            Colorir.def_cor(self, 'addItensListaInternoPosicaoFinaliza', "lista", lista)
-            Colorir.def_cor(self, 'addItensListaInternoFinal', "lista", lista)
-            Colorir.def_cor(self, 'addItensListaInternoPosicao', "lista", lista)
-            Colorir.def_cor(self, 'addItensListaInternoInicio', "lista", lista)
-            Colorir.def_cor(self, 'declaraListasObterPosicao', "lista", lista)
-            Colorir.def_cor(self, 'RemoverItensListasInterno', "lista", lista)
-            Colorir.def_cor(self, 'declaraVariaveis', "atribuicao", lista)
-            Colorir.def_cor(self, 'passandoParametros', "tempo", lista)
-            Colorir.def_cor(self, 'RemoverItensListas', "lista", lista)
-            Colorir.def_cor(self, 'incrementeDecremente', "tempo", lista)
-            Colorir.def_cor(self, 'recebeDeclaraListas', "lista", lista)
-            Colorir.def_cor(self, 'tiverInternoLista', "lista", lista)
-            Colorir.def_cor(self, 'aleatorioEntre', "lista", lista)
-            Colorir.def_cor(self, 'listaPosicoesCom', "lista", lista)
-            Colorir.def_cor(self, 'listaNaPosicao', "lista", lista)
-            Colorir.def_cor(self, 'listaCom', "lista", lista)
-            Colorir.def_cor(self, 'declaraListas', "lista", lista)
-            Colorir.def_cor(self, 'adicionarItensListas', "lista", lista)
-            Colorir.def_cor(self, 'tamanhoDaLista', "lista", lista)
-            Colorir.def_cor(self, 'digitado', "tempo", lista)
-            Colorir.def_cor(self, 'enquanto', "lista", lista)
-            Colorir.def_cor(self, 'mostreNessa', "exibicao", lista)
-            Colorir.def_cor(self, 'funcoes', "tempo", lista)
-            Colorir.def_cor(self, 'aguarde', "tempo", lista)
-            Colorir.def_cor(self, 'aleatorio', "tempo", lista)
-            Colorir.def_cor(self, 'limpatela', "tempo", lista)
-            Colorir.def_cor(self, 'incremente', "tempo", lista)
-            Colorir.def_cor(self, 'decremente', "logico", lista)
-            Colorir.def_cor(self, 'tiverLista', "lista", lista)
-            Colorir.def_cor(self, 'recebeParametros', "tempo", lista)
-            Colorir.def_cor(self, 'esperaEm', "tempo", lista)
-            Colorir.def_cor(self, 'repitaVezes', "lista", lista)
-            Colorir.def_cor(self, 'pare', "contas", lista)
-            Colorir.def_cor(self, 'logico', "logico", lista)
-            Colorir.def_cor(self, 'mostre', "exibicao", lista)
-            Colorir.def_cor(self, 'ler_tecla_por', "lista", lista)
-            Colorir.def_cor(self, 'matematica', "contas", lista)
+
+            for chave, comando in self.dic_comandos.items():
+                Colorir.def_cor(self, chave, comando["cor"], lista)
+
             Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista)
             Colorir.anl_cor(self, 'comentario', self.cor_do_comando["comentario"], lista)
             Colorir.anl_cor(self, '"', self.cor_do_comando["string"], lista)

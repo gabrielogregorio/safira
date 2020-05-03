@@ -379,27 +379,6 @@ class Run():
         self.numero_threads -= 1
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def analisa_instrucao(self, comando, texto):
         re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
         re_groups = findall(re_comandos, comando)
@@ -411,10 +390,10 @@ class Run():
         for grupo in re_groups:
 
             # Anda pelos comandos no dicionários, [se], [if]...
-            for n_comando in range(0, len(self.dic_comandos[ grupo[1:-1] ])):
+            for n_comando in range(0, len( self.dic_comandos[grupo[1:-1]]["comando"] )):
 
                 # Obtem um comando. se, if
-                txt_comando_analisar = self.dic_comandos[ grupo[1:-1] ][n_comando][0]
+                txt_comando_analisar = self.dic_comandos[ grupo[1:-1] ]["comando"][n_comando][0]
 
                 # Substitui o grupo pelo comando. <se>, if
                 comando_analise = comando.replace(grupo, txt_comando_analisar)

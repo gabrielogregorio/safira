@@ -196,7 +196,6 @@ class Safira(Aba):
 
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = lambda event=None: Safira.nova_aba(self, event))
-        self.mn_arqui.add_command(label='  Abrir pasta')
         self.mn_arqui.add_separator()
         self.mn_arqui.add_command(label='  Recentes')
         self.mn_arqui.add_separator()
@@ -534,7 +533,7 @@ class Safira(Aba):
         try:
             objeto.configure(self.dic_design[menu])
         except Exception as erro:
-            print("Interface" + str(erro))
+            print("Atualizar a interface config = " + str(erro))
 
     def atualiza_design_interface(self):
 
