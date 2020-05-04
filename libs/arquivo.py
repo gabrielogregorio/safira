@@ -64,7 +64,7 @@ class Arquivo():
                 try:
                     funcoes.salvar_arquivo(
                         arquivo=self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'],
-                        texto=programaCodigo[0:-1])
+                        texto=programaCodigo)
 
                 except Exception as erro:
                     messagebox.showinfo(

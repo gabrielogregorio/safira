@@ -38,7 +38,7 @@ class Run():
         self.num_linha = "0"
         self.historico_fluxo_de_dados = []
 
-        with open('configuracoes/mensagens.json') as json_file:
+        with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
             self.mensagens = load(json_file)
 
     def pressionou_enter(self, event=None):

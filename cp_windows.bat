@@ -3,26 +3,27 @@ color a
 
 echo Certifique-se que a versão do Python é a 3.7.2
 echo Execute os comandos abaixo caso tenha erro:
-python -m pip install --upgrade pip
-python -m pip install pyinstaller
+pip install --upgrade pip
+pip install pyinstaller --upgrade
+pip install setuptools --upgrade
 
-echo Deletando arquivo feynman.exe
-del feynman.exe
+echo Deletando arquivo safira.exe
+del safira.exe
 
 echo Criando uma cópia temporária
-copy script.py feynman.pyw
+copy safira.py safira.pyw
 
 echo Gerando o Executável
-pyinstaller --onefile -windowed --icon=app.ico feynman.pyw
+pyinstaller --onefile -windowed --icon="imagens\icone.ico" safira.pyw -w
 
 echo Tornando o executável acessivel
-move dist\feynman.exe .
+move dist\safira.exe .
 
 echo Deleteando o arquivo temporário
-del feynman.pyw
+del safira.pyw
 
-echo deletando o residuo feynman.spec
-del feynman.spec
+echo deletando o residuo safira.spec
+del safira.spec
 
 echo deletando pasta build/
 rd /s  /q build

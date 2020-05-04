@@ -745,14 +745,14 @@ class Safira(Aba):
 
     def arquivoConfiguracao(self, chave, novo = None):
         if novo is None:
-            with open('configuracoes/configuracoes.json') as json_file:
+            with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
                 configArquivoJson = load(json_file)
                 retorno = configArquivoJson[chave]
 
             return retorno
 
         elif novo is not None:
-            with open('configuracoes/configuracoes.json') as json_file:
+            with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
                 configArquivoJson = load(json_file)
 
                 configArquivoJson[chave] = novo

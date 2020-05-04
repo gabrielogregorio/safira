@@ -5,7 +5,7 @@ sudo python3.7 -m pip install pyinstaller --no-cache
 
 rm -rf safira
 cp safira.py safira.pyw
-pyinstaller --onefile -windowed --icon=icone.png safira.pyw -w
+pyinstaller --onefile -windowed --icon="imagens/icone.png" safira.pyw -w
 
 mv dist/safira .
 sudo chmod +x safira

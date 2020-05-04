@@ -38,14 +38,14 @@ def atualiza_configuracoes_temas():
 
             # BUSCA PELOS TEMAS DA SINTAXE
             try:
-                with open('temas/{}'.format(arquivoConfigs["sintaxe"])) as json_file:
+                with open('temas/{}'.format(arquivoConfigs["sintaxe"]), encoding='utf8') as json_file:
                     cor_da_sintaxe = load(json_file)
             except Exception as e2:
                 print('Erro ao carregar o tema da sintaxe:', e2)
 
             # BUSCA PELOS TEMAS DA INTERFACE
             try:
-                with open('temas/{}'.format(arquivoConfigs["tema"])) as json_file:
+                with open('temas/{}'.format(arquivoConfigs["tema"]), encoding='utf8') as json_file:
                     dicionario_design = load(json_file)
             except Exception as e3:
                 print('Erro ao carregar os temas:', e3)
