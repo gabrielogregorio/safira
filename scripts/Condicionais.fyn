@@ -7,9 +7,9 @@ se "nome" == o que o usuario digitar
 {
     mostre "show"
 }
-
+# Olá mundo
 n = 2
-m = 3
+m vale 3
 
 if n == 2
 {
@@ -22,3 +22,4 @@ if n == 3 ou m == 3 ou "idade" == idade
 {
     mostre 2 + 5
 }
+

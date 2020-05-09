@@ -7,10 +7,10 @@
       "Lucida Sans",
       13
     ],
-    "background": "#a8c0ff",
+    "background": "#ffffff",
     "foreground": "#454545",
     "border":0,
-    "activebackground": "#7da1ff",
+    "activebackground": "#e2e2e2",
     "activeborderwidth": 0,
     "activeforeground": "#565656"
   },
@@ -20,8 +20,8 @@
       13,
       "bold"
     ],
-    "height": 5,
-    "background": "#a8c0ff",
+    "height": 2,
+    "background": "#202040",
     "foreground": "#555555"
   },
   "lb_sobDAutores": {
@@ -29,47 +29,47 @@
       "Lucida Sans",
       13
     ],
-    "background": "#e6edff",
-    "foreground": "#223322"
+    "background": "#222232",
+    "foreground": "#222232"
   },
   "lb_sobDesenAno": {
     "font": [
       "Lucida Sans",
       13
     ],
-    "background": "#e6edff",
-    "foreground": "#223322"
+    "background": "#222232",
+    "foreground": "#222232"
   },
   "tx_codificacao": {
-    "background": "#e6edff",
-    "foreground": "#444444",
+    "background": "#222232",
+    "foreground": "#f3f3f3",
     "border":0,
     "highlightthickness": 0,
     "insertbackground": "#0000ff",
-    "selectbackground": "#dddddd",
-    "selectforeground": "#000000",
+    "selectbackground": "#333333",
+    "selectforeground": "#ffffff",
     "font": [
       "Lucida Sans",
       13
     ]
   },
   "scrollbar_text": {
-      "background":"#a8c0ff",
-      "troughcolor":"#e6edff",
+      "background":"#202040",
+      "troughcolor":"#222232",
       "border":0,
-      "width": 20,
+      "width": 10,
       "highlightthickness":0,
       "activebackground": "#b8d0ff",
-      "highlightbackground": "#e6edff",
-      "highlightcolor": "#e6edff"
+      "highlightbackground": "#222232",
+      "highlightcolor": "#222232"
   },
   "dicBtnMenus": {
     "width":30,
     "border":0,
     "highlightthickness": 2,
-    "highlightbackground":"#c5d4fc",
-    "activebackground":"#adc4ff",
-    "background": "#c5d4fc",
+    "highlightbackground":"#222232",
+    "activebackground":"#222232",
+    "background": "#222232",
     "foreground":"#fa0104",
     "font": [
       "Lucida Sans",
@@ -77,34 +77,35 @@
     ]
   },
   "dic_cor_abas_frame": {
-    "background": "#adc4ff"
+    "background": "#555565"
   },
   "dic_cor_abas": {
-       "background":"#c5d4fc",
-       "foreground":"#565656"
+       "background":"#222232",
+       "foreground":"#e8e8e8",
+       "activeforeground":"white"
   },
   "dic_cor_abas_focada": {
-       "background":"#e6edff"
+       "background":"#222232"
   },
   "dic_cor_abas_nao_focada": {
-       "background":"#c5d4fc"
+       "background":"#444454"
   },
   "fr_opcoes_rapidas": {
-    "background": "#c5d4fc"
+    "background": "#222232"
   },
   "fr_ajuda": {
-    "background": "#c5d4fc"
+    "background": "#222232"
   },
   "lb_linhas": {
     "border":0,
     "width":40,
     "highlightthickness":0,
-    "background": "#c5d4fc"
+    "background": "#222232"
   },
   "tx_terminal": {
     "width": 50,
     "background": "#191913",
-    "foreground": "#e6edff",
+    "foreground": "#f1f1f1",
     "highlightthickness": 0,
     "font": [
       "Lucida Sans",
@@ -127,10 +128,10 @@
   },
 
   "fr_princ": {
-    "background":"#e6edff"
+    "background":"#222232"
   },
   "tela": {
-    "background":"#e6edff"
+    "background":"#222232"
   },
   "fr_ajuda_comando":{
     "pady":10,

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import sys
+print("Versao do python", sys.version)
 
 from libs.aba import Aba
 from libs.orquestrador import Run
@@ -50,6 +52,9 @@ __date__ = '01/08/2019'
 __last_update__ = '02/05/2020'
 __version__ = '0.1'
 
+# sudo apt-get install python3-pip
+# sudo apt-get install python-tk python3-tk tk-dev
+
 class Safira(Aba):
     def __init__(self):
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
@@ -71,7 +76,10 @@ class Safira(Aba):
         self.aba_focada = 0
         self.lst_abas = []
         self.bt_play = None
+        self.fr_abas = None
+        self.fr_princ = None
         self.frame_tela = None
+        self.fr_opc_rapidas = None
         self.tela = None
         self.fr_splash = None    # splash
         self.l1_splash = None    # splash
@@ -163,7 +171,7 @@ class Safira(Aba):
         self.frame_tela.grid_columnconfigure(1, weight=1)
 
         try:
-            imgicon = PhotoImage(file='icone.png')
+            imgicon = PhotoImage(file='imagens/icone.png')
             self.tela.call('wm', 'iconphoto', self.tela._w, imgicon)
         except Exception as erro:
             print('>>> Erro ao carregar icone do app:', erro)
@@ -173,10 +181,8 @@ class Safira(Aba):
 
         dic_config_menu = {"tearoff":False, "font" : ("Lucida Sans", 13) }
 
-        self.mn_ferrm = Menu( self.mn_barra, dic_config_menu )
         self.mn_intfc = Menu( self.mn_barra, dic_config_menu )
         self.mn_exect = Menu( self.mn_barra, dic_config_menu )
-        self.mn_loclz = Menu( self.mn_barra, dic_config_menu )
         self.mn_exemp = Menu( self.mn_barra, dic_config_menu )
         self.mn_arqui = Menu( self.mn_barra, dic_config_menu )
         self.mn_edita = Menu( self.mn_barra, dic_config_menu )
@@ -186,13 +192,11 @@ class Safira(Aba):
 
         self.mn_barra.add_cascade(label='  Arquivo'    , menu=self.mn_arqui, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Executar'   , menu=self.mn_exect, font = ("Lucida Sans", 13))
-        self.mn_barra.add_cascade(label='  Localizar'  , menu=self.mn_loclz, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Exemplos'  , menu=self.mn_exemp, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Interface'  , menu=self.mn_intfc, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Ajuda'      , menu=self.mn_ajuda, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  sobre'      , menu=self.mn_sobre, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Dev'        , menu=self.mn_devel, font = ("Lucida Sans", 13))
-        self.mn_barra.add_cascade(label='  Ferramentas', menu=self.mn_ferrm, font = ("Lucida Sans", 13))
 
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = lambda event=None: Safira.nova_aba(self, event))
@@ -211,8 +215,6 @@ class Safira(Aba):
         self.mn_exect.add_command(label='  Executar até breakpoint (F7)', command=lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
         self.mn_exect.add_command(label='  Parar execução (F9)', command = lambda event: Safira.inicializa_orquestrador(self, event))
         self.mn_exect.add_command(label='  Inserir breakpoint (F10)', command = lambda event: Safira.adiciona_remove_breakpoint(self, event))
-        self.mn_loclz.add_command(label='  Localizar (CTRL + F)')
-        self.mn_loclz.add_command(label='  Substituir (CTRL + R)')
 
         mn_arq_exemplo_casc = Menu(self.mn_exemp, tearoff = False)
         for file in listdir('scripts/'):
@@ -586,6 +588,8 @@ class Safira(Aba):
     def atualiza_interface_config(self, objeto, menu):
         try:
             objeto.configure(self.dic_design[menu])
+            objeto.update()
+
         except Exception as erro:
             print("Erro Atualiza interface config = " + str(erro))
 
@@ -593,9 +597,7 @@ class Safira(Aba):
 
         Safira.atualiza_interface_config(self, self.mn_intfc_casct_sintx, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_intfc_casct_temas, "cor_menu")
-        Safira.atualiza_interface_config(self, self.mn_ferrm, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_intfc, "cor_menu")
-        Safira.atualiza_interface_config(self, self.mn_loclz, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_exect, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_arqui, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_edita, "cor_menu")
@@ -670,7 +672,12 @@ class Safira(Aba):
             try:
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
                 self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc).update()
+
                 Safira.atualiza_design_interface(self)
+                self.linhas_laterais.aba_focada2 = self.aba_focada
+                self.linhas_laterais.dic_abas2 = self.dic_abas
+
+
             except Exception as erro:
                 print('ERRO: ', erro)
             else:

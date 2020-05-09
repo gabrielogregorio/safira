@@ -155,7 +155,7 @@
       ["enquanto ","pt-br"],
       ["while ","pt-br"]
     ],
-    "cor":"lista"
+    "cor":"condicionais"
   },
   "aguarde":{
     "comando":[
@@ -169,7 +169,7 @@
       ["repita ","pt-br"],
       ["repitir ","pt-br"]
     ],
-    "cor":"lista"
+    "cor":"condicionais"
   },
 
   "limpatela":{
@@ -213,7 +213,7 @@
       [" vezes","pt-br"],
       [" vez","pt-br"]
     ],
-    "cor":"lista"
+    "cor":"condicionais"
   },
   "logico":{
     "comando":[
@@ -283,7 +283,7 @@
     "comando":[
       [" recebe parametros ","pt-br"]
     ],
-    "cor":"tempo"
+    "cor":"condicionais"
   },
   "recebeDeclaraListas":{
     "comando":[
