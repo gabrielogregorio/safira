@@ -122,13 +122,13 @@ class Safira(Aba):
 
         self.frame_splash = Frame(self.tela)
 
-        self.frame_splash.configure(self.dic_design["cor_intro"])
+        self.frame_splash.configure(background = self.dic_design["cor_intro"]["background"])
         self.frame_splash.rowconfigure(1, weight=1)
         self.frame_splash.grid_columnconfigure(0, weight=1)
 
-        self.fr_splash = Frame(self.frame_splash, self.dic_design["cor_intro"])
-        self.l1_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text=" COMBRATEC ", fg="#404040", font=( "Lucida Sans", 90), bd=80)
-        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Safira ILE", fg="#404040", font=("Lucida Sans", 12))
+        self.fr_splash = Frame(self.frame_splash, background = self.dic_design["cor_intro"]["background"])
+        self.l1_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text=" COMBRATEC ", font=( "Lucida Sans", 90), bd=80)
+        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Safira ILE", font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
@@ -216,7 +216,7 @@ class Safira(Aba):
         self.mn_exect.add_command(label='  Parar execução (F9)', command = lambda event: Safira.inicializa_orquestrador(self, event))
         self.mn_exect.add_command(label='  Inserir breakpoint (F10)', command = lambda event: Safira.adiciona_remove_breakpoint(self, event))
 
-        mn_arq_exemplo_casc = Menu(self.mn_exemp, tearoff = False)
+        Menu(self.mn_exemp, tearoff = False)
         for file in listdir('scripts/'):
             if len(file) > 5:
                 if file[-3:] == 'fyn':
@@ -402,9 +402,9 @@ class Safira(Aba):
             print("---")
 
         self.dic_design["cor_menu"]["font"][1] = int(self.dic_design["cor_menu"]["font"][1]) + adicao
-        #self.dic_design["lb_sobDeTitulo"]["font"][1] = int(self.dic_design["lb_sobDeTitulo"]["font"][1]) + adicao
-        #self.dic_design["dicBtnMenus"]["font"][1] = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
-        #self.dic_design["tx_terminal"]["font"][1] = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
+        self.dic_design["lb_sobDeTitulo"]["font"][1] = int(self.dic_design["lb_sobDeTitulo"]["font"][1]) + adicao
+        self.dic_design["dicBtnMenus"]["font"][1] = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
+        self.dic_design["tx_terminal"]["font"][1] = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
         self.dic_design["tx_codificacao"]["font"][1] = int(self.dic_design["tx_codificacao"]["font"][1]) + adicao
         self.dic_design["fonte_ct_linha"]["font"][1] = int(self.dic_design["fonte_ct_linha"]["font"][1]) + adicao
         self.dic_design["fonte_ct_linha"]["width"] = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
@@ -491,7 +491,7 @@ class Safira(Aba):
 
         try:
             self.tx_terminal.config(state=NORMAL)
-            self.tx_terminal.insert(END, '\nScript finalizado em {:.3} segundos'.format(time() - inicio))
+            self.tx_terminal.insert(END, '\nScript finalizado em {:.5} segundos'.format(time() - inicio))
             self.tx_terminal.see("end")
 
         except Exception as erro:
@@ -502,6 +502,27 @@ class Safira(Aba):
 
         self.bt_playP.configure(image=self.ic_playP)
         self.bool_interpretador_iniciado = False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -529,24 +550,30 @@ class Safira(Aba):
 
         # Debug
         coluna_identificadores = ('Variavel', 'Tipo','Valor')
-        fram_grid_variaveis = Frame(frame_terminal_e_grid)
+        fram_grid_variaveis = Frame(frame_terminal_e_grid, bg="red")
         fram_grid_variaveis.grid(row=2, column=1, sticky = NSEW)
 
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
         fram_grid_variaveis.rowconfigure(2, weight=1)
 
+        self.texto_busca = Label(fram_grid_variaveis, text="Faça a busca por variáveis")
         self.campo_busca = Entry(fram_grid_variaveis, font=("", 13))
         self.campo_busca.bind("<KeyRelease>",  lambda event: Safira.retornar_variaveis_correspondentes(self))
 
-        self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings")
-        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview)
-        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview)
+        self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", foreground='red')
+        self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
+
+        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="blue")
+        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview, bg="green")
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
+        
 
         for coluna in coluna_identificadores:
-            self.arvores_grid.heading(coluna, text=coluna.title() )
-            self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20)
+            self.arvores_grid.heading(coluna, text=coluna.title())#, selectmode="#f1a533")
+            self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20 )#, selectmode="orange")
+            self.arvores_grid.tag_configure("evenrow",background='red',foreground='yellow')
 
+        self.texto_busca.grid(row=0, column=1, sticky=NSEW)
         self.campo_busca.grid(row=1, column=1, sticky=NSEW)
         self.arvores_grid.grid(row=2,column=1,  sticky=NSEW)
         vsroolb.grid(row=2,column=2, sticky='ns')
@@ -555,6 +582,21 @@ class Safira(Aba):
         Safira.retornar_variaveis_correspondentes(self)
 
         self.lista_terminal_destruir = [hsroolb, self.arvores_grid, self.campo_busca, fram_grid_variaveis, frame_terminal_e_grid]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def inicializador_terminal_producao(self):
         Safira.destruir_instancia_terminal(self)

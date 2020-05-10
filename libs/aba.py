@@ -24,6 +24,14 @@ class Aba():
         for x in range(0, 3):
             self.dic_abas[num_aba]["listaAbas"][x].update()
 
+    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
+        self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground = bg_padrao)
+        self.dic_abas[self.aba_focada]["listaAbas"][2].update()
+        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground = bg_padrao)
+        self.dic_abas[self.aba_focada]["listaAbas"][1].update()
+        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background = bg_padrao, height=20)
+        self.dic_abas[self.aba_focada]["listaAbas"][0].update()
+
     def fecha_aba(self, bt_fechar):
         bool_era_focado = False
 
@@ -66,45 +74,32 @@ class Aba():
                         chave = k
                         break
     
-                dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-                bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+                dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
                 self.aba_focada = chave
                 self.dic_abas[chave]["foco"] =True
 
-                Aba.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+                Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
                 Aba.atualiza_texto_tela(self, chave)
 
                 self.lst_historico_abas_focadas.append(chave)
                 return 0
 
-    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
-        self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground = bg_padrao)
-        self.dic_abas[self.aba_focada]["listaAbas"][2].update()
-        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground = bg_padrao)
-        self.dic_abas[self.aba_focada]["listaAbas"][1].update()
-        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background = bg_padrao, height=20)
-        self.dic_abas[self.aba_focada]["listaAbas"][0].update()
-
     def atualiza_aba_foco(self, num_aba):
         if num_aba == self.aba_focada:
             return 0
 
-        dic_cor_abas = self.dic_design["dic_cor_abas"]
-        
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-        Aba.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+        dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"]
+        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
 
         self.dic_abas[self.aba_focada]["foco"] = False
 
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+        dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
         self.aba_focada = num_aba
         self.dic_abas[num_aba]["foco"] = True
 
         self.lst_historico_abas_focadas.append(num_aba)
 
-        Aba.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
+        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
         Aba.atualiza_texto_tela(self, num_aba)
 
     def nova_aba(self, event=None):
@@ -112,22 +107,18 @@ class Aba():
         posicao_adicionar = 0 # Adicionar na posição 0
 
         if len(self.dic_abas) != 0:
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
-            bg_padrao = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-            dic_cor_abas["background"] = bg_padrao
+            dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"] 
 
-            Aba.configurar_cor_aba(self, dic_cor_abas, bg_padrao)
-            posicao_adicionar = max(self.dic_abas.keys()) + 1 # Maior aba + 1 => final
+            Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
+            posicao_adicionar = max(self.dic_abas.keys()) + 1
 
         self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
 
-        dic_cor_abas = self.dic_design["dic_cor_abas"] 
-        dic_cor_abas["background"] = self.dic_design["dic_cor_abas_focada"]["background"]
-        bg_padrao = self.dic_design["dic_cor_abas_focada"]["background"]
+        dic_cor_finao = self.dic_design["dic_cor_abas_focada"] 
 
-        fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
-        lb_aba = Button(fr_uma_aba, dic_cor_abas, text="     ", border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-        bt_fechar = Button(fr_uma_aba, dic_cor_abas, text="x", relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
+        fr_uma_aba = Frame(self.fr_abas, height=20, background=dic_cor_finao["background"])
+        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="     ", border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
+        bt_fechar = Button(fr_uma_aba, dic_cor_finao, text="x", relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
 
         lb_aba['command'] = lambda num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba)
         bt_fechar['command'] = lambda bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar)
@@ -149,22 +140,16 @@ class Aba():
         """
             Usado apenas no inicio do programa *****1 VEZ*****
         """
-        cor_aba_focada = self.dic_design["dic_cor_abas_focada"]["background"]
-        cor_aba_nao_focada = self.dic_design["dic_cor_abas_nao_focada"]["background"]
-
         for num_aba, dados_aba in self.dic_abas.items():
-            dic_cor_abas = self.dic_design["dic_cor_abas"] 
  
             # Coloração da aba
             if dados_aba["foco"]:
                 self.aba_focada = num_aba
-                bg_padrao = cor_aba_focada
+                dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
             else:
-                bg_padrao = cor_aba_nao_focada
+                dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"]
 
-            dic_cor_abas["background"] = bg_padrao
-
-            fr_uma_aba = Frame(self.fr_abas, height=20, background=self.dic_design["dic_cor_abas_frame"]["background"])
+            fr_uma_aba = Frame(self.fr_abas, background = dic_cor_finao["background"], height=20)
             fr_uma_aba.rowconfigure(1, weight=1)
 
             nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
@@ -178,8 +163,8 @@ class Aba():
             if nome_arquivo.strip() == "":
                 nome_arquivo = "      "
 
-            lb_aba = Button(fr_uma_aba, dic_cor_abas, text=nome_arquivo, border=0, highlightthickness=0, padx=8, activebackground=bg_padrao,font = ("Lucida Sans", 13))
-            bt_fechar = Button(fr_uma_aba, dic_cor_abas, text=txt_btn, relief=FLAT, border=0, activebackground=bg_padrao, highlightthickness=0, font = ("Lucida Sans", 13))
+            lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
+            bt_fechar = Button(fr_uma_aba, dic_cor_finao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
      
             fr_uma_aba.update()
             lb_aba.update()

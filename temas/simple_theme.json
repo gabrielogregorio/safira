@@ -1,6 +1,7 @@
 {
   "cor_intro": {
-    "background": "#00ccff"
+    "background": "#222232",
+    "foreground":"#a1a1a1"
   },
   "cor_menu": {
     "font": [
@@ -46,7 +47,7 @@
     "border":0,
     "highlightthickness": 0,
     "insertbackground": "#0000ff",
-    "selectbackground": "#333333",
+    "selectbackground": "#333343",
     "selectforeground": "#ffffff",
     "font": [
       "Lucida Sans",
@@ -81,14 +82,21 @@
   },
   "dic_cor_abas": {
        "background":"#222232",
-       "foreground":"#e8e8e8",
-       "activeforeground":"white"
+       "activebackground":"#222232",
+       "activeforeground":"#efefef",
+       "foreground":"#efefef"
   },
   "dic_cor_abas_focada": {
-       "background":"#222232"
+       "background":"#222232",
+       "activebackground":"#222232",
+       "activeforeground":"#efefef",
+       "foreground":"#efefef"
   },
   "dic_cor_abas_nao_focada": {
-       "background":"#444454"
+       "background":"#444454",
+       "activebackground":"#444454",
+       "activeforeground":"#c1c1c1",
+       "foreground":"#c1c1c1"
   },
   "fr_opcoes_rapidas": {
     "background": "#222232"

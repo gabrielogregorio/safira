@@ -9,4 +9,4 @@ funcao calculaMedia recebe parametros nome, sobrenome
     mostre nome , " ", sobrenome
 }
 calculaMedia passando parametros "gabriel", "gregório"
-somaNumeros passando parametros 20, 30, 10
+somaNumeros passando parametros 20, 30, 1

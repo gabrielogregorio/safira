@@ -1,6 +1,7 @@
 {
   "cor_intro": {
-    "background": "#00ccff"
+    "background": "#00ccff",
+    "foreground":"#404040"
   },
   "cor_menu": {
     "font": [
