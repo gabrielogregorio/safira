@@ -103,6 +103,14 @@ class Safira(Aba):
         self.bt_redsf = None
         self.bt_ajuda = None
         self.bt_pesqu = None
+
+        self.bt_erro_aviso_fechar = None
+        self.bt_erro_aviso_exemplo = None
+        self.tx_erro_aviso_texto_erro = None
+        self.fr_erro_aviso_texto_erro = None
+        self.fr_erro_aviso = None
+
+
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
         self.bool_interpretador_iniciado = False
         self.lst_historico_abas_focadas = []
@@ -349,6 +357,56 @@ class Safira(Aba):
 
         self.tela.mainloop()
 
+
+
+
+
+
+    def fechar_um_widget_erro(self, objeto):
+        try:
+            objeto.grid_forget()
+        except Exception as e:
+            print("Erro ao destruir widget de erro", e)
+            
+
+    def fechar_mensagem_de_erro(self):
+
+        Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_fechar )
+        Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_exemplo )
+        Safira.fechar_um_widget_erro(self, self.tx_erro_aviso_texto_erro )
+        Safira.fechar_um_widget_erro(self, self.fr_erro_aviso_texto_erro )
+        Safira.fechar_um_widget_erro(self, self.fr_erro_aviso )
+
+        self.tx_codfc.tag_delete("codigoErro")
+
+
+    def abrir_script_mensagem_erro(self, dir_script):
+        Safira.nova_aba(self)
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/'+dir_script)
+
+    def mostrar_mensagem_de_erro(self, msg_erro, dir_script):
+
+        self.fr_erro_aviso = Frame(self.fr_princ, height=50, bg="#111121", bd=10, highlightthickness=10, highlightbackground="#222232", highlightcolor="#222232")
+        self.fr_erro_aviso.grid_columnconfigure(1, weight=1)
+        self.fr_erro_aviso.grid(row = 2, column = 2, sticky = NSEW)
+
+        self.fr_erro_aviso_texto_erro = Frame(self.fr_erro_aviso, bg="#111121")
+        self.fr_erro_aviso_texto_erro.grid_columnconfigure(1, weight=1)
+        self.fr_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
+
+        self.tx_erro_aviso_texto_erro = Text(self.fr_erro_aviso_texto_erro, bg="#111121", fg="#ff9696", height=2, highlightthickness=0, relief=FLAT)
+        self.tx_erro_aviso_texto_erro.insert(1.0, msg_erro)
+        self.tx_erro_aviso_texto_erro.configure(state="disable", selectbackground = "#222232")
+        self.tx_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
+
+        if dir_script != "":
+            self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso, text="Ver um exemplo ", relief="flat", fg="green",activeforeground="green", bg="#111121", activebackground="#111121", font=("", 13), command=lambda abc = self: Safira.abrir_script_mensagem_erro(abc, dir_script))
+            self.bt_erro_aviso_exemplo.grid(row=1, column=2)
+
+        self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, text="x", relief="sunken", fg="#ff9696",activeforeground="#ff9696", bg="#111121", activebackground="#111121", font=("", 13), highlightthickness=0, bd=0, command=lambda abc = self: Safira.fechar_mensagem_de_erro(abc))
+        self.bt_erro_aviso_fechar.grid(row=1, column=3)
+
+
     def salva_contextos(self):
         print("Salva contexto", self.dic_abas[self.aba_focada]["contexto"])
         print("texto contexto", self.dic_abas[self.aba_focada]["listaContextos"])
@@ -487,6 +545,11 @@ class Safira(Aba):
             except Exception as erro:
                 print("Erro update", erro)
 
+        # Se o erro foi avisado
+        if self.instancia.erro_alertado == True:
+            Safira.mostrar_mensagem_de_erro(self, self.instancia.txt_ultima_msg_erro, self.instancia.dir_script_aju_erro)
+
+            
         del self.instancia
 
         try:
@@ -560,7 +623,16 @@ class Safira(Aba):
         self.campo_busca = Entry(fram_grid_variaveis, font=("", 13))
         self.campo_busca.bind("<KeyRelease>",  lambda event: Safira.retornar_variaveis_correspondentes(self))
 
-        self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", foreground='red')
+        style = ttk.Style()
+        style.theme_use("clam")
+
+        style.configure("Custom.Treeview.Heading",
+           foreground="#232323", relief="flat")
+
+        style.map("Custom.Treeview.Heading",
+            relief=[('active','flat'),('pressed','flat')])
+
+        self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
 
         vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="blue")
@@ -571,7 +643,6 @@ class Safira(Aba):
         for coluna in coluna_identificadores:
             self.arvores_grid.heading(coluna, text=coluna.title())#, selectmode="#f1a533")
             self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20 )#, selectmode="orange")
-            self.arvores_grid.tag_configure("evenrow",background='red',foreground='yellow')
 
         self.texto_busca.grid(row=0, column=1, sticky=NSEW)
         self.campo_busca.grid(row=1, column=1, sticky=NSEW)

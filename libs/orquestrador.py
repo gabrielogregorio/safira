@@ -38,6 +38,10 @@ class Run():
         self.num_linha = "0"
         self.historico_fluxo_de_dados = []
 
+
+        self.txt_ultima_msg_erro = ""
+        self.dir_script_aju_erro = ""
+
         with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
             self.mensagens = load(json_file)
 
@@ -71,12 +75,12 @@ class Run():
 
             lista = self.tx_codficac.get(1.0, END).split("\n")
 
-            palavra = "**_erro_alertado_**"
+            palavra = "codigoErro"
             linha1 = str(linhaErro) + ".0"
             linha2 = str(linhaErro) + "." + str(len(lista[int(linhaErro) - 1]))
 
             self.tx_codficac.tag_add(palavra, linha1 , linha2)
-            self.tx_codficac.tag_config(palavra, background = "#ffa6b0")
+            self.tx_codficac.tag_config(palavra, background = "#572929")
 
         self.erro_alertado = True
 
@@ -86,6 +90,9 @@ class Run():
 
     def orq_erro(self, msg_log, linhaAnalise):
         self.aconteceu_erro = True
+
+        self.txt_ultima_msg_erro = msg_log
+        self.dir_script_aju_erro = ""
 
         if not self.erro_alertado:
             mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
