@@ -53,6 +53,7 @@ class Arquivo():
 
         if self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'] == "":
             Arquivo.salvar_arquivo_como_dialog(self)
+            return "salvar_arquivo_como_dialog"
 
         else:
             programaCodigo = self.tx_codfc.get(1.0, END)
@@ -75,6 +76,7 @@ class Arquivo():
                     self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = programaCodigo
                     self.dic_abas[self.aba_focada]["arquivoAtual"]['texto'] = programaCodigo
 
+        return None  
     def salvar_arquivo_dialog(self, event=None):
 
         arq_tips = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]

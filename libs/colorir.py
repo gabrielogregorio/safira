@@ -81,7 +81,7 @@ class Colorir():
             lista = self.tx_codfc.get(1.0, END).lower().split('\n')
 
             for chave, comando in self.dic_comandos.items():
-                Colorir.def_cor(self, chave, comando["cor"], lista)
+                Colorir.def_cor(self, chave, str(comando["cor"]), lista)
 
             Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista)
             Colorir.anl_cor(self, 'comentario', self.cor_do_comando["comentario"], lista)

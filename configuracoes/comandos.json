@@ -1,4 +1,102 @@
 {
+  "leia_arquivo":{
+    "comando":[
+      ["leia o texto do arquivo ","pt-br"],
+      ["obtenha o texto do arquivo ","pt-br"],
+      ["leia o arquivo ","pt-br"],
+      ["read the text of the file ","en-us"],
+      ["read the file ","en-us"],
+      ["get the text from the file ","en-us"],
+      ["obtener el texto del archivo ","es"],
+      ["lea el texto del archivo ","es"],
+      ["lea el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+  "sobrescreva_texto_arquivo_sub_sub":{
+    "comando":[
+      [" file","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+  "sobrescreva_texto_arquivo_sub":{
+    "comando":[
+      [" no arquivo ","pt-br"],
+      [" in the ","en-us"],
+      [" en el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+    "sobrescreva_texto_arquivo":{
+    "comando":[
+      ["sobrescreva ","pt-br"],
+      ["sobrescrever ","pt-br"],
+      ["overwrite ","en-us"],
+      ["sobrescriba ","es"]
+    ],
+    "cor":"lista"
+  },
+
+  "adicione_texto_arquivo_sub":{
+    "comando":[
+      [" no arquivo ","pt-br"],
+      [" in the file ","en-us"],
+      [" to the ","en-us"],
+      [" en el archivo ","es"],
+      [" al archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+
+  "adicione_texto_arquivo":{
+    "comando":[
+      ["escreva ","pt-br"],
+      ["adicione ","pt-br"],
+      ["write ","en-us"],
+      ["add ","en-us"],
+      ["escriba ","es"],
+      ["agregue ","es"]
+    ],
+    "cor":"lista"
+  },
+
+  "arquivo_existe":{
+    "comando":[
+      ["o arquivo ","pt-br"],
+      ["the file ","en-us"],
+      ["el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+
+  "arquivo_existe_sub_existe":{
+    "comando":[
+      [" existe","pt-br"],
+      [" exists","en-us"],
+      [" existe","es"]
+    ],
+    "cor":"lista"
+  },
+
+  "delete_arquivo":{
+    "comando":[
+      ["delete o arquivo ","pt-br"],
+      ["remova o arquivo ","pt-br"],
+      ["exclua o arquivo ","pt-br"],
+      ["delete the file ","en-us"],
+      ["eliminar el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+  "crie_arquivo":{
+    "comando":[
+      ["crie o arquivo ","pt-br"],
+      ["create the file ","en-us"],
+      ["crea el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
   "se":{
     "comando":[
       ["quando ","pt-br"],
@@ -116,7 +214,10 @@
     "comando":[
       ["mostre nessa linha ","pt-br"],
       ["imprima nessa linha ","pt-br"],
+      ["display ","en-us"],
       ["escreva nessa linha ","pt-br"],
+      ["print ","pt-br"],
+
       ["exiba nessa linha ","pt-br"]
     ],
     "cor":"exibicao"
@@ -128,8 +229,7 @@
         ["escreva ","pt-br"],
         ["exiba ","pt-br"],
         ["printf ","en-us"],
-        ["display ","en-us"],
-        ["print ","en-us"
+        ["println ","en-us"
       ]
     ],
     "cor":"exibicao"
@@ -192,6 +292,7 @@
       ["que for digitado","pt-br"],
       ["numero digitado","pt-br"],
       ["digitado","pt-br"],
+      ["input","pt-br"],
       ["entrada","pt-br"]
     ],
     "cor":"tempo"
@@ -230,7 +331,14 @@
       [" || ","all"],
       [" == ","all"],
       [" >= ","all"],
-      [" <= ","all"],
+      [" >= ","all"],
+      ["true","all"],
+      ["verdadeiro","pt-br"],
+      ["verdadeira","pt-br"],
+      ["verdade","pt-br"],
+      ["falso","pt-br"],
+      ["mentira","pt-br"],
+      ["false","all"],
       [" != ","all"],
       [" e ","pt-br"],
       [" > ","all"],

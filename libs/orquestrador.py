@@ -12,8 +12,8 @@ from random import randint
 from time import sleep
 import libs.funcoes as funcoes
 from json import load
-
-
+import os.path
+import os
 
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
@@ -88,17 +88,20 @@ class Run():
         if self.bool_logs:
             print(msg_log)
 
-    def orq_erro(self, msg_log, linhaAnalise):
+    def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
         self.aconteceu_erro = True
 
-        self.txt_ultima_msg_erro = msg_log
-        self.dir_script_aju_erro = ""
 
-        if not self.erro_alertado:
-            mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
-            self.tx_terminal.config(state=NORMAL)
-            self.tx_terminal.insert(END, mensagem_erro)
-            Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
+        if msg_log not in ["Erro ao iniciar o Interpretador", "indisponibilidade_terminal", "Interrompido"]:
+            if not self.erro_alertado:
+
+                self.txt_ultima_msg_erro = msg_log
+                self.dir_script_aju_erro = dir_script_erro
+
+                mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
+                self.tx_terminal.config(state=NORMAL)
+                self.tx_terminal.insert(END, mensagem_erro)
+                Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
         try:
@@ -110,11 +113,12 @@ class Run():
 
             self.tx_terminal.see("end")
             self.tx_terminal.update()
+            self.tx_terminal.config(state=DISABLED)
 
         except Exception as erro:
             return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
-
-        self.tx_terminal.config(state=DISABLED)
+        
+        
 
     def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
@@ -172,6 +176,7 @@ class Run():
                         lst_ultimo_ret = lst_analisa
                         comando_testado = str_linha
                         linhaAnalise = lst_ultimo_ret[1]
+                        dir_script_erro = lst_ultimo_ret[2]
                         lst_ultimo_ret = lst_ultimo_ret[0]
 
                         if lst_ultimo_ret[0] == False:
@@ -180,7 +185,7 @@ class Run():
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
+                            Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_ultimo_ret
 
@@ -227,7 +232,7 @@ class Run():
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
+                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
@@ -236,6 +241,7 @@ class Run():
                         lst_ultimo_ret = Run.interpretador(self, comando_testado)
 
                         linhaAnalise = lst_ultimo_ret[1]
+                        dir_script_erro = lst_ultimo_ret[2]
                         lst_ultimo_ret = lst_ultimo_ret[0]
 
                         
@@ -245,7 +251,7 @@ class Run():
                                     self.numero_threads -= 1
                                     return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
+                            Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_ultimo_ret
 
@@ -269,7 +275,7 @@ class Run():
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
+                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
@@ -311,7 +317,7 @@ class Run():
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
+                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
@@ -338,7 +344,7 @@ class Run():
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise)
+                            Run.orq_erro(self, lst_resultado_execucao[1], linhaAnalise, dir_script_erro)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
@@ -361,6 +367,7 @@ class Run():
 
             comando_testado = str_linha
             linhaAnalise = lst_ultimo_ret[1]
+            dir_script_erro = lst_ultimo_ret[2]
             lst_ultimo_ret = lst_ultimo_ret[0]
 
             if lst_ultimo_ret[0] == False:
@@ -368,7 +375,7 @@ class Run():
                     self.numero_threads -= 1
                     return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise)
+                Run.orq_erro(self, lst_ultimo_ret[1], linhaAnalise, dir_script_erro)
                 self.numero_threads -= 1
                 return lst_ultimo_ret
 
@@ -436,17 +443,17 @@ class Run():
         try:
             self.tx_terminal.get(1.0, 1.1)
         except:
-            return [[False, 'indisponibilidade_terminal', 'string','exibirNaTela'], "1"]
+            return [[False, 'indisponibilidade_terminal', 'string','exibirNaTela'], "1", ""]
 
         if self.aconteceu_erro:
-            return [[False, 'Erro ao iniciar o Interpretador', 'string','exibirNaTela'], "1"]
+            return [[False, 'Erro ao iniciar o Interpretador', 'string','exibirNaTela'], "1", ""]
 
         linha = linha.replace('\n', '')
         linha = linha.strip()
 
         # Se for uma linha vazia
         if linha == '':
-            return [ [True, None, 'vazio','linhaVazia'], "1" ]
+            return [ [True, None, 'vazio','linhaVazia'], "1", "" ]
 
         else:
             self.num_linha = "0"
@@ -464,7 +471,7 @@ class Run():
                 Run.aguardar_liberacao_breakPoint(self)
 
             if linha == '':
-                return [[True, None, 'vazio','linhaVazia'], "1"]
+                return [[True, None, 'vazio','linhaVazia'], "1", ""]
 
             analisa000 = Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
             analisa001 = Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
@@ -493,49 +500,204 @@ class Run():
             analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             analisa025 = Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
             analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
-            analisa027 = Run.analisa_instrucao(self, '^(<pare>)$', linha)
+            analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
+            analisa027 = Run.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
+            analisa028 = Run.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
+            analisa029 = Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
+            analisa030 = Run.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
+            analisa031 = Run.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
+            analisa032 = Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
 
-            if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha ]
-            if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha ]
-            if analisa002[0]: return [ Run.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha ]
-            if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha ]
-            if analisa004[0]: return [ Run.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha ]
-            if analisa005[0]: return [ Run.funcao_esperar_n_tempo(self, analisa005[1][2],  analisa005[1][3]), self.num_linha ]
-            if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha ]
-            if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), self.num_linha ]
-            if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), self.num_linha ]
-            if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), self.num_linha ]
-            if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  self.num_linha ]
-            if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), self.num_linha ]
-            if analisa012[0]: return [ Run.funcao_declarar_listas(self, analisa012[1][2],  analisa012[1][4]), self.num_linha ]
-            if analisa013[0]: return [ Run.funcao_rem_itns_na_lst(self, analisa013[1][2],  analisa013[1][4]), self.num_linha ]
-            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2],  analisa014[1][4],  analisa014[1][6]),  self.num_linha ]
-            if analisa015[0]: return [ Run.funcao_add_itns_na_lst(self, analisa015[1][2],  analisa015[1][4]), self.num_linha ]
-            if analisa016[0]: return [ Run.funcao_add_itns_lst_in(self, analisa016[1][2],  analisa016[1][4]), self.num_linha ]
-            if analisa017[0]: return [ Run.funcao_add_itns_na_lst(self, analisa017[1][2],  analisa017[1][4]), self.num_linha ]
-            if analisa018[0]: return [ Run.funcao_numer_aleatorio(self, analisa018[1][2],  analisa018[1][4]), self.num_linha ]
-            if analisa019[0]: return [ Run.funcao_obter_valor_lst(self, analisa019[1][2],  analisa019[1][4]), self.num_linha ]
-            if analisa020[0]: return [ Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha ]
-            if analisa021[0]: return [ Run.funcao_tiver_valor_lst(self, analisa021[1][2],  analisa021[1][4]), self.num_linha ]
-            if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha ]
-            if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), self.num_linha ]
-            if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), self.num_linha ]
-            if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), self.num_linha ]
-            if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), self.num_linha ]
-            if analisa027[0]: return [ Run.funcao_pararLoop(self), self.num_linha ]
+            if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha , "limpaTela.fyn"]
+            if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
+            if analisa002[0]: return [ Run.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha, "exibiçãoNaTela.fyn" ]
+            if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.fyn" ]
+            if analisa004[0]: return [ Run.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha, "enquanto.fyn"]
+            if analisa005[0]: return [ Run.funcao_esperar_n_tempo(self, analisa005[1][2],  analisa005[1][3]), self.num_linha, "esperar.fyn"]
+            if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha, "repetir.fyn" ]
+            if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), self.num_linha, "" ]
+            if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), self.num_linha, "" ]
+            if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), self.num_linha, "funcoes.fyn" ]
+            if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  self.num_linha, "" ]
+            if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), self.num_linha, "" ]
+            if analisa012[0]: return [ Run.funcao_declarar_listas(self, analisa012[1][2],  analisa012[1][4]), self.num_linha, "listas.fyn" ]
+            if analisa013[0]: return [ Run.funcao_rem_itns_na_lst(self, analisa013[1][2],  analisa013[1][4]), self.num_linha, "listas.fyn" ]
+            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2],  analisa014[1][4],  analisa014[1][6]),  self.num_linha, "listas.fyn" ]
+            if analisa015[0]: return [ Run.funcao_add_itns_na_lst(self, analisa015[1][2],  analisa015[1][4]), self.num_linha, "listas.fyn" ]
+            if analisa016[0]: return [ Run.funcao_add_itns_lst_in(self, analisa016[1][2],  analisa016[1][4]), self.num_linha, "listas.fyn" ]
+            if analisa017[0]: return [ Run.funcao_add_itns_na_lst(self, analisa017[1][2],  analisa017[1][4]), self.num_linha, "listas.fyn" ]
+            if analisa018[0]: return [ Run.funcao_numer_aleatorio(self, analisa018[1][2],  analisa018[1][4]), self.num_linha, "aleatorio.fyn" ]
+            if analisa019[0]: return [ Run.funcao_obter_valor_lst(self, analisa019[1][2],  analisa019[1][4]), self.num_linha, "" ]
+            if analisa020[0]: return [ Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas.fyn" ]
+            if analisa021[0]: return [ Run.funcao_tiver_valor_lst(self, analisa021[1][2],  analisa021[1][4]), self.num_linha, "se tiver.fyn" ]
+            if analisa022[0]: return [ Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, "" ]
+            if analisa023[0]: return [ Run.funcao_realizar_atribu(self, analisa023[1][1],  analisa023[1][3]), self.num_linha, "atribuicoes.fyn" ]
+            if analisa024[0]: return [ Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3]), self.num_linha, "funcoes.fyn" ]
+            if analisa025[0]: return [ Run.funcao_para_cada(self, analisa025[1][2],  analisa025[1][4], analisa025[1][6]), self.num_linha, "" ]
+            if analisa026[0]: return [ Run.funcao_ler_tecla_por(self, analisa026[1][2]), self.num_linha, "" ]
+            if analisa027[0]: return [ Run.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, "" ]
+            if analisa028[0]: return [ Run.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, "" ]
+            if analisa029[0]: return [ Run.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, "" ]
+            if analisa030[0]: return [ Run.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, "" ]
+            if analisa031[0]: return [ Run.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, "" ]
+            if analisa032[0]: return [ Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, "" ]
 
-            return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha ]
-        return [ [True, None, 'vazio', 'fazerNada'], self.num_linha ]
+            return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha, "" ]
+        return [ [True, None, 'vazio', 'fazerNada'], self.num_linha, "" ]
 
-    def funcao_pararLoop(self):
-        print("Parar loop")
 
-        # Não tem nenhum tipo de loop aconecendo
-        if len(self.historico_fluxo_de_dados) == 0:
-            return [False, "Para usar o comando pare, é ncessário estar dentro de um loop", "string", "fazerNada"]
 
-        return [True, "pararLoop", "string", "pararLoop"]
 
+
+    def funcao_ler_arquivo(self, nome_arquivo):
+
+        teste_valor_arquivo = Run.abstrair_valor_linha(self, nome_arquivo)
+        if teste_valor_arquivo[0] == False: return teste_valor_arquivo
+
+        if teste_valor_arquivo[1] == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+
+        nome_arquivo = str(teste_valor_arquivo[1])
+
+        if os.path.exists(nome_arquivo):
+            try:
+                f = open(nome_arquivo, "r")
+                texto = f.read()
+                f.close()
+
+            except Exception as e:
+                return [ False,"Erro ao abrir o arquivo \"{}\", erro \"{}\"".format(arquivo, e), 'string',' exibirNaTela']
+
+            else:
+                return [True, str(texto), "string", "fazerNada"]
+
+            return [True, True, "booleano", "fazerNada"]
+
+
+        return [ False,"O arquivo \"{}\" não existe!".format(nome_arquivo), 'string',' exibirNaTela']
+
+
+
+    def funcao_sobrescrever_arquivo(self, texto, nome_arquivo):
+
+        teste_valor_arquivo = Run.abstrair_valor_linha(self, nome_arquivo)
+        teste_valor_texto = Run.abstrair_valor_linha(self, texto)
+
+        if teste_valor_arquivo[0] == False: return teste_valor_arquivo
+        if teste_valor_texto[0] == False: return teste_valor_texto
+
+        if teste_valor_arquivo[1] == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+
+        nome_arquivo = str(teste_valor_arquivo[1])
+        texto = str(teste_valor_texto[1])
+        texto = texto.replace("\\n","\n")
+
+        if os.path.exists(nome_arquivo):
+            try:
+                f = open(nome_arquivo, "w", encoding = "utf8")
+                f.write(texto)
+                f.close()
+
+            except Exception as e:
+                return [ False,"Erro ao adicionar o texto \"{}\" no arquivo \"{}\". Erro \"{}\"".format(texto, arquivo, e), 'string',' exibirNaTela']
+
+            return [True, True, "booleano", "fazerNada"]
+
+        return [ False,"O arquivo \"{}\" não existe!".format(nome_arquivo), 'string',' exibirNaTela']
+
+
+    def funcao_adicionar_arquivo(self, texto, nome_arquivo):
+
+        teste_valor_arquivo = Run.abstrair_valor_linha(self, nome_arquivo)
+        teste_valor_texto = Run.abstrair_valor_linha(self, texto)
+
+        if teste_valor_arquivo[0] == False: return teste_valor_arquivo
+        if teste_valor_texto[0] == False: return teste_valor_texto
+
+        if teste_valor_arquivo[1] == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+
+        nome_arquivo = str(teste_valor_arquivo[1])
+        texto = str(teste_valor_texto[1])
+        texto = texto.replace("\\n","\n")
+
+        if os.path.exists(nome_arquivo):
+            try:
+                f = open(nome_arquivo, "a", encoding = "utf8")
+                f.write(texto)
+                f.close()
+            except Exception as e:
+                return [ False,"Erro ao adicionar o texto \"{}\" no arquivo \"{}\". Erro \"{}\"".format(texto, arquivo, e), 'string',' exibirNaTela']
+
+            return [True, True, "booleano", "fazerNada"]
+
+
+        return [ False,"O arquivo \"{}\" não existe!".format(nome_arquivo), 'string',' exibirNaTela']
+
+    def funcao_arquivo_existe(self, nome_arquivo):
+        if nome_arquivo == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+        teste_valor = Run.abstrair_valor_linha(self, nome_arquivo)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_arquivo = str(teste_valor[1])
+
+        if os.path.exists(nome_arquivo):
+            return [True, True, "booleano", "fazerNada"]
+
+        else:
+            return [True, False, "booleano", "fazerNada"]
+
+
+    def funcao_excluir_arquivo(self, nome_arquivo):
+        if nome_arquivo == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+        teste_valor = Run.abstrair_valor_linha(self, nome_arquivo)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_arquivo = str(teste_valor[1])
+
+        if os.path.exists(nome_arquivo):
+            try:
+                os.remove(nome_arquivo)
+
+            except Exception as erro:
+                return [ False,"Erro ao deletar o arquivo, erro \"{}\"".format(erro), 'string',' exibirNaTela']
+
+            else:
+                return [True, "", "vazio", "fazerNada"]
+
+        else:
+            return [ False,"O arquivo \"{}\" não existe".format(nome_arquivo), 'string',' exibirNaTela']
+
+        
+
+
+    def funcao_criar_arquivo(self, nome_arquivo):
+        if nome_arquivo == "":
+            return [ False,"Você precisa informar o nome de um arquivo", 'string',' exibirNaTela']
+
+        teste_valor = Run.abstrair_valor_linha(self, nome_arquivo)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_arquivo = str(teste_valor[1])
+
+        if not os.path.exists(nome_arquivo):
+            try:
+                f = open(nome_arquivo, "w", encoding='utf8')
+                f.write("")
+                f.close()
+
+            except Exception as erro:
+                return [ False,"Erro ao criar o arquivo, erro \"{}\"".format(erro), 'string',' exibirNaTela']
+
+        return [True, "", "vazio", "fazerNada"]
 
     def comandos_uso_geral(self, possivelVariavel):
         Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))
@@ -548,6 +710,8 @@ class Run():
         analisa021 = Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
         analisa022 = Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
         analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
+        analisa029 = Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
+        analisa032 = Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
@@ -555,6 +719,8 @@ class Run():
         if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2],analisa021[1][4])
         if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
         if analisa026[0]: return Run.funcao_ler_tecla_por(self, analisa026[1][2])
+        if analisa029[0]: return Run.funcao_arquivo_existe(self, analisa029[1][2])
+        if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
 
         return [True, None, 'vazio']
 
@@ -1182,6 +1348,13 @@ class Run():
         linha = linha.replace(' divide ', ' / ')
         linha = linha.replace(' mais ', ' + ')
         linha = linha.replace(' menos ', ' - ')
+        linha = linha.replace('true', 'True')
+        linha = linha.replace('verdadeiro', 'True')
+        linha = linha.replace('verdadeira', 'True')
+        linha = linha.replace('verdade', 'True')
+        linha = linha.replace('false', 'False')
+        linha = linha.replace('falso', 'False')
+        linha = linha.replace('mentira', 'False')
 
         if '"' in linha: return [False, "Isso é uma string", 'string']
 
@@ -1237,15 +1410,16 @@ class Run():
         else:
             return [True, self.dic_variaveis[variavel][0], self.dic_variaveis[variavel][1], 'fazerNada']
 
+
     def abstrair_valor_linha(self, possivelVariavel):
         Run.log(self, "Abstrar valor de uma linha inteira com possivelVariavel: '{}'".format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
 
-        if possivelVariavel == 'True':
+        if possivelVariavel.lower() in ['true', 'verdadeiro', 'verdadeira', 'verdade']:
             return [True, 'True', 'booleano']
 
-        if possivelVariavel == 'False':
+        if possivelVariavel.lower() in ['false','falso', 'mentira']:
             return [True, 'False', 'booleano']
 
         if possivelVariavel == '':

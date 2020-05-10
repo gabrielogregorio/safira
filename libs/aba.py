@@ -118,7 +118,7 @@ class Aba():
 
         fr_uma_aba = Frame(self.fr_abas, height=20, background=dic_cor_finao["background"])
         lb_aba = Button(fr_uma_aba, dic_cor_finao, text="     ", border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
-        bt_fechar = Button(fr_uma_aba, dic_cor_finao, text="x", relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
+        bt_fechar = Button(fr_uma_aba, dic_cor_finao, text="x ", relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
 
         lb_aba['command'] = lambda num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba)
         bt_fechar['command'] = lambda bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar)
@@ -156,12 +156,14 @@ class Aba():
             nome_arquivo = str(nome_arquivo[-1])
 
             if dados_aba["arquivoSalvo"]["texto"] != dados_aba["arquivoAtual"]["texto"]:
-                txt_btn = "*"
+                txt_btn = "* "
             else:
-                txt_btn = "x"
+                txt_btn = "x "
 
             if nome_arquivo.strip() == "":
                 nome_arquivo = "      "
+            else:
+                nome_arquivo = " " + nome_arquivo
 
             lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
             bt_fechar = Button(fr_uma_aba, dic_cor_finao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))

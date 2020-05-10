@@ -1,0 +1,44 @@
+file = "abc.txt"
+
+if the file file exists == False
+{
+    mostre "o arquivo ", file ," não existe"
+    create the file file
+
+    if the file file exists == True
+    {
+        print "Arquivo Criado com sucesso" 
+    }
+
+}
+
+if the file file exists == True
+{
+    delete the file file
+    print "Arquivo Deletado"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

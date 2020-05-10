@@ -110,7 +110,6 @@ class Safira(Aba):
         self.fr_erro_aviso_texto_erro = None
         self.fr_erro_aviso = None
 
-
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
         self.bool_interpretador_iniciado = False
         self.lst_historico_abas_focadas = []
@@ -288,8 +287,8 @@ class Safira(Aba):
         self.bt_playP = Button( self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event) )
         self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True) )
         self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event) )
-        self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED )
-        self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED )
+        self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "z") )
+        self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "y") )
         self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED )
         self.bt_pesqu = Button( self.fr_opc_rapidas, image=self.ic_pesqu, relief=RAISED )
 
@@ -299,7 +298,7 @@ class Safira(Aba):
 
         self.fr_abas = Frame(self.fr_princ, height=20)
         self.fr_abas.rowconfigure(1, weight=1)
-        self.fr_espaco = Label(self.fr_abas, width=7)
+        self.fr_espaco = Label(self.fr_abas, width=5)
 
         Safira.renderizar_abas_inicio(self)
 
@@ -346,20 +345,20 @@ class Safira(Aba):
         self.tela.update()
 
         self.tela.withdraw() # Ocultar tkinter
-        t_width    = self.tela.winfo_screenwidth()
-        t_heigth   = self.tela.winfo_screenheight()
-        self.tela.geometry("{}x{}+0+0".format(t_width, t_heigth))
-        self.tela.deiconify()
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
         Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
 
+        self.tela.update()
+        t_width    = self.tela.winfo_screenwidth()
+        t_heigth   = self.tela.winfo_screenheight()
+
+        self.tela.geometry("{}x{}+0+0".format(t_width - 20, t_heigth - 100 )) #t_width, t_heigth))
+
+        self.tela.update()
+        self.tela.deiconify()
         self.tela.mainloop()
-
-
-
-
 
 
     def fechar_um_widget_erro(self, objeto):
@@ -369,7 +368,7 @@ class Safira(Aba):
             print("Erro ao destruir widget de erro", e)
             
 
-    def fechar_mensagem_de_erro(self):
+    def fechar_mensagem_de_erro(self, remover_marcacao = True):
 
         Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_fechar )
         Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_exemplo )
@@ -377,7 +376,8 @@ class Safira(Aba):
         Safira.fechar_um_widget_erro(self, self.fr_erro_aviso_texto_erro )
         Safira.fechar_um_widget_erro(self, self.fr_erro_aviso )
 
-        self.tx_codfc.tag_delete("codigoErro")
+        if remover_marcacao:
+            self.tx_codfc.tag_delete("codigoErro")
 
 
     def abrir_script_mensagem_erro(self, dir_script):
@@ -385,6 +385,11 @@ class Safira(Aba):
         Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/'+dir_script)
 
     def mostrar_mensagem_de_erro(self, msg_erro, dir_script):
+
+        try:
+            Safira.fechar_mensagem_de_erro(self, remover_marcacao = False)
+        except Exception as e:
+            print("Não foi possível abrir uma possível mensagem de erro", e)
 
         self.fr_erro_aviso = Frame(self.fr_princ, height=50, bg="#111121", bd=10, highlightthickness=10, highlightbackground="#222232", highlightcolor="#222232")
         self.fr_erro_aviso.grid_columnconfigure(1, weight=1)
@@ -431,7 +436,6 @@ class Safira(Aba):
 
         if acao == "z":
             print("Desfazer")
-            print("Voltar para traz, até o zero")
 
             # Ainda não chegou no contexto 0
             if contexto != -1:
@@ -442,7 +446,6 @@ class Safira(Aba):
 
         else:
             print("Redesfazer")
-            print("Ir para frente até o máximo")
 
             # Ainda não chegou no contexto maximo
             if contexto + 1 < len(self.dic_abas[self.aba_focada]["listaContextos"]) and contexto < 10:
@@ -452,20 +455,16 @@ class Safira(Aba):
                 Safira.mudar_texto_txt_codifc(self, self.dic_abas[self.aba_focada]["listaContextos"][contexto])
 
     def mudar_fonte(self, acao):
-        if acao == "+":
-            adicao = 1
-            print("+++")
-        else:
-            adicao = -1
-            print("---")
+        if acao == "+": adicao = 1
+        else: adicao = -1
 
-        self.dic_design["cor_menu"]["font"][1] = int(self.dic_design["cor_menu"]["font"][1]) + adicao
+        self.dic_design["cor_menu"]["font"][1]       = int(self.dic_design["cor_menu"]["font"][1]) + adicao
         self.dic_design["lb_sobDeTitulo"]["font"][1] = int(self.dic_design["lb_sobDeTitulo"]["font"][1]) + adicao
-        self.dic_design["dicBtnMenus"]["font"][1] = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
-        self.dic_design["tx_terminal"]["font"][1] = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
+        self.dic_design["dicBtnMenus"]["font"][1]    = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
+        self.dic_design["tx_terminal"]["font"][1]    = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
         self.dic_design["tx_codificacao"]["font"][1] = int(self.dic_design["tx_codificacao"]["font"][1]) + adicao
         self.dic_design["fonte_ct_linha"]["font"][1] = int(self.dic_design["fonte_ct_linha"]["font"][1]) + adicao
-        self.dic_design["fonte_ct_linha"]["width"] = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
+        self.dic_design["fonte_ct_linha"]["width"]   = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
 
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
@@ -547,9 +546,10 @@ class Safira(Aba):
 
         # Se o erro foi avisado
         if self.instancia.erro_alertado == True:
-            Safira.mostrar_mensagem_de_erro(self, self.instancia.txt_ultima_msg_erro, self.instancia.dir_script_aju_erro)
+            if self.instancia.txt_ultima_msg_erro != "Interrompido":
+                if self.instancia.txt_ultima_msg_erro != "Erro ao iniciar o Interpretador":
+                    Safira.mostrar_mensagem_de_erro(self, self.instancia.txt_ultima_msg_erro, self.instancia.dir_script_aju_erro)
 
-            
         del self.instancia
 
         try:
@@ -566,39 +566,36 @@ class Safira(Aba):
         self.bt_playP.configure(image=self.ic_playP)
         self.bool_interpretador_iniciado = False
 
+    def destruir_instancia_terminal(self):
+        for widget in self.lista_terminal_destruir:
+            try:
+                widget.destroy()
+            except Exception as e:
+                print("Impossivel destruir instância: ", e)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            try:
+                widget.grid_forget()
+            except Exception as e:
+                print("Impossivel destruir instância: ", e)
 
     def inicializador_terminal_debug(self):
         Safira.destruir_instancia_terminal(self)
+        coluna_identificadores = ('Variavel', 'Tipo','Valor')
 
-        frame_terminal_e_grid = Frame(self.fr_princ)
-        frame_terminal_e_grid.grid(row=1, column=4, sticky=NSEW)
+        frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913", )
+        frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
 
         frame_terminal_e_grid.grid_columnconfigure(1, weight=1)
         frame_terminal_e_grid.rowconfigure(1, weight=1)
 
-        # Terminal
+        fr_fechar_menu = Frame(frame_terminal_e_grid, height=10, bg="#191913")
+        fr_fechar_menu.grid_columnconfigure(1, weight=1)
+        fr_fechar_menu.grid(row=0, column=1, sticky=NSEW)
+
+        bt_fechar = Button(fr_fechar_menu, text="x",fg="#f1f1f1", bg="#191913", activebackground="#191913", command = lambda event=None: Safira.destruir_instancia_terminal(self))
+        bt_fechar.configure(relief=FLAT, highlightthickness=0, bd=0, font=("",12))
+        bt_fechar.grid(row=0, column=1, sticky="E")
+
         self.tx_terminal = Text(frame_terminal_e_grid)
 
         try:
@@ -611,9 +608,7 @@ class Safira(Aba):
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-        # Debug
-        coluna_identificadores = ('Variavel', 'Tipo','Valor')
-        fram_grid_variaveis = Frame(frame_terminal_e_grid, bg="red")
+        fram_grid_variaveis = Frame(frame_terminal_e_grid)
         fram_grid_variaveis.grid(row=2, column=1, sticky = NSEW)
 
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
@@ -635,8 +630,8 @@ class Safira(Aba):
         self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
 
-        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="blue")
-        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview, bg="green")
+        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview)
+        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview)
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
         
 
@@ -651,23 +646,7 @@ class Safira(Aba):
         hsroolb.grid(row=3,column=1,  sticky='ew')
 
         Safira.retornar_variaveis_correspondentes(self)
-
-        self.lista_terminal_destruir = [hsroolb, self.arvores_grid, self.campo_busca, fram_grid_variaveis, frame_terminal_e_grid]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        self.lista_terminal_destruir = [frame_terminal_e_grid, fram_grid_variaveis, self.arvores_grid, self.tx_terminal, self.texto_busca, self.campo_busca, fr_fechar_menu, bt_fechar, vsroolb, hsroolb]
 
     def inicializador_terminal_producao(self):
         Safira.destruir_instancia_terminal(self)
@@ -697,6 +676,7 @@ class Safira(Aba):
         self.tx_terminal.bind("<KeyRelease>", lambda event: Safira.capturar_tecla_terminal(self, event))
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
+        self.lista_terminal_destruir = [self.top_janela_terminal, self.tx_terminal]
 
     def atualiza_interface_config(self, objeto, menu):
         try:
@@ -811,6 +791,8 @@ class Safira(Aba):
     def funcoes_arquivos_configurar(self, event, comando, link=None):
         if self.controle_arquivos is None: return 0
 
+        retorno_salvar_como = None
+
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.aba_focada, self.tx_codfc)
 
         if comando == "abrirArquivo":
@@ -820,7 +802,7 @@ class Safira(Aba):
             self.controle_arquivos.salvar_arquivo_dialog(event)
 
         elif comando == "salvar_arquivo":
-            self.controle_arquivos.salvar_arquivo(event)
+            retorno_salvar_como = self.controle_arquivos.salvar_arquivo(event)
 
         elif comando == "salvar_arquivo_como_dialog":
             self.controle_arquivos.salvar_arquivo_como_dialog(event)
@@ -828,8 +810,12 @@ class Safira(Aba):
         self.aba_focada = self.controle_arquivos.aba_focada
         self.dic_abas = self.controle_arquivos.dic_abas
 
-        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
-        Safira.atualiza_texto_tela(self, self.aba_focada)
+
+        if comando in ["abrirArquivo"]:
+            self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
+
+        if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
+            Safira.atualiza_texto_tela(self, self.aba_focada)
 
     def pressionar_enter_terminal(self, event = None):
         try:
@@ -843,12 +829,6 @@ class Safira(Aba):
         except Exception as erro:
             print("Erro ao capturar a tela", erro)
 
-    def destruir_instancia_terminal(self):
-        for widget in self.lista_terminal_destruir:
-            try:
-                widget.destroy()
-            except Exception as e:
-                print("Impossivel destruir instância: ", e)
 
     def retornar_variaveis_correspondentes(self):
         try:
@@ -868,7 +848,6 @@ class Safira(Aba):
             with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
                 configArquivoJson = load(json_file)
                 retorno = configArquivoJson[chave]
-
             return retorno
 
         elif novo is not None:
@@ -892,6 +871,7 @@ class Safira(Aba):
         else: self.bool_tela_em_fullscreen = True
 
         self.tela.attributes("-fullscreen", self.bool_tela_em_fullscreen)
+        self.tela.update()
 
     def ativar_logs(self, event=None):
         try:
@@ -917,6 +897,7 @@ class Safira(Aba):
         t_heigth = self.tela.winfo_screenheight()
 
         self.tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
+
         self.tela.deiconify()
         self.tela.update()
 

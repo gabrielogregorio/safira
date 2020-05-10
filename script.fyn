@@ -1,13 +1,23 @@
-mostre "ola"
+new_file = "alunos.txt"
 
-if 1 == 1
-{
-    print "1"
+if the file new_file exists == true {
+   delete the file new_file
 }
 
-while 1 == 1
+create the file new_file
+
+stop = false
+
+while stop == false
 {
-    print "oi"
+    println "digite algum nome: "
+    add input in the file new_file
+
+    println "Deseja sair? s= sim, enter = não"
+    if input == "s"
+    {
+        stop = true
+    }
 }
 
 

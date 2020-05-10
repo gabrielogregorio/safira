@@ -46,7 +46,7 @@
     "foreground": "#f3f3f3",
     "border":0,
     "highlightthickness": 0,
-    "insertbackground": "#0000ff",
+    "insertbackground": "#ffffff",
     "selectbackground": "#333343",
     "selectforeground": "#ffffff",
     "font": [
@@ -58,7 +58,7 @@
       "background":"#202040",
       "troughcolor":"#222232",
       "border":0,
-      "width": 10,
+      "width": 15,
       "highlightthickness":0,
       "activebackground": "#b8d0ff",
       "highlightbackground": "#222232",
@@ -78,7 +78,7 @@
     ]
   },
   "dic_cor_abas_frame": {
-    "background": "#555565"
+    "background": "#111121"
   },
   "dic_cor_abas": {
        "background":"#222232",

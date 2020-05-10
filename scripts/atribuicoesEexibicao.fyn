@@ -1,7 +1,7 @@
 n = 10
 
 imprima 10 + 20
-escreva na tela 'string' 
+escreva "string"
 display "string"
 mostre n / n
 escreva n
