@@ -1,22 +1,22 @@
-new_file = "alunos.txt"
+novo_arquivo = "alunos.txt"
 
-if the file new_file exists == true {
-   delete the file new_file
+se o arquivo novo_arquivo existe {
+   delete o arquivo novo_arquivo
 }
 
-create the file new_file
+crie o arquivo novo_arquivo
 
-stop = false
+parar vale mentira
 
-while stop == false
+enquanto parar for igual a mentira
 {
-    println "digite algum nome: "
-    add input in the file new_file
+    mostre nessa linha "Digite algum nome: "
+    adicione o que o usuario digitar no arquivo novo_arquivo
 
-    println "Deseja sair? s= sim, enter = não"
-    if input == "s"
+    mostre nessa linha "Deseja sair? \ns= sim, enter = não: "
+    se o que o usuario digitar == "s"
     {
-        stop = true
+        parar = verdade
     }
 }
 

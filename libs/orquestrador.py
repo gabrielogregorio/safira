@@ -1257,6 +1257,8 @@ class Run():
 
         resultado = Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
+
+        resultado[1] = str(resultado[1]).replace("\\n","\n")
         return [resultado[0], resultado[1], resultado[2],'exibirNaTela']
 
     def funcao_exibir_mesma_ln(self, linha):
@@ -1264,6 +1266,8 @@ class Run():
 
         resultado = Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
+
+        resultado[1] = str(resultado[1]).replace("\\n","\n")
         return [ resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela' ]
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
@@ -1583,8 +1587,8 @@ class Run():
                 linha = linha.replace(item, '  {}  '.format(item))
 
         # Se não tiver nenhuma operação a fazer
-        if qtd_simbolos_especiais == 0:
-            return [False, Run.msg_idioma(self, "condicao_nao_possui_condicao"), 'string', 'exibirNaTela']
+        #if qtd_simbolos_especiais == 0:
+        #    return [False, Run.msg_idioma(self, "condicao_nao_possui_condicao"), 'string', 'exibirNaTela']
 
         # Coreção de bugs ao usar o recurso de deixar espaços
         linha = linha.replace('* *', '**')
@@ -1612,8 +1616,7 @@ class Run():
         for item in finditer("_\\._[^_]*_\\._", linha):
 
             # Abstrai um valor qual
-            resultado = Run.abstrair_valor_linha(self, 
-                linha[anterior:item.start()])
+            resultado = Run.abstrair_valor_linha(self, linha[anterior:item.start()])
 
             if resultado[0] == False: return resultado
 
