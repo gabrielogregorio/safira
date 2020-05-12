@@ -266,6 +266,7 @@ class Safira(Aba):
         self.ic_PStop = PhotoImage( file='imagens/ic_parar.png' )
         self.ic_breaP = PhotoImage( file='imagens/ic_play_breakpoint.png' )
         self.ic_brk_p = PhotoImage( file='imagens/breakPoint.png' )
+        ic_brkp1 = PhotoImage( file='imagens/ic_play_breakpoint_um.png' )
         self.ic_desfz = PhotoImage( file='imagens/left.png' )
         self.ic_redsf = PhotoImage( file='imagens/right.png' )
         self.ic_ajuda = PhotoImage( file='imagens/ic_duvida.png' )
@@ -280,6 +281,7 @@ class Safira(Aba):
         self.ic_redsf = self.ic_redsf.subsample(4, 4)
         self.ic_ajuda = self.ic_ajuda.subsample(4, 4)
         self.ic_pesqu = self.ic_pesqu.subsample(4, 4)
+        ic_brkp1 = ic_brkp1.subsample(4,4)
 
         self.fr_opc_rapidas = Frame(self.frame_tela)
 
@@ -287,6 +289,7 @@ class Safira(Aba):
         self.bt_playP = Button( self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event) )
         self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True) )
         self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event) )
+        #bt_brkp1 = Button( self.fr_opc_rapidas, image=ic_brkp1, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True, linha_linha = True) )
         self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "z") )
         self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "y") )
         self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED )
@@ -330,8 +333,9 @@ class Safira(Aba):
         self.bt_playP.grid(row=1, column=4)
         self.bt_breaP.grid(row=1, column=5)
         self.bt_brk_p.grid(row=1, column=6)
-        self.bt_desfz.grid(row=1, column=7)
-        self.bt_redsf.grid(row=1, column=8)
+        #bt_brkp1.grid(row=1, column=7)
+        self.bt_desfz.grid(row=1, column=8)
+        self.bt_redsf.grid(row=1, column=9)
         self.bt_ajuda.grid(row=1, column=10)
         self.bt_pesqu.grid(row=1, column=11)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
@@ -469,7 +473,14 @@ class Safira(Aba):
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
 
-    def inicializa_orquestrador(self, event = None, libera_break_point_executa = False):
+    def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+        if linha_linha == True:
+            if len( self.tx_codfc.get(1.0, END).split("\n") ) != len(self.instancia.lst_breakpoints):
+                self.instancia.lst_breakpoints = [x for x in range(0, len(   self.tx_codfc.get(1.0, END).split("\n")  ))]
+            else:
+                self.instancia.bool_break_point_liberado = True
+
+
         print("\n Orquestrador iniciado")
 
         self.bt_playP.configure(image=self.ic_PStop)
@@ -582,11 +593,11 @@ class Safira(Aba):
         Safira.destruir_instancia_terminal(self)
         coluna_identificadores = ('Variavel', 'Tipo','Valor')
 
-        frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913", )
+        frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913")
         frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
-
         frame_terminal_e_grid.grid_columnconfigure(1, weight=1)
         frame_terminal_e_grid.rowconfigure(1, weight=1)
+
 
         fr_fechar_menu = Frame(frame_terminal_e_grid, height=10, bg="#191913")
         fr_fechar_menu.grid_columnconfigure(1, weight=1)
@@ -608,21 +619,23 @@ class Safira(Aba):
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-        fram_grid_variaveis = Frame(frame_terminal_e_grid)
+        fram_grid_variaveis = Frame(frame_terminal_e_grid, bg="#222222")
         fram_grid_variaveis.grid(row=2, column=1, sticky = NSEW)
 
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
         fram_grid_variaveis.rowconfigure(2, weight=1)
 
-        self.texto_busca = Label(fram_grid_variaveis, text="Faça a busca por variáveis")
-        self.campo_busca = Entry(fram_grid_variaveis, font=("", 13))
+        self.texto_busca = Label(fram_grid_variaveis, text="Faça a busca por variáveis", bg="#222222", fg="white")
+        self.campo_busca = Entry(fram_grid_variaveis, font=("", 13), bg="#222222", fg="white", highlightthickness=0, insertbackground="white")
         self.campo_busca.bind("<KeyRelease>",  lambda event: Safira.retornar_variaveis_correspondentes(self))
 
         style = ttk.Style()
         style.theme_use("clam")
 
-        style.configure("Custom.Treeview.Heading",
-           foreground="#232323", relief="flat")
+        style.configure("Custom.Treeview", 
+            background="#222222",
+            fieldbackground="#222222",
+            foreground="white")
 
         style.map("Custom.Treeview.Heading",
             relief=[('active','flat'),('pressed','flat')])
@@ -630,8 +643,8 @@ class Safira(Aba):
         self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
 
-        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview)
-        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview)
+        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
+        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
         
 

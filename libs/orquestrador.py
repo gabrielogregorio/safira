@@ -37,8 +37,6 @@ class Run():
         self.valor_tecla_pressionada = ""
         self.num_linha = "0"
         self.historico_fluxo_de_dados = []
-
-
         self.txt_ultima_msg_erro = ""
         self.dir_script_aju_erro = ""
 
@@ -469,6 +467,17 @@ class Run():
             # Se estiver em um breakpoint, aguarde.
             if int(self.num_linha) in self.lst_breakpoints:
                 Run.aguardar_liberacao_breakPoint(self)
+
+
+
+
+
+
+
+
+
+
+
 
             if linha == '':
                 return [[True, None, 'vazio','linhaVazia'], "1", ""]
