@@ -1,14 +1,28 @@
 {
+  "tipo_variavel":{
+    "comando":[
+      ["o tipo da variavel ","pt-br"],
+      ["tipo da variavel ","pt-br"],
+      ["type of variable ","en-us"],
+      ["o tipo de ","pt-br"],
+      ["o tipo da ","pt-br"],
+      ["tipo de ","pt-br"],
+      ["tipo da ","pt-br"],
+      ["type ","en-us"],
+      ["tipo ","es"]
+    ],
+    "cor":"lista"
+  },
   "leia_arquivo":{
     "comando":[
       ["leia o texto do arquivo ","pt-br"],
-      ["obtenha o texto do arquivo ","pt-br"],
-      ["leia o arquivo ","pt-br"],
-      ["read the text of the file ","en-us"],
-      ["read the file ","en-us"],
       ["get the text from the file ","en-us"],
+      ["obtenha o texto do arquivo ","pt-br"],
+      ["read the text of the file ","en-us"],
       ["obtener el texto del archivo ","es"],
       ["lea el texto del archivo ","es"],
+      ["leia o arquivo ","pt-br"],
+      ["read the file ","en-us"],
       ["lea el archivo ","es"]
     ],
     "cor":"lista"
@@ -23,8 +37,8 @@
   "sobrescreva_texto_arquivo_sub":{
     "comando":[
       [" no arquivo ","pt-br"],
-      [" in the ","en-us"],
-      [" en el archivo ","es"]
+      [" en el archivo ","es"],
+      [" in the ","en-us"]
     ],
     "cor":"lista"
   },
@@ -42,8 +56,8 @@
     "comando":[
       [" no arquivo ","pt-br"],
       [" in the file ","en-us"],
-      [" to the ","en-us"],
       [" en el archivo ","es"],
+      [" to the ","en-us"],
       [" al archivo ","es"]
     ],
     "cor":"lista"

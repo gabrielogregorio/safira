@@ -1,6 +1,12 @@
+# Exemplos de atribuições
+
+# A variável 'n' agora tem o valor numerico de 10
 n = 10
+mostre o tipo da variavel n
+
+# A variável 'nome' agora tem o valor de 'aleatório'
 nome = "aleatório"
-mostre n, " ", nome
+mostre o tipo da variavel nome
 
 num1 = numero aleatorio entre 1 e 10
 mostre nessa linha "digite um número"

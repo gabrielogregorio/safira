@@ -516,6 +516,7 @@ class Run():
             analisa030 = Run.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
             analisa031 = Run.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
             analisa032 = Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
+            analisa033 = Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
 
             if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha , "limpaTela.fyn"]
             if analisa001[0]: return [ Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
@@ -550,13 +551,22 @@ class Run():
             if analisa030[0]: return [ Run.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, "" ]
             if analisa031[0]: return [ Run.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, "" ]
             if analisa032[0]: return [ Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, "" ]
+            if analisa033[0]: return [ Run.funcao_tipo_variavel(self, analisa033[1][2]), self.num_linha, "" ]
 
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha, "" ]
         return [ [True, None, 'vazio', 'fazerNada'], self.num_linha, "" ]
 
 
 
+    def funcao_tipo_variavel(self, variavel):
+        Run.log(self, 'funcao funcao_tipo_variavel: {}'.format(variavel))
 
+        resultado = Run.abstrair_valor_linha(self, variavel)
+        if not resultado[0]: return resultado
+
+        resultado[1] = str(resultado[1]).replace("\\n","\n")
+        # Retornando o tipo
+        return [resultado[0], resultado[2], resultado[2],'exibirNaTela']
 
     def funcao_ler_arquivo(self, nome_arquivo):
 
@@ -721,6 +731,8 @@ class Run():
         analisa026 = Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
         analisa029 = Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
         analisa032 = Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
+        analisa033 = Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
+
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
@@ -730,6 +742,7 @@ class Run():
         if analisa026[0]: return Run.funcao_ler_tecla_por(self, analisa026[1][2])
         if analisa029[0]: return Run.funcao_arquivo_existe(self, analisa029[1][2])
         if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
+        if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
 
         return [True, None, 'vazio']
 

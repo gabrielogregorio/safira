@@ -48,7 +48,7 @@ __project__ = 'Combratec'
 __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
-__date__ = '01/08/2019'
+__date__        = '01/08/2019'
 __last_update__ = '02/05/2020'
 __version__ = '0.1'
 
@@ -57,6 +57,7 @@ __version__ = '0.1'
 
 class Safira(Aba):
     def __init__(self):
+
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.bool_tela_em_fullscreen = False
