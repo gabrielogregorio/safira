@@ -467,6 +467,8 @@ class Run():
             # Se estiver em um breakpoint, aguarde.
             if int(self.num_linha) in self.lst_breakpoints:
                 Run.aguardar_liberacao_breakPoint(self)
+            if self.aconteceu_erro:
+                return [[False, 'Erro ao iniciar o Interpretador', 'string','exibirNaTela'], "1", ""]
 
 
 

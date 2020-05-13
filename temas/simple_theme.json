@@ -1,11 +1,11 @@
 {
   "cor_intro": {
     "background": "#222232",
-    "foreground":"#a1a1a1"
+    "foreground":"#c1c1c1"
   },
   "cor_menu": {
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ],
     "background": "#ffffff",
@@ -17,9 +17,8 @@
   },
   "lb_sobDeTitulo": {
     "font": [
-      "Lucida Sans",
-      13,
-      "bold"
+      "Consolas Regular",
+      13
     ],
     "height": 2,
     "background": "#202040",
@@ -27,7 +26,7 @@
   },
   "lb_sobDAutores": {
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ],
     "background": "#222232",
@@ -35,7 +34,7 @@
   },
   "lb_sobDesenAno": {
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ],
     "background": "#222232",
@@ -50,17 +49,17 @@
     "selectbackground": "#333343",
     "selectforeground": "#ffffff",
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ]
   },
   "scrollbar_text": {
-      "background":"#202040",
+      "background":"#222232",
       "troughcolor":"#222232",
       "border":0,
       "width": 15,
       "highlightthickness":0,
-      "activebackground": "#b8d0ff",
+      "activebackground": "#222232",
       "highlightbackground": "#222232",
       "highlightcolor": "#222232"
   },
@@ -73,7 +72,7 @@
     "background": "#222232",
     "foreground":"#fa0104",
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ]
   },
@@ -116,14 +115,14 @@
     "foreground": "#f1f1f1",
     "highlightthickness": 0,
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ]
   },
   "tx_pesqu": {
     "foreground": "#676767",
     "font": [
-      "Lucida Sans",
+      "Consolas Regular",
       13
     ]
   },
@@ -163,7 +162,7 @@
     "anchor":"w"
   },
   "fonte_ct_linha":{
-    "font":["Lucida Sans", 13],
+    "font":["Consolas Regular", 13],
     "width":10
   }
 }

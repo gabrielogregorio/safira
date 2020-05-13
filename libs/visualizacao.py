@@ -6,12 +6,13 @@ from tkinter import Text
 class ContadorLinhas(Canvas):
     def __init__(self, frame, dic_design):
         Canvas.__init__(self, frame)
+
         self.textwidget = None
         self.linha_analise = 0
         self.dic_design = dic_design
 
-    def atribuir(self, text_widget):
-        self.textwidget = text_widget
+    def atribuir(self, tx_codfc):
+        self.textwidget = tx_codfc
 
     def desenhar_linhas(self, *args):
         self.delete("all")
@@ -28,15 +29,15 @@ class ContadorLinhas(Canvas):
 
             if int(num_linha) == self.linha_analise and not int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
                 num_linha = ">" + num_linha + "   "
-                cor_padrao = "green"
+                cor_padrao = "#7dff63"
 
             elif int(num_linha) == self.linha_analise and int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
                 num_linha = ">" + num_linha + " * "
-                cor_padrao = "red"
+                cor_padrao = "#ff7a95"
 
             elif int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
                 num_linha = "  " + num_linha + " * "
-                cor_padrao = "red"
+                cor_padrao = "#ff7a95"
             else:
                 num_linha = "  " + num_linha + "   "
 
