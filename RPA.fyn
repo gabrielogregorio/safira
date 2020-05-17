@@ -1,0 +1,23 @@
+se a imagem "chrome_carregado.jpg" aparecer em 10 segundos
+{
+    clique no meio da imagem "campo_busca.png"
+    digite "https://google.com"
+    pressione enter
+
+    
+    se  a imagem "google_carregado.png" em 1 minuto
+    {
+        clique na imagem "campo_busca_google.png"
+        digite "dolar hoje"
+        pressione enter
+
+        se a imagem "dolar_apareceu.png" aparecer em 20 segundos
+        {
+             tire um print e salve como "dolar_hoje.png" 
+             pressione e solte alt + f4
+
+             execute o script "enviarEmail.fyn"
+        } 
+    }
+}
+

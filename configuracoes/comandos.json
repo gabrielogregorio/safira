@@ -1,5 +1,97 @@
 {
-  "tipo_variavel":{
+  "a_imagem_aparecer":{
+    "comando":[
+      ["a imagem ","pt-br"]
+    ],
+    "cor":"lista"
+  },
+
+  "a_imagem_aparecer_interno":{
+    "comando":[
+      [" aparecer em ","pt-br"]
+    ],
+    "cor":"lista"
+  },
+
+  "a_imagem_aparecer_interno_segundos":{
+    "comando":[
+      [" segundos","pt-br"],
+      [" segundo","pt-br"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
+
+
+
+   "importe":{
+    "comando":[
+      ["importe a biblioteca ","pt-br"],
+      ["importe ","pt-br"],
+      ["import ","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+
+
+
+
+   "tente":{
+    "comando":[
+      ["tente","pt-br"],
+      ["try","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+   "se_der_erro":{
+    "comando":[
+      ["se der erro","pt-br"],
+      ["except","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+   "senao_der_erro":{
+    "comando":[
+      ["senao der erro","pt-br"]
+    ],
+    "cor":"condicionais"
+  },
+   "em_qualquer_caso":{
+    "comando":[
+      ["em qualquer caso","pt-br"],
+      ["finalmente","pt-br"],
+      ["finally","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+
+
+
+
+   "se_nao_se":{
+    "comando":[
+      ["senao se ","pt-br"],
+      ["else if ","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+   "se_nao":{
+    "comando":[
+      ["senao","pt-br"],
+      ["else","en-us"]
+    ],
+    "cor":"condicionais"
+  },
+
+   "tipo_variavel":{
     "comando":[
       ["o tipo da variavel ","pt-br"],
       ["tipo da variavel ","pt-br"],

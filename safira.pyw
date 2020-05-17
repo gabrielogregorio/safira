@@ -359,11 +359,11 @@ class Safira(Aba):
         self.tela.update()
         t_width    = self.tela.winfo_screenwidth()
         t_heigth   = self.tela.winfo_screenheight()
-
-        self.tela.geometry("{}x{}+0+0".format(t_width - 20, t_heigth - 100 )) #t_width, t_heigth))
+        print("Resolução => {}x{}".format(t_width, t_heigth))
+        self.tela.deiconify()
+        self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 )) #t_width, t_heigth))
 
         self.tela.update()
-        self.tela.deiconify()
         self.tela.mainloop()
 
 
