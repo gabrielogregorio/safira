@@ -42,6 +42,7 @@ from tkinter import E
 from tkinter import W
 from tkinter import Tk
 
+
 __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
 __project__ = 'Combratec'
@@ -117,7 +118,7 @@ class Safira(Aba):
 
     def main(self):
         Safira.splashScreen1(self)
-        sleep(1)
+        sleep(3)
         Safira.inicioScreen(self)
 
     def splashScreen1(self):
@@ -307,7 +308,7 @@ class Safira(Aba):
         Safira.renderizar_abas_inicio(self)
 
         self.fr_espaco.grid(row=1, column=0, sticky=NSEW)
-        self.tx_codfc = EditorDeCodigo(self.fr_princ)
+        self.tx_codfc = EditorDeCodigo(self.fr_princ,)
         self.tx_codfc.bind("<<Change>>", lambda event: Safira.atualizacao_linhas(self, event))
         self.tx_codfc.bind("<Configure>", lambda event: Safira.atualizacao_linhas(self, event))
         self.tx_codfc.bind('<Button>', lambda event:  Safira.obterPosicaoDoCursor(self, event))
@@ -317,8 +318,8 @@ class Safira(Aba):
         ### self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
         self.tx_codfc.bind('<Control-MouseWheel>', lambda event: Safira.mudar_fonte(self, "+") if int(event.delta) > 0 else Safira.mudar_fonte(self, "-"))
 
-        self.tx_codfc.bind('<Control-z>', lambda event: Safira.mudar_contexto(self, "z"))
-        self.tx_codfc.bind('<Control-y>', lambda event: Safira.mudar_contexto(self, "y"))
+        #self.tx_codfc.bind('<Control-z>', lambda event: Safira.mudar_contexto(self, "z"))
+        #self.tx_codfc.bind('<Control-y>', lambda event: Safira.mudar_contexto(self, "y"))
 
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_codfc.yview, relief=FLAT)
         self.tx_codfc.configure(yscrollcommand=self.sb_codfc.set)
@@ -358,11 +359,13 @@ class Safira(Aba):
         self.tela.update()
         t_width    = self.tela.winfo_screenwidth()
         t_heigth   = self.tela.winfo_screenheight()
-
-        self.tela.geometry("{}x{}+0+0".format(t_width - 20, t_heigth - 100 )) #t_width, t_heigth))
+        print("Resolução => {}x{}".format(t_width, t_heigth))
+        self.tela.deiconify()
+        self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 )) #t_width, t_heigth))
 
         self.tela.update()
-        self.tela.deiconify()
+
+        self.colorir_codigo.tela = self.tela # Passando instância de tela para o colorizador
         self.tela.mainloop()
 
 
@@ -416,7 +419,7 @@ class Safira(Aba):
         self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, text="x", relief="sunken", fg="#ff9696",activeforeground="#ff9696", bg="#111121", activebackground="#111121", font=("", 13), highlightthickness=0, bd=0, command=lambda abc = self: Safira.fechar_mensagem_de_erro(abc))
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
 
-
+    # Descartado por destruir o desenpenho
     def salva_contextos(self):
         print("Salva contexto", self.dic_abas[self.aba_focada]["contexto"])
         print("texto contexto", self.dic_abas[self.aba_focada]["listaContextos"])
@@ -735,9 +738,10 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.fr_espaco, "dic_cor_abas_frame")
 
     def ativar_coordernar_coloracao(self, event = None):
-        Safira.salva_contextos(self)
-        if self.dic_abas != {}:
-            self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
+        #Safira.salva_contextos(self)
+
+        #if self.dic_abas != {}:
+        #    self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
 
         self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
 
@@ -751,18 +755,10 @@ class Safira(Aba):
         except Exception as erro:
             print("Erro ao obter a posição o cursor =", erro)
         else:
-
             p1, p2 = str(numPosicao).split('.')
-            try:
-                palavra = self.tx_codfc.get('{}.{}'.format(p1, int(p2)-1), '{}.{}'.format(p1,int(p2))  )
-                print("Palavra = ", palavra)
-            except Exception as erro:
-                print("Erro", erro)
-
-            else:
-                if event.keysym == "braceleft":
-                    self.tx_codfc.insert('{}.{}'.format(p1,int(p2)), '\n    \n}' )
-                    self.tx_codfc.mark_set("insert", "{}.{}".format( int(p1)+1, int(p2)+4 ))
+            if event.keysym == "braceleft":
+                self.tx_codfc.insert('{}.{}'.format(p1,int(p2)), '\n    \n}' )
+                self.tx_codfc.mark_set("insert", "{}.{}".format( int(p1)+1, int(p2)+4 ))
 
             self.linha_p_brk_p = posCorrente
 
