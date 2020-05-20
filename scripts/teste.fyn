@@ -29,6 +29,9 @@ se nome for igual a "Alexa" e  tiver "Alexa" na lista de nomes
 {
   mostre "Linguagem mostre Fynman Alexa!"
   espere 1 segundos
+} senao se 2 == 2 {
+    
+mostre 2
 }
 
 contador recebe 0

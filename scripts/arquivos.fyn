@@ -1,3 +1,23 @@
+nome_alunos = "alunos.txt"
+
+
+# Verifica se  arquivo existe
+se o arquivo nome_alunos existe
+{
+    delete o arquivo nome_alunos       
+}
+
+crie o arquivo nome_alunos
+
+escreva "nome, idade, data de nascimento" no arquivo nome_alunos
+'^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$'
+
+'^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$'
+
+'^(<leia_arquivo>)(.*)$'
+
+
+
 file = "abc.txt"
 
 if the file file exists == False

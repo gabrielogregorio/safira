@@ -19,17 +19,19 @@ class Aba():
         if nome_arquivo.strip() == "":
             nome_arquivo = " " * 8
 
-        self.dic_abas[num_aba]["listaAbas"][1].configure(text=nome_arquivo)
+        self.dic_abas[num_aba]["listaAbas"][2].configure(text=nome_arquivo)
 
         for x in range(0, 3):
             self.dic_abas[num_aba]["listaAbas"][x].update()
 
-    def configurar_cor_aba(self, dic_cor_abas, bg_padrao):
+    def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
+        self.dic_abas[self.aba_focada]["listaAbas"][3].configure(dic_cor_botao)
+        self.dic_abas[self.aba_focada]["listaAbas"][3].update()
         self.dic_abas[self.aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground = bg_padrao)
         self.dic_abas[self.aba_focada]["listaAbas"][2].update()
-        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_abas, activebackground = bg_padrao)
+        self.dic_abas[self.aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
         self.dic_abas[self.aba_focada]["listaAbas"][1].update()
-        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background = bg_padrao, height=20)
+        self.dic_abas[self.aba_focada]["listaAbas"][0].configure(background = bg_padrao)
         self.dic_abas[self.aba_focada]["listaAbas"][0].update()
 
     def fecha_aba(self, bt_fechar):
@@ -37,7 +39,7 @@ class Aba():
 
         dic_cor_abas = self.dic_design["dic_cor_abas"]
         for chave, valor in self.dic_abas.items():
-            if self.dic_abas[chave]["listaAbas"][2] == bt_fechar:
+            if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
 
                 while chave in self.lst_historico_abas_focadas:
                     self.lst_historico_abas_focadas.remove(chave)
@@ -53,6 +55,8 @@ class Aba():
                     return 0
 
                 else:
+                    self.dic_abas[chave]["listaAbas"][3].update()
+                    self.dic_abas[chave]["listaAbas"][3].grid_forget()
                     self.dic_abas[chave]["listaAbas"][2].update()
                     self.dic_abas[chave]["listaAbas"][2].grid_forget()
                     self.dic_abas[chave]["listaAbas"][1].update()
@@ -75,10 +79,12 @@ class Aba():
                         break
     
                 dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
+                dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
+                dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"]
                 self.aba_focada = chave
                 self.dic_abas[chave]["foco"] =True
 
-                Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
+                Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
                 Aba.atualiza_texto_tela(self, chave)
 
                 self.lst_historico_abas_focadas.append(chave)
@@ -89,17 +95,23 @@ class Aba():
             return 0
 
         dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"]
-        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
+        dic_cor_botao = self.dic_design["dic_cor_abas_nao_focada_botao"]
+        dic_cor_marcador = self.dic_design["dic_cor_marcador_nao_focado"]
+        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
 
         self.dic_abas[self.aba_focada]["foco"] = False
 
         dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
+        dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
+        dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"] 
+
+
         self.aba_focada = num_aba
         self.dic_abas[num_aba]["foco"] = True
 
         self.lst_historico_abas_focadas.append(num_aba)
 
-        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
+        Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
         Aba.atualiza_texto_tela(self, num_aba)
 
     def nova_aba(self, event=None):
@@ -108,33 +120,59 @@ class Aba():
 
         if len(self.dic_abas) != 0:
             dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"] 
+            dic_cor_botao = self.dic_design["dic_cor_abas_nao_focada_botao"] 
+            dic_cor_marcador = self.dic_design["dic_cor_marcador_nao_focado"] 
 
-            Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"])
+
+            Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
             posicao_adicionar = max(self.dic_abas.keys()) + 1
 
         self.dic_abas[ posicao_adicionar ] = funcoes.carregar_json("configuracoes/guia.json")
 
         dic_cor_finao = self.dic_design["dic_cor_abas_focada"] 
+        dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
+        dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"] 
 
-        fr_uma_aba = Frame(self.fr_abas, height=20, background=dic_cor_finao["background"])
-        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="     ", border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
-        bt_fechar = Button(fr_uma_aba, dic_cor_finao, text="x ", relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
+        fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
 
-        lb_aba['command'] = lambda num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba)
-        bt_fechar['command'] = lambda bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar)
+        fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
+        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="     ", border=0, highlightthickness=0)
+        bt_fechar = Button(fr_uma_aba, dic_cor_botao, text="x ", relief=FLAT, border=0, highlightthickness=0)
+
+        lb_aba.bind('<ButtonPress>', lambda event=None, num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba) )
+        bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar) )
+
+        bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: Aba.muda_cor_fecha_botao(self, bt_fechar))
+        bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: Aba.volta_cor_fecha_botao(self, padrao, bt_fechar))
 
         fr_uma_aba.rowconfigure(1, weight=1)
              
         fr_uma_aba.grid(row=1, column=posicao_adicionar + 2, sticky=N)
+        fr_marcador.grid(row=0, column=1,columnspan=2, sticky=NSEW)
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
 
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
+        self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_marcador)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(bt_fechar)
 
         self.aba_focada = posicao_adicionar
         Aba.atualiza_texto_tela(self, self.aba_focada)
+
+    def muda_cor_fecha_botao(self, bt_fechar):
+        for chave, valor in self.dic_abas.items():
+            if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
+                self.dic_abas[chave]["listaAbas"][3].configure(self.dic_design["dic_cor_abas_botao_fechar_focada"])
+                self.dic_abas[chave]["listaAbas"][3].update()
+                return 0
+
+    def volta_cor_fecha_botao(self, padrao, bt_fechar):
+        for chave, valor in self.dic_abas.items():
+            if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
+                self.dic_abas[chave]["listaAbas"][3].configure(foreground=padrao)
+                self.dic_abas[chave]["listaAbas"][3].update()
+                return 0
 
     def renderizar_abas_inicio(self):
         """
@@ -145,11 +183,15 @@ class Aba():
             # Coloração da aba
             if dados_aba["foco"]:
                 self.aba_focada = num_aba
+                dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"] 
                 dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
+                dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
             else:
+                dic_cor_marcador = self.dic_design["dic_cor_marcador_nao_focado"] 
                 dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"]
+                dic_cor_botao = self.dic_design["dic_cor_abas_nao_focada_botao"]
 
-            fr_uma_aba = Frame(self.fr_abas, background = dic_cor_finao["background"], height=20)
+            fr_uma_aba = Frame(self.fr_abas, background = dic_cor_finao["background"])
             fr_uma_aba.rowconfigure(1, weight=1)
 
             nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
@@ -165,20 +207,28 @@ class Aba():
             else:
                 nome_arquivo = " " + nome_arquivo
 
-            lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0, padx=8, font = ("Lucida Sans", 13))
-            bt_fechar = Button(fr_uma_aba, dic_cor_finao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0, font = ("Lucida Sans", 13))
-     
+            fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
+            lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0)
+            bt_fechar = Button(fr_uma_aba, dic_cor_botao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0)
+
+            bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: Aba.muda_cor_fecha_botao(self, bt_fechar))
+            bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: Aba.volta_cor_fecha_botao(self, padrao, bt_fechar))
+
+            lb_aba.bind('<ButtonPress>', lambda event=None, num_aba = num_aba: Aba.atualiza_aba_foco(self, num_aba) )
+            bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar))
+
             fr_uma_aba.update()
+            fr_marcador.update()
             lb_aba.update()
             bt_fechar.update()
 
             fr_uma_aba.grid(row=1, column=num_aba + 2, sticky=N)
+            fr_marcador.grid(row=0, column=1,columnspan=2, sticky=NSEW)
             lb_aba.grid(row=1, column=1, sticky=NSEW)
             bt_fechar.grid(row=1, column=2)
 
-            lb_aba['command'] = lambda num_aba = num_aba: Aba.atualiza_aba_foco(self, num_aba)
-            bt_fechar['command'] = lambda bt_fechar=bt_fechar: Aba.fecha_aba(self, bt_fechar)
 
             self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
+            self.dic_abas[num_aba]["listaAbas"].append(fr_marcador)
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
