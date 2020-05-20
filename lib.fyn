@@ -4,5 +4,3 @@ funcao mostraNome recebe parametros nome, n2
 {
     mostre "oi"
 }
-
-

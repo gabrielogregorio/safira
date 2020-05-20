@@ -1,21 +1,11 @@
-novo_arquivo = "alunos.txt"
+mostre    "olá mundo"
+"oi"
 
-se o arquivo novo_arquivo existe {
-   delete o arquivo novo_arquivo
-}
+mostre 
 
-crie o arquivo novo_arquivo
+mo
 
-parar vale mentira
 
-enquanto parar for igual a mentira
-{
-    mostre nessa linha "Digite algum nome: "
-    adicione o que o usuario digitar no arquivo novo_arquivo
 
-    mostre nessa linha "Deseja sair? \ns= sim, enter = não: "
-    se o que o usuario digitar == "s"
-    {
-        parar = verdade
-    }
-}
+
+

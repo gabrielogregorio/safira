@@ -8,16 +8,3 @@ tipo da variável num1
 converta para numero "12345"
 
 dicionario de nomes recebe  { "nome":"Gabriel", "idade":"Gabriel" }
-
-tente
-{
-}
-se der problema
-{
-}
-se não der problema
-{
-}
-em qualquer caso
-{
-}

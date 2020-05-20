@@ -1,5 +1,5 @@
 # AVISO
-A versão atual **contém um BUG** que faz o programa finalizar antes do interpretador, fechando o programa tudo se resolve. Está versão também contém atualizações no sistema de Debug, porém o código ainda não foi refatorado
+Esse projeto está na versão beta 0.1
 
 # Introdução
 Uma linguagem de programação introdutória universal, simples e focada em na lógica.
