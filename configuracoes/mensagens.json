@@ -63,6 +63,9 @@
     "pt-br":"A função não existe: ",
     "en-us":"The function does not exist:"
   },
+  "funcao_nao_passou_parametros":{
+    "pt-br":"A função '{}' possui '{}' parâmetros, você precisa informa-los!"
+  },
  "funcao_tem_parametros_divergentes":{
     "pt-br":"A função \"{}\" tem {} parametros, mas você passou {} parametros!",
     "en-us":"The \"{}\" function has {} parameters, but you passed {} parameters!"

@@ -1,11 +1,7 @@
-mostre    "olá mundo"
-"oi"
+funcao calculamedia recebe parametros nome
+{
+    mostre "oi"
+}
 
-mostre 
-
-mo
-
-
-
-
+calculamedia passando parametro "gabriel"
 

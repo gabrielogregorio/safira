@@ -21,7 +21,6 @@ import os
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
 
-
         self.aconteceu_erro = False
         self.erro_alertado = False
         self.ignorar_erros = False
@@ -97,7 +96,6 @@ class Run():
 
         self.aconteceu_erro = True
 
-
         if msg_log not in ["Erro ao iniciar o Interpretador", "indisponibilidade_terminal", "Interrompido"]:
             if not self.erro_alertado:
 
@@ -146,9 +144,7 @@ class Run():
 
         int_profundidade_bloco = 0
         for num_txt_caractere, txt_caractere in enumerate(txt_codigo):
-
             txt_dois_caracteres = txt_codigo[num_txt_caractere : num_txt_caractere + 2]
-
 
             # Ignorar tudo entre /**/
             if txt_dois_caracteres == '/*' and not bool_achou_string and not bool_achou_comentario:
@@ -160,7 +156,6 @@ class Run():
 
             if bool_achou_comentario_longo:
                 continue
-
 
 
             # Ignorar comentário #
@@ -340,9 +335,9 @@ class Run():
                     lst_ultimo_teste = [True, False, 'booleano']
 
                 elif lst_ultimo_teste[3] == "declararFuncao":
-
                     lst_ultimo_teste[3] = "fazerNada"
-                    self.dic_funcoes[lst_ultimo_teste[4]] = [self.dic_funcoes[lst_ultimo_teste[4]][0], str_bloco_salvo[1:].strip()]
+                     
+                    self.dic_funcoes[lst_ultimo_teste[4]] = {'parametros':self.dic_funcoes[lst_ultimo_teste[4]]['parametros'], 'bloco':str_bloco_salvo[1:].strip()}
 
                 elif lst_ultimo_teste[3] == 'declararCondicional':
                     historico_fluxo_de_dados.append('declararCondicional')
@@ -558,29 +553,8 @@ class Run():
                         self.numero_threads -= 1
                         return lst_resultado_execucao
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                 str_bloco_salvo = ""
                 continue
-
-
-
-
-
 
             # Se for para salvar bloco, salve o txt_caractere
             if bool_salvar_bloco:
@@ -735,7 +709,6 @@ class Run():
             analisa027 = Run.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
             analisa028 = Run.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
 
-
             analisa042 = Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
             analisa029 = Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
 
@@ -747,13 +720,16 @@ class Run():
             analisa035 = Run.analisa_instrucao(self, '^(<se_nao_se>)(.*)$', linha)
             analisa036 = Run.analisa_instrucao(self, '^(<se_nao>)$', linha)
 
-
             analisa037 = Run.analisa_instrucao(self, '^(<tente>)$', linha)
             analisa038 = Run.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
             analisa039 = Run.analisa_instrucao(self, '^(<senao_der_erro>)$', linha)
             analisa040 = Run.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
             analisa003 = Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
             analisa041 = Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
+
+            analisa043 = Run.analisa_instrucao(self, '^(<funcoes>)(\s*[\w*\_]*\s*)$', linha)
+            analisa044 = Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', linha)
+
 
 
             if analisa000[0]: return [ Run.funcao_limpar_o_termin(self), self.num_linha , "limpaTela.fyn"]
@@ -764,6 +740,7 @@ class Run():
             if analisa006[0]: return [ Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha, "repetir.fyn" ]
             if analisa007[0]: return [ Run.funcao_incremente_vari(self, analisa007[1][2],  analisa007[1][4]), self.num_linha, "" ]
             if analisa008[0]: return [ Run.funcao_decremente_vari(self, analisa008[1][2],  analisa008[1][4]), self.num_linha, "" ]
+            if analisa043[0]: return [ Run.funcao_declarar_funcao(self, analisa043[1][2] ), self.num_linha, "funcoes.fyn" ]
             if analisa009[0]: return [ Run.funcao_declarar_funcao(self, analisa009[1][2],  analisa009[1][4]), self.num_linha, "funcoes.fyn" ]
             if analisa010[0]: return [ Run.funcao_add_lst_na_posi(self, analisa010[1][2],  analisa010[1][4],  analisa010[1][6]),  self.num_linha, "" ]
             if analisa011[0]: return [ Run.funcao_dec_lst_posicoe(self, analisa011[1][2],  analisa011[1][4]), self.num_linha, "" ]
@@ -802,6 +779,8 @@ class Run():
             if analisa040[0]: return [ Run.funcao_em_qualquer_caso(self), self.num_linha, "" ]
             if analisa003[0]: return [ Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.fyn" ]
             if analisa041[0]: return [ Run.funcao_importe(self, analisa041[1][2]), self.num_linha, "" ]
+
+            if analisa044[0]: return [ Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn" ]
 
 
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha, "" ]
@@ -1541,67 +1520,41 @@ class Run():
 
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
-    def funcao_executar_funcao(self, nomeDaFuncao, parametros):
 
-        try:
-            self.dic_funcoes[nomeDaFuncao]
 
-        except:
-            return [False, '{} "{}"'.format(Run.msg_idioma(self, "funcao_nao_existe"), nomeDaFuncao), 'string', 'exibirNaTela']
 
-        testa = Run.verifica_se_tem(self, parametros, ',')
-        if testa != []:
-            anterior = 0
-            listaParametros = []
 
-            for valorItem in testa:
-                if len(parametros[anterior : valorItem[0]]) > 0:
-                    listaParametros.append( parametros[anterior : valorItem[0]] )
-                    anterior = valorItem[1]
 
-            if len(parametros[anterior : ]) > 0:
-                listaParametros.append( parametros[anterior : ] )
 
-            listaFinalDeParametros = []
 
-            for parametro in listaParametros:
-                listaFinalDeParametros.append(parametro.strip())
 
-            # Se tiver a mesma quantiade de parametros
-            if len(self.dic_funcoes[nomeDaFuncao][0]) == len(listaFinalDeParametros):
 
-                for parametroDeclarar in range(len(self.dic_funcoes[nomeDaFuncao][0])):
-                    resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0][parametroDeclarar], listaFinalDeParametros[parametroDeclarar])
 
-                    if resultado[0] == False:
-                        return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
-            else:
-                return [False, Run.msg_idioma(self, "funcao_tem_parametros_divergentes").format(nomeDaFuncao, len(dic_funcoes[nomeDaFuncao][0]), len(listaFinalDeParametros)), 'string', 'fazerNada']
 
-        elif parametros is not None:
 
-            if len(self.dic_funcoes[nomeDaFuncao][0]) == 1:
-                resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao][0], parametros)
 
-                if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
-            else:
-                return [False, Run.msg_idioma(self, "funcao_passou_um_parametros").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao][0])), 'string', 'exibirNaTela']
 
-        resultadoOrquestrador = Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao][1])
 
-        if not resultadoOrquestrador[0]:
-            return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
 
-        return [True, None, 'vazio', 'fazerNada']
+    def funcao_declarar_funcao(self, nomeDaFuncao, parametros=None):
+        Run.log(self, 'funcao_declarar_funcao. Nome: {}, Parametros: {}'.format(nomeDaFuncao, parametros))
 
-    def funcao_declarar_funcao(self, nomeDaFuncao, parametros):
-        Run.log(self, 'Declarar funcoes: {}'.format(nomeDaFuncao + str(parametros)))
-
+        # Se o nome da função não está no padrão
         teste = Run.analisa_padrao_variavel(self, nomeDaFuncao)
+        if not teste[0]:
+            return teste
+
+        # Se não tem parâmetros
+        if parametros is None:
+            self.dic_funcoes[nomeDaFuncao] = {'parametros':None, 'bloco':'bloco'}
+
+            return [True, True, 'booleano', 'declararFuncao', nomeDaFuncao]
+
+
+        # Verifica se tem mais de um parâmetro
         testa = Run.verifica_se_tem(self, parametros, ', ')
 
-        if not teste[0]: return teste
-
+        # Tem mais de um parametro
         if testa != []:
             listaParametros = []
             anterior = 0
@@ -1621,16 +1574,130 @@ class Run():
                 teste = Run.analisa_padrao_variavel(self, parametro.strip())
                 if not teste[0]: return teste
 
-            self.dic_funcoes[nomeDaFuncao] = [listaFinalDeParametros, 'bloco']
+            # Adicionar Função
+            self.dic_funcoes[nomeDaFuncao] = {'parametros':listaFinalDeParametros, 'bloco':'bloco'}
 
+        # Não multiplos parâmetros
         else:
-            teste = Run.analisa_padrao_variavel(self, parametros)
-            if not teste[0]: return teste
 
-            self.dic_funcoes[nomeDaFuncao] = [parametros, 'bloco']
+            # Verifica se o parâmetro está no padrão
+            teste = Run.analisa_padrao_variavel(self, parametros)
+            if not teste[0]:
+                return teste
+
+            # Adicionar Função
+            self.dic_funcoes[nomeDaFuncao] = {'parametros':[parametros], 'bloco':'bloco'}
 
         funcao_em_analise = nomeDaFuncao
         return [True, True, 'booleano', 'declararFuncao',funcao_em_analise]
+
+
+
+
+
+    def funcao_executar_funcao(self, nomeDaFuncao, parametros = None):
+        try:
+            self.dic_funcoes[nomeDaFuncao]
+        except:
+            return [False, Run.msg_idioma(self, "funcao_nao_existe").format(nomeDaFuncao), 'string', 'exibirNaTela']
+
+        # Se não veio parâmetros
+        if parametros is None:
+
+            # Se a função tem parâmetros
+            if self.dic_funcoes[nomeDaFuncao]['parametros'] != None:
+                return [False, Run.msg_idioma(self, "funcao_nao_passou_parametros").format( nomeDaFuncao,  len(self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
+
+            resultadoOrquestrador = Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+
+            if not resultadoOrquestrador[0]:
+                return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
+            return [True, None, 'vazio', 'fazerNada']
+
+
+        # Não tem multiplos parâmetros
+        testa = Run.verifica_se_tem(self, parametros, ',')
+        if testa != []:
+            anterior = 0
+            listaParametros = []
+
+            # Anda pelos valores
+            for valorItem in testa:
+
+                # Obtem os parâmetros
+                if len(parametros[anterior : valorItem[0]]) > 0:
+                    listaParametros.append( parametros[anterior : valorItem[0]] )
+                    anterior = valorItem[1]
+
+            if len(parametros[anterior : ]) > 0:
+                listaParametros.append( parametros[anterior : ] )
+
+            listaFinalDeParametros = []
+
+            # Anda pelos parâmetros
+            for parametro in listaParametros:
+                listaFinalDeParametros.append(parametro.strip())
+
+            # Se a quantidade de itens for a mesma dessa funcao
+            if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == len(listaFinalDeParametros):
+
+                for parametroDeclarar in range(len(self.dic_funcoes[nomeDaFuncao]['parametros'])):
+                    resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'][parametroDeclarar], listaFinalDeParametros[parametroDeclarar])
+
+                    if resultado[0] == False:
+                        return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+            else:
+                return [False, Run.msg_idioma(self, "funcao_tem_parametros_divergentes").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao]['parametros']), len(listaFinalDeParametros)), 'string', 'fazerNada']
+
+        elif parametros is not None:
+
+            if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == 1:
+                resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'], parametros)
+
+                if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+            else:
+                return [False, Run.msg_idioma(self, "funcao_passou_um_parametros").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
+
+        resultadoOrquestrador = Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+
+        if not resultadoOrquestrador[0]:
+            return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
+
+        return [True, None, 'vazio', 'fazerNada']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def funcao_exibir_outra_ln(self, linha):
         Run.log(self, 'funcao exibição: {}'.format(linha))

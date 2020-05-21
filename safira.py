@@ -50,7 +50,7 @@ __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
 __date__        = '01/08/2019'
-__last_update__ = '02/05/2020'
+__last_update__ = '21/05/2020'
 __version__ = '0.1'
 
 # sudo apt-get install python3-pip
