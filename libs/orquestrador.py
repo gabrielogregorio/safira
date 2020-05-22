@@ -168,7 +168,6 @@ class Run():
             elif bool_achou_comentario:
                 continue
 
-
             # Executar o comando de uma linha
             # Se chegar no fim da linha ou iniciar um bloco e um bloco não estiver sendo salvo e nem estiver em uma string
             if ( txt_caractere == "\n" or txt_caractere == "{" and not bool_salvar_bloco and not bool_achou_string ):
@@ -206,14 +205,10 @@ class Run():
                         if lst_ultimo_teste[3] in ['fazerNada', 'exibirNaTela']: # Adiciona no fluxo de dados
                             historico_fluxo_de_dados.append('acaoDiversa')
 
-
                         txt_linha_comando = ""
 
                         if txt_caractere == "\n" and lst_ultimo_teste[3] == 'fazerNada':
                             continue
-
-
-
 
             # Quando começar uma string
             if txt_caractere == '"' and not bool_achou_string and not bool_salvar_bloco:
@@ -230,9 +225,6 @@ class Run():
 
             elif txt_caractere == "}" and not bool_achou_string:
                 int_profundidade_bloco -= 1
-
-
-
 
             # Quando finalizar um bloco
             if txt_caractere == "}" and not bool_achou_string and int_profundidade_bloco == 0:
@@ -419,16 +411,11 @@ class Run():
                             self.numero_threads -= 1
                             return lst_resultado_execucao
 
-
-
-
                 # É tente algo
                 elif lst_ultimo_teste[3] == 'tenteAlgo':
                     self.ignorar_erros = True
                     historico_fluxo_de_dados.append("tenteAlgo")
-
                     lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
-
                     bool_execucao_deu_erro_temporario = False
 
                     if lst_resultado_execucao[0] == False:
@@ -439,15 +426,12 @@ class Run():
                             return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
                         print("Erro ignorado => " + str(lst_resultado_execucao))
-
                         lst_resultado_execucao = [True, "", "linhaVazia", "fazerNada"]
-
                     self.ignorar_erros = False
 
 
 
                 elif lst_ultimo_teste[3] == 'seDerErro':
-
                     if len(historico_fluxo_de_dados) == 0:
                         Run.orq_erro(self, "Você precisa definir um tente, para testar o se der erro", "1", "")
                         self.numero_threads -= 1
@@ -460,11 +444,8 @@ class Run():
 
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario:
-
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
-
                         if lst_resultado_execucao[0] == False:
-
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
@@ -487,11 +468,8 @@ class Run():
 
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario == False:
-
                         lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
-
                         if lst_resultado_execucao[0] == False:
-
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
                                 return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
@@ -499,7 +477,6 @@ class Run():
                             Run.orq_erro(self, lst_resultado_execucao[1], num_linha_analisada, arq_script_erro)
                             self.numero_threads -= 1
                             return lst_resultado_execucao
-
 
                 elif lst_ultimo_teste[3] == 'seDerErro':
 
@@ -539,7 +516,6 @@ class Run():
                         Run.orq_erro(self, "Você precisa definir um tente, para testar o se não der erro", "1", "")
                         self.numero_threads -= 1
                         return [False, "Você precisa definir um tente, para testar o se não der erro", 'string', "fazerNada"]
-
 
                     lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
 
@@ -595,6 +571,11 @@ class Run():
             return [False, "Você precisa de fechar uma {", 'string', "fazerNada"]
 
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
+
+
+
+
+
 
     def analisa_instrucao(self, comando, texto):
         re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
@@ -783,6 +764,10 @@ class Run():
             if analisa044[0]: return [ Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn" ]
 
 
+
+
+
+
             return [ [False, "{}'{}'".format( Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string','exibirNaTela'], self.num_linha, "" ]
         return [ [True, None, 'vazio', 'fazerNada'], self.num_linha, "" ]
 
@@ -846,6 +831,8 @@ class Run():
         analisa032 = Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
         analisa033 = Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
         analisa034 = Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', possivelVariavel)
+        analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
+        analisa044 = Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', possivelVariavel)
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
@@ -857,6 +844,8 @@ class Run():
         if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
         if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
         if analisa034[0]: return Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4])
+        if analisa024[0]: return Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3])
+        if analisa044[0]: return Run.funcao_executar_funcao(self, analisa044[1][1])
 
         return [True, None, 'vazio']
 
@@ -1652,7 +1641,7 @@ class Run():
         elif parametros is not None:
 
             if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == 1:
-                resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'], parametros)
+                resultado = Run.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'][0], parametros)
 
                 if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
             else:

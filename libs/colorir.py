@@ -25,12 +25,16 @@ class Colorir():
         self.tx_codfc.tag_config(palavra, foreground=cor)
 
     def marcar_coloracao(self, regex, lista, linha, palavra, cor):
+        #vale, lista_p, linh_p, palavra, cor 
+        
         for valor in finditer(regex, lista[linha]):
             Colorir.realiza_coloracao(self, str(palavra), str(linha + 1), valor.start(), valor.end(), cor)
 
-    def def_cor(self, chave_comando, chave_cor, lista):
+    def def_cor(self, chave_comando,   chave_cor,   lista):
+        """         atribuicao_dados, 'lista',   lista_linhas  """
  
         for comando in self.dic_comandos[chave_comando]["comando"]:
+            "vale, recebe, é igual"
             Colorir.anl_cor(
                 self,
                 comando[0].strip(),
@@ -40,6 +44,7 @@ class Colorir():
 
 
     def anl_cor(self, palavra, cor, lista):
+        """            vale/=, '#ffffff', textoLista """
         if palavra == "||":
             return 0
 
@@ -48,8 +53,7 @@ class Colorir():
             Realiza a coloração seguindo instruções
         """
 
-        cor = cor['foreground']
-        
+        cor = cor['foreground'] # !==> "#ffffff"        
 
         palavra_comando = palavra.replace('+', '\\+')
         palavra_comando = palavra_comando.replace('/', '\\/')
@@ -60,6 +64,7 @@ class Colorir():
 
         for linha in range(len(lista)):
             palavra_comando = palavra_comando.replace(' ', '\\s*')
+            #vale, lista_p, linh_p, palavra, cor 
             Colorir.marcar_coloracao(self, '(^|\\s){}(\\s|$)'.format(palavra_comando), lista, linha, palavra, cor)
 
 
@@ -102,7 +107,7 @@ class Colorir():
 
         # não modifica o código
         if event is not None:
-            print( event.keysym )
+
             if event.keysym in ('Down', 'Up', 'Left', 'Right'):
                 return 0
 

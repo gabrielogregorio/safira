@@ -1,7 +1,6 @@
 funcao calculamedia recebe parametros nome
 {
-    mostre "oi"
+    mostre "oi", nome
 }
-
-calculamedia passando parametro "gabriel"
+calculamedia passando "gabriel"
 
