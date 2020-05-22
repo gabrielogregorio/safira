@@ -6,12 +6,11 @@ class Colorir():
     def __init__(self, cor_do_comando, dic_comandos):
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
+        self.primeira_vez = False
         self.tx_codfc = None
         self.tela = None
         self.palavras_analisadas = []
         self.historico_coloracao = []
-        self.primeira_vez = False
-
 
     def alterar_cor_comando(self, novo_cor_do_comando):
         self.cor_do_comando = novo_cor_do_comando
@@ -25,17 +24,6 @@ class Colorir():
 
         self.tx_codfc.tag_add(palavra, linha1, linha2)
         self.tx_codfc.tag_config(palavra, foreground=cor)
-
-
-
-
-
-
-
-
-
-
-
 
     def marcar_coloracao(self, regex, lista, linha, palavra, cor):
         #vale, lista_p, linh_p, palavra, cor 
@@ -97,24 +85,6 @@ class Colorir():
                 palavra_comando = palavra_comando.replace(' ', '\\s*')
                 #vale, lista_p, linh_p, palavra, cor 
                 Colorir.marcar_coloracao(self, '(^|\\s){}(\\s|$)'.format(palavra_comando), lista, linha, palavra, cor)
-
-
-
-
-
-    def marcar_coloracao_especial(self, regex, lista, linha, palavra, cor):
-        for valor in finditer(regex, lista[linha]):
-            Colorir.realiza_coloracao(self, str(palavra), str(linha + 1), valor.start(), valor.end(), cor)
-
-    def anl_cor_especial(self, palavra, cor, lista):
-        """
-            Realiza a coloração seguindo instruções
-        """
-
-        cor = cor['foreground']
-
-
-
 
     def coordena_coloracao(self, event, tx_codfc, primeira_vez=False):
         if primeira_vez:

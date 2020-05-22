@@ -136,7 +136,7 @@ class Aba():
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
 
         fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
-        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="     ", border=0, highlightthickness=0)
+        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="        ", border=0, highlightthickness=0)
         bt_fechar = Button(fr_uma_aba, dic_cor_botao, text="x ", relief=FLAT, border=0, highlightthickness=0)
 
         lb_aba.bind('<ButtonPress>', lambda event=None, num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba) )

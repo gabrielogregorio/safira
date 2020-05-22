@@ -1,6 +1,7 @@
-funcao calculamedia recebe parametros nome
+funcao calculamedia recebe parametros nome, n1, n2, n3
 {
-    mostre "oi", nome
+    mostre "oi ", nome
+    mostre "Sua média é de ", (n1 mais n2 mais n3 ) dividido por 3
 }
-calculamedia passando "gabriel"
+calculamedia passando "gabriel", 9.8, 7.2, 7.9
 

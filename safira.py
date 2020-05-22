@@ -354,7 +354,7 @@ class Safira(Aba):
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        
+
 
         self.tela.update()
         t_width    = self.tela.winfo_screenwidth()
@@ -379,7 +379,6 @@ class Safira(Aba):
             
 
     def fechar_mensagem_de_erro(self, remover_marcacao = True):
-
         Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_fechar )
         Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_exemplo )
         Safira.fechar_um_widget_erro(self, self.tx_erro_aviso_texto_erro )
@@ -480,6 +479,7 @@ class Safira(Aba):
         self.linhas_laterais.desenhar_linhas()
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+        tipo_exec = 'producao'
         if linha_linha == True:
             if len( self.tx_codfc.get(1.0, END).split("\n") ) != len(self.instancia.lst_breakpoints):
                 self.instancia.lst_breakpoints = [x for x in range(0, len(   self.tx_codfc.get(1.0, END).split("\n")  ))]
@@ -522,10 +522,12 @@ class Safira(Aba):
         self.bool_interpretador_iniciado = True
         if libera_break_point_executa:
             Safira.inicializador_terminal_debug(self)
+            tipo_exec = 'debug'
 
         else:
             Safira.inicializador_terminal_producao(self)
-
+            tipo_exec = 'producao'
+   
         self.tx_terminal.delete('1.0', END)
         self.linha_analise = 0
 
@@ -552,14 +554,16 @@ class Safira(Aba):
         while self.instancia.numero_threads != 0 or not self.instancia.boo_orquestrador_iniciado:
             self.tela.update()
 
-            try:
-                self.linha_analise = int(self.instancia.num_linha)
-                if self.linha_analise != valor_antigo:
-                    valor_antigo = self.linha_analise
-                    self.linhas_laterais.linha_analise = self.linha_analise
-                    self.linhas_laterais.desenhar_linhas()
-            except Exception as erro:
-                print("Erro update", erro)
+            # Modo debug
+            if tipo_exec == 'debug':
+                try:
+                    self.linha_analise = int(self.instancia.num_linha)
+                    if self.linha_analise != valor_antigo:
+                        valor_antigo = self.linha_analise
+                        self.linhas_laterais.linha_analise = self.linha_analise
+                        self.linhas_laterais.desenhar_linhas()
+                except Exception as erro:
+                    print("Erro update", erro)
 
         # Se o erro foi avisado
         if self.instancia.erro_alertado == True:
@@ -570,7 +574,7 @@ class Safira(Aba):
         del self.instancia
 
         try:
-            self.tx_terminal.config(state=NORMAL)
+            #self.tx_terminal.config(state=NORMAL)
             self.tx_terminal.insert(END, '\nScript finalizado em {:.5} segundos'.format(time() - inicio))
             self.tx_terminal.see("end")
 
@@ -588,12 +592,14 @@ class Safira(Aba):
             try:
                 widget.destroy()
             except Exception as e:
-                print("Impossivel destruir instância: ", e)
+                pass
+                #print("Impossivel destruir instância: ", e)
 
             try:
                 widget.grid_forget()
             except Exception as e:
-                print("Impossivel destruir instância: ", e)
+                pass
+                #print("Impossivel destruir instância: ", e)
 
     def inicializador_terminal_debug(self):
         Safira.destruir_instancia_terminal(self)
@@ -848,7 +854,8 @@ class Safira(Aba):
         try:
             self.dic_variaveis = self.instancia.dic_variaveis
         except Exception as e:
-            print("instancia não pronta ", e)
+            pass
+            #print("instancia não pronta ", e)
         else:
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 

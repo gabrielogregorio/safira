@@ -1,17 +1,16 @@
 x = 10
 
-exiba "Digite um número: "
-
+# Entrada de dados
+mostre nessa linha "Digite um número maior que ", x, " :"
 sorteado = um numero aleatorio entre x e o numero que o usuario digitar 
-mostre sorteado
 
-sorteado = um numero aleatorio entre 10 e 20 + 2
-mostre sorteado
+mostre "O numéro sorteador foi ", sorteado
 
-sorteado = um numero aleatorio entre -10 e 13
-mostre sorteado
+sorteado1 = um numero aleatorio entre 10 e 20 + 2
+sorteado2 = um numero aleatorio entre -10 e 13
+sorteado3 = numero aleatorio entre 20 e 40
+sorteado4 recebe um numero aleatorio entre x e x / 2 + sorteado3
 
-varSorte = numero aleatorio entre 20 e 40
+mostre "Os números sorteados foram"
+mostre sorteado1, ", ",sorteado2, ", ", sorteado3, ", ",sorteado4
 
-sorteado recebe um numero aleatorio entre x e x / 2 + varSorte
-mostre sorteado

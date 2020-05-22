@@ -1,29 +1,24 @@
-
 # isso é uma condição
 # um número pode ser igual ao outro
 
-se 1 for igual a 1
-{
-    mostre "É igual a 1"
-}
+n = 2
+m = 3
+idade = "idade"
 
 se "nome" == o que o usuario digitar
 {
     mostre "show"
+} 
+senao {
+    mostre "Você não digitou nome"
 }
 
-n = 2
-m = 3
+espere 2 s
 
-if n == 2
-{
-    print "Número é igual a 2"
+tente {
+    qualquer coisa / 0    
+} se der erro {
+    mostre "Deu erro"
 }
 
-idade = "idade"
-mostre "Bug"
-if n == 3 ou m == 3 ou "idade" == idade
-{
 
-    mostre 2 + 5
-}

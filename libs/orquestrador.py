@@ -103,13 +103,13 @@ class Run():
                 self.dir_script_aju_erro = dir_script_erro
 
                 mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
-                self.tx_terminal.config(state=NORMAL)
+                #self.tx_terminal.config(state=NORMAL)
                 self.tx_terminal.insert(END, mensagem_erro)
                 Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
         try:
-            self.tx_terminal.config(state=NORMAL)
+            #self.tx_terminal.config(state=NORMAL)
             if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
                 self.tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1][len(":nessaLinha:"):]))
             else:
@@ -117,7 +117,7 @@ class Run():
 
             self.tx_terminal.see("end")
             self.tx_terminal.update()
-            self.tx_terminal.config(state=DISABLED)
+            #self.tx_terminal.config(state=DISABLED)
 
         except Exception as erro:
             return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
@@ -1416,7 +1416,7 @@ class Run():
 
         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
-        self.tx_terminal.config(state=NORMAL)
+        #self.tx_terminal.config(state=NORMAL)
 
         self.esperar_pressionar_enter = True
 
@@ -1434,7 +1434,7 @@ class Run():
                 return [False, 'indisponibilidade_terminal', 'string','exibirNaTela']
 
         digitado = self.tx_terminal.get(1.0, END)
-        self.tx_terminal.config(state=DISABLED)
+        #self.tx_terminal.config(state=DISABLED)
         digitado = digitado[textoOriginal-1:-2]
         digitado = digitado.replace("\n","")
 
@@ -1452,9 +1452,9 @@ class Run():
     def funcao_limpar_o_termin(self):
         Run.log(self, 'Limpatela ativado!')
         try:
-            self.tx_terminal.config(state=NORMAL)
+            #self.tx_terminal.config(state=NORMAL)
             self.tx_terminal.delete(1.0, END)
-            self.tx_terminal.config(state=DISABLED)
+            #self.tx_terminal.config(state=DISABLED)
         except:
             return [False, 'indisponibilidade_terminal', 'string','exibirNaTela']
 
