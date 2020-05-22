@@ -354,7 +354,7 @@ class Safira(Aba):
 
         self.tela.update()
         #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
+        
 
         self.tela.update()
         t_width    = self.tela.winfo_screenwidth()
@@ -366,6 +366,8 @@ class Safira(Aba):
         self.tela.update()
 
         self.colorir_codigo.tela = self.tela # Passando instância de tela para o colorizador
+
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
         self.tela.mainloop()
 
 
@@ -740,11 +742,13 @@ class Safira(Aba):
     def ativar_coordernar_coloracao(self, event = None):
         #Safira.salva_contextos(self)
 
+        self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
+       
+
         #if self.dic_abas != {}:
         #    self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
 
-        self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
-
+        
         if event is not None:
             Safira.obterPosicaoDoCursor(self, event)
 
@@ -774,7 +778,7 @@ class Safira(Aba):
 
             try:
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
-                self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc).update()
+                self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
 
                 Safira.atualiza_design_interface(self)
                 self.linhas_laterais.aba_focada2 = self.aba_focada
@@ -822,7 +826,7 @@ class Safira(Aba):
 
 
         if comando in ["abrirArquivo"]:
-            self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
+            self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True)
 
         if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
             Safira.atualiza_texto_tela(self, self.aba_focada)

@@ -60,8 +60,8 @@
     "en-us":"Value 1 is greater than value 2, value 1 must be greater"
   },
  "funcao_nao_existe":{
-    "pt-br":"A função não existe: ",
-    "en-us":"The function does not exist:"
+    "pt-br":"A função  '{}'não existe",
+    "en-us":"The function '{}' does not exist"
   },
   "funcao_nao_passou_parametros":{
     "pt-br":"A função '{}' possui '{}' parâmetros, você precisa informa-los!"

@@ -832,7 +832,6 @@ class Run():
         analisa033 = Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
         analisa034 = Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', possivelVariavel)
         analisa024 = Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
-        analisa044 = Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', possivelVariavel)
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
@@ -845,7 +844,6 @@ class Run():
         if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
         if analisa034[0]: return Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4])
         if analisa024[0]: return Run.funcao_executar_funcao(self, analisa024[1][1],  analisa024[1][3])
-        if analisa044[0]: return Run.funcao_executar_funcao(self, analisa044[1][1])
 
         return [True, None, 'vazio']
 
@@ -1453,9 +1451,13 @@ class Run():
 
     def funcao_limpar_o_termin(self):
         Run.log(self, 'Limpatela ativado!')
-        self.tx_terminal.config(state=NORMAL)
-        self.tx_terminal.delete(1.0, END)
-        self.tx_terminal.config(state=DISABLED)
+        try:
+            self.tx_terminal.config(state=NORMAL)
+            self.tx_terminal.delete(1.0, END)
+            self.tx_terminal.config(state=DISABLED)
+        except:
+            return [False, 'indisponibilidade_terminal', 'string','exibirNaTela']
+
         return [True, None, 'vazio','fazerNada']
 
     def funcao_repetir_n_vezes(self, linha):
@@ -1587,7 +1589,7 @@ class Run():
     def funcao_executar_funcao(self, nomeDaFuncao, parametros = None):
         try:
             self.dic_funcoes[nomeDaFuncao]
-        except:
+        except Exception as erro:
             return [False, Run.msg_idioma(self, "funcao_nao_existe").format(nomeDaFuncao), 'string', 'exibirNaTela']
 
         # Se não veio parâmetros
@@ -1914,7 +1916,20 @@ class Run():
         try:
             float(possivelVariavel)
         except:
-            return Run.obter_valor_variavel(self, possivelVariavel)
+
+            teste_funcao = [False]
+
+            analisa044 = Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', possivelVariavel)
+            if analisa044[0]:
+                teste_funcao = Run.funcao_executar_funcao(self, analisa044[1][1])
+
+            # Se não é função, retorna variável
+            if teste_funcao[0] == False:
+                return Run.obter_valor_variavel(self, possivelVariavel)
+
+            # se é variavel, retorne ela
+            return teste_funcao
+
         else:
             return [True, float(possivelVariavel), 'float']
 
