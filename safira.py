@@ -19,6 +19,7 @@ import webbrowser
 from time import time, sleep
 from threading import Thread
 from os.path import abspath
+from os.path import exists
 from os import listdir
 from json import load
 from os import getcwd
@@ -58,7 +59,7 @@ __status__ = 'Desenvolvimento'
 __date__        = '01/08/2019'
 __last_update__ = '21/05/2020'
 __version__ = '0.1'
-
+ 
 # sudo apt-get install python3-pip
 # sudo apt-get install python-tk python3-tk tk-dev
 
@@ -122,6 +123,8 @@ class Safira(Aba):
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
         self.bool_interpretador_iniciado = False
         self.lst_historico_abas_focadas = []
+
+        super().__init__()
 
     def main(self):
         Safira.splashScreen1(self)
@@ -208,16 +211,29 @@ class Safira(Aba):
 
         self.mn_barra.add_cascade(label='  Arquivo'    , menu=self.mn_arqui, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Executar'   , menu=self.mn_exect, font = ("Lucida Sans", 13))
-        self.mn_barra.add_cascade(label='  Exemplos'  , menu=self.mn_exemp, font = ("Lucida Sans", 13))
+        self.mn_barra.add_cascade(label='  Exemplos'   , menu=self.mn_exemp, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Interface'  , menu=self.mn_intfc, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Ajuda'      , menu=self.mn_ajuda, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  sobre'      , menu=self.mn_sobre, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Dev'        , menu=self.mn_devel, font = ("Lucida Sans", 13))
 
+
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = lambda event=None: Safira.nova_aba(self, event))
-        self.mn_arqui.add_separator()
-        self.mn_arqui.add_command(label='  Recentes')
+
+
+        with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
+            configArquivoJson = load(json_file)
+        
+        recentes = list( configArquivoJson["recentes"] )
+
+        if recentes != []:
+            self.mn_arqui.add_separator()
+
+            for link in recentes:
+                funcao = lambda link = link:  Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , str(link))
+                self.mn_arqui.add_command(label="  " + str(link), command=funcao)
+
         self.mn_arqui.add_separator()
         self.mn_arqui.add_command(label='  Salvar (Ctrl-S)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo"))
         self.mn_arqui.add_command(label='  Salvar Como (Ctrl-Shift-S)', command=lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
@@ -426,21 +442,6 @@ class Safira(Aba):
 
         self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, text="x", relief="sunken", fg="#ff9696",activeforeground="#ff9696", bg="#111121", activebackground="#111121", font=("", 13), highlightthickness=0, bd=0, command=lambda abc = self: Safira.fechar_mensagem_de_erro(abc))
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
-
-    # Descartado por destruir o desenpenho
-    def salva_contextos(self):
-        print("Salva contexto", self.dic_abas[self.aba_focada]["contexto"])
-        print("texto contexto", self.dic_abas[self.aba_focada]["listaContextos"])
-
-        '''
-            Armazena alterações de contexto do código em 
-            no máximo 10 contextos de código, para  CTRL+Z e CTRL+Y
-        '''
-
-        self.dic_abas[self.aba_focada]["listaContextos"].append( self.tx_codfc.get("1.0", END) )
-
-        if len(self.dic_abas[self.aba_focada]["listaContextos"]) > 10:
-            self.dic_abas[self.aba_focada]["listaContextos"] = self.dic_abas[self.aba_focada]["listaContextos"][-10:]
 
     def mudar_texto_txt_codifc(self, txt_contexto):
         self.tx_codfc.delete("1.0", END)
@@ -754,7 +755,6 @@ class Safira(Aba):
 
     def ativar_coordernar_coloracao(self, event = None):
         print("Aba focada =", self.aba_focada)
-        #Safira.salva_contextos(self)
 
         self.colorir_codigo.aba_focada = self.aba_focada
         self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
@@ -815,6 +815,34 @@ class Safira(Aba):
         if self.bool_debug_temas: self.bool_debug_temas = False
         else: self.bool_debug_temas = True
 
+    def add_link_recentes(self, link):
+        with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
+            configArquivoJson = load(json_file)
+
+        # Se o arquivo não está na lista recentes
+        if link not in configArquivoJson["recentes"]:
+
+            configArquivoJson["recentes"].insert(0, str(link))
+
+            # Filtro pelos 10 primeiros
+            if len(configArquivoJson["recentes"]) > 10:
+                configArquivoJson["recentes"][0:10]
+
+            # Verifica se arquivos foram excluidos
+            lista = []
+            for item in configArquivoJson["recentes"]:
+                if exists(item):
+                    lista.append(item)
+                
+            configArquivoJson["recentes"] = lista
+
+            configArquivoJson = str(configArquivoJson)
+            configArquivoJson = configArquivoJson.replace("'",'"')
+
+            file = open('configuracoes/configuracoes.json','w')
+            file.write(configArquivoJson)
+            file.close()
+
     def funcoes_arquivos_configurar(self, event, comando, link=None):
         if self.controle_arquivos is None: return 0
 
@@ -824,6 +852,7 @@ class Safira(Aba):
 
         if comando == "abrirArquivo":
             self.controle_arquivos.abrirArquivo(link)
+            Safira.add_link_recentes(self, link)
 
         elif comando == "salvar_arquivo_dialog":
             self.controle_arquivos.salvar_arquivo_dialog(event)

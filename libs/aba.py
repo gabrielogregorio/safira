@@ -22,7 +22,7 @@ class Aba():
         nome_arquivo = str(nome_arquivo[-1])
 
         if nome_arquivo.strip() == "":
-            nome_arquivo = " " * 8
+            nome_arquivo = " " * 14
 
         self.dic_abas[num_aba]["listaAbas"][2].configure(text=nome_arquivo)
 
@@ -148,7 +148,7 @@ class Aba():
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
 
         fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
-        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="        ", border=0, highlightthickness=0)
+        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="              ", border=0, highlightthickness=0)
         bt_fechar = Button(fr_uma_aba, dic_cor_botao, text="x ", relief=FLAT, border=0, highlightthickness=0)
 
         lb_aba.bind('<ButtonPress>', lambda event=None, num_aba = posicao_adicionar: Aba.atualiza_aba_foco(self, num_aba) )
@@ -215,7 +215,7 @@ class Aba():
                 txt_btn = "x "
 
             if nome_arquivo.strip() == "":
-                nome_arquivo = "      "
+                nome_arquivo = "            "
             else:
                 nome_arquivo = " " + nome_arquivo
 
