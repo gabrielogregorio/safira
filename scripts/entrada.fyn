@@ -4,7 +4,8 @@ idade recebe o numero que for digitado
 se idade for maior que 18
 {
     mostre "Você é adulta!"
-}ss
+}
+
 if idade <= 18
 {
      print "você não é adulta!"

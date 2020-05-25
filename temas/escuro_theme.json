@@ -1,4 +1,4 @@
-{
+{ 
   "cor_intro": {
     "background": "#ffc000",
     "foreground":"#404040"
@@ -82,13 +82,52 @@
   },
   "dic_cor_abas": {
        "background":"#474747",
+       "activebackground":"#474747",
+       "activeforeground":"#565656",
        "foreground":"#565656"
   },
   "dic_cor_abas_focada": {
-       "background":"#b4b4b4"
+       "background":"#393944",
+       "activebackground":"#393944",
+       "activeforeground":"#ffffff",
+       "foreground":"#ffffff",
+       "padx":30,
+       "pady":7,
+       "font":["Lucida Sans", 11]
   },
   "dic_cor_abas_nao_focada": {
-       "background":"#696969"
+       "background":"#696969",
+       "activebackground":"#696969",
+       "activeforeground":"#a1a1a1",
+       "foreground":"#a1a1a1",
+       "padx":30,
+       "pady":7,
+       "font":["Lucida Sans", 11]
+  },
+  "dic_cor_marcador_focado": {
+       "background":"orange",
+       "height":2
+  },
+  "dic_cor_marcador_nao_focado": {
+       "background":"#696969",
+       "height":2
+  },
+  "dic_cor_abas_focada_botao": {
+       "font":["Lucida Sans", 14],
+       "background":"#393944",
+       "activebackground":"#393944",
+       "activeforeground":"orange",
+       "foreground":"#ffffff"
+  },
+  "dic_cor_abas_nao_focada_botao": {
+       "font":["Lucida Sans", 14],
+       "background":"#696969",
+       "activebackground":"#696969",
+       "activeforeground":"orange",
+       "foreground":"#393939"
+  },
+  "dic_cor_abas_botao_fechar_focada": {
+       "foreground":"white"
   },
   "fr_opcoes_rapidas": {
     "background": "#393939"

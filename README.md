@@ -1,5 +1,6 @@
 # AVISO
-Esse projeto está na versão beta 0.1
+Esse projeto está na versão beta 0.1 feynman_code, estamos trabalhando na primeira versão estável, a Safira IDE
+O método de coloração dos comandos está sendo otimizado e portanto, contém alguns bugs
 
 # Introdução
 Uma linguagem de programação introdutória universal, simples e focada em na lógica.

@@ -1,3 +1,9 @@
+# Theme One Dark
+# sudo apt install python3-distutils
+# sudo apt install python3-tk
+# sudo apt-get install python3-pip
+
+
 # -*- coding: utf-8 -*-
 import sys
 print("Versao do python", sys.version)
@@ -111,6 +117,7 @@ class Safira(Aba):
         self.tx_erro_aviso_texto_erro = None
         self.fr_erro_aviso_texto_erro = None
         self.fr_erro_aviso = None
+        self.valor_threads = 0
 
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
         self.bool_interpretador_iniciado = False
@@ -137,7 +144,7 @@ class Safira(Aba):
 
         self.fr_splash = Frame(self.frame_splash, background = self.dic_design["cor_intro"]["background"])
         self.l1_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text=" COMBRATEC ", font=( "Lucida Sans", 90), bd=80)
-        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Safira ILE", font=("Lucida Sans", 12))
+        self.l2_splash = Label(self.frame_splash, self.dic_design["cor_intro"], text="Safira IDE beta 0.2", font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
@@ -258,8 +265,8 @@ class Safira(Aba):
 
         self.mn_ajuda.add_command( label='  Ajuda (F1)', command= lambda:webbrowser.open(self.path + "/tutorial/index.html") )
         self.mn_ajuda.add_command( label='  Comandos Disponíveis', command =lambda: webbrowser.open(self.path + "/tutorial/index.html") )
-        self.mn_ajuda.add_command( label='  Comunidade', command=lambda: webbrowser.open("https://feynmancode.blogspot.com/p/comunidade.html") )
-        self.mn_sobre.add_command( label='  Projeto', command=lambda: webbrowser.open("http://feynmancode.blogspot.com/") )
+        self.mn_ajuda.add_command( label='  Comunidade', command=lambda: webbrowser.open("https://safiraide.blogspot.com/p/comunidade.html") )
+        self.mn_sobre.add_command( label='  Projeto', command=lambda: webbrowser.open("http://safiraide.blogspot.com/") )
         self.mn_devel.add_command( label='  Logs', command=lambda:  Safira.ativar_logs(self) )
         self.mn_devel.add_command( label='  Debug', command=lambda:  Safira.debug(self) )
 
@@ -746,18 +753,18 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.fr_espaco, "dic_cor_abas_frame")
 
     def ativar_coordernar_coloracao(self, event = None):
+        print("Aba focada =", self.aba_focada)
         #Safira.salva_contextos(self)
 
+        self.colorir_codigo.aba_focada = self.aba_focada
         self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
-       
+        #Thread(target= lambda event=event: Safira.th_confirm(self, event)).start()
 
-        #if self.dic_abas != {}:
-        #    self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
-
-        
-        if event is not None:
+        if self.dic_abas != {}:
+            self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
+        if hasattr(event, "keysym"):
             Safira.obterPosicaoDoCursor(self, event)
-
+        
     def obterPosicaoDoCursor(self, event=None):
         try:
             numPosicao = str(self.tx_codfc.index(INSERT))
@@ -766,7 +773,7 @@ class Safira(Aba):
             print("Erro ao obter a posição o cursor =", erro)
         else:
             p1, p2 = str(numPosicao).split('.')
-            if event.keysym == "braceleft":
+            if event.keysym == "braceleft" or event.keysym == "{":
                 self.tx_codfc.insert('{}.{}'.format(p1,int(p2)), '\n    \n}' )
                 self.tx_codfc.mark_set("insert", "{}.{}".format( int(p1)+1, int(p2)+4 ))
 
@@ -783,13 +790,13 @@ class Safira(Aba):
             dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
             try:
+                self.colorir_codigo.aba_focada = self.aba_focada
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
-                self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
+                #self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
 
                 Safira.atualiza_design_interface(self)
                 self.linhas_laterais.aba_focada2 = self.aba_focada
                 self.linhas_laterais.dic_abas2 = self.dic_abas
-
 
             except Exception as erro:
                 print('ERRO: ', erro)
@@ -829,10 +836,6 @@ class Safira(Aba):
 
         self.aba_focada = self.controle_arquivos.aba_focada
         self.dic_abas = self.controle_arquivos.dic_abas
-
-
-        if comando in ["abrirArquivo"]:
-            self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True)
 
         if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
             Safira.atualiza_texto_tela(self, self.aba_focada)

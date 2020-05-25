@@ -1,7 +1,7 @@
-{
+{ 
   "cor_intro": {
     "background": "#222232",
-    "foreground":"#c1c1c1"
+    "foreground":"#f9f9f1"
   },
   "cor_menu": {
     "font": [
@@ -93,7 +93,6 @@
        "padx":30,
        "pady":7,
        "font":["Lucida Sans", 11]
-
   },
   "dic_cor_abas_nao_focada": {
        "background":"#444454",
@@ -104,19 +103,14 @@
        "pady":7,
        "font":["Lucida Sans", 11]
   },
-
-
-  
   "dic_cor_marcador_focado": {
        "background":"#00c3ff",
-       "width":1
+       "height":1
   },
-
   "dic_cor_marcador_nao_focado": {
        "background":"#111121",
-       "width":1
+       "height":1
   },
-
   "dic_cor_abas_focada_botao": {
        "font":["Lucida Sans", 14],
        "background":"#222232",
@@ -131,15 +125,9 @@
        "activeforeground":"white",
        "foreground":"#222232"
   },
-
-
   "dic_cor_abas_botao_fechar_focada": {
        "foreground":"white"
   },
-
-
-
-
   "fr_opcoes_rapidas": {
     "background": "#222232"
   },
@@ -169,14 +157,12 @@
       13
     ]
   },
-
   "fr_ajuda": {
     "width":25,
     "background":"#ababab",
     "padx":0,
     "pady":0
   },
-
   "fr_princ": {
     "background":"#222232"
   },

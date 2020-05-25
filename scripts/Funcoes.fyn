@@ -1,12 +1,17 @@
+# Funções são rotinas de códigos que podem ser usadas com uma
+# chamada simples
+
+# *** Esse é um exemplo de função **** #
+
+# Declarando uma função que recebe 3 valores
 funcao somaNumeros recebe parametros n1, n2, n3
 {
+
+   # Rotina de código que será reusada
     mostre "Executando função"
-    mostre n1 + n2 + n3
+    mostre "Funçao sendo executada"
+    mostre nessa linha "A soma total é de ", n1 + n2 + n3
 }
+
+# Chamando a função com uma única linha
 somaNumeros passando parametros 20, 30, 10
-funcao calculaMedia recebe parametros nome, sobrenome
-{
-    mostre nome , " ", sobrenome
-}
-calculaMedia passando parametros "gabriel", "gregório"
-somaNumeros passando parametros 20, 30, 1

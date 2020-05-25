@@ -1,4 +1,4 @@
-{
+{ 
   "cor_intro": {
     "background": "#00ccff",
     "foreground":"#404040"
@@ -82,13 +82,52 @@
   },
   "dic_cor_abas": {
        "background":"#c5d4fc",
+       "activebackground":"#c5d4fc",
+       "activeforeground":"#565656",
        "foreground":"#565656"
   },
   "dic_cor_abas_focada": {
-       "background":"#e6edff"
+       "background":"#e6edff",
+       "activebackground":"#e6edff",
+       "activeforeground":"#565656",
+       "foreground":"#565656",
+       "padx":30,
+       "pady":7,
+       "font":["Lucida Sans", 11]
   },
   "dic_cor_abas_nao_focada": {
-       "background":"#c5d4fc"
+       "background":"#c5d4fc",
+       "activebackground":"#c5d4fc",
+       "activeforeground":"#a1a1a1",
+       "foreground":"#a1a1a1",
+       "padx":30,
+       "pady":7,
+       "font":["Lucida Sans", 11]
+  },
+  "dic_cor_marcador_focado": {
+       "background":"#0a67ad",
+       "height":2
+  },
+  "dic_cor_marcador_nao_focado": {
+       "background":"#c5d4fc",
+       "height":2
+  },
+  "dic_cor_abas_focada_botao": {
+       "font":["Lucida Sans", 14],
+       "background":"#e6edff",
+       "activebackground":"#e6edff",
+       "activeforeground":"black",
+       "foreground":"#e6edff"
+  },
+  "dic_cor_abas_nao_focada_botao": {
+       "font":["Lucida Sans", 14],
+       "background":"#c5d4fc",
+       "activebackground":"#c5d4fc",
+       "activeforeground":"black",
+       "foreground":"#c5d4fc"
+  },
+  "dic_cor_abas_botao_fechar_focada": {
+       "foreground":"white"
   },
   "fr_opcoes_rapidas": {
     "background": "#c5d4fc"
@@ -119,14 +158,12 @@
       13
     ]
   },
-
   "fr_ajuda": {
     "width":25,
     "background":"#ababab",
     "padx":0,
     "pady":0
   },
-
   "fr_princ": {
     "background":"#e6edff"
   },

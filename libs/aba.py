@@ -7,11 +7,16 @@ from tkinter import FLAT
 from tkinter import END
 
 class Aba():
+
+    def atualizar_coloracao_aba(self):
+        self.colorir_codigo.aba_focada = self.aba_focada
+        self.colorir_codigo.historico_coloracao[self.aba_focada] = []
+        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
+
     def atualiza_texto_tela(self, num_aba):
 
         self.tx_codfc.delete(1.0, END)
         self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"])[0:-1])
-        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
 
         nome_arquivo = self.dic_abas[num_aba]["arquivoSalvo"]["link"].split("/")
         nome_arquivo = str(nome_arquivo[-1])
@@ -23,6 +28,8 @@ class Aba():
 
         for x in range(0, 3):
             self.dic_abas[num_aba]["listaAbas"][x].update()
+
+        Aba.atualizar_coloracao_aba(self)
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
         self.dic_abas[self.aba_focada]["listaAbas"][3].configure(dic_cor_botao)
@@ -88,6 +95,7 @@ class Aba():
                 Aba.atualiza_texto_tela(self, chave)
 
                 self.lst_historico_abas_focadas.append(chave)
+                Aba.atualizar_coloracao_aba(self)
                 return 0
 
     def atualiza_aba_foco(self, num_aba):
@@ -113,6 +121,10 @@ class Aba():
 
         Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
         Aba.atualiza_texto_tela(self, num_aba)
+
+        self.colorir_codigo.aba_focada = self.aba_focada
+        self.colorir_codigo.historico_coloracao[self.aba_focada] = []
+        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
 
     def nova_aba(self, event=None):
 
