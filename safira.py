@@ -24,8 +24,9 @@ from os import listdir
 from json import load
 from os import getcwd
 import tkinter.font as tkFont
-import tkinter.ttk as ttk
-import tkinter as tk
+from tkinter.ttk import Style, Treeview
+
+
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
@@ -79,7 +80,7 @@ class Safira(Aba):
         self.tx_terminal = None
         self.instancia = None
         self.tx_codfc = None
-        self.linha_p_brk_p = 0
+        self.num_linha_breakpoint = 0
         self.posAbsuluta = 0
         self.posCorrente = 0
         self.aba_focada = 0
@@ -95,8 +96,10 @@ class Safira(Aba):
         self.l2_splash = None    # splash
         self.frame_splash = None # splash
         self.fr_opc_rapidas = None
+
         self.ic_salva = None
         self.ic_playP = None
+        self.bt_brkp1 = None
         self.ic_PStop = None
         self.ic_breaP = None
         self.ic_brk_p = None
@@ -217,7 +220,6 @@ class Safira(Aba):
         self.mn_barra.add_cascade(label='  sobre'      , menu=self.mn_sobre, font = ("Lucida Sans", 13))
         self.mn_barra.add_cascade(label='  Dev'        , menu=self.mn_devel, font = ("Lucida Sans", 13))
 
-
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = lambda event=None: Safira.nova_aba(self, event))
 
@@ -291,11 +293,12 @@ class Safira(Aba):
         self.ic_PStop = PhotoImage( file='imagens/ic_parar.png' )
         self.ic_breaP = PhotoImage( file='imagens/ic_play_breakpoint.png' )
         self.ic_brk_p = PhotoImage( file='imagens/breakPoint.png' )
-        ic_brkp1 = PhotoImage( file='imagens/ic_play_breakpoint_um.png' )
+        self.ic_brkp1 = PhotoImage( file='imagens/ic_play_breakpoint_um.png' )
         self.ic_desfz = PhotoImage( file='imagens/left.png' )
         self.ic_redsf = PhotoImage( file='imagens/right.png' )
         self.ic_ajuda = PhotoImage( file='imagens/ic_duvida.png' )
         self.ic_pesqu = PhotoImage( file='imagens/ic_pesquisa.png' )
+        self.ic_arquivo_nao_salvo = PhotoImage(file="imagens/nao_salvo.png")
 
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
@@ -306,7 +309,8 @@ class Safira(Aba):
         self.ic_redsf = self.ic_redsf.subsample(4, 4)
         self.ic_ajuda = self.ic_ajuda.subsample(4, 4)
         self.ic_pesqu = self.ic_pesqu.subsample(4, 4)
-        ic_brkp1 = ic_brkp1.subsample(4,4)
+        self.ic_arquivo_nao_salvo = self.ic_arquivo_nao_salvo.subsample(2,2)
+        self.ic_brkp1 = self.ic_brkp1.subsample(4,4)
 
         self.fr_opc_rapidas = Frame(self.frame_tela)
 
@@ -314,7 +318,7 @@ class Safira(Aba):
         self.bt_playP = Button( self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event) )
         self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True) )
         self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event) )
-        #bt_brkp1 = Button( self.fr_opc_rapidas, image=ic_brkp1, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True, linha_linha = True) )
+        self.bt_brkp1 = Button( self.fr_opc_rapidas, image=self.ic_brkp1, relief=RAISED, command = lambda event=None: Safira.breakpointGeral(self) )
         self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "z") )
         self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "y") )
         self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED )
@@ -358,7 +362,7 @@ class Safira(Aba):
         self.bt_playP.grid(row=1, column=4)
         self.bt_breaP.grid(row=1, column=5)
         self.bt_brk_p.grid(row=1, column=6)
-        #bt_brkp1.grid(row=1, column=7)
+        self.bt_brkp1.grid(row=1, column=7)
         self.bt_desfz.grid(row=1, column=8)
         self.bt_redsf.grid(row=1, column=9)
         self.bt_ajuda.grid(row=1, column=10)
@@ -384,6 +388,7 @@ class Safira(Aba):
         t_heigth   = self.tela.winfo_screenheight()
         print("Resolução => {}x{}".format(t_width, t_heigth))
         self.tela.deiconify()
+        Aba.tela = self.tela
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 )) #t_width, t_heigth))
 
         self.tela.update()
@@ -486,6 +491,13 @@ class Safira(Aba):
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
 
+    def breakpointGeral(self):
+        self.dic_abas[self.aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
+        Safira.atualizacao_linhas(self, event = None)
+        self.tx_codfc.update()
+
+        Safira.inicializa_orquestrador(self, libera_break_point_executa = True)
+
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
         tipo_exec = 'producao'
         if linha_linha == True:
@@ -493,7 +505,6 @@ class Safira(Aba):
                 self.instancia.lst_breakpoints = [x for x in range(0, len(   self.tx_codfc.get(1.0, END).split("\n")  ))]
             else:
                 self.instancia.bool_break_point_liberado = True
-
 
         print("\n Orquestrador iniciado")
 
@@ -649,7 +660,7 @@ class Safira(Aba):
         self.campo_busca = Entry(fram_grid_variaveis, font=("", 13), bg="#222222", fg="white", highlightthickness=0, insertbackground="white")
         self.campo_busca.bind("<KeyRelease>",  lambda event: Safira.retornar_variaveis_correspondentes(self))
 
-        style = ttk.Style()
+        style = Style()
         style.theme_use("clam")
 
         style.configure("Custom.Treeview", 
@@ -660,7 +671,7 @@ class Safira(Aba):
         style.map("Custom.Treeview.Heading",
             relief=[('active','flat'),('pressed','flat')])
 
-        self.arvores_grid = ttk.Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
+        self.arvores_grid = Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
 
         vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
@@ -740,11 +751,13 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.bt_ajuda, "dicBtnMenus")
         Safira.atualiza_interface_config(self, self.bt_pesqu, "dicBtnMenus")
         Safira.atualiza_interface_config(self, self.bt_brk_p, "dicBtnMenus")
+        Safira.atualiza_interface_config(self, self.bt_brkp1, "dicBtnMenus")
         Safira.atualiza_interface_config(self, self.fr_princ, "fr_princ")
         Safira.atualiza_interface_config(self, self.tela, "tela")
         Safira.atualiza_interface_config(self, self.tx_codfc, "tx_codificacao")
         Safira.atualiza_interface_config(self, self.sb_codfc, "scrollbar_text")
         Safira.atualiza_interface_config(self, self.fr_opc_rapidas, "fr_opcoes_rapidas")
+
 
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
@@ -762,6 +775,27 @@ class Safira(Aba):
 
         if self.dic_abas != {}:
             self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
+
+            if self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.aba_focada ]["arquivoSalvo"]['texto']:
+                print("Arquivo salvo é diferente do arquivo atual",
+                len(self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto']),
+                len(self.dic_abas[ self.aba_focada ]["arquivoSalvo"]['texto']))
+
+                if self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] == False:
+                    self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] = True
+
+                    largura_original = self.dic_abas[self.aba_focada]["listaAbas"][3].winfo_reqwidth()
+
+                    # Mantendo o tamnho
+                    largura_original = self.dic_abas[self.aba_focada]["listaAbas"][3].winfo_reqwidth()
+                    self.dic_abas[self.aba_focada]["listaAbas"][3].configure(image=self.ic_arquivo_nao_salvo, width=largura_original)
+
+            else:
+                self.dic_abas[self.aba_focada]["listaAbas"][3].config(image='', width=0)
+                self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] = False
+
+            self.dic_abas[self.aba_focada]["listaAbas"][3].update()
+
         if hasattr(event, "keysym"):
             Safira.obterPosicaoDoCursor(self, event)
         
@@ -777,7 +811,7 @@ class Safira(Aba):
                 self.tx_codfc.insert('{}.{}'.format(p1,int(p2)), '\n    \n}' )
                 self.tx_codfc.mark_set("insert", "{}.{}".format( int(p1)+1, int(p2)+4 ))
 
-            self.linha_p_brk_p = posCorrente
+            self.num_linha_breakpoint = posCorrente
 
     def atualizaInterface(self, chave, novo):
         while True:
@@ -810,12 +844,17 @@ class Safira(Aba):
                 break
 
     def debug(self):
-        messagebox.showinfo("Aviso","Debug iniciado para todos os casos")
-
-        if self.bool_debug_temas: self.bool_debug_temas = False
-        else: self.bool_debug_temas = True
+        if self.bool_debug_temas:
+            messagebox.showinfo("Aviso","Debug de temas finalizado")
+            self.bool_debug_temas = False
+        else:
+            messagebox.showinfo("Aviso","Debug de temas Iniciado")
+            self.bool_debug_temas = True
 
     def add_link_recentes(self, link):
+        print("Função adicionar arquivos recentes removida")
+        return 0
+
         with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
             configArquivoJson = load(json_file)
 
@@ -934,10 +973,10 @@ class Safira(Aba):
             print("Interpretador não iniciado")
 
     def adiciona_remove_breakpoint(self, event = None):
-        if int(self.linha_p_brk_p) in self.dic_abas[self.aba_focada]["lst_breakpoints"]:
-            self.dic_abas[self.aba_focada]["lst_breakpoints"].remove(int(self.linha_p_brk_p))
+        if int(self.num_linha_breakpoint) in self.dic_abas[self.aba_focada]["lst_breakpoints"]:
+            self.dic_abas[self.aba_focada]["lst_breakpoints"].remove(int(self.num_linha_breakpoint))
         else:
-            self.dic_abas[self.aba_focada]["lst_breakpoints"].append(int(self.linha_p_brk_p))
+            self.dic_abas[self.aba_focada]["lst_breakpoints"].append(int(self.num_linha_breakpoint))
         Safira.atualizacao_linhas(self, event = None)
 
     def centraliza_tela(self):

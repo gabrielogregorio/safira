@@ -3,10 +3,15 @@ from tkinter import N
 from tkinter import NSEW
 from tkinter import Frame
 from tkinter import Button
-from tkinter import FLAT
-from tkinter import END
+from tkinter import FLAT, PhotoImage
+from tkinter import END, Tk
+
+
 
 class Aba():
+    def __init__(self):
+        self.tela = None
+        pass
 
     def atualizar_coloracao_aba(self):
         self.colorir_codigo.aba_focada = self.aba_focada
@@ -164,6 +169,7 @@ class Aba():
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
 
+
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_marcador)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
@@ -219,7 +225,7 @@ class Aba():
             else:
                 nome_arquivo = " " + nome_arquivo
 
-            fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
+            fr_marcador = Frame(fr_uma_aba, dic_cor_marcador, padx=100, bd=10)
             lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0)
             bt_fechar = Button(fr_uma_aba, dic_cor_botao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0)
 
@@ -239,8 +245,9 @@ class Aba():
             lb_aba.grid(row=1, column=1, sticky=NSEW)
             bt_fechar.grid(row=1, column=2)
 
-
             self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
             self.dic_abas[num_aba]["listaAbas"].append(fr_marcador)
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
+
+

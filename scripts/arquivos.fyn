@@ -37,28 +37,3 @@ if the file file exists == True
     delete the file file
     print "Arquivo Deletado"
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

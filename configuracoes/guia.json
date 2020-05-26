@@ -2,9 +2,10 @@
 	"nome":"",
     "foco":true,
     "lst_breakpoints":[],
-    "arquivoSalvo":{"link": "","texto": ""},
+    "arquivoSalvo":{"link": "","texto": "\n"},
     "arquivoAtual":{"texto": ""},
     "listaContextos":[],
     "contexto":0,
+    "ja_foi_marcado_nao_salvo":false,
     "listaAbas":[]
 }
