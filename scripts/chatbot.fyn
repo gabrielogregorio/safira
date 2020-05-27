@@ -9,7 +9,9 @@ enquanto 1 for igual a 1
     ponto = 1
     repita x vezes
     {
-      if pergunta == lista de respostas na posicao ponto
+
+      valor = lista de respostas na posicao ponto
+      se pergunta == valor
       {
           mostre "Resposta ", respostas na posicao ponto + 1
       }         

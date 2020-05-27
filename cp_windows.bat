@@ -14,7 +14,7 @@ echo Criando uma cópia temporária
 copy safira.py safira.pyw
 
 echo Gerando o Executável
-pyinstaller --onefile -windowed --icon="imagens\icone.ico" safira.pyw -w
+pyinstaller --onefile --icon="imagens\icone.ico" safira.pyw
 
 echo Tornando o executável acessivel
 move dist\safira.exe .

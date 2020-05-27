@@ -1,21 +1,24 @@
+# -*- coding: utf-8 -*-
+
 # Theme One Dark
 # sudo apt install python3-distutils
 # sudo apt install python3-tk
 # sudo apt-get install python3-pip
 
+import libs.funcoes as funcoes
+import webbrowser
+import tkinter.font as tkFont
+from sys import version
 
-# -*- coding: utf-8 -*-
-import sys
-print("Versao do python", sys.version)
+print("Versão do python", version)
+print("\n\n**COMBRATEC**\n\n")
 
 from libs.aba import Aba
-from libs.orquestrador import Run
+from libs.run import Run
 from libs.colorir import Colorir
 from libs.visualizacao import ContadorLinhas
 from libs.visualizacao import EditorDeCodigo
 from libs.arquivo import Arquivo
-import libs.funcoes as funcoes
-import webbrowser
 from time import time, sleep
 from threading import Thread
 from os.path import abspath
@@ -23,10 +26,7 @@ from os.path import exists
 from os import listdir
 from json import load
 from os import getcwd
-import tkinter.font as tkFont
 from tkinter.ttk import Style, Treeview
-
-
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
@@ -35,7 +35,6 @@ from tkinter import CURRENT
 from tkinter import INSERT
 from tkinter import Button
 from tkinter import RAISED
-from tkinter import NORMAL
 from tkinter import Frame
 from tkinter import Label
 from tkinter import Entry
@@ -44,12 +43,7 @@ from tkinter import Text
 from tkinter import FLAT 
 from tkinter import Menu
 from tkinter import END
-from tkinter import N
-from tkinter import S
-from tkinter import E
-from tkinter import W
 from tkinter import Tk
-
 
 __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
@@ -57,45 +51,40 @@ __project__ = 'Combratec'
 __github__ = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
 __status__ = 'Desenvolvimento'
-__date__        = '01/08/2019'
-__last_update__ = '21/05/2020'
-__version__ = '0.1'
+__date__ = '01/08/2019'
+__last_update__ = '26/05/2020'
+__version__ = '0.2'
  
 # sudo apt-get install python3-pip
 # sudo apt-get install python-tk python3-tk tk-dev
 
 class Safira(Aba):
-    def __init__(self):
 
+    def __init__(self):
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
-        self.bool_tela_em_fullscreen = False
-        self.top_janela_terminal = None
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
-        self.controle_arquivos = None
+
         self.path = abspath(getcwd())
         self.lista_terminal_destruir = []
-        self.bool_debug_temas = False
-        self.linhas_laterais = None
-        self.tx_terminal = None
-        self.instancia = None
-        self.tx_codfc = None
+        self.lst_abas = []
+
+        self.bool_tela_em_fullscreen = False
         self.num_linha_breakpoint = 0
+        self.controle_arquivos = None
         self.posAbsuluta = 0
         self.posCorrente = 0
         self.aba_focada = 0
-        self.lst_abas = []
-        self.bt_play = None
-        self.fr_abas = None
-        self.fr_princ = None
+
+        self.top_janela_terminal = None
+        self.tx_codfc = None
+
+        self.fr_opc_rapidas = None
         self.frame_tela = None
-        self.fr_opc_rapidas = None
+        self.fr_princ = None
+        self.fr_abas = None
+        self.bt_play = None
         self.tela = None
-        self.fr_splash = None    # splash
-        self.l1_splash = None    # splash
-        self.l2_splash = None    # splash
-        self.frame_splash = None # splash
-        self.fr_opc_rapidas = None
 
         self.ic_salva = None
         self.ic_playP = None
@@ -116,14 +105,24 @@ class Safira(Aba):
         self.bt_ajuda = None
         self.bt_pesqu = None
 
-        self.bt_erro_aviso_fechar = None
-        self.bt_erro_aviso_exemplo = None
+        self.bool_debug_temas = False
+        self.linhas_laterais = None
+        self.tx_terminal = None
+        self.instancia = None
+
+        self.frame_splash = None # splash
+        self.fr_splash = None    # splash
+        self.l1_splash = None    # splash
+        self.l2_splash = None    # splash
+
         self.tx_erro_aviso_texto_erro = None
         self.fr_erro_aviso_texto_erro = None
+        self.bt_erro_aviso_exemplo = None
+        self.bt_erro_aviso_fechar = None
         self.fr_erro_aviso = None
         self.valor_threads = 0
 
-        self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json")}
+        self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json") }
         self.bool_interpretador_iniciado = False
         self.lst_historico_abas_focadas = []
 
@@ -160,6 +159,11 @@ class Safira(Aba):
 
         Safira.centraliza_tela(self)
 
+    def carregarJson(self, arquivo):
+        with open(arquivo, encoding='utf8') as json_file:
+            configArquivoJson = load(json_file)
+        return configArquivoJson
+
     def inicioScreen(self):
         self.fr_splash.grid_forget()
         self.l1_splash.grid_forget()
@@ -187,7 +191,7 @@ class Safira(Aba):
         self.tela.bind('<F10>', lambda event: Safira.adiciona_remove_breakpoint(self))
         #self.tela.bind('<F9>', lambda event: Safira.inicializa_orquestrador(self))
         self.tela.bind('<Control-n>', lambda event: Safira.nova_aba(self, event))
-        self.tela.title('Combratec -  Safira ILE')
+        self.tela.title('Combratec -  Safira IDE')
         # self.tela.attributes('-fullscreen', True)
         self.frame_tela.rowconfigure(2, weight=1)
         self.frame_tela.grid_columnconfigure(1, weight=1)
@@ -223,15 +227,11 @@ class Safira(Aba):
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = lambda event=None: Safira.nova_aba(self, event))
 
-
-        with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
-            configArquivoJson = load(json_file)
-        
+        configArquivoJson = Safira.carregarJson(self, 'configuracoes/configuracoes.json')
         recentes = list( configArquivoJson["recentes"] )
 
         if recentes != []:
             self.mn_arqui.add_separator()
-
             for link in recentes:
                 funcao = lambda link = link:  Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , str(link))
                 self.mn_arqui.add_command(label="  " + str(link), command=funcao)
@@ -262,7 +262,7 @@ class Safira(Aba):
         for file in listdir('temas/'):
             if len(file) > 11:
                 if file[-10:] == 'theme.json':
-                    funcao = lambda link = file: Safira.atualizaInterface(self, 'tema', str(link))
+                    funcao = lambda link = file: Safira.atualiza_dados_interface(self, 'tema', str(link))
                     if self.arquivo_configuracoes["tema"] == file:
                         file = "*" + file
                     else:
@@ -274,7 +274,7 @@ class Safira(Aba):
         for file in listdir('temas/'):
             if len(file) > 13:
                 if file[-12:] == 'sintaxe.json':
-                    funcao = lambda link = file: Safira.atualizaInterface(self, 'sintaxe', str(link))
+                    funcao = lambda link = file: Safira.atualiza_dados_interface(self, 'sintaxe', str(link))
                     if self.arquivo_configuracoes["sintaxe"] == file:
                         file = "*" + file
                     else:
@@ -318,9 +318,9 @@ class Safira(Aba):
         self.bt_playP = Button( self.fr_opc_rapidas, image=self.ic_playP, relief=RAISED, command =lambda event=None: Safira.inicializa_orquestrador(self, event) )
         self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, relief=RAISED, command = lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True) )
         self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, relief=RAISED, command = lambda event=None: Safira.adiciona_remove_breakpoint(self, event) )
-        self.bt_brkp1 = Button( self.fr_opc_rapidas, image=self.ic_brkp1, relief=RAISED, command = lambda event=None: Safira.breakpointGeral(self) )
-        self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "z") )
-        self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "y") )
+        self.bt_brkp1 = Button( self.fr_opc_rapidas, image=self.ic_brkp1, relief=RAISED, command = lambda event=None: Safira.inicia_marca_break_point_geral(self) )
+        #self.bt_desfz = Button( self.fr_opc_rapidas, image=self.ic_desfz, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "z") )
+        #self.bt_redsf = Button( self.fr_opc_rapidas, image=self.ic_redsf, relief=RAISED, command = lambda event=None: Safira.mudar_contexto(self, "y") )
         self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda, relief=RAISED )
         self.bt_pesqu = Button( self.fr_opc_rapidas, image=self.ic_pesqu, relief=RAISED )
 
@@ -342,9 +342,7 @@ class Safira(Aba):
         self.tx_codfc.bind('<KeyRelease>', lambda event = None: Safira.ativar_coordernar_coloracao(self, event))
         self.tx_codfc.focus_force()
 
-        ### self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
         self.tx_codfc.bind('<Control-MouseWheel>', lambda event: Safira.mudar_fonte(self, "+") if int(event.delta) > 0 else Safira.mudar_fonte(self, "-"))
-
         #self.tx_codfc.bind('<Control-z>', lambda event: Safira.mudar_contexto(self, "z"))
         #self.tx_codfc.bind('<Control-y>', lambda event: Safira.mudar_contexto(self, "y"))
 
@@ -363,8 +361,8 @@ class Safira(Aba):
         self.bt_breaP.grid(row=1, column=5)
         self.bt_brk_p.grid(row=1, column=6)
         self.bt_brkp1.grid(row=1, column=7)
-        self.bt_desfz.grid(row=1, column=8)
-        self.bt_redsf.grid(row=1, column=9)
+        #self.bt_desfz.grid(row=1, column=8)
+        #self.bt_redsf.grid(row=1, column=9)
         self.bt_ajuda.grid(row=1, column=10)
         self.bt_pesqu.grid(row=1, column=11)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
@@ -380,31 +378,27 @@ class Safira(Aba):
         self.tela.withdraw() # Ocultar tkinter
 
         self.tela.update()
-        #Safira.funcoes_arquivos_configurar(None, "abrirArquivo", 'game.fyn')
 
-
-        self.tela.update()
         t_width    = self.tela.winfo_screenwidth()
         t_heigth   = self.tela.winfo_screenheight()
-        print("Resolução => {}x{}".format(t_width, t_heigth))
+
+        print("Resolução da tela => {}x{}".format(t_width, t_heigth))
         self.tela.deiconify()
+
+        # Atualiza objeto tela
         Aba.tela = self.tela
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 )) #t_width, t_heigth))
+        self.colorir_codigo.tela = self.tela # Passando instância de tela para o colorizador
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
 
         self.tela.update()
-
-        self.colorir_codigo.tela = self.tela # Passando instância de tela para o colorizador
-
-        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
         self.tela.mainloop()
-
 
     def fechar_um_widget_erro(self, objeto):
         try:
             objeto.grid_forget()
         except Exception as e:
             print("Erro ao destruir widget de erro", e)
-            
 
     def fechar_mensagem_de_erro(self, remover_marcacao = True):
         Safira.fechar_um_widget_erro(self, self.bt_erro_aviso_fechar )
@@ -416,13 +410,11 @@ class Safira(Aba):
         if remover_marcacao:
             self.tx_codfc.tag_delete("codigoErro")
 
-
     def abrir_script_mensagem_erro(self, dir_script):
         Safira.nova_aba(self)
         Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/'+dir_script)
 
     def mostrar_mensagem_de_erro(self, msg_erro, dir_script):
-
         try:
             Safira.fechar_mensagem_de_erro(self, remover_marcacao = False)
         except Exception as e:
@@ -453,6 +445,7 @@ class Safira(Aba):
         self.tx_codfc.insert("1.0", txt_contexto[0:-1])
 
     def mudar_contexto(self, acao):
+        return "Funçao desfazer redesfazer desabilitada"
 
         contexto = self.dic_abas[self.aba_focada]["contexto"] - 1
 
@@ -480,18 +473,24 @@ class Safira(Aba):
         if acao == "+": adicao = 1
         else: adicao = -1
 
-        self.dic_design["cor_menu"]["font"][1]       = int(self.dic_design["cor_menu"]["font"][1]) + adicao
+        self.dic_design["cor_menu"]["font"][1] = int(self.dic_design["cor_menu"]["font"][1]) + adicao
         self.dic_design["lb_sobDeTitulo"]["font"][1] = int(self.dic_design["lb_sobDeTitulo"]["font"][1]) + adicao
-        self.dic_design["dicBtnMenus"]["font"][1]    = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
-        self.dic_design["tx_terminal"]["font"][1]    = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
+        self.dic_design["dicBtnMenus"]["font"][1] = int(self.dic_design["dicBtnMenus"]["font"][1]) + adicao
+        self.dic_design["tx_terminal"]["font"][1] = int(self.dic_design["tx_terminal"]["font"][1]) + adicao
         self.dic_design["tx_codificacao"]["font"][1] = int(self.dic_design["tx_codificacao"]["font"][1]) + adicao
         self.dic_design["fonte_ct_linha"]["font"][1] = int(self.dic_design["fonte_ct_linha"]["font"][1]) + adicao
-        self.dic_design["fonte_ct_linha"]["width"]   = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
+        self.dic_design["fonte_ct_linha"]["width"] = int(self.dic_design["fonte_ct_linha"]["width"]) + adicao
 
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
 
-    def breakpointGeral(self):
+    def inicia_marca_break_point_geral(self):
+        """
+        Configura um breakpoint em todo os código focado
+
+        :return:
+        """
+
         self.dic_abas[self.aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
         Safira.atualizacao_linhas(self, event = None)
         self.tx_codfc.update()
@@ -499,6 +498,15 @@ class Safira(Aba):
         Safira.inicializa_orquestrador(self, libera_break_point_executa = True)
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+        """
+        Inicia o oequestrador do interpretador de comandos
+
+        :param event:
+        :param libera_break_point_executa:
+        :param linha_linha: Para debug linha a linha
+        :return:
+        """
+
         tipo_exec = 'producao'
         if linha_linha == True:
             if len( self.tx_codfc.get(1.0, END).split("\n") ) != len(self.instancia.lst_breakpoints):
@@ -517,6 +525,7 @@ class Safira(Aba):
         except:
             print("Thread Parou")
         else:
+            # interromper terminal
             if self.bool_interpretador_iniciado and libera_break_point_executa == False:
                 self.instancia.aconteceu_erro = True
                 return 0
@@ -559,11 +568,7 @@ class Safira(Aba):
 
         linhas = nova_linha
 
-        self.instancia = Run( self.tx_terminal,
-                              self.tx_codfc,
-                              False,
-                              self.dic_abas[self.aba_focada]["lst_breakpoints"],
-                              bool_ignorar_todos_breakpoints)
+        self.instancia = Run( self.tx_terminal, self.tx_codfc, False, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
 
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
@@ -607,6 +612,12 @@ class Safira(Aba):
         self.bool_interpretador_iniciado = False
 
     def destruir_instancia_terminal(self):
+        """
+        Destroe uma instância qualquer de um terminal
+
+        :return:
+        """
+
         for widget in self.lista_terminal_destruir:
             try:
                 widget.destroy()
@@ -621,6 +632,11 @@ class Safira(Aba):
                 #print("Impossivel destruir instância: ", e)
 
     def inicializador_terminal_debug(self):
+        """
+        Inicia terminal lateral no modo debug
+        :return:
+        """
+
         Safira.destruir_instancia_terminal(self)
         coluna_identificadores = ('Variavel', 'Tipo','Valor')
 
@@ -628,7 +644,6 @@ class Safira(Aba):
         frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
         frame_terminal_e_grid.grid_columnconfigure(1, weight=1)
         frame_terminal_e_grid.rowconfigure(1, weight=1)
-
 
         fr_fechar_menu = Frame(frame_terminal_e_grid, height=10, bg="#191913")
         fr_fechar_menu.grid_columnconfigure(1, weight=1)
@@ -663,13 +678,8 @@ class Safira(Aba):
         style = Style()
         style.theme_use("clam")
 
-        style.configure("Custom.Treeview", 
-            background="#222222",
-            fieldbackground="#222222",
-            foreground="white")
-
-        style.map("Custom.Treeview.Heading",
-            relief=[('active','flat'),('pressed','flat')])
+        style.configure("Custom.Treeview", background="#222222", fieldbackground="#222222", foreground="white")
+        style.map("Custom.Treeview.Heading", relief=[('active','flat'),('pressed','flat')])
 
         self.arvores_grid = Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
@@ -678,7 +688,6 @@ class Safira(Aba):
         hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
         
-
         for coluna in coluna_identificadores:
             self.arvores_grid.heading(coluna, text=coluna.title())#, selectmode="#f1a533")
             self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20 )#, selectmode="orange")
@@ -693,6 +702,11 @@ class Safira(Aba):
         self.lista_terminal_destruir = [frame_terminal_e_grid, fram_grid_variaveis, self.arvores_grid, self.tx_terminal, self.texto_busca, self.campo_busca, fr_fechar_menu, bt_fechar, vsroolb, hsroolb]
 
     def inicializador_terminal_producao(self):
+        """
+        Inicia o terminal sem o debug e na tela central
+
+        :return:
+        """
         Safira.destruir_instancia_terminal(self)
 
         self.top_janela_terminal = Toplevel(self.tela)
@@ -708,7 +722,6 @@ class Safira(Aba):
         self.top_janela_terminal.deiconify()
 
         self.tela.update()
-
         self.tx_terminal = Text(self.top_janela_terminal)
 
         try:
@@ -723,6 +736,13 @@ class Safira(Aba):
         self.lista_terminal_destruir = [self.top_janela_terminal, self.tx_terminal]
 
     def atualiza_interface_config(self, objeto, menu):
+        """
+        Atualiza de forma individual um tema, se baseando no objeto e na chave do docionário de design
+
+        :param objeto: Objeto para atualizar
+        :param menu: Chave das configurações
+        :return:
+        """
         try:
             objeto.configure(self.dic_design[menu])
             objeto.update()
@@ -731,6 +751,11 @@ class Safira(Aba):
             print("Erro Atualiza interface config = " + str(erro))
 
     def atualiza_design_interface(self):
+        """
+        Atualiza a cor das interfaces do programa
+
+        :return:
+        """
 
         Safira.atualiza_interface_config(self, self.mn_intfc_casct_sintx, "cor_menu")
         Safira.atualiza_interface_config(self, self.mn_intfc_casct_temas, "cor_menu")
@@ -758,7 +783,6 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.sb_codfc, "scrollbar_text")
         Safira.atualiza_interface_config(self, self.fr_opc_rapidas, "fr_opcoes_rapidas")
 
-
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         Safira.atualiza_interface_config(self, self.linhas_laterais, "lb_linhas")
@@ -766,7 +790,51 @@ class Safira(Aba):
         Safira.atualiza_interface_config(self, self.fr_abas, "dic_cor_abas_frame")
         Safira.atualiza_interface_config(self, self.fr_espaco, "dic_cor_abas_frame")
 
+    def atualiza_dados_interface(self, chave, novo):
+        """
+        Coordena a atualização do arquivo de coloração e coordena a atualização de cores
+
+        :param chave: chave de acesso do arquivo de configurações
+        :param novo: Novo valor para o arquivo de configurações
+        :return:
+        """
+        while True:
+            try:
+                Safira.arquivoConfiguracao(self, chave, novo)
+            except Exception as e:
+                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
+                return 0
+
+            dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+
+            try:
+                self.colorir_codigo.aba_focada = self.aba_focada
+                self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
+                #self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
+
+                Safira.atualiza_design_interface(self)
+                self.linhas_laterais.aba_focada2 = self.aba_focada
+                self.linhas_laterais.dic_abas2 = self.dic_abas
+
+            except Exception as erro:
+                print('ERRO: ', erro)
+            else:
+                print('Temas atualizados')
+
+            self.tela.update()
+            self.tx_codfc.update()
+
+            if not self.bool_debug_temas:
+                break
+    
     def ativar_coordernar_coloracao(self, event = None):
+        """
+        Recebe um evento do de uma tecla pressionado ou apenas uma chamada e realiza procedimentos de acordo com
+        cada caractere digitado
+
+        :param event: Evento do tipo clique ou None
+        :return:
+        """
         print("Aba focada =", self.aba_focada)
 
         self.colorir_codigo.aba_focada = self.aba_focada
@@ -800,6 +868,11 @@ class Safira(Aba):
             Safira.obterPosicaoDoCursor(self, event)
         
     def obterPosicaoDoCursor(self, event=None):
+        """
+        Salva a posição clicada com o mouse e análisa o caractere que foi digitado, para aplicar efeitos como {}
+        :param event: Evento
+        :return:
+        """
         try:
             numPosicao = str(self.tx_codfc.index(INSERT))
             posCorrente = int(float(self.tx_codfc.index(CURRENT)))
@@ -813,36 +886,6 @@ class Safira(Aba):
 
             self.num_linha_breakpoint = posCorrente
 
-    def atualizaInterface(self, chave, novo):
-        while True:
-            try:
-                Safira.arquivoConfiguracao(self, chave, novo)
-            except Exception as e:
-                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
-                return 0
-
-            dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
-
-            try:
-                self.colorir_codigo.aba_focada = self.aba_focada
-                self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
-                #self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
-
-                Safira.atualiza_design_interface(self)
-                self.linhas_laterais.aba_focada2 = self.aba_focada
-                self.linhas_laterais.dic_abas2 = self.dic_abas
-
-            except Exception as erro:
-                print('ERRO: ', erro)
-            else:
-                print('Temas atualizados')
-
-            self.tela.update()
-            self.tx_codfc.update()
-
-            if not self.bool_debug_temas:
-                break
-
     def debug(self):
         if self.bool_debug_temas:
             messagebox.showinfo("Aviso","Debug de temas finalizado")
@@ -855,8 +898,7 @@ class Safira(Aba):
         print("Função adicionar arquivos recentes removida")
         return 0
 
-        with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
-            configArquivoJson = load(json_file)
+        configArquivoJson = Safira.carregarJson('configuracoes/configuracoes.json')
 
         # Se o arquivo não está na lista recentes
         if link not in configArquivoJson["recentes"]:
@@ -884,7 +926,6 @@ class Safira(Aba):
 
     def funcoes_arquivos_configurar(self, event, comando, link=None):
         if self.controle_arquivos is None: return 0
-
         retorno_salvar_como = None
 
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.aba_focada, self.tx_codfc)
@@ -919,7 +960,6 @@ class Safira(Aba):
             self.instancia.capturar_tecla( event.keysym )
         except Exception as erro:
             print("Erro ao capturar a tela", erro)
-
 
     def retornar_variaveis_correspondentes(self):
         try:
