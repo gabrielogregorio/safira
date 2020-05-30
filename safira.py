@@ -187,6 +187,8 @@ class Safira(Aba):
         self.tela.bind('<Control-o>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_dialog"))
         self.tela.bind('<Control-S>', lambda event: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
         self.tela.bind('<F7>', lambda event: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
+        self.tela.bind('<F6>', lambda event: Safira.inicia_marca_break_point_geral(self))
+
 
         self.tela.bind('<F10>', lambda event: Safira.adiciona_remove_breakpoint(self))
         #self.tela.bind('<F9>', lambda event: Safira.inicializa_orquestrador(self))
@@ -239,22 +241,19 @@ class Safira(Aba):
         self.mn_arqui.add_separator()
         self.mn_arqui.add_command(label='  Salvar (Ctrl-S)', command= lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo"))
         self.mn_arqui.add_command(label='  Salvar Como (Ctrl-Shift-S)', command=lambda event=None: Safira.funcoes_arquivos_configurar(self, None, "salvar_arquivo_como_dialog"))
-        self.mn_arqui.add_separator()
-        self.mn_arqui.add_command(label='  imprimir (Ctrl-P)')
-        self.mn_arqui.add_command(label='  Exportar (Ctrl-E)')
-        self.mn_arqui.add_command(label='  Enviar por e-mail ')
 
         self.mn_exect.add_command(label='  Executar Tudo (F5)', command=lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa=False))
-        self.mn_exect.add_command(label='  Executar linha (F6)')
+        self.mn_exect.add_command(label='  Executar linha por linha (F6)', command = lambda event=None: Safira.inicia_marca_break_point_geral(self) )
         self.mn_exect.add_command(label='  Executar até breakpoint (F7)', command=lambda event=None: Safira.inicializa_orquestrador(self, libera_break_point_executa = True))
         self.mn_exect.add_command(label='  Parar execução (F9)', command = lambda event: Safira.inicializa_orquestrador(self, event))
         self.mn_exect.add_command(label='  Inserir breakpoint (F10)', command = lambda event: Safira.adiciona_remove_breakpoint(self, event))
 
         Menu(self.mn_exemp, tearoff = False)
+
         for file in listdir('scripts/'):
             if len(file) > 5:
                 if file[-3:] == 'fyn':
-                    funcao = lambda link = file:  Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link))
+                    funcao = lambda link = file:  Safira.abrir_script(self, link)
                     self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
         self.mn_intfc_casct_temas = Menu(self.mn_intfc, tearoff=False)
@@ -393,6 +392,10 @@ class Safira(Aba):
 
         self.tela.update()
         self.tela.mainloop()
+
+    def abrir_script(self, link):
+        Safira.nova_aba(self, None)
+        Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link) )
 
     def fechar_um_widget_erro(self, objeto):
         try:
