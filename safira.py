@@ -597,7 +597,7 @@ class Safira(Aba):
 
         try:
             #self.tx_terminal.config(state=NORMAL)
-            self.tx_terminal.insert(END, '\nScript finalizado em {:.5} segundos'.format(time() - inicio))
+            self.tx_terminal.insert(END, '\n\nScript finalizado em {:.5} segundos'.format(time() - inicio))
             self.tx_terminal.see("end")
 
         except Exception as erro:
