@@ -7,7 +7,6 @@ from tkinter import FLAT, PhotoImage
 from tkinter import END, Tk
 
 
-
 class Aba():
     def __init__(self):
         self.tela = None
@@ -118,7 +117,6 @@ class Aba():
         dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
         dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"] 
 
-
         self.aba_focada = num_aba
         self.dic_abas[num_aba]["foco"] = True
 
@@ -139,7 +137,6 @@ class Aba():
             dic_cor_finao = self.dic_design["dic_cor_abas_nao_focada"] 
             dic_cor_botao = self.dic_design["dic_cor_abas_nao_focada_botao"] 
             dic_cor_marcador = self.dic_design["dic_cor_marcador_nao_focado"] 
-
 
             Aba.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
             posicao_adicionar = max(self.dic_abas.keys()) + 1
@@ -168,7 +165,6 @@ class Aba():
         fr_marcador.grid(row=0, column=1,columnspan=2, sticky=NSEW)
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
-
 
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_marcador)
@@ -215,10 +211,7 @@ class Aba():
             nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
             nome_arquivo = str(nome_arquivo[-1])
 
-            if dados_aba["arquivoSalvo"]["texto"] != dados_aba["arquivoAtual"]["texto"]:
-                txt_btn = "* "
-            else:
-                txt_btn = "x "
+            txt_btn = "x "
 
             if nome_arquivo.strip() == "":
                 nome_arquivo = "            "
@@ -249,5 +242,3 @@ class Aba():
             self.dic_abas[num_aba]["listaAbas"].append(fr_marcador)
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
-
-

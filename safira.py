@@ -451,7 +451,6 @@ class Safira(Aba):
 
         if acao == "z":
             print("Desfazer")
-
             # Ainda não chegou no contexto 0
             if contexto != -1:
                 contexto -= 1
@@ -461,8 +460,7 @@ class Safira(Aba):
 
         else:
             print("Redesfazer")
-
-            # Ainda não chegou no contexto maximo
+            # Ainda não chegou no contexto 0
             if contexto + 1 < len(self.dic_abas[self.aba_focada]["listaContextos"]) and contexto < 10:
                 contexto += 1
                 contexto = self.dic_abas[self.aba_focada]["contexto"] = contexto
@@ -965,8 +963,7 @@ class Safira(Aba):
         try:
             self.dic_variaveis = self.instancia.dic_variaveis
         except Exception as e:
-            pass
-            #print("instancia não pronta ", e)
+            print("instancia não pronta ", e)
         else:
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 
@@ -1021,7 +1018,7 @@ class Safira(Aba):
 
     def centraliza_tela(self):
         self.tela.update()
-        self.tela.withdraw() # Ocultar tkinter
+        self.tela.withdraw()
         j_width  = self.tela.winfo_reqwidth()
         j_height = self.tela.winfo_reqheight()
 

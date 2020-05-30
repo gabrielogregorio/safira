@@ -1,19 +1,2 @@
-sair recebe mentira
-
-enquanto sair for igual a mentira
-{
-    mostre "Digite um número"
-    mostre "0 - Sair"
-    mostre "1 - Esquerda"
-    mostre "2 - Direita"
-    mostre "3 - Em cima"
-    mostre "4 - Em baixo"
-
-    numero recebe o numero que o usuario digitar
-
-    se numero for igual a 0
-    {
-        sair = verdade
-    }
-}
-
+tire um print da tela e salve como "Olá mundo.png"
+abra o arquivo "Olá mundo.png" no "shotwell"

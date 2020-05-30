@@ -15,6 +15,7 @@ import libs.funcoes as funcoes
 from json import load
 import threading
 import os.path
+from os import system
 import os
 
 class Run():
@@ -702,6 +703,11 @@ class Run():
             analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
             analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\s*[\w*\_]*\s*)$', linha)
             analisa044 =Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', linha)
+            analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
+            analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
+            analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)
+
+            # Análise vai de 1 a N. Não começã por zero
 
             if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela.fyn"]
             if analisa001[0]: return [Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
@@ -717,7 +723,7 @@ class Run():
             if analisa011[0]: return [Run.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
             if analisa012[0]: return [Run.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas.fyn"]
             if analisa013[0]: return [Run.funcao_rem_itns_na_lst(self, analisa013[1][2], analisa013[1][4]), self.num_linha, "listas.fyn"]
-            if analisa014[0]: return [ Run.funcao_add_itns_lst_ps(self, analisa014[1][2], analisa014[1][4], analisa014[1][6]), self.num_linha, "listas.fyn"]
+            if analisa014[0]: return [Run.funcao_add_itns_lst_ps(self, analisa014[1][2], analisa014[1][4], analisa014[1][6]), self.num_linha, "listas.fyn"]
             if analisa015[0]: return [Run.funcao_add_itns_na_lst(self, analisa015[1][2], analisa015[1][4]), self.num_linha, "listas.fyn"]
             if analisa016[0]: return [Run.funcao_add_itns_lst_in(self, analisa016[1][2], analisa016[1][4]), self.num_linha, "listas.fyn"]
             if analisa017[0]: return [Run.funcao_add_itns_na_lst(self, analisa017[1][2], analisa017[1][4]), self.num_linha, "listas.fyn"]
@@ -728,7 +734,7 @@ class Run():
             if analisa022[0]: return [Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, ""]
             if analisa023[0]: return [Run.funcao_realizar_atribu(self, analisa023[1][1], analisa023[1][3]), self.num_linha, "atribuicoes.fyn"]
             if analisa024[0]: return [Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes.fyn"]
-            if analisa025[0]: return [ Run.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, ""]
+            if analisa025[0]: return [Run.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, ""]
             if analisa026[0]: return [Run.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, ""]
             if analisa027[0]: return [Run.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, ""]
             if analisa028[0]: return [Run.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, ""]
@@ -740,6 +746,7 @@ class Run():
             if analisa032[0]: return [Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, ""]
             if analisa033[0]: return [Run.funcao_tipo_variavel(self, analisa033[1][2]), self.num_linha, ""]
             if analisa034[0]: return [Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4]), self.num_linha, ""]
+            if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa035[1][2], analisa035[1][4]), self.num_linha, ""]
             if analisa035[0]: return [Run.funcao_senao_se(self, analisa035[1][2]), self.num_linha, ""]
             if analisa036[0]: return [Run.funcao_senao(self), self.num_linha, ""]
             if analisa037[0]: return [Run.funcao_tente(self), self.num_linha, ""]
@@ -750,9 +757,16 @@ class Run():
             if analisa041[0]: return [Run.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
             if analisa044[0]: return [Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn"]
 
+            if analisa046[0]: return [Run.funcao_tirar_print_salvar_como(self, analisa046[1][2]), self.num_linha, ""]
+            if analisa047[0]: return [Run.funcao_abrir_arquivo(self, analisa047[1][2], analisa047[1][4]), self.num_linha, ""]
+
             return [[False, "{}'{}'".format(Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string',
                      'exibirNaTela'], self.num_linha, ""]
         return [[True, None, 'vazio', 'fazerNada'], self.num_linha, ""]
+
+
+
+
 
     def funcao_importe(self, biblioteca):
         #Run.log(self, 'funcao_importe:')
@@ -811,6 +825,7 @@ class Run():
         analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
         analisa034 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', possivelVariavel)
         analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
+        analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', possivelVariavel)
 
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
@@ -823,50 +838,10 @@ class Run():
         if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
         if analisa034[0]: return Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4])
         if analisa024[0]: return Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
+        if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa045[1][2], analisa045[1][4]), self.num_linha, ""]
 
         return [True, None, 'vazio']
 
-    def thread_tempo_espera(self, tempo):
-        self.esperando_tempo = True
-        sleep(tempo)
-        self.esperando_tempo = False
-
-    def funcao_a_imagem_aparecer_por(self, imagem, tempo):
-        #Run.log(self, 'funcao funcao_a_imagem_aparecer_por {}'.format(imagem))
-
-        imagem =Run.abstrair_valor_linha(self, imagem)
-        tempo =Run.abstrair_valor_linha(self, tempo)
-
-        if not imagem[0]: return imagem
-        if not tempo[0]: return tempo
-
-        if imagem[2] != "string":
-            return [False, "A imagem precisa ser um texto", 'string', ' exibirNaTela']
-
-        if tempo[2] != "float":
-            return [False, "A variável tempo precisa ser numérico", 'string', ' exibirNaTela']
-
-        self.esperando_tempo = True
-        threading.Thread(target=lambda this=self, tempo=tempo:Run.thread_tempo_espera(self, tempo))
-
-        try:
-            import pyautogui
-
-            posicoes = None
-            while posicoes is None:
-                posicoes = pyautogui.locateCenterOnScreen(imagem[1], confidence=0.8, grayscale=True)
-
-                if posicoes is not None:
-                    return [True, True, "booleano", "fazerNada"]
-
-                if not self.esperando_tempo:
-                    return [True, False, "booleano", "fazerNada"]
-
-        except Exception as e:
-            return [False, "Erro com a execução da função, erro 1 '{}'".format(e), "string", 'exibirNaTela']
-
-        else:
-            return [True, teste, "booleano", "fazerNada"]
 
     def funcao_tipo_variavel(self, variavel):
         #Run.log(self, 'funcao funcao_tipo_variavel: {}'.format(variavel))

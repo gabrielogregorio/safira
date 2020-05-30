@@ -1,13 +1,18 @@
 {
   "a_imagem_aparecer":{
     "comando":[
+      ["aguarde a imagem ","pt-br"],
       ["a imagem ","pt-br"]
     ],
     "cor":"lista"
   },
   "a_imagem_aparecer_interno":{
     "comando":[
-      [" aparecer em ","pt-br"]
+      [" aparecer em ","pt-br"],
+      [" apareceu em ","pt-br"],
+      [" carregou em ","pt-br"],
+      [" apareceu ","pt-br"],
+      [" carregou ","pt-br"]
     ],
     "cor":"lista"
   },
@@ -18,6 +23,43 @@
     ],
     "cor":"lista"
   },
+  "a_imagem_aparecer_interno_minutos":{
+    "comando":[
+      [" minutos","pt-br"],
+      [" min","pt-br"]
+    ],
+    "cor":"lista"
+  },
+  "tire_um_print_salve_como":{
+    "comando":[
+      ["tire uma captura de tela e salve como ","pt-br"],
+      ["tire um print da tela e salve como ","pt-br"],
+      ["tire um print e salve como ","pt-br"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+  "abra_um_arquivo":{
+    "comando":[
+      ["abra o arquivo ","pt-br"],
+      ["abra a imagem ","pt-br"],
+      ["abra a foto ","pt-br"]
+    ],
+    "cor":"lista"
+  },
+  
+  "abra_um_arquivo_no":{
+    "comando":[
+      [" no ","pt-br"]
+    ],
+    "cor":"lista"
+  },
+  
+
+
+
    "importe":{
     "comando":[
       ["importe a biblioteca ","pt-br"],
