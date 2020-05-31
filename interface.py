@@ -968,17 +968,3 @@ class Interface(Aba):
             file.write(str(configArquivoJson))
             file.close()
 
-    def centraliza_tela(self):
-        self.tela.update()
-        self.tela.withdraw()
-
-        j_width  = self.tela.winfo_reqwidth()
-        j_height = self.tela.winfo_reqheight()
-
-        t_width = self.tela.winfo_screenwidth()
-        t_heigth = self.tela.winfo_screenheight()
-
-        self.tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
-
-        self.tela.deiconify()
-        self.tela.update()

@@ -10,6 +10,7 @@
 from sys import version
 from tkinter import Tk
 from interface import *
+from time import sleep
 
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
@@ -36,6 +37,7 @@ class Safira():
     def main(self):
         splash = Splash(self.tela, self.dic_design)
         splash.splash_inicio()
+        sleep(3)
         splash.splash_fim()
 
         i = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)

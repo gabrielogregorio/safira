@@ -4,6 +4,9 @@ from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Button
 from tkinter import Frame
+from tkinter import W
+from tkinter import GROOVE
+from tkinter import NSEW
 from tkinter import messagebox
 import webbrowser
 
@@ -47,6 +50,17 @@ class Atualizar():
     def aviso_versao(self, baixada, texto_versao_dev, link_versao_dev):
 
         tp_atualizacao = Toplevel(self.tela)
+
+        tp_atualizacao.update()
+        tp_atualizacao.withdraw()
+
+        j_width  = tp_atualizacao.winfo_reqwidth()
+        j_height = tp_atualizacao.winfo_reqheight()
+        t_width = self.tela.winfo_screenwidth()
+        t_heigth = self.tela.winfo_screenheight()
+
+
+
         tp_atualizacao.title("Aviso de atualização")
 
         fr_atualizaca = Frame(tp_atualizacao, bg="#2e2e2e")
@@ -60,7 +74,7 @@ class Atualizar():
         if texto_versao_dev != "":
             lb_versao_dev = Label(fr_versao_dev, text=texto_versao_dev, fg="#b2ff54", bg="#2e2e2e")
             bt = Button(fr_versao_dev, text="Baixar", bg="#2e2e2e", activebackground="#2e2e2e", relief=GROOVE, fg="#b2ff54", activeforeground="#b2ff54", highlightthickness=0, bd=0)
-            bt.configure(command = webbrowser.open( link_versao_dev ) )
+            bt.configure(command = lambda link=link_versao_dev:webbrowser.open( link ) )
             bt.grid(row=1, column=2)
 
         lb_versao_dev.grid(row=1, column=1)
@@ -73,3 +87,6 @@ class Atualizar():
         lb_versao_est.grid(row=4, column=1, sticky=W)
         tp_atualizacao.resizable (False, False)
 
+        tp_atualizacao.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
+        tp_atualizacao.deiconify()
+        tp_atualizacao.update()
