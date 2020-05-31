@@ -1,10 +1,9 @@
 lista de nomes recebe "Mariana", "Alexa", "Maria"
 mostre "lista de nomes: ", nomes
 
-se 1 == 1{
+se 1 == 1 {
     mostre "olá mundo"
 }
-
 
 remova "Mariana" da lista de nomes 
 mostre "Removendo a Mariana: ", nomes
