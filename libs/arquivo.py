@@ -46,6 +46,8 @@ class Arquivo():
 
             return arq.name
 
+
+
     def salvar_arquivo(self, event=None):
         """
         Salva um arquivo que já está aberto

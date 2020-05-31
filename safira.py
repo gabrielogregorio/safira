@@ -373,12 +373,6 @@ class Safira(Aba):
                     funcao = lambda link = file:  Safira.abrir_script(self, link)
                     self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
-    def carregarJson(self, arquivo):
-
-        with open(arquivo, encoding='utf8') as json_file:
-            configArquivoJson = load(json_file)
-        return configArquivoJson
-
     def abrir_script(self, link):
         Safira.nova_aba(self, None)
         Safira.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link) )
