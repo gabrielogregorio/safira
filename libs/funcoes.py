@@ -1,4 +1,4 @@
-from json import load
+from json import load, loads
 
 def abrir_arquivo(filename):
     try:
@@ -20,6 +20,9 @@ def carregar_json(arquivo):
     with open(arquivo, encoding='utf8') as json_file:
         dic_json = load(json_file)
     return dic_json
+
+def transformar_em_json(texto):
+    return loads(texto)
 
 def atualiza_configuracoes_temas():
     dicionario_comandos = None
