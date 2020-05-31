@@ -1,2 +1,32 @@
-tire um print da tela e salve como "Olá mundo.png"
-abra o arquivo "Olá mundo.png" no "shotwell"
+
+tente
+{
+    
+}
+se der erro
+{
+    
+}
+senao der erro
+{
+    
+}
+em qualquer caso
+{
+    
+}
+
+
+tente
+try
+
+se der erro
+except
+
+senao der erro
+
+em qualquer caso
+finalmente
+finally
+
+

@@ -323,7 +323,6 @@
       ["display ","en-us"],
       ["escreva nessa linha ","pt-br"],
       ["print ","pt-br"],
-
       ["exiba nessa linha ","pt-br"]
     ],
     "cor":"exibicao"
@@ -437,7 +436,7 @@
       [" || ","all"],
       [" == ","all"],
       [" >= ","all"],
-      [" >= ","all"],
+      [" <= ","all"],
       ["true","all"],
       ["verdadeiro","pt-br"],
       ["verdadeira","pt-br"],

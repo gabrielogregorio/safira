@@ -702,8 +702,8 @@ class Run():
             analisa040 =Run.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
             analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
             analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
-            analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\s*[\w*\_]*\s*)$', linha)
-            analisa044 =Run.analisa_instrucao(self, '^\s*[a-z\_]*\s*$', linha)
+            analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
+            analisa044 =Run.analisa_instrucao(self, '^\\s*[a-z\\_]*\\s*$', linha)
             analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
             analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
             analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)
@@ -739,7 +739,6 @@ class Run():
             if analisa026[0]: return [Run.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, ""]
             if analisa027[0]: return [Run.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, ""]
             if analisa028[0]: return [Run.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, ""]
-
             if analisa042[0]: return [Run.funcao_arquivo_nao_existe(self, analisa042[1][2]), self.num_linha, ""]
             if analisa029[0]: return [Run.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, ""]
             if analisa030[0]: return [Run.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, ""]
@@ -757,17 +756,12 @@ class Run():
             if analisa003[0]: return [Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.fyn"]
             if analisa041[0]: return [Run.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
             if analisa044[0]: return [Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn"]
-
             if analisa046[0]: return [Run.funcao_tirar_print_salvar_como(self, analisa046[1][2]), self.num_linha, ""]
             if analisa047[0]: return [Run.funcao_abrir_arquivo(self, analisa047[1][2], analisa047[1][4]), self.num_linha, ""]
 
             return [[False, "{}'{}'".format(Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string',
                      'exibirNaTela'], self.num_linha, ""]
         return [[True, None, 'vazio', 'fazerNada'], self.num_linha, ""]
-
-
-
-
 
     def funcao_abrir_arquivo(self, nome_arquivo, nome_software):
 
@@ -810,9 +804,6 @@ class Run():
         self.esperando_tempo = True
         sleep(tempo)
         self.esperando_tempo = False
-
-
-
 
     def funcao_a_imagem_aparecer_por_minuto(self, imagem, tempo):
         tempo =Run.abstrair_valor_linha(self, tempo)
@@ -862,7 +853,6 @@ class Run():
             return [True, teste, "booleano", "fazerNada"]
 
     # ************************* FIM RPA ************************************#
-
 
     def funcao_importe(self, biblioteca):
         #Run.log(self, 'funcao_importe:')

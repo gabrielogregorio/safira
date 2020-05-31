@@ -1,0 +1,24 @@
+#****** Nome do comando ******#
+# Importação
+
+
+#****** Descrição do comando ******#
+# Carrega e executa um código inteiro na linguagem Feynman
+
+
+#****** Preparação do ambiente ******#
+# Criação de um arquivo, que conterá um código na linguagem Feynman
+se o arquivo "biblioteca.fyn" existe
+{
+    delete o arquivo "biblioteca.fyn"
+}
+
+crie o arquivo "biblioteca.fyn"
+adicione "mostre 123" no arquivo "biblioteca.fyn"
+
+
+#****** Uso simples comando ******#
+importe a biblioteca biblioteca
+importe biblioteca
+import  biblioteca
+

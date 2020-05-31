@@ -1,0 +1,44 @@
+#****** Nome do comando ******#
+# Condicionais
+
+#****** Descrição do comando ******#
+# Testa se uma ou mais condições são verdadeiras, a primeira que atender
+# será executada, as outras serão ignoradas, mesmo que também
+# sejam verdadeiras. Sempre será necessário testar a condição "se ",
+# depois você pode testar ou não a condição "senao se " ou a "senao "
+
+
+#****** Uso simples comando ******#
+se 1 for igual a 1
+{
+    mostre "A condição é verdadeira"
+}
+senao se 2 for diferente de 10 ou "teste" for igual a "teste"
+{
+    mostre "Essa condição é verdadeira e a de cima é falsa"
+}
+senao 
+{
+    mostre "Nenhuma das condições são verdadeiras"
+}
+
+
+#****** Variações dos comandos ******#
+# se, quando, if
+# senao se, else if
+# senao, else
+
+#****** Variações dos subcomandos ******#
+# for maior ou igual a , <= 
+# for menor ou igual a , >= 
+# for menor que , <
+# for maior que , > 
+# for diferente de , !=
+# for igual a , == 
+# true , verdadeiro , verdadeira , verdade
+# falso , mentira , false
+
+#****** Subcomandos de junção de multiplos testes ******#
+# e , and , &&
+# ou , or  , ||
+

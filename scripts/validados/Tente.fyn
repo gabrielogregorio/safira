@@ -1,0 +1,36 @@
+#****** Nome do comando ******#
+# Tente
+
+#****** Descrição do comando ******#
+# Executa um comando, se ele for executado com sucesso 
+# ou com erros ele irá executar os blocos especificos. O comando 
+# tente deve ser o primeiro e é obrigatório, os outros são opcionais
+# e podem estar em qualquer ordem
+
+
+#****** Uso simples comando ******#
+tente
+{
+    mostre "Isso não deve provocar um erro"
+    isso não faz sentido e deve provocar um erro
+}
+se der erro
+{
+    mostre "Aconteceu um erro"
+}
+senao der erro
+{
+    mostre "Não aconteceu um erro"
+}
+em qualquer caso
+{
+    mostre "Deu um erro ou não"
+}
+
+
+#****** Variações dos comandos ******#
+# tente , try
+# se der erro , except
+# senao der erro
+# em qualquer caso , finalmente , finally
+
