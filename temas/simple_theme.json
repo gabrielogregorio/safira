@@ -11,6 +11,7 @@
     "background": "#ffffff",
     "foreground": "#454545",
     "border":0,
+    "tearoff":false,
     "activebackground": "#e2e2e2",
     "activeborderwidth": 0,
     "activeforeground": "#565656"

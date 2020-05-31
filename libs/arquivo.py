@@ -83,8 +83,9 @@ class Arquivo():
         arq_dial = filedialog.Open(filetypes=arq_tips)
         arq_nome = arq_dial.show()
 
-        if arq_nome == ():
+        if arq_nome == () :
             print(' Nenhum arquivo escolhido')
+            return 0
 
         else:
             print(' Arquivo "{}" escolhido'.format(arq_nome))

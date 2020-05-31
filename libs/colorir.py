@@ -102,7 +102,7 @@ class Colorir():
 
         # não modifica o código
         if event is not None:
-            print(event.keysym)
+            print("[OK] tecla pressinada => ", event.keysym)
 
             if event.keysym in ('Down', 'Up', 'Left', 'Right'):
                 return 0
@@ -134,7 +134,6 @@ class Colorir():
 
                     # Se houve uma variação na quantidade de palavras
                     if len(self.historico_coloracao[self.aba_focada]) != len(self.palavras_analisadas[self.aba_focada]):
-                        print("delete", palavra_nao_colorida)
                         self.tx_codfc.tag_delete(palavra_nao_colorida)
 
         self.tx_codfc.update()

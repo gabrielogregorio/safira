@@ -1,9 +1,6 @@
 lista de nomes recebe "Mariana", "Alexa", "Maria"
 mostre "lista de nomes: ", nomes
 
-
-
-
 se 1 == 1{
     mostre "olá mundo"
 }
