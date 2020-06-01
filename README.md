@@ -1,5 +1,5 @@
 # AVISO
-Esse projeto está na versão beta 0.1 feynman_code, estamos trabalhando na primeira versão estável, a Safira IDE
+Esse projeto está na versão beta 0.2 Safira_ide, estamos trabalhando na primeira versão estável
 O método de coloração dos comandos está sendo otimizado e portanto, contém alguns bugs
 
 # Introdução
@@ -41,6 +41,7 @@ Esperamos que ela possa suavizar o aprendizado de linguagens como Python, Javasc
 -------------------------------------
 
 # Como fazer as coisas?
+> Ao abri a IDE, verifique na aba exemplos
 
 ## Como fazer um print
 ```

@@ -1,0 +1,20 @@
+#****** Nome do comando ******#
+# Para cada
+
+#****** Descrição do comando ******#
+# Cria uma variável ou modifica o valor de uma
+# Atribuindo dinamicamente o valor de uma variável
+# Executando ao mesmo tempo um laço
+
+#****** Uso simples comando ******#
+para cada x de 0 ate 10
+{
+    mostre "X vale -> ", x
+}
+
+#****** Variações dos comandos ******#
+# para cada , for
+
+#****** Variações dos subcomandos ******#
+# de
+# ate 

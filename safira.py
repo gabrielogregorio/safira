@@ -20,7 +20,6 @@ __description__ = 'Linguagem de programação focada em lógica'
 __version__     = '0.2'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
-__last_update__ = '31/05/2020'
 
 print("Versão do python", version)
 

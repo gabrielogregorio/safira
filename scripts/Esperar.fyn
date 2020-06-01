@@ -1,8 +1,0 @@
-espere 1 segundo
-mostre "olá?"
-
-aguarde 2 segundos
-mostre "Tudo bem?"
-
-espere 5000 ms
-mostre "Como você vai?"

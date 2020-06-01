@@ -1,17 +1,36 @@
-# Funções são rotinas de códigos que podem ser usadas com uma
-# chamada simples
+#****** Nome do comando ******#
+# Funções
 
-# *** Esse é um exemplo de função **** #
+#****** Descrição do comando ******#
+# Cria um bloco de intruções com um nome que pode ser
+# executado em qualquer parte do código
+# através da palavra atribuida
 
-# Declarando uma função que recebe 3 valores
-funcao somaNumeros recebe parametros n1, n2, n3
+#****** Uso simples comando ******#
+# Criando uma função
+funcao mostraArvore
 {
+    mostre "    *    "
+    mostre "   ***   "
+    mostre "  *****  "
+    mostre " ******* "
+    mostre "    *    "
+}
+# Chamando a função. Você pode chamar ela 
+# Quantas vezes e onde quiser
+mostraArvore
 
-   # Rotina de código que será reusada
-    mostre "Executando função"
-    mostre "Funçao sendo executada"
-    mostre nessa linha "A soma total é de ", n1 + n2 + n3
+# Você também pode criar uma função com parâmetros
+funcao calculaMedia recebe parametros nota1, nota2
+{
+    mostre "Sua média final é ", (nota1 + nota2) / 2
 }
 
-# Chamando a função com uma única linha
-somaNumeros passando parametros 20, 30, 10
+calculaMedia passando parametros 9.8, 7.5
+
+#****** Variações dos comandos ******#
+# function , funcao , def 
+
+#****** Variações dos subcomandos ******#
+# recebe parametros
+# passando parametros , parametros , passando parametro , passando , parametro 

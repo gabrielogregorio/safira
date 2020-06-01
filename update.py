@@ -59,8 +59,6 @@ class Atualizar():
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-
-
         tp_atualizacao.title("Aviso de atualização")
 
         fr_atualizaca = Frame(tp_atualizacao, bg="#2e2e2e")

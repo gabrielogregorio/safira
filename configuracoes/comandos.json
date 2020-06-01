@@ -39,8 +39,6 @@
     "cor":"lista"
   },
 
-
-
   "abra_um_arquivo":{
     "comando":[
       ["abra o arquivo ","pt-br"],
@@ -57,9 +55,6 @@
     "cor":"lista"
   },
   
-
-
-
    "importe":{
     "comando":[
       ["importe a biblioteca ","pt-br"],
@@ -381,6 +376,7 @@
     "comando":[
       ["limpar a tela","pt-br"],
       ["limpatela","pt-br"],
+      ["limpe a tela","pt-br"],
       ["clear","en-us"]
     ],
     "cor":"tempo"

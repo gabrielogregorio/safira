@@ -1,0 +1,18 @@
+#****** Nome do comando ******#
+# Repita
+
+#****** Descrição do comando ******#
+# Espera durante um intervalo definido
+      
+#****** Uso simples comando ******#
+repita 10 vezes
+{
+    mostre "Repetindo todo o bloco 10 vezes"
+}
+
+#****** Variações dos comandos ******#
+# repita , repitir 
+
+#****** Variações dos subcomandos ******#
+# vezes , vez 
+

@@ -1,16 +1,18 @@
-x = 10
+# ALEATORIO
+#****** Nome do comando ******#
+# Aleatório
 
-# Entrada de dados
-mostre nessa linha "Digite um número maior que ", x, " :"
-sorteado = um numero aleatorio entre x e o numero que o usuario digitar 
+#****** Descrição do comando ******#
+# Sorteia um número aleatório
+# Os valores podem ser variáveis
+# ou resultados de outros comandos
 
-mostre "O numéro sorteador foi ", sorteado
+#****** Uso simples comando ******#
+numeroSorteado = um numero aleatorio entre 10 e 20
+mostre numeroSorteado
 
-sorteado1 = um numero aleatorio entre 10 e 20 + 2
-sorteado2 = um numero aleatorio entre -10 e 13
-sorteado3 = numero aleatorio entre 20 e 40
-sorteado4 recebe um numero aleatorio entre x e x / 2 + sorteado3
+#****** Variações dos comandos ******#
+# um numero aleatorio entre , numero aleatorio entre
 
-mostre "Os números sorteados foram"
-mostre sorteado1, ", ",sorteado2, ", ", sorteado3, ", ",sorteado4
-
+#****** Variações dos subcomandos ******#
+# e

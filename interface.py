@@ -622,7 +622,7 @@ class Interface(Aba):
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 ))
         self.colorir_codigo.tela = self.tela
 
-        Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
+        #Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
 
         self.tela.deiconify()
         self.tela.update()

@@ -703,7 +703,7 @@ class Run():
             analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
             analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
             analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
-            analisa044 =Run.analisa_instrucao(self, '^\\s*[a-z\\_]*\\s*$', linha)
+            analisa044 =Run.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
             analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
             analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
             analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)

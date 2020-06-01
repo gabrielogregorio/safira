@@ -1,0 +1,20 @@
+# DIGITADO
+#****** Nome do comando ******#
+# Digitado
+
+#****** Descrição do comando ******#
+# Recebe um valor que o usuario digitar
+
+#****** Uso simples comando ******#
+mostre nessa linha "Digite seu nome: "
+nome = o que o usuario digitar
+
+mostre nessa linha "Digite sua idade: "
+idade = o numero que o usuario digitar
+
+mostre nome, " sua idade é ", idade
+
+#****** Variações dos comandos ******#
+# o numero que o usuario digitar , numero que o usuario digitar , o numero que for digitado, numero que for digitado , numero digitado
+
+# o que o usuario digitar , que o usuario digitar , o que for digitado , que for digitado , digitado , input , entrada

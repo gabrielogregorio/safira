@@ -1,7 +1,0 @@
-mostre "Pressione enter"
-
-# Espera o usuário apertar enter
-i = o que o usuario digitar
-limpatela
-
-mostre "Tela limpa"

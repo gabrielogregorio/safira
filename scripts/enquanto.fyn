@@ -1,18 +1,27 @@
-x = 0
 
-while x < 10
+#****** Nome do comando ******#
+# Comando Enquanto
+
+#****** Descrição do comando ******#
+# Repete um bloco de intrução enquanto uma condição for verdadeira
+# Aviso, OS TESTES REALIZADOS obedecem as mesmas opções
+# do comando de condicionais. Consulte esse comando
+# para ter mais informações
+
+#****** Uso simples comando ******#
+opcao = 1
+enquanto opcao for diferente de 0
 {
-    mostre nessa linha x, " : "
-    x = x + 1 
+    limpar a tela
+    mostre "Escolha uma opção"
+    mostre "0 - Sair "
+    mostre "1 - Consulta Saldo "
+    mostre "2 - Consulta CPF "
+    mostre "3 - Consulta Identidade "
 
-    y = 0
-    while y < 10
-    {
-        se y == 2
-        {
-        }
-        mostre nessa linha y, " > "
-        y = y + 1
-    }
-    mostre ""
+    opcao recebe o numero que o usuario digitar
 }
+
+#****** Variações dos comandos ******#
+# enquanto , while 
+

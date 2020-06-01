@@ -1,0 +1,15 @@
+#****** Nome do comando ******#
+# Exiba na mesma linha
+
+#****** Descrição do comando ******#
+# Exibe alguma coisa na tela, sem ir para a linha de baixo
+# Você pode separar valores pela virgula, exemplo:
+# mostre "Digite sua idade ", variavelNome
+
+#****** Uso simples comando ******#
+nome = "Kellen"
+mostre nessa linha "Bom dia "
+mostre nessa linha nome
+
+#****** Variações dos comandos ******#
+# imprima nessa linha , display , escreva nessa linha , print , exiba nessa linha 

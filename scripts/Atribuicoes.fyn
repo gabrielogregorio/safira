@@ -1,9 +1,0 @@
-n = 10
-nome = "aleatório"
-mostre n, " ", nome
-
-num1 = numero aleatorio entre 1 e 10
-mostre nessa linha "digite um número"
-num2 recebe o numero que for digitado
-
-mostre "Numero aleatório = ", num1, " a soma é = ", num1 + num2
