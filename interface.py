@@ -7,7 +7,6 @@ from libs.arquivo import Arquivo
 from time import time, sleep
 from threading import Thread
 from os.path import abspath
-from os.path import exists
 from os import listdir
 from json import load
 from os import getcwd
