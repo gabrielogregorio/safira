@@ -178,11 +178,17 @@ class Interface(Aba):
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 
             palavra = self.campo_busca.get()
-            print("Dicionário => ", dic_variaveis)
 
             for k, v in dic_variaveis.items():
                 if palavra in k:
-                    self.arvores_grid.insert('', END, values=(k, v[1], v[0]))
+                    caracteres = ""
+                    for x in v[0]:
+                        if caracteres == "":
+                            caracteres += '"' + str(x[0]) + '"'
+                        else:
+                            caracteres += ', "' + str(x[0]) + '"'
+
+                    self.arvores_grid.insert('', END, values=(k, v[1], caracteres))
 
     def adiciona_remove_breakpoint(self, event = None):
         if int(self.num_linha_breakpoint) in self.dic_abas[self.aba_focada]["lst_breakpoints"]:
@@ -197,6 +203,7 @@ class Interface(Aba):
             print("Programa não está em execução, bkp ignorados", e)
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+        print("Inicializador do orquestrador iniciado")
 
         """
         Inicia o oequestrador do interpretador de comandos
@@ -241,7 +248,7 @@ class Interface(Aba):
             except:
                 print("Iniciando programa até breakpoint")
             else:
-                print("Liberando programa.")
+                print("Liberando programa, breakpoint liberado!")
                 return 0
         else:
             bool_ignorar_todos_breakpoints = True
@@ -278,18 +285,19 @@ class Interface(Aba):
 
         while self.instancia.numero_threads != 0 or not self.instancia.boo_orquestrador_iniciado:
             self.tela.update()
+            sleep(0.1)
 
             # Modo debug
             if tipo_exec == 'debug':
                 try:
-                    self.tela.update()
-                    self.tx_codfc.update()
 
                     self.linha_analise = int(self.instancia.num_linha)
                     if self.linha_analise != valor_antigo:
                         valor_antigo = self.linha_analise
                         self.linhas_laterais.linha_analise = self.linha_analise
                         self.linhas_laterais.desenhar_linhas()
+                        self.tela.update()
+                        self.tx_codfc.update()
                 except Exception as erro:
                     print("Erro update", erro)
 
@@ -312,6 +320,7 @@ class Interface(Aba):
         
         self.linhas_laterais.linha_analise = 0
         self.linhas_laterais.desenhar_linhas()
+        self.tela.update()
 
         self.bt_playP.configure(image=self.ic_playP)
         self.bool_interpretador_iniciado = False
@@ -697,6 +706,7 @@ class Interface(Aba):
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         self.linhas_laterais.desenhar_linhas()
+        self.tela.update()
 
     def modoFullScreen(self, event=None):
         if self.bool_tela_em_fullscreen: self.bool_tela_em_fullscreen = False
@@ -779,6 +789,7 @@ class Interface(Aba):
 
         self.tx_codfc.configure(self.dic_design["tx_codificacao"])
         self.linhas_laterais.desenhar_linhas()
+        self.tela.update()
 
 
     def atualiza_interface_config(self, objeto, menu):

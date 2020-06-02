@@ -1,0 +1,159 @@
+
+#******************************* Nome dos comandos *********************#
+# Manipulação e criação de listas
+
+#******************************* Descrição dos comandos ****************#
+# Diversos Comandos para manipular listas
+
+#******************************* Uso simples dos comandos **************#
+
+
+
+
+
+# Cria uma lista chamada numeros com 10 posições de texto
+lista de numeros com 100 posicoes
+
+# Declarar uma lista
+lista de nomes recebe "gabriel", "Maria", "Julia"
+mostre nomes
+
+# Adiciona um valor em uma posição
+lista de nomes na posicao 2 recebe "gregório"
+mostre nomes
+
+
+
+
+lista de opcoes recebe "opção1", "opção3"
+mostre opcoes
+
+# Adicionar um valor em uma posição especifica
+# não sobrescrevendo o valor
+adicione "opção2" na posicao 2 da lista de opcoes
+mostre opcoes
+
+# Adicionar algo no final de uma lista
+adicione "opção4" no final da lista de opcoes
+mostre opcoes
+
+# Adicionar algo na lista de nomes
+adicione "opção5" na lista de opcoes
+mostre opcoes
+
+# Adicionar algo no inicio da lista
+adicione "opção0" no inicio da lista de opcoes
+
+# Remover um item da lista
+remova "opção5" da lista de opcoes
+
+
+
+
+# Retornar um valor em uma posição
+mostre lista de opcoes na posicao 1
+
+# Verifica se tem um valor na lista
+se tiver "opção2" na lista de opcoes
+{
+    remova "opção2" da lista de opcoes
+    mostre opcoes
+}
+
+# Retorna a quantidade de itens de uma lista
+mostre " A lista de nomes tem ", o tamanho da lista de nomes, " posições"
+mostre " A lista de opcoes tem ", o tamanho da lista de opcoes, " posições"
+mostre " A lista de números tem ", o tamanho da lista de numeros, " posições"
+
+
+#****************************** Variações dos comandos *****************#
+# --------------------------- Cria uma lista x posições ----------------#
+# * lista de
+# * lista
+
+# * com
+
+# * posicoes
+
+
+# ------------------------- Declarar uma lista--------------------------#
+# * lista de
+# * lista
+
+# * recebe
+# * com
+
+
+# ---------------- Sobrescrever um valor em uma posição da lista -------#
+# * lista de
+# * lista
+
+# * na posicao
+
+# * recebe
+# * com
+
+
+# --------------- Adicionar um valor em uma posição especifica ---------#
+# * adicione
+
+# * na posicao
+
+# * da lista de
+
+
+# ------------------ Adicionar algo no final de uma lista --------------#
+# * adicione
+
+# * no final da lista de
+# * no final a lista de
+# * no final na lista
+
+
+# ------------------ Adicionar algo no inicio da lista -----------------#
+# * adicione
+
+# * no inicio da lista de
+# * no inicio a lista de
+# * no inicio na lista
+
+
+# ------------------- Adicionar algo na lista de nomes -----------------#
+# * adicione
+
+# * na lista de
+# * da lista de
+# * a lista de
+# * na lista
+# * a lista
+
+
+# --------------------- Remover um item da lista -----------------------#
+# * remova
+
+# * da lista de
+# * da lista
+
+
+# ----------------- Retornar um valor em uma posição -------------------#
+# * lista de
+# * lista
+
+# * na posicao
+
+
+# ---------------- Verifica se tem um valor na lista -------------------#
+# * tiver
+
+# * na lista de
+# * na lista
+# * em
+
+
+# ----------- Retorna a quantidade de itens de uma lista ---------------#
+# * o tamanho da lista de
+# * o tamanho da lista
+# * tamanho da lista de
+# * tamanho da lista
+
+

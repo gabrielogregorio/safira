@@ -193,6 +193,6 @@
   },
   "fonte_ct_linha":{
     "font":["Consolas Regular", 13],
-    "width":10
+    "width":2000
   }
 }

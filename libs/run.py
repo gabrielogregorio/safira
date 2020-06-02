@@ -59,6 +59,7 @@ class Run():
         self.bool_break_point_liberado = False
         while not self.bool_break_point_liberado and not self.bool_ignorar_todos_breakpoints:
             self.tx_codficac.update()
+            sleep(0.1)
 
     def realiza_coloracao_erro(self, palavra, valor1, valor2, cor='red', linhaErro = None):
         """
@@ -684,7 +685,6 @@ class Run():
             analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             analisa025 =Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
             analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
-            analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
             analisa027 =Run.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
             analisa028 =Run.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
             analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
@@ -707,7 +707,6 @@ class Run():
             analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
             analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
             analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)
-
             # Análise vai de 1 a N. Não começã por zero
 
             if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela.fyn"]
@@ -906,6 +905,7 @@ class Run():
         analisa021 =Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
         analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
         analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
+        analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
         analisa029 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
         analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
         analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
@@ -913,12 +913,16 @@ class Run():
         analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
         analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', possivelVariavel)
 
+
+
+
         if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
         if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
         if analisa020[0]: return Run.funcao_ovalor_digitado(self, analisa020[1][1])
         if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4])
         if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
         if analisa026[0]: return Run.funcao_ler_tecla_por_s(self, analisa026[1][2])
+        if analisa042[0]: return Run.funcao_arquivo_nao_existe(self, analisa042[1][2])
         if analisa029[0]: return Run.funcao_arquivo_existe(self, analisa029[1][2])
         if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
         if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])

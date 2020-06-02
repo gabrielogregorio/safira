@@ -39,9 +39,9 @@ class ContadorLinhas(Canvas):
                 num_linha = "  " + num_linha + " * "
                 cor_padrao = "#ff7a95"
             else:
-                num_linha = "  " + num_linha + "   "
+                num_linha = " " + num_linha + "  "
 
-            self.create_text(2, y,anchor="nw", text=num_linha, font=self.dic_design["fonte_ct_linha"]["font"],  fill=cor_padrao)
+            self.create_text(2, y, anchor="nw", text=num_linha, font=self.dic_design["fonte_ct_linha"]["font"],  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
 
 class EditorDeCodigo(Text):
