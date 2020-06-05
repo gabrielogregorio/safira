@@ -18,6 +18,7 @@ import os.path
 from os import system
 import os
 
+from time import time
 
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
@@ -45,6 +46,8 @@ class Run():
         self.esperando_tempo = False
         self.dir_script_aju_erro = ""
 
+        self.inicio = time()
+
         with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
             self.mensagens = load(json_file)
 
@@ -59,7 +62,7 @@ class Run():
         self.bool_break_point_liberado = False
         while not self.bool_break_point_liberado and not self.bool_ignorar_todos_breakpoints:
             self.tx_codficac.update()
-            sleep(0.1)
+            sleep(0.05)
 
     def realiza_coloracao_erro(self, palavra, valor1, valor2, cor='red', linhaErro = None):
         """
@@ -123,7 +126,11 @@ class Run():
 
     def log(self, msg_log):
         if self.bool_logs:
-            print(msg_log)
+            agora = time() - self.inicio
+            
+            self.inicio = agora
+
+            print('[{:.2f}] => '.format(agora), r'{}'.format(msg_log))
 
     def orquestrador_interpretador(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
@@ -568,14 +575,9 @@ class Run():
 
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-
-
-
-
-
-
-
     def analisa_instrucao(self, comando, texto):
+        #Run.log(self, '<analisa_instrucao>: {}{}'.format( comando,texto))
+
         re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
         re_groups = findall(re_comandos, comando)
         if re_groups == None:
@@ -622,7 +624,7 @@ class Run():
         return [True, [saida.strip() for saida in lista_itens]]
 
     def interpretador(self, linha):
-        #Run.log(self, 'Interpretador iniciado')
+        Run.log(self, ':<interpretador>: {}'.format(linha))
 
         try:
             self.tx_terminal.get(1.0, 1.1)
@@ -672,12 +674,9 @@ class Run():
             analisa011 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
             analisa012 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             analisa013 =Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
-
             analisa014 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
             analisa015 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
             analisa016 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
-
-
             analisa017 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
             analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
             analisa019 =Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
@@ -766,7 +765,7 @@ class Run():
         return [[True, None, 'vazio', 'fazerNada'], self.num_linha, ""]
 
     def comandos_uso_geral(self, possivelVariavel):
-        #Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))
+        Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
 
@@ -802,6 +801,7 @@ class Run():
 
 
     def funcao_abrir_arquivo(self, nome_arquivo, nome_software):
+        Run.log(self, '<funcao_abrir_arquivo>: {}{}'.format( nome_arquivo,nome_software))
 
         nome_arquivo =Run.abstrair_valor_linha(self, nome_arquivo)
         nome_software =Run.abstrair_valor_linha(self, nome_software)
@@ -821,6 +821,8 @@ class Run():
 
 
     def funcao_tirar_print_salvar_como(self, nome_imagem):
+        Run.log(self, '<funcao_tirar_print_salvar_como>: {}'.format( nome_imagem))
+
         nome_imagem =Run.abstrair_valor_linha(self, nome_imagem)
 
         if not nome_imagem[0]: return nome_imagem
@@ -839,11 +841,15 @@ class Run():
             return [True, True, "booleano", "fazerNada"]
 
     def thread_tempo_espera(self, tempo):
+        Run.log(self, '<thread_tempo_espera>: {}'.format( tempo))
+
         self.esperando_tempo = True
         sleep(tempo)
         self.esperando_tempo = False
 
     def funcao_a_imagem_aparecer_por_minuto(self, imagem, tempo):
+        Run.log(self, '<funcao_a_imagem_aparecer_por_minuto>: {}{}'.format( imagem, tempo))
+
         tempo =Run.abstrair_valor_linha(self, tempo)
         if not tempo[0]: return tempo
 
@@ -854,7 +860,7 @@ class Run():
         return funcao_a_imagem_aparecer_por(self, imagem, tempo[1]*60)
 
     def funcao_a_imagem_aparecer_por(self, imagem, tempo):
-        #Run.log(self, 'funcao funcao_a_imagem_aparecer_por {}'.format(imagem))
+        Run.log(self, 'funcao funcao_a_imagem_aparecer_por {}{}'.format(imagem, tempo))
 
         imagem =Run.abstrair_valor_linha(self, imagem)
         tempo =Run.abstrair_valor_linha(self, tempo)
@@ -893,7 +899,7 @@ class Run():
     # ************************* FIM RPA ************************************#
 
     def funcao_importe(self, biblioteca):
-        #Run.log(self, 'funcao_importe:')
+        Run.log(self, '<funcao_importe>: {}'.format(biblioteca))
 
         # Tenta abrir o texto da biblioteca
         teste = funcoes.abrir_arquivo(str(biblioteca.lower()) + str(".fyn"))
@@ -909,31 +915,32 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_tente(self):
-        #Run.log(self, 'funcao_tente:')
+        Run.log(self, 'funcao_tente:')
         return [True, True, 'string', 'tenteAlgo']
 
     def funcao_se_der_erro(self):
-        #Run.log(self, 'funcao_se_der_erro:')
+        Run.log(self, 'funcao_se_der_erro:')
         return [True, True, 'string', 'seDerErro']
 
     def funcao_senao_der_erro(self):
-        #Run.log(self, 'funcao_senao_der_erro:')
+        Run.log(self, 'funcao_senao_der_erro:')
         return [True, True, 'string', 'seNaoErro']
 
     def funcao_em_qualquer_caso(self):
-        #Run.log(self, 'funcao_em_qualquer_caso:')
+        Run.log(self, 'funcao_em_qualquer_caso:')
         return [True, True, 'string', 'emQualquerCaso']
 
     def funcao_senao(self):
-        #Run.log(self, 'funcao_senao:')
+        Run.log(self, 'funcao_senao:')
         return [True, True, 'string', 'declararSenao']
 
     def funcao_senao_se(self, condicao):
-        #Run.log(self, 'funcao_senao_se: {}'.format(condicao))
+        Run.log(self, 'funcao_senao_se: {}'.format(condicao))
         resultado =Run.funcao_testar_condicao(self, condicao)
         return [resultado[0], resultado[1], resultado[2], 'declararSenaoSe']
 
     def verifica_se_tem(self, linha, a_buscar):
+        Run.log(self, '<verifica_se_tem>: {}{}'.format(linha, a_buscar))
         analisar = True
         lista = []
 
@@ -953,7 +960,7 @@ class Run():
         return lista
 
     def funcao_tipo_variavel(self, variavel):
-        #Run.log(self, 'funcao funcao_tipo_variavel: {}'.format(variavel))
+        Run.log(self, '<funcao_tipo_variavel>: {}'.format(variavel))
 
         resultado =Run.abstrair_valor_linha(self, variavel)
         if not resultado[0]: return resultado
@@ -963,6 +970,7 @@ class Run():
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
     def funcao_ler_arquivo(self, nome_arquivo):
+        Run.log(self, '<funcao_ler_arquivo>: {}'.format(nome_arquivo))
 
         teste_valor_arquivo =Run.abstrair_valor_linha(self, nome_arquivo)
         if teste_valor_arquivo[0] == False: return teste_valor_arquivo
@@ -988,6 +996,7 @@ class Run():
         return [False, "O arquivo \"{}\" não existe!".format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_sobrescrever_arquivo(self, texto, nome_arquivo):
+        Run.log(self, '<funcao_sobrescrever_arquivo>: {}.{}'.format(texto, nome_arquivo))
 
         teste_valor_arquivo =Run.abstrair_valor_linha(self, nome_arquivo)
         teste_valor_texto =Run.abstrair_valor_linha(self, texto)
@@ -1016,6 +1025,7 @@ class Run():
         return [False, "O arquivo \"{}\" não existe!".format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_adicionar_arquivo(self, texto, nome_arquivo):
+        Run.log(self, '<funcao_adicionar_arquivo>: {}.{}'.format(texto, nome_arquivo))
 
         teste_valor_arquivo =Run.abstrair_valor_linha(self, nome_arquivo)
         teste_valor_texto =Run.abstrair_valor_linha(self, texto)
@@ -1045,6 +1055,7 @@ class Run():
         return [False, "O arquivo \"{}\" não existe!".format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_arquivo_existe(self, nome_arquivo):
+        Run.log(self, '<funcao_arquivo_existe>: {}'.format(nome_arquivo))
         if nome_arquivo == "":
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
@@ -1060,6 +1071,8 @@ class Run():
             return [True, False, "booleano", "fazerNada"]
 
     def funcao_arquivo_nao_existe(self, nome_arquivo):
+        Run.log(self, '<funcao_arquivo_nao_existe>: {}'.format(nome_arquivo))
+
         if nome_arquivo == "":
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
@@ -1074,6 +1087,8 @@ class Run():
             return [True, True, "booleano", "fazerNada"]
 
     def funcao_excluir_arquivo(self, nome_arquivo):
+        Run.log(self, '<funcao_excluir_arquivo>: {}'.format(nome_arquivo))
+
         if nome_arquivo == "":
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
@@ -1096,6 +1111,7 @@ class Run():
             return [False, "O arquivo \"{}\" não existe".format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_criar_arquivo(self, nome_arquivo):
+        Run.log(self, '<funcao_criar_arquivo>: {}'.format(nome_arquivo))
         if nome_arquivo == "":
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
@@ -1116,20 +1132,23 @@ class Run():
         return [True, "", "vazio", "fazerNada"]
 
     def funcao_ler_tecla_por_s(self, tempo):
-        #Run.log(self, 'ler tecla por: ' + tempo)
+        Run.log(self, 'ler tecla por: ' + tempo)
         self.valor_da_tecla_pressionada = ""
 
-        sleep(0.1)
+        sleep(0.05)
         tecla = self.valor_tecla_pressionada
         self.valor_tecla_pressionada = ""
 
         return [True, str(tecla).lower(), "string", "fazerNada"]
 
     def msg_variavel_numerica(self, msg, variavel):
+        Run.log(self, '<msg_variavel_numerica>: {},{}'.format(msg, variavel))
+
         if msg == 'naoNumerico':
             return [False, "A variável '{}' não é numérica!".format(variavel), 'string', 'exibirNaTela']
 
     def funcao_loop_para_cada_(self, variavel, inicio, fim):
+        Run.log(self, '<funcao_loop_para_cada_>: {}, {}, {}'.format(variavel, inicio, fim))
 
         teste_exist =Run.obter_valor_variavel(self, variavel)
         teste_valorI =Run.abstrair_valor_linha(self, inicio)
@@ -1160,7 +1179,7 @@ class Run():
         return Run.incremente_decremente(self, valor, variavel, 'decremente')
 
     def incremente_decremente(self, valor, variavel, acao):
-        #Run.log(self, 'incremente_decremente:' + valor+str(variavel))
+        Run.log(self, '<incremente_decremente>: {}, {}, {}'.format(valor, variavel, acao))
 
         teste_exist =Run.obter_valor_variavel(self, variavel)
         teste_valor =Run.abstrair_valor_linha(self, valor)
@@ -1186,6 +1205,7 @@ class Run():
         return self.mensagens[chave][self.idioma]
 
     def funcao_add_lst_na_posi(self, variavelLista, posicao, valor):
+        Run.log(self, '<funcao_add_lst_na_posi>: {}, {}, {}'.format(variavelLista, posicao, valor))
 
         if variavelLista == '' or posicao == '' or valor == '':  # Veio sem dados
             return [False,Run.msg_idioma(self, 'add_lst_posicao_separador'), 'string', ' exibirNaTela']
@@ -1219,7 +1239,7 @@ class Run():
         return [True, True, 'booleano', 'fazerNada']
 
     def obter_valor_lista(self, linha):
-        #Run.log(self, 'obter_valor_lista ' + str(linha))
+        Run.log(self, '<obter_valor_lista>: {}'.format(linha))
 
         teste =Run.obter_valor_variavel(self, linha)
 
@@ -1231,7 +1251,7 @@ class Run():
         return teste
 
     def funcao_obter_valor_lst(self, variavel, posicao):
-        #Run.log(self, 'Função Valor de lista: "{}", subcomandos: "{}"'.format(variavel, posicao))
+        Run.log(self, '<funcao_obter_valor_lst>: {}, {}'.format(variavel, posicao))
 
         if variavel == '' or posicao == '':
             return [False,Run.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
@@ -1260,7 +1280,7 @@ class Run():
         return [True, resultado[posicao - 1][0], resultado[posicao - 1][1], 'exibirNaTela']
 
     def funcao_tiver_valor_lst(self, valor, variavel):
-        #Run.log(self, "Função tiver na lista: " + valor)
+        Run.log(self, '<funcao_tiver_valor_lst>: {}, {}'.format(valor, variavel))
 
         if variavel == '' or valor == '':
             return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
@@ -1284,7 +1304,7 @@ class Run():
         return [True, False, 'booleano', 'fazerNada']
 
     def funcao_otamanho_da_lst(self, linha):
-        #Run.log(self, 'Função obter o tamanho da lista: "{}"'.format(linha))
+        Run.log(self, '<funcao_otamanho_da_lst>: {}'.format(linha))
 
         linha = linha.strip()
 
@@ -1299,7 +1319,7 @@ class Run():
                     'exibirNaTela']
 
     def funcao_rem_itns_na_lst(self, valor, variavel):
-        #Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
+        Run.log(self, '<funcao_rem_itns_na_lst>: {}, {}'.format(valor, variavel))
 
         if variavel == '' or valor == '':
             return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
@@ -1346,7 +1366,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_add_itns_lst_in(self, valor, variavel):
-        #Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
+        Run.log(self, '<funcao_add_itns_lst_in>: {}, {}'.format(valor, variavel))
 
         if variavel == '' or valor == '':
             return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
@@ -1365,7 +1385,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_add_itns_lst_ps(self, valor, posicao, variavel):
-        #Run.log(self, 'Função remover itens da lista: "{}"'.format(valor))
+        Run.log(self, '<funcao_add_itns_lst_ps>: {},{}, {}'.format(valor, posicao, variavel))
 
         if variavel == '' or valor == '':
             return [False,
@@ -1395,7 +1415,7 @@ class Run():
         return [True, True, 'booleano', 'fazerNada']
 
     def funcao_dec_lst_posicoe(self, variavel, posicoes):
-        #Run.log(self, 'Função declarar listas posicoes: "{}"'.format(variavel))
+        Run.log(self, '<funcao_dec_lst_posicoe>: {},{}'.format(variavel, posicoes))
 
         teste =Run.analisa_padrao_variavel(self, variavel)
         resultado =Run.abstrair_valor_linha(self, posicoes)
@@ -1415,7 +1435,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_declarar_listas(self, variavel, itens):
-        #Run.log(self, 'Função declarar listas: "{}"'.format(variavel + str(itens) ))
+        Run.log(self, '<funcao_declarar_listas>: {},{}'.format(variavel, itens))
 
         if itens == '' or variavel == '':
             return [False,Run.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
@@ -1464,7 +1484,7 @@ class Run():
             return [True, None, 'vazio', 'fazerNada']
 
     def funcao_ovalor_digitado(self, linha):
-        #Run.log(self, 'Função digitado: "{}"'.format(linha))
+        Run.log(self, '<funcao_ovalor_digitado>: {}'.format(linha))
 
         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
@@ -1503,7 +1523,7 @@ class Run():
             return [True, digitado, 'string', 'fazerNada']
 
     def funcao_limpar_o_termin(self):
-        #Run.log(self, 'Limpatela ativado!')
+        Run.log(self, '<funcao_limpar_o_termin>:')
         try:
             # self.tx_terminal.config(state=NORMAL)
             self.tx_terminal.delete(1.0, END)
@@ -1514,7 +1534,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_repetir_n_vezes(self, linha):
-        #Run.log(self, "funcao repetir: '{}'".format(linha))
+        Run.log(self, "<funcao_repetir_n_vezes>: '{}'".format(linha))
 
         linha = linha.replace('vezes', '')
         linha = linha.replace('vez', '')
@@ -1536,7 +1556,7 @@ class Run():
             return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
     def funcao_numer_aleatorio(self, num1, num2):
-        #Run.log(self,  'funcao aleatório: {}'.format(num1))
+        Run.log(self,  '<funcao_numer_aleatorio>: {}, {}'.format(num1, num2))
 
         num1 =Run.abstrair_valor_linha(self, num1)
         num2 =Run.abstrair_valor_linha(self, num2)
@@ -1566,7 +1586,7 @@ class Run():
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
     def funcao_declarar_funcao(self, nomeDaFuncao, parametros=None):
-        #Run.log(self, 'funcao_declarar_funcao. Nome: {}, Parametros: {}'.format(nomeDaFuncao, parametros))
+        Run.log(self, '<funcao_declarar_funcao>: {}, {}'.format(nomeDaFuncao, parametros))
 
         # Se o nome da função não está no padrão
         teste =Run.analisa_padrao_variavel(self, nomeDaFuncao)
@@ -1620,6 +1640,7 @@ class Run():
         return [True, True, 'booleano', 'declararFuncao', funcao_em_analise]
 
     def funcao_executar_funcao(self, nomeDaFuncao, parametros=None):
+        Run.log(self, '<funcao_executar_funcao>: {}, {}'.format(nomeDaFuncao, parametros))
         try:
             self.dic_funcoes[nomeDaFuncao]
         except Exception as erro:
@@ -1634,8 +1655,7 @@ class Run():
                 return [False,Run.msg_idioma(self, "funcao_nao_passou_parametros").format(nomeDaFuncao, len(
                     self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
-            resultadoOrquestrador =Run.orquestrador_interpretador(self,
-                                                                             self.dic_funcoes[nomeDaFuncao]['bloco'])
+            resultadoOrquestrador =Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
             if not resultadoOrquestrador[0]:
                 return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
@@ -1702,7 +1722,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_exibir_outra_ln(self, linha):
-        #Run.log(self, 'funcao exibição: {}'.format(linha))
+        Run.log(self, '<funcao_exibir_outra_ln>: {}'.format(linha))
 
         resultado =Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
@@ -1711,7 +1731,7 @@ class Run():
         return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
 
     def funcao_exibir_mesma_ln(self, linha):
-        #Run.log(self, 'Função exibir nessa linha ativada'.format(linha))
+        Run.log(self, '<funcao_exibir_mesma_ln>: {}'.format(linha))
 
         resultado =Run.abstrair_valor_linha(self, linha)
         if not resultado[0]: return resultado
@@ -1720,7 +1740,7 @@ class Run():
         return [resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela']
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
-        #Run.log(self, 'Função tempo: {}'.format(tempo))
+        Run.log(self, '<funcao_esperar_n_tempo>: {}, {}'.format(tempo, tipo_espera))
 
         resultado =Run.abstrair_valor_linha(self, tempo)
         if not resultado[0]: return resultado
@@ -1734,7 +1754,7 @@ class Run():
         return [True, None, 'vazio', 'fazerNada']
 
     def obter_valor_string(self, string):
-        #Run.log(self, 'Obter valor de uma string: {}'.format(string))
+        Run.log(self, '<obter_valor_string>: {}'.format(string))
 
         valorFinal = ''
         anterior = 0
@@ -1757,7 +1777,7 @@ class Run():
         return [True, valorFinal, 'string']
 
     def localiza_transforma_variavel(self, linha):
-        #Run.log(self, 'localiza_transforma_variavel: {}'.format(linha))
+        Run.log(self, '<localiza_transforma_variavel>: {}'.format(linha))
 
         anterior = 0
         normalizacao = 0
@@ -1789,7 +1809,7 @@ class Run():
         return [True, linha, 'string']
 
     def fazer_contas(self, linha):
-        #Run.log(self, 'Fazer contas: {}'.format(linha))
+        Run.log(self, '<fazer_contas>: {}'.format(linha))
 
         # Do maior para o menor
         linha = linha.replace(' multiplicado por ', ' * ')
@@ -1853,7 +1873,8 @@ class Run():
             return [True, resutadoFinal, 'float']
 
     def obter_valor_variavel(self, variavel):
-        #Run.log(self, 'Obter valor da variável: "{}"'.format(variavel))
+        Run.log(self, '<obter_valor_variavel>: {}'.format(variavel))
+
         variavel = variavel.strip()
         variavel = variavel.replace('\n', '')
 
@@ -1866,7 +1887,7 @@ class Run():
             return [True, self.dic_variaveis[variavel][0], self.dic_variaveis[variavel][1], 'fazerNada']
 
     def abstrair_valor_linha(self, possivelVariavel):
-        #Run.log(self, "Abstrar valor de uma linha inteira com possivelVariavel: '{}'".format(possivelVariavel))
+        Run.log(self, '<abstrair_valor_linha>: {}'.format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
 
@@ -1947,6 +1968,8 @@ class Run():
             return [True, float(possivelVariavel), 'float']
 
     def analisa_padrao_variavel(self, variavel):
+        Run.log(self, '<analisa_padrao_variavel>: {}'.format(variavel))
+        
         variavel = str(variavel)
 
         variavel = variavel.replace("_", "")  # _ também é valido
@@ -1960,7 +1983,7 @@ class Run():
         return [True, True, 'booleano']
 
     def funcao_realizar_atribu(self, variavel, valor):
-        #Run.log(self, 'Função atribuição: {}'.format(variavel + str(valor)))
+        Run.log(self, '<funcao_realizar_atribu>: {}, {}'.format(variavel, valor))
 
         if variavel == '' or valor == '':
             return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'string', 'exibirNaTela']
@@ -1982,12 +2005,13 @@ class Run():
         return [resultado[0], resultado[1], resultado[2], 'fazerNada']
 
     def funcao_loops_enquantox(self, linha):
-        #Run.log(self, 'Função loops enquanto: {}'.format(linha))
+        Run.log(self, '<funcao_loops_enquantox>: {}, {}'.format(linha))
+
         resultado =Run.funcao_testar_condicao(self, linha)
         return [resultado[0], resultado[1], resultado[2], 'declararLoop']
 
     def tiver_valor_lista(self, linha):
-        #Run.log(self, 'Função condicional: {}'.format(linha))
+        Run.log(self, '<tiver_valor_lista>: {}'.format(linha))
 
         linha = linha.strip()
 
@@ -2000,7 +2024,7 @@ class Run():
 
 
     def funcao_testar_condicao(self, linha):
-        #Run.log(self, 'Função condicional: {}'.format(linha))
+        Run.log(self, '<funcao_testar_condicao>: {}'.format(linha))
 
         # Padronização geral
         linha = linha.replace(' for maior ou igual a ', ' >= ')

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+
+    <style>
+        .collapsible {
+            background-color: #777;
+            color:white;
+            cursor: pointer;
+            padding: 18px;
+            width: 100%;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .active, .collapsible:hover {
+            background-color: #555;
+        }
+
+        .collapsible:after {
+            content: '+';
+            color: white;
+            font-weight: bold;
+            float: right;
+            margin-left: 5px;
+        }
+
+        .active:after {
+            content: "-";
+        }
+
+        .content {
+            padding: 0 18px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+    <h2>Comandos da Safira</h2>
+
+    <button class="collapsible">Exibir algo na tela</button>
+    <div class="content">
+<p>
+<span style="color:#8cbd7d">#****** Nome do comando ******#</span>
+<span style="color:#8cbd7d"># Exiba na tela</span>
+
+<span style="color:#8cbd7d">#****** Descrição do comando ******#</span>
+# Exibe alguma coisa na tela, indo para a linha de baixo
+# Você pode separar valores pela virgula, exemplo:
+# mostre "Digite sua idade ", variavelNome
+
+<span style="color:#8cbd7d">#****** Uso simples comando ******#</span>
+nome = "Kellen"
+mostre "Bom dia "
+mostre nome
+
+<span style="color:#8cbd7d">#****** Variações dos comandos ******#</span>
+<span style="color:#8cbd7d"># mostre , imprima , escreva , exiba , printf , println </span>
+    </p>
+        
+        
+
+    </div>
+
+    <button class="collapsible">Criar uma variável</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+
+    <button class="collapsible">Testar uma condição</button>
+    <div class="content">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+    </div>
+
+    <script>
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+
+            coll[i].addEventListener("click", function() {
+
+                this.classList.toggle("active");
+
+                var content = this.nextElementSibling;
+                
+                if (content.style.maxHeight){
+                    content.style.maxHeight = null;
+                } else {
+                    content.style.maxHeight = content.scrollHeight + "px";
+                } 
+
+            });
+
+        }
+    </script>
+
+</body>
+</html>

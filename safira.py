@@ -12,6 +12,7 @@ from tkinter import Tk
 from interface import *
 from time import sleep
 
+
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
 __project__     = 'Combratec'
@@ -20,8 +21,6 @@ __description__ = 'Linguagem de programação focada em lógica'
 __version__     = '0.2'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
-
-print("Versão do python", version)
 
 class Safira():
     def __init__(self):
@@ -35,11 +34,12 @@ class Safira():
 
     def main(self):
         splash = Splash(self.tela, self.dic_design)
+        i = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
+
         splash.splash_inicio()
         sleep(3)
-        splash.splash_fim()
 
-        i = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
+        splash.splash_fim()
         i.inicioScreen()
 
 if __name__ == "__main__":

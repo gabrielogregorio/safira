@@ -1,90 +1,107 @@
-from libs.funcoes import transformar_em_json, carregar_json
+from libs.funcoes import carregar_json
 import requests
 from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Button
-from tkinter import Frame
+from tkinter import Frame, Message
 from tkinter import W
-from tkinter import GROOVE
+from tkinter import Tk
+from tkinter import FLAT
 from tkinter import NSEW
-from tkinter import messagebox
 import webbrowser
+from threading import Thread
+from tkinter import messagebox
 
+texto_geral = """\nA versão {} esta disponível para download. Avalie a posiblidade de fazer a atualização. A atualizações de software pode trazer novos comandos e recursos de segurança, porém, também pode trazer novos bugs.\n"""
 
 class Atualizar():
     def __init__(self, tela):
         self.tela = tela
+        self.tp_atualizacao = None
 
     def obter_versao_baixada(self):
         return carregar_json("versao/update.json")
 
     def obter_versao_mais_recente_dev(self):
-        resposta = requests.get("https://raw.githubusercontent.com/Combratec/feynman_code/master/versao/update.json")
-        return transformar_em_json(resposta.text)
+        resposta = requests.get("https://safiraide.blogspot.com/p/downloads.html")
+        texto = str(resposta.text)
 
-    def verificar_versao(self):
+        lista = texto.split('id="idenficador_de_versao">')
 
-        baixada = Atualizar.obter_versao_baixada(self)
-        recente = Atualizar.obter_versao_mais_recente_dev(self)
+        temporario = lista[1][0:70] # 0.2</span>
+        temporario2 = temporario.split("</span>") # 0.2
 
-        texto_versao_dev = ""
-        link_versao_dev = ""
+        return float( temporario2[0].strip() )
 
-        if (recente["versao"] > baixada["versao"]):
-            texto_versao_dev = "  A versão {} de desenvolvimento está disponível ".format(recente["versao"])
-            link_versao_dev = recente["url"]
+    def verificar_versao(self, primeira_vez = False):
+        try:
 
-        elif recente["versao"] != baixada["versao"]:
-            "  Por favor, Você está usando uma versão do futuro, que bizarro, não sei oque fazer!"
+            baixada = Atualizar.obter_versao_baixada(self)
+            recente = Atualizar.obter_versao_mais_recente_dev(self)
 
-        else:
-            "  Você está usando a versão de desenvolvimento mais atualizada"
+            if float(baixada["versao"]) < recente:
+                Atualizar.aviso_versao(self, baixada, recente)
+            else:
+                if not primeira_vez:
+                    messagebox.showinfo("Atualizado!", "Você está usando a versão mais recente da Safira")
 
-        if texto_versao_dev != "":
-            Atualizar.aviso_versao(self, baixada, texto_versao_dev, link_versao_dev)
-        else:
-            messagebox.showinfo("Aviso", "Você está usando a versão mais recente disponível")
+        except Exception as erro:
+            if not primeira_vez:
+                print(erro)
+                messagebox.showinfo("ops", "Aconteceu um erro ao buscar a atualização, você precisa estar conectado a internet para buscar a atualizações")
 
         return True
 
-    def aviso_versao(self, baixada, texto_versao_dev, link_versao_dev):
+    def abrir_site(self):
+        t = Thread(target=lambda event=None: webbrowser.open( "https://safiraide.blogspot.com/p/downloads.html" ))
+        t.start()
 
-        tp_atualizacao = Toplevel(self.tela)
+        self.tp_atualizacao.destroy()
 
-        tp_atualizacao.update()
-        tp_atualizacao.withdraw()
+    def aviso_versao(self, baixada, recente):
 
-        j_width  = tp_atualizacao.winfo_reqwidth()
-        j_height = tp_atualizacao.winfo_reqheight()
+        self.tp_atualizacao = Toplevel(self.tela , bd=20, bg="#fafafa", highlightcolor="#fafafa")
+        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
+
+        self.tp_atualizacao.update()
+        self.tp_atualizacao.withdraw()
+        self.tp_atualizacao.wm_attributes('-type', 'splash')
+
+        j_width  = self.tp_atualizacao.winfo_reqwidth()
+        j_height = self.tp_atualizacao.winfo_reqheight()
+
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        tp_atualizacao.title("Aviso de atualização")
+        self.tp_atualizacao.title("Aviso de atualização")
 
-        fr_atualizaca = Frame(tp_atualizacao, bg="#2e2e2e")
+        fr_atualizaca = Frame(self.tp_atualizacao, bg="#fafafa")
+
+        lb_versao_dev = Label(fr_atualizaca, text="Nova versão disponível!".format(recente), fg="#744aff", bg="#fafafa", font=("", 20))
+        lb_versao_tex = Message(fr_atualizaca, anchor="nw", fg="#343434", bg="#fafafa", font=("", 11),  text='{}'.format(texto_geral).format(recente))
+
+        fr_botoes = Frame(fr_atualizaca, bg="#fafafa")
+
+        bt_cancela = Button(fr_botoes, text="Não quero", bg="#c7c7c7", activebackground="#c7c7c7", relief=FLAT, fg="#323232", activeforeground="#323232")
+        bt_atualiza = Button(fr_botoes, text="Atualizar Agora", bg="#21d9c6", activebackground="#21d9c6", relief=FLAT, fg="#094d46", activeforeground="#094d46", )
+
+        bt_atualiza.configure(command = lambda event=None: Atualizar.abrir_site(self) )
+        bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
+
         fr_atualizaca.grid_columnconfigure(1, weight=1)
-
-        lb_para_qual = Label(fr_atualizaca, fg="white", text= "  Verifique quais sãos as versões disponíveis para atualização\n\n", bg="#2e2e2e")
-        lb_versao_usando = Label(fr_atualizaca, text="  Minha versão {} de {}\n".format(baixada["versao"], baixada["tipo"] ), bg="#2e2e2e", fg="white")
-        fr_versao_dev = Frame(fr_atualizaca, bg="#2e2e2e")
-
-
-        if texto_versao_dev != "":
-            lb_versao_dev = Label(fr_versao_dev, text=texto_versao_dev, fg="#b2ff54", bg="#2e2e2e")
-            bt = Button(fr_versao_dev, text="Baixar", bg="#2e2e2e", activebackground="#2e2e2e", relief=GROOVE, fg="#b2ff54", activeforeground="#b2ff54", highlightthickness=0, bd=0)
-            bt.configure(command = lambda link=link_versao_dev:webbrowser.open( link ) )
-            bt.grid(row=1, column=2)
-
-        lb_versao_dev.grid(row=1, column=1)
-        lb_versao_est = Label(fr_atualizaca, text="\n  Nenhuma versão estável existente\n", bg="#2e2e2e", fg="white")
+        fr_botoes.grid_columnconfigure(1, weight=1)
+        fr_botoes.grid_columnconfigure(2, weight=1)
 
         fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
-        lb_para_qual.grid(row=1, column=1, sticky=NSEW)
-        lb_versao_usando.grid(row=2, column=1, sticky=W)
-        fr_versao_dev.grid(row=3, column=1, sticky=W)
-        lb_versao_est.grid(row=4, column=1, sticky=W)
-        tp_atualizacao.resizable (False, False)
+        lb_versao_dev.grid(row=1, column=1 )
+        lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
 
-        tp_atualizacao.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
-        tp_atualizacao.deiconify()
-        tp_atualizacao.update()
+        fr_botoes.grid(row=3, column=1, sticky=NSEW)
+
+        bt_cancela.grid(row=1, column=1)
+        bt_atualiza.grid(row=1, column=2)
+        # self.tp_atualizacao.resizable (False, False)
+
+        self.tp_atualizacao.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
+        self.tp_atualizacao.deiconify()
+        self.tp_atualizacao.update()

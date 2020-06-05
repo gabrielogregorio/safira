@@ -34,6 +34,7 @@ import tkinter.font as tkFont
 
 class Splash():
     def __init__(self, tela, dic_design):
+
         self.frame_splash = None
         self.fr_splash = None
         self.l1_splash = None
@@ -42,6 +43,7 @@ class Splash():
         self.dic_design = dic_design
 
     def splash_inicio(self):
+
         self.frame_splash = Frame(self.tela)
 
         self.frame_splash.configure(background = self.dic_design["cor_intro"]["background"])
@@ -103,7 +105,6 @@ class Interface(Aba):
         self.lista_breakponts = []
         self.lst_abas = []
 
-
         self.bool_tela_em_fullscreen = False
         self.bool_debug_temas = False
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json") }
@@ -147,12 +148,14 @@ class Interface(Aba):
         self.fr_abas = None
         self.bt_play = None
 
+        self.bool_logs = False
+
         self.atualizar = Atualizar(self.tela)
 
     def ativar_logs(self, event=None):
         try:
-            if self.instancia.bool_logs: self.instancia.bool_logs = False
-            else: self.instancia.bool_logs = True
+            if self.bool_logs: self.bool_logs = False
+            else: self.bool_logs = True
         except:
             print("Interpretador não iniciado")
 
@@ -169,6 +172,7 @@ class Interface(Aba):
             print("Erro ao capturar a tela", erro)
 
     def retornar_variaveis_correspondentes(self):
+
         try:
             dic_variaveis = self.instancia.dic_variaveis
         except Exception as e:
@@ -190,6 +194,7 @@ class Interface(Aba):
                     self.arvores_grid.insert('', END, values=(k, v[1], caracteres))
 
     def adiciona_remove_breakpoint(self, event = None):
+
         if int(self.num_linha_breakpoint) in self.dic_abas[self.aba_focada]["lst_breakpoints"]:
             self.dic_abas[self.aba_focada]["lst_breakpoints"].remove(int(self.num_linha_breakpoint))
         else:
@@ -202,6 +207,7 @@ class Interface(Aba):
             print("Programa não está em execução, bkp ignorados", e)
 
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+
         print("Inicializador do orquestrador iniciado")
 
         """
@@ -215,7 +221,6 @@ class Interface(Aba):
 
         self.bt_playP.configure(image=self.ic_PStop)
         self.bt_playP.update()
-
 
         tipo_exec = 'producao'
         if linha_linha == True:
@@ -275,7 +280,7 @@ class Interface(Aba):
 
         linhas = nova_linha
         print("Instância criada")
-        self.instancia = Run( self.tx_terminal, self.tx_codfc, False, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
+        self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
 
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
@@ -284,7 +289,9 @@ class Interface(Aba):
 
         while self.instancia.numero_threads != 0 or not self.instancia.boo_orquestrador_iniciado:
             self.tela.update()
-            sleep(0.1)
+            self.tx_codfc.update()
+            self.tx_terminal.update()
+            sleep(0.2)
 
             # Modo debug
             if tipo_exec == 'debug':
@@ -325,6 +332,7 @@ class Interface(Aba):
         self.bool_interpretador_iniciado = False
 
     def destruir_instancia_terminal(self):
+
         """
         Destroe uma instância qualquer de um terminal
 
@@ -336,15 +344,14 @@ class Interface(Aba):
                 widget.destroy()
             except Exception as e:
                 pass
-                print("[OK] Instância não destruida: ", e)
 
             try:
                 widget.grid_forget()
             except Exception as e:
                 pass
-                print("[OK] Instância não destruida: ", e)
 
     def inicializador_terminal_debug(self):
+
         """
         Inicia terminal lateral no modo debug
         :return:
@@ -417,6 +424,7 @@ class Interface(Aba):
         self.lista_terminal_destruir = [frame_terminal_e_grid, fram_grid_variaveis, self.arvores_grid, self.tx_terminal, self.texto_busca, self.campo_busca, fr_fechar_menu, bt_fechar, vsroolb, hsroolb]
 
     def inicializador_terminal_producao(self):
+
         """
         Inicia o terminal sem o debug e na tela central
 
@@ -451,6 +459,7 @@ class Interface(Aba):
 
 
     def inicioScreen(self):
+
         self.tela.overrideredirect(0) # Traz barra de titulo
         self.tela.withdraw() # Ocultar tkinter
 
@@ -468,11 +477,11 @@ class Interface(Aba):
         comando_executar_progr = lambda event = None: Interface.inicializa_orquestrador(self)
         comando_abrir_nova_aba = lambda event = None: Interface.nova_aba(self, event)
         comando_ativar_fullscr = lambda event: Interface.modoFullScreen(self, event)
-        comando_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/index.html") 
+        comando_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/comando.html") 
         comando_abrir_comunida = lambda: webbrowser.open("https://safiraide.blogspot.com/p/comunidade.html") 
         comando_abrirl_projeto = lambda: webbrowser.open("http://safiraide.blogspot.com/") 
-        comando_abrirlnk_ajuda = lambda: webbrowser.open(self.path + "/tutorial/index.html") 
-        comando_ativaropc_logs = lambda: self.intepretador.ativar_logs(self)
+        comando_abrirlnk_ajuda = lambda: webbrowser.open(self.path + "/tutorial/comando.html") 
+        comando_ativaropc_logs = lambda: Interface.ativar_logs(self)
         comando_ativarop_debug = lambda: Interface.debug(self)
 
         self.tela.bind('<Control-n>', comando_abrir_nova_aba)
@@ -537,7 +546,7 @@ class Interface(Aba):
         self.mn_sobre.add_command( label='  Verificar Atualização', command= lambda event=None: self.atualizar.verificar_versao())
 
         self.mn_devel.add_command( label='  Logs', command= comando_ativaropc_logs )
-        self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
+        #self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
 
         self.ic_salva = PhotoImage( file='imagens/ic_salvar.png' )
         self.ic_playP = PhotoImage( file='imagens/ic_play.png' )
@@ -634,9 +643,13 @@ class Interface(Aba):
 
         self.tela.deiconify()
         self.tela.update()
+
+        self.atualizar.verificar_versao(primeira_vez=True)
+
         self.tela.mainloop()
 
     def cascate_temas_temas(self):
+
         self.mn_intfc_casct_temas = Menu(self.mn_intfc, tearoff=False)
         self.mn_intfc.add_cascade(label='  Temas', menu=self.mn_intfc_casct_temas)
 
@@ -650,6 +663,7 @@ class Interface(Aba):
                 self.mn_intfc_casct_temas.add_command(label=file, command=funcao)
 
     def cascate_temas_sintaxe(self):
+
         self.mn_intfc_casct_sintx = Menu(self.mn_intfc, tearoff=False)
         self.mn_intfc.add_cascade(label='  sintaxe', menu=self.mn_intfc_casct_sintx)
 
@@ -663,6 +677,7 @@ class Interface(Aba):
                 self.mn_intfc_casct_sintx.add_command(label=file, command=funcao)
 
     def cascate_scripts(self):
+
         for file in listdir('scripts/'):
             if len(file) > 5:
                 if file[-3:] == 'fyn':
@@ -670,20 +685,24 @@ class Interface(Aba):
                     self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
     def abrir_script(self, link):
+
         Interface.nova_aba(self, None)
         Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link) )
 
     def fechar_um_widget_erro(self, objeto):
+
         try:
             objeto.grid_forget()
         except Exception as e:
             print("Erro ao destruir widget de erro", e)
 
     def abrir_script_mensagem_erro(self, dir_script):
+
         Interface.nova_aba(self)
         Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/'+dir_script)
 
     def fechar_mensagem_de_erro(self, remover_marcacao = True):
+
         Interface.fechar_um_widget_erro(self, self.bt_erro_aviso_fechar )
         Interface.fechar_um_widget_erro(self, self.bt_erro_aviso_exemplo )
         Interface.fechar_um_widget_erro(self, self.tx_erro_aviso_texto_erro )
@@ -694,6 +713,7 @@ class Interface(Aba):
             self.tx_codfc.tag_delete("codigoErro")
 
     def debug(self):
+
         if self.bool_debug_temas:
             messagebox.showinfo("Aviso","Debug de temas finalizado")
             self.bool_debug_temas = False
@@ -702,12 +722,14 @@ class Interface(Aba):
             self.bool_debug_temas = True
 
     def atualizacao_linhas(self, event):
+
         self.linhas_laterais.aba_focada2 = self.aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         self.linhas_laterais.desenhar_linhas()
         self.tela.update()
 
     def modoFullScreen(self, event=None):
+
         if self.bool_tela_em_fullscreen: self.bool_tela_em_fullscreen = False
         else: self.bool_tela_em_fullscreen = True
 
@@ -716,10 +738,12 @@ class Interface(Aba):
 
     # **************** AÇÕES DIRETAS DO TEXT **********************#
     def copiar_selecao(self):
+
         print('copy')
         self.tx_codfc.event_generate("<<Copy>>")
 
     def colar_selecao(self):
+
         try:
             self.tx_codfc.delete("sel.first", "sel.last")
         except:
@@ -728,12 +752,14 @@ class Interface(Aba):
         return "break"
 
     def selecione_tudo(self):
+
         self.tx_codfc.tag_add(SEL, "1.0", END)
         self.tx_codfc.mark_set(INSERT, "1.0")
         self.tx_codfc.see(INSERT)
         return 'break'
 
     def inicia_marca_break_point_geral(self):
+
         """
         Configura um breakpoint em todo os código focado
 
@@ -747,6 +773,7 @@ class Interface(Aba):
         Interface.inicializa_orquestrador(self, libera_break_point_executa = True)
 
     def mostrar_mensagem_de_erro(self, msg_erro, dir_script):
+
         try:
             Interface.fechar_mensagem_de_erro(self, remover_marcacao = False)
         except Exception as e:
@@ -773,6 +800,7 @@ class Interface(Aba):
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
 
     def mudar_fonte(self, acao):
+
         print("mmudar a fonte")
 
         if acao == "+": adicao = 1
@@ -792,6 +820,7 @@ class Interface(Aba):
 
 
     def atualiza_interface_config(self, objeto, menu):
+
         """
         Atualiza de forma individual um tema, se baseando no objeto e na chave do docionário de design
 
@@ -807,6 +836,7 @@ class Interface(Aba):
             print("Erro Atualiza interface config = " + str(erro))
 
     def atualiza_design_interface(self):
+
         """
         Atualiza a cor das interfaces do programa
 
@@ -848,6 +878,7 @@ class Interface(Aba):
         Interface.atualiza_interface_config(self, self.fr_espaco, "dic_cor_abas_frame")
 
     def atualiza_dados_interface(self, chave, novo):
+
         """
         Coordena a atualização do arquivo de coloração e coordena a atualização de cores
 
@@ -885,6 +916,7 @@ class Interface(Aba):
                 break
     
     def ativar_coordernar_coloracao(self, event = None):
+
         """
         Recebe um evento do de uma tecla pressionado ou apenas uma chamada e realiza procedimentos de acordo com
         cada caractere digitado
@@ -892,7 +924,6 @@ class Interface(Aba):
         :param event: Evento do tipo clique ou None
         :return:
         """
-        print("[OK] Aba focada =>", self.aba_focada)
 
         self.colorir_codigo.aba_focada = self.aba_focada
         self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
@@ -902,7 +933,6 @@ class Interface(Aba):
             self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
 
             if self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.aba_focada ]["arquivoSalvo"]['texto']:
-                print("[OK] Arquivo salvo é diferente do arquivo atual")
 
                 if self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] == False:
                     self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] = True
@@ -923,6 +953,7 @@ class Interface(Aba):
             Interface.obterPosicaoDoCursor(self, event)
         
     def obterPosicaoDoCursor(self, event=None):
+
         """
         Salva a posição clicada com o mouse e análisa o caractere que foi digitado, para aplicar efeitos como {}
         :param event: Evento
@@ -944,6 +975,7 @@ class Interface(Aba):
             self.num_linha_breakpoint = posCorrente
 
     def funcoes_arquivos_configurar(self, event, comando, link=None):
+
         if self.controle_arquivos is None: return 0
         retorno_salvar_como = None
 
@@ -961,6 +993,7 @@ class Interface(Aba):
             Interface.atualiza_texto_tela(self, self.aba_focada)
 
     def arquivoConfiguracao(self, chave, novo = None):
+
         if novo is None:
             with open('configuracoes/configuracoes.json', encoding='utf8') as json_file:
                 configArquivoJson = load(json_file)
@@ -977,4 +1010,3 @@ class Interface(Aba):
             file = open('configuracoes/configuracoes.json','w')
             file.write(str(configArquivoJson))
             file.close()
-
