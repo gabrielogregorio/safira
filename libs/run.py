@@ -21,7 +21,7 @@ import os
 from time import time
 
 class Run():
-    def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints):
+    def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base):
 
         self.aconteceu_erro = False
         self.erro_alertado = False
@@ -45,6 +45,7 @@ class Run():
         self.txt_ultima_msg_erro = ""
         self.esperando_tempo = False
         self.dir_script_aju_erro = ""
+        self.diretorio_base = diretorio_base
 
         self.inicio = time()
 
@@ -901,8 +902,10 @@ class Run():
     def funcao_importe(self, biblioteca):
         Run.log(self, '<funcao_importe>: {}'.format(biblioteca))
 
+        biblioteca = Run.formatar_arquivo(self, biblioteca.lower()) + str(".fyn")
+
         # Tenta abrir o texto da biblioteca
-        teste = funcoes.abrir_arquivo(str(biblioteca.lower()) + str(".fyn"))
+        teste = funcoes.abrir_arquivo(  biblioteca  )
         if teste[0] == None:
             return [False, "Erro ao abrir a biblioteca {}, erro {}".format(biblioteca, teste[1]), "string", "fazerNada"]
 
@@ -969,6 +972,20 @@ class Run():
         # Retornando o tipo
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
+
+    def formatar_arquivo(self, nome_arquivo):
+        # Apenas o nome do arquivo
+        if "/" not in nome_arquivo:
+            nome_arquivo = self.diretorio_base + nome_arquivo
+
+        else:
+            # Não começa com /
+            if nome_arquivo[0] != '/':
+
+                # apontar diretório de acordo com o script
+                nome_arquivo = self.diretorio_base + nome_arquivo
+        return nome_arquivo
+
     def funcao_ler_arquivo(self, nome_arquivo):
         Run.log(self, '<funcao_ler_arquivo>: {}'.format(nome_arquivo))
 
@@ -979,6 +996,7 @@ class Run():
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
         nome_arquivo = str(teste_valor_arquivo[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
 
         if os.path.exists(nome_arquivo):
             try:
@@ -1008,6 +1026,7 @@ class Run():
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
         nome_arquivo = str(teste_valor_arquivo[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
         texto = str(teste_valor_texto[1])
         texto = texto.replace("\\n", "\n")
 
@@ -1037,6 +1056,8 @@ class Run():
             return [False, "Você precisa informar o nome de um arquivo", 'string', ' exibirNaTela']
 
         nome_arquivo = str(teste_valor_arquivo[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
+
         texto = str(teste_valor_texto[1])
         texto = texto.replace("\\n", "\n")
 
@@ -1063,6 +1084,7 @@ class Run():
         if teste_valor[0] == False: return teste_valor
 
         nome_arquivo = str(teste_valor[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
 
         if os.path.exists(nome_arquivo):
             return [True, True, "booleano", "fazerNada"]
@@ -1080,6 +1102,7 @@ class Run():
         if teste_valor[0] == False: return teste_valor
 
         nome_arquivo = str(teste_valor[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
 
         if os.path.exists(nome_arquivo):
             return [True, False, "booleano", "fazerNada"]
@@ -1096,6 +1119,7 @@ class Run():
         if teste_valor[0] == False: return teste_valor
 
         nome_arquivo = str(teste_valor[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
 
         if os.path.exists(nome_arquivo):
             try:
@@ -1119,6 +1143,8 @@ class Run():
         if teste_valor[0] == False: return teste_valor
 
         nome_arquivo = str(teste_valor[1])
+        nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
+
 
         if not os.path.exists(nome_arquivo):
             try:
@@ -2005,7 +2031,7 @@ class Run():
         return [resultado[0], resultado[1], resultado[2], 'fazerNada']
 
     def funcao_loops_enquantox(self, linha):
-        Run.log(self, '<funcao_loops_enquantox>: {}, {}'.format(linha))
+        Run.log(self, '<funcao_loops_enquantox>: {}'.format(linha))
 
         resultado =Run.funcao_testar_condicao(self, linha)
         return [resultado[0], resultado[1], resultado[2], 'declararLoop']

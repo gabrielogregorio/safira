@@ -61,11 +61,10 @@ class Atualizar():
     def aviso_versao(self, baixada, recente):
 
         self.tp_atualizacao = Toplevel(self.tela , bd=20, bg="#fafafa", highlightcolor="#fafafa")
-        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
-
-        self.tp_atualizacao.update()
         self.tp_atualizacao.withdraw()
+
         self.tp_atualizacao.wm_attributes('-type', 'splash')
+        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
 
         j_width  = self.tp_atualizacao.winfo_reqwidth()
         j_height = self.tp_atualizacao.winfo_reqheight()
@@ -76,12 +75,9 @@ class Atualizar():
         self.tp_atualizacao.title("Aviso de atualização")
 
         fr_atualizaca = Frame(self.tp_atualizacao, bg="#fafafa")
-
         lb_versao_dev = Label(fr_atualizaca, text="Nova versão disponível!".format(recente), fg="#744aff", bg="#fafafa", font=("", 20))
         lb_versao_tex = Message(fr_atualizaca, anchor="nw", fg="#343434", bg="#fafafa", font=("", 11),  text='{}'.format(texto_geral).format(recente))
-
         fr_botoes = Frame(fr_atualizaca, bg="#fafafa")
-
         bt_cancela = Button(fr_botoes, text="Não quero", bg="#c7c7c7", activebackground="#c7c7c7", relief=FLAT, fg="#323232", activeforeground="#323232")
         bt_atualiza = Button(fr_botoes, text="Atualizar Agora", bg="#21d9c6", activebackground="#21d9c6", relief=FLAT, fg="#094d46", activeforeground="#094d46", )
 

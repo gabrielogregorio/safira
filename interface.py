@@ -27,10 +27,13 @@ from tkinter import Text
 from tkinter import FLAT 
 from tkinter import Menu
 from tkinter import END
+from bugs import Bug
 import libs.funcoes as funcoes
 import webbrowser
 from update import Atualizar
 import tkinter.font as tkFont
+import re
+
 
 class Splash():
     def __init__(self, tela, dic_design):
@@ -98,6 +101,7 @@ class Interface(Aba):
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.path = abspath(getcwd())
+        self.bug = Bug(tela)
         self.tela = tela
 
         self.lst_historico_abas_focadas = []
@@ -130,6 +134,7 @@ class Interface(Aba):
         self.ic_salva = None
         self.ic_playP = None
         self.bt_brkp1 = None
+        self.bt_lp_bk = None
         self.ic_PStop = None
         self.ic_breaP = None
         self.ic_brk_p = None
@@ -200,6 +205,20 @@ class Interface(Aba):
         else:
             self.dic_abas[self.aba_focada]["lst_breakpoints"].append(int(self.num_linha_breakpoint))
         Interface.atualizacao_linhas(self, event = None)
+
+        try:
+            self.instancia.lst_breakpoints = self.dic_abas[self.aba_focada]["lst_breakpoints"]
+        except Exception as e:
+            print("Programa não está em execução, bkp ignorados", e)
+
+
+    def limpar_todos_os_breakpoints(self):
+        if self.dic_abas[self.aba_focada]["lst_breakpoints"] == []:
+            Interface.marca_todos_breakpoint(self)
+
+        else:
+            self.dic_abas[self.aba_focada]["lst_breakpoints"] = []
+            Interface.atualizacao_linhas(self, event = None)
 
         try:
             self.instancia.lst_breakpoints = self.dic_abas[self.aba_focada]["lst_breakpoints"]
@@ -278,9 +297,14 @@ class Interface(Aba):
         for linha in range(len(lista)):
             nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
 
+        # Obter o diretório base
+        diretorio_base = self.dic_abas[self.aba_focada]["arquivoSalvo"]["link"]
+
+        diretorio_base = re.sub('([^\/]{1,})$','', diretorio_base) # Obter diretório apenas
+
         linhas = nova_linha
         print("Instância criada")
-        self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints)
+        self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base)
 
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
@@ -474,6 +498,7 @@ class Interface(Aba):
         comando_inserir_breakp = lambda event = None: Interface.adiciona_remove_breakpoint(self, event)
         comando_parar_execucao = lambda event = None: Interface.inicializa_orquestrador(self, event)
         comando_executar_linha = lambda event = None: Interface.inicia_marca_break_point_geral(self) 
+        comando_limpa_breakpon = lambda event = None: Interface.limpar_todos_os_breakpoints(self) 
         comando_executar_progr = lambda event = None: Interface.inicializa_orquestrador(self)
         comando_abrir_nova_aba = lambda event = None: Interface.nova_aba(self, event)
         comando_ativar_fullscr = lambda event: Interface.modoFullScreen(self, event)
@@ -511,15 +536,13 @@ class Interface(Aba):
         self.mn_arqui = Menu( self.mn_barra)
         self.mn_edita = Menu( self.mn_barra)
         self.mn_ajuda = Menu( self.mn_barra)
-        self.mn_sobre = Menu( self.mn_barra)
         self.mn_devel = Menu( self.mn_barra)
 
         self.mn_barra.add_cascade(label='  Arquivo', menu=self.mn_arqui)
         self.mn_barra.add_cascade(label='  Executar', menu=self.mn_exect)
         self.mn_barra.add_cascade(label='  Exemplos', menu=self.mn_exemp)
         self.mn_barra.add_cascade(label='  Interface', menu=self.mn_intfc)
-        self.mn_barra.add_cascade(label='  Ajuda', menu=self.mn_ajuda)
-        self.mn_barra.add_cascade(label='  sobre', menu=self.mn_sobre)
+        self.mn_barra.add_cascade(label='  Ajuda/Sobre', menu=self.mn_ajuda)
         self.mn_barra.add_cascade(label='  Dev', menu=self.mn_devel)
 
         self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= comando_abriro_arquivo)
@@ -540,11 +563,11 @@ class Interface(Aba):
 
         self.mn_ajuda.add_command( label='  Ajuda (F1)', command= comando_abrirlnk_ajuda)
         self.mn_ajuda.add_command( label='  Comandos Disponíveis', command=comando_abrir_disponiv)
-        self.mn_ajuda.add_command( label='  Comunidade', command=comando_abrir_comunida )
+        self.mn_ajuda.add_separator()
+        self.mn_ajuda.add_command( label='  Reportar um Bug', command= lambda event=None: self.bug.interface())
+        self.mn_ajuda.add_command( label='  Verificar Atualização', command= lambda event=None: self.atualizar.verificar_versao())
 
-        self.mn_sobre.add_command( label='  Projeto', command= comando_abrirl_projeto)
-        self.mn_sobre.add_command( label='  Verificar Atualização', command= lambda event=None: self.atualizar.verificar_versao())
-
+    
         self.mn_devel.add_command( label='  Logs', command= comando_ativaropc_logs )
         #self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
 
@@ -557,6 +580,7 @@ class Interface(Aba):
         self.ic_ajuda = PhotoImage( file='imagens/ic_duvida.png' )
         self.ic_pesqu = PhotoImage( file='imagens/ic_pesquisa.png' )
         self.ic_nsalv = PhotoImage( file="imagens/nao_salvo.png" )
+        self.iclp_bkp = PhotoImage( file="imagens/limpar_bkp.png" )
 
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
@@ -567,6 +591,8 @@ class Interface(Aba):
         self.ic_pesqu = self.ic_pesqu.subsample(4, 4)
         self.ic_nsalv = self.ic_nsalv.subsample(2, 2)
         self.ic_brkp1 = self.ic_brkp1.subsample(4, 4)
+        self.iclp_bkp = self.iclp_bkp.subsample(4, 4)
+        
 
         # ************ Icones de opções rápidas ************** #
 
@@ -577,6 +603,7 @@ class Interface(Aba):
         self.bt_breaP = Button( self.fr_opc_rapidas, image=self.ic_breaP, command = comando_executar_brakp )
         self.bt_brk_p = Button( self.fr_opc_rapidas, image=self.ic_brk_p, command = comando_inserir_breakp )
         self.bt_brkp1 = Button( self.fr_opc_rapidas, image=self.ic_brkp1, command = comando_executar_linha )
+        self.bt_lp_bk = Button( self.fr_opc_rapidas, image=self.iclp_bkp, command = comando_limpa_breakpon )
         self.bt_ajuda = Button( self.fr_opc_rapidas, image=self.ic_ajuda)
         self.bt_pesqu = Button( self.fr_opc_rapidas, image=self.ic_pesqu)
 
@@ -620,6 +647,7 @@ class Interface(Aba):
         self.bt_breaP.grid(row=1, column=5)
         self.bt_brk_p.grid(row=1, column=6)
         self.bt_brkp1.grid(row=1, column=7)
+        self.bt_lp_bk.grid(row=1, column=8)
         self.bt_ajuda.grid(row=1, column=10)
         self.bt_pesqu.grid(row=1, column=11)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
@@ -758,6 +786,10 @@ class Interface(Aba):
         self.tx_codfc.see(INSERT)
         return 'break'
 
+    def marca_todos_breakpoint(self):
+        self.dic_abas[self.aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
+        Interface.atualizacao_linhas(self, event = None)
+
     def inicia_marca_break_point_geral(self):
 
         """
@@ -766,8 +798,7 @@ class Interface(Aba):
         :return:
         """
 
-        self.dic_abas[self.aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
-        Interface.atualizacao_linhas(self, event = None)
+        Interface.marca_todos_breakpoint(self)
         self.tx_codfc.update()
 
         Interface.inicializa_orquestrador(self, libera_break_point_executa = True)
@@ -852,7 +883,6 @@ class Interface(Aba):
         Interface.atualiza_interface_config(self, self.mn_exemp, "cor_menu")
         Interface.atualiza_interface_config(self, self.mn_barra, "cor_menu")
         Interface.atualiza_interface_config(self, self.mn_ajuda, "cor_menu")
-        Interface.atualiza_interface_config(self, self.mn_sobre, "cor_menu")
         Interface.atualiza_interface_config(self, self.mn_devel, "cor_menu")
         Interface.atualiza_interface_config(self, self.bt_salva, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_playP, "dicBtnMenus")
@@ -863,6 +893,7 @@ class Interface(Aba):
         Interface.atualiza_interface_config(self, self.bt_pesqu, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_brk_p, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_brkp1, "dicBtnMenus")
+        Interface.atualiza_interface_config(self, self.bt_lp_bk, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.fr_princ, "fr_princ")
         Interface.atualiza_interface_config(self, self.tela, "tela")
         Interface.atualiza_interface_config(self, self.tx_codfc, "tx_codificacao")
