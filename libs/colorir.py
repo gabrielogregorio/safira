@@ -1,7 +1,7 @@
-from re import finditer
-from tkinter import END
-from copy import deepcopy
 from threading import Thread
+from tkinter   import END
+from copy      import deepcopy
+from re        import finditer
 
 class Colorir():
     def __init__(self, cor_do_comando, dic_comandos):

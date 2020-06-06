@@ -6,19 +6,19 @@ __description__ = 'Interpretador de comandos'
 __status__      = 'Desenvolvimento'
 __version__     = '0.1'
 
-from re import findall, finditer
-from tkinter import END, NORMAL
-from tkinter import DISABLED
-from random import randint
-from time import sleep
 import libs.funcoes as funcoes
-from json import load
 import threading
 import os.path
-from os import system
 import os
 
-from time import time
+from tkinter import END, NORMAL
+from tkinter import DISABLED
+from random  import randint
+from time    import sleep
+from time    import time
+from json    import load
+from re      import findall, finditer
+from os      import system
 
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base):

@@ -1,4 +1,5 @@
 import libs.funcoes as funcoes
+
 from tkinter import N
 from tkinter import NSEW
 from tkinter import Frame

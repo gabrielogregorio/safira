@@ -1,12 +1,12 @@
-from tkinter import Button
-from tkinter import Label
-from tkinter import NSEW, Frame, FLAT
-from tkinter import Button, Toplevel
-from tkinter import Tk
-from tkinter import PhotoImage
-import webbrowser
 from threading import Thread
+from tkinter   import Button
+from tkinter   import Label
+from tkinter   import NSEW, Frame, FLAT
+from tkinter   import Button, Toplevel
+from tkinter   import Tk
+from tkinter   import PhotoImage
 
+import webbrowser
 
 class Bug():
     def __init__(self, tela):

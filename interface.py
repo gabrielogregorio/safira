@@ -1,52 +1,56 @@
-from libs.aba import Aba
-from libs.run import Run
-from libs.colorir import Colorir
-from libs.visualizacao import ContadorLinhas
-from libs.visualizacao import EditorDeCodigo
-from libs.arquivo import Arquivo
-from time import time, sleep
-from threading import Thread
-from os.path import abspath
-from os import listdir
-from json import load
-from os import getcwd
-from tkinter.ttk import Style, Treeview
-from tkinter import PhotoImage
-from tkinter import messagebox
-from tkinter import Scrollbar
-from tkinter import Toplevel, SEL
-from tkinter import CURRENT
-from tkinter import INSERT
-from tkinter import Button
-from tkinter import RAISED
-from tkinter import Frame
-from tkinter import Label
-from tkinter import Entry
-from tkinter import NSEW
-from tkinter import Text
-from tkinter import FLAT 
-from tkinter import Menu
-from tkinter import END
-from bugs import Bug
+# -*- coding: utf-8 -*-
+
+from libs.visualizacao     import ContadorLinhas
+from libs.visualizacao     import EditorDeCodigo
+from tkinter.ttk           import Treeview
+from tkinter.ttk           import Style
+from libs.colorir          import Colorir
+from libs.arquivo          import Arquivo
+from threading             import Thread
+from libs.aba              import Aba
+from libs.run              import Run
+from tkinter               import SEL
+from tkinter               import Toplevel
+from tkinter               import PhotoImage
+from tkinter               import messagebox
+from tkinter               import Scrollbar
+from tkinter               import CURRENT
+from tkinter               import INSERT
+from tkinter               import Button
+from tkinter               import RAISED
+from tkinter               import Frame
+from tkinter               import Label
+from tkinter               import Entry
+from tkinter               import NSEW
+from tkinter               import Text
+from tkinter               import FLAT 
+from tkinter               import Menu
+from os.path               import abspath
+from tkinter               import END
+from update                import Atualizar
+from time                  import sleep
+from time                  import time
+from json                  import load
+from bugs                  import Bug
+from os                    import getcwd
+from os                    import listdir
+
 import libs.funcoes as funcoes
-import webbrowser
-from update import Atualizar
 import tkinter.font as tkFont
+import webbrowser
 import re
 
 
 class Splash():
     def __init__(self, tela, dic_design):
-
-        self.frame_splash = None
-        self.fr_splash = None
-        self.l1_splash = None
-        self.l2_splash = None
-        self.tela = tela
-        self.dic_design = dic_design
+        self.frame_splash       = None
+        self.fr_splash       = None
+        self.l1_splash       = None
+        self.l2_splash       = None
+        self.tela            = tela
+        self.dic_design      = dic_design
 
     def splash_inicio(self):
-
         self.frame_splash = Frame(self.tela)
 
         self.frame_splash.configure(background = self.dic_design["cor_intro"]["background"])
@@ -80,7 +84,6 @@ class Splash():
 
         self.tela.deiconify()
         self.tela.update()
-
     def splash_fim(self):
         self.fr_splash.grid_forget()
         self.l1_splash.grid_forget()
@@ -88,81 +91,77 @@ class Splash():
 
         self.frame_splash.grid_forget()
 
-
 class Interface(Aba):
     def __init__(self, tela, dic_comandos, dic_design, cor_do_comando):
         super().__init__()
 
+        self.cor_do_comando                  = cor_do_comando
+        self.dic_comandos                    = dic_comandos
+        self.dic_design                      = dic_design
+        self.tela                            = tela
 
-        self.cor_do_comando = cor_do_comando
-        self.dic_comandos = dic_comandos
-        self.dic_design = dic_design
+        self.bool_tela_em_fullscreen         = False
+        self.bool_debug_temas                = False
+        self.bool_logs                       = False
 
-        self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
-        self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
-        self.path = abspath(getcwd())
-        self.bug = Bug(tela)
-        self.tela = tela
+        self.lst_historico_abas_focadas      = []
+        self.lista_terminal_destruir         = []
+        self.lista_breakponts                = []
+        self.lst_abas                        = []
 
-        self.lst_historico_abas_focadas = []
-        self.lista_terminal_destruir = []
-        self.lista_breakponts = []
-        self.lst_abas = []
+        self.num_lin_bkp            = 0
+        self.valor_threads                   = 0
+        self.linha_analise                   = 0
+        self.posAbsuluta                     = 0
+        self.posCorrente                     = 0
+        self.num_aba_focada                      = 0
 
-        self.bool_tela_em_fullscreen = False
-        self.bool_debug_temas = False
-        self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json") }
+        self.tx_erro_aviso_texto_erro        = None
+        self.fr_erro_aviso_texto_erro        = None
+        self.bt_erro_aviso_exemplo           = None
+        self.bt_erro_aviso_fechar            = None
+        self.controle_arquivos               = None
+        self.linhas_laterais                 = None
+        self.fr_opc_rapidas                  = None
+        self.fr_erro_aviso                   = None
+        self.frame_tela                      = None
+        self.fr_princ                        = None
+        self.tx_codfc                        = None
+        self.ic_salva                        = None
+        self.ic_playP                        = None
+        self.bt_brkp1                        = None
+        self.bt_lp_bk                        = None
+        self.ic_PStop                        = None
+        self.ic_breaP                        = None
+        self.ic_brk_p                        = None
+        self.ic_desfz                        = None
+        self.ic_redsf                        = None
+        self.ic_ajuda                        = None
+        self.ic_pesqu                        = None
+        self.bt_salva                        = None
+        self.bt_playP                        = None
+        self.bt_breaP                        = None
+        self.bt_brk_p                        = None
+        self.bt_desfz                        = None
+        self.bt_redsf                        = None
+        self.bt_ajuda                        = None
+        self.bt_pesqu                        = None
+        self.fr_abas                         = None
+        self.bt_play                         = None
 
-        self.num_linha_breakpoint = 0
-        self.valor_threads = 0
-        self.linha_analise = 0
-        self.posAbsuluta = 0
-        self.posCorrente = 0
-        self.aba_focada = 0
+        self.arquivo_configuracoes           = funcoes.carregar_json("configuracoes/configuracoes.json")
+        self.colorir_codigo                  = Colorir(self.cor_do_comando, self.dic_comandos)
+        self.path                            = abspath(getcwd())
 
-        self.tx_erro_aviso_texto_erro = None
-        self.fr_erro_aviso_texto_erro = None
-        self.bt_erro_aviso_exemplo = None
-        self.bt_erro_aviso_fechar = None
-        self.controle_arquivos = None
-        self.linhas_laterais = None
-        self.fr_opc_rapidas = None
-        self.fr_erro_aviso = None
-        self.frame_tela = None
-        self.fr_princ = None
-        self.tx_codfc = None
-        self.ic_salva = None
-        self.ic_playP = None
-        self.bt_brkp1 = None
-        self.bt_lp_bk = None
-        self.ic_PStop = None
-        self.ic_breaP = None
-        self.ic_brk_p = None
-        self.ic_desfz = None
-        self.ic_redsf = None
-        self.ic_ajuda = None
-        self.ic_pesqu = None
-        self.bt_salva = None
-        self.bt_playP = None
-        self.bt_breaP = None
-        self.bt_brk_p = None
-        self.bt_desfz = None
-        self.bt_redsf = None
-        self.bt_ajuda = None
-        self.bt_pesqu = None
-        self.fr_abas = None
-        self.bt_play = None
-
-        self.bool_logs = False
-
-        self.atualizar = Atualizar(self.tela)
+        self.bug                             = Bug(self.tela)
+        self.dic_abas                        = { 0:funcoes.carregar_json("configuracoes/guia.json") }
+        self.atualizar                       = Atualizar(self.tela)
 
     def ativar_logs(self, event=None):
-        try:
-            if self.bool_logs: self.bool_logs = False
-            else: self.bool_logs = True
-        except:
-            print("Interpretador não iniciado")
+        self.bool_logs = True
+
+        if self.bool_logs:
+            self.bool_logs = False
 
     def pressionar_enter_terminal(self, event = None):
         try:
@@ -177,11 +176,12 @@ class Interface(Aba):
             print("Erro ao capturar a tela", erro)
 
     def retornar_variaveis_correspondentes(self):
-
         try:
             dic_variaveis = self.instancia.dic_variaveis
+
         except Exception as e:
-            print("instancia não pronta ", e)
+            print("instancia de variáveos não pronta ", e)
+
         else:
             self.arvores_grid.delete(*self.arvores_grid.get_children()) # IDS como argumentos
 
@@ -199,29 +199,31 @@ class Interface(Aba):
                     self.arvores_grid.insert('', END, values=(k, v[1], caracteres))
 
     def adiciona_remove_breakpoint(self, event = None):
+        # Marcar um breakpoint
+        if int(self.num_lin_bkp) in self.dic_abas[self.num_aba_focada]["lst_breakpoints"]:
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"].remove(int(self.num_lin_bkp))
 
-        if int(self.num_linha_breakpoint) in self.dic_abas[self.aba_focada]["lst_breakpoints"]:
-            self.dic_abas[self.aba_focada]["lst_breakpoints"].remove(int(self.num_linha_breakpoint))
         else:
-            self.dic_abas[self.aba_focada]["lst_breakpoints"].append(int(self.num_linha_breakpoint))
-        Interface.atualizacao_linhas(self, event = None)
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"].append(int(self.num_lin_bkp))
 
+        # Atualizar Breakpont no interpretador
         try:
-            self.instancia.lst_breakpoints = self.dic_abas[self.aba_focada]["lst_breakpoints"]
+            self.instancia.lst_breakpoints = self.dic_abas[self.num_aba_focada]["lst_breakpoints"]
         except Exception as e:
             print("Programa não está em execução, bkp ignorados", e)
 
+        Interface.atualizacao_linhas(self, event = None)
 
     def limpar_todos_os_breakpoints(self):
-        if self.dic_abas[self.aba_focada]["lst_breakpoints"] == []:
+        if self.dic_abas[self.num_aba_focada]["lst_breakpoints"] == []:
             Interface.marca_todos_breakpoint(self)
 
         else:
-            self.dic_abas[self.aba_focada]["lst_breakpoints"] = []
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = []
             Interface.atualizacao_linhas(self, event = None)
 
         try:
-            self.instancia.lst_breakpoints = self.dic_abas[self.aba_focada]["lst_breakpoints"]
+            self.instancia.lst_breakpoints = self.dic_abas[self.num_aba_focada]["lst_breakpoints"]
         except Exception as e:
             print("Programa não está em execução, bkp ignorados", e)
 
@@ -298,13 +300,13 @@ class Interface(Aba):
             nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
 
         # Obter o diretório base
-        diretorio_base = self.dic_abas[self.aba_focada]["arquivoSalvo"]["link"]
+        diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
 
         diretorio_base = re.sub('([^\/]{1,})$','', diretorio_base) # Obter diretório apenas
 
         linhas = nova_linha
         print("Instância criada")
-        self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base)
+        self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base)
 
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
         t.start()
@@ -636,7 +638,7 @@ class Interface(Aba):
         self.tx_codfc.configure(yscrollcommand=self.sb_codfc.set)
 
         self.linhas_laterais = ContadorLinhas(self.fr_princ, self.dic_design)
-        self.linhas_laterais.aba_focada2 = self.aba_focada
+        self.linhas_laterais.aba_focada2 = self.num_aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         self.linhas_laterais.atribuir(self.tx_codfc)
 
@@ -657,7 +659,7 @@ class Interface(Aba):
         self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
         # ******** Manipulação dos arquivos **************** #
-        self.controle_arquivos = Arquivo(self.dic_abas, self.aba_focada, self.tx_codfc)
+        self.controle_arquivos = Arquivo(self.dic_abas, self.num_aba_focada, self.tx_codfc)
         Interface.atualiza_design_interface(self)
 
         t_width = self.tela.winfo_screenwidth()
@@ -751,7 +753,7 @@ class Interface(Aba):
 
     def atualizacao_linhas(self, event):
 
-        self.linhas_laterais.aba_focada2 = self.aba_focada
+        self.linhas_laterais.aba_focada2 = self.num_aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
         self.linhas_laterais.desenhar_linhas()
         self.tela.update()
@@ -787,7 +789,7 @@ class Interface(Aba):
         return 'break'
 
     def marca_todos_breakpoint(self):
-        self.dic_abas[self.aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
+        self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = [ x for x in range(len(self.tx_codfc.get(1.0, END)))]
         Interface.atualizacao_linhas(self, event = None)
 
     def inicia_marca_break_point_geral(self):
@@ -900,7 +902,7 @@ class Interface(Aba):
         Interface.atualiza_interface_config(self, self.sb_codfc, "scrollbar_text")
         Interface.atualiza_interface_config(self, self.fr_opc_rapidas, "fr_opcoes_rapidas")
 
-        self.linhas_laterais.aba_focada2 = self.aba_focada
+        self.linhas_laterais.aba_focada2 = self.num_aba_focada
         self.linhas_laterais.dic_abas2 = self.dic_abas
 
         Interface.atualiza_interface_config(self, self.linhas_laterais, "lb_linhas")
@@ -927,12 +929,12 @@ class Interface(Aba):
             dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
             try:
-                self.colorir_codigo.aba_focada = self.aba_focada
+                self.colorir_codigo.aba_focada = self.num_aba_focada
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
                 #self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
 
                 Interface.atualiza_design_interface(self)
-                self.linhas_laterais.aba_focada2 = self.aba_focada
+                self.linhas_laterais.aba_focada2 = self.num_aba_focada
                 self.linhas_laterais.dic_abas2 = self.dic_abas
 
             except Exception as erro:
@@ -956,29 +958,29 @@ class Interface(Aba):
         :return:
         """
 
-        self.colorir_codigo.aba_focada = self.aba_focada
+        self.colorir_codigo.aba_focada = self.num_aba_focada
         self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
         #Thread(target= lambda event=event: Interface.th_confirm(self, event)).start()
 
         if self.dic_abas != {}:
-            self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
+            self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
 
-            if self.dic_abas[ self.aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.aba_focada ]["arquivoSalvo"]['texto']:
+            if self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.num_aba_focada ]["arquivoSalvo"]['texto']:
 
-                if self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] == False:
-                    self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] = True
+                if self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] == False:
+                    self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] = True
 
-                    largura_original = self.dic_abas[self.aba_focada]["listaAbas"][3].winfo_reqwidth()
+                    largura_original = self.dic_abas[self.num_aba_focada]["listaAbas"][3].winfo_reqwidth()
 
                     # Mantendo o tamnho
-                    largura_original = self.dic_abas[self.aba_focada]["listaAbas"][3].winfo_reqwidth()
-                    self.dic_abas[self.aba_focada]["listaAbas"][3].configure(image=self.ic_nsalv, width=largura_original)
+                    largura_original = self.dic_abas[self.num_aba_focada]["listaAbas"][3].winfo_reqwidth()
+                    self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(image=self.ic_nsalv, width=largura_original)
 
             else:
-                self.dic_abas[self.aba_focada]["listaAbas"][3].config(image='', width=0)
-                self.dic_abas[self.aba_focada]["ja_foi_marcado_nao_salvo"] = False
+                self.dic_abas[self.num_aba_focada]["listaAbas"][3].config(image='', width=0)
+                self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] = False
 
-            self.dic_abas[self.aba_focada]["listaAbas"][3].update()
+            self.dic_abas[self.num_aba_focada]["listaAbas"][3].update()
 
         if hasattr(event, "keysym"):
             Interface.obterPosicaoDoCursor(self, event)
@@ -1003,25 +1005,25 @@ class Interface(Aba):
                 self.tx_codfc.insert('{}.{}'.format(p1,int(p2)), '\n    \n}' )
                 self.tx_codfc.mark_set("insert", "{}.{}".format( int(p1)+1, int(p2)+4 ))
 
-            self.num_linha_breakpoint = posCorrente
+            self.num_lin_bkp = posCorrente
 
     def funcoes_arquivos_configurar(self, event, comando, link=None):
 
         if self.controle_arquivos is None: return 0
         retorno_salvar_como = None
 
-        self.controle_arquivos.atualiza_infos(self.dic_abas, self.aba_focada, self.tx_codfc)
+        self.controle_arquivos.atualiza_infos(self.dic_abas, self.num_aba_focada, self.tx_codfc)
 
         if comando == "abrirArquivo": self.controle_arquivos.abrirArquivo(link)
         elif comando == "salvar_arquivo_dialog": self.controle_arquivos.salvar_arquivo_dialog(event)
         elif comando == "salvar_arquivo": retorno_salvar_como = self.controle_arquivos.salvar_arquivo(event)
         elif comando == "salvar_arquivo_como_dialog": self.controle_arquivos.salvar_arquivo_como_dialog(event)
 
-        self.aba_focada = self.controle_arquivos.aba_focada
+        self.num_aba_focada = self.controle_arquivos.aba_focada
         self.dic_abas = self.controle_arquivos.dic_abas
 
         if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
-            Interface.atualiza_texto_tela(self, self.aba_focada)
+            Interface.atualiza_texto_tela(self, self.num_aba_focada)
 
     def arquivoConfiguracao(self, chave, novo = None):
 

@@ -4,13 +4,12 @@
 # sudo apt install python3-distutils
 # sudo apt install python3-tk
 # sudo apt-get install python3-pip
-# sudo apt-get install python3-pip
-# sudo apt-get install python-tk python3-tk tk-dev
+# sudo apt-get install python3-tk tk-dev
 
-from sys import version
-from tkinter import Tk
 from interface import *
-from time import sleep
+from tkinter   import Tk
+from sys       import version
+from time      import sleep
 
 
 __author__      = 'Gabriel Gregório da Silva'
@@ -27,20 +26,19 @@ class Safira():
         self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
         self.tela = Tk()
+        self.tela.withdraw()
+        self.tela.overrideredirect(1)
         self.tela.rowconfigure(1, weight=1)
         self.tela.grid_columnconfigure(1, weight=1)
-        self.tela.withdraw()          # Remove visibilidade
-        self.tela.overrideredirect(1) # Remove barra de titulos
 
     def main(self):
         splash = Splash(self.tela, self.dic_design)
-        i = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
+        interf = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
 
         splash.splash_inicio()
         sleep(3)
-
         splash.splash_fim()
-        i.inicioScreen()
+        interf.inicioScreen()
 
 if __name__ == "__main__":
     app = Safira()
