@@ -21,7 +21,7 @@ from re      import findall, finditer
 from os      import system
 
 class Run():
-    def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base):
+    def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos):
 
         self.aconteceu_erro = False
         self.erro_alertado = False
@@ -34,7 +34,7 @@ class Run():
         self.numero_threads = 0
         self.bool_logs = bool_logs
         self.tx_codficac = tx_codficac
-        self.dic_comandos = funcoes.carregar_json('configuracoes/comandos.json')
+        self.dic_comandos = dic_comandos
         self.lst_breakpoints = lst_breakpoints
         self.bool_break_point_liberado = None
         self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
@@ -47,6 +47,7 @@ class Run():
         self.dir_script_aju_erro = ""
         self.diretorio_base = diretorio_base
 
+        self.dicLetras = dicLetras
         self.inicio = time()
 
         with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
@@ -662,141 +663,291 @@ class Run():
             if linha == '':
                 return [[True, None, 'vazio', 'linhaVazia'], "1", ""]
  
-            analisa000 =Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
-            analisa001 =Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
-            analisa002 =Run.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
-            analisa004 =Run.analisa_instrucao(self, '^(<enquanto>)(.*)$', linha)
-            analisa005 =Run.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
-            analisa006 =Run.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha)
-            analisa007 =Run.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-            analisa008 =Run.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-            analisa009 =Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
-            analisa010 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-            analisa011 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
-            analisa012 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-            analisa013 =Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
-            analisa014 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
-            analisa015 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
-            analisa016 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
-            analisa017 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
-            analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
-            analisa019 =Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
-            analisa020 =Run.analisa_instrucao(self, '^(<digitado>)$', linha)
-            analisa021 =Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
-            analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
+            caractere_inicio = linha[0]
+
+            if caractere_inicio in self.dicLetras["limpatela"]:
+                analisa000 =Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
+                if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela.fyn"]
+
+            if caractere_inicio in self.dicLetras["mostreNessa"]:
+                analisa001 =Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
+                if analisa001[0]: return [Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
+
+            if caractere_inicio in self.dicLetras["mostre"]:
+                analisa002 =Run.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
+                if analisa002[0]: return [Run.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
+
+            if caractere_inicio in self.dicLetras["enquanto"]:
+                analisa004 =Run.analisa_instrucao(self, '^(<enquanto>)(.*)$', linha)
+                if analisa004[0]: return [Run.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha, "enquanto.fyn"]
+
+            if caractere_inicio in self.dicLetras["aguarde"]:
+                analisa005 =Run.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
+                if analisa005[0]: return [Run.funcao_esperar_n_tempo(self, analisa005[1][2], analisa005[1][3]), self.num_linha, "esperar.fyn"]
+
+            if caractere_inicio in self.dicLetras["repita"]:
+                analisa006 =Run.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha)
+                if analisa006[0]: return [Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha, "repetir.fyn"]
+
+            if caractere_inicio in self.dicLetras["incremente"]:
+                analisa007 =Run.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+                if analisa007[0]: return [Run.funcao_incremente_vari(self, analisa007[1][2], analisa007[1][4]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["decremente"]:
+                analisa008 =Run.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+                if analisa008[0]: return [Run.funcao_decremente_vari(self, analisa008[1][2], analisa008[1][4]), self.num_linha, ""]
+
+
+            # ********************** Funções **********************
+
+            if caractere_inicio in self.dicLetras["funcoes"]:
+                analisa009 =Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
+                if analisa009[0]: return [Run.funcao_declarar_funcao(self, analisa009[1][2], analisa009[1][4]),self.num_linha, "funcoes.fyn"]
+
+                analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
+                if analisa043[0]: return [Run.funcao_declarar_funcao(self, analisa043[1][2]), self.num_linha, "funcoes.fyn"]
+
+            # ********************** Digitado **********************
+            if caractere_inicio in self.dicLetras["digitado"]:
+                analisa020 =Run.analisa_instrucao(self, '^(<digitado>)$', linha)
+                if analisa020[0]: return [Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas.fyn"]
+
+
+            # ********************** Listas **********************
+            if caractere_inicio in self.dicLetras["declaraListas"]:
+                analisa010 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+                if analisa010[0]: return [Run.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, ""]
+
+                analisa011 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
+                if analisa011[0]: return [Run.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
+
+                analisa012 =Run.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+                if analisa012[0]: return [Run.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas.fyn"]
+
+                analisa048 =Run.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
+                if analisa048[0]: return [Run.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, ""]
+
+
+            if caractere_inicio in self.dicLetras["RemoverItensListas"]:
+                analisa013 =Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
+                if analisa013[0]: return [Run.funcao_rem_itns_na_lst(self, analisa013[1][2], analisa013[1][4]), self.num_linha, "listas.fyn"]
+
+
+            if caractere_inicio in self.dicLetras["adicionarItensListas"]:
+                analisa014 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
+                if analisa014[0]: return [Run.funcao_add_itns_lst_ps(self, analisa014[1][2], analisa014[1][4], analisa014[1][6]), self.num_linha, "listas.fyn"]
+
+                analisa015 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
+                if analisa015[0]: return [Run.funcao_add_itns_na_lst(self, analisa015[1][2], analisa015[1][4]), self.num_linha, "listas.fyn"]
+
+                analisa016 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
+                if analisa016[0]: return [Run.funcao_add_itns_lst_in(self, analisa016[1][2], analisa016[1][4]), self.num_linha, "listas.fyn"]
+
+                analisa017 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
+                if analisa017[0]: return [Run.funcao_add_itns_na_lst(self, analisa017[1][2], analisa017[1][4]), self.num_linha, "listas.fyn"]
+
+
+            if caractere_inicio in self.dicLetras["aleatorio"]:
+                analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
+                if analisa018[0]: return [Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4]), self.num_linha, "aleatorio.fyn"]
+
+            if caractere_inicio in self.dicLetras["declaraListasObterPosicao"]:
+                analisa019 =Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
+                if analisa019[0]: return [Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["tiverLista"]:
+                analisa021 =Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
+                if analisa021[0]: return [Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4]), self.num_linha, "se tiver.fyn"]
+
+            if caractere_inicio in self.dicLetras["tamanhoDaLista"]:
+                analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
+                if analisa022[0]: return [Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, ""]
+
+
+
+            if caractere_inicio in self.dicLetras["se_der_erro"]:
+                analisa038 =Run.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
+                if analisa038[0]: return [Run.funcao_se_der_erro(self), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["senao_der_erro"]:
+                analisa039 =Run.analisa_instrucao(self, '^(<senao_der_erro>)$', linha)
+                if analisa039[0]: return [Run.funcao_senao_der_erro(self), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["em_qualquer_caso"]:
+                analisa040 =Run.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
+                if analisa040[0]: return [Run.funcao_em_qualquer_caso(self), self.num_linha, ""]
+
+
+            # ************************ Arquivo ************************
+            if caractere_inicio in self.dicLetras["crie_arquivo"]:
+                analisa027 =Run.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
+                if analisa027[0]: return [Run.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["delete_arquivo"]:
+                analisa028 =Run.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
+                if analisa028[0]: return [Run.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["arquivo_existe"]:
+                analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
+                if analisa042[0]: return [Run.funcao_arquivo_nao_existe(self, analisa042[1][2]), self.num_linha, ""]
+
+                analisa029 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
+                if analisa029[0]: return [Run.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["adicione_texto_arquivo"]:
+                analisa030 =Run.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
+                if analisa030[0]: return [Run.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["sobrescreva_texto_arquivo"]:
+                analisa031 =Run.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
+                if analisa031[0]: return [Run.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["leia_arquivo"]:
+                analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
+                if analisa032[0]: return [Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, ""]
+
+
+
             analisa023 =Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
-            analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
-            analisa025 =Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
-            analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
-            analisa027 =Run.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
-            analisa028 =Run.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
-            analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
-            analisa029 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
-            analisa030 =Run.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
-            analisa031 =Run.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
-            analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
-            analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
-            analisa034 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', linha)
-            analisa035 =Run.analisa_instrucao(self, '^(<se_nao_se>)(.*)$', linha)
-            analisa036 =Run.analisa_instrucao(self, '^(<se_nao>)$', linha)
-            analisa037 =Run.analisa_instrucao(self, '^(<tente>)$', linha)
-            analisa038 =Run.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
-            analisa039 =Run.analisa_instrucao(self, '^(<senao_der_erro>)$', linha)
-            analisa040 =Run.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
-            analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
-            analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
-            analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
-            analisa044 =Run.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
-            analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
-            analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
-            analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)
-            # Análise vai de 1 a N. Não começã por zero
-
-            if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela.fyn"]
-            if analisa001[0]: return [Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
-            if analisa002[0]: return [Run.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha, "exibiçãoNaTela.fyn"]
-            if analisa004[0]: return [Run.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha, "enquanto.fyn"]
-            if analisa005[0]: return [Run.funcao_esperar_n_tempo(self, analisa005[1][2], analisa005[1][3]), self.num_linha, "esperar.fyn"]
-            if analisa006[0]: return [Run.funcao_repetir_n_vezes(self, analisa006[1][2]), self.num_linha, "repetir.fyn"]
-            if analisa007[0]: return [Run.funcao_incremente_vari(self, analisa007[1][2], analisa007[1][4]), self.num_linha, ""]
-            if analisa008[0]: return [Run.funcao_decremente_vari(self, analisa008[1][2], analisa008[1][4]), self.num_linha, ""]
-            if analisa043[0]: return [Run.funcao_declarar_funcao(self, analisa043[1][2]), self.num_linha, "funcoes.fyn"]
-            if analisa009[0]: return [Run.funcao_declarar_funcao(self, analisa009[1][2], analisa009[1][4]),self.num_linha, "funcoes.fyn"]
-            if analisa010[0]: return [Run.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, ""]
-            if analisa011[0]: return [Run.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
-            if analisa012[0]: return [Run.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas.fyn"]
-            if analisa013[0]: return [Run.funcao_rem_itns_na_lst(self, analisa013[1][2], analisa013[1][4]), self.num_linha, "listas.fyn"]
-            if analisa014[0]: return [Run.funcao_add_itns_lst_ps(self, analisa014[1][2], analisa014[1][4], analisa014[1][6]), self.num_linha, "listas.fyn"]
-            if analisa015[0]: return [Run.funcao_add_itns_na_lst(self, analisa015[1][2], analisa015[1][4]), self.num_linha, "listas.fyn"]
-            if analisa016[0]: return [Run.funcao_add_itns_lst_in(self, analisa016[1][2], analisa016[1][4]), self.num_linha, "listas.fyn"]
-            if analisa017[0]: return [Run.funcao_add_itns_na_lst(self, analisa017[1][2], analisa017[1][4]), self.num_linha, "listas.fyn"]
-            if analisa018[0]: return [Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4]), self.num_linha, "aleatorio.fyn"]
-            if analisa019[0]: return [Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, ""]
-            if analisa020[0]: return [Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas.fyn"]
-            if analisa021[0]: return [Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4]), self.num_linha, "se tiver.fyn"]
-            if analisa022[0]: return [Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, ""]
             if analisa023[0]: return [Run.funcao_realizar_atribu(self, analisa023[1][1], analisa023[1][3]), self.num_linha, "atribuicoes.fyn"]
-            if analisa024[0]: return [Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes.fyn"]
-            if analisa025[0]: return [Run.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, ""]
-            if analisa026[0]: return [Run.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, ""]
-            if analisa027[0]: return [Run.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, ""]
-            if analisa028[0]: return [Run.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, ""]
-            if analisa042[0]: return [Run.funcao_arquivo_nao_existe(self, analisa042[1][2]), self.num_linha, ""]
-            if analisa029[0]: return [Run.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, ""]
-            if analisa030[0]: return [Run.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, ""]
-            if analisa031[0]: return [Run.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, ""]
-            if analisa032[0]: return [Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, ""]
-            if analisa033[0]: return [Run.funcao_tipo_variavel(self, analisa033[1][2]), self.num_linha, ""]
-            if analisa034[0]: return [Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4]), self.num_linha, ""]
-            if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa035[1][2], analisa035[1][4]), self.num_linha, ""]
-            if analisa035[0]: return [Run.funcao_senao_se(self, analisa035[1][2]), self.num_linha, ""]
-            if analisa036[0]: return [Run.funcao_senao(self), self.num_linha, ""]
-            if analisa037[0]: return [Run.funcao_tente(self), self.num_linha, ""]
-            if analisa038[0]: return [Run.funcao_se_der_erro(self), self.num_linha, ""]
-            if analisa039[0]: return [Run.funcao_senao_der_erro(self), self.num_linha, ""]
-            if analisa040[0]: return [Run.funcao_em_qualquer_caso(self), self.num_linha, ""]
-            if analisa003[0]: return [Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.fyn"]
-            if analisa041[0]: return [Run.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
-            if analisa044[0]: return [Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn"]
-            if analisa046[0]: return [Run.funcao_tirar_print_salvar_como(self, analisa046[1][2]), self.num_linha, ""]
-            if analisa047[0]: return [Run.funcao_abrir_arquivo(self, analisa047[1][2], analisa047[1][4]), self.num_linha, ""]
 
-            return [[False, "{}'{}'".format(Run.msg_idioma(self, 'comando_desconhecido'), linha), 'string',
-                     'exibirNaTela'], self.num_linha, ""]
-        return [[True, None, 'vazio', 'fazerNada'], self.num_linha, ""]
+            analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
+            if analisa024[0]: return [Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes.fyn"]
+
+            if caractere_inicio in self.dicLetras["para_cada"]:
+                analisa025 =Run.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
+                if analisa025[0]: return [Run.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["ler_tecla_por"]:
+                analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
+                if analisa026[0]: return [Run.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["tipo_variavel"]:
+                analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
+                if analisa033[0]: return [Run.funcao_tipo_variavel(self, analisa033[1][2]), self.num_linha, ""]
+
+
+            if caractere_inicio in self.dicLetras["importe"]:
+                analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
+                if analisa041[0]: return [Run.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
+
+
+
+
+
+
+            # Tente / se der erro / senao der erro/ em qualquer caso
+            if caractere_inicio in self.dicLetras["tente"]:
+                analisa037 =Run.analisa_instrucao(self, '^(<tente>)$', linha)
+                if analisa037[0]: return [Run.funcao_tente(self), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["se_nao_se"]:
+                analisa035 =Run.analisa_instrucao(self, '^(<se_nao_se>)(.*)$', linha)
+                if analisa035[0]: return [Run.funcao_senao_se(self, analisa035[1][2]), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["se_nao"]:
+                analisa036 =Run.analisa_instrucao(self, '^(<se_nao>)$', linha)
+                if analisa036[0]: return [Run.funcao_senao(self), self.num_linha, ""]
+
+            # se / senao se / senao
+            if caractere_inicio in self.dicLetras["se"]:
+                analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)$', linha)
+                if analisa003[0]: return [Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.fyn"]
+
+
+
+
+
+            # ULTIMO
+            analisa044 =Run.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
+            if analisa044[0]: return [Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes.fyn"]
+
+            #analisa034 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', linha)
+            #if analisa034[0]: return [Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4]), self.num_linha, ""]
+
+            #analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', linha)
+            #if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa045[1][2], analisa045[1][4]), self.num_linha, ""]
+
+            #analisa046 =Run.analisa_instrucao(self, '^(<tire_um_print_salve_como>)(.*)$', linha)
+            #if analisa046[0]: return [Run.funcao_tirar_print_salvar_como(self, analisa046[1][2]), self.num_linha, ""]
+
+            #analisa047 =Run.analisa_instrucao(self, '^(<abra_um_arquivo>)(.*)(<abra_um_arquivo_no>)(.*)$', linha)
+            #if analisa047[0]: return [Run.funcao_abrir_arquivo(self, analisa047[1][2], analisa047[1][4]), self.num_linha, ""]
+
+            return [  [False, "{}'{}'".format(  Run.msg_idioma(self, 'comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
+
+        return [[True, None, 'vazio', 'fazerNada'], str(self.num_linha), ""]
+
+
+
+
+
+
 
     def comandos_uso_geral(self, possivelVariavel):
         Run.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
 
-        analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', possivelVariavel)
-        analisa019 =Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
-        analisa020 =Run.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
-        analisa021 =Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
-        analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
-        analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
-        analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
-        analisa029 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
-        analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
-        analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
-        analisa034 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', possivelVariavel)
-        analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
-        analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', possivelVariavel)
+        if possivelVariavel != "":
+            caractere_inicio = possivelVariavel[0]
+        else:
+            caractere_inicio = None
 
-        if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
-        if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
-        if analisa020[0]: return Run.funcao_ovalor_digitado(self, analisa020[1][1])
-        if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4])
-        if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
-        if analisa026[0]: return Run.funcao_ler_tecla_por_s(self, analisa026[1][2])
-        if analisa042[0]: return Run.funcao_arquivo_nao_existe(self, analisa042[1][2])
-        if analisa029[0]: return Run.funcao_arquivo_existe(self, analisa029[1][2])
-        if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
-        if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
-        if analisa034[0]: return Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4])
-        if analisa024[0]: return Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
-        if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa045[1][2], analisa045[1][4]), self.num_linha, ""]
+        if caractere_inicio in self.dicLetras["aleatorio"]:
+            analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', possivelVariavel)
+            if analisa018[0]: return Run.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4])
+
+        if caractere_inicio in self.dicLetras["declaraListas"]:
+             analisa048 =Run.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', possivelVariavel)
+             if analisa048[0]: return Run.funcao_retornar_lista(self, analisa048[1][2])
+
+        if caractere_inicio in self.dicLetras["declaraListasObterPosicao"]:
+            analisa019 =Run.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
+            if analisa019[0]: return Run.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
+
+        if caractere_inicio in self.dicLetras["digitado"]:
+            analisa020 =Run.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
+            if analisa020[0]: return Run.funcao_ovalor_digitado(self, analisa020[1][1])
+
+        if caractere_inicio in self.dicLetras["tiverLista"]:
+            analisa021 =Run.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
+            if analisa021[0]: return Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4])
+
+        if caractere_inicio in self.dicLetras["tamanhoDaLista"]:
+            analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
+            if analisa022[0]: return Run.funcao_otamanho_da_lst(self, analisa022[1][2])
+
+        if caractere_inicio in self.dicLetras["ler_tecla_por"]:
+            analisa026 =Run.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
+            if analisa026[0]: return Run.funcao_ler_tecla_por_s(self, analisa026[1][2])
+
+        if caractere_inicio in self.dicLetras["arquivo_existe"]:
+            analisa042 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
+            if analisa042[0]: return Run.funcao_arquivo_nao_existe(self, analisa042[1][2])
+
+            analisa029 =Run.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
+            if analisa029[0]: return Run.funcao_arquivo_existe(self, analisa029[1][2])
+
+        if caractere_inicio in self.dicLetras["leia_arquivo"]:
+            analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
+            if analisa032[0]: return Run.funcao_ler_arquivo(self, analisa032[1][2])
+
+        if caractere_inicio in self.dicLetras["tipo_variavel"]:
+            analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
+            if analisa033[0]: return Run.funcao_tipo_variavel(self, analisa033[1][2])
+
+        if caractere_inicio in self.dicLetras["passandoParametros"]:
+            analisa024 =Run.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
+            if analisa024[0]: return Run.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
+
+        #if caractere_inicio in self.dicLetras["a_imagem_aparecer"]:
+        #    analisa034 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_segundos>)$', possivelVariavel)
+        #    if analisa034[0]: return Run.funcao_a_imagem_aparecer_por(self, analisa034[1][2], analisa034[1][4])
+
+        #if caractere_inicio in self.dicLetras["a_imagem_aparecer"]:
+        #    analisa045 =Run.analisa_instrucao(self, '^(<a_imagem_aparecer>)(.*)(<a_imagem_aparecer_interno>)(.*)(<a_imagem_aparecer_interno_minutos>)$', possivelVariavel)
+        #    if analisa045[0]: return [Run.funcao_a_imagem_aparecer_por_minuto(self, analisa045[1][2], analisa045[1][4]), self.num_linha, ""]
 
         return [True, None, 'vazio']
 
@@ -1276,6 +1427,31 @@ class Run():
 
         return teste
 
+
+
+    def funcao_retornar_lista(self, variavel):
+        Run.log(self, '<funcao_retornar_lista>: {}'.format(variavel))
+
+        teste_variavel =Run.obter_valor_lista(self, variavel)
+
+        if teste_variavel[0] == False:
+            return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+
+
+        if teste_variavel[2] != 'lista':
+            return [False, '{} {}'.format(variavel, Run.msg_idioma(self, "nao_e_lista")), 'string']
+
+
+        resultado = teste_variavel[1]
+
+        return [True, resultado, "lista", 'fazerNada']
+
+
+
+
+
+
+
     def funcao_obter_valor_lst(self, variavel, posicao):
         Run.log(self, '<funcao_obter_valor_lst>: {}, {}'.format(variavel, posicao))
 
@@ -1318,7 +1494,7 @@ class Run():
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
         if teste_variavel[2] != 'lista':
-            return [False, '{} {}'.format(linha,Run.msg_idioma(self, "nao_e_lista")), 'string',
+            return [False, '{} {}'.format(teste_variavel[1], Run.msg_idioma(self, "nao_e_lista")), 'string',
                     'exibirNaTela']
 
         if not resultado_valor[0]:
@@ -1537,7 +1713,7 @@ class Run():
         digitado = digitado.replace("\n", "")
 
         # SE FOR NUMÉRICO
-        if 'numero ' in linha:
+        if 'numero ' in linha or 'number' in linha:
             try:
                 float(digitado)
             except:
@@ -1564,6 +1740,9 @@ class Run():
 
         linha = linha.replace('vezes', '')
         linha = linha.replace('vez', '')
+        linha = linha.replace('times', '')
+        linha = linha.replace('veces', '')
+
         linha = linha.strip()
         linha =Run.abstrair_valor_linha(self, linha)
 
@@ -1771,10 +1950,10 @@ class Run():
         resultado =Run.abstrair_valor_linha(self, tempo)
         if not resultado[0]: return resultado
 
-        if tipo_espera == "segundos" or tipo_espera == "s" or tipo_espera == "segundo":
+        if tipo_espera in ["segundos", "s", "segundo", "second", "seconds"]:
             sleep(resultado[1])
 
-        elif tipo_espera == "milisegundos" or tipo_espera == "ms" or tipo_espera == "milisegundo":
+        elif tipo_espera in ["milissegundos", "ms", "milissegundo", "millisecond", "milliseconds", "milisegundo", "milisegundos"]:
             sleep(resultado[1] / 1000)
 
         return [True, None, 'vazio', 'fazerNada']
@@ -1839,18 +2018,34 @@ class Run():
 
         # Do maior para o menor
         linha = linha.replace(' multiplicado por ', ' * ')
+        linha = linha.replace(' multiplied by ', ' * ')
+        linha = linha.replace(' multiplicar ', ' * ')
+
         linha = linha.replace(' dividido por ', ' / ')
+        linha = linha.replace(' divided by ', ' / ')
+
         linha = linha.replace(' multiplique ', ' * ')
+        linha = linha.replace(' multiply ', ' * ')
+
         linha = linha.replace(' elevado por ', ' ** ')
+        linha = linha.replace(' elevated by ', ' ** ')
         linha = linha.replace(' elevado a ', ' ** ')
         linha = linha.replace(' elevado ', ' ** ')
         linha = linha.replace(' divide ', ' / ')
         linha = linha.replace(' mais ', ' + ')
+        linha = linha.replace(' plus ', ' + ')
+        linha = linha.replace(' mas ', ' + ')
         linha = linha.replace(' menos ', ' - ')
+        linha = linha.replace(' minus ', ' - ')
+
         linha = linha.replace('true', 'True')
+        linha = linha.replace('truth', 'True')
+        linha = linha.replace('cierto', 'True')
         linha = linha.replace('verdadeiro', 'True')
         linha = linha.replace('verdadeira', 'True')
+        linha = linha.replace('verdad', 'True')
         linha = linha.replace('verdade', 'True')
+
         linha = linha.replace('false', 'False')
         linha = linha.replace('falso', 'False')
         linha = linha.replace('mentira', 'False')
@@ -1917,7 +2112,7 @@ class Run():
 
         possivelVariavel = str(possivelVariavel).strip()
 
-        if possivelVariavel.lower() in ['true', 'verdadeiro', 'verdadeira', 'verdade']:
+        if possivelVariavel.lower() in ['true', 'verdadeiro', 'verdadeira', 'verdade', 'truth', 'cierto', 'verdad']:
             return [True, 'True', 'booleano']
 
         if possivelVariavel.lower() in ['false', 'falso', 'mentira']:
@@ -2054,14 +2249,34 @@ class Run():
 
         # Padronização geral
         linha = linha.replace(' for maior ou igual a ', ' >= ')
+        linha = linha.replace(' es mayor o igual a ', ' >= ')
+        linha = linha.replace(' is greater than or equal to ', ' >= ')
+
         linha = linha.replace(' for menor ou igual a ', ' <= ')
+        linha = linha.replace(' es menor o igual que ', ' <= ')
+        linha = linha.replace(' is less than or equal a ', ' <= ')
+
         linha = linha.replace(' for diferente de ', ' != ')
+        linha = linha.replace(' es diferente de ', ' != ')
+        linha = linha.replace(' is different from ', ' != ')
+
         linha = linha.replace(' for maior que ', ' > ')
+        linha = linha.replace(' es mayor que ', ' > ')
+        linha = linha.replace(' is greater than ', ' > ')
+
         linha = linha.replace(' for menor que ', ' < ')
+        linha = linha.replace(' es menos que ', ' < ')
+        linha = linha.replace(' is less than ', ' < ')
+
         linha = linha.replace(' for igual a ', ' == ')
+        linha = linha.replace(' es igual a ', ' == ')
+        linha = linha.replace(' is equal to ', ' == ')
+
+        linha = linha.replace('ye ', '  and  ')
         linha = linha.replace(' e ', '  and  ')
         linha = linha.replace(' && ', '  and  ')
         linha = linha.replace(' ou ', '  or  ')
+        linha = linha.replace(' o ', '  or  ')
         linha = linha.replace(' || ', '  or  ')
 
         # Adicionando um espaço

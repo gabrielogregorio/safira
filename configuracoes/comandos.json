@@ -59,21 +59,24 @@
     "comando":[
       ["importe a biblioteca ","pt-br"],
       ["importe ","pt-br"],
-      ["import ","en-us"]
+      ["import ","en-us"],
+      ["incluir ","es"]
     ],
     "cor":"condicionais"
   },
    "se_nao_se":{
     "comando":[
       ["senao se ","pt-br"],
-      ["else if ","en-us"]
+      ["else if ","en-us"],
+      ["si no si ","es"]
     ],
     "cor":"condicionais"
   },
    "se_nao":{
     "comando":[
       ["senao","pt-br"],
-      ["else","en-us"]
+      ["else","en-us"],
+      ["si no","es"]
     ],
     "cor":"condicionais"
   },
@@ -165,7 +168,8 @@
   "arquivo_existe_nao_sub_existe":{
     "comando":[
       [" nao existe","pt-br"],
-      [" not exists","en-us"]
+      [" not exists","en-us"],
+      [" no existe ","es"]
     ],
     "cor":"lista"
   },
@@ -202,14 +206,16 @@
     "comando":[
       ["quando ","pt-br"],
       ["se ","pt-br"],
-      ["if ","en-us"]
+      ["if ","en-us"],
+      ["si ","es"]
     ],
     "cor":"condicionais"
   },
   "pare":{
     "comando":[
       ["break","en-us"],
-      ["pare","pt-br"]
+      ["pare","pt-br"],
+      ["detener","es"]
     ],
     "cor":"contas"
   },
@@ -230,25 +236,33 @@
   },
   "adicionarItensListas":{
     "comando":[
-      ["adicione ","pt-br"]
+      ["adicione ","pt-br"],
+      ["add ","en-us"],
+      ["anadir ","es"]
     ],
     "cor":"lista"
   },
   "listaPosicoesCom":{
     "comando":[
-      [" posicoes","pt-br"]
+      [" posicoes","pt-br"],
+      [" positions ","en-us"],
+      [" posiciones ","es"]
     ],
     "cor":"lista"
   },
   "listaNaPosicao":{
     "comando":[
-      [" na posicao ","pt-br"]
+      [" na posicao ","pt-br"],
+      [" in position ","en-us"],
+      [" en posicion ","es"]
     ],
     "cor":"lista"
   },
   "RemoverItensListas":{
     "comando":[
-      ["remova ","pt-br"]
+      ["remova ","pt-br"],
+      ["remove ","en-us"],
+      ["eliminarlo ","es"]
     ],
     "cor":"lista"
   },
@@ -267,7 +281,9 @@
   "para_cada":{
     "comando":[
       ["para cada ","pt-br"],
-      ["for ","en-us"]
+      ["for each ","en-us"],
+      ["for ","en-us"],
+      ["para cada ","es"]
     ],
     "cor":"condicionais"
   },
@@ -285,29 +301,39 @@
   },
   "tamanhoDaLista":{
     "comando":[
-      ["o tamanho da lista de","pt-br"],
-      ["o tamanho da lista","pt-br"],
-      ["tamanho da lista de","pt-br"],
-      ["tamanho da lista","pt-br"]
+      ["o tamanho da lista de ","pt-br"],
+      ["o tamanho da lista ","pt-br"],
+      ["tamanho da lista de ","pt-br"],
+      ["tamanho da lista ","pt-br"],
+      ["el tamano de la  lista","es"],
+      ["tamano de la lista","es"]
     ],
     "cor":"lista"
   },
   "tiverLista":{
     "comando":[
-      ["tiver ","pt-br"]
+      ["tiver ","pt-br"],
+      ["tener ","es"],
+      ["have ","en-us"]
     ],
     "cor":"lista"
   },
   "aleatorio":{
     "comando":[
       ["um numero aleatorio entre ","pt-br"],
-      ["numero aleatorio entre ","pt-br"]
+      ["numero aleatorio entre ","pt-br"],
+      ["un numero aleatorio entre ","es"],
+      ["numero aleatorio entre ","es"],
+      ["a random number between ","en-us"],
+      ["random number between ","en-us"]
     ],
     "cor":"tempo"
   },
   "aleatorioEntre":{
     "comando":[
-      [" e ","pt-br"]
+      [" e ","pt-br"],
+      [" and ","en-us"],
+      [" y ","es"]
     ],
     "cor":"lista"
   },
@@ -315,10 +341,18 @@
     "comando":[
       ["mostre nessa linha ","pt-br"],
       ["imprima nessa linha ","pt-br"],
-      ["display ","en-us"],
       ["escreva nessa linha ","pt-br"],
+      ["exiba nessa linha ","pt-br"],
+
+      ["show on that line ","en-us"],
+      ["print on that line ","en-us"],
+      ["write on that line ","en-us"],
+      ["display ","en-us"],
       ["print ","pt-br"],
-      ["exiba nessa linha ","pt-br"]
+
+      ["mostrar en esa línea ","es"],
+      ["escribe en esa línea ","es"],
+      ["imprimir en esa línea ","es"]
     ],
     "cor":"exibicao"
   },
@@ -328,9 +362,16 @@
         ["imprima ","pt-br"],
         ["escreva ","pt-br"],
         ["exiba ","pt-br"],
+
+        ["show "],
+        ["write ","en-us"],
         ["printf ","en-us"],
-        ["println ","en-us"
-      ]
+        ["println ","en-us"],
+
+        ["mostrar  ","es"],
+        ["escribe ","es"],
+        ["imprimir ","es"]
+
     ],
     "cor":"exibicao"
   },
@@ -338,6 +379,8 @@
     "comando":[
       [" recebe ","pt-br"],
       [" vale ","pt-br"],
+      [" obtiene ","es"],
+      [" receive ","en-us"],
       [" = ","all"]
     ],
     "cor":"atribuicao"
@@ -346,28 +389,36 @@
     "comando":[
       ["function ","pt-br"],
       ["funcao ","pt-br"],
-      ["def ","pt-br"]
+      ["funcion ","es"],
+      ["def ","en-us"]
     ],
     "cor":"tempo"
   },
   "enquanto":{
     "comando":[
       ["enquanto ","pt-br"],
-      ["while ","pt-br"]
+      ["while ","en-us"],
+      ["mientras que ","es"],
+      ["mientras ","es"]
     ],
     "cor":"condicionais"
   },
   "aguarde":{
     "comando":[
       ["espere ","pt-br"],
-      ["aguarde ","pt-br"]
+      ["aguarde ","pt-br"],
+      ["wait ","en-us"],
+      ["delay ","en-us"],
+      ["esperar ","es"]
     ],
     "cor":"tempo"
   },
   "repita":{
     "comando":[
       ["repita ","pt-br"],
-      ["repitir ","pt-br"]
+      ["repetir ","pt-br"],
+      ["repeat ","en-us"],
+      ["repetir ","es"]
     ],
     "cor":"condicionais"
   },
@@ -377,7 +428,10 @@
       ["limpar a tela","pt-br"],
       ["limpatela","pt-br"],
       ["limpe a tela","pt-br"],
-      ["clear","en-us"]
+
+      ["clear","en-us"],
+
+      ["limpiar la pantalla","es"]
     ],
     "cor":"tempo"
   },
@@ -393,27 +447,56 @@
       ["que for digitado","pt-br"],
       ["numero digitado","pt-br"],
       ["digitado","pt-br"],
-      ["input","pt-br"],
-      ["entrada","pt-br"]
+      ["entrada","pt-br"],
+
+
+      ["el numero que ingresa el usuario","es"],
+      ["numero que escribe el usuario","es"],
+      ["el numero que se ingresa","es"],
+      ["numero que está escrito","es"],
+      ["lo que escribe el usuario","es"],
+      ["el usuario a escribir","es"],
+      ["lo que sea que esté escrito","es"],
+      ["eso está escrito","es"],
+      ["numero escrito","es"],
+      ["mecanografiado","es"],
+
+      ["input","en-us"],
+      ["the number that the user enters","en-us"],
+      ["number that the user types","en-us"],
+      ["the number that is entered","en-us"],
+      ["number that is typed","en-us"],
+      ["what the user types","en-us"],
+      ["the user to type","en-us"],
+      ["whatever is typed","en-us"],
+      ["that is typed","en-us"],
+      ["typed number","en-us"],
+      ["typed","en-us"]
     ],
     "cor":"tempo"
   },
   "incremente":{
     "comando":[
-      ["incremente","pt-br"]
+      ["incremente ","pt-br"],
+      ["increase ","en-us"],
+      ["incrementar ","es"]
     ],
     "cor":"tempo"
   },
   "decremente":{
     "comando":[
-      ["decremente","pt-br"]
+      ["decremente","pt-br"],
+      ["decreasingly","en-us"],
+      ["decrecientemente","es"]
     ],
     "cor":"logico"
   },
   "repitaVezes":{
     "comando":[
       [" vezes","pt-br"],
-      [" vez","pt-br"]
+      [" vez","pt-br"],
+      [" times","en-us"],
+      [" veces","es"]
     ],
     "cor":"condicionais"
   },
@@ -425,23 +508,46 @@
       [" for maior que ","pt-br"],
       [" for menor que ","pt-br"],
       [" for igual a ","pt-br"],
-      [" and ","en-us"],
-      [" && ","all"],
+
+      [" es mayor o igual a ","es"],
+      [" es menor o igual que ","es"],
+      [" es diferente de ","es"],
+      [" es mayor que ","es"],
+      [" es menos que ","es"],
+      [" es igual a ","es"],
+
+      [" is greater than or equal to ","en-us"],
+      [" is less than or equal a ","en-us"],
+      [" is different from ","en-us"],
+      [" is greater than ","en-us"],
+      [" is less than ","en-us"],
+      [" is equal to ","en-us"],
+
       [" ou ","pt-br"],
       [" or ","en-us"],
-      [" || ","all"],
-      [" == ","all"],
-      [" >= ","all"],
-      [" <= ","all"],
-      ["true","all"],
+      [" o ","es"],
+
+      [" and ","en-us"],
+      [" e ","pt-br"],
+      [" y ","pt-br"],
+
+      ["true","en-us"],
+      ["false","en-us"],
+      ["truth","en-us"],
       ["verdadeiro","pt-br"],
       ["verdadeira","pt-br"],
       ["verdade","pt-br"],
       ["falso","pt-br"],
       ["mentira","pt-br"],
-      ["false","all"],
+      ["cierto","es"],
+      ["verdad","es"],
+
+      [" && ","all"],
+      [" || ","all"],
+      [" == ","all"],
+      [" >= ","all"],
+      [" <= ","all"],
       [" != ","all"],
-      [" e ","pt-br"],
       [" > ","all"],
       [" < ","all"]
     ],
@@ -454,10 +560,20 @@
       [" multiplique ","pt-br"],
       [" elevado por ","pt-br"],
       [" elevado a ","pt-br"],
-      [" elevado ","pt-br"],
-      [" divide ","pt-br"],
+      [" dividido ","pt-br"],
       [" menos ","pt-br"],
       [" mais ","pt-br"],
+
+      [" multiplied by ","en-us"],
+      [" elevated by ","en-us"],
+      [" divided by ","en-us"],
+      [" multiply ","en-us"],
+      [" minus ","en-us"],
+      [" plus ","en-us"],
+
+      [" multiplicar ","es"],
+      [" mas ","es"],
+
       [" ** ","all"],
       [" - ","all"],
       [" * ","all"],
@@ -469,35 +585,61 @@
   },
   "esperaEm":{
     "comando":[
-      [" milisegundos","pt-br"],
-      [" milisegundo","pt-br"],
+      [" milissegundos","pt-br"],
+      [" milissegundo","pt-br"],
       [" segundos","pt-br"],
       [" segundo","pt-br"],
-      [" ms","pt-br"],
-      [" s","pt-br"]
+
+      [" milisegundos","en-us"],
+      [" millisecond","en-us"],
+      [" seconds","en-us"],
+      [" second","en-us"],
+
+      [" milisegundos","es"],
+      [" milisegundo","es"],  
+
+      [" ms","all"],
+      [" s","all"]
     ],
     "cor":"tempo"
   },
   "passandoParametros":{
     "comando":[
       [" passando parametros ","pt-br"],
-      [" parametros ","pt-br"],
       [" passando parametro ","pt-br"],
+      [" parametros ","pt-br"],
       [" passando ","pt-br"],
-      [" parametro ","pt-br"]
+      [" parametro ","pt-br"],
+
+      [" passing parameters ","en-us"],
+      [" passing parameter ","en-us"],
+      [" parameters ","en-us"],
+      [" passing ","en-us"],
+      [" parameter ","en-us"],
+
+      [" parametros de paso ","es"],
+      [" parametro de paso ","es"],
+      [" parametros ","es"],
+      [" pasando los ","es"],
+      [" parametro ","es"]
+
     ],
     "cor":"tempo"
   },
   "recebeParametros":{
     "comando":[
-      [" recebe parametros ","pt-br"]
+      [" recebe parametros ","pt-br"],
+      [" receives parameters ","en-us"],
+      [" recibe parametros ","es"]
     ],
     "cor":"condicionais"
   },
   "recebeDeclaraListas":{
     "comando":[
       [" recebe ","pt-br"],
-      [" com ","pt-br"]
+      [" com ","pt-br"],
+      [" recibir ","es"],
+      [" receive ","en-us"]
     ],
     "cor":"lista"
   },
@@ -567,20 +709,24 @@
   "tente":{
     "comando":[
       ["tente","pt-br"],
-      ["try","en-us"]
+      ["try","en-us"],
+      ["tratar","es"]
     ],
     "cor":"condicionais"
   },
    "se_der_erro":{
     "comando":[
       ["se der erro","pt-br"],
-      ["except","en-us"]
+      ["except","en-us"],
+      ["si sale mal","es"]
     ],
     "cor":"condicionais"
   },
    "senao_der_erro":{
     "comando":[
-      ["senao der erro","pt-br"]
+      ["if it doesn't go wrong","en-us"],
+      ["senao der erro","pt-br"],
+      ["si no sale mal","es"]
     ],
     "cor":"condicionais"
   },
@@ -588,7 +734,8 @@
     "comando":[
       ["em qualquer caso","pt-br"],
       ["finalmente","pt-br"],
-      ["finally","en-us"]
+      ["finally","en-us"],
+      ["in any case","en-us"]
     ],
     "cor":"condicionais"
   }

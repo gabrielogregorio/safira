@@ -1,4 +1,4 @@
-editorDeImagem = 'shotwell ' # Se você usa Ubuntu
+editorDeImagem = "shotwell" # Se você usa Ubuntu
 #editorDeImagem = 'mspaint '  # Se você usa Windows 10
 
 execute o script "enviarEmail.fyn"
