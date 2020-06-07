@@ -64,8 +64,10 @@ class Atualizar():
 
         self.tp_atualizacao = Toplevel(self.tela , bd=20, bg="#fafafa", highlightcolor="#fafafa")
         self.tp_atualizacao.withdraw()
-
-        self.tp_atualizacao.wm_attributes('-type', 'splash')
+        try:
+            self.tp_atualizacao.wm_attributes('-type', 'splash')
+        except Exception as erro:
+            print("Erro ao remover barra de titulos => ", erro)
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
 
         j_width  = self.tp_atualizacao.winfo_reqwidth()
@@ -110,7 +112,11 @@ class Atualizar():
         self.tp_atualizacao = Toplevel(self.tela , bd=20, bg="#fafafa", highlightcolor="#fafafa")
         self.tp_atualizacao.withdraw()
 
-        self.tp_atualizacao.wm_attributes('-type', 'splash')
+        try:
+            self.tp_atualizacao.wm_attributes('-type', 'splash')
+        except Exception as erro:
+            print("Erro ao remover barra de titulos => ", erro)
+            
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
 
         j_width  = self.tp_atualizacao.winfo_reqwidth()

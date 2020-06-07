@@ -38,46 +38,718 @@
             max-height: 0;
             overflow: hidden;
             transition: max-height 0.2s ease-out;
-            background-color: #f1f1f1;
+            background-color: #222232;
         }
+
+    body {
+        background-color: #222232;
+        color:white;
+    }
     </style>
 </head>
 <body>
     <h2>Comandos da Safira</h2>
 
-    <button class="collapsible">Exibir algo na tela</button>
-    <div class="content">
-<p>
-<span style="color:#8cbd7d">#****** Nome do comando ******#</span>
-<span style="color:#8cbd7d"># Exiba na tela</span>
-
-<span style="color:#8cbd7d">#****** Descrição do comando ******#</span>
-# Exibe alguma coisa na tela, indo para a linha de baixo
-# Você pode separar valores pela virgula, exemplo:
-# mostre "Digite sua idade ", variavelNome
-
-<span style="color:#8cbd7d">#****** Uso simples comando ******#</span>
-nome = "Kellen"
-mostre "Bom dia "
-mostre nome
-
-<span style="color:#8cbd7d">#****** Variações dos comandos ******#</span>
-<span style="color:#8cbd7d"># mostre , imprima , escreva , exiba , printf , println </span>
+ <button class="collapsible">Exibir na tela</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font>
+        <font color="#41b375"># Exiba na tela</font><br>
+        <font color="#41b375"></font><br>
+        <font color="#41b375">#****** Descrição do comando ******#</font><br>
+        <font color="#41b375"># Exibe alguma coisa na tela, indo para a linha de baixo</font><br>
+        <font color="#41b375"># Você pode separar valores pela virgula, exemplo:</font><br>
+        <font color="#41b375"># mostre "Digite sua idade ", variavelNome</font><br>
+        <font color="#41b375"></font><br>
+        <font color="#41b375">#****** Uso simples comando ******#</font><br>
+        <font color="#ffffff">nome = "Kellen"</font><br>
+        <font color="#7baaf7">mostre</font> "Bom dia "<br>
+        <font color="#7baaf7">mostre</font> nome<br>
+        <font color="#41b375"></font><br>
+        <font color="#41b375">#****** Variações dos comandos ******#</font><br>
+        <font color="#41b375"># mostre , imprima , escreva , exiba , printf , println&nbsp;</font><br>
     </p>
-        
-        
+ </div>
 
-    </div>
 
-    <button class="collapsible">Criar uma variável</button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+ <button class="collapsible">Exibir na mesma linha</button>
+ <div class="content">
+    <p>
+        <font color="#41b375">#****** Nome do comando ******#</font><br>
+        <font color="#41b375"># Exiba na mesma linha</font><br>
+        <font color="#41b375"></font><br>
+        <font color="#41b375">#****** Descrição do comando ******#</font><br>
+        <font color="#41b375"># Exibe alguma coisa na tela, sem ir para a linha de baixo</font><br>
+        <font color="#41b375"># Você pode separar valores pela virgula, exemplo:</font><br>
+        <font color="#41b375"># mostre "Digite sua idade ", variavelNome</font><br>
+        <font color="#41b375"></font><br>
+        <font color="#41b375">#****** Uso simples comando ******#</font><br>
+        <font color="#41b375">nome = "Kellen"</font><br>
+        <font color="#7baaf7">mostre</font> nessa linha "Bom dia "<br>
+        <font color="#7baaf7">mostre</font> nessa linha nome<br>
+        <br/><br>
+        <font color="#41b375">#****** Variações dos comandos ******#</font><br>
+        <font color="#41b375"># imprima nessa linha , display , escreva nessa linha , print , exiba nessa linha&nbsp;</font><br>
+    </p>
+ </div>
 
-    <button class="collapsible">Testar uma condição</button>
-    <div class="content">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+
+ <button class="collapsible">Variáveis</button>
+ <div class="content">
+    <p>
+        <font color="#41b375"># VARIAVEIS</font>
+        <font color="#41b375">#****** Nome do comando ******#</font>
+        <font color="#41b375"># Declarar variável</font>
+        <font color="#41b375"><br/></font>
+        <font color="#41b375">#****** Descrição do comando ******#</font>
+        <font color="#41b375"># Atribui um valor a um nome, exemplo:</font>
+        <font color="#41b375"># idade = 20</font>
+        <font color="#41b375"># Nesta situação, ao usar a palavra idade,</font>
+        <font color="#41b375"># ela terá o valor 20</font>
+        <font color="#41b375"><br/></font>
+        <font color="#41b375">#****** Uso simples comando ******#</font>
+        <br/>
+        <font color="#41b375"># Variável numérica</font>
+        <font color="#41b375">idade =&nbsp; 20</font>
+        <br/>
+        <font color="#41b375"># Variável texto</font>
+        <font color="#41b375">nome =&nbsp; &nbsp;"CJ"</font>
+        <br/>
+        <font color="#41b375"># Variável booleana (Verdadeira ou falsa)</font>
+        <font color="#41b375">casado = falso</font>
+        <br/>
+        <font color="#41b375"># Você pode realizar testes com as variáveis</font>
+        <font color="#41b375">se casado for igual a falso</font>
+        <font color="#41b375">{</font>
+        <font color="#41b375">&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "Você não é casado."</font>
+        <font color="#41b375">}</font>
+        <br/>
+        <font color="#41b375"># Você pode ver o tipo de uma variável com o comando tipo</font>
+        <font color="#7baaf7">mostre</font> "idade é do tipo -&gt; ", o tipo da variavel idade
+        <font color="#7baaf7">mostre</font> "idade é do nome -&gt; "o tipo da variavel nome
+        <font color="#7baaf7">mostre</font> "idade é do casado -&gt; "o tipo da variavel casado
+        <br/>
+        <font color="#41b375">#****** Variações dos comandos ******#</font>
+        <font color="#41b375"># recebe , vale , =&nbsp;</font>
+        <font color="#41b375"># o tipo da variavel , tipo da variavel , type of variable , o tipo de , o tipo da , tipo de , tipo da , tipo&nbsp;</font>
+        <br/>
+    </p>
+ </div>
+
+
+ <button class="collapsible">Incrementar/Decrementar variáveis</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Incremente/Decremente</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Aumenta ou diminui o valor de uma variável numérica</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>numero = 1</p>
+    <p><font color="#7baaf7">mostre</font> numero</p>
+    <p><br/></p>
+    <p>incremente 15 em numero</p>
+    <p><font color="#7baaf7">mostre</font> numero</p>
+    <p><br/></p>
+    <p>decremente 2 em numero</p>
+    <p><font color="#7baaf7">mostre</font> numero</p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># decremente</font></p>
+    <p><font color="#41b375"># incremente</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># na variavel , da variavel , no , na , em</font></p>
+    <br/>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Testar uma condição</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Condicionais</font></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Testa se uma ou mais condições são verdadeiras, a primeira que atender</font></p>
+    <p><font color="#41b375"># será executada, as outras serão ignoradas, mesmo que também</font></p>
+    <p><font color="#41b375"># sejam verdadeiras. Sempre será necessário testar a condição "se ",</font></p>
+    <p><font color="#41b375"># depois você pode testar ou não a condição "senao se " ou a "senao "</font></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p><font color="#ba67c8">se</font> <font color="#e1bee7">1</font> <font color="#e67c73">for igual a </font><font color="#e1bee7">1</font></p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font><font color="#f7cb4d"> "A condição é verdadeira"</font></p>
+    <p>}</p>
+    <p><font color="#ba67c8">senao se</font> <font color="#e1bee7">2</font> <font color="#e67c73">for diferente de</font> <font color="#e1bee7">10 </font><font color="#e67c73">ou</font> <font color="#f7cb4d">"teste"</font><font color="#e67c73"> for igual a</font><font color="#f7cb4d"> "teste"</font></p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font><font color="#f7cb4d"> "Essa condição é verdadeira e a de cima é falsa"</font></p>
+    <p>}</p>
+    <p><font color="#ba67c8">senao&nbsp;</font></p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Nenhuma das condições são verdadeiras"</font></p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># se, quando, if</font></p>
+    <p><font color="#41b375"># senao se, else if</font></p>
+    <p><font color="#41b375"># senao, else</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># for maior ou igual a , &lt;=&nbsp;</font></p>
+    <p><font color="#41b375"># for menor ou igual a , &gt;=&nbsp;</font></p>
+    <p><font color="#41b375"># for menor que , &lt;</font></p>
+    <p><font color="#41b375"># for maior que , &gt;&nbsp;</font></p>
+    <p><font color="#41b375"># for diferente de , !=</font></p>
+    <p><font color="#41b375"># for igual a , ==&nbsp;</font></p>
+    <p><font color="#41b375"># true , verdadeiro , verdadeira , verdade</font></p>
+    <p><font color="#41b375"># falso , mentira , false</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Subcomandos de junção de multiplos testes ******#</font></p>
+    <p><font color="#41b375"># e , and , &amp;&amp;</font></p>
+    <p><font color="#41b375"># ou , or&nbsp; , ||</font></p>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Enquanto</button>
+ <div class="content">
+    <p><br/></p>
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Comando Enquanto</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Repete um bloco de intrução enquanto uma condição for verdadeira</font></p>
+    <p><font color="#41b375"># Aviso, OS TESTES REALIZADOS obedecem as mesmas opções</font></p>
+    <p><font color="#41b375"># do comando de condicionais. Consulte esse comando</font></p>
+    <p><font color="#41b375"># para ter mais informações</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>opcao = 1</p>
+    <p>enquanto opcao for diferente de 0</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; limpar a tela</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Escolha uma opção"</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"0 - Sair "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"1 - Consulta Saldo "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"2 - Consulta CPF "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"3 - Consulta Identidade "</font></p>
+    <p><br/></p>
+    <p>&nbsp; &nbsp; opcao recebe o numero que o usuario digitar</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># enquanto , while&nbsp;</font></p>
+    <p><br/></p>
+ </div>
+
+
+
+
+ <button class="collapsible">Para cada</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Para cada</font></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Cria uma variável ou modifica o valor de uma</font></p>
+    <p><font color="#41b375"># Atribuindo dinamicamente o valor de uma variável</font></p>
+    <p><font color="#41b375"># Executando ao mesmo tempo um laço</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>para cada x de 0 ate 10</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "X vale -&gt; ", x</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># para cada , for</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># de</font></p>
+    <p><font color="#41b375"># ate&nbsp;</font></p>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Repetir</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Repita</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Espera durante um intervalo definido</font></p>
+    <p><font color="#41b375">&nbsp; &nbsp; &nbsp;&nbsp;</font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>repita 10 vezes</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "Repetindo todo o bloco 10 vezes"</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># repita , repitir&nbsp;</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># vezes , vez&nbsp;</font></p>
+    <p><br/></p>
+    <p><br/></p>
+ </div>
+
+
+
+ <button class="collapsible">Funções</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Funções</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Cria um bloco de intruções com um nome que pode ser</font></p>
+    <p><font color="#41b375"># executado em qualquer parte do código</font></p>
+    <p><font color="#41b375"># através da palavra atribuida</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p><font color="#41b375"># Criando uma função</font></p>
+    <p>funcao mostraArvore</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"&nbsp; &nbsp; *&nbsp; &nbsp; "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"&nbsp; &nbsp;***&nbsp; &nbsp;"</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"&nbsp; *****&nbsp; "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">" ******* "</font></p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"&nbsp; &nbsp; *&nbsp; &nbsp; "</font></p>
+    <p>}</p>
+    <p><font color="#41b375"># Chamando a função. Você pode chamar ela&nbsp;</font></p>
+    <p><font color="#41b375"># Quantas vezes e onde quiser</font></p>
+    <p>mostraArvore</p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># Você também pode criar uma função com parâmetros</font></p>
+    <p>funcao calculaMedia recebe parametros nota1, nota2</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "Sua média final é ", (nota1 + nota2) / 2</p>
+    <p>}</p>
+    <p><br/></p>
+    <p>calculaMedia passando parametros 9.8, 7.5</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># function , funcao , def&nbsp;</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># recebe parametros</font></p>
+    <p><font color="#41b375"># passando parametros , parametros , passando parametro , passando , parametro&nbsp;</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><br/></p>
+ </div>
+
+
+
+ <button class="collapsible">Esperar</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Aguarde</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Espera durante um intervalo definido</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p><font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Olá, amigo(a)!"</font></p>
+    <p>espere 2 segundos</p>
+    <p><font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Como você está?"</font></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># espere , aguarde&nbsp;</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># milisegundos, milisegundo, segundos, segundo, ms, s</font></p>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Número aleatório</button>
+ <div class="content">
+    <p><font color="#41b375"># ALEATORIO</font></p>
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Aleatório</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Sorteia um número aleatório</font></p>
+    <p><font color="#41b375"># Os valores podem ser variáveis</font></p>
+    <p><font color="#41b375"># ou resultados de outros comandos</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>numeroSorteado = um numero aleatorio entre 10 e 20</p>
+    <p><font color="#7baaf7">mostre</font> numeroSorteado</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># um numero aleatorio entre , numero aleatorio entre</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Variações dos subcomandos ******#</font></p>
+    <p><font color="#41b375"># e</font></p>
+    <br/>
+ </div>
+
+
+ <button class="collapsible">Ler o que o usuário digitar</button>
+ <div class="content">
+    <p><font color="#41b375"># DIGITADO</font></p>
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Digitado</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Recebe um valor que o usuario digitar</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p><font color="#7baaf7">mostre nessa linha</font> <font color="#f7cb4d">"Digite seu nome: "</font></p>
+    <p>nome = o que o usuario digitar</p>
+    <p><br/></p>
+    <p><font color="#7baaf7">mostre nessa linha</font> <font color="#f7cb4d">"Digite sua idade: "</font></p>
+    <p>idade = o numero que o usuario digitar</p>
+    <p><br/></p>
+    <p>mostre nome, <font color="#f7cb4d">" sua idade é "</font>, idade</p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Variações dos comandos ******#</font></p>
+    <p><font color="#41b375"># o numero que o usuario digitar , numero que o usuario digitar , o numero que for digitado, numero que for digitado , numero digitado</font>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># o que o usuario digitar , que o usuario digitar , o que for digitado , que for digitado , digitado , </font>input , entrada</font>
+    <br/>
+ </div>
+
+
+
+ <button class="collapsible">Trabalhando com listas</button>
+ <div class="content">
+    <p><br/></p>
+    <p><font color="#41b375">#******************************* Nome dos comandos *********************#</font></p>
+    <p><font color="#41b375"># Manipulação e criação de listas</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#******************************* Descrição dos comandos ****************#</font></p>
+    <p><font color="#41b375"># Diversos Comandos para manipular listas</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#******************************* Uso simples dos comandos **************#</font></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><font color="#41b375"># Cria uma lista chamada numeros com 10 posições de texto</font></p>
+    <p>lista de numeros com 100 posicoes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Declarar uma lista</font></p>
+    <p>lista de nomes recebe "gabriel", "Maria", "Julia"</p>
+    <p><font color="#7baaf7">mostre</font> nomes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Adiciona um valor em uma posição</font></p>
+    <p>lista de nomes na posicao 2 recebe "gregório"</p>
+    <p><font color="#7baaf7">mostre</font> nomes</p>
+    <p><br/></p>
+    <p>lista de opcoes recebe "opção1", "opção3"</p>
+    <p><font color="#7baaf7">mostre</font> opcoes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Adicionar um valor em uma posição especifica</font></p>
+    <p><font color="#41b375"># não sobrescrevendo o valor</font></p>
+    <p>adicione "opção2" na posicao 2 da lista de opcoes</p>
+    <p><font color="#7baaf7">mostre</font> opcoes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Adicionar algo no final de uma lista</font></p>
+    <p>adicione "opção4" no final da lista de opcoes</p>
+    <p><font color="#7baaf7">mostre</font> opcoes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Adicionar algo na lista de nomes</font></p>
+    <p>adicione "opção5" na lista de opcoes</p>
+    <p><font color="#7baaf7">mostre</font> opcoes</p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># Adicionar algo no inicio da lista</font></p>
+    <p>adicione "opção0" no inicio da lista de opcoes</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Remover um item da lista</font></p>
+    <p>remova "opção5" da lista de opcoes</p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><font color="#41b375"># Retornar um valor em uma posição</font></p>
+    <p><font color="#7baaf7">mostre</font> lista de opcoes na posicao 1</p>
+    <p><br/></p>
+    <p># Verifica se tem um valor na lista</p>
+    <p>se tiver "opção2" na lista de opcoes</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; remova "opção2" da lista de opcoes</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> opcoes</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Retorna a quantidade de itens de uma lista</font></p>
+    <p><font color="#7baaf7">mostre</font> " A lista de nomes tem ", o tamanho da lista de nomes, " posições"</p>
+    <p><font color="#7baaf7">mostre</font> " A lista de opcoes tem ", o tamanho da lista de opcoes, " posições"</p>
+    <p><font color="#7baaf7">mostre</font> " A lista de números tem ", o tamanho da lista de numeros, " posições"</p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****************************** Variações dos comandos *****************#</font></p>
+    <p><font color="#41b375"># --------------------------- Cria uma lista x posições ----------------#</font></p>
+    <p><font color="#41b375"># * lista de</font></p>
+    <p><font color="#41b375"># * lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * com</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * posicoes</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ------------------------- Declarar uma lista--------------------------#</font></p>
+    <p><font color="#41b375"># * lista de</font></p>
+    <p><font color="#41b375"># * lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * recebe</font></p>
+    <p><font color="#41b375"># * com</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ---------------- Sobrescrever um valor em uma posição da lista -------#</font></p>
+    <p><font color="#41b375"># * lista de</font></p>
+    <p><font color="#41b375"># * lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * na posicao</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * recebe</font></p>
+    <p><font color="#41b375"># * com</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># --------------- Adicionar um valor em uma posição especifica ---------#</font></p>
+    <p><font color="#41b375"># * adicione</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * na posicao</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * da lista de</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ------------------ Adicionar algo no final de uma lista --------------#</font></p>
+    <p><font color="#41b375"># * adicione</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * no final da lista de</font></p>
+    <p><font color="#41b375"># * no final a lista de</font></p>
+    <p><font color="#41b375"># * no final na lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ------------------ Adicionar algo no inicio da lista -----------------#</font></p>
+    <p><font color="#41b375"># * adicione</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * no inicio da lista de</font></p>
+    <p><font color="#41b375"># * no inicio a lista de</font></p>
+    <p><font color="#41b375"># * no inicio na lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ------------------- Adicionar algo na lista de nomes -----------------#</font></p>
+    <p><font color="#41b375"># * adicione</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * na lista de</font></p>
+    <p><font color="#41b375"># * da lista de</font></p>
+    <p><font color="#41b375"># * a lista de</font></p>
+    <p><font color="#41b375"># * na lista</font></p>
+    <p><font color="#41b375"># * a lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># --------------------- Remover um item da lista -----------------------#</font></p>
+    <p><font color="#41b375"># * remova</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * da lista de</font></p>
+    <p><font color="#41b375"># * da lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ----------------- Retornar um valor em uma posição -------------------#</font></p>
+    <p><font color="#41b375"># * lista de</font></p>
+    <p><font color="#41b375"># * lista</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * na posicao</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ---------------- Verifica se tem um valor na lista -------------------#</font></p>
+    <p><font color="#41b375"># * tiver</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * na lista de</font></p>
+    <p><font color="#41b375"># * na lista</font></p>
+    <p><font color="#41b375"># * em</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ----------- Retorna a quantidade de itens de uma lista ---------------#</font></p>
+    <p><font color="#41b375"># * o tamanho da lista de</font></p>
+    <p><font color="#41b375"># * o tamanho da lista</font></p>
+    <p><font color="#41b375"># * tamanho da lista de</font></p>
+    <p><font color="#41b375"># * tamanho da lista</font></p>
+    <p><br/></p>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Manipulação de arquivos</button>
+ <div class="content">
+    <p><font color="#41b375">#******************************* Nome dos comandos **************************#</font></p>
+    <p><font color="#41b375"># Manipulação de arquivos</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#******************************* Descrição dos comandos **************************#</font></p>
+    <p><font color="#41b375"># Diversos Comandos para manipular arquivos</font></p>
+    <p><font color="#41b375"># Criação</font></p>
+    <p><font color="#41b375"># Inserção de texto</font></p>
+    <p><font color="#41b375"># Leitura</font></p>
+    <p><font color="#41b375"># Verificar se existe</font></p>
+    <p><font color="#41b375"># Remover</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#******************************* Uso simples dos comandos **************************#</font></p>
+    <p><font color="#41b375"># Criar um arquivo qualquer</font></p>
+    <p>crie o arquivo "arquivo.txt"</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Escrever em um arquivo</font></p>
+    <p>adicione "Texto qualquer" no arquivo "arquivo.txt"</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Sobrescrever por completo um arquivo</font></p>
+    <p>sobrescreva "Iai, tudo bem amigo" no arquivo "arquivo.txt"</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Ler o conteudo do arquivo</font></p>
+    <p>conteudo = leia o texto do arquivo "arquivo.txt"</p>
+    <p><font color="#7baaf7">mostre</font> conteudo</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Verificar se um arquivo existe ou não</font></p>
+    <p>se o arquivo "arquivoQUeNaoExiste.txt" nao existe</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "Esse arquivo não existe"</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#41b375"># Deletar um arquivo</font></p>
+    <p>se o arquivo "arquivo.txt" existe</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> "Esse arquivo Existe e será removido"</p>
+    <p>&nbsp; &nbsp; delete o arquivo "arquivo.txt"</p>
+    <p>}</p>
+    <p><br/></p>
+    <p><font color="#f7cb4d"><br/></font></p>
+    <p><font color="#41b375">#****************** Variações dos comandos ****************#</font></p>
+    <p><font color="#41b375"># -------------------------------- Criação de arquivo -------------------------- #</font></p>
+    <p><font color="#41b375"># * crie o arquivo</font></p>
+    <p><font color="#41b375"># * create the file</font></p>
+    <p><font color="#41b375"># * crea el archivo</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># --------------------------------- Adição de texto ----------------------------- #</font></p>
+    <p><font color="#41b375"># * escreva&nbsp;</font></p>
+    <p><font color="#41b375"># * adicione&nbsp;</font></p>
+    <p><font color="#41b375"># * write&nbsp;</font></p>
+    <p><font color="#41b375"># * add&nbsp;</font></p>
+    <p><font color="#41b375"># * escriba&nbsp;</font></p>
+    <p><font color="#41b375"># * agregue&nbsp;</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * no arquivo</font></p>
+    <p><font color="#41b375"># * in the file</font></p>
+    <p><font color="#41b375"># * en el archivo</font></p>
+    <p><font color="#41b375"># * to the</font></p>
+    <p><font color="#41b375"># * al archivo</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ---------------------------- Sobrescrever o arquivo --------------------------- #</font></p>
+    <p><font color="#41b375"># * sobrescreva</font></p>
+    <p><font color="#41b375"># * sobrescrever</font></p>
+    <p><font color="#41b375"># * overwrite</font></p>
+    <p><font color="#41b375"># * sobrescriba</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * no arquivo</font></p>
+    <p><font color="#41b375"># * en el archivo</font></p>
+    <p><font color="#41b375"># * in the</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * file</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ------------------------- Ler todo o texto do arquivo ----------------------#</font></p>
+    <p><font color="#41b375"># * leia o texto do arquivo</font></p>
+    <p><font color="#41b375"># * get the text from the file</font></p>
+    <p><font color="#41b375"># * obtenha o texto do arquivo</font></p>
+    <p><font color="#41b375"># * read the text of the file</font></p>
+    <p><font color="#41b375"># * obtener el texto del archivo</font></p>
+    <p><font color="#41b375"># * lea el texto del archivo</font></p>
+    <p><font color="#41b375"># * leia o arquivo</font></p>
+    <p><font color="#41b375"># * read the file</font></p>
+    <p><font color="#41b375"># * lea el archivo</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ---------------------------- Verifica se um arquivo existe ----------------#</font></p>
+    <p><font color="#41b375"># COMANDO</font></p>
+    <p><font color="#41b375"># * o arquivo</font></p>
+    <p><font color="#41b375"># * the file</font></p>
+    <p><font color="#41b375"># * el archivo</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * nao existe</font></p>
+    <p><font color="#41b375"># * not exists</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># * existe</font></p>
+    <p><font color="#41b375"># * exists</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"># ----------------------------------- Deletar um arquivo ----------------------- #</font></p>
+    <p><font color="#41b375"># * delete o arquivo</font></p>
+    <p><font color="#41b375"># * remova o arquivo</font></p>
+    <p><font color="#41b375"># * exclua o arquivo</font></p>
+    <p><font color="#41b375"># * delete the file</font></p>
+    <p><font color="#41b375"># * eliminar el archivo</font></p>
+    <p><font color="#f7cb4d"><br/></font></p>
+    <p><br/></p>
+ </div>
+
+
+ <button class="collapsible">Importar</button>
+ <div class="content">
+    <p><font color="#41b375">#****** Nome do comando ******#</font></p>
+    <p><font color="#41b375"># Importação</font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375"><br/></font></p>
+    <p><font color="#41b375">#****** Descrição do comando ******#</font></p>
+    <p><font color="#41b375"># Carrega e executa um código inteiro na linguagem Feynman</font></p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Preparação do ambiente ******#</font></p>
+    <p><font color="#41b375"># Criação de um arquivo, que conterá um código na linguagem Feynman</font></p>
+    <p>se o arquivo "biblioteca.fyn" existe</p>
+    <p>{</p>
+    <p>&nbsp; &nbsp; delete o arquivo "biblioteca.fyn"</p>
+    <p>}</p>
+    <p><br/></p>
+    <p>crie o arquivo "biblioteca.fyn"</p>
+    <p>adicione "mostre 123" no arquivo "biblioteca.fyn"</p>
+    <p><br/></p>
+    <p><br/></p>
+    <p><font color="#41b375">#****** Uso simples comando ******#</font></p>
+    <p>importe a biblioteca biblioteca</p>
+    <p>importe biblioteca</p>
+    <p>import&nbsp; biblioteca</p>
+    <p><br/></p>
+ </div>
+
+ 
+ <button class="collapsible">Tente executar algo</button>
+ <div class="content">
+    <div><font color="#41b375">#****** Nome do comando ******#</font></div>
+    <div><font color="#41b375"># Tente</font></div>
+    <div><font color="#41b375"><br/></font></div>
+    <div><font color="#41b375">#****** Descrição do comando ******#</font></div>
+    <div><font color="#41b375"># Executa um comando, se ele for executado com sucesso&nbsp;</font></div>
+    <div><font color="#41b375"># ou com erros ele irá executar os blocos especificos. O comando&nbsp;</font></div>
+    <div><font color="#41b375"># tente deve ser o primeiro e é obrigatório, os outros são opcionais</font></div>
+    <div><font color="#41b375"># e podem estar em qualquer ordem</font></div>
+    <div><font color="#41b375"><br/></font></div>
+    <div><font color="#41b375"><br/></font></div>
+    <div><font color="#41b375">#****** Uso simples comando ******#</font></div>
+    <div><font color="#ba67c8">tente</font></div>
+    <div>{</div>
+    <div>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Isso não deve provocar um erro"</font></div>
+    <div>&nbsp; &nbsp; isso não faz sentido e deve provocar um erro</div>
+    <div>}</div>
+    <div><font color="#ba67c8">se der erro</font></div>
+    <div>{</div>
+    <div>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Aconteceu um erro"</font></div>
+    <div>}</div>
+    <div><font color="#ba67c8">senao der erro</font></div>
+    <div>{</div>
+    <div>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Não aconteceu um erro"</font></div>
+    <div>}</div>
+    <div><font color="#ba67c8">em qualquer caso</font></div>
+    <div>{</div>
+    <div>&nbsp; &nbsp; <font color="#7baaf7">mostre</font> <font color="#f7cb4d">"Deu um erro ou não"</font></div>
+    <div>}</div>
+    <div><br/></div>
+    <div><br/></div>
+    <div><font color="#41b375">#****** Variações dos comandos ******#</font></div>
+    <div><font color="#41b375"># tente , try</font></div>
+    <div><font color="#41b375"># se der erro , except</font></div>
+    <div><font color="#41b375"># senao der erro</font></div>
+    <div><font color="#41b375"># em qualquer caso , finalmente , finally</font></div>
+    <div><br/></div>
+    <p></p>
+ </div>
 
     <script>
         var coll = document.getElementsByClassName("collapsible");

@@ -42,7 +42,11 @@ class Bug():
 
         self.tp_bug = Toplevel(self.tela, bd=10, bg="#3e4045")
         self.tp_bug.withdraw()
-        self.tp_bug.wm_attributes('-type','splash')
+
+        try:
+            self.tp_bug.wm_attributes('-type','splash')
+        except Exception as erro:
+            print("Erro ao remover barra de titulos => ", erro)
         
         self.lb1 = Label(self.tp_bug, text="  Então você encontrou um bug?  ", font=("",20), bg="#3e4045", fg="#efefef")
         self.lb2 = Label(self.tp_bug, bg="#3e4045", fg="#efefef", image = self.image_bug)
