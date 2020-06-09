@@ -17,7 +17,7 @@ __email__       = 'gabriel.gregorio.1@outlook.com'
 __project__     = 'Combratec'
 __github__      = 'https://github.com/Combratec/'
 __description__ = 'Linguagem de programação focada em lógica'
-__version__     = '0.2'
+__version__     = '0.21'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
 

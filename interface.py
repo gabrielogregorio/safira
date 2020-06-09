@@ -930,7 +930,7 @@ class Interface():
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 ))
         self.colorir_codigo.tela = self.tela
 
-        #Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.fyn')
+        #Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.safira')
 
         self.tela.deiconify()
         self.tela.update()
@@ -970,8 +970,8 @@ class Interface():
     def cascate_scripts(self):
 
         for file in listdir('scripts/'):
-            if len(file) > 5:
-                if file[-3:] == 'fyn':
+            if len(file) > 6:
+                if file[-6:] == 'safira':
                     funcao = lambda link = file:  Interface.abrir_script(self, link)
                     self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 

@@ -19,9 +19,9 @@ class Arquivo():
     def salvar_arquivo_como_dialog(self, event=None):
         arq = filedialog.asksaveasfile(
             mode='w',
-            defaultextension=".fyn",
+            defaultextension=".safira",
             title="Selecione o script",
-            filetypes=(("Meus scripts", "*.fyn"), ("all files", "*.*")))
+            filetypes=(("Meus scripts", "*.safira"), ("all files", "*.*")))
 
         if arq is None:
             return None
@@ -82,7 +82,7 @@ class Arquivo():
         return None  
     def salvar_arquivo_dialog(self, event=None):
 
-        arq_tips = [('Scripts fyn', '*.fyn'), ('Todos os arquivos', '*')]
+        arq_tips = [('Scripts Safira', '*.safira'), ('Todos os arquivos', '*')]
         arq_dial = filedialog.Open(filetypes=arq_tips)
         arq_nome = arq_dial.show()
 
