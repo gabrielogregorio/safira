@@ -202,9 +202,26 @@
     ],
     "cor":"lista"
   },
+  "se_final":{
+    "comando":[
+      [" entao faca isso","pt-br"],
+      [" entonces cuchillo","es"],
+      [" entao faca","pt-br"],
+      [" then knife","en-us"],
+      [" cuchillo","es"],
+      [" entonces","es"],
+      [" entao","pt-br"],
+      [" knife","en-us"],
+      [" then","en-us"],
+      [" faca","pt-br"],
+      ["","all"]
+    ],
+    "cor":"condicionais"
+  },
   "se":{
     "comando":[
       ["quando ","pt-br"],
+      ["caso ","pt-br"],
       ["se ","pt-br"],
       ["if ","en-us"],
       ["si ","es"]
@@ -306,7 +323,8 @@
       ["tamanho da lista de ","pt-br"],
       ["tamanho da lista ","pt-br"],
       ["el tamano de la  lista","es"],
-      ["tamano de la lista","es"]
+      ["tamano de la lista","es"],
+      ["len ","en-us"]
     ],
     "cor":"lista"
   },

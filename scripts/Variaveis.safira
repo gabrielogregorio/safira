@@ -27,8 +27,8 @@ se casado for igual a falso
 
 # Você pode ver o tipo de uma variável com o comando tipo
 mostre "idade é do tipo -> ", o tipo da variavel idade
-mostre "idade é do nome -> "o tipo da variavel nome
-mostre "idade é do casado -> "o tipo da variavel casado
+mostre "idade é do nome -> ", o tipo da variavel nome
+mostre "idade é do casado -> ", o tipo da variavel casado
 
 #****** Variações dos comandos ******#
 # recebe , vale , = 
