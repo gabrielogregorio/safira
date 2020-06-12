@@ -1,4 +1,143 @@
 {
+  "matematica":{
+    "comando":[
+      [" multiplicado por ","pt-br"],
+      [" dividido por ","pt-br"],
+      [" multiplique ","pt-br"],
+      [" elevado por ","pt-br"],
+      [" elevado a ","pt-br"],
+      [" dividido ","pt-br"],
+      [" menos ","pt-br"],
+      [" mais ","pt-br"],
+
+      [" multiplied by ","en-us"],
+      [" elevated by ","en-us"],
+      [" divided by ","en-us"],
+      [" multiply ","en-us"],
+      [" minus ","en-us"],
+      [" plus ","en-us"],
+
+      [" multiplicar ","es"],
+      [" mas ","es"],
+
+      [" ** ","all"],
+      [" - ","all"],
+      [" * ","all"],
+      [" % ","all"],
+      [" / ","all"],
+      [" + ","all"]
+    ],
+    "cor":"contas"
+  },
+  "logico":{
+    "comando":[
+      [" for maior ou igual a ","pt-br"],
+      [" for menor ou igual a ","pt-br"],
+      [" for diferente de ","pt-br"],
+      [" for maior que ","pt-br"],
+      [" for menor que ","pt-br"],
+      [" for igual a ","pt-br"],
+
+      [" es mayor o igual a ","es"],
+      [" es menor o igual que ","es"],
+      [" es diferente de ","es"],
+      [" es mayor que ","es"],
+      [" es menos que ","es"],
+      [" es igual a ","es"],
+
+      [" is greater than or equal to ","en-us"],
+      [" is less than or equal a ","en-us"],
+      [" is different from ","en-us"],
+      [" is greater than ","en-us"],
+      [" is less than ","en-us"],
+      [" is equal to ","en-us"],
+
+      [" ou ","pt-br"],
+      [" or ","en-us"],
+      [" o ","es"],
+
+      [" and ","en-us"],
+      [" e ","pt-br"],
+      [" y ","pt-br"],
+
+      ["true","en-us"],
+      ["false","en-us"],
+      ["truth","en-us"],
+      ["verdadeiro","pt-br"],
+      ["verdadeira","pt-br"],
+      ["verdade","pt-br"],
+      ["falso","pt-br"],
+      ["mentira","pt-br"],
+      ["cierto","es"],
+      ["verdad","es"],
+
+      [" && ","all"],
+      [" || ","all"],
+      [" == ","all"],
+      [" >= ","all"],
+      [" <= ","all"],
+      [" != ","all"],
+      [" > ","all"],
+      [" < ","all"]
+    ],
+    "cor":"logico"
+  },
+  "limpatela":{
+    "comando":[
+      ["limpar a tela","pt-br"],
+      ["limpatela","pt-br"],
+      ["limpe a tela","pt-br"],
+
+      ["clear","en-us"],
+
+      ["limpiar la pantalla","es"]
+    ],
+    "cor":"tempo"
+  },
+
+  "listaNaPosicao":{
+    "comando":[
+      [" na posicao ","pt-br"],
+      [" in position ","en-us"],
+      [" en posicion ","es"]
+    ],
+    "cor":"lista"
+  },
+  "se":{
+    "comando":[
+      ["quando ","pt-br"],
+      ["caso ","pt-br"],
+      ["se ","pt-br"],
+      ["if ","en-us"],
+      ["si ","es"]
+    ],
+    "cor":"condicionais"
+  },
+  "pare":{
+    "comando":[
+      ["break","en-us"],
+      ["pare","pt-br"],
+      ["detener","es"]
+    ],
+    "cor":"contas"
+  },
+  "interrompa":{
+    "comando":[
+      ["interrupt","en-us"],
+      ["interrompa","pt-br"],
+      ["interromper","pt-br"],
+      ["interrumpir","es"]
+    ],
+    "cor":"contas"
+  },
+  "continue":{
+    "comando":[
+      ["continue","en-us"],
+      ["continuar","pt-br"],
+      ["seguir","es"]
+    ],
+    "cor":"contas"
+  },
   "a_imagem_aparecer":{
     "comando":[
       ["aguarde a imagem ","pt-br"],
@@ -38,7 +177,6 @@
     ],
     "cor":"lista"
   },
-
   "abra_um_arquivo":{
     "comando":[
       ["abra o arquivo ","pt-br"],
@@ -54,7 +192,6 @@
     ],
     "cor":"lista"
   },
-  
    "importe":{
     "comando":[
       ["importe a biblioteca ","pt-br"],
@@ -182,8 +319,6 @@
     ],
     "cor":"lista"
   },
-
-
   "delete_arquivo":{
     "comando":[
       ["delete o arquivo ","pt-br"],
@@ -218,24 +353,6 @@
     ],
     "cor":"condicionais"
   },
-  "se":{
-    "comando":[
-      ["quando ","pt-br"],
-      ["caso ","pt-br"],
-      ["se ","pt-br"],
-      ["if ","en-us"],
-      ["si ","es"]
-    ],
-    "cor":"condicionais"
-  },
-  "pare":{
-    "comando":[
-      ["break","en-us"],
-      ["pare","pt-br"],
-      ["detener","es"]
-    ],
-    "cor":"contas"
-  },
   "declaraListas":{
     "comando":[
       ["lista de ","pt-br"],
@@ -267,14 +384,7 @@
     ],
     "cor":"lista"
   },
-  "listaNaPosicao":{
-    "comando":[
-      [" na posicao ","pt-br"],
-      [" in position ","en-us"],
-      [" en posicion ","es"]
-    ],
-    "cor":"lista"
-  },
+
   "RemoverItensListas":{
     "comando":[
       ["remova ","pt-br"],
@@ -441,18 +551,6 @@
     "cor":"condicionais"
   },
 
-  "limpatela":{
-    "comando":[
-      ["limpar a tela","pt-br"],
-      ["limpatela","pt-br"],
-      ["limpe a tela","pt-br"],
-
-      ["clear","en-us"],
-
-      ["limpiar la pantalla","es"]
-    ],
-    "cor":"tempo"
-  },
   "digitado":{
     "comando":[
       ["o numero que o usuario digitar","pt-br"],
@@ -518,89 +616,7 @@
     ],
     "cor":"condicionais"
   },
-  "logico":{
-    "comando":[
-      [" for maior ou igual a ","pt-br"],
-      [" for menor ou igual a ","pt-br"],
-      [" for diferente de ","pt-br"],
-      [" for maior que ","pt-br"],
-      [" for menor que ","pt-br"],
-      [" for igual a ","pt-br"],
 
-      [" es mayor o igual a ","es"],
-      [" es menor o igual que ","es"],
-      [" es diferente de ","es"],
-      [" es mayor que ","es"],
-      [" es menos que ","es"],
-      [" es igual a ","es"],
-
-      [" is greater than or equal to ","en-us"],
-      [" is less than or equal a ","en-us"],
-      [" is different from ","en-us"],
-      [" is greater than ","en-us"],
-      [" is less than ","en-us"],
-      [" is equal to ","en-us"],
-
-      [" ou ","pt-br"],
-      [" or ","en-us"],
-      [" o ","es"],
-
-      [" and ","en-us"],
-      [" e ","pt-br"],
-      [" y ","pt-br"],
-
-      ["true","en-us"],
-      ["false","en-us"],
-      ["truth","en-us"],
-      ["verdadeiro","pt-br"],
-      ["verdadeira","pt-br"],
-      ["verdade","pt-br"],
-      ["falso","pt-br"],
-      ["mentira","pt-br"],
-      ["cierto","es"],
-      ["verdad","es"],
-
-      [" && ","all"],
-      [" || ","all"],
-      [" == ","all"],
-      [" >= ","all"],
-      [" <= ","all"],
-      [" != ","all"],
-      [" > ","all"],
-      [" < ","all"]
-    ],
-    "cor":"logico"
-  },
-  "matematica":{
-    "comando":[
-      [" multiplicado por ","pt-br"],
-      [" dividido por ","pt-br"],
-      [" multiplique ","pt-br"],
-      [" elevado por ","pt-br"],
-      [" elevado a ","pt-br"],
-      [" dividido ","pt-br"],
-      [" menos ","pt-br"],
-      [" mais ","pt-br"],
-
-      [" multiplied by ","en-us"],
-      [" elevated by ","en-us"],
-      [" divided by ","en-us"],
-      [" multiply ","en-us"],
-      [" minus ","en-us"],
-      [" plus ","en-us"],
-
-      [" multiplicar ","es"],
-      [" mas ","es"],
-
-      [" ** ","all"],
-      [" - ","all"],
-      [" * ","all"],
-      [" % ","all"],
-      [" / ","all"],
-      [" + ","all"]
-    ],
-    "cor":"contas"
-  },
   "esperaEm":{
     "comando":[
       [" milissegundos","pt-br"],

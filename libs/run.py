@@ -134,8 +134,8 @@ class Run():
 
             print('[{:.2f}] => '.format(agora), r'{}'.format(msg_log))
 
-    def orquestrador_interpretador(self, txt_codigo):
-        Run.log(self, '<orquestrador_interpretador>:' + txt_codigo)
+    def orquestrador_interpretador_(self, txt_codigo):
+        Run.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
 
         self.numero_threads += 1 # Aumenta os Thread
         self.boo_orquestrador_iniciado = True # Indica que já está contando os Thread
@@ -180,7 +180,7 @@ class Run():
 
             # Executar o comando de uma linha
             # Se chegar no fim da linha ou iniciar um bloco e um bloco não estiver sendo salvo e nem estiver em uma string
-            if ( txt_caractere == "\n" or txt_caractere == "{" and not bool_salvar_bloco and not bool_achou_string ):
+            if ( txt_caractere == "\n" or txt_caractere == ";" or txt_caractere == "{" and not bool_salvar_bloco and not bool_achou_string ):
 
                 # Se tiver alguma coisa na linha
                 if len(txt_linha_comando.strip()) > 0:
@@ -189,6 +189,13 @@ class Run():
                     txt_linha_comando = txt_linha_comando.replace("\n","").strip()
 
                     lst_analisa =Run.interpretador(self, txt_linha_comando)
+                    if lst_analisa[0][3] == "continuarLoop":
+                        self.numero_threads -= 1
+                        return [True, True, 'booleano', "continuarLoop"]
+
+                    if lst_analisa[0][3] == "pararLoop":
+                        self.numero_threads -= 1
+                        return lst_analisa[0]
 
                     if lst_analisa[0][3] == 'linhaVazia': # A linha estava em branco
                         txt_linha_comando = ""
@@ -248,8 +255,11 @@ class Run():
                     while lst_ultimo_teste[1] and not self.aconteceu_erro:
 
                         # Executar o bloco completo
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self,
-                            str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        print(lst_resultado_execucao, "::>")
+
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            break
 
                         if lst_resultado_execucao[0] == False:
                             self.numero_threads -= 1
@@ -276,14 +286,16 @@ class Run():
                             Run.orq_erro(self, lst_ultimo_teste[1], num_linha_analisada, arq_script_erro)
                             return lst_ultimo_teste
 
+
                 elif lst_ultimo_teste[3] == "declararLoopRepetir":
                     historico_fluxo_de_dados.append('declararLoopRepetir') # Encaixa Loop
 
                     lst_ultimo_teste[3] = 'fazerNada'
 
                     for valor in range(0, lst_ultimo_teste[1]):
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self,
-                            str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            break
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -318,8 +330,10 @@ class Run():
                             self.numero_threads -= 1
                             return criar_variavel
 
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self,
-                            str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            break
+
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -344,7 +358,14 @@ class Run():
                     if lst_ultimo_teste[1]:
                         bool_ultimo_teste = True
 
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "continuarLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "continuarLoop"]
+                        print(lst_resultado_execucao, "<>")
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "pararLoop"]
 
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -378,7 +399,14 @@ class Run():
                         if lst_ultimo_teste[1]:
                             bool_ultimo_teste = True # Condição agora foi executada
 
-                            lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                            lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                            if lst_resultado_execucao[3] == "continuarLoop":
+                                self.numero_threads -= 1
+                                return [True, True, 'booleano', "continuarLoop"]
+                            print(lst_resultado_execucao, ">>")
+                            if lst_resultado_execucao[3] == "pararLoop":
+                                self.numero_threads -= 1
+                                return lst_resultado_execucao
 
                             if lst_resultado_execucao[0] == False:
 
@@ -406,7 +434,14 @@ class Run():
                     # Condição se ou senão anterior era falsa
                     if bool_ultimo_teste == False:
                         bool_ultimo_teste = True # Condição agora foi executada
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "continuarLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "continuarLoop"]
+                        print(lst_resultado_execucao, "ÇÇ")
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            self.numero_threads -= 1
+                            return lst_resultado_execucao
 
                         if lst_resultado_execucao[0] == False:
 
@@ -422,8 +457,18 @@ class Run():
                 elif lst_ultimo_teste[3] == 'tenteAlgo':
                     self.ignorar_erros = True
                     historico_fluxo_de_dados.append("tenteAlgo")
-                    lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                    lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+
+                    if lst_resultado_execucao[3] == "continuarLoop":
+                        self.numero_threads -= 1
+                        return [True, True, 'booleano', "continuarLoop"]
+
+                    if lst_resultado_execucao[3] == "pararLoop":
+                        self.numero_threads -= 1
+                        return [True, True, 'booleano', "pararLoop"]
+
                     bool_execucao_deu_erro_temporario = False
+
 
                     if lst_resultado_execucao[0] == False:
                         bool_execucao_deu_erro_temporario = True
@@ -449,7 +494,14 @@ class Run():
 
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario:
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "continuarLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "continuarLoop"]
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            self.numero_threads -= 1
+                            return lst_resultado_execucao
+
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
@@ -473,7 +525,14 @@ class Run():
 
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario == False:
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "continuarLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "continuarLoop"]
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            self.numero_threads -= 1
+                            return lst_resultado_execucao
+                        
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads -= 1
@@ -498,8 +557,14 @@ class Run():
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario:
 
-                        lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
-
+                        lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "continuarLoop":
+                            self.numero_threads -= 1
+                            return [True, True, 'booleano', "continuarLoop"]
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            self.numero_threads -= 1
+                            return lst_resultado_execucao
+                        
                         if lst_resultado_execucao[0] == False:
 
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -522,8 +587,14 @@ class Run():
                         self.numero_threads -= 1
                         return [False, "Você precisa definir um tente, para testar o se não der erro", 'string', "fazerNada"]
 
-                    lst_resultado_execucao = Run.orquestrador_interpretador(self, str_bloco_salvo[1:].strip())
-
+                    lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                    if lst_resultado_execucao[3] == "continuarLoop":
+                        self.numero_threads -= 1
+                        return [True, True, 'booleano', "continuarLoop"]
+                    if lst_resultado_execucao[3] == "pararLoop":
+                        self.numero_threads -= 1
+                        return lst_resultado_execucao
+                        
                     if lst_resultado_execucao[0] == False:
 
                         if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -550,7 +621,13 @@ class Run():
 
             txt_linha_comando = txt_linha_comando.replace("\n","").strip()
             lst_ultimo_teste =Run.interpretador(self, txt_linha_comando)
-
+            if lst_ultimo_teste[0][3] == "continuarLoop":
+                self.numero_threads -= 1
+                return [True, True, 'booleano', "continuarLoop"]
+            if lst_ultimo_teste[0][3] == "pararLoop":
+                self.numero_threads -= 1
+                return [True, True, 'booleano', "pararLoop"]
+                        
             txt_comando_testado = txt_linha_comando
             num_linha_analisada = lst_ultimo_teste[1]
             arq_script_erro = lst_ultimo_teste[2]
@@ -637,6 +714,9 @@ class Run():
             return [[False, 'Erro ao iniciar o Interpretador', 'string', 'exibirNaTela'], "1", ""]
 
         linha = linha.replace('\n', '')
+        if linha[0] == ";":
+            linha = linha[1:]
+
         linha = linha.strip()
 
         # Se for uma linha vazia
@@ -669,6 +749,18 @@ class Run():
                 analisa000 =Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
                 if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela___.safira"]
 
+            if caractere_inicio in self.dicLetras["continue"]:
+                analisa048 =Run.analisa_instrucao(self, '^(<continue>)$', linha)
+                if analisa048[0]: return [Run.funcao_continuar(self), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["pare"]:
+                analisa048 =Run.analisa_instrucao(self, '^(<pare>)$', linha)
+                if analisa048[0]: return [Run.funcao_parar(self), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["interrompa"]:
+                analisa048 =Run.analisa_instrucao(self, '^(<interrompa>)$', linha)
+                if analisa048[0]: return [Run.funcao_interrompa(self), self.num_linha, ""]
+
             if caractere_inicio in self.dicLetras["mostreNessa"]:
                 analisa001 =Run.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
                 if analisa001[0]: return [Run.funcao_exibir_mesma_ln(self, analisa001[1][2]), self.num_linha, "exibiçãoNaTela___.safira"]
@@ -697,9 +789,7 @@ class Run():
                 analisa008 =Run.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
                 if analisa008[0]: return [Run.funcao_decremente_vari(self, analisa008[1][2], analisa008[1][4]), self.num_linha, ""]
 
-
             # ********************** Funções **********************
-
             if caractere_inicio in self.dicLetras["funcoes"]:
                 analisa009 =Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
                 if analisa009[0]: return [Run.funcao_declarar_funcao(self, analisa009[1][2], analisa009[1][4]),self.num_linha, "funcoes___.safira"]
@@ -711,7 +801,6 @@ class Run():
             if caractere_inicio in self.dicLetras["digitado"]:
                 analisa020 =Run.analisa_instrucao(self, '^(<digitado>)$', linha)
                 if analisa020[0]: return [Run.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas___.safira"]
-
 
             # ********************** Listas **********************
             if caractere_inicio in self.dicLetras["declaraListas"]:
@@ -727,11 +816,9 @@ class Run():
                 analisa048 =Run.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
                 if analisa048[0]: return [Run.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, ""]
 
-
             if caractere_inicio in self.dicLetras["RemoverItensListas"]:
                 analisa013 =Run.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
                 if analisa013[0]: return [Run.funcao_rem_itns_na_lst(self, analisa013[1][2], analisa013[1][4]), self.num_linha, "listas___.safira"]
-
 
             if caractere_inicio in self.dicLetras["adicionarItensListas"]:
                 analisa014 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
@@ -745,7 +832,6 @@ class Run():
 
                 analisa017 =Run.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
                 if analisa017[0]: return [Run.funcao_add_itns_na_lst(self, analisa017[1][2], analisa017[1][4]), self.num_linha, "listas___.safira"]
-
 
             if caractere_inicio in self.dicLetras["aleatorio"]:
                 analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
@@ -763,8 +849,6 @@ class Run():
                 analisa022 =Run.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
                 if analisa022[0]: return [Run.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, ""]
 
-
-
             if caractere_inicio in self.dicLetras["se_der_erro"]:
                 analisa038 =Run.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
                 if analisa038[0]: return [Run.funcao_se_der_erro(self), self.num_linha, ""]
@@ -776,7 +860,6 @@ class Run():
             if caractere_inicio in self.dicLetras["em_qualquer_caso"]:
                 analisa040 =Run.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
                 if analisa040[0]: return [Run.funcao_em_qualquer_caso(self), self.num_linha, ""]
-
 
             # ************************ Arquivo ************************
             if caractere_inicio in self.dicLetras["crie_arquivo"]:
@@ -806,8 +889,6 @@ class Run():
                 analisa032 =Run.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
                 if analisa032[0]: return [Run.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, ""]
 
-
-
             analisa023 =Run.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
             if analisa023[0]: return [Run.funcao_realizar_atribu(self, analisa023[1][1], analisa023[1][3]), self.num_linha, "atribuicoes___.safira"]
 
@@ -826,15 +907,9 @@ class Run():
                 analisa033 =Run.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
                 if analisa033[0]: return [Run.funcao_tipo_variavel(self, analisa033[1][2]), self.num_linha, ""]
 
-
             if caractere_inicio in self.dicLetras["importe"]:
                 analisa041 =Run.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
                 if analisa041[0]: return [Run.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
-
-
-
-
-
 
             # Tente / se der erro / senao der erro/ em qualquer caso
             if caractere_inicio in self.dicLetras["tente"]:
@@ -853,10 +928,6 @@ class Run():
             if caractere_inicio in self.dicLetras["se"]:
                 analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha)
                 if analisa003[0]: return [Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais___.safira"]
-
-
-
-
 
             # ULTIMO
             analisa044 =Run.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
@@ -877,11 +948,6 @@ class Run():
             return [  [False, "{}'{}'".format(  Run.msg_idioma(self, 'comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
 
         return [[True, None, 'vazio', 'fazerNada'], str(self.num_linha), ""]
-
-
-
-
-
 
 
     def comandos_uso_geral(self, possivelVariavel):
@@ -951,7 +1017,16 @@ class Run():
 
         return [True, None, 'vazio']
 
+    def funcao_interrompa(self):
+        self.aconteceu_erro = True
+        return [False, 'indisponibilidade_terminal', "string", "fazerNada"]
 
+    def funcao_parar(self):
+        return [True, True, "booleano", "pararLoop"]
+
+    def funcao_continuar(self):
+        return [True, True, "booleano", "continuarLoop"]
+        
     def funcao_abrir_arquivo(self, nome_arquivo, nome_software):
         Run.log(self, '<funcao_abrir_arquivo>: {}{}'.format( nome_arquivo,nome_software))
 
@@ -970,7 +1045,6 @@ class Run():
         texto = system("{} \"{}\" ".format(nome_software[1], nome_arquivo[1] ))
 
         return [True, texto, "string", "exibirNaTela"]
-
 
     def funcao_tirar_print_salvar_como(self, nome_imagem):
         Run.log(self, '<funcao_tirar_print_salvar_como>: {}'.format( nome_imagem))
@@ -1061,7 +1135,7 @@ class Run():
             return [False, "Erro ao abrir a biblioteca {}, erro {}".format(biblioteca, teste[1]), "string", "fazerNada"]
 
         # Carrega a biblioteca
-        resultadoOrquestrador =Run.orquestrador_interpretador(self, teste[0])
+        resultadoOrquestrador =Run.orquestrador_interpretador_(self, teste[0])
 
         if resultadoOrquestrador[0] == False:
             return resultadoOrquestrador
@@ -1860,7 +1934,7 @@ class Run():
                 return [False,Run.msg_idioma(self, "funcao_nao_passou_parametros").format(nomeDaFuncao, len(
                     self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
-            resultadoOrquestrador =Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+            resultadoOrquestrador =Run.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
             if not resultadoOrquestrador[0]:
                 return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
@@ -1900,11 +1974,7 @@ class Run():
                         return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
             else:
                 return [False,Run.msg_idioma(self, "funcao_tem_parametros_divergentes").format(nomeDaFuncao,
-                                                                                                          len(
-                                                                                                              self.dic_funcoes[
-                                                                                                                  nomeDaFuncao][
-                                                                                                                  'parametros']),
-                                                                                                          len(
+                                                                                                         len(
                                                                                                               listaFinalDeParametros)),
                         'string', 'fazerNada']
 
@@ -1919,7 +1989,7 @@ class Run():
                 return [False,Run.msg_idioma(self, "funcao_passou_um_parametros").format(nomeDaFuncao, len(
                     self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
-        resultadoOrquestrador =Run.orquestrador_interpretador(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+        resultadoOrquestrador =Run.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
         if not resultadoOrquestrador[0]:
             return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']

@@ -2,21 +2,17 @@ from threading import Thread
 from tkinter   import END
 from copy      import deepcopy
 from re        import finditer
+from time      import time
 
 class Colorir():
     def __init__(self, cor_do_comando, dic_comandos):
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
-        self.primeira_vez = False
         self.tx_codfc = None
         self.tela = None
-        self.aba_focada = 0
 
-        self.palavras_analisadas = {}
-        self.historico_coloracao = {}
-
-        self.palavras_analisadas[self.aba_focada] = []
-        self.historico_coloracao[self.aba_focada] = []
+        self.historico_coloracao = []
+        self.lista_todos_coloracao = []
 
     def alterar_cor_comando(self, novo_cor_do_comando):
         self.cor_do_comando = novo_cor_do_comando
@@ -34,40 +30,31 @@ class Colorir():
         self.tela.update()
         self.tx_codfc.update()
 
-
     def marcar_coloracao(self, regex, lista, linha, palavra, cor):
-        #vale, lista_p, linh_p, palavra, cor 
-        
+
         for valor in finditer(regex, lista[linha]):
 
             inicio_regex = valor.start()
             final_regex = valor.end()
 
             usado = cor + " <,> " + palavra + " <,> " + regex + " <,> " + str(linha) + " <,> " + str(inicio_regex) + " <,> " + str(final_regex)
-            self.historico_coloracao[self.aba_focada].append(usado)
+            #usado = cor + " <,> " + palavra + " <,> " + regex + " <,> " + str(inicio_regex) + " <,> " + str(final_regex)
+
+            self.historico_coloracao.append(usado)
             Colorir.realiza_coloracao(self, str(usado), str(linha + 1), inicio_regex, final_regex, cor)
 
+            if usado not in self.lista_todos_coloracao:
+                self.lista_todos_coloracao.append(usado)
 
-    def def_cor(self, chave_comando,   chave_cor,   lista):
-        """         atribuicao_dados, 'lista',   lista_linhas  """
- 
-        for comando in self.dic_comandos[chave_comando]["comando"]:
-            comando2 = comando[0].strip()
-            "vale, recebe, é igual"
-            Colorir.anl_cor(
-                self,
-                comando2,
-                self.cor_do_comando[chave_cor],
-                lista)
+                print("****** COLORACAO REALIZADA")
 
     def anl_cor(self, palavra, cor, lista):
-        """            vale/=, '#ffffff', textoLista """
+        """ vale/=, '#ffffff', textoLista """
+
         if palavra == "||" or palavra == "":
             return 0
 
-        """
-            Realiza a coloração seguindo instruções
-        """
+        """ Realiza a coloração seguindo instruções """
         cor = cor['foreground'] # !==> "#ffffff"        
 
         palavra_comando = palavra.replace('+', '\\+')
@@ -95,59 +82,60 @@ class Colorir():
                 #vale, lista_p, linh_p, palavra, cor 
                 Colorir.marcar_coloracao(self, '(^|\\s){}(\\s|$)'.format(palavra_comando), lista, linha, palavra, cor)
 
+
+    def def_cor(self, chave_comando,   chave_cor,   lista):
+        """ atribuicao_dados, 'lista',   lista_linhas  """
+ 
+        for comando in self.dic_comandos[chave_comando]["comando"]:
+
+    
+            "vale, recebe, é igual"
+            Colorir.anl_cor(
+                self,
+                comando[0].strip(),
+                self.cor_do_comando[chave_cor],
+                lista)
+
     def coordena_coloracao(self, event, tx_codfc, primeira_vez=False):
-        if primeira_vez:
-            self.primeira_vez = primeira_vez
+        start = time()
+
         self.tx_codfc = tx_codfc
 
         # não modifica o código
         if event is not None:
             print("[OK] tecla pressinada => ", event.keysym)
-
             if event.keysym in ('Down', 'Up', 'Left', 'Right'):
                 return 0
 
+        lista_linhas = self.tx_codfc.get(1.0, END).lower().split('\n')
 
-        #try:
-        lista = self.tx_codfc.get(1.0, END).lower().split('\n')
-
-        # Verifica se existe
-        try:
-            self.historico_coloracao[self.aba_focada]
-        except Exception as e:
-            #print("Chave inexistente, nova chave", self.aba_focada)
-            self.historico_coloracao[self.aba_focada] = []
-
-        self.palavras_analisadas[self.aba_focada] = deepcopy( self.historico_coloracao[self.aba_focada] )
-        self.historico_coloracao[self.aba_focada] = []
+        self.historico_coloracao = []
         for chave, comando in self.dic_comandos.items():
-            Colorir.def_cor(self, chave, str(comando["cor"]), lista)
+            Colorir.def_cor(self, chave, str(comando["cor"]), lista_linhas)
 
-        Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista)
-        Colorir.anl_cor(self, 'comentario', self.cor_do_comando["comentario"], lista)
-        Colorir.anl_cor(self, '"', self.cor_do_comando["string"], lista)
+        Colorir.anl_cor(self, 'numerico', self.cor_do_comando["numerico"], lista_linhas)
+        Colorir.anl_cor(self, 'comentario', self.cor_do_comando["comentario"], lista_linhas)
+        Colorir.anl_cor(self, '"', self.cor_do_comando["string"], lista_linhas)
+
+        bool_alterado = False
 
         # Primeira vez não remove ninguém
-        if not self.primeira_vez:
-            for palavra_nao_colorida in self.palavras_analisadas[self.aba_focada]:
-                if palavra_nao_colorida not in self.historico_coloracao[self.aba_focada]:
+        for palavra_nao_colorida in self.lista_todos_coloracao:
+            if palavra_nao_colorida not in self.historico_coloracao:
+                bool_alterado = True
+                try:
+                    self.tx_codfc.tag_delete(palavra_nao_colorida)
+                    self.lista_todos_coloracao.remove(palavra_nao_colorida)
+                except:
+                    pass
 
-                    # Se houve uma variação na quantidade de palavras
-                    if len(self.historico_coloracao[self.aba_focada]) != len(self.palavras_analisadas[self.aba_focada]):
-                        self.tx_codfc.tag_delete(palavra_nao_colorida)
-
+        print("Alterado =>", bool_alterado)
         self.tx_codfc.update()
         if self.tela is not None:
             self.tela.update()
+        
+        print("Delay: ", time() - start)
 
-        #except Exception as erro:
-        #    print("Erro ao atualizar coloracao", erro)
-
-        self.primeira_vez = primeira_vez
-
-        #print(" ")
-        #print("hst ",self.historico_coloracao)
-        #print("plv ",self.palavras_analisadas)
         return 0
 
 

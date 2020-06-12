@@ -108,12 +108,13 @@ class Interface():
         self.lista_breakponts                = []
         self.lst_abas                        = []
 
-        self.num_lin_bkp            = 0
+        self.num_lin_bkp                     = 0
         self.valor_threads                   = 0
         self.linha_analise                   = 0
         self.posAbsuluta                     = 0
         self.posCorrente                     = 0
-        self.num_aba_focada                      = 0
+        self.num_aba_focada                  = 0
+        self.num_modulos_acionados           = 1
 
         self.tx_erro_aviso_texto_erro        = None
         self.fr_erro_aviso_texto_erro        = None
@@ -174,14 +175,13 @@ class Interface():
 
 
 
+    def atualizar_coloracao_aba(self, limpar=False):
+        self.num_modulos_acionados += 1
 
-
-##########################################################
-########################## ABAS
-    def atualizar_coloracao_aba(self):
-        self.colorir_codigo.aba_focada = self.num_aba_focada
-        self.colorir_codigo.historico_coloracao[self.num_aba_focada] = []
+        if limpar: self.colorir_codigo.historico_coloracao = []
         self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
+
+        self.num_modulos_acionados = 1
 
     def atualiza_texto_tela(self, num_aba):
 
@@ -199,7 +199,7 @@ class Interface():
         for x in range(0, 3):
             self.dic_abas[num_aba]["listaAbas"][x].update()
 
-        Interface.atualizar_coloracao_aba(self)
+        Interface.atualizar_coloracao_aba(self, True)
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
@@ -291,10 +291,8 @@ class Interface():
         Interface.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
         Interface.atualiza_texto_tela(self, num_aba)
 
-        self.colorir_codigo.aba_focada = self.num_aba_focada
-        self.colorir_codigo.historico_coloracao[self.num_aba_focada] = []
-        self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
 
+        Interface.atualizar_coloracao_aba(self)
     def nova_aba(self, event=None):
 
         posicao_adicionar = 0 # Adicionar na posição 0
@@ -571,7 +569,7 @@ class Interface():
         self.tx_terminal.update()
         self.instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos)
 
-        t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador(codigoPrograma))
+        t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
         t.start()
 
         valor_antigo = 0
@@ -983,7 +981,8 @@ class Interface():
     def fechar_um_widget_erro(self, objeto):
 
         try:
-            objeto.grid_forget()
+            if objeto is not None:
+                objeto.grid_forget()
         except Exception as e:
             print("Erro ao destruir widget de erro", e)
 
@@ -1190,9 +1189,7 @@ class Interface():
             dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
             try:
-                self.colorir_codigo.aba_focada = self.num_aba_focada
                 self.colorir_codigo.alterar_cor_comando(self.cor_do_comando)
-                #self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc, primeira_vez=True).update()
 
                 Interface.atualiza_design_interface(self)
                 self.linhas_laterais.aba_focada2 = self.num_aba_focada
@@ -1220,10 +1217,7 @@ class Interface():
         """
 
         Interface.fechar_mensagem_de_erro(self) # Deletar tag de erro
-
-        self.colorir_codigo.aba_focada = self.num_aba_focada
-        self.colorir_codigo.coordena_coloracao(event, tx_codfc=self.tx_codfc)
-        #Thread(target= lambda event=event: Interface.th_confirm(self, event)).start()
+        Interface.atualizar_coloracao_aba(self, limpar=True)
 
         if self.dic_abas != {}:
             self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
