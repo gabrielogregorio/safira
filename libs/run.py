@@ -6,13 +6,12 @@ __description__ = 'Interpretador de comandos'
 __status__      = 'Desenvolvimento'
 __version__     = '0.1'
 
-import libs.funcoes as funcoes
+
 import threading
 import os.path
 import os
 
-from tkinter import END, NORMAL
-from tkinter import DISABLED
+from tkinter import END
 from random  import randint
 from time    import sleep
 from time    import time
@@ -106,13 +105,11 @@ class Run():
                 self.dir_script_aju_erro = dir_script_erro
 
                 mensagem_erro = "\n[{}] {}".format(linhaAnalise, msg_log)
-                #self.tx_terminal.config(state=NORMAL)
                 self.tx_terminal.insert(END, mensagem_erro)
                 Run.realiza_coloracao_erro(self, 'codigoErro', valor1=0, valor2=len(mensagem_erro)+1, cor='#ffabab', linhaErro = linhaAnalise )
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
         try:
-            #self.tx_terminal.config(state=NORMAL)
             if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
                 self.tx_terminal.insert(END, str(lst_retorno_ultimo_comando[1][len(":nessaLinha:"):]))
             else:
@@ -120,7 +117,6 @@ class Run():
 
             self.tx_terminal.see("end")
             self.tx_terminal.update()
-            #self.tx_terminal.config(state=DISABLED)
 
         except Exception as erro:
             return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
@@ -791,8 +787,15 @@ class Run():
 
             # ********************** Funções **********************
             if caractere_inicio in self.dicLetras["funcoes"]:
+                analisa009 =Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros_parentese_abre>)(.*)(<recebeParametros_parentese_fecha>)$', linha)
+                if analisa009[0]: return [Run.funcao_declarar_funcao(self, analisa009[1][2], analisa009[1][4]),self.num_linha, "funcoes___.safira"]
+
                 analisa009 =Run.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
                 if analisa009[0]: return [Run.funcao_declarar_funcao(self, analisa009[1][2], analisa009[1][4]),self.num_linha, "funcoes___.safira"]
+
+
+                analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)(<recebeParametros_parentese_abre>)\\s*(<recebeParametros_parentese_fecha>)$', linha)
+                if analisa043[0]: return [Run.funcao_declarar_funcao(self, analisa043[1][2]), self.num_linha, "funcoes___.safira"]
 
                 analisa043 =Run.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
                 if analisa043[0]: return [Run.funcao_declarar_funcao(self, analisa043[1][2]), self.num_linha, "funcoes___.safira"]
@@ -1764,8 +1767,6 @@ class Run():
 
         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
-        # self.tx_terminal.config(state=NORMAL)
-
         self.esperar_pressionar_enter = True
 
         while self.esperar_pressionar_enter:
@@ -1782,7 +1783,6 @@ class Run():
                 return [False, 'indisponibilidade_terminal', 'string', 'exibirNaTela']
 
         digitado = self.tx_terminal.get(1.0, END)
-        # self.tx_terminal.config(state=DISABLED)
         digitado = digitado[textoOriginal - 1:-2]
         digitado = digitado.replace("\n", "")
 
@@ -1801,9 +1801,7 @@ class Run():
     def funcao_limpar_o_termin(self):
         Run.log(self, '<funcao_limpar_o_termin>:')
         try:
-            # self.tx_terminal.config(state=NORMAL)
             self.tx_terminal.delete(1.0, END)
-            # self.tx_terminal.config(state=DISABLED)
         except:
             return [False, 'indisponibilidade_terminal', 'string', 'exibirNaTela']
 
@@ -2447,3 +2445,21 @@ class Run():
         else:
             return [True, resutadoFinal, 'booleano', 'declararCondicional']
 
+
+
+if __name__ == "__main__":
+    import funcoes as funcoes
+
+    print("Interpretador")
+
+
+    instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos)
+
+    t = Thread(target=lambda codigoPrograma = linhas: instancia.orquestrador_interpretador_(codigoPrograma))
+    t.start()
+
+
+
+
+else:
+    import libs.funcoes as funcoes

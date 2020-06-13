@@ -667,7 +667,27 @@
       [" recibe parametros ","es"]
     ],
     "cor":"condicionais"
+
   },
+  "recebeParametros_parentese_abre":{
+    "comando":[
+      [" \\( ","all"]
+    ],
+    "cor":"condicionais"
+  },
+
+  "recebeParametros_parentese_fecha":{
+    "comando":[
+      [" \\) \\: ","all"],
+      [" \\) ","all"]
+    ],
+    "cor":"condicionais"
+  },
+
+
+
+
+
   "recebeDeclaraListas":{
     "comando":[
       [" recebe ","pt-br"],

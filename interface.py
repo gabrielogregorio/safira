@@ -114,7 +114,7 @@ class Interface():
         self.posAbsuluta                     = 0
         self.posCorrente                     = 0
         self.num_aba_focada                  = 0
-        self.num_modulos_acionados           = 1
+        self.num_modulos_acionados           = 0
 
         self.tx_erro_aviso_texto_erro        = None
         self.fr_erro_aviso_texto_erro        = None
@@ -170,18 +170,28 @@ class Interface():
                         self.dicLetras[k].append(  valor[0] )
 
 
+    def atualizar_coloracao_aba(self, limpar=False, event=None):
+        # num_modulos_acionados => 0
 
+        if event is not None: # Não modifica o código
+            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return'):
+                print("tecla pressinada => ", event.keysym)
+                return 0
 
-
-
-
-    def atualizar_coloracao_aba(self, limpar=False):
         self.num_modulos_acionados += 1
+
+        if self.num_modulos_acionados > 3:
+            return 0
+
+        if self.num_modulos_acionados == 2:
+            while self.num_modulos_acionados != 0:
+                self.tela.update()
+            self.num_modulos_acionados += 1
 
         if limpar: self.colorir_codigo.historico_coloracao = []
         self.colorir_codigo.coordena_coloracao(None, tx_codfc = self.tx_codfc)
 
-        self.num_modulos_acionados = 1
+        self.num_modulos_acionados = 0
 
     def atualiza_texto_tela(self, num_aba):
 
@@ -892,7 +902,7 @@ class Interface():
         self.tx_codfc.bind("<<Change>>", lambda event: Interface.atualizacao_linhas(self, event))
         self.tx_codfc.bind("<Configure>", lambda event: Interface.atualizacao_linhas(self, event))
         self.tx_codfc.bind('<Button>', lambda event:  Interface.obterPosicaoDoCursor(self, event))
-        self.tx_codfc.bind('<KeyRelease>', lambda event = None: Interface.ativar_coordernar_coloracao(self, event))
+        self.tx_codfc.bind('<KeyRelease>', lambda event: Interface.ativar_coordernar_coloracao(self, event))
         self.tx_codfc.bind('<Control-MouseWheel>', lambda event: Interface.mudar_fonte(self, "+") if int(event.delta) > 0 else Interface.mudar_fonte(self, "-"))
 
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_codfc.yview, relief=FLAT)
@@ -1217,7 +1227,7 @@ class Interface():
         """
 
         Interface.fechar_mensagem_de_erro(self) # Deletar tag de erro
-        Interface.atualizar_coloracao_aba(self, limpar=True)
+        Interface.atualizar_coloracao_aba(self, True, event)
 
         if self.dic_abas != {}:
             self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] = self.tx_codfc.get(1.0, END)
