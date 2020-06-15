@@ -15,6 +15,9 @@ from tkinter import messagebox
 texto_geral = """\nA versão {} esta disponível para download. Avalie a posiblidade de fazer a atualização. A atualizações de software pode trazer novos comandos e recursos de segurança, porém, também pode trazer novos bugs.\n"""
 texto_geral_atualizado = """\nVocê está usando a versão {}. Se você quer receber aviso de novas versões, nos acompanhe no Facebook ou no nosso blog.\n"""
 
+VERSAO_ATUAL = {"versao":0.21}
+
+
 class Atualizar():
     def __init__(self, tela):
         self.tela = tela
@@ -37,7 +40,7 @@ class Atualizar():
     def verificar_versao(self, primeira_vez = False):
         try:
 
-            baixada = Atualizar.obter_versao_baixada(self)
+            baixada = VERSAO_ATUAL
             recente = Atualizar.obter_versao_mais_recente_dev(self)
 
             if float(baixada["versao"]) < recente:

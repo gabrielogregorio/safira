@@ -17,9 +17,6 @@ class Colorir():
         self.cor_do_comando = novo_cor_do_comando
 
     def __realiza_coloracao(self, palavra, linha, valor1, valor2, cor):
-        """
-            Realiza a coloracao de uma unica palavra
-        """
         linha1 = '{}.{}'.format(linha, valor1)
         linha2 = '{}.{}'.format(linha, valor2)
 
@@ -27,14 +24,13 @@ class Colorir():
         self.tx_codfc.tag_config(palavra, foreground=cor)
 
         self.tela.update()
-        self.tx_codfc.update()
 
     def __marcar_coloracao(self, regex, lista, linha, palavra, cor):
 
         for valor in finditer(regex, lista[linha]):
 
             inicio_regex = valor.start()
-            final_regex = valor.end()
+            final_regex  = valor.end()
 
             usado = cor + str(palavra) + str(regex) + str(inicio_regex) + str(final_regex) + str(linha+1)
 
@@ -83,13 +79,12 @@ class Colorir():
             cor_numerico = self.cor_do_comando["numerico"]["foreground"]
             cor_string = self.cor_do_comando["string"]["foreground"]
 
-            Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
             Colorir.__marcar_coloracao(self, regex_numerico,lista,linha,'numerico',cor_numerico)
             Colorir.__marcar_coloracao(self, regex_string, lista, linha, '"', cor_string)
+            Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
 
 
     def coordena_coloracao(self, event, tx_codfc):
-
         self.tx_codfc = tx_codfc
 
         lista_linhas = self.tx_codfc.get(1.0, END).lower().split('\n')
@@ -104,7 +99,6 @@ class Colorir():
                 self.tx_codfc.tag_delete(palavra_nao_colorida)
                 self.lista_todos_coloracao.remove(palavra_nao_colorida)
 
-        self.tx_codfc.update()
         if self.tela is not None:
             self.tela.update()
 

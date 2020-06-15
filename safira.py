@@ -35,9 +35,11 @@ class Safira():
         splash = Splash(self.tela, self.dic_design)
         interf = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
 
+
         splash.splash_inicio()
         sleep(3)
         splash.splash_fim()
+
         interf.inicioScreen()
 
 if __name__ == "__main__":

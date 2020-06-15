@@ -742,7 +742,7 @@ class Run():
             caractere_inicio = linha[0]
 
             if caractere_inicio in self.dicLetras["limpatela"]:
-                analisa000 =Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
+                analisa000 = Run.analisa_instrucao(self, '^(<limpatela>)$', linha)
                 if analisa000[0]: return [Run.funcao_limpar_o_termin(self), self.num_linha, "limpaTela___.safira"]
 
             if caractere_inicio in self.dicLetras["continue"]:

@@ -3,14 +3,15 @@ Esse projeto está na versão beta 0.2 Safira_ide, estamos trabalhando na primei
 O método de coloração dos comandos está sendo otimizado e portanto, contém alguns bugs
 
 # Introdução
-Uma linguagem de programação introdutória universal, simples e focada em na lógica.
+Uma linguagem de programação com objetivo de amortecer o impacto no momento do primeiro contato com o mundo da programação, simples, focada na lógica.
 
 ![Imagem](imagens/safira.png)
 
 # Como executar  
-1. Baixe o Python3.7 no seu computador
-2. Execute o arquivo "programa.py"
-3. Programe!
+1. Baixe e instale o Python3.8
+2. Adicione o Python ao Path
+3. Instale os pacotes necessários: python3.8 -m pip install -r requeriments.txt
+4. Execute o arquivo safira.py
 
 ## Tópicos
 - [objetivo](#Objetivo)
@@ -205,5 +206,3 @@ mostre lista de cidades na posicao 3
 mostre tamanho da lista de nomes
 
 ```
-
-

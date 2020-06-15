@@ -258,25 +258,25 @@ class Interface():
 
         if bool_era_focado: # Aba fechada era a focada
 
-                try:
-                    chave = self.lst_historico_abas_focadas[-1]
-                except:
-                    for k, valor in self.dic_abas.items():
-                        chave = k
-                        break
-    
-                dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
-                dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
-                dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"]
-                self.num_aba_focada = chave
-                self.dic_abas[chave]["foco"] =True
+            try:
+                chave = self.lst_historico_abas_focadas[-1]
+            except:
+                for k, valor in self.dic_abas.items():
+                    chave = k
+                    break
 
-                Interface.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
-                Interface.atualiza_texto_tela(self, chave)
+            dic_cor_finao = self.dic_design["dic_cor_abas_focada"]
+            dic_cor_botao = self.dic_design["dic_cor_abas_focada_botao"]
+            dic_cor_marcador = self.dic_design["dic_cor_marcador_focado"]
+            self.num_aba_focada = chave
+            self.dic_abas[chave]["foco"] =True
 
-                self.lst_historico_abas_focadas.append(chave)
-                Interface.atualizar_coloracao_aba(self)
-                return 0
+            Interface.configurar_cor_aba(self, dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
+            Interface.atualiza_texto_tela(self, chave)
+
+            self.lst_historico_abas_focadas.append(chave)
+            Interface.atualizar_coloracao_aba(self)
+            return 0
 
     def atualiza_aba_foco(self, num_aba):
         if num_aba == self.num_aba_focada:
@@ -418,14 +418,11 @@ class Interface():
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
 
-
-
-
     def ativar_logs(self, event=None):
-        self.bool_logs = True
-
         if self.bool_logs:
             self.bool_logs = False
+        else:
+            self.bool_logs = True
 
     def pressionar_enter_terminal(self, event = None):
         try:
@@ -498,15 +495,6 @@ class Interface():
 
         print("Inicializador do orquestrador iniciado")
 
-        """
-        Inicia o oequestrador do interpretador de comandos
-
-        :param event:
-        :param libera_break_point_executa:
-        :param linha_linha: Para debug linha a linha
-        :return:
-        """
-
         self.bt_playP.configure(image=self.ic_PStop)
         self.bt_playP.update()
 
@@ -569,7 +557,7 @@ class Interface():
         # Obter o diretório base
         diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
 
-        diretorio_base = re.sub('([^\/]{1,})$','', diretorio_base) # Obter diretório apenas
+        diretorio_base = re.sub('([^\\/]{1,})$','', diretorio_base) # Obter diretório apenas
 
         linhas = nova_linha
         print("Instância criada")
@@ -629,13 +617,6 @@ class Interface():
         self.bool_interpretador_iniciado = False
 
     def destruir_instancia_terminal(self):
-
-        """
-        Destroe uma instância qualquer de um terminal
-
-        :return:
-        """
-
         for widget in self.lista_terminal_destruir:
             try:
                 widget.destroy()
@@ -648,11 +629,6 @@ class Interface():
                 pass
 
     def inicializador_terminal_debug(self):
-
-        """
-        Inicia terminal lateral no modo debug
-        :return:
-        """
 
         Interface.destruir_instancia_terminal(self)
         coluna_identificadores = ('Variavel', 'Tipo','Valor')
@@ -978,10 +954,9 @@ class Interface():
     def cascate_scripts(self):
 
         for file in listdir('scripts/'):
-            if len(file) > 6:
-                if file[-6:] == 'safira':
-                    funcao = lambda link = file:  Interface.abrir_script(self, link)
-                    self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
+            if file.endswith("safira"):
+                funcao = lambda link = file:  Interface.abrir_script(self, link)
+                self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
     def abrir_script(self, link):
 
