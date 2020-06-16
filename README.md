@@ -7,7 +7,10 @@ IDE e código na linguagem Safira
 # Como executar os arquivos do repositório
 1. Baixe e instale o Python3.8
 2. Adicione o Python ao Path
-3. Instale os pacotes necessários: python3.8 -m pip install -r requeriments.txt
+3. Instale os pacotes necessários
+  ```shell
+    python3.8 -m pip install -r requeriments.txt
+  ```
 4. Execute o arquivo safira.py
 
 -------------------------------------
@@ -22,5 +25,6 @@ Confira os principais comandos aqui: https://safiraide.blogspot.com/p/comandos.h
 * [Linux Mint](https://safiraide.blogspot.com/p/downloads.html)
 * [Ubuntu](https://safiraide.blogspot.com/p/downloads.html)
 
-
-
+# Outros Links
+* [Blog](https://safiraide.blogspot.com/)
+* [Facebook](https://www.facebook.com/safiraide/)
