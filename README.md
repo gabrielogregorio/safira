@@ -1,5 +1,5 @@
 # AVISO
-Esse projeto está na versão beta 0.2 Safira_ide, estamos trabalhando na primeira versão estável
+Esse projeto está na versão beta 0.2 Safira, estamos trabalhando na primeira versão estável
 O método de coloração dos comandos está sendo otimizado e portanto, contém alguns bugs
 
 # Introdução
