@@ -9,6 +9,7 @@ A Safira é focada apenas na estrutura básica e em pequenos scripts. Não é re
 Nos primeiro contato com a Safira, é recomendado o uso de comandos no idioma nativo, como o português, exemplo:
 
 Se o foco for ensinar linguagem Python para um grupo de pessoas, é recomendado começar com comandos bem simples, como:
+
 ´´´
 nome vale o que o usuario digitar
 
@@ -19,7 +20,7 @@ se nome for igual a "Gabriel" entao {
 
 Posteriormente, é recomendado a variação, mesmo que seja comando por comando, no ritmo do aluno para a seguinte codificação,
 
-´´´
+´´´python
 nome == input()
 
 if nome == "Gabriel"
