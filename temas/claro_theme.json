@@ -194,5 +194,80 @@
   "fonte_ct_linha":{
     "font":["Lucida Sans", 13],
     "width":2000
+  },
+  "aviso_versao_top_level":{
+    "bd":20,
+    "bg":"#fafafa",
+    "highlightcolor":"#fafafa"
+  },
+  "aviso_versao_tp_atualizada":{
+    "bd":20,
+    "bg":"#fafafa",
+    "highlightcolor":"#fafafa" 
+  },
+  "aviso_versao_fr_atualizacao":{
+    "bg":"#fafafa"
+  },
+  "aviso_versao_lb_dev":{
+    "fg":"#744aff", 
+    "bg":"#fafafa",
+    "font":["", 20]
+  },
+  "aviso_versao_ms":{
+    "anchor":"nw",
+    "fg":"#343434",
+    "bg":"#fafafa",
+    "font":["", 11]
+  },
+  "aviso_versao_btn":{
+   "bg":"#fafafa"
+  },
+  "aviso_versao_btn_cancela":{
+     "bg":"#c7c7c7",
+     "activebackground":"#c7c7c7",
+     "fg":"#323232",
+     "activeforeground":"#323232"
+  },
+  "aviso_versao_btn_atualiza":{
+     "bg":"#21d9c6",
+     "activebackground":"#21d9c6",
+     "fg":"#094d46",
+     "activeforeground":"#094d46"
+  },
+  "aviso_versao_fr_atualizada":{
+     "bg":"#fafafa"
+  },
+  "aviso_versao_lb_dev_atualizada":{
+     "fg":"#744aff",
+     "bg":"#fafafa",
+     "font":["", 20]
+  },
+  "aviso_versao_ms_atualizada":{
+    "anchor":"nw",
+    "fg":"#343434",
+    "bg":"#fafafa",
+    "font":["", 11]
+  },
+  "aviso_versao_bt_cancela_atualizada": {
+    "bg":"#ff2200",
+    "activebackground":"#ff2200",
+    "fg":"#730000",
+    "activeforeground":"#730000"
+  },
+  "aviso_versao_bt_facebook_atualizada": {
+    "bg":"#0088ff",
+    "activebackground":"#0088ff",
+    "fg":"#003d73",
+    "activeforeground":"#003d73"
+
+  },
+  "aviso_versao_fr_inf_atualizada": {
+    "bg":"#fafafa"
+  },
+  "aviso_versao_bt_blog_atualizada": {
+    "bg":"#ff7003",
+    "activebackground":"#ff7003",
+    "fg":"#873a00",
+    "activeforeground":"#873a00"
   }
 }

@@ -11,6 +11,7 @@ from tkinter   import Tk
 from sys       import version
 from time      import sleep
 
+from design import Design
 
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
@@ -23,7 +24,11 @@ __date__        = '01/08/2019'
 
 class Safira():
     def __init__(self):
-        self.dic_comandos, self.dic_design, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+        self.dic_comandos, self.dic_designRemover, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+
+        self.design = Design()
+        self.design.update_design_dic()
+        self.dic_design = self.design.get_design_dic()
 
         self.tela = Tk()
         self.tela.withdraw()
@@ -32,9 +37,8 @@ class Safira():
         self.tela.grid_columnconfigure(1, weight=1)
 
     def main(self):
-        splash = Splash(self.tela, self.dic_design)
-        interf = Interface(self.tela, self.dic_comandos, self.dic_design, self.cor_do_comando)
-
+        splash = Splash(self.tela, self.design)
+        interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando)
 
         splash.splash_inicio()
         sleep(3)

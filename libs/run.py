@@ -4,7 +4,7 @@ __project__     = 'Combratec'
 __github__      = 'https://github.com/Combratec/'
 __description__ = 'Interpretador de comandos'
 __status__      = 'Desenvolvimento'
-__version__     = '0.1'
+__version__     = '0.2'
 
 
 import threading
@@ -19,34 +19,41 @@ from json    import load
 from re      import findall, finditer
 from os      import system
 
+
 class Run():
     def __init__(self, terminal, tx_codficac, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos):
 
+        self.bool_break_point_liberado = None
+
+        self.boo_orquestrador_iniciado = False
+        self.esperar_pressionar_enter = False
+        self.esperando_tempo = False
         self.aconteceu_erro = False
         self.erro_alertado = False
         self.ignorar_erros = False
-        self.esperar_pressionar_enter = False
+
         self.dic_variaveis = {}
         self.dic_funcoes = {}
-        self.boo_orquestrador_iniciado = False
-        self.tx_terminal = terminal
+
         self.numero_threads = 0
+
+        self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
+        self.valor_tecla_pressionada = ""
+        self.txt_ultima_msg_erro = ""
+        self.dir_script_aju_erro = ""
+        self.idioma = "pt-br"
+        self.num_linha = "0"
+
+        self.tx_terminal = terminal
         self.bool_logs = bool_logs
         self.tx_codficac = tx_codficac
         self.dic_comandos = dic_comandos
         self.lst_breakpoints = lst_breakpoints
-        self.bool_break_point_liberado = None
         self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
-        self.idioma = "pt-br"
-        self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
-        self.valor_tecla_pressionada = ""
-        self.num_linha = "0"
-        self.txt_ultima_msg_erro = ""
-        self.esperando_tempo = False
-        self.dir_script_aju_erro = ""
         self.diretorio_base = diretorio_base
 
         self.dicLetras = dicLetras
+
         self.inicio = time()
 
         with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
@@ -61,15 +68,12 @@ class Run():
 
     def aguardar_liberacao_breakPoint(self):
         self.bool_break_point_liberado = False
+
         while not self.bool_break_point_liberado and not self.bool_ignorar_todos_breakpoints:
             self.tx_codficac.update()
             sleep(0.05)
 
     def realiza_coloracao_erro(self, palavra, valor1, valor2, cor='red', linhaErro = None):
-        """
-            Colore uma linha de erro no terminal
-        """
-
         linha = self.tx_terminal.get(1.0, END)
         linha = len(linha.split('\n')) - 1
 
@@ -93,14 +97,15 @@ class Run():
         self.erro_alertado = True
 
     def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
+
         if self.ignorar_erros:
             return "Ignorar Erro"
 
         self.aconteceu_erro = True
 
         if msg_log not in ["Erro ao iniciar o Interpretador", "indisponibilidade_terminal", "Interrompido"]:
-            if not self.erro_alertado:
 
+            if not self.erro_alertado:
                 self.txt_ultima_msg_erro = msg_log
                 self.dir_script_aju_erro = dir_script_erro
 
@@ -121,7 +126,6 @@ class Run():
         except Exception as erro:
             return [[False, "indisponibilidade_terminal", 'string','exibirNaTela'], "1"]
 
-
     def log(self, msg_log):
         if self.bool_logs:
             agora = time() - self.inicio
@@ -133,32 +137,33 @@ class Run():
     def orquestrador_interpretador_(self, txt_codigo):
         Run.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
 
-        self.numero_threads += 1 # Aumenta os Thread
+        self.numero_threads += 1
         self.boo_orquestrador_iniciado = True # Indica que já está contando os Thread
 
         int_tamanho_codigo = len(txt_codigo)
-        bool_achou_comentario_longo = False
-        bool_salvar_bloco = False
-        bool_achou_comentario = False
-        bool_achou_string = False
-        bool_execucao_deu_erro_temporario = False
 
-        str_bloco_salvo = ""
-        txt_linha_comando = ""
-        txt_caractere = ""
-        historico_fluxo_de_dados = []
+        bool_execucao_deu_erro_temporario = False
+        bool_achou_comentario_longo = False
+        bool_achou_comentario = False
+        bool_salvar_bloco = False
+        bool_achou_string = False
         bool_ultimo_teste = False
+
+        txt_linha_comando = ""
+        str_bloco_salvo = ""
+        txt_caractere = ""
+
+        historico_fluxo_de_dados = []
 
         int_profundidade_bloco = 0
         for num_txt_caractere, txt_caractere in enumerate(txt_codigo):
             txt_dois_caracteres = txt_codigo[num_txt_caractere : num_txt_caractere + 2]
 
-            # Ignorar tudo entre /**/
             if txt_dois_caracteres == '/*' and not bool_achou_string and not bool_achou_comentario:
                 bool_achou_comentario_longo = True
                 continue
 
-            if bool_achou_comentario_longo and txt_codigo[num_txt_caractere - 2:num_txt_caractere] == '*/':
+            if bool_achou_comentario_longo and txt_codigo[num_txt_caractere-2:num_txt_caractere] == '*/':
                 bool_achou_comentario_longo = False
 
             if bool_achou_comentario_longo:
@@ -185,6 +190,7 @@ class Run():
                     txt_linha_comando = txt_linha_comando.replace("\n","").strip()
 
                     lst_analisa =Run.interpretador(self, txt_linha_comando)
+
                     if lst_analisa[0][3] == "continuarLoop":
                         self.numero_threads -= 1
                         return [True, True, 'booleano', "continuarLoop"]
@@ -282,7 +288,6 @@ class Run():
                             Run.orq_erro(self, lst_ultimo_teste[1], num_linha_analisada, arq_script_erro)
                             return lst_ultimo_teste
 
-
                 elif lst_ultimo_teste[3] == "declararLoopRepetir":
                     historico_fluxo_de_dados.append('declararLoopRepetir') # Encaixa Loop
 
@@ -315,6 +320,7 @@ class Run():
                     if passo_para_cada == 1:
                         inici_para_cada = lst_ultimo_teste[1][1]
                         final_para_cada = lst_ultimo_teste[1][2] + 1
+
                     else:
                         inici_para_cada = lst_ultimo_teste[1][1]
                         final_para_cada = lst_ultimo_teste[1][2] - 1
@@ -351,6 +357,7 @@ class Run():
                 elif lst_ultimo_teste[3] == 'declararCondicional':
                     historico_fluxo_de_dados.append('declararCondicional')
                     lst_ultimo_teste[3] = "fazerNada"
+
                     if lst_ultimo_teste[1]:
                         bool_ultimo_teste = True
 
@@ -358,7 +365,7 @@ class Run():
                         if lst_resultado_execucao[3] == "continuarLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "continuarLoop"]
-                        print(lst_resultado_execucao, "<>")
+
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "pararLoop"]
@@ -372,20 +379,22 @@ class Run():
 
                             self.numero_threads -= 1
                             return lst_resultado_execucao
+
                     else:
                         bool_ultimo_teste == False
 
-                # É um senao se e o teste
                 elif lst_ultimo_teste[3] == 'declararSenaoSe':
 
                     if len(historico_fluxo_de_dados) == 0:
                         Run.orq_erro(self, "Você precisa definir uma condição, para testar o senão", "1", "")
                         self.numero_threads -= 1
+
                         return [False, "Você precisa definir uma condição, para testar o senão", 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'declararCondicional':
                         Run.orq_erro(self, "Você precisa definir uma condição, para testar o senão", "1", "")
                         self.numero_threads -= 1
+
                         return [False, "Você precisa definir uma condição, para testar o senão", 'string', "fazerNada"]
 
                     # Condição se ou senão anterior era falsa
@@ -399,7 +408,7 @@ class Run():
                             if lst_resultado_execucao[3] == "continuarLoop":
                                 self.numero_threads -= 1
                                 return [True, True, 'booleano', "continuarLoop"]
-                            print(lst_resultado_execucao, ">>")
+
                             if lst_resultado_execucao[3] == "pararLoop":
                                 self.numero_threads -= 1
                                 return lst_resultado_execucao
@@ -431,10 +440,11 @@ class Run():
                     if bool_ultimo_teste == False:
                         bool_ultimo_teste = True # Condição agora foi executada
                         lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+
                         if lst_resultado_execucao[3] == "continuarLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "continuarLoop"]
-                        print(lst_resultado_execucao, "ÇÇ")
+
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads -= 1
                             return lst_resultado_execucao
@@ -465,7 +475,6 @@ class Run():
 
                     bool_execucao_deu_erro_temporario = False
 
-
                     if lst_resultado_execucao[0] == False:
                         bool_execucao_deu_erro_temporario = True
 
@@ -473,11 +482,11 @@ class Run():
                             self.numero_threads -= 1
                             return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-                        print("Erro ignorado => " + str(lst_resultado_execucao))
                         lst_resultado_execucao = [True, "", "linhaVazia", "fazerNada"]
                     self.ignorar_erros = False
 
                 elif lst_ultimo_teste[3] == 'seDerErro':
+
                     if len(historico_fluxo_de_dados) == 0:
                         Run.orq_erro(self, "Você precisa definir um tente, para testar o se der erro", "1", "")
                         self.numero_threads -= 1
@@ -491,9 +500,11 @@ class Run():
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario:
                         lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+
                         if lst_resultado_execucao[3] == "continuarLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "continuarLoop"]
+
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads -= 1
                             return lst_resultado_execucao
@@ -522,9 +533,11 @@ class Run():
                     # Teste deu erro
                     if bool_execucao_deu_erro_temporario == False:
                         lst_resultado_execucao = Run.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+
                         if lst_resultado_execucao[3] == "continuarLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "continuarLoop"]
+
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads -= 1
                             return lst_resultado_execucao
@@ -557,6 +570,7 @@ class Run():
                         if lst_resultado_execucao[3] == "continuarLoop":
                             self.numero_threads -= 1
                             return [True, True, 'booleano', "continuarLoop"]
+
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads -= 1
                             return lst_resultado_execucao
@@ -587,6 +601,7 @@ class Run():
                     if lst_resultado_execucao[3] == "continuarLoop":
                         self.numero_threads -= 1
                         return [True, True, 'booleano', "continuarLoop"]
+
                     if lst_resultado_execucao[3] == "pararLoop":
                         self.numero_threads -= 1
                         return lst_resultado_execucao
@@ -617,9 +632,11 @@ class Run():
 
             txt_linha_comando = txt_linha_comando.replace("\n","").strip()
             lst_ultimo_teste =Run.interpretador(self, txt_linha_comando)
+
             if lst_ultimo_teste[0][3] == "continuarLoop":
                 self.numero_threads -= 1
                 return [True, True, 'booleano', "continuarLoop"]
+
             if lst_ultimo_teste[0][3] == "pararLoop":
                 self.numero_threads -= 1
                 return [True, True, 'booleano', "pararLoop"]
@@ -638,7 +655,8 @@ class Run():
                 Run.orq_erro(self, lst_ultimo_teste[1], num_linha_analisada, arq_script_erro)
                 return lst_ultimo_teste
 
-            if lst_ultimo_teste[3] == 'exibirNaTela': Run.orq_exibir_tela(self, lst_ultimo_teste)
+            if lst_ultimo_teste[3] == 'exibirNaTela':
+                Run.orq_exibir_tela(self, lst_ultimo_teste)
 
         # Aviso de erros de profundidade
         self.numero_threads -= 1
@@ -651,14 +669,13 @@ class Run():
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
     def analisa_instrucao(self, comando, texto):
-        #Run.log(self, '<analisa_instrucao>: {}{}'.format( comando,texto))
-
         re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
         re_groups = findall(re_comandos, comando)
         if re_groups == None:
             return [False]
 
         dic_options = {}
+
         # Anda pelos grupos <se>, <esperar>
         for grupo in re_groups:
 
@@ -670,6 +687,7 @@ class Run():
 
                 # Substitui o grupo pelo comando. <se>, if
                 comando_analise = comando.replace(grupo, txt_comando_analisar)
+
                 try:
                     dic_options[grupo] = dic_options[grupo] + "|" + str(txt_comando_analisar)
                 except Exception as err:
@@ -689,7 +707,9 @@ class Run():
         # Aplicar no texto
         re_texto = findall(comando, texto)
 
-        if re_texto == []: return [False, 0]
+        if re_texto == []:
+            return [False, 0]
+
         if str(type(re_texto[0])) == "<class 'str'>":
             lista_itens = [re_texto[0]]
         else:
@@ -733,6 +753,7 @@ class Run():
             # Se estiver em um breakpoint, aguarde.
             if int(self.num_linha) in self.lst_breakpoints:
                Run.aguardar_liberacao_breakPoint(self)
+
             if self.aconteceu_erro:
                 return [[False, 'Erro ao iniciar o Interpretador', 'string', 'exibirNaTela'], "1", ""]
 
@@ -932,7 +953,7 @@ class Run():
                 analisa003 =Run.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha)
                 if analisa003[0]: return [Run.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais___.safira"]
 
-            # ULTIMO
+            # ULTIMO SEMPRE
             analisa044 =Run.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
             if analisa044[0]: return [Run.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes___.safira"]
 
@@ -958,10 +979,9 @@ class Run():
 
         possivelVariavel = str(possivelVariavel).strip()
 
+        caractere_inicio = None
         if possivelVariavel != "":
             caractere_inicio = possivelVariavel[0]
-        else:
-            caractere_inicio = None
 
         if caractere_inicio in self.dicLetras["aleatorio"]:
             analisa018 =Run.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', possivelVariavel)
@@ -1133,7 +1153,7 @@ class Run():
         biblioteca = Run.formatar_arquivo(self, biblioteca.lower()) + str("___.safira")
 
         # Tenta abrir o texto da biblioteca
-        teste = funcoes.abrir_arquivo(  biblioteca  )
+        teste = funcoes.abrir_arquivo(biblioteca)
         if teste[0] == None:
             return [False, "Erro ao abrir a biblioteca {}, erro {}".format(biblioteca, teste[1]), "string", "fazerNada"]
 
@@ -1197,7 +1217,7 @@ class Run():
         if not resultado[0]: return resultado
 
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
-        # Retornando o tipo
+
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
 
@@ -1268,6 +1288,7 @@ class Run():
                 return [False,
                         "Erro ao adicionar o texto \"{}\" no arquivo \"{}\". Erro \"{}\"".format(texto, arquivo, e),
                         'string', ' exibirNaTela']
+
             return [True, True, "booleano", "fazerNada"]
         return [False, "O arquivo \"{}\" não existe!".format(nome_arquivo), 'string', ' exibirNaTela']
 
@@ -1294,13 +1315,10 @@ class Run():
                 f = open(nome_arquivo, "a", encoding="utf8")
                 f.write(texto)
                 f.close()
+
             except Exception as e:
-                return [False,
-                        "Erro ao adicionar o texto \"{}\" no arquivo \"{}\". Erro \"{}\"".format(texto, arquivo, e),
-                        'string', ' exibirNaTela']
-
+                return [False, "Erro ao adicionar o texto \"{}\" no arquivo \"{}\". Erro \"{}\"".format(texto, arquivo, e), 'string', ' exibirNaTela']
             return [True, True, "booleano", "fazerNada"]
-
         return [False, "O arquivo \"{}\" não existe!".format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_arquivo_existe(self, nome_arquivo):
@@ -1316,7 +1334,6 @@ class Run():
 
         if os.path.exists(nome_arquivo):
             return [True, True, "booleano", "fazerNada"]
-
         else:
             return [True, False, "booleano", "fazerNada"]
 
@@ -1373,7 +1390,6 @@ class Run():
         nome_arquivo = str(teste_valor[1])
         nome_arquivo = Run.formatar_arquivo(self, nome_arquivo)
 
-
         if not os.path.exists(nome_arquivo):
             try:
                 f = open(nome_arquivo, "w", encoding='utf8')
@@ -1421,6 +1437,7 @@ class Run():
             if not criar_variavel[0]:
                 return criar_variavel
         passo = 1
+
         if (int(teste_valorI[1]) > int(teste_valorF[1])):
             passo = -1
 
@@ -1498,13 +1515,10 @@ class Run():
         teste =Run.obter_valor_variavel(self, linha)
 
         if not teste[0]: return teste
-
         if teste[2] != 'lista':
             return [False, "{} {}".format(linha,Run.msg_idioma(self, "nao_e_lista")), 'string']
 
         return teste
-
-
 
     def funcao_retornar_lista(self, variavel):
         Run.log(self, '<funcao_retornar_lista>: {}'.format(variavel))
@@ -1514,7 +1528,6 @@ class Run():
         if teste_variavel[0] == False:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
-
         if teste_variavel[2] != 'lista':
             return [False, '{} {}'.format(variavel, Run.msg_idioma(self, "nao_e_lista")), 'string']
 
@@ -1523,20 +1536,14 @@ class Run():
 
         return [True, resultado, "lista", 'fazerNada']
 
-
-
-
-
-
-
     def funcao_obter_valor_lst(self, variavel, posicao):
         Run.log(self, '<funcao_obter_valor_lst>: {}, {}'.format(variavel, posicao))
 
         if variavel == '' or posicao == '':
             return [False,Run.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
-        teste_posicao =Run.abstrair_valor_linha(self, posicao)
-        teste_variavel =Run.obter_valor_lista(self, variavel)
+        teste_posicao = Run.abstrair_valor_linha(self, posicao)
+        teste_variavel = Run.obter_valor_lista(self, variavel)
 
         if not teste_posicao[0]:
             return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
@@ -1571,8 +1578,7 @@ class Run():
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
         if teste_variavel[2] != 'lista':
-            return [False, '{} {}'.format(teste_variavel[1], Run.msg_idioma(self, "nao_e_lista")), 'string',
-                    'exibirNaTela']
+            return [False, '{} {}'.format(teste_variavel[1], Run.msg_idioma(self, "nao_e_lista")), 'string', 'exibirNaTela']
 
         if not resultado_valor[0]:
             return [resultado_valor[0], resultado_valor[1], resultado_valor[2], 'exibirNaTela']
@@ -1597,44 +1603,48 @@ class Run():
             return [True, '{} {}'.format(Run.msg_idioma(self, "erro_obter_tamanho_lista"), erro), 'string',
                     'exibirNaTela']
 
-    def funcao_rem_itns_na_lst(self, valor, variavel):
-        Run.log(self, '<funcao_rem_itns_na_lst>: {}, {}'.format(valor, variavel))
+    def teste_generico_lista(self, variavel, valor):
 
         if variavel == '' or valor == '':
             return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
 
-        # analisa[1] se lista foi decarada e se é lista
-        teste =Run.obter_valor_lista(self, variavel)
-        if not teste[0]:
-            return [teste[0], teste[1], teste[2], 'exibirNaTela']
-
-        resultado =Run.abstrair_valor_linha(self, valor)
-
-        if not resultado[0]:
-            return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
-
-        try:
-            self.dic_variaveis[variavel][0].remove([resultado[1], resultado[2]])
-        except Exception as erro:
-            return [False,
-                    '"{}" {} "{}"!'.format(resultado[1],Run.msg_idioma(self, "nao_esta_na_lista"), variavel),
-                    'string', 'exibirNaTela']
-
-        return [True, None, 'vazio', 'fazerNada']
-
-    def funcao_add_itns_na_lst(self, valor, variavel):
-
-        if variavel == '' or valor == '':
-            return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
-
-        teste_variavel =Run.obter_valor_lista(self, variavel)
-        teste_valor =Run.abstrair_valor_linha(self, valor)
+        teste_variavel = Run.obter_valor_lista(self, variavel)
+        teste_valor = Run.abstrair_valor_linha(self, valor)
 
         if not teste_variavel[0]:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
         if not teste_valor[0]:
             return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+
+
+        return [True, teste_variavel, teste_valor]
+
+
+    def funcao_rem_itns_na_lst(self, valor, variavel):
+        Run.log(self, '<funcao_rem_itns_na_lst>: {}, {}'.format(valor, variavel))
+
+        teste_generico = Run.teste_generico_lista(self, variavel, valor)
+        if not teste_generico[0]:
+            return teste_generico
+
+        teste_variavel = teste_generico[1]
+        teste_valor = teste_generico[2]
+
+        try:
+            self.dic_variaveis[variavel][0].remove([teste_valor[1], teste_valor[2]])
+        except Exception as erro:
+            return [False, '"{}" {} "{}"!'.format(teste_valor[1],Run.msg_idioma(self, "nao_esta_na_lista"), variavel), 'string', 'exibirNaTela']
+        return [True, None, 'vazio', 'fazerNada']
+
+    def funcao_add_itns_na_lst(self, valor, variavel):
+
+        teste_generico = Run.teste_generico_lista(self, variavel, valor)
+        if not teste_generico[0]:
+            return teste_generico
+
+        teste_variavel = teste_generico[1]
+        teste_valor = teste_generico[2]
 
         try:
             self.dic_variaveis[variavel][0].append([teste_valor[1], teste_valor[2]])
@@ -1647,18 +1657,12 @@ class Run():
     def funcao_add_itns_lst_in(self, valor, variavel):
         Run.log(self, '<funcao_add_itns_lst_in>: {}, {}'.format(valor, variavel))
 
-        if variavel == '' or valor == '':
-            return [False,Run.msg_idioma(self, "variavel_valor_nao_informado"), 'exibirNaTela']
+        teste_generico = Run.teste_generico_lista(self, variavel, valor)
+        if not teste_generico[0]:
+            return teste_generico
 
-        # analisa[1] se lista foi decarada e se é lista
-        teste_variavel =Run.obter_valor_lista(self, variavel)
-        teste_valor =Run.abstrair_valor_linha(self, valor)
-
-        if not teste_variavel[0]:
-            return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
-
-        if not teste_valor[0]:
-            return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+        teste_variavel = teste_generico[1]
+        teste_valor = teste_generico[2]
 
         self.dic_variaveis[variavel][0].insert(0, [teste_valor[1], teste_valor[2]])
         return [True, None, 'vazio', 'fazerNada']
@@ -1671,12 +1675,14 @@ class Run():
                     '2 É necessário passar um comando de referência, para indicar o que é valor e o que é variável. Como " Adicione 1 a lista de nomes ',
                     'exibirNaTela']
 
-        teste_variavel =Run.obter_valor_lista(self, variavel)
-        teste_posicao =Run.abstrair_valor_linha(self, posicao)
-        teste_valor =Run.abstrair_valor_linha(self, valor)
+        teste_generico = Run.teste_generico_lista(self, variavel, valor)
+        if not teste_generico[0]:
+            return teste_generico
 
-        if not teste_variavel[0]: return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
-        if not teste_valor[0]: return [teste_valor[0], teste_valor[1], teste_valor[2], 'exibirNaTela']
+        teste_variavel = teste_generico[1]
+        teste_valor = teste_generico[2]
+
+        teste_posicao =Run.abstrair_valor_linha(self, posicao)
         if not teste_posicao[0]: return [teste_posicao[0], teste_posicao[1], teste_posicao[2], 'exibirNaTela']
 
         if teste_posicao[2] != 'float':
@@ -1756,6 +1762,7 @@ class Run():
             obterValor =Run.abstrair_valor_linha(self, itens)
             if obterValor[0] == False:
                 return [obterValor[0], obterValor[1], obterValor[2], 'exibirNaTela']
+
             lista = []
             lista.append([obterValor[1], obterValor[2]])
 
@@ -1768,7 +1775,6 @@ class Run():
         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
         self.esperar_pressionar_enter = True
-
         while self.esperar_pressionar_enter:
 
             try:
@@ -1887,6 +1893,7 @@ class Run():
             for valorItem in testa:
                 if parametros[anterior: valorItem[0]]:
                     listaParametros.append(parametros[anterior: valorItem[0]])
+
                 anterior = valorItem[1]
 
             if len(parametros[anterior:]) > 0:
@@ -2034,9 +2041,7 @@ class Run():
 
         for valor in finditer("""\"[^"]*\"""", string):
 
-            abstrair =Run.abstrair_valor_linha(self,
-                                                          string[anterior:valor.start()])
-
+            abstrair =Run.abstrair_valor_linha(self, string[anterior:valor.start()])
             if not abstrair[0]: return abstrair
 
             valorFinal = valorFinal + str(abstrair[1]) + string[valor.start() + 1:valor.end() - 1]
@@ -2044,7 +2049,6 @@ class Run():
 
         abstrair =Run.abstrair_valor_linha(self, string[anterior:])
         if not abstrair[0]: return abstrair
-
         valorFinal = valorFinal + str(abstrair[1])
 
         return [True, valorFinal, 'string']
@@ -2063,7 +2067,6 @@ class Run():
             if palavra.isalnum() and palavra[0].isalpha():
 
                 variavelDessaVez =Run.abstrair_valor_linha(self, palavra)
-
                 if not variavelDessaVez[0]: return variavelDessaVez
 
                 tipos_obtidos.append(variavelDessaVez[2])
@@ -2081,22 +2084,21 @@ class Run():
 
         return [True, linha, 'string']
 
+    def substituir_fora_do_contexto():
+        pass
+
     def fazer_contas(self, linha):
         Run.log(self, '<fazer_contas>: {}'.format(linha))
 
-        # Do maior para o menor
         linha = linha.replace(' multiplicado por ', ' * ')
         linha = linha.replace(' multiplied by ', ' * ')
-        linha = linha.replace(' multiplicar ', ' * ')
-
         linha = linha.replace(' dividido por ', ' / ')
-        linha = linha.replace(' divided by ', ' / ')
-
-        linha = linha.replace(' multiplique ', ' * ')
-        linha = linha.replace(' multiply ', ' * ')
-
         linha = linha.replace(' elevado por ', ' ** ')
         linha = linha.replace(' elevated by ', ' ** ')
+        linha = linha.replace(' multiplique ', ' * ')
+        linha = linha.replace(' multiplicar ', ' * ')
+        linha = linha.replace(' divided by ', ' / ')
+        linha = linha.replace(' multiply ', ' * ')
         linha = linha.replace(' elevado a ', ' ** ')
         linha = linha.replace(' elevado ', ' ** ')
         linha = linha.replace(' divide ', ' / ')
@@ -2105,7 +2107,6 @@ class Run():
         linha = linha.replace(' mas ', ' + ')
         linha = linha.replace(' menos ', ' - ')
         linha = linha.replace(' minus ', ' - ')
-
         linha = linha.replace('true', 'True')
         linha = linha.replace('truth', 'True')
         linha = linha.replace('cierto', 'True')
@@ -2113,7 +2114,6 @@ class Run():
         linha = linha.replace('verdadeira', 'True')
         linha = linha.replace('verdad', 'True')
         linha = linha.replace('verdade', 'True')
-
         linha = linha.replace('false', 'False')
         linha = linha.replace('falso', 'False')
         linha = linha.replace('mentira', 'False')
@@ -2260,7 +2260,6 @@ class Run():
         Run.log(self, '<analisa_padrao_variavel>: {}'.format(variavel))
         
         variavel = str(variavel)
-
         variavel = variavel.replace("_", "")  # _ também é valido
 
         if not variavel[0].isalpha():
@@ -2309,8 +2308,6 @@ class Run():
             return Run.funcao_tiver_valor_lst(self, analisa021[1][2], analisa021[1][4])
 
         return [True, None, 'booleano']
-
-
 
     def funcao_testar_condicao(self, linha):
         Run.log(self, '<funcao_testar_condicao>: {}'.format(linha))
@@ -2449,17 +2446,12 @@ class Run():
 
 if __name__ == "__main__":
     import funcoes as funcoes
-
     print("Interpretador")
-
 
     instancia = Run( self.tx_terminal, self.tx_codfc, self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos)
 
     t = Thread(target=lambda codigoPrograma = linhas: instancia.orquestrador_interpretador_(codigoPrograma))
     t.start()
-
-
-
 
 else:
     import libs.funcoes as funcoes

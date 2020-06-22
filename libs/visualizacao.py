@@ -4,12 +4,12 @@ from tkinter import Canvas
 from tkinter import Text
 
 class ContadorLinhas(Canvas):
-    def __init__(self, frame, dic_design):
+    def __init__(self, frame, design):
         Canvas.__init__(self, frame)
 
         self.textwidget = None
         self.linha_analise = 0
-        self.dic_design = dic_design
+        self.design = design
 
     def atribuir(self, tx_codfc):
         self.textwidget = tx_codfc
@@ -41,8 +41,9 @@ class ContadorLinhas(Canvas):
             else:
                 num_linha = " " + num_linha + "  "
 
-            self.create_text(2, y, anchor="nw", text=num_linha, font=self.dic_design["fonte_ct_linha"]["font"],  fill=cor_padrao)
+            self.create_text(2, y, anchor="nw", text=num_linha, font=self.design.dic["fonte_ct_linha"]["font"],  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
+
 
 class EditorDeCodigo(Text):
     def __init__(self, *args, **kwargs):

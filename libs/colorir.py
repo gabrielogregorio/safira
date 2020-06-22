@@ -29,20 +29,19 @@ class Colorir():
 
         for valor in finditer(regex, lista[linha]):
 
-            inicio_regex = valor.start()
+            inici_regex = valor.start()
             final_regex  = valor.end()
 
-            usado = cor + str(palavra) + str(regex) + str(inicio_regex) + str(final_regex) + str(linha+1)
+            usado = cor + str(palavra) + str(regex) + str(inici_regex) + str(final_regex) + str(linha+1)
 
             self.historico_coloracao.append(usado)
-            Colorir.__realiza_coloracao(self, str(usado), str(linha + 1), inicio_regex, final_regex, cor)
+            Colorir.__realiza_coloracao(self, str(usado), str(linha + 1), inici_regex, final_regex, cor)
 
             if usado not in self.lista_todos_coloracao:
                 self.lista_todos_coloracao.append(usado)
 
 
     def __filtrar_palavras(palavra):
-        # Coreção para regex
         palavra_comando = palavra.replace('+', '\\+')
         palavra_comando = palavra_comando.replace('/', '\\/')
         palavra_comando = palavra_comando.replace('*', '\\*')
@@ -103,6 +102,3 @@ class Colorir():
             self.tela.update()
 
         return 0
-
-
-

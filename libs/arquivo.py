@@ -47,13 +47,7 @@ class Arquivo():
 
             return arq.name
 
-
-
     def salvar_arquivo(self, event=None):
-        """
-        Salva um arquivo que já está aberto
-        """
-
         if self.dic_abas[self.aba_focada]["arquivoSalvo"]['link'] == "":
             Arquivo.salvar_arquivo_como_dialog(self)
             return "salvar_arquivo_como_dialog"
@@ -62,7 +56,7 @@ class Arquivo():
             programaCodigo = self.tx_codfc.get(1.0, END)
 
             if self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] == programaCodigo:
-                print("Nnão sofreu modificações")
+                print("Não sofreu modificações")
 
             else:
                 try:
@@ -78,8 +72,8 @@ class Arquivo():
                 else:
                     self.dic_abas[self.aba_focada]["arquivoSalvo"]['texto'] = programaCodigo
                     self.dic_abas[self.aba_focada]["arquivoAtual"]['texto'] = programaCodigo
-
         return None  
+
     def salvar_arquivo_dialog(self, event=None):
 
         arq_tips = [('Scripts Safira', '*.safira'), ('Todos os arquivos', '*')]
