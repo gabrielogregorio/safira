@@ -1,7 +1,7 @@
 # Introdução
 A Safira é uma linguagem de programação focada em lógica com o objetivo de amortecer o impacto do primeiro contato com o mundo da programação, oferecendo uma interface simples, intuitiva e uma codificação natural, focada em lógica
 
-Este é um exemplo da Safira
+Esta é a Safira
 ![Imagem](imagens/projeto.gif)
 
 A Safira é focada apenas na estrutura básica e em pequenos scripts. Não é recomendado o uso da safira para projetos com muitas linhas de código, sendo altamente recomendado a variação de comandos para se aproximar da primeira linguagem de programação que o aluno vai de fato aprender.
