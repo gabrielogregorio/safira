@@ -10,22 +10,29 @@ Nos primeiro contato com a Safira, é recomendado o uso de comandos no idioma na
 
 Se o foco for ensinar linguagem Python para um grupo de pessoas, é recomendado começar com comandos bem simples, como:
 
-´´´
-nome vale o que o usuario digitar
+    nome vale o que o usuario digitar
 
-se nome for igual a "Gabriel" entao {
-    mostre "Olá Gabriel"
-} 
-´´´
+    se nome for igual a "Gabriel" entao {
+        mostre "Olá Gabriel"
+    } 
 
 Posteriormente, é recomendado a variação, mesmo que seja comando por comando, no ritmo do aluno para a seguinte codificação,
 
-´´´python
-nome == input()
+    nome = input
 
-if nome == "Gabriel"
-    print("Olá Gabriel")
-´´´
+    if nome == "Gabriel" {
+        print "Olá Gabriel"
+    }
+
+Perceba que a Safira está muito mais próximo do Python agora
+
+
+    nome = input()
+
+    if nome == "Gabriel":
+        print("Olá Gabriel")
+
+
 
 Desta forma, a complexidade da linguagem, seja ela qual for, é reduzida e o conceito será aprendido com mais facilidade. A Safira tem mais de 30 comandos, você pode conferir eles na aba "Exemplos" da IDE ou no [blog](https://safiraide.blogspot.com/p/comandos.html).
  
