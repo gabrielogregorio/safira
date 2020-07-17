@@ -10,15 +10,17 @@ __version__     = '0.2'
 import threading
 import os.path
 import os
-
 from tkinter import END
 from random  import randint
 from time    import sleep
 from time    import time
 from json    import load
-from re      import findall, finditer
+from re      import findall
+from re      import finditer
 from os      import system
+
 import libs.funcoes as funcoes
+
 
 class Interpretador():
     def __init__(self, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos):
@@ -61,7 +63,7 @@ class Interpretador():
             self.controle_interpretador = "aguardando_breakpoint"
 
             while self.controle_interpretador != "":
-                sleep(0.001)
+                sleep(0.0001)
 
     def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
 
@@ -87,7 +89,7 @@ class Interpretador():
             self.controle_interpretador = ':mostreLinha:' + lst_retorno_ultimo_comando[1]
 
         while self.controle_interpretador != "":
-            sleep(0.001)
+            sleep(0.0001)
 
 
     def log(self, msg_log):
@@ -978,7 +980,7 @@ class Interpretador():
         self.controle_interpretador = "limpar_tela"
 
         while self.controle_interpretador != "":
-            sleep(0.001)
+            sleep(0.0001)
 
 
         return [True, None, 'vazio', 'fazerNada']
@@ -1128,7 +1130,7 @@ class Interpretador():
         while self.controle_interpretador != "":
             if self.aconteceu_erro:
                 return [False, "Interrompido", "string", "exibirNaTela"]
-            sleep(0.001)
+            sleep(0.0001)
 
         digitado = self.texto_digitado
 

@@ -248,7 +248,7 @@
     "bg":"#fafafa",
     "font":["", 11]
   },
-  "aviso_versao_bt_cancela_atualizada": {
+  "aviso_bt_cancelar": {
     "bg":"#ff2200",
     "activebackground":"#ff2200",
     "fg":"#730000",
@@ -269,5 +269,43 @@
     "activebackground":"#ff7003",
     "fg":"#873a00",
     "activeforeground":"#873a00"
+  },
+
+  "lb1_encontrou_bug":{
+    "font":["",20],
+    "bg":"#3e4045",
+    "fg":"#efefef"
+  },
+
+  "lb2_encontrou_bug":{
+    "bg":"#3e4045",
+    "fg":"#efefef"
+  },
+  
+  "lb3_encontrou_bug":{
+    "font":["",11],
+    "bg":"#3e4045",
+    "fg":"#efefef"
+  },
+  
+  "fr_bt_encontrou_bug":{
+    "bg":"#3e4045"
+  },
+  
+  "bt_canc_encontrou_bug":{
+    "font":["",13],
+    "highlightbackground":"#972121",
+    "bg":"#a83232",
+    "fg":"white",
+    "activebackground":"#a83232",
+    "activeforeground":"#efefef"
+  },
+  "bt_report_encontrou_bug":{
+    "font":["",13],
+    "highlightbackground":"#219791",
+    "rbg":"#1d6965",
+    "fg":"white",
+    "activebackground":"#1d6965",
+    "activeforeground":"#efefef"
   }
 }

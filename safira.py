@@ -1,49 +1,53 @@
 # -*- coding: utf-8 -*-
 
-from libs.funcoes          import carregar_json
-from libs.visualizacao     import ContadorLinhas
-from libs.visualizacao     import EditorDeCodigo
-from tkinter.ttk           import Treeview
-from tkinter.ttk           import Style
-from libs.colorir          import Colorir
-from libs.arquivo          import Arquivo
-from threading             import Thread
-from libs.interpretador    import Interpretador
 from tkinter               import SEL
+from tkinter               import CURRENT
+from tkinter               import INSERT
+from tkinter               import RAISED
+from tkinter               import FLAT 
+from tkinter               import END
+from tkinter               import NSEW
+from tkinter               import N
+from tkinter               import W
 from tkinter               import Toplevel
 from tkinter               import PhotoImage
 from tkinter               import messagebox
 from tkinter               import Scrollbar
-from tkinter               import CURRENT
-from tkinter               import INSERT
 from tkinter               import Button
-from tkinter               import RAISED
 from tkinter               import Frame
 from tkinter               import Label
 from tkinter               import Entry
-from tkinter               import NSEW, N, W
 from tkinter               import Message
 from tkinter               import Tk
 from tkinter               import messagebox
 from tkinter               import Text
-from tkinter               import FLAT 
 from tkinter               import Menu
 from os.path               import abspath
-from tkinter               import END
+from tkinter.ttk           import Treeview
+from tkinter.ttk           import Style
+from threading             import Thread
 from time                  import sleep
 from time                  import time
 from json                  import load
 from os                    import getcwd
 from os                    import listdir
-from tkinter               import Tk
 from sys                   import version
-
-import libs.funcoes as funcoes
 import tkinter.font as tkFont
-import webbrowser
 import re
-import requests
 import webbrowser
+
+import webbrowser
+import requests
+
+from libs.funcoes          import carregar_json
+from libs.interpretador    import Interpretador
+from libs.funcoes          import carregar_json
+from libs.visualizacao     import ContadorLinhas
+from libs.visualizacao     import EditorDeCodigo
+from libs.colorir          import Colorir
+from libs.arquivo          import Arquivo
+import libs.funcoes as funcoes
+
 
 # -*- coding: utf-8 -*-
 
@@ -77,14 +81,12 @@ estar conectado a internet para buscar a atualizações"""
 
 VERSAO_ATUAL = {"versao":0.3}
 
-
-from libs.funcoes import carregar_json
-
 global esperar_pressionar_enter
 global libera_breakpoint
 
 libera_breakpoint = False
 esperar_pressionar_enter = False
+
 class Design():
     def __init__(self):
         self.dic = {}
@@ -189,7 +191,7 @@ class Atualizar():
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Nova versão disponível!")
         lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_UPDATE_DISPONIVEL).format(recente))
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_versao_bt_cancela_atualizada"], text="Não quero")
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
         bt_atualiza = Button(fr_botoes, text="Atualizar Agora")
 
         fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
@@ -239,10 +241,9 @@ class Atualizar():
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Sua versão é a última!")
         lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_ATUALIZADO).format(baixada["versao"]), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_versao_bt_cancela_atualizada"], text="Não quero")
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
         bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text="Facebook", relief=FLAT)
         bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text="Blog", relief=FLAT)
-
         bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
         bt_facebook.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiraide/") )
         bt_blogger_.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiraide.blogspot.com/") )
@@ -266,7 +267,8 @@ class Atualizar():
 
 
 class Bug():
-    def __init__(self, tela):
+    def __init__(self, tela, design):
+        self.design =design
         self.tela = tela
         self.bt_report = None
         self.image_bug = None
@@ -299,28 +301,30 @@ class Bug():
         self.image_bug = self.image_bug.subsample(4)
 
         self.tp_princi = Toplevel(self.tela, bd=10, bg="#3e4045")
+        # self.design.dic[""]
+
+
         self.tp_princi.withdraw()
 
         try:
             self.tp_princi.wm_attributes('-type','splash')
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
-        
-        self.lb_label1 = Label(self.tp_princi, text="  Então você encontrou um bug?  ", font=("",20), bg="#3e4045", fg="#efefef")
-        self.lb_label2 = Label(self.tp_princi, bg="#3e4045", fg="#efefef", image = self.image_bug)
-        self.lb_label3 = Label(self.tp_princi, text="""\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n""")
 
-        self.fr_botoes = Frame(self.tp_princi, bg='#3e4045')
-        self.bt_cancel = Button(self.fr_botoes, text="Depois")
-        self.bt_report = Button(self.fr_botoes, text="Reportar o BUG")
+        self.lb_label1 = Label(self.tp_princi, self.design.dic["lb1_encontrou_bug"],  text="  Então você encontrou um bug?  ")
+        self.lb_label2 = Label(self.tp_princi, self.design.dic["lb2_encontrou_bug"], image = self.image_bug)
+        self.lb_label3 = Label(self.tp_princi, self.design.dic["lb3_encontrou_bug"], text="""\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n""")
+
+        self.fr_botoes = Frame(self.tp_princi, self.design.dic["fr_bt_encontrou_bug"])
+        self.bt_cancel = Button(self.fr_botoes, self.design.dic["bt_canc_encontrou_bug"], text="Depois", relief=FLAT)
+        self.bt_report = Button(self.fr_botoes, self.design.dic["bt_report_encontrou_bug"], text="Reportar o BUG", relief=FLAT)
 
         self.tp_princi.grid_columnconfigure(1, weight=1)
         self.fr_botoes.grid_columnconfigure(1, weight=1)
         self.fr_botoes.grid_columnconfigure(2, weight=1)
 
-        self.lb_label3.configure(font=("",11), bg="#3e4045", fg="#efefef")
-        self.bt_cancel.configure(font=("",13), highlightbackground="#972121", relief=FLAT, bg="#a83232", fg="white", activebackground="#a83232", activeforeground="#efefef", command=lambda event=None: Bug.__destruir_interface(self))
-        self.bt_report.configure(font=("",13), highlightbackground="#219791", relief=FLAT, bg="#1d6965", fg="white", activebackground="#1d6965", activeforeground="#efefef", command=lambda event=None: Bug.__acessar_site_reporte(self))
+        self.bt_cancel.configure(command=lambda event=None: Bug.__destruir_interface(self))
+        self.bt_report.configure(command=lambda event=None: Bug.__acessar_site_reporte(self))
 
         self.lb_label1.grid(row=1, column=1, sticky=NSEW)
         self.lb_label2.grid(row=2, column=1, sticky=NSEW)
@@ -332,14 +336,15 @@ class Bug():
         self.tp_princi.deiconify()
         self.tp_princi.update()
 
+
 class Splash():
     def __init__(self, tela, design):
-        self.frame_splash       = None
-        self.fr_splash       = None
-        self.l1_splash       = None
-        self.l2_splash       = None
-        self.tela            = tela
-        self.design          = design
+        self.frame_splash = None
+        self.fr_splash = None
+        self.l1_splash = None
+        self.l2_splash = None
+        self.tela = tela
+        self.design = design
 
     def splash_inicio(self):
         self.frame_splash = Frame(self.tela)
@@ -386,7 +391,6 @@ class Interface():
     def __init__(self, tela, dic_comandos, design, cor_do_comando):
 
         self.design = design
-
 
         self.cor_do_comando                  = cor_do_comando
         self.dic_comandos                    = dic_comandos
@@ -446,7 +450,7 @@ class Interface():
         self.colorir_codigo                  = Colorir(self.cor_do_comando, self.dic_comandos)
         self.path                            = abspath(getcwd())
 
-        self.bug                             = Bug(self.tela)
+        self.bug                             = Bug(self.tela, design)
         self.dic_abas                        = { 0:funcoes.carregar_json("configuracoes/guia.json") }
         self.atualizar                       = Atualizar(self.tela, design)
 
@@ -454,7 +458,7 @@ class Interface():
         for k, v in self.dic_comandos.items():
             self.dicLetras[k] = []
             for valor in v["comando"]:
-                valor = valor[0].strip() # comando
+                valor = valor[0].strip()
 
                 if valor != "":
                     valor = valor.lower()
@@ -466,9 +470,8 @@ class Interface():
     def atualizar_coloracao_aba(self, limpar=False, event=None):
         # num_modulos_acionados => 0
 
-        if event is not None: # Não modifica o código
+        if event is not None:
             if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return'):
-                print("tecla pressinada => ", event.keysym)
                 return 0
 
         self.num_modulos_acionados += 1
@@ -487,7 +490,6 @@ class Interface():
         self.num_modulos_acionados = 0
 
     def atualiza_texto_tela(self, num_aba):
-
         self.tx_codfc.delete(1.0, END)
         self.tx_codfc.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"])[0:-1])
 
@@ -549,7 +551,8 @@ class Interface():
                     del self.dic_abas[chave]
                     break
 
-        if bool_era_focado: # Aba fechada era a focada
+        # Aba fechada era a focada
+        if bool_era_focado:
 
             try:
                 chave = self.lst_historico_abas_focadas[-1]
@@ -717,12 +720,6 @@ class Interface():
         else:
             self.bool_logs = True
 
-    #def pressionar_enter_terminal(self, event = None):
-    #    try:
-    #        self.instancia.pressionou_enter(event)
-    #    except Exception as erro:
-    #        print("Impossivel detectar enter:", erro)
-
     def capturar_tecla_terminal(self, event):
         try:
             self.instancia.capturar_tecla( event.keysym )
@@ -812,6 +809,7 @@ class Interface():
         except:
             print("Thread Parou")
         else:
+
             # interromper terminal
             if self.bool_interpretador_iniciado and libera_break_point_executa == False:
                 self.instancia.aconteceu_erro = True
@@ -902,7 +900,6 @@ class Interface():
 
                     self.instancia.controle_interpretador = ""
 
-
                 elif acao == ':input:':
 
                     if self.tx_terminal is None:
@@ -928,10 +925,6 @@ class Interface():
                     self.instancia.texto_digitado = digitado.replace("\n", "")
                     self.instancia.controle_interpretador = ""
 
-
-
-
-
                 elif acao == 'limpar_tela':
                     if self.tx_terminal is None:
                         clear()
@@ -939,15 +932,11 @@ class Interface():
                         self.tx_terminal.delete('1.0', END)
                     self.instancia.controle_interpretador = ""
 
-
-
                 elif acao == 'aguardando_breakpoint':
 
                     # Modo debug
                     if tipo_exec == 'debug':
                         try:
-                            #sleep(0.2)
-
                             self.linha_analise = int(self.instancia.num_linha)
                             if self.linha_analise != valor_antigo:
                                 valor_antigo = self.linha_analise
@@ -957,7 +946,6 @@ class Interface():
                                 self.tx_codfc.update()
                         except Exception as erro:
                             print("Erro update", erro)
-
 
                     libera_breakpoint = False
                     while not libera_breakpoint:

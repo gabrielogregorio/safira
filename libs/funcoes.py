@@ -1,5 +1,6 @@
 from json import load, loads
 
+
 def abrir_arquivo(filename):
     try:
         arquivo = open(filename, 'r', encoding='utf8')
