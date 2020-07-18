@@ -49,8 +49,6 @@ from libs.arquivo          import Arquivo
 import libs.funcoes as funcoes
 
 
-# -*- coding: utf-8 -*-
-
 # Theme One Dark
 # sudo apt install python3-distutils
 # sudo apt install python3-tk
@@ -61,7 +59,7 @@ import libs.funcoes as funcoes
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
 __project__     = 'Combratec'
-__github__      = 'https://github.com/Combratec/'
+__github__      = 'https://github.com/Combratec/safira'
 __description__ = 'Linguagem de programação focada em lógica'
 __version__     = '0.3'
 __status__      = 'Desenvolvimento'
@@ -146,18 +144,17 @@ class Atualizar():
     def verificar_versao(self, primeira_vez = False):
         try:
             if 1 == 1:
-
                 baixada = VERSAO_ATUAL
                 recente = Atualizar.obter_versao_mais_recente_dev(self)
 
                 if float(baixada["versao"]) < recente:
                     Atualizar.aviso_versao(self, baixada, recente)
+
                 else:
                     if not primeira_vez:
                         Atualizar.aviso_versao_atualizada(self, baixada)
 
         except Exception as erro:
-            print(erro,"*"*20)
             if not primeira_vez:
                 messagebox.showinfo("ops", ERRO_GENERICO)
         
