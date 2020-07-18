@@ -863,6 +863,8 @@ class Interface():
         self.tx_terminal.update()
         self.instancia = Interpretador( self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos)
 
+        linhas = self.instancia.cortar_comentarios(linhas)
+
         t = Thread(target=lambda codigoPrograma = linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
         t.start()
 

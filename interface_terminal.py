@@ -48,6 +48,8 @@ def iniciar(linhas, tx_terminal=None):
         nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
 
     instancia = Interpretador(bool_logs, [], bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos)
+    nova_linha = instancia.cortar_comentarios(nova_linha)
+
     t = Thread(target=lambda codigoPrograma = nova_linha: instancia.orquestrador_interpretador_(codigoPrograma))
     t.start()
 
