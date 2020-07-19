@@ -303,7 +303,7 @@
   "bt_report_encontrou_bug":{
     "font":["",13],
     "highlightbackground":"#219791",
-    "rbg":"#1d6965",
+    "bg":"#1d6965",
     "fg":"white",
     "activebackground":"#1d6965",
     "activeforeground":"#efefef"

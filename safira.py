@@ -34,7 +34,6 @@ from os                    import listdir
 from sys                   import version
 import tkinter.font as tkFont
 import re
-import webbrowser
 
 import webbrowser
 import requests
@@ -42,12 +41,15 @@ import requests
 from libs.funcoes          import carregar_json
 from libs.interpretador    import Interpretador
 from libs.funcoes          import carregar_json
-from libs.visualizacao     import ContadorLinhas
-from libs.visualizacao     import EditorDeCodigo
-from libs.colorir          import Colorir
+from visualizacao     import ContadorLinhas
+from visualizacao     import EditorDeCodigo
+from colorir          import Colorir
 from libs.arquivo          import Arquivo
 import libs.funcoes as funcoes
-
+from splash import Splash
+from atualizar import Atualizar
+from bug import Bug
+from design import Design
 
 # Theme One Dark
 # sudo apt install python3-distutils
@@ -66,18 +68,7 @@ __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
 
 
-TEXTO_UPDATE_DISPONIVEL = """\n
-A versão {} esta disponível para download. Avalie a posiblidade de fazer a \
-atualização. A atualizações de software pode trazer novos comandos e recursos \
-de segurança, porém, também pode trazer novos bugs.\n"""
-
-TEXTO_ATUALIZADO = """\nVocê está usando a versão {}. Se você quer\
-receber aviso de novas versões, nos acompanhe no Facebook ou no nosso blog.\n"""
-
-ERRO_GENERICO = """Aconteceu um erro ao buscar a \atualização, você precisa\
-estar conectado a internet para buscar a atualizações"""
-
-VERSAO_ATUAL = {"versao":0.3}
+messagebox
 
 global esperar_pressionar_enter
 global libera_breakpoint
@@ -85,18 +76,6 @@ global libera_breakpoint
 libera_breakpoint = False
 esperar_pressionar_enter = False
 
-class Design():
-    def __init__(self):
-        self.dic = {}
-
-    def __get_sett_file(self):
-        return carregar_json("configuracoes/configuracoes.json")["tema"]
-
-    def update_design_dic(self):
-        self.dic = carregar_json("temas/{}".format(Design.__get_sett_file(self)))
-
-    def get_design_dic(self):
-        return self.dic
 
 
 class Safira():
@@ -122,267 +101,6 @@ class Safira():
         splash.splash_fim()
 
         interf.inicioScreen()
-
-
-class Atualizar():
-    def __init__(self, tela, design):
-        self.tela = tela
-        self.tp_atualizacao = None
-        self.design =design
-
-    def obter_versao_mais_recente_dev(self):
-        resposta = requests.get("https://safiraide.blogspot.com/p/downloads.html")
-        texto = str(resposta.text)
-
-        lista = texto.split('id="idenficador_de_versao">')
-
-        temporario = lista[1][0:70] # 0.2</span>
-        temporario2 = temporario.split("</span>") # 0.2
-
-        return float(temporario2[0].strip())
-
-    def verificar_versao(self, primeira_vez = False):
-        try:
-            if 1 == 1:
-                baixada = VERSAO_ATUAL
-                recente = Atualizar.obter_versao_mais_recente_dev(self)
-
-                if float(baixada["versao"]) < recente:
-                    Atualizar.aviso_versao(self, baixada, recente)
-
-                else:
-                    if not primeira_vez:
-                        Atualizar.aviso_versao_atualizada(self, baixada)
-
-        except Exception as erro:
-            if not primeira_vez:
-                messagebox.showinfo("ops", ERRO_GENERICO)
-        
-        return True
-
-    def abrir_site(self, link):
-        t = Thread(target=lambda event=None: webbrowser.open( link ))
-        t.start()
-
-        self.tp_atualizacao.destroy()
-
-    def aviso_versao(self, baixada, recente):
-        self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_top_level"])
-        self.tp_atualizacao.withdraw()
-
-        try:
-            self.tp_atualizacao.wm_attributes('-type', 'splash')
-        except Exception as erro:
-            print("Erro ao remover barra de titulos => ", erro)
-
-        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
-
-        j_width  = self.tp_atualizacao.winfo_reqwidth()
-        j_height = self.tp_atualizacao.winfo_reqheight()
-        t_width = self.tela.winfo_screenwidth()
-        t_heigth = self.tela.winfo_screenheight()
-
-        self.tp_atualizacao.title("Aviso de atualização")
-
-        fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
-        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Nova versão disponível!")
-        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_UPDATE_DISPONIVEL).format(recente))
-        fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
-        bt_atualiza = Button(fr_botoes, text="Atualizar Agora")
-
-        fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
-        lb_versao_dev.configure(self.design.dic["aviso_versao_lb_dev"])
-        lb_versao_tex.configure(self.design.dic["aviso_versao_ms"])
-        fr_botoes.configure(self.design.dic["aviso_versao_btn"])
-        bt_cancela.configure(self.design.dic["aviso_versao_btn_cancela"], relief=FLAT)
-        bt_atualiza.configure(self.design.dic["aviso_versao_btn_atualiza"], relief=FLAT)
-
-        bt_atualiza.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiraide.blogspot.com/p/downloads.html") )
-        bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
-
-        fr_atualizaca.grid_columnconfigure(1, weight=1)
-        fr_botoes.grid_columnconfigure(1, weight=1)
-        fr_botoes.grid_columnconfigure(2, weight=1)
-        fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
-        lb_versao_dev.grid(row=1, column=1 )
-        lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
-        fr_botoes.grid(row=3, column=1, sticky=NSEW)
-        bt_cancela.grid(row=1, column=1)
-        bt_atualiza.grid(row=1, column=2)
-
-        self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
-        self.tp_atualizacao.deiconify()
-        self.tp_atualizacao.update()
-
-    def aviso_versao_atualizada(self, baixada):
-
-        self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_tp_atualizada"])
-        self.tp_atualizacao.withdraw()
-
-        try:
-            self.tp_atualizacao.wm_attributes('-type', 'splash')
-        except Exception as erro:
-            print("Erro ao remover barra de titulos => ", erro)
-            
-        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
-
-        j_width  = self.tp_atualizacao.winfo_reqwidth()
-        j_height = self.tp_atualizacao.winfo_reqheight()
-        t_width = self.tela.winfo_screenwidth()
-        t_heigth = self.tela.winfo_screenheight()
-
-        self.tp_atualizacao.title("Você está Atualizado!")
-
-        fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
-        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Sua versão é a última!")
-        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_ATUALIZADO).format(baixada["versao"]), relief=FLAT)
-        fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
-        bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text="Facebook", relief=FLAT)
-        bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text="Blog", relief=FLAT)
-        bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
-        bt_facebook.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiraide/") )
-        bt_blogger_.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiraide.blogspot.com/") )
-
-        fr_atualizaca.grid_columnconfigure(1, weight=1)
-        fr_botoes.grid_columnconfigure(1, weight=1)
-        fr_botoes.grid_columnconfigure(2, weight=1)
-        fr_botoes.grid_columnconfigure(3, weight=1)
-
-        fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
-        lb_versao_dev.grid(row=1, column=1 )
-        lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
-        fr_botoes.grid(row=3, column=1, sticky=NSEW)
-        bt_cancela.grid(row=1, column=1)
-        bt_facebook.grid(row=1, column=2)
-        bt_blogger_.grid(row=1, column=3)
-
-        self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2 )-int(j_height/2)))
-        self.tp_atualizacao.deiconify()
-        self.tp_atualizacao.update()
-
-
-class Bug():
-    def __init__(self, tela, design):
-        self.design =design
-        self.tela = tela
-        self.bt_report = None
-        self.image_bug = None
-        self.bt_cancel = None
-        self.fr_botoes = None
-        self.lb_label3 = None
-        self.lb_label2 = None
-        self.lb_label1 = None
-        self.tp_princi = None
-
-    def __acessar_site_reporte(self):
-        self.bt_report.configure(text="Abrindo formulário do Google")
-
-        t = Thread(target=lambda event=None: webbrowser.open("https://forms.gle/J4kE2Li8c58fz4hh6") )
-        t.start()        
-
-        Bug.__destruir_interface(self)
-
-    def __destruir_interface(self):
-        self.bt_report.destroy()
-        self.bt_cancel.destroy()
-        self.fr_botoes.destroy()
-        self.lb_label3.destroy()
-        self.lb_label2.destroy()
-        self.lb_label1.destroy()
-        self.tp_princi.destroy()
-
-    def interface(self):
-        self.image_bug = PhotoImage(file="imagens/bug.png")
-        self.image_bug = self.image_bug.subsample(4)
-
-        self.tp_princi = Toplevel(self.tela, bd=10, bg="#3e4045")
-        # self.design.dic[""]
-
-
-        self.tp_princi.withdraw()
-
-        try:
-            self.tp_princi.wm_attributes('-type','splash')
-        except Exception as erro:
-            print("Erro ao remover barra de titulos => ", erro)
-
-        self.lb_label1 = Label(self.tp_princi, self.design.dic["lb1_encontrou_bug"],  text="  Então você encontrou um bug?  ")
-        self.lb_label2 = Label(self.tp_princi, self.design.dic["lb2_encontrou_bug"], image = self.image_bug)
-        self.lb_label3 = Label(self.tp_princi, self.design.dic["lb3_encontrou_bug"], text="""\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n""")
-
-        self.fr_botoes = Frame(self.tp_princi, self.design.dic["fr_bt_encontrou_bug"])
-        self.bt_cancel = Button(self.fr_botoes, self.design.dic["bt_canc_encontrou_bug"], text="Depois", relief=FLAT)
-        self.bt_report = Button(self.fr_botoes, self.design.dic["bt_report_encontrou_bug"], text="Reportar o BUG", relief=FLAT)
-
-        self.tp_princi.grid_columnconfigure(1, weight=1)
-        self.fr_botoes.grid_columnconfigure(1, weight=1)
-        self.fr_botoes.grid_columnconfigure(2, weight=1)
-
-        self.bt_cancel.configure(command=lambda event=None: Bug.__destruir_interface(self))
-        self.bt_report.configure(command=lambda event=None: Bug.__acessar_site_reporte(self))
-
-        self.lb_label1.grid(row=1, column=1, sticky=NSEW)
-        self.lb_label2.grid(row=2, column=1, sticky=NSEW)
-        self.lb_label3.grid(row=3, column=1, sticky=NSEW)
-        self.fr_botoes.grid(row=4, column=1, sticky=NSEW)
-        self.bt_cancel.grid(row=1, column=1)
-        self.bt_report.grid(row=1, column=2)
-
-        self.tp_princi.deiconify()
-        self.tp_princi.update()
-
-
-class Splash():
-    def __init__(self, tela, design):
-        self.frame_splash = None
-        self.fr_splash = None
-        self.l1_splash = None
-        self.l2_splash = None
-        self.tela = tela
-        self.design = design
-
-    def splash_inicio(self):
-        self.frame_splash = Frame(self.tela)
-
-        self.frame_splash.configure(background = self.design.dic["cor_intro"]["background"])
-        self.frame_splash.rowconfigure(1, weight=1)
-        self.frame_splash.grid_columnconfigure(0, weight=1)
-
-        self.fr_splash = Frame(self.frame_splash)
-        self.l1_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
-        self.l2_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
-
-        self.fr_splash.configure(background = self.design.dic["cor_intro"]["background"])
-        self.l1_splash.configure(text=" COMBRATEC ", font=( "Lucida Sans", 90), bd=80)
-        self.l2_splash.configure(text="Safira IDE beta 0.3", font=("Lucida Sans", 12))
-
-        self.frame_splash.grid(row=1, column=1, sticky=NSEW)
-        self.fr_splash.grid(row=0, column=1, sticky=NSEW)
-        self.l1_splash.grid(row=1, column=1, sticky=NSEW)
-        self.l2_splash.grid(row=2, column=1, sticky=NSEW)
-        self.frame_splash.update()
-
-        self.tela.update()
-        self.tela.withdraw()
-
-        j_width  = self.tela.winfo_reqwidth()
-        j_height = self.tela.winfo_reqheight()
-
-        t_width = self.tela.winfo_screenwidth()
-        t_heigth = self.tela.winfo_screenheight()
-
-        self.tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
-
-        self.tela.deiconify()
-        self.tela.update()
-    def splash_fim(self):
-        self.fr_splash.grid_forget()
-        self.l1_splash.grid_forget()
-        self.l2_splash.grid_forget()
-
-        self.frame_splash.grid_forget()
 
 class Interface():
     def __init__(self, tela, dic_comandos, design, cor_do_comando):
@@ -449,7 +167,8 @@ class Interface():
 
         self.bug                             = Bug(self.tela, design)
         self.dic_abas                        = { 0:funcoes.carregar_json("configuracoes/guia.json") }
-        self.atualizar                       = Atualizar(self.tela, design)
+        self.atualizar                       = Atualizar(self.tela, self.design)
+        
 
         self.dicLetras = {}
         for k, v in self.dic_comandos.items():
