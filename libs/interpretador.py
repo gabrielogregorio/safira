@@ -1263,33 +1263,26 @@ class Interpretador():
 
 
     def fazer_contas(self, linha):
-        linha = linha.replace(' multiplicado por ', ' * ')
-        linha = linha.replace(' multiplied by ', ' * ')
-        linha = linha.replace(' dividido por ', ' / ')
-        linha = linha.replace(' elevado por ', ' ** ')
-        linha = linha.replace(' elevated by ', ' ** ')
-        linha = linha.replace(' multiplique ', ' * ')
-        linha = linha.replace(' multiplicar ', ' * ')
-        linha = linha.replace(' divided by ', ' / ')
-        linha = linha.replace(' multiply ', ' * ')
-        linha = linha.replace(' elevado a ', ' ** ')
-        linha = linha.replace(' elevado ', ' ** ')
-        linha = linha.replace(' divide ', ' / ')
-        linha = linha.replace(' mais ', ' + ')
-        linha = linha.replace(' plus ', ' + ')
-        linha = linha.replace(' mas ', ' + ')
-        linha = linha.replace(' menos ', ' - ')
-        linha = linha.replace(' minus ', ' - ')
-        linha = linha.replace(' true ', ' True ')
-        linha = linha.replace(' truth ', ' True ')
-        linha = linha.replace(' cierto ', ' True ')
-        linha = linha.replace(' verdadeiro ', ' True ')
-        linha = linha.replace(' verdadeira ', ' True ')
-        linha = linha.replace(' verdad ', ' True ')
-        linha = linha.replace(' verdade ', ' True ')
-        linha = linha.replace(' false ', ' False ')
-        linha = linha.replace(' falso ', ' False ')
-        linha = linha.replace(' mentira ', ' False ')
+        for comando in self.dic_comandos["matematica_mult"]["comando"]:
+            linha = linha.replace(comando[0], ' * ')
+
+        for comando in self.dic_comandos["matematica_div"]["comando"]:
+            linha = linha.replace(comando[0], ' / ')
+
+        for comando in self.dic_comandos["matematica_elev"]["comando"]:
+            linha = linha.replace(comando[0], ' ** ')
+
+        for comando in self.dic_comandos["matematica_add"]["comando"]:
+            linha = linha.replace(comando[0], ' + ')
+
+        for comando in self.dic_comandos["matematica_sub"]["comando"]:
+            linha = linha.replace(comando[0], ' - ')
+
+        for comando in self.dic_comandos["logico_true"]["comando"]:
+            linha = linha.replace(comando[0], ' True ')
+
+        for comando in self.dic_comandos["logico_false"]["comando"]:
+            linha = linha.replace(comando[0], ' False ')
 
         if '"' in linha: return [False, "Isso é uma string", 'string']
 
@@ -1341,10 +1334,10 @@ class Interpretador():
         if possivelVariavel == '':
             return [True, possivelVariavel, 'string']
 
-        if possivelVariavel.lower() in ['true', 'verdadeiro', 'verdadeira', 'verdade', 'truth', 'cierto', 'verdad']:
+        if possivelVariavel.lower() in [comando[0] for comando in self.dic_comandos["logico_true"]["comando"]]:
             return [True, 'True', 'booleano']
 
-        if possivelVariavel.lower() in ['false', 'falso', 'mentira']:
+        if possivelVariavel.lower() in [comando[0] for comando in self.dic_comandos["logico_false"]["comando"]]:
             return [True, 'False', 'booleano']
 
 
@@ -1981,15 +1974,12 @@ class Interpretador():
         if itens == '' or variavel == '' or posicao == '':
             return [False,Interpretador.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
-
-
         teste_variavel = Interpretador.obter_valor_variavel(self, variavel)
         if not teste_variavel[0]:
             return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
 
         if teste_variavel[2] != 'lista':
             return [False, '{} {}'.format(teste_variavel[1], Interpretador.msg_idioma(self, "nao_e_lista")), 'string', 'exibirNaTela']
-
 
         resultado_posicao = Interpretador.abstrair_valor_linha(self, posicao)
         if not resultado_posicao[0]: return resultado_posicao
@@ -2196,36 +2186,30 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_testar_condicao(self, linha):
-        linha = linha.replace(' for maior ou igual a ', ' >= ')
-        linha = linha.replace(' es mayor o igual a ', ' >= ')
-        linha = linha.replace(' is greater than or equal to ', ' >= ')
 
-        linha = linha.replace(' for menor ou igual a ', ' <= ')
-        linha = linha.replace(' es menor o igual que ', ' <= ')
-        linha = linha.replace(' is less than or equal a ', ' <= ')
+        for comando in self.dic_comandos["logico_maior_igual"]["comando"]:
+            linha = linha.replace(comando[0], ' >= ')
 
-        linha = linha.replace(' for diferente de ', ' != ')
-        linha = linha.replace(' es diferente de ', ' != ')
-        linha = linha.replace(' is different from ', ' != ')
+        for comando in self.dic_comandos["logico_menor_igual"]["comando"]:
+            linha = linha.replace(comando[0], ' <= ')
 
-        linha = linha.replace(' for maior que ', ' > ')
-        linha = linha.replace(' es mayor que ', ' > ')
-        linha = linha.replace(' is greater than ', ' > ')
+        for comando in self.dic_comandos["logico_diferente"]["comando"]:
+            linha = linha.replace(comando[0], ' != ')
 
-        linha = linha.replace(' for menor que ', ' < ')
-        linha = linha.replace(' es menos que ', ' < ')
-        linha = linha.replace(' is less than ', ' < ')
+        for comando in self.dic_comandos["logico_maior"]["comando"]:
+            linha = linha.replace(comando[0], ' > ')
 
-        linha = linha.replace(' for igual a ', ' == ')
-        linha = linha.replace(' es igual a ', ' == ')
-        linha = linha.replace(' is equal to ', ' == ')
+        for comando in self.dic_comandos["logico_menor"]["comando"]:
+            linha = linha.replace(comando[0], ' < ')
 
-        linha = linha.replace('ye ', '  and  ')
-        linha = linha.replace(' e ', '  and  ')
-        linha = linha.replace(' && ', '  and  ')
-        linha = linha.replace(' ou ', '  or  ')
-        linha = linha.replace(' o ', '  or  ')
-        linha = linha.replace(' || ', '  or  ')
+        for comando in self.dic_comandos["logico_igual"]["comando"]:
+            linha = linha.replace(comando[0], ' == ')
+
+        for comando in self.dic_comandos["logico_e"]["comando"]:
+            linha = linha.replace(comando[0], '  and  ')
+
+        for comando in self.dic_comandos["logico_ou"]["comando"]:
+            linha = linha.replace(comando[0], '  or  ')
 
         linha = ' ' + str(linha) + ' '
         simbolosEspeciais = ['>=', '<=', '!=', '>', '<', '==', '(', ')', ' and ', ' or ', ' tiver ']

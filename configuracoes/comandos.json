@@ -28,87 +28,147 @@
     ],
     "cor":"lista"
   },
-
-  "matematica":{
+  "matematica_mod":{
     "comando":[
-      [" multiplicado por ","pt-br"],
-      [" dividido por ","pt-br"],
-      [" multiplique ","pt-br"],
+      [" % ","all"]
+    ],
+    "cor":"contas"
+  },
+  "matematica_elev":{
+    "comando":[
       [" elevado por ","pt-br"],
       [" elevado a ","pt-br"],
-      [" dividido ","pt-br"],
-      [" menos ","pt-br"],
-      [" mais ","pt-br"],
-
-      [" multiplied by ","en-us"],
       [" elevated by ","en-us"],
-      [" divided by ","en-us"],
+      [" ** ","all"]
+    ],
+    "cor":"contas"
+  },
+  "matematica_mult":{
+    "comando":[
+      [" multiplicado por ","pt-br"],
+      [" multiplique ","pt-br"],
+      [" multiplied by ","en-us"],
       [" multiply ","en-us"],
-      [" minus ","en-us"],
-      [" plus ","en-us"],
-
       [" multiplicar ","es"],
+      [" * ","all"]
+    ],
+    "cor":"contas"
+  },
+  "matematica_div":{
+    "comando":[
+      [" dividido por ","pt-br"],
+      [" dividido ","pt-br"],
+      [" divided by ","en-us"],
+      [" / ","all"]
+    ],
+    "cor":"contas"
+  },
+  "matematica_sub":{
+    "comando":[
+      [" menos ","pt-br"],
+      [" minus ","en-us"],
+      [" - ","all"]
+    ],
+    "cor":"contas"
+  },
+  "matematica_add":{
+    "comando":[
+      [" mais ","pt-br"],
+      [" plus ","en-us"],
       [" mas ","es"],
-
-      [" ** ","all"],
-      [" - ","all"],
-      [" * ","all"],
-      [" % ","all"],
-      [" / ","all"],
       [" + ","all"]
     ],
     "cor":"contas"
   },
-  "logico":{
+  "logico_e":{
     "comando":[
-      [" for maior ou igual a ","pt-br"],
-      [" for menor ou igual a ","pt-br"],
-      [" for diferente de ","pt-br"],
-      [" for maior que ","pt-br"],
-      [" for menor que ","pt-br"],
-      [" for igual a ","pt-br"],
-
-      [" es mayor o igual a ","es"],
-      [" es menor o igual que ","es"],
-      [" es diferente de ","es"],
-      [" es mayor que ","es"],
-      [" es menos que ","es"],
-      [" es igual a ","es"],
-
-      [" is greater than or equal to ","en-us"],
-      [" is less than or equal a ","en-us"],
-      [" is different from ","en-us"],
-      [" is greater than ","en-us"],
-      [" is less than ","en-us"],
-      [" is equal to ","en-us"],
-
-      [" ou ","pt-br"],
-      [" or ","en-us"],
-      [" o ","es"],
-
       [" and ","en-us"],
       [" e ","pt-br"],
       [" y ","pt-br"],
-
+      [" && ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_ou":{
+    "comando":[
+      [" ou ","pt-br"],
+      [" or ","en-us"],
+      [" o ","es"],
+      [" || ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_menor_igual":{
+    "comando":[
+      [" for menor ou igual a ","pt-br"],
+      [" es menor o igual que ","es"],
+      [" is less than or equal a ","en-us"],
+      [" <= ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_maior_igual":{
+    "comando":[
+      [" for maior ou igual a ","pt-br"],
+      [" es mayor o igual a ","es"],
+      [" is greater than or equal to ","en-us"],
+      [" >= ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_diferente":{
+    "comando":[
+      [" for diferente de ","pt-br"],
+      [" es diferente de ","es"],
+      [" is different from ","en-us"],
+      [" != ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_igual":{
+    "comando":[
+      [" for igual a ","pt-br"],
+      [" es igual a ","es"],
+      [" is equal to ","en-us"],
+      [" == ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_maior":{
+    "comando":[
+      [" for maior que ","pt-br"],
+      [" es mayor que ","es"],
+      [" is greater than ","en-us"],
+      [" > ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_menor":{
+    "comando":[
+      [" for menor que ","pt-br"],
+      [" es menos que ","es"],
+      [" is less than ","en-us"],
+      [" < ","all"]
+    ],
+    "cor":"logico"
+  },
+  "logico_true":{
+    "comando":[
       ["true","en-us"],
-      ["false","en-us"],
       ["truth","en-us"],
       ["verdadeiro","pt-br"],
       ["verdadeira","pt-br"],
       ["verdade","pt-br"],
-      ["falso","pt-br"],
-      ["mentira","pt-br"],
       ["cierto","es"],
-      ["verdad","es"],
-
-      [" && ","all"],
-      [" || ","all"],
-      [" == ","all"],
-      [" >= ","all"],
-      [" <= ","all"],
-      [" != ","all"],
-      [" > ","all"],
-      [" < ","all"]
+      ["verdad","es"]
+    ],
+    "cor":"logico"
+  },
+  "logico_false":{
+    "comando":[
+      ["false","en-us"],
+      ["falso","pt-br"],
+      ["mentira","pt-br"]
     ],
     "cor":"logico"
   },
@@ -124,7 +184,6 @@
     ],
     "cor":"tempo"
   },
-
   "listaNaPosicao":{
     "comando":[
       [" na posicao ","pt-br"],
@@ -215,7 +274,6 @@
     ],
     "cor":"lista"
   },
-  
   "abra_um_arquivo_no":{
     "comando":[
       [" no ","pt-br"]
@@ -299,7 +357,6 @@
     ],
     "cor":"lista"
   },
-
   "adicione_texto_arquivo_sub":{
     "comando":[
       [" no arquivo ","pt-br"],
@@ -310,7 +367,6 @@
     ],
     "cor":"lista"
   },
-
   "adicione_texto_arquivo":{
     "comando":[
       ["escreva ","pt-br"],
@@ -322,7 +378,6 @@
     ],
     "cor":"lista"
   },
-
   "arquivo_existe":{
     "comando":[
       ["o arquivo ","pt-br"],
@@ -331,7 +386,6 @@
     ],
     "cor":"lista"
   },
-
   "arquivo_existe_nao_sub_existe":{
     "comando":[
       [" nao existe","pt-br"],
@@ -340,7 +394,6 @@
     ],
     "cor":"lista"
   },
-
   "arquivo_existe_sub_existe":{
     "comando":[
       [" existe","pt-br"],
@@ -414,7 +467,6 @@
     ],
     "cor":"lista"
   },
-
   "RemoverItensListas":{
     "comando":[
       ["remova ","pt-br"],
@@ -528,7 +580,6 @@
         ["printf ","en-us"],
         ["println ","en-us"],
 
-
         ["mostrar  ","es"],
         ["escribe ","es"],
         ["imprimir ","es"]
@@ -565,7 +616,6 @@
     ],
     "cor":"condicionais"
   },
-
   "enquanto_final":{
     "comando":[
       [" entao faca isso","pt-br"],
@@ -582,8 +632,6 @@
     ],
     "cor":"condicionais"
   },
-
-
   "aguarde":{
     "comando":[
       ["espere ","pt-br"],
@@ -603,7 +651,6 @@
     ],
     "cor":"condicionais"
   },
-
   "digitado":{
     "comando":[
       ["o numero que o usuario digitar","pt-br"],
@@ -728,7 +775,6 @@
     ],
     "cor":"condicionais"
   },
-
   "recebeParametros_parentese_fecha":{
     "comando":[
       [" \\) \\: ","all"],
@@ -736,11 +782,6 @@
     ],
     "cor":"condicionais"
   },
-
-
-
-
-
   "recebeDeclaraListas":{
     "comando":[
       [" recebe ","pt-br"],

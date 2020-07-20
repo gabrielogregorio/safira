@@ -1,1 +1,7 @@
-print "futuro" to upper
+if true {
+print "futuro" to upper    
+}
+
+println 1 mais 1
+
+println 10 dividido por 2
