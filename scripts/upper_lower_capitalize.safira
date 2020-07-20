@@ -1,0 +1,10 @@
+nome = "gabRIel"
+
+nome_lower       = nome to lower
+nome_upper      = nome to upper
+nome_captalize = nome captalize
+
+println nome_lower
+println nome_upper
+println nome_captalize
+

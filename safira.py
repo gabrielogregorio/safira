@@ -168,7 +168,6 @@ class Interface():
         self.bug                             = Bug(self.tela, design)
         self.dic_abas                        = { 0:funcoes.carregar_json("configuracoes/guia.json") }
         self.atualizar                       = Atualizar(self.tela, self.design)
-        
 
         self.dicLetras = {}
         for k, v in self.dic_comandos.items():
@@ -176,7 +175,9 @@ class Interface():
             for valor in v["comando"]:
                 valor = valor[0].strip()
 
-                if valor != "":
+                if valor == "":
+                    self.dicLetras[k].append(valor)
+                else:
                     valor = valor.lower()
 
                     if valor[0] not in self.dicLetras[k]:
@@ -1003,7 +1004,7 @@ class Interface():
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 ))
         self.colorir_codigo.tela = self.tela
 
-        #Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.safira')
+        Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo", 'script.safira')
 
         self.tela.deiconify()
         self.tela.update()
@@ -1318,9 +1319,7 @@ class Interface():
 
     def funcoes_arquivos_configurar(self, event, comando, link=None):
 
-        if self.controle_arquivos is None:
-            return 0
-
+        if self.controle_arquivos is None: return 0
         retorno_salvar_como = None
 
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.num_aba_focada, self.tx_codfc)

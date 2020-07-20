@@ -1,4 +1,34 @@
 {
+  "to_lower":{
+    "comando":[
+      [" para minusculo","pt-br"],
+      [" em minusculo","pt-br"],
+      [" to lower","en-us"],
+      [" en minusculas","es"],
+      [" in lower case","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "to_upper":{
+    "comando":[
+      [" para maiusculo","pt-br"],
+      [" em maiusculo","pt-br"],
+      [" to upper","en-us"],
+      [" in upper case","en-us"],
+      [" en mayusculas","es"]
+    ],
+    "cor":"lista"
+  },
+  "to_captalize":{
+    "comando":[
+      [" para captalizado","pt-br"],
+      [" captalizado","pt-br"],
+      [" captalize","en-us"],
+      [" in capitalized","en-us"]
+    ],
+    "cor":"lista"
+  },
+
   "matematica":{
     "comando":[
       [" multiplicado por ","pt-br"],
@@ -471,6 +501,7 @@
       ["imprima nessa linha ","pt-br"],
       ["escreva nessa linha ","pt-br"],
       ["exiba nessa linha ","pt-br"],
+      ["escreva ","pt-br"],
 
       ["show on that line ","en-us"],
       ["print on that line ","en-us"],
@@ -489,12 +520,14 @@
         ["mostre ","pt-br"],
         ["imprima ","pt-br"],
         ["escreva ","pt-br"],
+        ["escreval ","pt-br"],
         ["exiba ","pt-br"],
 
         ["show "],
         ["write ","en-us"],
         ["printf ","en-us"],
         ["println ","en-us"],
+
 
         ["mostrar  ","es"],
         ["escribe ","es"],
@@ -509,7 +542,8 @@
       [" vale ","pt-br"],
       [" obtiene ","es"],
       [" receive ","en-us"],
-      [" = ","all"]
+      [" = ","all"],
+      [" <- ","all"]
     ],
     "cor":"atribuicao"
   },
@@ -531,6 +565,25 @@
     ],
     "cor":"condicionais"
   },
+
+  "enquanto_final":{
+    "comando":[
+      [" entao faca isso","pt-br"],
+      [" entonces cuchillo","es"],
+      [" entao faca","pt-br"],
+      [" then knife","en-us"],
+      [" cuchillo","es"],
+      [" entonces","es"],
+      [" entao","pt-br"],
+      [" knife","en-us"],
+      [" then","en-us"],
+      [" faca","pt-br"],
+      ["","all"]
+    ],
+    "cor":"condicionais"
+  },
+
+
   "aguarde":{
     "comando":[
       ["espere ","pt-br"],

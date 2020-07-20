@@ -781,7 +781,7 @@ class Interpretador():
                 if analisa002[0]: return [Interpretador.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha, "exibiçãoNaTela.safira"]
 
             if caractere_inicio in self.dicLetras["enquanto"]:
-                analisa004 =Interpretador.analisa_instrucao(self, '^(<enquanto>)(.*)$', linha)
+                analisa004 =Interpretador.analisa_instrucao(self, '^(<enquanto>)(.*)(<enquanto_final>)$', linha)
                 if analisa004[0]: return [Interpretador.funcao_loops_enquantox(self, analisa004[1][2]), self.num_linha, "enquanto.safira"]
 
             if caractere_inicio in self.dicLetras["aguarde"]:
@@ -821,18 +821,17 @@ class Interpretador():
                 if analisa020[0]: return [Interpretador.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas.safira"]
 
             # ********************** Listas **********************
-            if caractere_inicio in self.dicLetras["declaraListas"]:
-                analisa010 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-                if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, ""]
+            analisa010 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, ""]
 
-                analisa011 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
-                if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
+            analisa011 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
+            if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
 
-                analisa012 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-                if analisa012[0]: return [Interpretador.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas.safira"]
+            analisa012 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            if analisa012[0]: return [Interpretador.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas.safira"]
 
-                analisa048 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
-                if analisa048[0]: return [Interpretador.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, ""]
+            analisa048 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
+            if analisa048[0]: return [Interpretador.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, ""]
 
             if caractere_inicio in self.dicLetras["RemoverItensListas"]:
                 analisa013 =Interpretador.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
@@ -854,10 +853,6 @@ class Interpretador():
             if caractere_inicio in self.dicLetras["aleatorio"]:
                 analisa018 =Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
                 if analisa018[0]: return [Interpretador.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4]), self.num_linha, "aleatorio.safira"]
-
-            if caractere_inicio in self.dicLetras["declaraListasObterPosicao"]:
-                analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
-                if analisa019[0]: return [Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, ""]
 
             if caractere_inicio in self.dicLetras["tiverLista"]:
                 analisa021 =Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
@@ -942,9 +937,18 @@ class Interpretador():
                 analisa003 =Interpretador.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha)
                 if analisa003[0]: return [Interpretador.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais.safira"]
 
-
             analisa023 =Interpretador.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
             if analisa023[0]: return [Interpretador.funcao_realizar_atribu(self, analisa023[1][1], analisa023[1][3]), self.num_linha, "atribuicoes.safira"]
+
+            # Pode não começar com o "lista de "
+            # PRIMEIRO POR SER MAIOR
+            analisa023 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)(<declaraVariaveis>)(.*)$', linha)
+            if analisa023[0]: return [Interpretador.funcao_realiza_atribuica_posicao_lista(self, analisa023[1][2], analisa023[1][4], analisa023[1][6]), self.num_linha, ".safira"]
+
+            # SEGUNDO POR SER MENOR
+            analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
+            if analisa019[0]: return [Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, ""]
+
 
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             if analisa024[0]: return [Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes.safira"]
@@ -975,9 +979,8 @@ class Interpretador():
              analisa048 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', possivelVariavel)
              if analisa048[0]: return Interpretador.funcao_retornar_lista(self, analisa048[1][2])
 
-        if caractere_inicio in self.dicLetras["declaraListasObterPosicao"]:
-            analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
-            if analisa019[0]: return Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
+        analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
+        if analisa019[0]: return Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4])
 
         if caractere_inicio in self.dicLetras["digitado"]:
             analisa020 =Interpretador.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
@@ -1014,6 +1017,15 @@ class Interpretador():
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
             if analisa024[0]: return Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
 
+        analisa050 =Interpretador.analisa_instrucao(self, '^(.*)(<to_upper>)$', possivelVariavel)
+        if analisa050[0]: return Interpretador.funcao_para_maiusculo(self, analisa050[1][1])
+
+        analisa050 =Interpretador.analisa_instrucao(self, '^(.*)(<to_lower>)$', possivelVariavel)
+        if analisa050[0]: return Interpretador.funcao_para_minusculo(self, analisa050[1][1])
+
+        analisa050 =Interpretador.analisa_instrucao(self, '^(.*)(<to_captalize>)$', possivelVariavel)
+        if analisa050[0]: return Interpretador.funcao_para_captalize(self, analisa050[1][1])
+
         return [True, None, 'vazio']
 
 
@@ -1028,8 +1040,39 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_interrompa(self):
+        Interpretador.log(self, '<funcao_interrompa>:')
         self.aconteceu_erro = True
         return [False, 'indisponibilidade_terminal', "string", "fazerNada"]
+
+    def funcao_para_maiusculo(self, texto):
+        abstrair = Interpretador.abstrair_valor_linha(self, texto)
+        if not abstrair[0]: return abstrair
+
+        if abstrair[2] != "string":
+            return [False, 'Para usar o recurso de conversão para maiusculo, é necessário informar uma string', 'string', 'fazerNada']
+
+        return [True, abstrair[1].upper(), "string", "fazerNada"]
+
+    def funcao_para_minusculo(self, texto):
+        abstrair = Interpretador.abstrair_valor_linha(self, texto)
+        if not abstrair[0]: return abstrair
+
+        print(abstrair)
+
+        if abstrair[2] != "string":
+            return [False, 'Para usar o recurso de conversão para minusculo, é necessário informar uma string', 'string', 'fazerNada']
+
+        return [True, abstrair[1].lower(), "string", "fazerNada"]
+
+    def funcao_para_captalize(self, texto):
+        abstrair = Interpretador.abstrair_valor_linha(self, texto)
+        if not abstrair[0]: return abstrair
+
+        if abstrair[2] != "string":
+            return [False, 'Para usar o recurso de conversão de captalização, é necessário informar uma string', 'string', 'fazerNada']
+
+        return [True, abstrair[1].capitalize(), "string", "fazerNada"]
+
 
     def funcao_parar(self):
         return [True, True, "booleano", "pararLoop"]
@@ -1788,6 +1831,7 @@ class Interpretador():
 
 
     def funcao_obter_valor_lst(self, variavel, posicao):
+        Interpretador.log(self, '<funcao_obter_valor_lst>:')
         if variavel == '' or posicao == '':
             return [False,Interpretador.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
@@ -1836,6 +1880,7 @@ class Interpretador():
         return [True, False, 'booleano', 'fazerNada']
 
     def funcao_dec_lst_posicoe(self, variavel, posicoes):
+        Interpretador.log(self, '<funcao_dec_lst_posicoe>:')
         teste =Interpretador.analisa_padrao_variavel(self, variavel)
         resultado =Interpretador.abstrair_valor_linha(self, posicoes)
 
@@ -1905,6 +1950,7 @@ class Interpretador():
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
     def funcao_realizar_atribu(self, variavel, valor):
+        Interpretador.log(self, '<funcao_realizar_atribu>:')
         if variavel == '' or valor == '':
             return [False,Interpretador.msg_idioma(self, "variavel_valor_nao_informado"), 'string', 'exibirNaTela']
 
@@ -1925,8 +1971,52 @@ class Interpretador():
         return [resultado[0], resultado[1], resultado[2], 'fazerNada']
 
 
+
+    def funcao_realiza_atribuica_posicao_lista(self, variavel, posicao, itens):
+        Interpretador.log(self, '<funcao_realiza_atribuica_posicao_lista>:')
+        variavel = variavel.strip()
+        posicao = posicao.strip()
+        itens = itens.strip()
+
+        if itens == '' or variavel == '' or posicao == '':
+            return [False,Interpretador.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
+
+
+
+        teste_variavel = Interpretador.obter_valor_variavel(self, variavel)
+        if not teste_variavel[0]:
+            return [teste_variavel[0], teste_variavel[1], teste_variavel[2], 'exibirNaTela']
+
+        if teste_variavel[2] != 'lista':
+            return [False, '{} {}'.format(teste_variavel[1], Interpretador.msg_idioma(self, "nao_e_lista")), 'string', 'exibirNaTela']
+
+
+        resultado_posicao = Interpretador.abstrair_valor_linha(self, posicao)
+        if not resultado_posicao[0]: return resultado_posicao
+        if resultado_posicao[2] != 'float':
+            return Interpretador.msg_variavel_numerica(self, 'naoNumerico', linha[1])
+
+        tamanho_lista = Interpretador.funcao_otamanho_da_lst(self, variavel)
+        if not tamanho_lista[0]:
+            return tamanho_lista
+
+        # Verifica se estorou o limite da lista
+        if resultado_posicao[1] > tamanho_lista[1]:
+            return [False,Interpretador.msg_idioma(self, "posicao_maior_limite_lista"), 'string', 'exibirNaTela']
+
+        if resultado_posicao[1] < 1:
+            return [False,Interpretador.msg_idioma(self, "posicao_menor_limite_lista"), 'string', 'exibirNaTela']
+
+        resultado_itens = Interpretador.abstrair_valor_linha(self, itens)
+        if not resultado_itens[0]: return resultado_itens
+
+        self.dic_variaveis[variavel][0][int(resultado_posicao[1]) - 1] = [resultado_itens[1], resultado_itens[2]]
+        return [True, None, 'vazio', 'fazerNada']
+
     # ========== FUNÇÔES GRANDES ======================= #
+
     def funcao_declarar_listas(self, variavel, itens):
+        Interpretador.log(self, '<funcao_declarar_listas>:')
         if itens == '' or variavel == '':
             return [False,Interpretador.msg_idioma(self, "variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
@@ -2156,6 +2246,8 @@ class Interpretador():
         linha = linha.replace('> =', '>=')
         linha = linha.replace('< =', '<=')
         linha = linha.replace('! =', '!=')
+
+
         linha = linha.replace('   tiver   ', ' tiver ')
 
         linha = linha.strip()
