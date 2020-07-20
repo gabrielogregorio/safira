@@ -23,7 +23,6 @@ class Colorir():
         self.tx_codfc.tag_add(palavra, linha1, linha2)
         self.tx_codfc.tag_config(palavra, foreground=cor)
 
-        self.tela.update()
 
     def __marcar_coloracao(self, regex, lista, linha, palavra, cor):
 
