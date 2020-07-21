@@ -1,24 +1,27 @@
 #!/usr/bin/python3.8
 
-from threading import Thread
 from libs.interpretador import Interpretador
-from time import sleep 
-from os import system, name 
-
 import libs.funcoes as funcoes
+from threading import Thread
+from os import system, name 
+from time import sleep 
+from tkinter import *
 import sys
+
+global esperar_pressionar_enter
+esperar_pressionar_enter = False
 
 
 def clear(): 
-    # Windows 
     if name == 'nt': 
         system('cls') 
-  
-    # Mac e Linux
+
     else: 
         system('clear') 
-global esperar_pressionar_enter
-esperar_pressionar_enter = False
+
+def altera_status_enter(event=None):
+    global esperar_pressionar_enter
+    esperar_pressionar_enter = False
 
 def iniciar(linhas, tx_terminal=None):
     global esperar_pressionar_enter
@@ -77,8 +80,6 @@ def iniciar(linhas, tx_terminal=None):
                     tx_terminal.insert(END, acao[len(':mostreLinha:') : ] + '\n')
 
                 instancia.controle_interpretador = ""
-
-
             elif acao == ':input:':
 
                 if tx_terminal is None:
@@ -101,7 +102,6 @@ def iniciar(linhas, tx_terminal=None):
                 
                 instancia.texto_digitado = digitado.replace("\n", "")
                 instancia.controle_interpretador = ""
-
 
             elif acao == 'limpar_tela':
                 if tx_terminal is None:
@@ -128,30 +128,6 @@ def iniciar(linhas, tx_terminal=None):
             )
             tx_terminal.insert(END, alerta_erro)
 
-
-'''
-    n = 1
-
-while n < 10 {
-    n = n + 1
-    print n
-}
-'''
-
-
-
-
-
-
-
-
-def altera_status_enter(event=None):
-    global esperar_pressionar_enter
-    esperar_pressionar_enter = False
-
-
-from tkinter import *
-
 tela = Tk()
 
 tx_codfc = Text(tela)
@@ -165,6 +141,3 @@ bt = Button(tela, text="iniciar", command=lambda event=None: iniciar(tx_codfc.ge
 bt.grid()
 
 tela.mainloop()
-
-
-#iniciar(t)

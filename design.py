@@ -1,4 +1,6 @@
 from libs.funcoes import carregar_json
+
+
 class Design():
     def __init__(self):
         self.dic = {}

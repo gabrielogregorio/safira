@@ -1,4 +1,3 @@
-
 from threading             import Thread
 import webbrowser
 from tkinter               import Toplevel

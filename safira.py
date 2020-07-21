@@ -1,50 +1,47 @@
 # -*- coding: utf-8 -*-
 
-from tkinter               import SEL
-from tkinter               import CURRENT
-from tkinter               import INSERT
-from tkinter               import RAISED
-from tkinter               import FLAT 
-from tkinter               import END
-from tkinter               import NSEW
-from tkinter               import N
-from tkinter               import W
-from tkinter               import Toplevel
-from tkinter               import PhotoImage
-from tkinter               import messagebox
-from tkinter               import Scrollbar
-from tkinter               import Button
-from tkinter               import Frame
-from tkinter               import Label
-from tkinter               import Entry
-from tkinter               import Message
-from tkinter               import Tk
-from tkinter               import messagebox
-from tkinter               import Text
-from tkinter               import Menu
-from os.path               import abspath
-from tkinter.ttk           import Treeview
-from tkinter.ttk           import Style
-from threading             import Thread
-from time                  import sleep
-from time                  import time
-from json                  import load
-from os                    import getcwd
-from os                    import listdir
-from sys                   import version
+from tkinter import SEL
+from tkinter import CURRENT
+from tkinter import INSERT
+from tkinter import RAISED
+from tkinter import FLAT 
+from tkinter import END
+from tkinter import NSEW
+from tkinter import N
+from tkinter import W
+from tkinter import Toplevel
+from tkinter import PhotoImage
+from tkinter import messagebox
+from tkinter import Scrollbar
+from tkinter import Button
+from tkinter import Frame
+from tkinter import Label
+from tkinter import Entry
+from tkinter import Message
+from tkinter import Tk
+from tkinter import messagebox
+from tkinter import Text
+from tkinter import Menu
+from os.path import abspath
+from tkinter.ttk import Treeview
+from tkinter.ttk import Style
+from threading import Thread
+from time import sleep
+from time import time
+from json import load
+from os import getcwd
+from os import listdir
+from sys import version
 import tkinter.font as tkFont
 import re
-
 import webbrowser
 import requests
-
-from libs.funcoes          import carregar_json
-from libs.interpretador    import Interpretador
-from libs.funcoes          import carregar_json
-from visualizacao     import ContadorLinhas
-from visualizacao     import EditorDeCodigo
-from colorir          import Colorir
-from libs.arquivo          import Arquivo
+from libs.interpretador import Interpretador
+from libs.funcoes import carregar_json
+from visualizacao import ContadorLinhas
+from visualizacao import EditorDeCodigo
+from colorir import Colorir
+from libs.arquivo import Arquivo
 import libs.funcoes as funcoes
 from splash import Splash
 from atualizar import Atualizar
@@ -68,14 +65,11 @@ __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
 
 
-messagebox
-
 global esperar_pressionar_enter
 global libera_breakpoint
 
 libera_breakpoint = False
 esperar_pressionar_enter = False
-
 
 
 class Safira():
@@ -430,7 +424,6 @@ class Interface():
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
-
     def ativar_logs(self, event=None):
         if self.bool_logs:
             self.bool_logs = False
@@ -498,13 +491,12 @@ class Interface():
         except Exception as e:
             print("Programa não está em execução, bkp ignorados", e)
 
-
     def libera_breakpoint_exe(self):
         global libera_breakpoint
         libera_breakpoint = True
 
-
     def inicializa_orquestrador(self, event = None, libera_break_point_executa = False, linha_linha = False):
+        global libera_breakpoint
 
         print("Inicializador do orquestrador iniciado")
 
@@ -562,8 +554,8 @@ class Interface():
         self.linha_analise = 0
 
         linhas = self.tx_codfc.get('1.0', END)[0:-1]
-        nova_linha = ''
 
+        nova_linha = ''
         lista = linhas.split('\n')
         for linha in range(len(lista)):
             nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
@@ -588,12 +580,11 @@ class Interface():
         valor_antigo = 0
 
         tx_terminal = self.tx_terminal
-        global libera_breakpoint
+
         while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
             self.tela.update()
             self.tx_codfc.update()
             self.tx_terminal.update()
-
 
             if tx_terminal is not None:
                 self.tela.update()
@@ -905,7 +896,6 @@ class Interface():
         self.mn_ajuda.add_separator()
         self.mn_ajuda.add_command( label='  Reportar um Bug', command= lambda event=None: self.bug.interface())
         self.mn_ajuda.add_command( label='  Verificar Atualização', command= lambda event=None: self.atualizar.verificar_versao())
-
     
         self.mn_devel.add_command( label='  Logs', command= comando_ativaropc_logs )
         #self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
@@ -932,9 +922,7 @@ class Interface():
         self.ic_brkp1 = self.ic_brkp1.subsample(4, 4)
         self.iclp_bkp = self.iclp_bkp.subsample(4, 4)
         
-
         # ************ Icones de opções rápidas ************** #
-
         self.fr_opcoe = Frame(self.frame_tela)
 
         self.bt_salva = Button( self.fr_opcoe, image=self.ic_salva, command = comando_acao_salvararq )
@@ -957,7 +945,6 @@ class Interface():
         Interface.renderizar_abas_inicio(self)
 
         # ************ Tela de desenvolvimento do código ****************** #
-
         self.tx_codfc = EditorDeCodigo(self.fr_princ, undo=True, autoseparators=True, maxundo = 50, tabs=4)
         self.tx_codfc.focus_force()
 
@@ -1001,6 +988,7 @@ class Interface():
 
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
+
         self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 ))
         self.colorir_codigo.tela = self.tela
 
@@ -1029,7 +1017,6 @@ class Interface():
                 self.mn_intfc_casct_temas.add_command(label=arquivo, command=funcao)
 
     def cascate_temas_sintaxe(self):
-
         self.mn_intfc_casct_sintx = Menu(self.mn_intfc, tearoff=False)
         self.mn_intfc.add_cascade(label='  sintaxe', menu=self.mn_intfc_casct_sintx)
 
@@ -1044,19 +1031,16 @@ class Interface():
                 self.mn_intfc_casct_sintx.add_command(label=arquivo, command=funcao)
 
     def cascate_scripts(self):
-
         for file in listdir('scripts/'):
             if file.endswith("safira"):
                 funcao = lambda link = file:  Interface.abrir_script(self, link)
                 self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
     def abrir_script(self, link):
-
         Interface.nova_aba(self, None)
         Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link) )
 
     def fechar_um_widget_erro(self, objeto):
-
         try:
             if objeto is not None:
                 objeto.grid_forget()
@@ -1130,18 +1114,10 @@ class Interface():
         Interface.atualizacao_linhas(self, event = None)
 
     def inicia_marca_break_point_geral(self):
-
-        """
-        Configura um breakpoint em todo os código focado
-
-        :return:
-        """
-
         Interface.marca_todos_breakpoint(self)
         self.tx_codfc.update()
 
         Interface.inicializa_orquestrador(self, libera_break_point_executa = True)
-
 
     def realiza_coloracao_erro(self, linha_que_deu_erro):
         lista = self.tx_codfc .get(1.0, END)
@@ -1156,7 +1132,6 @@ class Interface():
 
             self.tx_codfc.tag_add(palavra, linha1 , linha2)
             self.tx_codfc.tag_config(palavra, background = "#572929")
-
 
     def mostrar_mensagem_de_erro(self, msg_erro, dir_script, linha_que_deu_erro):
         Interface.realiza_coloracao_erro(self, linha_que_deu_erro)
@@ -1187,7 +1162,6 @@ class Interface():
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
 
     def mudar_fonte(self, acao):
-
         print("mmudar a fonte")
 
         if acao == "+": adicao = 1
@@ -1204,7 +1178,6 @@ class Interface():
         self.tx_codfc.configure(self.design.dic["tx_codificacao"])
         self.cont_lin.desenhar_linhas()
         self.tela.update()
-
 
     def atualiza_interface_config(self, objeto, menu):
         try:

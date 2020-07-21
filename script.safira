@@ -1,5 +1,5 @@
 if true {
-print "futuro" to upper    
+    print "futuro" to upper    
 }
 
 println 1 mais 1

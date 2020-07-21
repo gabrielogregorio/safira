@@ -11,7 +11,6 @@ estar conectado a internet para buscar a atualizações"""
 
 VERSAO_ATUAL = {"versao":0.3}
 
-
 from tkinter import Toplevel
 from tkinter import Frame
 from tkinter import Button
@@ -24,7 +23,6 @@ from tkinter import messagebox
 import requests
 
 class Atualizar():
-
     def __init__(self, tela, design):
         self.tela = tela
         self.tp_atualizacao = None
@@ -57,7 +55,7 @@ class Atualizar():
         except Exception as erro:
             if not primeira_vez:
                 messagebox.showinfo("ops", ERRO_GENERICO + str(erro))
-        
+
         return True
 
     def abrir_site(self, link):
