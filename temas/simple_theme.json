@@ -115,14 +115,14 @@
   "dic_cor_abas_focada_botao": {
        "font":["Lucida Sans", 14],
        "background":"#222232",
-       "activebackground":"red",
+       "activebackground":"#222232",
        "activeforeground":"white",
        "foreground":"#222232"
   },
   "dic_cor_abas_nao_focada_botao": {
        "font":["Lucida Sans", 14],
        "background":"#444454",
-       "activebackground":"red",
+       "activebackground":"#444454",
        "activeforeground":"white",
        "foreground":"#222232"
   },

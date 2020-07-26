@@ -4,6 +4,7 @@ from copy      import deepcopy
 from re        import finditer
 from time      import time
 
+
 class Colorir():
     def __init__(self, cor_do_comando, dic_comandos):
         self.cor_do_comando = cor_do_comando
@@ -49,6 +50,14 @@ class Colorir():
         return palavra_comando
 
     def __colorir_comandos(self, lista_linhas):
+
+        # Obtem uma cópia do código para análise mais rápida do interpretador
+        texto = ""
+        for linha in lista_linhas:
+            texto += linha
+        texto = texto.replace(' ', '')
+        texto = texto.lower()
+
         for chave_comando, dicionario_comandos in self.dic_comandos.items():
             cor = self.cor_do_comando[ dicionario_comandos["cor"] ]["foreground"]
 
@@ -57,6 +66,10 @@ class Colorir():
                 palavra_analise = comando[0].strip()
 
                 if palavra_analise == "": continue
+
+                # Verifica se o comando está no código
+                comando_teste = palavra_analise.replace(' ','')
+                if comando_teste not in texto: continue
 
                 palavra_comando = Colorir.__filtrar_palavras(palavra_analise)
                 regex = '(^|\\s){}(\\s|$)'.format(palavra_comando)

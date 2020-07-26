@@ -8,7 +8,7 @@ from os import system, name
 import libs.funcoes as funcoes
 import sys
 
-dic_comandos, dic_designRemover, cor_do_comando = funcoes.atualiza_configuracoes_temas()
+dic_comandos, cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
 dicLetras = {}
 for k, v in dic_comandos.items():

@@ -15,7 +15,6 @@ esperar_pressionar_enter = False
 def clear(): 
     if name == 'nt': 
         system('cls') 
-
     else: 
         system('clear') 
 
@@ -25,7 +24,7 @@ def altera_status_enter(event=None):
 
 def iniciar(linhas, tx_terminal=None):
     global esperar_pressionar_enter
-    dic_comandos, dic_designRemover, cor_do_comando = funcoes.atualiza_configuracoes_temas()
+    dic_comandos, cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
     dicLetras = {}
     for k, v in dic_comandos.items():

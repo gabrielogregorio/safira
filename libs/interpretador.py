@@ -21,7 +21,7 @@ import libs.funcoes as funcoes
 from os      import system
 
 class Interpretador():
-    def __init__(self, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos):
+    def __init__(self, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos, idioma):
         self.boo_orquestrador_iniciado = False
         self.aconteceu_erro = False # Avisa que aconteceu um erro, para quebrar todos os loops
         self.erro_alertado = False # Avisa que os erros já foram alertados
@@ -32,7 +32,7 @@ class Interpretador():
 
         self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
         self.num_linha = "0"
-        self.idioma = "pt-br" # Idioma padrão
+        self.idioma = idioma # Idioma padrão
 
         self.controle_interpretador = "" # retorna intruções para para uma terminal
         self.dir_script_aju_erro = "" # Script para dar dica sobre o erro

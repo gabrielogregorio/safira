@@ -3,6 +3,7 @@ from tkinter import Label
 from tkinter import Label
 from tkinter import NSEW
 
+
 class Splash():
     def __init__(self, tela, design):
         self.frame_splash = None
@@ -46,6 +47,8 @@ class Splash():
 
         self.tela.deiconify()
         self.tela.update()
+
+
     def splash_fim(self):
         self.fr_splash.grid_forget()
         self.l1_splash.grid_forget()

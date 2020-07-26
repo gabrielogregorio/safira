@@ -1,52 +1,57 @@
 # -*- coding: utf-8 -*-
 
-from tkinter import SEL
-from tkinter import CURRENT
-from tkinter import INSERT
-from tkinter import RAISED
-from tkinter import FLAT 
-from tkinter import END
-from tkinter import NSEW
-from tkinter import N
-from tkinter import W
-from tkinter import Toplevel
+from tkinter import messagebox
 from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
+from tkinter import Toplevel
+from tkinter import CURRENT
+from tkinter import Message
 from tkinter import Button
+from tkinter import INSERT
+from tkinter import RAISED
 from tkinter import Frame
 from tkinter import Label
 from tkinter import Entry
-from tkinter import Message
-from tkinter import Tk
-from tkinter import messagebox
+from tkinter import NSEW
 from tkinter import Text
 from tkinter import Menu
-from os.path import abspath
+from tkinter import FLAT 
+from tkinter import END
+from tkinter import SEL
+from tkinter import Tk
+from tkinter import N
+from tkinter import W
+
 from tkinter.ttk import Treeview
 from tkinter.ttk import Style
 from threading import Thread
+from os.path import abspath
 from time import sleep
 from time import time
 from json import load
 from os import getcwd
 from os import listdir
 from sys import version
+
 import tkinter.font as tkFont
-import re
 import webbrowser
 import requests
+import re
+
 from libs.interpretador import Interpretador
 from libs.funcoes import carregar_json
-from visualizacao import ContadorLinhas
-from visualizacao import EditorDeCodigo
-from colorir import Colorir
 from libs.arquivo import Arquivo
 import libs.funcoes as funcoes
-from splash import Splash
+
+from visualizacao import ContadorLinhas
+from visualizacao import EditorDeCodigo
 from atualizar import Atualizar
-from bug import Bug
+from colorir import Colorir
+from splash import Splash
 from design import Design
+from bug import Bug
+
 
 # Theme One Dark
 # sudo apt install python3-distutils
@@ -74,7 +79,7 @@ esperar_pressionar_enter = False
 
 class Safira():
     def __init__(self):
-        self.dic_comandos, self.dic_designRemover, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+        self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
         self.design = Design()
         self.design.update_design_dic()
@@ -152,10 +157,12 @@ class Interface():
         self.bt_redsf                        = None
         self.bt_ajuda                        = None
         self.bt_pesqu                        = None
+        self.bt_idiom                        = None
         self.fr__abas                        = None
         self.bt_play                         = None
 
         self.arquivo_configuracoes           = funcoes.carregar_json("configuracoes/configuracoes.json")
+        self.idioma                          = self.arquivo_configuracoes['idioma']
         self.colorir_codigo                  = Colorir(self.cor_do_comando, self.dic_comandos)
         self.path                            = abspath(getcwd())
 
@@ -178,11 +185,12 @@ class Interface():
                         self.dicLetras[k].append(  valor[0] )
 
 
+
     def atualizar_coloracao_aba(self, limpar=False, event=None):
         # num_modulos_acionados => 0
 
         if event is not None:
-            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return'):
+            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return', 'BackSpace'):
                 return 0
 
         self.num_modulos_acionados += 1
@@ -424,6 +432,8 @@ class Interface():
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
+
+
     def ativar_logs(self, event=None):
         if self.bool_logs:
             self.bool_logs = False
@@ -570,7 +580,7 @@ class Interface():
         self.tela.update()
         self.tx_codfc.update()
         self.tx_terminal.update()
-        self.instancia = Interpretador( self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos)
+        self.instancia = Interpretador( self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
 
         linhas = self.instancia.cortar_comentarios(linhas)
 
@@ -592,7 +602,6 @@ class Interface():
 
             acao = self.instancia.controle_interpretador
             if acao != "":
-
                 if acao.startswith(':nessaLinha:'):
                     
                     if self.tx_terminal is None:
@@ -710,7 +719,6 @@ class Interface():
                 pass
 
     def inicializador_terminal_debug(self):
-
         Interface.destruir_instancia_terminal(self)
         coluna_identificadores = ('Variavel', 'Tipo','Valor')
 
@@ -811,9 +819,7 @@ class Interface():
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
         self.lista_terminal_destruir = [self.top_janela_terminal, self.tx_terminal]
 
-
     def inicioScreen(self):
-
         self.tela.overrideredirect(0) # Traz barra de titulo
         self.tela.withdraw() # Ocultar tkinter
 
@@ -891,6 +897,7 @@ class Interface():
         Interface.cascate_temas_temas(self)
         Interface.cascate_temas_sintaxe(self)
 
+
         self.mn_ajuda.add_command( label='  Ajuda (F1)', command= comando_abrirlnk_ajuda)
         self.mn_ajuda.add_command( label='  Comandos Disponíveis', command=comando_abrir_disponiv)
         self.mn_ajuda.add_separator()
@@ -910,6 +917,7 @@ class Interface():
         self.ic_pesqu = PhotoImage( file='imagens/ic_pesquisa.png' )
         self.ic_nsalv = PhotoImage( file="imagens/nao_salvo.png" )
         self.iclp_bkp = PhotoImage( file="imagens/limpar_bkp.png" )
+        self.ic_idiom = PhotoImage( file="imagens/ic_pt_br.png" )
 
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
@@ -921,6 +929,7 @@ class Interface():
         self.ic_nsalv = self.ic_nsalv.subsample(2, 2)
         self.ic_brkp1 = self.ic_brkp1.subsample(4, 4)
         self.iclp_bkp = self.iclp_bkp.subsample(4, 4)
+        self.ic_idiom = self.ic_idiom.subsample(4, 4)
         
         # ************ Icones de opções rápidas ************** #
         self.fr_opcoe = Frame(self.frame_tela)
@@ -933,6 +942,7 @@ class Interface():
         self.bt_lp_bk = Button( self.fr_opcoe, image=self.iclp_bkp, command = comando_limpa_breakpon )
         self.bt_ajuda = Button( self.fr_opcoe, image=self.ic_ajuda)
         self.bt_pesqu = Button( self.fr_opcoe, image=self.ic_pesqu)
+        self.bt_idiom = Button( self.fr_opcoe, image=self.ic_idiom)
 
         self.fr_princ = Frame(self.frame_tela)
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -951,7 +961,6 @@ class Interface():
         self.tx_codfc.bind('<Control-c>', lambda event=None:Interface.copiar_selecao(self))
         self.tx_codfc.bind("<<Paste>>", lambda event=None:Interface.colar_selecao(self))
         self.tx_codfc.bind('<Control-a>', lambda event=None:Interface.selecione_tudo(self))
-
         self.tx_codfc.bind("<<Change>>", lambda event: Interface.atualizacao_linhas(self, event))
         self.tx_codfc.bind("<Configure>", lambda event: Interface.atualizacao_linhas(self, event))
         self.tx_codfc.bind('<Button>', lambda event:  Interface.obterPosicaoDoCursor(self, event))
@@ -976,6 +985,7 @@ class Interface():
         self.bt_lp_bk.grid(row=1, column=8)
         self.bt_ajuda.grid(row=1, column=10)
         self.bt_pesqu.grid(row=1, column=11)
+        self.bt_idiom.grid(row=1, column=12)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
         self.fr__abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
         self.cont_lin.grid(row=1, column=1, sticky=NSEW)
@@ -1037,7 +1047,11 @@ class Interface():
                 self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
 
     def abrir_script(self, link):
-        Interface.nova_aba(self, None)
+        if self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"].strip() != "":
+
+            Interface.nova_aba(self, None)
+        print(">>", self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"])
+
         Interface.funcoes_arquivos_configurar(self, None, "abrirArquivo" , 'scripts/' + str(link) )
 
     def fechar_um_widget_erro(self, objeto):
@@ -1089,12 +1103,9 @@ class Interface():
 
     # **************** AÇÕES DIRETAS DO TEXT **********************#
     def copiar_selecao(self):
-
-        print('copy')
         self.tx_codfc.event_generate("<<Copy>>")
 
     def colar_selecao(self):
-
         try:
             self.tx_codfc.delete("sel.first", "sel.last")
         except:
@@ -1103,7 +1114,6 @@ class Interface():
         return "break"
 
     def selecione_tudo(self):
-
         self.tx_codfc.tag_add(SEL, "1.0", END)
         self.tx_codfc.mark_set(INSERT, "1.0")
         self.tx_codfc.see(INSERT)
@@ -1123,7 +1133,6 @@ class Interface():
         lista = self.tx_codfc .get(1.0, END)
 
         if linha_que_deu_erro is not None:
-
             lista = self.tx_codfc.get(1.0, END).split("\n")
 
             palavra = "codigoErro"
@@ -1208,6 +1217,7 @@ class Interface():
         Interface.atualiza_interface_config(self, self.bt_redsf, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_ajuda, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_pesqu, "dicBtnMenus")
+        Interface.atualiza_interface_config(self, self.bt_idiom, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_brk_p, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_brkp1, "dicBtnMenus")
         Interface.atualiza_interface_config(self, self.bt_lp_bk, "dicBtnMenus")
@@ -1228,7 +1238,7 @@ class Interface():
                 print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
                 return 0
 
-            dic_comandos, self.dic_designRemover, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+            self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
             self.design.update_design_dic()        
 
             try:
