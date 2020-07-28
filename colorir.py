@@ -85,12 +85,15 @@ class Colorir():
             regex_comentario = '(#|\\/\\/).*$'
             regex_numerico = '(^|\\s|\\,)([0-9\\.]\\s*){1,}($|\\s|\\,)'
             regex_string = """\"[^"]*\""""
+            regex_chave = "{|}"
 
             cor_comentario = self.cor_do_comando["comentario"]["foreground"]
             cor_numerico = self.cor_do_comando["numerico"]["foreground"]
+            cor_chave = self.cor_do_comando["logico"]["foreground"] 
             cor_string = self.cor_do_comando["string"]["foreground"]
 
             Colorir.__marcar_coloracao(self, regex_numerico,lista,linha,'numerico',cor_numerico)
+            Colorir.__marcar_coloracao(self, regex_chave,lista,linha,'chave',cor_chave)
             Colorir.__marcar_coloracao(self, regex_string, lista, linha, '"', cor_string)
             Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
 

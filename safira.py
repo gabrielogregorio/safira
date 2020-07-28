@@ -866,7 +866,8 @@ class Interface():
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
         
         for coluna in coluna_identificadores:
-            self.arvores_grid.heading(coluna, text=coluna.title())#, selectmode="#f1a533")
+            s
+            elf.arvores_grid.heading(coluna, text=coluna.title())#, selectmode="#f1a533")
             self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title()) + 20 )#, selectmode="orange")
 
         self.texto_busca.grid(row=0, column=1, sticky=NSEW)
