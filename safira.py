@@ -52,7 +52,6 @@ from splash import Splash
 from design import Design
 from bug import Bug
 
-
 # Theme One Dark
 # sudo apt install python3-distutils
 # sudo apt install python3-tk
@@ -127,6 +126,27 @@ class Interface():
         self.num_aba_focada                  = 0
         self.num_modulos_acionados           = 0
 
+
+
+        # ============ IDIOMA ================#
+        self.idioma = "pt-br"
+        self.tp_interface = None
+        self.lista_botoes = []
+        self.base = "imagens/"
+        self.dic_imgs = {"pt-br":"ic_pt_br.png", "en-us":"ic_en_us.png"}
+        self.fr_top = None
+        self.lb1 = None
+        self.fr_idionas = None
+        self.fr_bt = None
+        self.bt_bt = None
+        self.lb_bt = None
+        self.bt_bt = None
+        self.imgs = []
+        # ============ IDIOMA ================#
+
+
+
+
         self.tx_erro_aviso_texto_erro        = None
         self.fr_erro_aviso_texto_erro        = None
         self.bt_erro_aviso_exemplo           = None
@@ -169,6 +189,7 @@ class Interface():
         self.bug                             = Bug(self.tela, design)
         self.dic_abas                        = { 0:funcoes.carregar_json("configuracoes/guia.json") }
         self.atualizar                       = Atualizar(self.tela, self.design)
+        self.id                              = None
 
         self.dicLetras = {}
         for k, v in self.dic_comandos.items():
@@ -184,6 +205,79 @@ class Interface():
                     if valor[0] not in self.dicLetras[k]:
                         self.dicLetras[k].append(  valor[0] )
 
+
+    def interface_idioma(self):
+        self.tp_interface = Toplevel(self.tela, bd=10, bg="#efefef")
+        self.fr_top = Frame(self.tp_interface, bg="#efefef")
+        self.fr_top.grid(row=1, column=1)
+
+        self.lb1 = Label(self.fr_top, fg="#343434", bg="#efefef", text="""
+            Essa escolha afetará a Interface gráfica e o idioma que as mensagens     
+                                de erros serão exibidas\n""")
+        self.lb1.grid(row=1, column=1)
+
+        
+        self.fr_idionas = Frame(self.tp_interface, bg="#efefef")
+        self.fr_idionas.grid(row=2, column=1)
+
+        # Carregar as imagens
+        self.imgs = []
+        for k, v in self.dic_imgs.items():
+            self.imgs.append(PhotoImage(file=self.base+v))
+
+        # Carregar os botões
+        x = 0
+        self.lista_botoes = []
+        for k, v in self.dic_imgs.items():
+
+            if self.idioma == k:
+                self.fr_bt = Frame(self.fr_idionas, bd=10, bg="#bbbbbb")
+                self.bt_bt = Button(self.fr_bt,  image=self.imgs[x], bg="#bbbbbb", activebackground="#bbbbbb", highlightthickness=0, relief=FLAT, bd=0)
+                self.lb_bt = Label(self.fr_bt,  text=k, bg="#bbbbbb", activebackground="#bbbbbb", highlightthickness=0, relief=FLAT, bd=0, fg="green")
+            else:
+                self.fr_bt = Frame(self.fr_idionas, bd=10, bg="#efefef")
+                self.bt_bt = Button(self.fr_bt,  image=self.imgs[x], bg="#efefef", activebackground="#efefef", highlightthickness=0, relief=FLAT, bd=0)
+                self.lb_bt = Label(self.fr_bt,  text=k, bg="#efefef", activebackground="#efefef", highlightthickness=0, relief=FLAT, bd=0)
+
+            self.bt_bt["command"] = lambda bt_bt=self.bt_bt : Interface.marca_opcao(self, bt_bt)
+
+            self.lista_botoes.append([self.fr_bt, self.bt_bt, self.lb_bt])
+
+            self.fr_bt.grid(row=1, column=x)
+            self.bt_bt.grid(row=1, column=x)
+            self.lb_bt.grid(row=2, column=x)
+
+            x += 1
+
+    def marca_opcao(self, botao):
+        for bandeira in self.lista_botoes:
+            if bandeira[1] == botao:
+                bandeira[0].configure(bg="#bbbbbb")
+                bandeira[1].configure(bg="#bbbbbb", activebackground="#bbbbbb")
+                bandeira[2].configure(bg="#bbbbbb", activebackground="#bbbbbb",fg="green" )
+                self.idioma = bandeira[2]["text"]
+
+                self.ic_idiom = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
+                self.ic_idiom = self.ic_idiom.subsample(4, 4)
+                self.bt_idiom["image"] = self.ic_idiom
+
+                Interface.atualiza_dados_interface(self, "idioma", self.idioma)
+
+                self.tp_interface.destroy()
+
+                self.tp_interface = None
+                self.fr_top = None
+                self.lb1 = None
+                self.fr_idionas = None
+                self.fr_bt = None
+                self.bt_bt = None
+                self.lb_bt = None
+                self.bt_bt = None
+
+            else:
+                bandeira[0].configure(bg="#efefef")
+                bandeira[1].configure(bg="#efefef", activebackground="#efefef")
+                bandeira[2].configure(bg="#efefef", activebackground="#efefef", fg="black")
 
 
     def atualizar_coloracao_aba(self, limpar=False, event=None):
@@ -844,6 +938,7 @@ class Interface():
         comando_abrirlnk_ajuda = lambda: webbrowser.open(self.path + "/tutorial/comando.html") 
         comando_ativaropc_logs = lambda: Interface.ativar_logs(self)
         comando_ativarop_debug = lambda: Interface.debug(self)
+        comando_atualizar_idioma = lambda: Interface.atualizar_idioma(self)
 
         self.tela.bind('<Control-n>', comando_abrir_nova_aba)
         self.tela.bind('<Control-s>', comando_acao_salvararq)
@@ -897,7 +992,6 @@ class Interface():
         Interface.cascate_temas_temas(self)
         Interface.cascate_temas_sintaxe(self)
 
-
         self.mn_ajuda.add_command( label='  Ajuda (F1)', command= comando_abrirlnk_ajuda)
         self.mn_ajuda.add_command( label='  Comandos Disponíveis', command=comando_abrir_disponiv)
         self.mn_ajuda.add_separator()
@@ -917,7 +1011,7 @@ class Interface():
         self.ic_pesqu = PhotoImage( file='imagens/ic_pesquisa.png' )
         self.ic_nsalv = PhotoImage( file="imagens/nao_salvo.png" )
         self.iclp_bkp = PhotoImage( file="imagens/limpar_bkp.png" )
-        self.ic_idiom = PhotoImage( file="imagens/ic_pt_br.png" )
+        self.ic_idiom = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
 
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
@@ -942,7 +1036,7 @@ class Interface():
         self.bt_lp_bk = Button( self.fr_opcoe, image=self.iclp_bkp, command = comando_limpa_breakpon )
         self.bt_ajuda = Button( self.fr_opcoe, image=self.ic_ajuda)
         self.bt_pesqu = Button( self.fr_opcoe, image=self.ic_pesqu)
-        self.bt_idiom = Button( self.fr_opcoe, image=self.ic_idiom)
+        self.bt_idiom = Button( self.fr_opcoe, image=self.ic_idiom, command = comando_atualizar_idioma)
 
         self.fr_princ = Frame(self.frame_tela)
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -1010,6 +1104,20 @@ class Interface():
         self.atualizar.verificar_versao(primeira_vez=True)
 
         self.tela.mainloop()
+
+    def atualizar_idioma(self):
+        Interface.interface_idioma(self)
+
+
+
+
+        #id = Idioma(self.idioma, self.tela)
+
+        #id.interface()
+        #self.idioma = id.idioma
+
+        # print(self.idioma)
+
 
     def cascate_temas_temas(self):
 
