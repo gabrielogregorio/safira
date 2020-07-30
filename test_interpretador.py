@@ -27,7 +27,7 @@ bool_ignorar_todos_breakpoints = True
 diretorio_base = '/'
 
 
-instancia = Interpretador(bool_logs, [], bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos)
+instancia = Interpretador(bool_logs, [], bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos, idioma='pt-br')
 
 def test_condicao():
     assert instancia.funcao_testar_condicao("2 for igual a 2") == [True, True, 'booleano', 'declararCondicional']

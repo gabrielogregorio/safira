@@ -762,15 +762,15 @@ class Interpretador():
 
             if caractere_inicio in self.dicLetras["continue"]:
                 analisa048 =Interpretador.analisa_instrucao(self, '^(<continue>)$', linha)
-                if analisa048[0]: return [Interpretador.funcao_continuar(self), self.num_linha, ""]
+                if analisa048[0]: return [Interpretador.funcao_continuar(self), self.num_linha, "continue"]
 
             if caractere_inicio in self.dicLetras["pare"]:
                 analisa048 =Interpretador.analisa_instrucao(self, '^(<pare>)$', linha)
-                if analisa048[0]: return [Interpretador.funcao_parar(self), self.num_linha, ""]
+                if analisa048[0]: return [Interpretador.funcao_parar(self), self.num_linha, "pare"]
 
             if caractere_inicio in self.dicLetras["interrompa"]:
                 analisa048 =Interpretador.analisa_instrucao(self, '^(<interrompa>)$', linha)
-                if analisa048[0]: return [Interpretador.funcao_interrompa(self), self.num_linha, ""]
+                if analisa048[0]: return [Interpretador.funcao_interrompa(self), self.num_linha, "interrompa"]
 
             if caractere_inicio in self.dicLetras["mostreNessa"]:
                 analisa001 =Interpretador.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
@@ -794,11 +794,11 @@ class Interpretador():
 
             if caractere_inicio in self.dicLetras["incremente"]:
                 analisa007 =Interpretador.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-                if analisa007[0]: return [Interpretador.funcao_incremente_vari(self, analisa007[1][2], analisa007[1][4]), self.num_linha, ""]
+                if analisa007[0]: return [Interpretador.funcao_incremente_vari(self, analisa007[1][2], analisa007[1][4]), self.num_linha, "incremente_decremente"]
 
             if caractere_inicio in self.dicLetras["decremente"]:
                 analisa008 =Interpretador.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
-                if analisa008[0]: return [Interpretador.funcao_decremente_vari(self, analisa008[1][2], analisa008[1][4]), self.num_linha, ""]
+                if analisa008[0]: return [Interpretador.funcao_decremente_vari(self, analisa008[1][2], analisa008[1][4]), self.num_linha, "incremente_decremente"]
 
             # ********************** Funções **********************
             if caractere_inicio in self.dicLetras["funcoes"]:
@@ -822,16 +822,16 @@ class Interpretador():
 
             # ********************** Listas **********************
             analisa010 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
-            if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, ""]
+            if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, "listas"]
 
             analisa011 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
-            if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, ""]
+            if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
 
             analisa012 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa012[0]: return [Interpretador.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas"]
 
             analisa048 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
-            if analisa048[0]: return [Interpretador.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, ""]
+            if analisa048[0]: return [Interpretador.funcao_retornar_lista(self, analisa048[1][2], ), self.num_linha, "listas"]
 
             if caractere_inicio in self.dicLetras["RemoverItensListas"]:
                 analisa013 =Interpretador.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
@@ -860,56 +860,62 @@ class Interpretador():
 
             if caractere_inicio in self.dicLetras["tamanhoDaLista"]:
                 analisa022 =Interpretador.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
-                if analisa022[0]: return [Interpretador.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, ""]
+                if analisa022[0]: return [Interpretador.funcao_otamanho_da_lst(self, analisa022[1][2]), self.num_linha, "listas"]
 
             if caractere_inicio in self.dicLetras["se_der_erro"]:
                 analisa038 =Interpretador.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
-                if analisa038[0]: return [Interpretador.funcao_se_der_erro(self), self.num_linha, ""]
+                if analisa038[0]: return [Interpretador.funcao_se_der_erro(self), self.num_linha, "tente"]
 
             if caractere_inicio in self.dicLetras["senao_der_erro"]:
                 analisa039 =Interpretador.analisa_instrucao(self, '^(<senao_der_erro>)$', linha)
-                if analisa039[0]: return [Interpretador.funcao_senao_der_erro(self), self.num_linha, ""]
+                if analisa039[0]: return [Interpretador.funcao_senao_der_erro(self), self.num_linha, "tente"]
 
             if caractere_inicio in self.dicLetras["em_qualquer_caso"]:
                 analisa040 =Interpretador.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
-                if analisa040[0]: return [Interpretador.funcao_em_qualquer_caso(self), self.num_linha, ""]
+                if analisa040[0]: return [Interpretador.funcao_em_qualquer_caso(self), self.num_linha, "tente"]
+
+            # Tente / se der erro / senao der erro/ em qualquer caso
+            if caractere_inicio in self.dicLetras["tente"]:
+                analisa037 =Interpretador.analisa_instrucao(self, '^(<tente>)$', linha)
+                if analisa037[0]: return [Interpretador.funcao_tente(self), self.num_linha, "tente"]
+
 
             # ************************ Arquivo ************************
             if caractere_inicio in self.dicLetras["crie_arquivo"]:
                 analisa027 =Interpretador.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
-                if analisa027[0]: return [Interpretador.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, ""]
+                if analisa027[0]: return [Interpretador.funcao_criar_arquivo(self, analisa027[1][2]), self.num_linha, "arquivos"]
 
             if caractere_inicio in self.dicLetras["delete_arquivo"]:
                 analisa028 =Interpretador.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
-                if analisa028[0]: return [Interpretador.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, ""]
+                if analisa028[0]: return [Interpretador.funcao_excluir_arquivo(self, analisa028[1][2]), self.num_linha, "arquivos"]
 
             if caractere_inicio in self.dicLetras["arquivo_existe"]:
                 analisa042 =Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
-                if analisa042[0]: return [Interpretador.funcao_arquivo_nao_existe(self, analisa042[1][2]), self.num_linha, ""]
+                if analisa042[0]: return [Interpretador.funcao_arquivo_nao_existe(self, analisa042[1][2]), self.num_linha, "arquivos"]
 
                 analisa029 =Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
-                if analisa029[0]: return [Interpretador.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, ""]
+                if analisa029[0]: return [Interpretador.funcao_arquivo_existe(self, analisa029[1][2]), self.num_linha, "arquivos"]
 
             if caractere_inicio in self.dicLetras["adicione_texto_arquivo"]:
                 analisa030 =Interpretador.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
-                if analisa030[0]: return [Interpretador.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, ""]
+                if analisa030[0]: return [Interpretador.funcao_adicionar_arquivo(self, analisa030[1][2], analisa030[1][4]), self.num_linha, "arquivos"]
 
             if caractere_inicio in self.dicLetras["sobrescreva_texto_arquivo"]:
                 analisa031 =Interpretador.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
-                if analisa031[0]: return [Interpretador.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, ""]
+                if analisa031[0]: return [Interpretador.funcao_sobrescrever_arquivo(self, analisa031[1][2], analisa031[1][4]), self.num_linha, "arquivos"]
 
             if caractere_inicio in self.dicLetras["leia_arquivo"]:
                 analisa032 =Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
-                if analisa032[0]: return [Interpretador.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, ""]
+                if analisa032[0]: return [Interpretador.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, "arquivos"]
 
 
             if caractere_inicio in self.dicLetras["para_cada"]:
                 analisa025 =Interpretador.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
-                if analisa025[0]: return [Interpretador.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, ""]
+                if analisa025[0]: return [Interpretador.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, "para_cada"]
 
             if caractere_inicio in self.dicLetras["ler_tecla_por"]:
                 analisa026 =Interpretador.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', linha)
-                if analisa026[0]: return [Interpretador.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, ""]
+                if analisa026[0]: return [Interpretador.funcao_ler_tecla_por_s(self, analisa026[1][2]), self.num_linha, "espere"]
 
             if caractere_inicio in self.dicLetras["tipo_variavel"]:
                 analisa033 =Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
@@ -917,22 +923,18 @@ class Interpretador():
 
             if caractere_inicio in self.dicLetras["importe"]:
                 analisa041 =Interpretador.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
-                if analisa041[0]: return [Interpretador.funcao_importe(self, analisa041[1][2]), self.num_linha, ""]
+                if analisa041[0]: return [Interpretador.funcao_importe(self, analisa041[1][2]), self.num_linha, "importe"]
 
-            # Tente / se der erro / senao der erro/ em qualquer caso
-            if caractere_inicio in self.dicLetras["tente"]:
-                analisa037 =Interpretador.analisa_instrucao(self, '^(<tente>)$', linha)
-                if analisa037[0]: return [Interpretador.funcao_tente(self), self.num_linha, ""]
-
+            # se / senao se / senao
             if caractere_inicio in self.dicLetras["se_nao_se"]:
                 analisa035 =Interpretador.analisa_instrucao(self, '^(<se_nao_se>)(.*)$', linha)
-                if analisa035[0]: return [Interpretador.funcao_senao_se(self, analisa035[1][2]), self.num_linha, ""]
+                if analisa035[0]: return [Interpretador.funcao_senao_se(self, analisa035[1][2]), self.num_linha, "condicionais"]
 
             if caractere_inicio in self.dicLetras["se_nao"]:
                 analisa036 =Interpretador.analisa_instrucao(self, '^(<se_nao>)$', linha)
-                if analisa036[0]: return [Interpretador.funcao_senao(self), self.num_linha, ""]
+                if analisa036[0]: return [Interpretador.funcao_senao(self), self.num_linha, "condicionais"]
 
-            # se / senao se / senao
+            
             if caractere_inicio in self.dicLetras["se"]:
                 analisa003 =Interpretador.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha)
                 if analisa003[0]: return [Interpretador.funcao_testar_condicao(self, analisa003[1][2]), self.num_linha, "condicionais"]
@@ -947,7 +949,7 @@ class Interpretador():
 
             # SEGUNDO POR SER MENOR
             analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
-            if analisa019[0]: return [Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, ""]
+            if analisa019[0]: return [Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, "lista"]
 
 
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)

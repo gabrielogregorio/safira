@@ -180,7 +180,7 @@ class Interface():
         self.bt_pesqu = None
         self.bt_idiom = None
         self.fr__abas = None
-        self.bt_play = None
+        self.bt_play  = None
 
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
         self.idioma = self.arquivo_configuracoes['idioma']
@@ -191,6 +191,8 @@ class Interface():
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json") }
         self.atualizar = Atualizar(self.tela, self.design)
         self.id = None
+
+        self.arquivo_scripts = funcoes.carregar_json("configuracoes/scripts.json")
 
         self.dicLetras = {}
         for k, v in self.dic_comandos.items():
@@ -1123,7 +1125,7 @@ class Interface():
                 self.mn_intfc_casct_sintx.add_command(label=arquivo, command=funcao)
 
     def carregar_cascata_scripts(self):
-        for file in listdir('scripts/'):
+        for file in listdir('scripts/' + self.idioma):
             if file.endswith("safira"):
                 funcao = lambda link = file:  Interface.abrir_um_script(self, link)
                 self.mn_exemp.add_command(label="  " + file + "  ", command = funcao)
@@ -1132,7 +1134,7 @@ class Interface():
         if self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"].strip() != "":
             Interface.abrir_nova_aba(self, None)
 
-        Interface.manipular_arquivos(self, None, "abrirArquivo" , 'scripts/' + str(link) )
+        Interface.manipular_arquivos(self, None, "abrirArquivo" , 'scripts/'+ self.idioma + '/' + str(link) )
 
     def destruir_widget_mensagem_erro(self, objeto):
         try:
@@ -1243,7 +1245,7 @@ class Interface():
         self.tx_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
 
         if dir_script != "":
-            self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso, text="Ver um exemplo ", relief="flat", fg="green",activeforeground="green", bg="#111121", activebackground="#111121", font=("", 13), command=lambda abc = self: Interface.abrir_dica_script_erro(abc, dir_script))
+            self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso, text="Ver um exemplo ", relief="flat", fg="green",activeforeground="green", bg="#111121", activebackground="#111121", font=("", 13), command=lambda abc = self: Interface.abrir_dica_script_erro(abc, self.arquivo_scripts[dir_script][self.idioma]))
             self.bt_erro_aviso_exemplo.grid(row=1, column=2)
 
         self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, text="x", relief="sunken", fg="#ff9696",activeforeground="#ff9696", bg="#111121", activebackground="#111121", font=("", 13), highlightthickness=0, bd=0, command=lambda event=None: Interface.fechar_mensagem_de_erro(self))

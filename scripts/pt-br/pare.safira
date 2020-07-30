@@ -1,0 +1,12 @@
+soma = 0    
+enquanto soma for menor que 10
+{
+    soma recebe soma mais 1
+
+    se soma for igual a 5 {
+       pare  # para um loop
+   }
+    mostre soma
+}
+
+print "Programa continuou"

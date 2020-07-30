@@ -1,0 +1,14 @@
+soma = 1
+
+enquanto soma for menor que 10
+{
+    soma recebe soma mais 1
+
+    se soma for igual a 5 {
+       # vai para o proximo valor do loop
+       continue 
+   }
+
+   mostre "soma vale ", soma
+}
+
