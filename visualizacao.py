@@ -11,8 +11,8 @@ class ContadorLinhas(Canvas):
         self.linha_analise = 0
         self.design = design
 
-    def atribuir(self, tx_codfc):
-        self.textwidget = tx_codfc
+    def atribuir(self, tx_editor_codigo):
+        self.textwidget = tx_editor_codigo
 
     def desenhar_linhas(self, *args):
         self.delete("all")

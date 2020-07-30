@@ -1,0 +1,52 @@
+{
+    "limpaTela":{
+      "pt-br":"",
+      "en-us":""
+    },
+    "exibiçãoNaTela":{
+        "pt-br":"MostreNaTela.safira",
+        "en-us":""
+    },
+
+    "enquanto":{
+        "pt-br":"Enquanto.safira",
+        "en-us":""
+    },
+    "esperar":{
+      "pt-br":"Espere.safira",
+      "en-us":""
+    },
+    "repetir":{
+      "pt-br":"Repita.safira",
+      "en-us":""
+    },
+    "funcoes":{
+      "pt-br":"Funcoes.safira",
+      "en-us":""
+    },
+    "tudo_entradas":{
+        "pt-br":"Digitado.safira",
+        "en-us":""
+      },
+      "listas":{
+        "pt-br":"Listas.safira",
+        "en-us":""
+      },
+      "aleatorio":{
+        "pt-br":"Aleatorio.safira",
+        "en-us":""
+      },
+
+      "se tiver":{
+        "pt-br":"Listas.safira",
+        "en-us":""
+      },
+      "condicionais":{
+        "pt-br":"Condicionais.safira",
+        "en-us":""
+      },
+      "atribuicoes":{
+        "pt-br":"Variaveis.safira",
+        "en-us":""
+      }
+   }

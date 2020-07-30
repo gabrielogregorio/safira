@@ -9,7 +9,7 @@ class Colorir():
     def __init__(self, cor_do_comando, dic_comandos):
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
-        self.tx_codfc = None
+        self.tx_editor_codigo = None
         self.tela = None
         self.historico_coloracao = []
         self.lista_todos_coloracao = []
@@ -21,8 +21,8 @@ class Colorir():
         linha1 = '{}.{}'.format(linha, valor1)
         linha2 = '{}.{}'.format(linha, valor2)
 
-        self.tx_codfc.tag_add(palavra, linha1, linha2)
-        self.tx_codfc.tag_config(palavra, foreground=cor)
+        self.tx_editor_codigo.tag_add(palavra, linha1, linha2)
+        self.tx_editor_codigo.tag_config(palavra, foreground=cor)
 
 
     def __marcar_coloracao(self, regex, lista, linha, palavra, cor):
@@ -98,10 +98,10 @@ class Colorir():
             Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
 
 
-    def coordena_coloracao(self, event, tx_codfc):
-        self.tx_codfc = tx_codfc
+    def coordena_coloracao(self, event, tx_editor_codigo):
+        self.tx_editor_codigo = tx_editor_codigo
 
-        lista_linhas = self.tx_codfc.get(1.0, END).lower().split('\n')
+        lista_linhas = self.tx_editor_codigo.get(1.0, END).lower().split('\n')
 
         self.historico_coloracao = []
 
@@ -110,7 +110,7 @@ class Colorir():
 
         for palavra_nao_colorida in self.lista_todos_coloracao:
             if palavra_nao_colorida not in self.historico_coloracao:
-                self.tx_codfc.tag_delete(palavra_nao_colorida)
+                self.tx_editor_codigo.tag_delete(palavra_nao_colorida)
                 self.lista_todos_coloracao.remove(palavra_nao_colorida)
 
         if self.tela is not None:
