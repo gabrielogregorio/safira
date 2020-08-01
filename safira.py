@@ -63,7 +63,6 @@ from bug import Bug
 # sudo apt-get install python3-pip
 # sudo apt-get install python3-tk tk-dev
 
-
 __author__      = 'Gabriel Gregório da Silva'
 __email__       = 'gabriel.gregorio.1@outlook.com'
 __project__     = 'Combratec'
@@ -88,6 +87,7 @@ class Safira():
         self.design = Design()
         self.design.update_design_dic()
         self.dic_design = self.design.get_design_dic()
+        self.interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
         self.tela = Tk()
         self.tela.withdraw()
@@ -97,7 +97,7 @@ class Safira():
 
     def main(self):
         splash = Splash(self.tela, self.design)
-        interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando)
+        interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando, self.interface_idioma)
 
         splash.splash_inicio()
         sleep(3)
@@ -106,7 +106,7 @@ class Safira():
         interf.carregar_tela_principal()
 
 class Interface():
-    def __init__(self, tela, dic_comandos, design, cor_do_comando):
+    def __init__(self, tela, dic_comandos, design, cor_do_comando, interface_idioma):
         self.design = design
 
         self.cor_do_comando = cor_do_comando
@@ -134,6 +134,7 @@ class Interface():
 
         # ============ IDIOMA ================#
         self.idioma = "pt-br"
+        self.interface_idioma = interface_idioma
         self.tp_interface_idioma = None
         self.lista_botoes = []
         self.base = "imagens/"
@@ -187,9 +188,9 @@ class Interface():
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
         self.path = abspath(getcwd())
 
-        self.bug = Bug(self.tela, design)
+        self.bug = Bug(self.tela, design, self.idioma, self.interface_idioma)
         self.dic_abas = { 0:funcoes.carregar_json("configuracoes/guia.json") }
-        self.atualizar = Atualizar(self.tela, self.design)
+        self.atualizar = Atualizar(self.tela, self.design, self.idioma, self.interface_idioma)
         self.id = None
 
         self.arquivo_scripts = funcoes.carregar_json("configuracoes/scripts.json")
@@ -214,9 +215,7 @@ class Interface():
         self.fr_top_idioma = Frame(self.tp_interface_idioma, bg="#efefef")
         self.fr_top_idioma.grid(row=1, column=1)
 
-        self.lb1 = Label(self.fr_top_idioma, fg="#343434", bg="#efefef", text="""
-            Essa escolha afetará a Interface gráfica e o idioma que as mensagens     
-                                de erros serão exibidas\n""")
+        self.lb1 = Label(self.fr_top_idioma, fg="#343434", bg="#efefef", text=self.interface_idioma["texto_atualizacao"][self.idioma])
         self.lb1.grid(row=1, column=1)
 
         
@@ -777,7 +776,7 @@ class Interface():
 
         try:
             #self.tx_terminal.config(state=NORMAL)
-            self.tx_terminal.insert(END, '\n\nScript finalizado em {:.5} segundos'.format(time() - inicio))
+            self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(time() - inicio))
             self.tx_terminal.see("end")
 
         except Exception as erro:
@@ -808,7 +807,8 @@ class Interface():
 
     def iniciar_terminal_debug(self):
         Interface.destruir_instancia_terminal(self)
-        coluna_identificadores = ('Variavel', 'Tipo','Valor')
+
+        coluna_identificadores = (self.interface_idioma["debug_variavel"][self.idioma], self.interface_idioma["debug_tipo"][self.idioma],self.interface_idioma["debug_valor"][self.idioma])
 
         frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913")
         frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
@@ -841,7 +841,7 @@ class Interface():
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
         fram_grid_variaveis.rowconfigure(2, weight=1)
 
-        self.texto_busca = Label(fram_grid_variaveis, text="Faça a busca por variáveis", bg="#222222", fg="white")
+        self.texto_busca = Label(fram_grid_variaveis, text=self.interface_idioma["debug_faca_busca"][self.idioma], bg="#222222", fg="white")
         self.campo_busca = Entry(fram_grid_variaveis, font=("", 13), bg="#222222", fg="white", highlightthickness=0, insertbackground="white")
         self.campo_busca.bind("<KeyRelease>",  lambda event: Interface.retornar_variaveis(self))
 
@@ -938,7 +938,7 @@ class Interface():
         self.tela.bind('<F10>', comando_inserir_breakp)
         self.tela.bind('<F11>', comando_ativar_fullscr)
 
-        self.tela.title('Combratec -  Safira IDE')
+        self.tela.title('Combratec -  Safira Lang')
         self.tela.call('wm', 'iconphoto', self.tela._w, PhotoImage(file='imagens/icone.png'))
 
         self.frame_tela.rowconfigure(2, weight=1)
@@ -956,36 +956,36 @@ class Interface():
         self.mn_ajuda = Menu( self.mn_barra)
         self.mn_devel = Menu( self.mn_barra)
 
-        self.mn_barra.add_cascade(label='  Arquivo', menu=self.mn_arqui)
-        self.mn_barra.add_cascade(label='  Executar', menu=self.mn_exect)
-        self.mn_barra.add_cascade(label='  Exemplos', menu=self.mn_exemp)
-        self.mn_barra.add_cascade(label='  Interface', menu=self.mn_intfc)
-        self.mn_barra.add_cascade(label='  Ajuda/Sobre', menu=self.mn_ajuda)
-        self.mn_barra.add_cascade(label='  Dev', menu=self.mn_devel)
-
-        self.mn_arqui.add_command(label='  Abrir arquivo (Ctrl+O)', command= comando_abriro_arquivo)
-        self.mn_arqui.add_command(label='  Nova Aba (Ctrl-N)', command = comando_abrir_abrir_nova_aba)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_arquivo"][self.idioma], menu=self.mn_arqui)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_executar"][self.idioma], menu=self.mn_exect)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_exemplos"][self.idioma], menu=self.mn_exemp)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_interface"][self.idioma], menu=self.mn_intfc)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_ajuda"][self.idioma], menu=self.mn_ajuda)
+        self.mn_barra.add_cascade(label=self.interface_idioma["label_dev"][self.idioma], menu=self.mn_devel)
+        
         self.mn_arqui.add_separator()
-        self.mn_arqui.add_command(label='  Salvar (Ctrl-S)', command= comando_acao_salvararq)
-        self.mn_arqui.add_command(label='  Salvar Como (Ctrl-Shift-S)', command=comando_salvararq_como)
+        self.mn_arqui.add_command(label=self.interface_idioma["label_abrir_arquivo"][self.idioma], command= comando_abriro_arquivo)
+        self.mn_arqui.add_command(label=self.interface_idioma["label_nova_aba"][self.idioma], command = comando_abrir_abrir_nova_aba)
+        self.mn_arqui.add_command(label=self.interface_idioma["label_salvar"][self.idioma], command= comando_acao_salvararq)
+        self.mn_arqui.add_command(label=self.interface_idioma["label_salvar_como"][self.idioma], command=comando_salvararq_como)
 
-        self.mn_exect.add_command(label='  Executar Tudo (F5)', command=comando_executar_progr)
-        self.mn_exect.add_command(label='  Executar linha por linha (F6)', command = comando_executar_linha)
-        self.mn_exect.add_command(label='  Executar até breakpoint (F7)', command=comando_executar_brakp)
-        self.mn_exect.add_command(label='  Parar execução (F9)', command = comando_parar_execucao)
-        self.mn_exect.add_command(label='  Inserir breakpoint (F10)', command = comando_inserir_breakp)
+        self.mn_exect.add_command(label=self.interface_idioma["label_executar_tudo"][self.idioma], command=comando_executar_progr)
+        self.mn_exect.add_command(label=self.interface_idioma["label_linha_por_linha"][self.idioma], command = comando_executar_linha)
+        self.mn_exect.add_command(label=self.interface_idioma["label_ate_breakpoint"][self.idioma], command=comando_executar_brakp)
+        self.mn_exect.add_command(label=self.interface_idioma["label_parar_execucao"][self.idioma], command = comando_parar_execucao)
+        self.mn_exect.add_command(label=self.interface_idioma["label_inserir_breakpoint"][self.idioma], command = comando_inserir_breakp)
 
         Interface.carregar_cascata_scripts(self)
         Interface.carregar_cascata_temas(self)
         Interface.carregar_cascata_sintaxe(self)
 
-        self.mn_ajuda.add_command( label='  Ajuda (F1)', command= comando_abrirlnk_ajuda)
-        self.mn_ajuda.add_command( label='  Comandos Disponíveis', command=comando_abrir_disponiv)
+        self.mn_ajuda.add_command( label=self.interface_idioma["label_ajuda"][self.idioma], command= comando_abrirlnk_ajuda)
+        self.mn_ajuda.add_command( label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=comando_abrir_disponiv)
         self.mn_ajuda.add_separator()
-        self.mn_ajuda.add_command( label='  Reportar um Bug', command= lambda event=None: self.bug.interface())
-        self.mn_ajuda.add_command( label='  Verificar Atualização', command= lambda event=None: self.atualizar.verificar_versao())
+        self.mn_ajuda.add_command( label=self.interface_idioma["label_reportar_bug"][self.idioma], command= lambda event=None: self.bug.interface())
+        self.mn_ajuda.add_command( label= self.interface_idioma["label_verificar_atualizacao"][self.idioma], command= lambda event=None: self.atualizar.verificar_versao())
     
-        self.mn_devel.add_command( label='  Logs', command= comando_ativaropc_logs )
+        self.mn_devel.add_command( label=self.interface_idioma["label_logs"][self.idioma], command= comando_ativaropc_logs )
         #self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
 
         self.ic_salva = PhotoImage( file='imagens/ic_salvar.png' )
@@ -1092,13 +1092,29 @@ class Interface():
 
         self.tela.mainloop()
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def atualizar_idioma(self):
         Interface.interface_idioma(self)
 
     def carregar_cascata_temas(self):
 
         self.mn_intfc_casct_temas = Menu(self.mn_intfc, tearoff=False)
-        self.mn_intfc.add_cascade(label='  Temas', menu=self.mn_intfc_casct_temas)
+        self.mn_intfc.add_cascade(label=self.interface_idioma["label_cascate_temas"][self.idioma], menu=self.mn_intfc_casct_temas)
 
         for file in listdir('temas/'):
             if 'theme.json' in file:
@@ -1112,7 +1128,9 @@ class Interface():
 
     def carregar_cascata_sintaxe(self):
         self.mn_intfc_casct_sintx = Menu(self.mn_intfc, tearoff=False)
-        self.mn_intfc.add_cascade(label='  sintaxe', menu=self.mn_intfc_casct_sintx)
+
+
+        self.mn_intfc.add_cascade(label=self.interface_idioma["label_cascate_sintaxe"][self.idioma], menu=self.mn_intfc_casct_sintx)
 
         for file in listdir('temas/'):
             if 'sintaxe.json' in file:
@@ -1245,7 +1263,7 @@ class Interface():
         self.tx_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
 
         if dir_script != "":
-            self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso, text="Ver um exemplo ", relief="flat", fg="green",activeforeground="green", bg="#111121", activebackground="#111121", font=("", 13), command=lambda abc = self: Interface.abrir_dica_script_erro(abc, self.arquivo_scripts[dir_script][self.idioma]))
+            self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso, text=self.interface_idioma["erro_ver_exemplo"][self.idioma], relief="flat", fg="green",activeforeground="green", bg="#111121", activebackground="#111121", font=("", 13), command=lambda abc = self: Interface.abrir_dica_script_erro(abc, self.arquivo_scripts[dir_script][self.idioma]))
             self.bt_erro_aviso_exemplo.grid(row=1, column=2)
 
         self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, text="x", relief="sunken", fg="#ff9696",activeforeground="#ff9696", bg="#111121", activebackground="#111121", font=("", 13), highlightthickness=0, bd=0, command=lambda event=None: Interface.fechar_mensagem_de_erro(self))

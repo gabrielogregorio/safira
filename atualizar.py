@@ -1,16 +1,3 @@
-TEXTO_UPDATE_DISPONIVEL = """\n
-A versão {} esta disponível para download. Avalie a posiblidade de fazer a \
-atualização. A atualizações de software pode trazer novos comandos e recursos \
-de segurança, porém, também pode trazer novos bugs.\n"""
-
-TEXTO_ATUALIZADO = """\nVocê está usando a versão {}. Se você quer\
-receber aviso de novas versões, nos acompanhe no Facebook ou no nosso blog.\n"""
-
-ERRO_GENERICO = """Aconteceu um erro ao buscar a \atualização, você precisa\
-estar conectado a internet para buscar a atualizações"""
-
-VERSAO_ATUAL = {"versao":0.3}
-
 from tkinter import Toplevel
 from tkinter import Frame
 from tkinter import Button
@@ -22,14 +9,34 @@ import webbrowser
 from tkinter import messagebox
 import requests
 
+global texto_update_disponivel
+global texto_atualizado
+global erro_generico
+
+
+VERSAO_ATUAL = {"versao":0.3}
+
 class Atualizar():
-    def __init__(self, tela, design):
+    def __init__(self, tela, design, idioma, interface_idioma):
+        global texto_update_disponivel
+        global texto_atualizado
+        global erro_generico
+
+        self.idioma = idioma
+        self.interface_idioma = interface_idioma
         self.tela = tela
         self.tp_atualizacao = None
         self.design =design
 
+        texto_update_disponivel = self.interface_idioma["texto_update_disponivel"][self.idioma]
+        texto_atualizado = self.interface_idioma["texto_atualizado"][self.idioma]
+        erro_generico = self.interface_idioma["erro_generico"][self.idioma]
+
+
+
+
     def obter_versao_mais_recente_dev(self):
-        resposta = requests.get("https://safiraide.blogspot.com/p/downloads.html")
+        resposta = requests.get("https://safiralang.blogspot.com/p/downloads.html")
         texto = str(resposta.text)
 
         lista = texto.split('id="idenficador_de_versao">')
@@ -54,7 +61,7 @@ class Atualizar():
 
         except Exception as erro:
             if not primeira_vez:
-                messagebox.showinfo("ops", ERRO_GENERICO + str(erro))
+                messagebox.showinfo("ops", erro_generico + str(erro))
 
         return True
 
@@ -80,13 +87,13 @@ class Atualizar():
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        self.tp_atualizacao.title("Aviso de atualização")
+        self.tp_atualizacao.title(self.interface_idioma["titulo_aviso_atualizacao"][self.idioma])
 
         fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
-        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Nova versão disponível!")
-        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_UPDATE_DISPONIVEL).format(recente))
+        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["versao_nova_disponivel"][self.idioma])
+        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(texto_update_disponivel).format(recente))
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["versao_nao_quero"][self.idioma])
         bt_atualiza = Button(fr_botoes, text="Atualizar Agora")
 
         fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
@@ -130,18 +137,19 @@ class Atualizar():
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        self.tp_atualizacao.title("Você está Atualizado!")
+        self.tp_atualizacao.title(self.interface_idioma["titulo_aviso_atualizado"][self.idioma])
 
         fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
-        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text="Sua versão é a última!")
-        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(TEXTO_ATUALIZADO).format(baixada["versao"]), relief=FLAT)
+        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["atualizado_versao_ultima"][self.idioma])
+        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(texto_atualizado).format(baixada["versao"]), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text="Não quero")
-        bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text="Facebook", relief=FLAT)
-        bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text="Blog", relief=FLAT)
+        
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["texto_nao_quero"][self.idioma])
+        bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=FLAT)
+        bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text=self.interface_idioma["atualizado_blog"][self.idioma], relief=FLAT)
         bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
-        bt_facebook.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiraide/") )
-        bt_blogger_.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiraide.blogspot.com/") )
+        bt_facebook.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiralang/") )
+        bt_blogger_.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/") )
 
         fr_atualizaca.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(1, weight=1)

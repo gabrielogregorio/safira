@@ -9,7 +9,9 @@ from tkinter               import PhotoImage
 
 
 class Bug():
-    def __init__(self, tela, design):
+    def __init__(self, tela, design, idioma, interface_idioma):
+        self.idioma = idioma
+        self.interface_idioma = interface_idioma
         self.design =design
         self.tela = tela
         self.bt_report = None
@@ -22,7 +24,7 @@ class Bug():
         self.tp_princi = None
 
     def __acessar_site_reporte(self):
-        self.bt_report.configure(text="Abrindo formulário do Google")
+        self.bt_report.configure(text=self.interface_idioma["abrir_formulario"][self.idioma])
 
         t = Thread(target=lambda event=None: webbrowser.open("https://forms.gle/J4kE2Li8c58fz4hh6") )
         t.start()        
@@ -43,23 +45,24 @@ class Bug():
         self.image_bug = self.image_bug.subsample(4)
 
         self.tp_princi = Toplevel(self.tela, bd=10, bg="#3e4045")
-        # self.design.dic[""]
-
-
         self.tp_princi.withdraw()
 
         try:
             self.tp_princi.wm_attributes('-type','splash')
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
+        
+        print(self.interface_idioma["encontrou_bug"])
+        print(self.idioma)
+        print(self.interface_idioma["encontrou_bug"][self.idioma])
 
-        self.lb_label1 = Label(self.tp_princi, self.design.dic["lb1_encontrou_bug"],  text="  Então você encontrou um bug?  ")
+        self.lb_label1 = Label(self.tp_princi, self.design.dic["lb1_encontrou_bug"],  text=self.interface_idioma["encontrou_bug"][self.idioma])
         self.lb_label2 = Label(self.tp_princi, self.design.dic["lb2_encontrou_bug"], image = self.image_bug)
-        self.lb_label3 = Label(self.tp_princi, self.design.dic["lb3_encontrou_bug"], text="""\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n""")
+        self.lb_label3 = Label(self.tp_princi, self.design.dic["lb3_encontrou_bug"], text=self.interface_idioma["texto_reportar_bug"][self.idioma])
 
         self.fr_botoes = Frame(self.tp_princi, self.design.dic["fr_bt_encontrou_bug"])
-        self.bt_cancel = Button(self.fr_botoes, self.design.dic["bt_canc_encontrou_bug"], text="Depois", relief=FLAT)
-        self.bt_report = Button(self.fr_botoes, self.design.dic["bt_report_encontrou_bug"], text="Reportar o BUG", relief=FLAT)
+        self.bt_cancel = Button(self.fr_botoes, self.design.dic["bt_canc_encontrou_bug"], text=self.interface_idioma["texto_depois"][self.idioma], relief=FLAT)
+        self.bt_report = Button(self.fr_botoes, self.design.dic["bt_report_encontrou_bug"], text=self.interface_idioma["texto_reporte_bug"][self.idioma], relief=FLAT)
 
         self.tp_princi.grid_columnconfigure(1, weight=1)
         self.fr_botoes.grid_columnconfigure(1, weight=1)

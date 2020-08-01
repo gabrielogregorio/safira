@@ -1,7 +1,25 @@
-if true {
-    print "futuro" to upper    
+mostre "Olá mundo, digite seu nome: "
+
+// entrada de dados
+nome vale o que o usuario digitar
+
+// condições
+se nome em minusculo for igual a "safira" entao {
+    mostre "Olá, safira!"
+}
+senao se nome for igual a "Julia" {
+    mostre "Olá, julia"
+    espere 2 segundos
+}
+senao {
+    mostre nome, " seu nome é bonito"
 }
 
-println 1 mais 1a
+// listas
+list of names is worth "name1", "name2"
+show names in position 2
 
-println 10 dividido por 2
+add "name3" in list of names
+mensaje receive names en posicion 3
+mostre mensaje em maiusculo
+

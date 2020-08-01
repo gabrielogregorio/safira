@@ -439,7 +439,8 @@
   "declaraListas":{
     "comando":[
       ["lista de ","pt-br"],
-      ["lista ","pt-br"]
+      ["lista ","pt-br"],
+      ["list of ","en-us"]
     ],
     "cor":"lista"
   },
@@ -447,6 +448,7 @@
     "comando":[
       ["lista de ","pt-br"],
       ["lista ","pt-br"],
+      ["list of ","en-us"],
       ["","pt-br"]
     ],
     "cor":"lista"
@@ -787,7 +789,8 @@
       [" recebe ","pt-br"],
       [" com ","pt-br"],
       [" recibir ","es"],
-      [" receive ","en-us"]
+      [" receive ","en-us"],
+      [" is worth ","en-us"]
     ],
     "cor":"lista"
   },
@@ -797,7 +800,8 @@
       [" da lista de ","pt-br"],
       [" a lista de ","pt-br"],
       [" na lista ","pt-br"],
-      [" a lista ","pt-br"]
+      [" a lista ","pt-br"],
+      [" in list of ","en-us"]
     ],
     "cor":"lista"
   },
