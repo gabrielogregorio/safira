@@ -1,7 +1,7 @@
 {
     "texto_atualizacao":{
-      "pt-br":"Essa escolha afetará a Interface gráfica e o idioma que as mensagens de erros serão exibidas\n",
-      "en-us":"This choice will affect the graphical interface and the language in which error messages will be displayed  \n"
+      "pt-br":"Essa escolha afetará a Interface gráfica e o idioma que as mensagens de erros serão exibidas\n\nÉ necessário reiniciar a Safira para a interface ser atualizada!",
+      "en-us":"This choice will affect the graphical interface and the language in which error messages will be displayed\n\nIt is necessary to restart Sapphire for the interface to be updated!"
     },
     "script_finalizado":{
       "pt-br":"\n\nScript finalizado em {:.5} segundos",
@@ -174,7 +174,9 @@
     "abrir_formulario":{
       "pt-br":"Abrindo formulário do Google",
       "en-us":"Opening Google form"
+    },
+    "atualizar_agora":{
+      "pt-br":"Atualizar Agora",
+      "en-us":"Update now"
     }
-
-      
-    }        
+}

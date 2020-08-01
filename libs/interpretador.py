@@ -52,7 +52,7 @@ class Interpretador():
 
         self.inicio = time()
 
-        with open('configuracoes/mensagens.json', encoding='utf8') as json_file:
+        with open('libs/mensagens.json', encoding='utf8') as json_file:
             self.mensagens = load(json_file)
 
 

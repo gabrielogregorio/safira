@@ -9,31 +9,15 @@ import webbrowser
 from tkinter import messagebox
 import requests
 
-global texto_update_disponivel
-global texto_atualizado
-global erro_generico
-
-
-VERSAO_ATUAL = {"versao":0.3}
+VERSAO_ATUAL = {"versao":0.1}
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma):
-        global texto_update_disponivel
-        global texto_atualizado
-        global erro_generico
-
         self.idioma = idioma
         self.interface_idioma = interface_idioma
         self.tela = tela
         self.tp_atualizacao = None
         self.design =design
-
-        texto_update_disponivel = self.interface_idioma["texto_update_disponivel"][self.idioma]
-        texto_atualizado = self.interface_idioma["texto_atualizado"][self.idioma]
-        erro_generico = self.interface_idioma["erro_generico"][self.idioma]
-
-
-
 
     def obter_versao_mais_recente_dev(self):
         resposta = requests.get("https://safiralang.blogspot.com/p/downloads.html")
@@ -61,7 +45,7 @@ class Atualizar():
 
         except Exception as erro:
             if not primeira_vez:
-                messagebox.showinfo("ops", erro_generico + str(erro))
+                messagebox.showinfo("ops", self.interface_idioma["erro_generico"][self.idioma] + str(erro))
 
         return True
 
@@ -91,10 +75,11 @@ class Atualizar():
 
         fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["versao_nova_disponivel"][self.idioma])
-        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(texto_update_disponivel).format(recente))
+        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_update_disponivel"][self.idioma]).format(recente))
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
         bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["versao_nao_quero"][self.idioma])
-        bt_atualiza = Button(fr_botoes, text="Atualizar Agora")
+
+        bt_atualiza = Button(fr_botoes, text=self.interface_idioma["atualizar_agora"][self.idioma])
 
         fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
         lb_versao_dev.configure(self.design.dic["aviso_versao_lb_dev"])
@@ -103,7 +88,7 @@ class Atualizar():
         bt_cancela.configure(self.design.dic["aviso_versao_btn_cancela"], relief=FLAT)
         bt_atualiza.configure(self.design.dic["aviso_versao_btn_atualiza"], relief=FLAT)
 
-        bt_atualiza.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiraide.blogspot.com/p/downloads.html") )
+        bt_atualiza.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/p/downloads.html") )
         bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
 
         fr_atualizaca.grid_columnconfigure(1, weight=1)
@@ -141,7 +126,7 @@ class Atualizar():
 
         fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["atualizado_versao_ultima"][self.idioma])
-        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(texto_atualizado).format(baixada["versao"]), relief=FLAT)
+        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(baixada["versao"]), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
         
         bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["texto_nao_quero"][self.idioma])
