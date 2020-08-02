@@ -34,7 +34,7 @@ Perceba que a Safira está muito mais próximo do Python agora
 
 
 
-Desta forma, a complexidade da linguagem, seja ela qual for, é reduzida e o conceito será aprendido com mais facilidade. A Safira tem mais de 30 comandos, você pode conferir eles na aba "Exemplos" da IDE ou no [blog](https://safiraide.blogspot.com/p/comandos.html).
+Desta forma, a complexidade da linguagem, seja ela qual for, é reduzida e o conceito será aprendido com mais facilidade. A Safira tem mais de 30 comandos, você pode conferir eles na aba "Exemplos" da IDE ou no [blog](https://safiralang.blogspot.com/p/comandos.html).
  
 É assim que fica a codificação de um programa maior na Safira.
 ![Imagem](imagens/safira.png)
@@ -51,15 +51,15 @@ Desta forma, a complexidade da linguagem, seja ela qual for, é reduzida e o con
 -------------------------------------
 
 # Como programar em Safira?
-Confira os principais comandos aqui: https://safiraide.blogspot.com/p/comandos.html
+Confira os principais comandos aqui: https://safiralang.blogspot.com/p/comandos.html
 
 -------------------------------------
 
 # Download
-* [Windows 10](https://safiraide.blogspot.com/p/downloads.html)
-* [Linux Mint](https://safiraide.blogspot.com/p/downloads.html)
-* [Ubuntu](https://safiraide.blogspot.com/p/downloads.html)
+* [Windows 10](https://safiralang.blogspot.com/p/downloads.html)
+* [Linux Mint](https://safiralang.blogspot.com/p/downloads.html)
+* [Ubuntu](https://safiralang.blogspot.com/p/downloads.html)
 
 # Outros Links
-* [Blog](https://safiraide.blogspot.com/)
-* [Facebook](https://www.facebook.com/safiraide/)
+* [Blog](https://safiralang.blogspot.com/)
+* [Facebook](https://www.facebook.com/safiralang/)

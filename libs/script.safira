@@ -1,0 +1,9 @@
+println "Olá mundo\n\n"
+n = input
+
+while input != "s"
+{
+    println "acess
+}
+
+

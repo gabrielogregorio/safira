@@ -77,6 +77,20 @@
       13
     ]
   },
+  "dicBtnCopiarColar": {
+    "border":0,
+    "highlightthickness": 0,
+    "highlightbackground":"#deffe1",
+    "activebackground":"#222232",
+    "highlightcolor":"#deffe1",
+    "background": "#222232",
+    "foreground":"#deffe1",
+    "activeforeground":"#deffe1",
+    "font": [
+      "Consolas Regular",
+      13
+    ]
+  },
   "dic_cor_abas_frame": {
     "background": "#111121"
   },

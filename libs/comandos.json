@@ -1,4 +1,29 @@
+
 {
+  "substitua":{
+    "comando":[
+      ["substitua ","pt-br"],
+      ["reemplace ","es"],
+      ["replace ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "substitua_por":{
+    "comando":[
+      [" por ","pt-br"],
+      [" con ","es"],
+      [" with ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "substitua_na_variavel":{
+    "comando":[
+      [" na variavel ","pt-br"],
+      [" en la variable ","es"],
+      [" in the variable ","en-us"]
+    ],
+    "cor":"lista"
+  },
   "to_lower":{
     "comando":[
       [" para minusculo","pt-br"],
@@ -533,6 +558,7 @@
   "aleatorio":{
     "comando":[
       ["um numero aleatorio entre ","pt-br"],
+      ["pense em um numero aleatorio entre ","pt-br"],
       ["numero aleatorio entre ","pt-br"],
       ["un numero aleatorio entre ","es"],
       ["numero aleatorio entre ","es"],
@@ -595,6 +621,9 @@
       [" vale ","pt-br"],
       [" obtiene ","es"],
       [" receive ","en-us"],
+      [" receives ","en-us"],
+      [" equals ","en-us"],
+      [" worth ","en-us"],
       [" = ","all"],
       [" <- ","all"]
     ],

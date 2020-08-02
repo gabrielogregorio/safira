@@ -72,13 +72,9 @@ __version__     = '0.3'
 __status__      = 'Desenvolvimento'
 __date__        = '01/08/2019'
 
-
-global esperar_pressionar_enter
 global libera_breakpoint
 
 libera_breakpoint = False
-esperar_pressionar_enter = False
-
 
 class Safira():
     def __init__(self):
@@ -94,6 +90,7 @@ class Safira():
         self.tela.overrideredirect(1)
         self.tela.rowconfigure(1, weight=1)
         self.tela.grid_columnconfigure(1, weight=1)
+        
 
     def main(self):
         splash = Splash(self.tela, self.design)
@@ -117,6 +114,8 @@ class Interface():
         self.bool_debug_temas = False
         self.bool_logs = False
 
+        self.esperar_pressionar_enter = False
+
         self.lst_historico_abas_focadas = []
         self.lista_terminal_destruir = []
         self.lista_breakponts = []
@@ -127,6 +126,7 @@ class Interface():
         self.linha_analise = 0
         self.posAbsuluta = 0
         self.posCorrente = 0
+
         self.num_aba_focada = 0
         self.num_modulos_acionados = 0
 
@@ -182,6 +182,8 @@ class Interface():
         self.bt_idiom = None
         self.fr__abas = None
         self.bt_play  = None
+        self.bt_copia = None
+        self.bt_colar = None
 
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
         self.idioma = self.arquivo_configuracoes['idioma']
@@ -679,18 +681,21 @@ class Interface():
         tx_terminal = self.tx_terminal
 
         while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
-            self.tela.update()
-            self.tx_editor_codigo.update()
-            self.tx_terminal.update()
 
+            # Se existir uma interface gráfica
             if tx_terminal is not None:
-                self.tela.update()
-                self.tx_terminal.update()
+                self.tela.update() # Tela principal
+                self.tx_editor_codigo.update() # Editor
+                self.tx_terminal.update() # console
 
+            # Obtem uma instrução do interpretador
             acao = self.instancia.controle_interpretador
+
             if acao != "":
+                # exibição na tela
                 if acao.startswith(':nessaLinha:'):
                     
+                    # Exibir mensagem ou mostrar no terminal
                     if self.tx_terminal is None:
                         print(acao[len(':nessaLinha:') : ], end="")
                     else:
@@ -699,6 +704,8 @@ class Interface():
                     self.instancia.controle_interpretador = ""
 
                 elif acao.startswith(':mostreLinha:'):
+
+                    # Exibir mensagem ou mostrar no terminal
                     if self.tx_terminal is None:
                         print(acao[len(':mostreLinha:') : ])
                     else:
@@ -708,38 +715,50 @@ class Interface():
 
                 elif acao == ':input:':
 
+                    # Entrada de dados
                     if self.tx_terminal is None:
-                        self.instancia.texto_digitado = input()
+                        digitado = input()
 
                     else:
+                        # Salva o tamanho do texto
                         textoOriginal = len(self.tx_terminal.get(1.0, END))
-                        global esperar_pressionar_enter
 
-                        esperar_pressionar_enter = True
-                        while esperar_pressionar_enter:
+                        # Espera o usuário pressionar enter
+                        self.esperar_pressionar_enter = True
+                        while self.esperar_pressionar_enter:
+
+                            # Atualiza a interface
                             self.tx_terminal.update()
                             self.tx_editor_codigo.update()
                             self.tela.update()
 
-                        print("SAIU")
-
+                            # Salva tamanho do novo texto
                         digitado = self.tx_terminal.get(1.0, END)
+
+                        # Corta o texto antigo
                         digitado = digitado[textoOriginal - 1:-2]
 
-                        esperar_pressionar_enter = False
-                    
+                        # Sinaliza que o enter já foi pressionado
+                        self.esperar_pressionar_enter = False
+
+                    # Atualiza o o interpretador com o texto                
                     self.instancia.texto_digitado = digitado.replace("\n", "")
+
+                    # Atualiza o interpretador para continuar
                     self.instancia.controle_interpretador = ""
 
                 elif acao == 'limpar_tela':
+
+                    # Limpar a interface ou o terminal
                     if self.tx_terminal is None:
                         clear()
                     else:
                         self.tx_terminal.delete('1.0', END)
+
+                    # Atualiza o interpretador para continuar
                     self.instancia.controle_interpretador = ""
 
                 elif acao == 'aguardando_breakpoint':
-
                     # Modo debug
                     if tipo_exec == 'debug':
                         try:
@@ -763,13 +782,23 @@ class Interface():
 
                     self.instancia.controle_interpretador = ""
                 else:
-                    print("INFORMAÇÂO NAO MAPEADA")
+                    print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
 
-        # Se o erro foi avisado
-        if self.instancia.erro_alertado == True:
-            if self.instancia.mensagem_erro != "Interrompido":
-                if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
-                    Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
+
+  
+        # Se der erro
+        if self.instancia.aconteceu_erro:
+            if tx_terminal is None:
+                print("Erro : ", self.instancia.mensagem_erro)
+                print("Linha: ", self.instancia.linha_que_deu_erro)
+
+            else:
+                # Se o erro foi avisado
+                if self.instancia.erro_alertado == True:
+                    if self.instancia.mensagem_erro != "Interrompido":
+                        if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
+                            Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
+
 
         #print("Instância deletada")
         del self.instancia
@@ -790,8 +819,7 @@ class Interface():
         self.bool_interpretador_iniciado = False
 
     def alterar_status_pressionou_enter(self, event=None):
-        global esperar_pressionar_enter
-        esperar_pressionar_enter = False
+        self.esperar_pressionar_enter = False
 
     def destruir_instancia_terminal(self):
         for widget in self.lista_terminal_destruir:
@@ -831,7 +859,7 @@ class Interface():
             print("Erro ao configurar os temas ao iniciar o terminal: ", erro)
 
         self.tx_terminal.bind('<Return>', lambda event: Interface.alterar_status_pressionou_enter(self))
-        self.tx_terminal.bind("<KeyRelease>", lambda event: Interface.capturar_tecla_terminal(self, event))
+        #self.tx_terminal.bind("<KeyRelease>", lambda event: Interface.capturar_tecla_terminal(self, event))
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
@@ -896,7 +924,7 @@ class Interface():
             print("Erro 2 ao configurar os temas ao iniciar o terminal: ", erro)
 
         self.tx_terminal.bind('<Return>', lambda event: Interface.alterar_status_pressionou_enter(self, event))
-        self.tx_terminal.bind("<KeyRelease>", lambda event: Interface.capturar_tecla_terminal(self, event))
+        #self.tx_terminal.bind("<KeyRelease>", lambda event: Interface.capturar_tecla_terminal(self, event))
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
         self.lista_terminal_destruir = [self.top_janela_terminal, self.tx_terminal]
@@ -927,6 +955,11 @@ class Interface():
         comando_ativaropc_logs = lambda: Interface.ativar_logs(self)
         comando_ativarop_debug = lambda: Interface.ativar_modo_debug_temas(self)
         comando_atualizar_idioma = lambda: Interface.atualizar_idioma(self)
+
+        comando_copiar = lambda: Interface.copiar_selecao(self)
+        comando_colar = lambda: Interface.colar_selecao(self)
+
+
 
         self.tela.bind('<Control-n>', comando_abrir_abrir_nova_aba)
         self.tela.bind('<Control-s>', comando_acao_salvararq)
@@ -986,7 +1019,12 @@ class Interface():
         self.mn_ajuda.add_command( label= self.interface_idioma["label_verificar_atualizacao"][self.idioma], command= lambda event=None: self.atualizar.verificar_versao())
     
         self.mn_devel.add_command( label=self.interface_idioma["label_logs"][self.idioma], command= comando_ativaropc_logs )
-        #self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
+        self.mn_devel.add_command( label='  Debug', command= comando_ativarop_debug )
+
+
+
+        self.ic_left = PhotoImage( file='imagens/left.png' )
+        self.ic_rigth = PhotoImage( file='imagens/right.png' )
 
         self.ic_salva = PhotoImage( file='imagens/ic_salvar.png' )
         self.ic_playP = PhotoImage( file='imagens/ic_play.png' )
@@ -1011,6 +1049,8 @@ class Interface():
         self.ic_brkp1 = self.ic_brkp1.subsample(4, 4)
         self.iclp_bkp = self.iclp_bkp.subsample(4, 4)
         self.ic_idiom = self.ic_idiom.subsample(4, 4)
+        self.ic_left  = self.ic_left.subsample(4, 4)
+        self.ic_rigth = self.ic_rigth.subsample(4, 4)
         
         # ************ Icones de opções rápidas ************** #
         self.fr_opcoe = Frame(self.frame_tela)
@@ -1024,6 +1064,11 @@ class Interface():
         self.bt_ajuda = Button( self.fr_opcoe, image=self.ic_ajuda)
         self.bt_pesqu = Button( self.fr_opcoe, image=self.ic_pesqu)
         self.bt_idiom = Button( self.fr_opcoe, image=self.ic_idiom, command = comando_atualizar_idioma)
+        self.bt_left = Button( self.fr_opcoe, image=self.ic_left)
+        self.bt_rigth = Button( self.fr_opcoe, image=self.ic_rigth)
+        self.bt_copia = Button( self.fr_opcoe, text="copiar", command=comando_copiar)
+        self.bt_colar = Button( self.fr_opcoe, text="colar", command=comando_colar)
+
 
         self.fr_princ = Frame(self.frame_tela)
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -1064,9 +1109,13 @@ class Interface():
         self.bt_brk_p.grid(row=1, column=6)
         self.bt_brkp1.grid(row=1, column=7)
         self.bt_lp_bk.grid(row=1, column=8)
-        self.bt_ajuda.grid(row=1, column=10)
-        self.bt_pesqu.grid(row=1, column=11)
-        self.bt_idiom.grid(row=1, column=12)
+        #self.bt_left.grid(row=1, column=9)
+        #self.bt_rigth.grid(row=1, column=10)
+        self.bt_ajuda.grid(row=1, column=11)
+        self.bt_pesqu.grid(row=1, column=12)
+        self.bt_idiom.grid(row=1, column=13)
+        self.bt_copia.grid(row=1, column=14)
+        self.bt_colar.grid(row=1, column=15)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
         self.fr__abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
         self.cont_lin.grid(row=1, column=1, sticky=NSEW)
@@ -1091,22 +1140,6 @@ class Interface():
         self.atualizar.verificar_versao(primeira_vez=True)
 
         self.tela.mainloop()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def atualizar_idioma(self):
         Interface.interface_idioma(self)
@@ -1316,6 +1349,8 @@ class Interface():
         Interface.atualizar_design_objeto(self, self.bt_redsf, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_ajuda, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_pesqu, "dicBtnMenus")
+        Interface.atualizar_design_objeto(self, self.bt_copia, "dicBtnCopiarColar")
+        Interface.atualizar_design_objeto(self, self.bt_colar, "dicBtnCopiarColar")
         Interface.atualizar_design_objeto(self, self.bt_idiom, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_brk_p, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_brkp1, "dicBtnMenus")
