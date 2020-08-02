@@ -9,7 +9,7 @@ import webbrowser
 from tkinter import messagebox
 import requests
 
-VERSAO_ATUAL = {"versao":0.1}
+VERSAO_ATUAL = {"versao":0.25}
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma):
