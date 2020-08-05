@@ -1,18 +1,25 @@
-#****** Nome do comando ******#
-# Repita
-
-#****** Descrição do comando ******#
 # Espera durante um intervalo definido
-      
+
+
+
+
 #****** Uso simples comando ******#
 repita 100 vezes
 {
     mostre "Repetindo todo o bloco 100 vezes"
 }
 
+
+
+
 #****** Variações dos comandos ******#
-# repita , repitir 
+# repita
+# repetir
+# repeat
+# repetir 
 
 #****** Variações dos subcomandos ******#
-# vezes , vez 
-
+# vezes
+# vez
+# times
+# veces

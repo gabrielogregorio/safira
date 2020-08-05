@@ -1,17 +1,38 @@
-#****** Nome do comando ******#
-# Aguarde
-
-#****** Descrição do comando ******#
 # Espera durante um intervalo definido
+
+
+
+
 
 #****** Uso simples comando ******#
 mostre "Olá, amigo(a)!"
 espere 2 segundos
 mostre "Como você está?"
 
+
+
+
+
+
 #****** Variações dos comandos ******#
-# espere , aguarde 
+# espere 
+# aguarde 
+# wait 
+# delay 
+# esperar
 
 #****** Variações dos subcomandos ******#
-# milisegundos, milisegundo, segundos, segundo, ms, s
+# milissegundos
+# milissegundo
+# milisegundos
+# millisecond
+# milisegundos
+# milisegundo  
+# ms
+
+# segundos
+# segundo
+# seconds
+# second
+# s
 

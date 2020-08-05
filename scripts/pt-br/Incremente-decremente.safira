@@ -1,8 +1,7 @@
-#****** Nome do comando ******#
-# Incremente/Decremente
-
-#****** Descrição do comando ******#
 # Aumenta ou diminui o valor de uma variável numérica
+
+
+
 
 #****** Uso simples comando ******#
 numero = 1
@@ -14,9 +13,23 @@ mostre numero
 decremente 2 em numero
 mostre numero
 
+
+
+
+
+
 #****** Variações dos comandos ******#
 # decremente
-# incremente
+# decreasingly
+# decrecientemente
+# 
+# incremente 
+# increase 
+# incrementar 
 
 #****** Variações dos subcomandos ******#
-# na variavel , da variavel , no , na , em
+# na variavel 
+# da variavel 
+# no 
+# na 
+# em 

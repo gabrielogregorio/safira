@@ -45,8 +45,7 @@ class Colorir():
         palavra_comando = palavra.replace('+', '\\+')
         palavra_comando = palavra_comando.replace('/', '\\/')
         palavra_comando = palavra_comando.replace('*', '\\*')
-        palavra_comando = palavra_comando.replace(' ', '\\s*')
-
+        palavra_comando = palavra_comando.replace(' ', '[\\s{1,}|_]')
         return palavra_comando
 
     def __colorir_comandos(self, lista_linhas):
@@ -57,6 +56,7 @@ class Colorir():
             texto += linha
         texto = texto.replace(' ', '')
         texto = texto.lower()
+        texto = texto.replace('_','')
 
         for chave_comando, dicionario_comandos in self.dic_comandos.items():
             cor = self.cor_do_comando[ dicionario_comandos["cor"] ]["foreground"]
@@ -72,6 +72,7 @@ class Colorir():
                 if comando_teste not in texto: continue
 
                 palavra_comando = Colorir.__filtrar_palavras(palavra_analise)
+                
                 regex = '(^|\\s){}(\\s|$)'.format(palavra_comando)
 
                 for linha in range(len(lista_linhas)):

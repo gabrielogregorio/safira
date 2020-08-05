@@ -155,6 +155,8 @@
       [" for igual a ","pt-br"],
       [" es igual a ","es"],
       [" is equal to ","en-us"],
+      [" for ","pt-br"],
+      [" is ","pt-br"],
       [" == ","all"]
     ],
     "cor":"logico"
@@ -685,12 +687,12 @@
   "digitado":{
     "comando":[
       ["o numero que o usuario digitar","pt-br"],
-      ["numero que o usuario digitar","pt-br"],
       ["o numero que for digitado","pt-br"],
+      ["numero que o usuario digitar","pt-br"],
       ["numero que for digitado","pt-br"],
       ["o que o usuario digitar","pt-br"],
-      ["que o usuario digitar","pt-br"],
       ["o que for digitado","pt-br"],
+      ["que o usuario digitar","pt-br"],
       ["que for digitado","pt-br"],
       ["numero digitado","pt-br"],
       ["digitado","pt-br"],

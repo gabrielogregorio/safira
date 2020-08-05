@@ -1,13 +1,11 @@
-#******************************* Nome dos comandos **************************#
-# Manipulação de arquivos
-
-#******************************* Descrição dos comandos **************************#
 # Diversos Comandos para manipular arquivos
 # Criação
 # Inserção de texto
 # Leitura
 # Verificar se existe
 # Remover
+
+
 
 #******************************* Uso simples dos comandos **************************#
 # Criar um arquivo qualquer
@@ -35,6 +33,8 @@ se o arquivo "arquivo.txt" existe
     mostre "Esse arquivo Existe e será removido"
     delete o arquivo "arquivo.txt"
 }
+
+
 
 
 #****************** Variações dos comandos ****************#

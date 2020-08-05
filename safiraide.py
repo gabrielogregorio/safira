@@ -728,18 +728,28 @@ class Interface():
                         while self.esperar_pressionar_enter:
 
                             # Atualiza a interface
-                            self.tx_terminal.update()
                             self.tx_editor_codigo.update()
                             self.tela.update()
+                            try:
+                                #self.tx_terminal.get(1.0, END)
+                                print(">>>>")
+                                self.tx_terminal.update()
+                            except:
+                                self.instancia.aconteceu_erro = True
+                                break
 
+
+                        if not self.instancia.aconteceu_erro:
                             # Salva tamanho do novo texto
-                        digitado = self.tx_terminal.get(1.0, END)
+                            digitado = self.tx_terminal.get(1.0, END)
 
-                        # Corta o texto antigo
-                        digitado = digitado[textoOriginal - 1:-2]
+                            # Corta o texto antigo
+                            digitado = digitado[textoOriginal - 1:-2]
 
-                        # Sinaliza que o enter já foi pressionado
-                        self.esperar_pressionar_enter = False
+                            # Sinaliza que o enter já foi pressionado
+                            self.esperar_pressionar_enter = False
+                        else:
+                            break
 
                     # Atualiza o o interpretador com o texto                
                     self.instancia.texto_digitado = digitado.replace("\n", "")
@@ -825,13 +835,17 @@ class Interface():
         for widget in self.lista_terminal_destruir:
             try:
                 widget.destroy()
+                self.tx_terminal = None
             except Exception as e:
                 pass
 
             try:
                 widget.grid_forget()
+                self.tx_terminal = None
             except Exception as e:
                 pass
+
+
 
     def iniciar_terminal_debug(self):
         Interface.destruir_instancia_terminal(self)
@@ -839,6 +853,7 @@ class Interface():
         coluna_identificadores = (self.interface_idioma["debug_variavel"][self.idioma], self.interface_idioma["debug_tipo"][self.idioma],self.interface_idioma["debug_valor"][self.idioma])
 
         frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913")
+        self.frame_terminal_e_grid.protocol("WM_DELETE_WINDOW", lambda event=None: Interface.destruir_instancia_terminal(self))
         frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
         frame_terminal_e_grid.grid_columnconfigure(1, weight=1)
         frame_terminal_e_grid.rowconfigure(1, weight=1)
@@ -906,6 +921,8 @@ class Interface():
         Interface.destruir_instancia_terminal(self)
 
         self.top_janela_terminal = Toplevel(self.tela)
+        self.top_janela_terminal.protocol("WM_DELETE_WINDOW", lambda event=None: Interface.destruir_instancia_terminal(self))
+
         self.top_janela_terminal.grid_columnconfigure(1, weight=1)
         self.top_janela_terminal.rowconfigure(1, weight=1)
         self.top_janela_terminal.withdraw() # Ocultar tkinter

@@ -1,12 +1,10 @@
-# VARIAVEIS
-#****** Nome do comando ******#
-# Declarar variável
-
-#****** Descrição do comando ******#
 # Atribui um valor a um nome, exemplo:
 # idade = 20
 # Nesta situação, ao usar a palavra idade,
 # ela terá o valor 20
+
+
+
 
 #****** Uso simples comando ******#
 
@@ -30,7 +28,27 @@ mostre "idade é do tipo -> ", o tipo da variavel idade
 mostre "idade é do nome -> ", o tipo da variavel nome
 mostre "idade é do casado -> ", o tipo da variavel casado
 
-#****** Variações dos comandos ******#
-# recebe , vale , = 
-# o tipo da variavel , tipo da variavel , type of variable , o tipo de , o tipo da , tipo de , tipo da , type , tipo 
 
+
+
+
+#****** Variações dos comandos ******#
+# recebe 
+# vale 
+# obtiene 
+# receive 
+# receives 
+# equals 
+# worth 
+# = 
+# <- 
+# 
+# o tipo da variavel 
+# tipo da variavel 
+# type of variable 
+# o tipo de 
+# o tipo da 
+# tipo de 
+# tipo da 
+# type 
+# tipo 

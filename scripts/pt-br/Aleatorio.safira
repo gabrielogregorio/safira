@@ -1,18 +1,32 @@
-# ALEATORIO
-#****** Nome do comando ******#
-# Aleatório
-
-#****** Descrição do comando ******#
 # Sorteia um número aleatório
 # Os valores podem ser variáveis
 # ou resultados de outros comandos
+
+
+
+
+
 
 #****** Uso simples comando ******#
 numeroSorteado = um numero aleatorio entre 10 e 20
 mostre numeroSorteado
 
+
 #****** Variações dos comandos ******#
-# um numero aleatorio entre , numero aleatorio entre
+# pense em um numero aleatorio entre 
+# un numero aleatorio entre 
+# um numero aleatorio entre 
+# a random number between 
+# numero aleatorio entre 
+# numero aleatorio entre 
+# random number between 
+
+
+
+
+
 
 #****** Variações dos subcomandos ******#
-# e
+# e 
+# and 
+# y 

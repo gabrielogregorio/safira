@@ -1,12 +1,11 @@
-
-#****** Nome do comando ******#
-# Comando Enquanto
-
-#****** Descrição do comando ******#
 # Repete um bloco de intrução enquanto uma condição for verdadeira
 # Aviso, OS TESTES REALIZADOS obedecem as mesmas opções
 # do comando de condicionais. Consulte esse comando
 # para ter mais informações
+
+
+
+
 
 #****** Uso simples comando ******#
 opcao = 1
@@ -22,6 +21,22 @@ enquanto opcao for diferente de 0
     opcao recebe o numero que o usuario digitar
 }
 
+
 #****** Variações dos comandos ******#
-# enquanto , while 
+# mientras que 
+# enquanto
+# mientras 
+# while
+
+#****** Comandos opcionais ******#
+# entao faca isso
+# entonces cuchillo
+# entao faca
+# then knife
+# cuchillo
+# entonces
+# entao
+# knife
+# then
+# faca
 

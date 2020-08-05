@@ -15,7 +15,7 @@ ESPERAR_PRESSIONAR_ENTER = False
 class Console:
     def __init__(self, bool_logs ,idioma):
         self.bool_logs = bool_logs
-        self.diretorio_base = os.getcwd()
+        self.diretorio_base = os.getcwd() + "/"
         self.dicLetras = {}
         self.dic_comandos = funcoes.carregar_json('comandos.json')
 
@@ -210,3 +210,4 @@ a.close()
 
 i = Console(bool_logs, idioma)
 i.iniciar(t)
+

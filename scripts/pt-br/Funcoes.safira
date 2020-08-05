@@ -1,10 +1,10 @@
-#****** Nome do comando ******#
-# Funções
-
-#****** Descrição do comando ******#
 # Cria um bloco de intruções com um nome que pode ser
 # executado em qualquer parte do código
 # através da palavra atribuida
+
+
+
+
 
 #****** Uso simples comando ******#
 # Criando uma função
@@ -16,6 +16,7 @@ funcao mostraArvore
     mostre " ******* "
     mostre "    *    "
 }
+
 # Chamando a função. Você pode chamar ela 
 # Quantas vezes e onde quiser
 mostraArvore
@@ -28,9 +29,36 @@ funcao calculaMedia recebe parametros nota1, nota2
 
 calculaMedia passando parametros 9.8, 7.5
 
+
+
+
+
+
 #****** Variações dos comandos ******#
-# function , funcao , def 
+# function 
+# funcao 
+# funcion 
+# def 
 
 #****** Variações dos subcomandos ******#
-# recebe parametros
-# passando parametros , parametros , passando parametro , passando , parametro 
+# recebe parametros 
+# receives parameters 
+# recibe parametros 
+# 
+# passando parametros
+# passando parametro 
+# parametros 
+# passando 
+# parametro 
+# 
+# passing parameters 
+# passing parameter 
+# parameters 
+# passing 
+# parameter 
+# 
+# parametros de paso 
+# parametro de paso 
+# parametros 
+# pasando los 
+# parametro 

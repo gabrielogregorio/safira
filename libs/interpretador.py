@@ -712,8 +712,7 @@ class Interpretador():
                     dic_options[grupo] = txt_comando_analisar
 
         for k, v in dic_options.items():
-            v_add = v.replace(' ', '\\s{1,}')
-
+            v_add = v.replace(' ', '[\\s{1,}|_]')
             comando = comando.replace(k, v_add)
 
         # o ? evita a gulidisse do .*, ele pode remover um passando parametros e considerar só o parametros, por exemplo
@@ -721,6 +720,7 @@ class Interpretador():
 
         # Marca o padrão de variável
         comando = comando.replace('__var__', '({})'.format(self.rgx_padrao_variavel))
+        print(comando)
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
@@ -2218,31 +2218,23 @@ class Interpretador():
 
         return [True, None, 'vazio', 'fazerNada']
 
+    def filtrar_comando(self, linha, comando, substituicao):
+        for comando in self.dic_comandos[comando]["comando"]:
+            linha = linha.replace(comando[0], substituicao)
+
+        return linha
+        
+
     def funcao_testar_condicao(self, linha):
 
-        for comando in self.dic_comandos["logico_maior_igual"]["comando"]:
-            linha = linha.replace(comando[0], ' >= ')
-
-        for comando in self.dic_comandos["logico_menor_igual"]["comando"]:
-            linha = linha.replace(comando[0], ' <= ')
-
-        for comando in self.dic_comandos["logico_diferente"]["comando"]:
-            linha = linha.replace(comando[0], ' != ')
-
-        for comando in self.dic_comandos["logico_maior"]["comando"]:
-            linha = linha.replace(comando[0], ' > ')
-
-        for comando in self.dic_comandos["logico_menor"]["comando"]:
-            linha = linha.replace(comando[0], ' < ')
-
-        for comando in self.dic_comandos["logico_igual"]["comando"]:
-            linha = linha.replace(comando[0], ' == ')
-
-        for comando in self.dic_comandos["logico_e"]["comando"]:
-            linha = linha.replace(comando[0], '  and  ')
-
-        for comando in self.dic_comandos["logico_ou"]["comando"]:
-            linha = linha.replace(comando[0], '  or  ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_maior_igual", ' >= ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_menor_igual", ' <= ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_diferente", ' != ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_maior", ' > ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_menor", ' < ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_igual", ' == ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_e", '  and  ')
+        linha = Interpretador.filtrar_comando(self, linha, "logico_ou", '  or  ')
 
         linha = ' ' + str(linha) + ' '
         simbolosEspeciais = ['>=', '<=', '!=', '>', '<', '==', '(', ')', ' and ', ' or ', ' tiver ']
