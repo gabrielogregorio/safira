@@ -1,5 +1,89 @@
-
 {
+
+  "copie":{
+    "comando":[
+      ["copie el archivo ","es"],
+      ["copia o arquivo ","pt-br"],
+      ["copy the file ","en-us"],
+      ["copia ","pt-br"],
+      ["copie ","es"],
+      ["copy ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "copie_para":{
+    "comando":[
+      [" to the directory ","en-us"],
+      [" en el directorio ","es"],
+      [" para o diretório ","pt-br"],
+      [" al directorio ","es"],
+      [" to the folder ","en-us"],
+      [" para a pasta ","pt-br"],
+      [" a la carpeta ","es"],
+      [" to the ","en-us"],
+      [" para ","pt-br"],
+      [" to ","en-us"],
+      [" a ","es"]
+    ],
+    "cor":"lista"
+  },
+  "copie_para_opcional":{
+    "comando":[
+      [" directory","en-us"],
+      [" folder","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+
+
+  
+
+
+
+
+
+
+
+
+
+  "mova":{
+    "comando":[
+      ["mueva el archivo ","es"],
+      ["mova o arquivo ","pt-br"],
+      ["move the ","en-us"],
+      ["mova ","pt-br"],
+      ["mueve ","es"],
+      ["move ","en-us"]
+        ],
+    "cor":"lista"
+  },
+  "mova_para":{
+    "comando":[
+      [" para o diretorio ", "pt-br"],
+      [" al directorio ", "en-us"],
+      [" para a pasta ", "pt-br"],
+      [" a la carpeta ", "es"],
+      [" file to the ", "en-us"],
+      [" file to ", "en-us"],
+      [" to the ", "en-us"],
+      [" para ", "pt-br"],
+      [" to ", "en-us"]
+        ],
+    "cor":"lista"
+  },
+  "mova_para_opcional":{
+    "comando":[
+      [" directory","en-us"],
+      [" folder","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
   "substitua":{
     "comando":[
       ["substitua ","pt-br"],

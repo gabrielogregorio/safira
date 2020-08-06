@@ -1,4 +1,14 @@
 {
+
+  "erro_copiar_arquivo":{
+    "pt-br":"Erro ao copiar o arquivo '{}' para o diretório '{}'. Erro : '{}'",
+    "en-us":"Error copying file '{}' to directory '{}'. Mistake : '{}'"
+  },
+
+  "erro_mover_arquivo":{
+    "pt-br":"Erro ao mover o arquivo '{}' para o diretório '{}'. Erro : '{}'",
+    "en-us":"Error moving file '{}' to directory '{}'. Mistake : '{}'"
+  },
   "comando_desconhecido":{
     "pt-br":"Um comando desconhecido foi localizado: ",
     "en-us":"An unknown command was found: "

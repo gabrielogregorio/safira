@@ -17,6 +17,7 @@ from time    import time
 from json    import load
 from re      import findall
 from re      import finditer
+import shutil
 
 try:
     import libs.funcoes as funcoes
@@ -720,7 +721,6 @@ class Interpretador():
 
         # Marca o padrão de variável
         comando = comando.replace('__var__', '({})'.format(self.rgx_padrao_variavel))
-        print(comando)
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
@@ -923,6 +923,20 @@ class Interpretador():
                 if analisa032[0]: return [Interpretador.funcao_ler_arquivo(self, analisa032[1][2]), self.num_linha, "arquivos"]
 
 
+
+            # SISTEMA OPERACIONAL
+            if caractere_inicio in self.dicLetras["mova"]:
+                analisa032 =Interpretador.analisa_instrucao(self, '^(<mova>)(.*)(<mova_para>)(.*)(<mova_para_opcional>)$', linha)
+                if analisa032[0]: return [Interpretador.funcao_mover_arquivo(self, analisa032[1][2], analisa032[1][4] ), self.num_linha, ""]
+
+            if caractere_inicio in self.dicLetras["copie"]:
+                analisa032 =Interpretador.analisa_instrucao(self, '^(<copie>)(.*)(<copie_para>)(.*)(<copie_para_opcional>)$', linha)
+                if analisa032[0]: return [Interpretador.funcao_copiar_arquivo(self, analisa032[1][2], analisa032[1][4] ), self.num_linha, ""]
+
+
+
+
+
             if caractere_inicio in self.dicLetras["para_cada"]:
                 analisa025 =Interpretador.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
                 if analisa025[0]: return [Interpretador.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, "para_cada"]
@@ -961,7 +975,6 @@ class Interpretador():
             analisa023 =Interpretador.analisa_instrucao(self, '^(\\s*[a-zA-Z\\_0-9]*)(<declaraVariaveis>)(.*)$', linha)
             if analisa023[0]: return [Interpretador.funcao_realizar_atribu(self, analisa023[1][1], analisa023[1][3]), self.num_linha, "atribuicoes"]
 
-            # Pode não começar com o "lista de "
             # PRIMEIRO POR SER MAIOR
             analisa023 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)(<declaraVariaveis>)(.*)$', linha)
             if analisa023[0]: return [Interpretador.funcao_realiza_atribuica_posicao_lista(self, analisa023[1][2], analisa023[1][4], analisa023[1][6]), self.num_linha, "lista"]
@@ -970,10 +983,10 @@ class Interpretador():
             analisa019 =Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
             if analisa019[0]: return [Interpretador.funcao_obter_valor_lst(self, analisa019[1][2], analisa019[1][4]), self.num_linha, "lista"]
 
-
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
             if analisa024[0]: return [Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes"]
 
+            # Executar Função
             # ULTIMO SEMPRE
             analisa044 =Interpretador.analisa_instrucao(self, '^\\s*[A-Z0-9a-z\\_]*\\s*$', linha)
             if analisa044[0]: return [Interpretador.funcao_executar_funcao(self, analisa044[1][1]), self.num_linha, "funcoes"]
@@ -981,7 +994,7 @@ class Interpretador():
             return [ [False, "{}'{}'".format(  self.msg('comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
 
         return [[True, None, 'vazio', 'fazerNada'], str(self.num_linha), ""]
-
+    
 
     def comandos_uso_geral(self, possivelVariavel):
         Interpretador.log(self, 'comandos_uso_geral: {}'.format(possivelVariavel))
@@ -1049,6 +1062,73 @@ class Interpretador():
 
         return [True, None, 'vazio']
 
+    def verificar_se_existe(self, arquivo_diretorio, ja_foi_abstraido = False):
+
+        if not ja_foi_abstraido:
+            teste_arquivo = Interpretador.abstrair_valor_linha(self, arquivo_diretorio)
+            if not teste_arquivo[0]: return teste_arquivo
+
+        else:
+            teste_arquivo = [True, arquivo_diretorio]
+
+        if os.path.exists(teste_arquivo[1]):
+            return [True, True, "booleano", "fazerNada"]
+        return [True, False, "booleano", "fazerNada"]
+
+    def testar_existencia(self, arquivo):
+        # Abstrair o valor do arquivo e do objetivo
+        teste_arquivo = Interpretador.abstrair_valor_linha(self, arquivo)
+        if not teste_arquivo[0]: return teste_arquivo
+
+        # Verificar se o diretório e o objetivo existem
+        teste_erro =  Interpretador.verificar_se_existe(self, teste_arquivo[1], ja_foi_abstraido = True)
+        if not teste_erro[0]:
+            return teste_erro #[False, self.msg("arquivo_nao_existe").format(teste_arquivo[1]), 'string', 'fazerNada']
+
+        return teste_arquivo
+
+
+   #print(os.getcwd())
+    # Funções do Sistema Operacional
+
+    def funcao_mover_arquivo(self, arquivo, objetivo):
+        # Abstrair o valor do arquivo e do objetivo
+        teste_arquivo = Interpretador.testar_existencia(self, arquivo)
+        if not teste_arquivo[0]: return teste_arquivo
+
+        teste_objetivo = Interpretador.testar_existencia(self, objetivo)
+        if not teste_objetivo[0]: return teste_objetivo
+
+        try:
+            shutil.move(teste_arquivo[1], teste_objetivo[1])
+        except Exception as erro:
+            #if  'already exists' in erro:
+            return [False, self.msg("erro_mover_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
+        
+        return [True, True , 'booleano', 'fazerNada']
+
+    def funcao_copiar_arquivo(self, arquivo, objetivo):
+        # Abstrair o valor do arquivo e do objetivo
+        teste_arquivo = Interpretador.testar_existencia(self, arquivo)
+        if not teste_arquivo[0]: return teste_arquivo
+
+        teste_objetivo = Interpretador.testar_existencia(self, objetivo)
+        if not teste_objetivo[0]: return teste_objetivo
+
+        try:
+            shutil.copy(teste_arquivo[1], teste_objetivo[1])
+        except Exception as erro:
+            #if  'already exists' in erro:
+            return [False, self.msg("erro_copiar_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
+        
+        return [True, True , 'booleano', 'fazerNada']
+
+
+
+
+
+
+
     def funcao_substituir_texto(self, valor1, valor2, variavel):
         teste_variavel = Interpretador.obter_valor_variavel(self, variavel)
         if not teste_variavel[0]: return teste_variavel
@@ -1096,8 +1176,6 @@ class Interpretador():
     def funcao_para_minusculo(self, texto):
         abstrair = Interpretador.abstrair_valor_linha(self, texto)
         if not abstrair[0]: return abstrair
-
-        print(abstrair)
 
         if abstrair[2] != "string":
             return [False, self.msg("p_maiusc_minusc_cap_texto").format("minusculo") , 'string', 'fazerNada']
