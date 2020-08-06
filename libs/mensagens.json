@@ -1,5 +1,9 @@
 {
 
+  "precisa_nome_diretorio":{
+    "pt-br":"Você precisa informar o nome de um diretorio",
+    "en-us":"You need to provide the name of a directory"
+  },
   "erro_copiar_arquivo":{
     "pt-br":"Erro ao copiar o arquivo '{}' para o diretório '{}'. Erro : '{}'",
     "en-us":"Error copying file '{}' to directory '{}'. Mistake : '{}'"

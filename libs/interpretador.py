@@ -924,7 +924,13 @@ class Interpretador():
 
 
 
+
+
             # SISTEMA OPERACIONAL
+            if caractere_inicio in self.dicLetras["obter_diretorio"]:
+                analisa032 =Interpretador.analisa_instrucao(self, '^(<obter_diretorio>)$', linha)
+                if analisa032[0]: return [Interpretador.funcao_obter_diretorio_atual(self), self.num_linha, ""]
+
             if caractere_inicio in self.dicLetras["mova"]:
                 analisa032 =Interpretador.analisa_instrucao(self, '^(<mova>)(.*)(<mova_para>)(.*)(<mova_para_opcional>)$', linha)
                 if analisa032[0]: return [Interpretador.funcao_mover_arquivo(self, analisa032[1][2], analisa032[1][4] ), self.num_linha, ""]
@@ -1032,12 +1038,29 @@ class Interpretador():
             analisa026 =Interpretador.analisa_instrucao(self, '^(<ler_tecla_por>)(.*)(<esperaEm>)$', possivelVariavel)
             if analisa026[0]: return Interpretador.funcao_ler_tecla_por_s(self, analisa026[1][2])
 
+
+        # SISTEMA OPERACIONAL
+        if caractere_inicio in self.dicLetras["obter_diretorio"]:
+            analisa032 =Interpretador.analisa_instrucao(self, '^(<obter_diretorio>)$', possivelVariavel)
+            if analisa032[0]: return Interpretador.funcao_obter_diretorio_atual(self)
+
+
+
         if caractere_inicio in self.dicLetras["arquivo_existe"]:
             analisa042 =Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
             if analisa042[0]: return Interpretador.funcao_arquivo_nao_existe(self, analisa042[1][2])
 
             analisa029 =Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
             if analisa029[0]: return Interpretador.funcao_arquivo_existe(self, analisa029[1][2])
+
+        if caractere_inicio in self.dicLetras["diretorio_existe"]:
+            analisa042 =Interpretador.analisa_instrucao(self, '^(<"diretorio_existe>)(.*)(<"diretorio_existe_nao_sub_existe>)$', possivelVariavel)
+            if analisa042[0]: return Interpretador.funcao_diretorio_nao_existe(self, analisa042[1][2])
+
+            analisa029 =Interpretador.analisa_instrucao(self, '^(<"diretorio_existe>)(.*)(<"diretorio_existe_sub_existe>)$', possivelVariavel)
+            if analisa029[0]: return Interpretador.funcao_diretorio_existe(self, analisa029[1][2])
+
+
 
         if caractere_inicio in self.dicLetras["leia_arquivo"]:
             analisa032 =Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
@@ -1088,8 +1111,9 @@ class Interpretador():
         return teste_arquivo
 
 
-   #print(os.getcwd())
     # Funções do Sistema Operacional
+    def funcao_obter_diretorio_atual(self):
+        return [True, os.getcwd() , 'string', 'fazerNada']
 
     def funcao_mover_arquivo(self, arquivo, objetivo):
         # Abstrair o valor do arquivo e do objetivo
@@ -1642,6 +1666,44 @@ class Interpretador():
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
 
+
+
+
+
+    def funcao_diretorio_existe(self, nome_diretorio):
+    
+        if nome_diretorio == "":
+            return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
+
+        teste_valor =Interpretador.abstrair_valor_linha(self, nome_diretorio)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_diretorio = str(teste_valor[1])
+        nome_diretorio = Interpretador.formatar_arquivo(self, nome_diretorio)
+
+        if os.path.exists(nome_diretorio):
+            return [True, True, "booleano", "fazerNada"]
+        else:
+            return [True, False, "booleano", "fazerNada"]
+
+    def funcao_diretorio_nao_existe(self, nome_diretorio):
+        if nome_diretorio == "":
+            return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
+
+        teste_valor =Interpretador.abstrair_valor_linha(self, nome_diretorio)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_diretorio = str(teste_valor[1])
+        nome_diretorio = Interpretador.formatar_arquivo(self, nome_diretorio)
+
+        if os.path.exists(nome_diretorio):
+            return [True, False, "booleano", "fazerNada"]
+        else:
+            return [True, True, "booleano", "fazerNada"]
+
+
+
+    # Precisa disferenciar diretório de arquivo
     def funcao_arquivo_existe(self, nome_arquivo):
 
         if nome_arquivo == "":
@@ -1672,6 +1734,12 @@ class Interpretador():
             return [True, False, "booleano", "fazerNada"]
         else:
             return [True, True, "booleano", "fazerNada"]
+
+
+
+
+
+
 
     def funcao_excluir_arquivo(self, nome_arquivo):
         if nome_arquivo == "":

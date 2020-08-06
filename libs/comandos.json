@@ -1,142 +1,4 @@
 {
-
-  "copie":{
-    "comando":[
-      ["copie el archivo ","es"],
-      ["copia o arquivo ","pt-br"],
-      ["copy the file ","en-us"],
-      ["copia ","pt-br"],
-      ["copie ","es"],
-      ["copy ","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "copie_para":{
-    "comando":[
-      [" to the directory ","en-us"],
-      [" en el directorio ","es"],
-      [" para o diretório ","pt-br"],
-      [" al directorio ","es"],
-      [" to the folder ","en-us"],
-      [" para a pasta ","pt-br"],
-      [" a la carpeta ","es"],
-      [" to the ","en-us"],
-      [" para ","pt-br"],
-      [" to ","en-us"],
-      [" a ","es"]
-    ],
-    "cor":"lista"
-  },
-  "copie_para_opcional":{
-    "comando":[
-      [" directory","en-us"],
-      [" folder","en-us"],
-      ["","all"]
-    ],
-    "cor":"lista"
-  },
-
-
-  
-
-
-
-
-
-
-
-
-
-  "mova":{
-    "comando":[
-      ["mueva el archivo ","es"],
-      ["mova o arquivo ","pt-br"],
-      ["move the ","en-us"],
-      ["mova ","pt-br"],
-      ["mueve ","es"],
-      ["move ","en-us"]
-        ],
-    "cor":"lista"
-  },
-  "mova_para":{
-    "comando":[
-      [" para o diretorio ", "pt-br"],
-      [" al directorio ", "en-us"],
-      [" para a pasta ", "pt-br"],
-      [" a la carpeta ", "es"],
-      [" file to the ", "en-us"],
-      [" file to ", "en-us"],
-      [" to the ", "en-us"],
-      [" para ", "pt-br"],
-      [" to ", "en-us"]
-        ],
-    "cor":"lista"
-  },
-  "mova_para_opcional":{
-    "comando":[
-      [" directory","en-us"],
-      [" folder","en-us"],
-      ["","all"]
-    ],
-    "cor":"lista"
-  },
-
-
-
-
-  "substitua":{
-    "comando":[
-      ["substitua ","pt-br"],
-      ["reemplace ","es"],
-      ["replace ","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "substitua_por":{
-    "comando":[
-      [" por ","pt-br"],
-      [" con ","es"],
-      [" with ","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "substitua_na_variavel":{
-    "comando":[
-      [" na variavel ","pt-br"],
-      [" en la variable ","es"],
-      [" in the variable ","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "to_lower":{
-    "comando":[
-      [" para minusculo","pt-br"],
-      [" em minusculo","pt-br"],
-      [" to lower","en-us"],
-      [" en minusculas","es"],
-      [" in lower case","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "to_upper":{
-    "comando":[
-      [" para maiusculo","pt-br"],
-      [" em maiusculo","pt-br"],
-      [" to upper","en-us"],
-      [" in upper case","en-us"],
-      [" en mayusculas","es"]
-    ],
-    "cor":"lista"
-  },
-  "to_captalize":{
-    "comando":[
-      [" para captalizado","pt-br"],
-      [" captalizado","pt-br"],
-      [" captalize","en-us"],
-      [" in capitalized","en-us"]
-    ],
-    "cor":"lista"
-  },
   "matematica_mod":{
     "comando":[
       [" % ","all"]
@@ -283,6 +145,172 @@
     ],
     "cor":"logico"
   },
+
+
+
+
+  "obter_diretorio":{
+    "comando":[
+      ["del directorio de trabajo actual", "es"],
+      ["ele diretorio de trabalho atual", "es"],
+      ["the current working directory", "en-us"],
+      ["o diretorio de trabalho atual", "pt-br"],
+      ["directorio de trabajo actual", "es"],
+      ["diretorio de trabalho atual", "pt-br"],
+      ["current working directory", "en-us"],
+      ["o diretorio de trabalho", "pt-br"],
+      ["take the current path ", "en-us"],
+      ["the current directory", "en-us"],
+      ["the current folder", "en-us"],
+      ["el directorio actual", "es"],
+      ["o diretorio atual", "pt-br"],
+      ["o diretorio atual", "pt-br"],
+      ["la carpeta actual", "es"],
+      ["a pasta atual", "pt-br"]
+          ],
+    "cor":"lista"
+  },
+
+
+
+
+  "copie":{
+    "comando":[
+      ["copie el archivo ","es"],
+      ["copia o arquivo ","pt-br"],
+      ["copy the file ","en-us"],
+      ["copia ","pt-br"],
+      ["copie ","es"],
+      ["copy ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "copie_para":{
+    "comando":[
+      [" to the directory ","en-us"],
+      [" en el directorio ","es"],
+      [" para o diretorio ","pt-br"],
+      [" al directorio ","es"],
+      [" to the folder ","en-us"],
+      [" para a pasta ","pt-br"],
+      [" a la carpeta ","es"],
+      [" to the ","en-us"],
+      [" para ","pt-br"],
+      [" to ","en-us"],
+      [" a ","es"]
+    ],
+    "cor":"lista"
+  },
+  "copie_para_opcional":{
+    "comando":[
+      [" directory","en-us"],
+      [" folder","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
+  "mova":{
+    "comando":[
+      ["mueva el archivo ","es"],
+      ["mova o arquivo ","pt-br"],
+      ["move the ","en-us"],
+      ["mova ","pt-br"],
+      ["mueve ","es"],
+      ["move ","en-us"]
+        ],
+    "cor":"lista"
+  },
+  "mova_para":{
+    "comando":[
+      [" para o diretorio ", "pt-br"],
+      [" al directorio ", "en-us"],
+      [" para a pasta ", "pt-br"],
+      [" a la carpeta ", "es"],
+      [" file to the ", "en-us"],
+      [" file to ", "en-us"],
+      [" to the ", "en-us"],
+      [" para ", "pt-br"],
+      [" to ", "en-us"]
+        ],
+    "cor":"lista"
+  },
+  "mova_para_opcional":{
+    "comando":[
+      [" directory","en-us"],
+      [" folder","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
+  "substitua":{
+    "comando":[
+      ["substitua ","pt-br"],
+      ["reemplace ","es"],
+      ["replace ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "substitua_por":{
+    "comando":[
+      [" por ","pt-br"],
+      [" con ","es"],
+      [" with ","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "substitua_na_variavel":{
+    "comando":[
+      [" na variavel ","pt-br"],
+      [" en la variable ","es"],
+      [" in the variable ","en-us"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
+  "to_lower":{
+    "comando":[
+      [" para minusculo","pt-br"],
+      [" em minusculo","pt-br"],
+      [" to lower","en-us"],
+      [" en minusculas","es"],
+      [" in lower case","en-us"]
+    ],
+    "cor":"lista"
+  },
+  "to_upper":{
+    "comando":[
+      [" para maiusculo","pt-br"],
+      [" em maiusculo","pt-br"],
+      [" to upper","en-us"],
+      [" in upper case","en-us"],
+      [" en mayusculas","es"]
+    ],
+    "cor":"lista"
+  },
+  "to_captalize":{
+    "comando":[
+      [" para captalizado","pt-br"],
+      [" captalizado","pt-br"],
+      [" captalize","en-us"],
+      [" in capitalized","en-us"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+  
   "limpatela":{
     "comando":[
       ["limpar a tela","pt-br"],
@@ -513,6 +541,83 @@
     ],
     "cor":"lista"
   },
+
+
+
+
+
+
+
+
+
+
+
+
+
+  o diretorio "/home" existe
+  el directorio "/ home" existe
+  existe el directorio "/ home"
+  the "/ home" directory exists
+  o diretorio "/ home" existe
+  o caminho "/ home" existir
+  the "/ home" folder exists
+  "/ home" directory exists
+  existe la carpeta "/ home"
+  a pasta "/ home" existe
+  existe la ruta "/ home"
+  "/ home" folder exists
+  pasta "/ home" existe
+  path "/ home" exists
+
+  the "/ home" directory does not exist
+  the "/ home" folder does not exist
+  "/ home" directory does not exist
+  el directorio "/ home" no existe
+  the "/ home" path does not exist
+  o diretorio "/ home" não existe
+  o caminho "/ home" não existir
+  folder "/ home" does not exist
+  diretorio "/ home" não existe
+  la carpeta "/ home" no existe
+  a pasta "/ home" não existe
+  pasta "/ home" não existe
+
+
+
+
+  "arquivo_existe":{
+    "comando":[
+      ["o arquivo ","pt-br"],
+      ["the file ","en-us"],
+      ["el archivo ","es"]
+    ],
+    "cor":"lista"
+  },
+  "arquivo_existe_nao_sub_existe":{
+    "comando":[
+      [" nao existe","pt-br"],
+      [" not exists","en-us"],
+      [" no existe ","es"]
+    ],
+    "cor":"lista"
+  },
+  "arquivo_existe_sub_existe":{
+    "comando":[
+      [" existe","pt-br"],
+      [" exists","en-us"],
+      [" existe","es"]
+    ],
+    "cor":"lista"
+  },
+  
+
+
+
+
+
+
+
+
   "delete_arquivo":{
     "comando":[
       ["delete o arquivo ","pt-br"],
@@ -703,15 +808,21 @@
   },
   "declaraVariaveis":{
     "comando":[
+      [" has the value of ","en-us"],
+      [" tem o valor do ","pt-br"],
+      [" tem o valor de ","pt-br"],
+      [" tiene el valor ","es"],
+      [" tem o valor ","pt-br"],
+      [" receives ","en-us"],
+      [" receive ","en-us"],
+      [" equals ","en-us"],
       [" recebe ","pt-br"],
+      [" worth ","en-us"],
       [" vale ","pt-br"],
       [" obtiene ","es"],
-      [" receive ","en-us"],
-      [" receives ","en-us"],
-      [" equals ","en-us"],
-      [" worth ","en-us"],
-      [" = ","all"],
-      [" <- ","all"]
+      [" := ","all"],
+      [" <- ","all"],
+      [" = ","all"]
     ],
     "cor":"atribuicao"
   },
