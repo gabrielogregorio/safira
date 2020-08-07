@@ -517,71 +517,55 @@
     ],
     "cor":"lista"
   },
-  "arquivo_existe":{
+
+
+
+
+
+
+  
+  "diretorio_existe":{
     "comando":[
-      ["o arquivo ","pt-br"],
-      ["the file ","en-us"],
-      ["el archivo ","es"]
+      ["el directorio ", "es"],
+      ["o diretorio ", "pt-br"],
+      ["la carpeta ", "es"],
+      ["o caminho ", "pt-br"],
+      ["o diretorio ", "pt-br"],
+      ["diretorio ", "pt-br"],
+      ["a pasta ", "pt-br"],
+      ["folder ", "en-us"],
+      ["pasta ", "pt-br"],
+      ["path ", "en-us"],
+      ["the ", "en-us"],
+      ["", "all"]
+          ],
+    "cor":"lista"
+  },
+
+  "diretorio_existe_sub_existe":{
+    "comando":[
+      [" directory exists", "en-us"],
+      [" folder exists", "en-us"],
+      [" existir", "pt-br"],
+      [" exists", "en-us"],
+      [" existe", "pt-br"]      
     ],
     "cor":"lista"
   },
-  "arquivo_existe_nao_sub_existe":{
+
+  "diretorio_existe_nao_sub_existe":{
     "comando":[
-      [" nao existe","pt-br"],
+      [" directory does not exist", "en-us"],
+      [" folder does not exist", "en-us"],
+      [" path does not exist", "en-us"],
       [" not exists","en-us"],
-      [" no existe ","es"]
+      [" does not exist", "en-us"],
+      [" não existir", "pt-br"],
+      [" não existe", "pt-br"],
+      [" no existe", "en-us"]
     ],
     "cor":"lista"
   },
-  "arquivo_existe_sub_existe":{
-    "comando":[
-      [" existe","pt-br"],
-      [" exists","en-us"],
-      [" existe","es"]
-    ],
-    "cor":"lista"
-  },
-
-
-
-
-
-
-
-
-
-
-
-
-
-  o diretorio "/home" existe
-  el directorio "/ home" existe
-  existe el directorio "/ home"
-  the "/ home" directory exists
-  o diretorio "/ home" existe
-  o caminho "/ home" existir
-  the "/ home" folder exists
-  "/ home" directory exists
-  existe la carpeta "/ home"
-  a pasta "/ home" existe
-  existe la ruta "/ home"
-  "/ home" folder exists
-  pasta "/ home" existe
-  path "/ home" exists
-
-  the "/ home" directory does not exist
-  the "/ home" folder does not exist
-  "/ home" directory does not exist
-  el directorio "/ home" no existe
-  the "/ home" path does not exist
-  o diretorio "/ home" não existe
-  o caminho "/ home" não existir
-  folder "/ home" does not exist
-  diretorio "/ home" não existe
-  la carpeta "/ home" no existe
-  a pasta "/ home" não existe
-  pasta "/ home" não existe
-
 
 
 
@@ -610,12 +594,6 @@
     "cor":"lista"
   },
   
-
-
-
-
-
-
 
 
   "delete_arquivo":{
@@ -696,12 +674,6 @@
   "listaCom":{
     "comando":[
       [" com ","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "ler_tecla_por":{
-    "comando":[
-      ["ler tecla por ","pt-br"]
     ],
     "cor":"lista"
   },
@@ -806,6 +778,7 @@
     ],
     "cor":"exibicao"
   },
+
   "declaraVariaveis":{
     "comando":[
       [" has the value of ","en-us"],
@@ -969,54 +942,72 @@
     "comando":[
       [" passando parametros ","pt-br"],
       [" passando parametro ","pt-br"],
-      [" parametros ","pt-br"],
-      [" passando ","pt-br"],
-      [" parametro ","pt-br"],
-
       [" passing parameters ","en-us"],
       [" passing parameter ","en-us"],
-      [" parameters ","en-us"],
-      [" passing ","en-us"],
-      [" parameter ","en-us"],
-
       [" parametros de paso ","es"],
       [" parametro de paso ","es"],
-      [" parametros ","es"],
+      [" parameters ","en-us"],
+      [" parametros ","pt-br"],
+      [" parameter ","en-us"],
+      [" parametro ","pt-br"],
       [" pasando los ","es"],
+      [" passando ","pt-br"],
+      [" passing ","en-us"],
+      [" parametros ","es"],
       [" parametro ","es"]
-
     ],
     "cor":"tempo"
   },
   "recebeParametros":{
     "comando":[
-      [" recebe parametros ","pt-br"],
       [" receives parameters ","en-us"],
-      [" recibe parametros ","es"]
+      [" recebe parametros ","pt-br"],
+      [" recibe parametros ","es"],
+      [" receives ","en-us"],
+      [" receive ","en-us"],
+      [" recebe ","pt-br"]
     ],
     "cor":"condicionais"
 
+
+
   },
+
+
+"passando_parametros_abrir":{
+  "comando":[
+    ["\\s*\\(\\s*","all"]
+  ],
+  "cor":"condicionais"
+},
+"passando_parametros_fechar":{
+  "comando":[
+    ["\\s*\\)\\s*","all"]
+  ],
+  "cor":"condicionais"
+},
+
+
   "recebeParametros_parentese_abre":{
     "comando":[
-      [" \\( ","all"]
+      ["\\s*\\(\\s*","all"]
     ],
     "cor":"condicionais"
   },
   "recebeParametros_parentese_fecha":{
     "comando":[
-      [" \\) \\: ","all"],
-      [" \\) ","all"]
+      ["\\s*\\)\\s*\\:\\s*","all"],
+      ["\\s*\\)\\s*","all"]
     ],
     "cor":"condicionais"
   },
   "recebeDeclaraListas":{
     "comando":[
-      [" recebe ","pt-br"],
-      [" com ","pt-br"],
-      [" recibir ","es"],
+      [" is worth ","en-us"],
       [" receive ","en-us"],
-      [" is worth ","en-us"]
+      [" recebe ","pt-br"],
+      [" recibir ","es"],
+      [" com ","pt-br"]
     ],
     "cor":"lista"
   },
@@ -1024,22 +1015,16 @@
     "comando":[
       [" na lista de ","pt-br"],
       [" da lista de ","pt-br"],
+      [" in list of ","en-us"],
       [" a lista de ","pt-br"],
       [" na lista ","pt-br"],
-      [" a lista ","pt-br"],
-      [" in list of ","en-us"]
+      [" a lista ","pt-br"]
     ],
     "cor":"lista"
   },
   "addItensListaInternoPosicaoFinaliza":{
     "comando":[
       [" da lista de ","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "addItensListaInternoPosicao":{
-    "comando":[
-      [" na posicao ","pt-br"]
     ],
     "cor":"lista"
   },
@@ -1095,8 +1080,8 @@
    "se_der_erro":{
     "comando":[
       ["se der erro","pt-br"],
-      ["except","en-us"],
-      ["si sale mal","es"]
+      ["si sale mal","es"],
+      ["except","en-us"]
     ],
     "cor":"condicionais"
   },
@@ -1111,9 +1096,9 @@
    "em_qualquer_caso":{
     "comando":[
       ["em qualquer caso","pt-br"],
+      ["in any case","en-us"],
       ["finalmente","pt-br"],
-      ["finally","en-us"],
-      ["in any case","en-us"]
+      ["finally","en-us"]
     ],
     "cor":"condicionais"
   }

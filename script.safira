@@ -1,1 +1,14 @@
-show the current directory
+if the "/home" directory exists then {
+    print "oila"
+}
+
+pare
+
+
+def calculaMedia (nota1, nota2) {
+    println (nota1 + nota2) / 2
+}
+
+calculaMedia ( 10, 7 )
+
+
