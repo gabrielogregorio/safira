@@ -1,14 +1,29 @@
-if the "/home" directory exists then {
-    print "oila"
+def para_minusculo2 (texto) {
+    return texto to upper
 }
 
-pare
+p = para_minusculo2("GaBRiEL")
+print p
 
 
-def calculaMedia (nota1, nota2) {
-    println (nota1 + nota2) / 2
+retorne 0
+
+
+crie o arquivo "ola_mundo/"
+
+
+Se o que o usuario digitar for igual a "safira" entao {
+     mostre "Esse é um nome legal"
 }
 
-calculaMedia ( 10, 7 )
+If  user digits is equal to  "sapphire" then {
+     show "This is a nice name"
+}
 
+si el usuario escribe es igual a "zafiro" {
+       muestra "Este es un buen nombre"
+}
 
+if input == "sapphire" {
+    println "naturalness"
+}

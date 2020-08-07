@@ -349,7 +349,14 @@
     ],
     "cor":"contas"
   },
-  "interrompa":{
+  "retorne":{
+    "comando":[
+      ["retorne ","pt-br"],
+      ["return ","en-us"],
+      ["volver ","es"]
+    ],
+    "cor":"contas"
+  },  "interrompa":{
     "comando":[
       ["interrupt","en-us"],
       ["interrompa","pt-br"],
@@ -760,10 +767,25 @@
   },
   "mostre":{
     "comando":[
-        ["mostre ","pt-br"],
+        ["exiba na tela","pt-br"],
+        ["mostre na tela ","pt-br"],
+        ["imprima na tela","pt-br"],
+        ["escreva na tela","pt-br"],
+
+        ["display on the screen ", "en-us"],
+        ["show on the screen ", "en-us"],
+        ["print on the screen ", "en-us"],
+        ["write on the screen ", "en-us"],
+
+        ["mostrar en la pantalla ", "es"],
+        ["mostrar en la pantalla ", "es"],
+        ["imprimir en la pantalla ", "es"],
+        ["escribe en la pantalla ", "es"],
+
+        ["escreval ","pt-br"],
         ["imprima ","pt-br"],
         ["escreva ","pt-br"],
-        ["escreval ","pt-br"],
+        ["mostre ","pt-br"],
         ["exiba ","pt-br"],
 
         ["show "],
@@ -771,7 +793,8 @@
         ["printf ","en-us"],
         ["println ","en-us"],
 
-        ["mostrar  ","es"],
+        ["mostrar ","es"],
+        ["muestra ","es"],
         ["escribe ","es"],
         ["imprimir ","es"]
 
@@ -855,39 +878,39 @@
   "digitado":{
     "comando":[
       ["o numero que o usuario digitar","pt-br"],
-      ["o numero que for digitado","pt-br"],
+      ["the number that the user enters","en-us"],
+      ["el numero que ingresa el usuario","es"],
       ["numero que o usuario digitar","pt-br"],
-      ["numero que for digitado","pt-br"],
+      ["numero que escribe el usuario","es"],
+      ["number that the user types","en-us"],
+      ["the number that is entered","en-us"],
+      ["o numero que for digitado","pt-br"],
+      ["lo que sea que esté escrito","es"],
       ["o que o usuario digitar","pt-br"],
-      ["o que for digitado","pt-br"],
+      ["numero que for digitado","pt-br"],
+      ["lo que escribe el usuario","es"],
+      ["el numero que se ingresa","es"],
       ["que o usuario digitar","pt-br"],
+      ["number that is typed","en-us"],
+      ["numero que está escrito","es"],
+      ["what the user types","en-us"],
+      ["o que for digitado","pt-br"],
+      ["el usuario a escribir","es"],
+      ["whatever is typed","en-us"],
+      ["the user to type","en-us"],
       ["que for digitado","pt-br"],
       ["numero digitado","pt-br"],
-      ["digitado","pt-br"],
-      ["entrada","pt-br"],
-
-
-      ["el numero que ingresa el usuario","es"],
-      ["numero que escribe el usuario","es"],
-      ["el numero que se ingresa","es"],
-      ["numero que está escrito","es"],
-      ["lo que escribe el usuario","es"],
-      ["el usuario a escribir","es"],
-      ["lo que sea que esté escrito","es"],
+      ["el usuario escribe","es"],
+      ["eso está escrito","es"],
+      ["that is typed","en-us"],
+      ["typed number","en-us"],
       ["eso está escrito","es"],
       ["numero escrito","es"],
       ["mecanografiado","es"],
-
+      ["user digits","en-us"],
+      ["digitado","pt-br"],
+      ["entrada","pt-br"],
       ["input","en-us"],
-      ["the number that the user enters","en-us"],
-      ["number that the user types","en-us"],
-      ["the number that is entered","en-us"],
-      ["number that is typed","en-us"],
-      ["what the user types","en-us"],
-      ["the user to type","en-us"],
-      ["whatever is typed","en-us"],
-      ["that is typed","en-us"],
-      ["typed number","en-us"],
       ["typed","en-us"]
     ],
     "cor":"tempo"
@@ -965,6 +988,7 @@
       [" recibe parametros ","es"],
       [" receives ","en-us"],
       [" receive ","en-us"],
+      [" recibe ","es"],
       [" recebe ","pt-br"]
     ],
     "cor":"condicionais"
@@ -1101,5 +1125,37 @@
       ["finally","en-us"]
     ],
     "cor":"condicionais"
+  },
+
+  "crie_um_diretorio":{
+    "comando":[
+      ["crie uma pasta com o nome de ", "pt-br"],
+      ["crie um diretorio com o nome ", "pt-br"],
+      ["crie um diretorio chamado ", "pt-br"],
+      ["crie uma pasta com o nome ", "pt-br"],
+      ["crie uma pasta chamada ", "pt-br"],
+      ["create a folder called ", "en-us"],
+      ["create a folder named ", "en-us"],
+      ["crear un directorio ", "es"],
+      ["criar um diretorio ", "pt-br"],
+      ["crear una carpeta ", "es"],
+      ["crie o diretorio ", "pt-br"],
+      ["crie uma pasta ", "pt-br"],
+      ["crie a pasta ", "pt-br"],
+      ["create the ", "en-us"],
+      ["create a ", "en-us"]
+      
+          ],
+    "cor":"lista"
+  },
+  "crie_um_diretorio_sub":{
+    "comando":[
+      [" directory","en-us"],
+      [" folder","en-us"],
+      ["","all"]
+    ],
+    "cor":"lista"
   }
 }
+
+

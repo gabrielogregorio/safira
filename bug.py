@@ -4,7 +4,7 @@ from tkinter               import Toplevel
 from tkinter               import Label
 from tkinter               import Frame
 from tkinter               import Button
-from tkinter import FLAT, NSEW
+from tkinter               import FLAT, NSEW
 from tkinter               import PhotoImage
 
 

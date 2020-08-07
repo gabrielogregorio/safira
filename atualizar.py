@@ -5,19 +5,19 @@ from tkinter import Message
 from tkinter import Label
 from tkinter import FLAT, NSEW
 from threading import Thread
-import webbrowser
 from tkinter import messagebox
+import webbrowser
 import requests
 
 VERSAO_ATUAL = {"versao":0.25}
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma):
-        self.idioma = idioma
         self.interface_idioma = interface_idioma
-        self.tela = tela
         self.tp_atualizacao = None
-        self.design =design
+        self.idioma = idioma
+        self.design = design
+        self.tela = tela
 
     def obter_versao_mais_recente_dev(self):
         resposta = requests.get("https://safiralang.blogspot.com/p/downloads.html")

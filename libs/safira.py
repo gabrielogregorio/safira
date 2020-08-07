@@ -27,7 +27,6 @@ class Console:
         self.bool_ignorar_todos_breakpoints = BOOL_IGNORAR_TODOS_BREAKPOINTS
 
 
-
     def clear(self): 
         if name == 'nt': 
             system('cls') 
