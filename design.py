@@ -9,7 +9,8 @@ class Design():
         return carregar_json("configuracoes/configuracoes.json")["tema"]
 
     def update_design_dic(self):
-        self.dic = carregar_json("temas/{}".format(Design.__get_sett_file(self)))
+        texto_json = "temas/{}".format(Design.__get_sett_file(self))
+        self.dic = carregar_json(texto_json)
 
     def get_design_dic(self):
         return self.dic

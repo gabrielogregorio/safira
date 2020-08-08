@@ -1,54 +1,67 @@
 ## Documentação da Safira
-Versão da documentação: 04/07/2020
-Versão da Safira: 0.25
+
+Versão da documentação: 04/07/2020  
+Versão da Safira: 0.25   
 Idioma: Português-Brasil
 
 _________
 
-# Introução
-A Safira é uma linguagem de programação focada na naturalidade, na prática, você consegue programar usando palavras como se estivesse conversando com outra pessoa. Isso não significa que tudo precisa ser natural, a safira também entede comandos mais diretos.
+# Introdução
 
-# palavras que você pode achar estranho
-Programa - É o Texto que você escreveu, são suas ordens ao computador
-Script - É um arquivo com o programa que vocẽ escreveu. Normalmente eles terminal com ".safira"
-Algoritimo: É o programa que você escreveu, ou mais especificamente, a sua solução
+A Safira é uma linguagem de programação focada na naturalidade, na prática, você consegue programar usando palavras como se estivesse conversando com outra pessoa. A Safira também consegue trabalhar em um nível mais direto.
 
-_________
-Esta é a cara da Safira:
+## Palavras Interessantes  
+* **Programa: ** É o Texto que você escreveu, são suas ordens ao computador
+* **Script: ** É um arquivo com o programa que vocẽ escreveu. Normalmente eles terminal com ".safira"
+* **Algorítimo: **: É o programa que você escreveu, ou mais especificamente, a sua solução
 
-# Interface
-Parte Superior
+-----
 
-### Arquivo
-###### Abrir Arquivo
+### Menu Arquivo    
+###### Abrir Arquivo    
 Abre um script safira, você pode informar 
-###### Nova Aba
+
+###### Nova Aba  
 Abre uma nova Aba para você escrever outro código safira
-###### Salvar
+
+###### Salvar  
 Salva suas modificações no Script
-###### Salvar Como
+
+###### Salvar Como  
 Salva o script com um novo nome, como uma cópia
 
-### Executar
-###### Executar Tudo
+-------------
+
+### Menu Executar  
+###### Executar Tudo  
 Inicia e executa o código Safira até o final sem paradas
-###### Executar Linha por Linha
+
+###### Executar Linha por Linha  
 Inicia e executa linha por linha da safira, parando a cada linha que é executada e você autoriza a safira a executar a proxima linha
-###### Executar Até BreakPoint
+
+###### Executar Até BreakPoint  
 Inicia e Executa até um ponto de parada (breakpoint)
-###### Inserir BreakPoint
+
+###### Inserir BreakPoint  
 Insere um ponto de parada, se a safira for executa no modo Executar até breakpoint, a safira irá executar o código até essa linha, parando nela.
 
 > Aviso: A Safira não lê linhas que contém apenas comentários.
 
-### Exemplos
-    Contém vários exemplos de código em Safira, você 
-    
-### Interface
-###### Temas
-> Contem Cores diferntes para a interface
-###### Interface
-> Contem cores 
+---------------
 
-Ajuda Sobre
+### Exemplos  
+Contém vários exemplos de código em Safira, você 
+
+---------------
+    
+### Interface   
+###### Temas  
+Contem Cores diferntes para a interface
+
+###### Interface  
+Contem cores 
+
+---------
+
+### Ajuda Sobre  
 

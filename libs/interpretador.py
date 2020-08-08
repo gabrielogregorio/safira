@@ -6,18 +6,18 @@ __description__ = 'Interpretador de comandos'
 __status__      = 'Desenvolvimento'
 __version__     = '0.2'
 
-
 import threading
 import os.path
 import os
 from tkinter import END
 from random  import randint
-from time    import sleep
-from time    import time
-from json    import load
-from re      import findall
-from re      import finditer
+from time import sleep
+from time import time
+from json import load
+from re import findall
+from re import finditer
 import shutil
+
 
 try:
     import libs.funcoes as funcoes
@@ -30,45 +30,72 @@ except:
 from os      import system
 
 
-        
-
-
 class Interpretador():
     def __init__(self, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos, idioma):
         self.boo_orquestrador_iniciado = False
-        self.aconteceu_erro = False # Avisa que aconteceu um erro, para quebrar todos os loops
-        self.erro_alertado = False # Avisa que os erros já foram alertados
-        self.ignorar_erros = False # Marca que não é para ignorar erros
 
-        self.linha_que_deu_erro = None # linha que deu o erro
-        self.texto_digitado = None # Captura algo que será digitado pelo usuário
+        # Avisa que aconteceu um erro, para quebrar todos os loops
+        self.aconteceu_erro = False
+
+        # Avisa que os erros já foram alertados
+        self.erro_alertado = False
+
+        # Marca que não é para ignorar erros
+        self.ignorar_erros = False
+
+        # linha que deu o erro
+        self.linha_que_deu_erro = None
+
+        # Captura algo que será digitado pelo usuário
+        self.texto_digitado = None
 
         self.rgx_padrao_variavel = '[a-zA-Z0-9\\_]*'
         self.num_linha = "0"
-        self.idioma = idioma # Idioma padrão
 
-        self.controle_interpretador = "" # retorna intruções para para uma terminal
-        self.dir_script_aju_erro = "" # Script para dar dica sobre o erro
-        self.mensagem_erro = ""  # Erro que estorou
+        # Idioma padrão
+        self.idioma = idioma
 
-        self.dic_variaveis = {} # Variáveis
-        self.dic_funcoes = {} # Funções
+        # retorna intruções para para uma terminal
+        self.controle_interpretador = ""
 
-        self.numero_threads_ativos = 0 # Número de vezes que o orquestrador foi chamado
+        # Script para dar dica sobre o erro
+        self.dir_script_aju_erro = ""
 
-        self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints # Ignorar todos os breakpoints
-        self.lst_breakpoints = lst_breakpoints # Lista com os pontos de breakpoints
-        self.diretorio_base = diretorio_base # Diretório que o script está
-        self.dic_comandos = dic_comandos # Analisar os comandos
-        self.bool_logs = bool_logs # Rastrear os logs
-        self.dicLetras = dicLetras # Letras iniciais de cada tipo de comando, para otimização
+        # Erro que estorou
+        self.mensagem_erro = ""
+
+        # Variáveis
+        self.dic_variaveis = {}
+
+        # Funções
+        self.dic_funcoes = {}
+
+        # Número de vezes que o orquestrador foi chamado
+        self.numero_threads_ativos = 0
+
+        # Ignorar todos os breakpoints
+        self.bool_ignorar_todos_breakpoints = bool_ignorar_todos_breakpoints
+
+        # Lista com os pontos de breakpoints
+        self.lst_breakpoints = lst_breakpoints
+
+        # Diretório que o script está
+        self.diretorio_base = diretorio_base
+
+        # Analisar os comandos
+        self.dic_comandos = dic_comandos
+
+        # Rastrear os logs
+        self.bool_logs = bool_logs
+
+        # Letras iniciais de cada tipo de comando, para otimização
+        self.dicLetras = dicLetras
 
         self.inicio = time()
 
         self.msg_inst = Mensagens(self.idioma)
         chave = ""
         self.msg = lambda acesso=chave: self.msg_inst.text(acesso)
-
 
     def analisa_inicio_codigo(self, linha):
         linha = linha.strip()
@@ -81,9 +108,8 @@ class Interpretador():
 
         return num_linha
 
-
     def cortar_comentarios(self, codigo):
-        lista= codigo.split('\n')
+        lista = codigo.split('\n')
 
         string = ""
         for linha in lista:
@@ -145,7 +171,6 @@ class Interpretador():
 
         while self.controle_interpretador != "":
             sleep(0.0001)
-
 
     def log(self, msg_log):
         if self.bool_logs:
@@ -2196,15 +2221,21 @@ class Interpretador():
         teste_valorI =Interpretador.abstrair_valor_linha(self, inicio)
         teste_valorF =Interpretador.abstrair_valor_linha(self, fim)
 
-        if teste_valorI[0] == False: return teste_valorI
-        if teste_valorF[0] == False: return teste_valorF
+        if teste_valorI[0] == False:
+            return teste_valorI
 
-        if teste_valorI[2] != 'float': return Interpretador.msg_variavel_numerica(self, 'naoNumerico', teste_valorI[1])
-        if teste_valorF[2] != 'float': return Interpretador.msg_variavel_numerica(self, 'naoNumerico', teste_valorF[1])
+        if teste_valorF[0] == False:
+            return teste_valorF
+
+        if teste_valorI[2] != 'float':
+            return Interpretador.msg_variavel_numerica(self, 'naoNumerico', teste_valorI[1])
+
+        if teste_valorF[2] != 'float':
+            return Interpretador.msg_variavel_numerica(self, 'naoNumerico', teste_valorF[1])
 
         # Variável não existe
         if teste_exist[0] == False:
-            criar_variavel =Interpretador.funcao_realizar_atribu(self, variavel, '0')
+            criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel, '0')
 
             if not criar_variavel[0]:
                 return criar_variavel
@@ -2220,15 +2251,20 @@ class Interpretador():
         Interpretador.log(self, "__funcao_add_lst_na_posi")
 
         if variavelLista == '' or posicao == '' or valor == '':  # Veio sem dados
-            return [False,self.msg('add_lst_posicao_separador'), 'string', ' exibirNaTela']
+            return [False, self.msg('add_lst_posicao_separador'), 'string', ' exibirNaTela']
 
         teste_exist =Interpretador.obter_valor_variavel(self, variavelLista)
         teste_posic =Interpretador.abstrair_valor_linha(self, posicao)
         teste_valor =Interpretador.abstrair_valor_linha(self, valor)
 
-        if not teste_exist[0]: return teste_exist
-        if not teste_posic[0]: return teste_posic
-        if not teste_valor[0]: return teste_valor
+        if not teste_exist[0]:
+            return teste_exist
+
+        if not teste_posic[0]:
+            return teste_posic
+        
+        if not teste_valor[0]:
+            return teste_valor
 
         if teste_exist[2] != 'lista':
             return [False, '{} {}'.format(variavelLista,self.msg("nao_e_lista")), 'string']
@@ -2250,13 +2286,12 @@ class Interpretador():
         self.dic_variaveis[variavelLista][0][posicao - 1] = [ teste_valor[1], teste_valor[2] ]
         return [True, True, 'booleano', 'fazerNada']
 
-
     def funcao_obter_valor_lst(self, variavel, posicao):
         Interpretador.log(self, "__funcao_obter_valor_lst")
 
         Interpretador.log(self, '<funcao_obter_valor_lst>:')
         if variavel == '' or posicao == '':
-            return [False,self.msg("variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
+            return [False, self.msg("variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
         teste_posicao = Interpretador.abstrair_valor_linha(self, posicao)
         teste_variavel = Interpretador.obter_valor_lista(self, variavel)
@@ -2274,10 +2309,10 @@ class Interpretador():
         resultado = teste_variavel[1]
 
         if posicao < 1:
-            return [False,self.msg("posicao_menor_limite_lista"), 'exibirNaTela']
+            return [False, self.msg("posicao_menor_limite_lista"), 'exibirNaTela']
 
         if len(resultado) < posicao:
-            return [False,self.msg("posicao_maior_limite_lista"), 'exibirNaTela']
+            return [False, self.msg("posicao_maior_limite_lista"), 'exibirNaTela']
 
         return [True, resultado[posicao - 1][0], resultado[posicao - 1][1], 'exibirNaTela']
 
@@ -2285,7 +2320,7 @@ class Interpretador():
         Interpretador.log(self, "__funcao_tiver_valor_lst")
 
         if variavel == '' or valor == '':
-            return [False,self.msg("variavel_valor_nao_informado"), 'exibirNaTela']
+            return [False, self.msg("variavel_valor_nao_informado"), 'exibirNaTela']
 
         teste_variavel =Interpretador.obter_valor_variavel(self, variavel)
         resultado_valor =Interpretador.abstrair_valor_linha(self, valor)
@@ -2301,7 +2336,6 @@ class Interpretador():
 
         if [resultado_valor[1], resultado_valor[2]] in self.dic_variaveis[variavel][0]:
             return [True, True, 'booleano', 'fazerNada']
-
         return [True, False, 'booleano', 'fazerNada']
 
     def funcao_dec_lst_posicoe(self, variavel, posicoes):
@@ -2311,9 +2345,11 @@ class Interpretador():
         teste =Interpretador.analisa_padrao_variavel(self, variavel)
         resultado =Interpretador.abstrair_valor_linha(self, posicoes)
 
-        if not teste[0]: return teste
+        if not teste[0]:
+            return teste
 
-        if not resultado[0]: return resultado
+        if not resultado[0]:
+            return resultado
 
         if resultado[2] != 'float':
             return Interpretador.msg_variavel_numerica(self, 'naoNumerico', resultado[1])
@@ -2336,7 +2372,8 @@ class Interpretador():
         linha = linha.strip()
         linha =Interpretador.abstrair_valor_linha(self, linha)
 
-        if not linha[0]: return [linha[0], linha[1], linha[2], 'exibirNaTela']
+        if not linha[0]:
+            return [linha[0], linha[1], linha[2], 'exibirNaTela']
 
         if linha[2] != 'float':
             return Interpretador.msg_variavel_numerica(self, 'naoNumerico', linha[1])
@@ -2362,21 +2399,21 @@ class Interpretador():
         try:
             int(num1[1])
         except:
-            return [False,self.msg("aleatorio_valor1_nao_numerico"), 'string', 'exibirNaTela']
+            return [False, self.msg("aleatorio_valor1_nao_numerico"), 'string', 'exibirNaTela']
 
         try:
             int(num2[1])
         except:
-            return [False,self.msg("aleatorio_valor2_nao_numerico"), 'string', 'exibirNaTela']
+            return [False, self.msg("aleatorio_valor2_nao_numerico"), 'string', 'exibirNaTela']
 
         n1 = int(num1[1])
         n2 = int(num2[1])
 
         if n1 == n2:
-            return [False,self.msg("aleatorio_valor1_igual_valo2"), 'string', 'exibirNaTela']
+            return [False, self.msg("aleatorio_valor1_igual_valo2"), 'string', 'exibirNaTela']
 
         elif n1 > n2:
-            return [False,self.msg("aleatorio_valor1_maior_valo2"), 'string', 'exibirNaTela']
+            return [False, self.msg("aleatorio_valor1_maior_valo2"), 'string', 'exibirNaTela']
 
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
@@ -2572,7 +2609,7 @@ class Interpretador():
             return [True, None, 'vazio', 'fazerNada']
 
         # Não tem multiplos parâmetros
-        testa =Interpretador.verifica_se_tem(self, parametros, ',')
+        testa = Interpretador.verifica_se_tem(self, parametros, ',')
         if testa != []:
             anterior = 0
             listaParametros = []
@@ -2619,10 +2656,9 @@ class Interpretador():
 
                 if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
             else:
-                 return [False,self.msg("funcao_passou_um_parametros").format(nomeDaFuncao, len(
-                    self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
+                 return [False,self.msg("funcao_passou_um_parametros").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
-        resultadoOrquestrador =Interpretador.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+        resultadoOrquestrador = Interpretador.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
         if not resultadoOrquestrador[0]:
             return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
@@ -2643,7 +2679,6 @@ class Interpretador():
         
     def funcao_testar_condicao(self, linha):
         Interpretador.log(self, "__funcao_testar_condicao")
-
 
         linha = Interpretador.filtrar_comando(self, linha, "logico_maior_igual", ' >= ')
         linha = Interpretador.filtrar_comando(self, linha, "logico_menor_igual", ' <= ')
@@ -2674,7 +2709,6 @@ class Interpretador():
         linha = linha.replace('< =', '<=')
         linha = linha.replace('! =', '!=')
 
-
         linha = linha.replace('   tiver   ', ' tiver ')
 
         linha = linha.strip()
@@ -2695,9 +2729,10 @@ class Interpretador():
         for item in finditer("_\\._[^_]*_\\._", linha):
 
             # Abstrai um valor qual
-            resultado =Interpretador.abstrair_valor_linha(self, linha[anterior:item.start()])
+            resultado = Interpretador.abstrair_valor_linha(self, linha[anterior:item.start()])
 
-            if resultado[0] == False: return resultado
+            if resultado[0] is False:
+                return resultado
 
             saida = resultado[1]
 
@@ -2712,7 +2747,8 @@ class Interpretador():
         boolTemTiverLista = False
         resultado =Interpretador.tiver_valor_lista(self, linha[anterior:].strip())
 
-        if not resultado[0]: return resultado
+        if not resultado[0]:
+            return resultado
 
         if resultado[2] == 'booleano':
 
@@ -2727,7 +2763,8 @@ class Interpretador():
         if not boolTemTiverLista:
 
             resultado =Interpretador.abstrair_valor_linha(self, linha[anterior:])
-            if not resultado[0]: return resultado
+            if not resultado[0]:
+                return resultado
 
             saida = resultado[1]
             if resultado[2] == 'string':

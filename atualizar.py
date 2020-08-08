@@ -9,7 +9,9 @@ from tkinter import messagebox
 import webbrowser
 import requests
 
-VERSAO_ATUAL = {"versao":0.25}
+
+VERSAO_ATUAL = {"versao": 0.25}
+
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma):
@@ -25,12 +27,12 @@ class Atualizar():
 
         lista = texto.split('id="idenficador_de_versao">')
 
-        temporario = lista[1][0:70] # 0.2</span>
-        temporario2 = temporario.split("</span>") # 0.2
+        temporario = lista[1][0:70]
+        temporario2 = temporario.split("</span>")
 
         return float(temporario2[0].strip())
 
-    def verificar_versao(self, primeira_vez = False):
+    def verificar_versao(self, primeira_vez=False):
         try:
             if 1 == 1:
                 baixada = VERSAO_ATUAL
@@ -50,7 +52,7 @@ class Atualizar():
         return True
 
     def abrir_site(self, link):
-        t = Thread(target=lambda event=None: webbrowser.open( link ))
+        t = Thread(target=lambda event=None: webbrowser.open(link))
         t.start()
 
         self.tp_atualizacao.destroy()
@@ -66,7 +68,7 @@ class Atualizar():
 
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
 
-        j_width  = self.tp_atualizacao.winfo_reqwidth()
+        j_width = self.tp_atualizacao.winfo_reqwidth()
         j_height = self.tp_atualizacao.winfo_reqheight()
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
@@ -88,14 +90,14 @@ class Atualizar():
         bt_cancela.configure(self.design.dic["aviso_versao_btn_cancela"], relief=FLAT)
         bt_atualiza.configure(self.design.dic["aviso_versao_btn_atualiza"], relief=FLAT)
 
-        bt_atualiza.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/p/downloads.html") )
-        bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
+        bt_atualiza.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/p/downloads.html"))
+        bt_cancela.configure(command=lambda event=None: self.tp_atualizacao.destroy())
 
         fr_atualizaca.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(2, weight=1)
         fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
-        lb_versao_dev.grid(row=1, column=1 )
+        lb_versao_dev.grid(row=1, column=1)
         lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
         fr_botoes.grid(row=3, column=1, sticky=NSEW)
         bt_cancela.grid(row=1, column=1)
@@ -114,10 +116,10 @@ class Atualizar():
             self.tp_atualizacao.wm_attributes('-type', 'splash')
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
-            
+
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
 
-        j_width  = self.tp_atualizacao.winfo_reqwidth()
+        j_width = self.tp_atualizacao.winfo_reqwidth()
         j_height = self.tp_atualizacao.winfo_reqheight()
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
@@ -126,15 +128,15 @@ class Atualizar():
 
         fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["atualizado_versao_ultima"][self.idioma])
-        lb_versao_tex = Message(fr_atualizaca,self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(baixada["versao"]), relief=FLAT)
+        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(baixada["versao"]), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        
+
         bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["texto_nao_quero"][self.idioma])
         bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=FLAT)
         bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text=self.interface_idioma["atualizado_blog"][self.idioma], relief=FLAT)
-        bt_cancela.configure(command = lambda event=None: self.tp_atualizacao.destroy() )
-        bt_facebook.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiralang/") )
-        bt_blogger_.configure(command = lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/") )
+        bt_cancela.configure(command=lambda event=None: self.tp_atualizacao.destroy())
+        bt_facebook.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiralang/"))
+        bt_blogger_.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/"))
 
         fr_atualizaca.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(1, weight=1)
@@ -142,13 +144,13 @@ class Atualizar():
         fr_botoes.grid_columnconfigure(3, weight=1)
 
         fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
-        lb_versao_dev.grid(row=1, column=1 )
+        lb_versao_dev.grid(row=1, column=1)
         lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
         fr_botoes.grid(row=3, column=1, sticky=NSEW)
         bt_cancela.grid(row=1, column=1)
         bt_facebook.grid(row=1, column=2)
         bt_blogger_.grid(row=1, column=3)
 
-        self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2 )-int(j_height/2)))
+        self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
         self.tp_atualizacao.deiconify()
         self.tp_atualizacao.update()

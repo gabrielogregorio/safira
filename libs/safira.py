@@ -1,6 +1,6 @@
 #!/usr/bin/python3.8
 
-from time import sleep 
+from time import sleep
 from threading import Thread
 from os import system, name, path
 import sys
@@ -8,12 +8,14 @@ from interpretador import Interpretador
 import funcoes as funcoes
 import os
 
+
 LST_BREAKPOINTS = []
 BOOL_IGNORAR_TODOS_BREAKPOINTS = True
 ESPERAR_PRESSIONAR_ENTER = False
 
+
 class Console:
-    def __init__(self, bool_logs ,idioma):
+    def __init__(self, bool_logs, idioma):
         self.bool_logs = bool_logs
         self.diretorio_base = os.getcwd() + "/"
         self.dicLetras = {}
@@ -26,16 +28,13 @@ class Console:
         self.lst_breakpoints = LST_BREAKPOINTS
         self.bool_ignorar_todos_breakpoints = BOOL_IGNORAR_TODOS_BREAKPOINTS
 
-
-    def clear(self): 
-        if name == 'nt': 
-            system('cls') 
-    
-        else: 
-            system('clear') 
+    def clear(self):
+        if name == 'nt':
+            system('cls')
+        else:
+            system('clear')
 
     def gerar_dicionario_letras(self):
-
         self.dicLetras = {}
         for k, v in self.dic_comandos.items():
             self.dicLetras[k] = []
@@ -48,16 +47,15 @@ class Console:
                     valor = valor.lower()
 
                     if valor[0] not in self.dicLetras[k]:
-                        self.dicLetras[k].append(  valor[0] )
+                        self.dicLetras[k].append(valor[0])
 
     def marcar_linhas(self, linhas):
         # Marcando as linhas com um número, [numero da linha]
         lista = linhas.split('\n')
         nova_linha = ''
         for linha in range(len(lista)):
-            nova_linha += '[{}]{}\n'.format( str(linha + 1), lista[linha] )
+            nova_linha += '[{}]{}\n'.format(str(linha+1), lista[linha])
         return nova_linha
-
 
     def iniciar(self, linhas, tx_terminal=None):
         self.tx_terminal = tx_terminal
@@ -74,18 +72,22 @@ class Console:
         nova_linha = self.instancia.cortar_comentarios(nova_linha)
 
         # Inicia o interpretador
-        t = Thread(target=lambda codigoPrograma = nova_linha: self.instancia.orquestrador_interpretador_(codigoPrograma))
+        t = Thread(target=lambda codigoPrograma=nova_linha: self.instancia.orquestrador_interpretador_(codigoPrograma))
         t.start()
 
         # Executa as intruções do interpretador
         # Enquanto não finalizar ou o interpretador não ser iniciado
         while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
-
                 # Se existir uma interface gráfica
                 if tx_terminal is not None:
-                    self.tela.update() # Tela principal
-                    self.tx_editor_codigo.update() # Editor
-                    self.tx_terminal.update() # console
+                    # Tela principal
+                    self.tela.update()
+
+                    # Editor
+                    self.tx_editor_codigo.update()
+
+                    # console
+                    self.tx_terminal.update()
 
                 # Obtem uma instrução do interpretador
                 acao = self.instancia.controle_interpretador
@@ -93,22 +95,22 @@ class Console:
                 if acao != "":
                     # exibição na tela
                     if acao.startswith(':nessaLinha:'):
-                        
+
                         # Exibir mensagem ou mostrar no terminal
                         if self.tx_terminal is None:
-                            print(acao[len(':nessaLinha:') : ], end="")
+                            print(acao[len(':nessaLinha:'):], end="")
                         else:
-                            self.tx_terminal.insert(END, acao[len(':nessaLinha:') : ])
-                        
+                            self.tx_terminal.insert(END, acao[len(':nessaLinha:'):])
+
                         self.instancia.controle_interpretador = ""
 
                     elif acao.startswith(':mostreLinha:'):
 
                         # Exibir mensagem ou mostrar no terminal
                         if self.tx_terminal is None:
-                            print(acao[len(':mostreLinha:') : ])
+                            print(acao[len(':mostreLinha:'):])
                         else:
-                            self.tx_terminal.insert(END, acao[len(':mostreLinha:') : ] + '\n')
+                            self.tx_terminal.insert(END, acao[len(':mostreLinha:'):]+'\n')
 
                         self.instancia.controle_interpretador = ""
 
@@ -131,7 +133,7 @@ class Console:
                                 self.tx_editor_codigo.update()
                                 self.tela.update()
 
-                             # Salva tamanho do novo texto
+                            # Salva tamanho do novo texto
                             digitado = self.tx_terminal.get(1.0, END)
 
                             # Corta o texto antigo
@@ -140,7 +142,7 @@ class Console:
                             # Sinaliza que o enter já foi pressionado
                             self.esperar_pressionar_enter = False
 
-                        # Atualiza o o interpretador com o texto                
+                        # Atualiza o o interpretador com o texto
                         self.instancia.texto_digitado = digitado.replace("\n", "")
 
                         # Atualiza o interpretador para continuar
@@ -191,13 +193,12 @@ class Console:
 
             else:
                 # Se o erro foi avisado
-                if self.instancia.erro_alertado == True:
+                if self.instancia.erro_alertado is True:
                     if self.instancia.mensagem_erro != "Interrompido":
                         if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
                             Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
 
         del self.instancia
-
 
 bool_logs = False
 idioma = "pt-br"
@@ -206,7 +207,5 @@ a = open(sys.argv[1], 'r')
 t = a.read()
 a.close()
 
-
 i = Console(bool_logs, idioma)
 i.iniciar(t)
-

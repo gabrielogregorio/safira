@@ -1,13 +1,16 @@
-from json    import load
+from json import load
+
 
 class Mensagens:
     def __init__(self, idioma):
         self.idioma = idioma
+        json_link = "mensagens.json"
+
         try:
-            with open('libs/mensagens.json', encoding='utf8') as json_file:
+            with open('libs/'.format(json_link), encoding='utf8') as json_file:
                 self.mensagens = load(json_file)
         except:
-            with open('mensagens.json', encoding='utf8') as json_file:
+            with open(json_link, encoding='utf8') as json_file:
                 self.mensagens = load(json_file)
 
     def text(self, chave):

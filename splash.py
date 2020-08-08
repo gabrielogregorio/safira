@@ -16,7 +16,7 @@ class Splash():
     def splash_inicio(self):
         self.frame_splash = Frame(self.tela)
 
-        self.frame_splash.configure(background = self.design.dic["cor_intro"]["background"])
+        self.frame_splash.configure(background=self.design.dic["cor_intro"]["background"])
         self.frame_splash.rowconfigure(1, weight=1)
         self.frame_splash.grid_columnconfigure(0, weight=1)
 
@@ -24,8 +24,8 @@ class Splash():
         self.l1_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
         self.l2_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
 
-        self.fr_splash.configure(background = self.design.dic["cor_intro"]["background"])
-        self.l1_splash.configure(text=" COMBRATEC ", font=( "Lucida Sans", 90), bd=80)
+        self.fr_splash.configure(background=self.design.dic["cor_intro"]["background"])
+        self.l1_splash.configure(text=" COMBRATEC ", font=("Lucida Sans", 90), bd=80)
         self.l2_splash.configure(text="Safira IDE beta 0.3", font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
@@ -37,17 +37,15 @@ class Splash():
         self.tela.update()
         self.tela.withdraw()
 
-        j_width  = self.tela.winfo_reqwidth()
+        j_width = self.tela.winfo_reqwidth()
         j_height = self.tela.winfo_reqheight()
 
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        self.tela.geometry("+{}+{}".format( int(t_width / 2) - int(j_width / 2), int(t_heigth / 2 ) - int (j_height / 2) ))
-
+        self.tela.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
         self.tela.deiconify()
         self.tela.update()
-
 
     def splash_fim(self):
         self.fr_splash.grid_forget()

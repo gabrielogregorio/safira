@@ -1,8 +1,8 @@
 from threading import Thread
-from tkinter   import END
-from copy      import deepcopy
-from re        import finditer
-from time      import time
+from tkinter import END
+from copy import deepcopy
+from re import finditer
+from time import time
 
 
 class Colorir():
@@ -24,13 +24,12 @@ class Colorir():
         self.tx_editor_codigo.tag_add(palavra, linha1, linha2)
         self.tx_editor_codigo.tag_config(palavra, foreground=cor)
 
-
     def __marcar_coloracao(self, regex, lista, linha, palavra, cor):
 
         for valor in finditer(regex, lista[linha]):
 
             inici_regex = valor.start()
-            final_regex  = valor.end()
+            final_regex = valor.end()
 
             usado = cor + str(palavra) + str(regex) + str(inici_regex) + str(final_regex) + str(linha+1)
 
@@ -39,7 +38,6 @@ class Colorir():
 
             if usado not in self.lista_todos_coloracao:
                 self.lista_todos_coloracao.append(usado)
-
 
     def __filtrar_palavras(palavra):
         palavra_comando = palavra.replace('+', '\\+')
@@ -56,28 +54,29 @@ class Colorir():
             texto += linha
         texto = texto.replace(' ', '')
         texto = texto.lower()
-        texto = texto.replace('_','')
+        texto = texto.replace('_', '')
 
         for chave_comando, dicionario_comandos in self.dic_comandos.items():
-            cor = self.cor_do_comando[ dicionario_comandos["cor"] ]["foreground"]
+            cor = self.cor_do_comando[dicionario_comandos["cor"]]["foreground"]
 
             for comando in dicionario_comandos["comando"]:
 
                 palavra_analise = comando[0].strip()
 
-                if palavra_analise == "": continue
+                if palavra_analise == "":
+                    continue
 
                 # Verifica se o comando está no código
-                comando_teste = palavra_analise.replace(' ','')
-                if comando_teste not in texto: continue
+                comando_teste = palavra_analise.replace(' ', '')
+                if comando_teste not in texto:
+                    continue
 
                 palavra_comando = Colorir.__filtrar_palavras(palavra_analise)
-                
+
                 regex = '(^|\\s){}(\\s|$)'.format(palavra_comando)
 
                 for linha in range(len(lista_linhas)):
                     Colorir.__marcar_coloracao(self, regex, lista_linhas, linha, palavra_comando, cor)
-
 
     def __colorir_especial(self, lista):
 
@@ -90,14 +89,13 @@ class Colorir():
 
             cor_comentario = self.cor_do_comando["comentario"]["foreground"]
             cor_numerico = self.cor_do_comando["numerico"]["foreground"]
-            cor_chave = self.cor_do_comando["logico"]["foreground"] 
+            cor_chave = self.cor_do_comando["logico"]["foreground"]
             cor_string = self.cor_do_comando["string"]["foreground"]
 
-            Colorir.__marcar_coloracao(self, regex_numerico,lista,linha,'numerico',cor_numerico)
-            Colorir.__marcar_coloracao(self, regex_chave,lista,linha,'chave',cor_chave)
+            Colorir.__marcar_coloracao(self, regex_numerico, lista, linha, 'numerico', cor_numerico)
+            Colorir.__marcar_coloracao(self, regex_chave, lista, linha, 'chave', cor_chave)
             Colorir.__marcar_coloracao(self, regex_string, lista, linha, '"', cor_string)
             Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
-
 
     def coordena_coloracao(self, event, tx_editor_codigo):
         self.tx_editor_codigo = tx_editor_codigo

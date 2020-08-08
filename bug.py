@@ -1,18 +1,18 @@
-from threading             import Thread
+from threading import Thread
 import webbrowser
-from tkinter               import Toplevel
-from tkinter               import Label
-from tkinter               import Frame
-from tkinter               import Button
-from tkinter               import FLAT, NSEW
-from tkinter               import PhotoImage
+from tkinter import Toplevel
+from tkinter import Label
+from tkinter import Frame
+from tkinter import Button
+from tkinter import FLAT, NSEW
+from tkinter import PhotoImage
 
 
 class Bug():
     def __init__(self, tela, design, idioma, interface_idioma):
         self.idioma = idioma
         self.interface_idioma = interface_idioma
-        self.design =design
+        self.design = design
         self.tela = tela
         self.bt_report = None
         self.image_bug = None
@@ -24,10 +24,13 @@ class Bug():
         self.tp_princi = None
 
     def __acessar_site_reporte(self):
-        self.bt_report.configure(text=self.interface_idioma["abrir_formulario"][self.idioma])
+        website_forms = "https://forms.gle/J4kE2Li8c58fz4hh6"
 
-        t = Thread(target=lambda event=None: webbrowser.open("https://forms.gle/J4kE2Li8c58fz4hh6") )
-        t.start()        
+        self.bt_report.configure(
+            text=self.interface_idioma["abrir_formulario"][self.idioma])
+
+        t = Thread(target=lambda event=None: webbrowser.open(website_forms))
+        t.start()
 
         Bug.__destruir_interface(self)
 
@@ -48,17 +51,25 @@ class Bug():
         self.tp_princi.withdraw()
 
         try:
-            self.tp_princi.wm_attributes('-type','splash')
+            self.tp_princi.wm_attributes('-type', 'splash')
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
-        
+
         print(self.interface_idioma["encontrou_bug"])
         print(self.idioma)
         print(self.interface_idioma["encontrou_bug"][self.idioma])
 
-        self.lb_label1 = Label(self.tp_princi, self.design.dic["lb1_encontrou_bug"],  text=self.interface_idioma["encontrou_bug"][self.idioma])
-        self.lb_label2 = Label(self.tp_princi, self.design.dic["lb2_encontrou_bug"], image = self.image_bug)
-        self.lb_label3 = Label(self.tp_princi, self.design.dic["lb3_encontrou_bug"], text=self.interface_idioma["texto_reportar_bug"][self.idioma])
+        self.lb_label1 = Label(self.tp_princi)
+        self.lb_label2 = Label(self.tp_princi)
+        self.lb_label3 = Label(self.tp_princi)
+
+        self.lb_label1.configure(self.design.dic["lb1_encontrou_bug"])
+        self.lb_label2.configure(self.design.dic["lb2_encontrou_bug"])
+        self.lb_label3.configure(self.design.dic["lb3_encontrou_bug"])
+
+        self.lb_label1.configure(text=self.interface_idioma["encontrou_bug"][self.idioma])
+        self.lb_label2.configure(image=self.image_bug)
+        self.lb_label3.configure(text=self.interface_idioma["texto_reportar_bug"][self.idioma])
 
         self.fr_botoes = Frame(self.tp_princi, self.design.dic["fr_bt_encontrou_bug"])
         self.bt_cancel = Button(self.fr_botoes, self.design.dic["bt_canc_encontrou_bug"], text=self.interface_idioma["texto_depois"][self.idioma], relief=FLAT)
