@@ -55,15 +55,14 @@ class EditorDeCodigo(Text):
         self.tk.createcommand(self._w, self._proxy)
 
     def _proxy(self, *args):
-        #try:
-        if 1 == 1:
-            cmd = (self._orig) + args
+        try:
+            cmd = (self._orig,) + args
             result = self.tk.call(cmd)
 
             if (args[0] in ("insert", "replace", "delete") or args[0:3] == ("mark", "set", "insert") or args[0:2] == ("xview", "moveto") or args[0:2] == ("xview", "scroll") or args[0:2] == ("yview", "moveto") or args[0:2] == ("yview", "scroll")):
                 self.event_generate("<<Change>>", when="tail")
 
             return result
-        #except Exception as erro:
-        #    print("Erro em _proxy: ", erro)
-        #    return ""
+        except Exception as erro:
+            print("Erro em _proxy: ", erro)
+            return ""

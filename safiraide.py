@@ -174,9 +174,9 @@ class Interface():
         self.bt_pesqu = None
         self.bt_idiom = None
         self.fr__abas = None
-        self.bt_play = None
         self.bt_copia = None
         self.bt_colar = None
+        self.bt_play = None
 
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
         self.idioma = self.arquivo_configuracoes['idioma']

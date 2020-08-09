@@ -1,33 +1,31 @@
-__author__      = 'Gabriel Gregório da Silva'
-__email__       = 'gabriel.gregorio.1@outlook.com'
-__project__     = 'Combratec'
-__github__      = 'https://github.com/Combratec/'
-__description__ = 'Interpretador de comandos'
-__status__      = 'Desenvolvimento'
-__version__     = '0.2'
-
 import threading
 import os.path
 import os
 from tkinter import END
-from random  import randint
+from random import randint
 from time import sleep
 from time import time
 from json import load
 from re import findall
 from re import finditer
 import shutil
-
+from os import system
 
 try:
     import libs.funcoes as funcoes
     from libs.mensagens import Mensagens
-
 except:
     import funcoes as funcoes
     from mensagens import Mensagens
 
-from os      import system
+
+__author__ = 'Gabriel Gregório da Silva'
+__email__ = 'gabriel.gregorio.1@outlook.com'
+__project__ = 'Combratec'
+__github__ = 'https://github.com/Combratec/'
+__description__ = 'Interpretador de comandos'
+__status__ = 'Desenvolvimento'
+__version__ = '0.2'
 
 
 class Interpretador():
@@ -115,7 +113,7 @@ class Interpretador():
         for linha in lista:
             bool_iniciou_string = False
             linha = linha.strip()
-            temp= ""
+            temp = ""
 
             for char in range(len(linha)):
 
@@ -182,50 +180,51 @@ class Interpretador():
         Interpretador.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
 
         self.numero_threads_ativos += 1
-        self.boo_orquestrador_iniciado = True # Indica que já está contando os Thread
+        # Indica que já está contando os Thread
+        self.boo_orquestrador_iniciado = True
 
-        int_tamanho_codigo = len(txt_codigo)
+        len_cod = len(txt_codigo)
 
-        bool_execucao_deu_erro_temporario = False
-        bool_achou_comentario_longo = False
-        bool_achou_comentario = False
+        bool_erro_tentar = False
+        bool_coment_longo = False
+        bool_coment_curto = False
         bool_salvar_bloco = False
-        bool_achou_string = False
         bool_ultimo_teste = False
+        bool_string = False
 
         txt_linha_comando = ""
         str_bloco_salvo = ""
-        txt_caractere = ""
+        txt_char = ""
 
         historico_fluxo_de_dados = []
-
         int_profundidade_bloco = 0
-        for num_txt_caractere, txt_caractere in enumerate(txt_codigo):
-            txt_dois_caracteres = txt_codigo[num_txt_caractere : num_txt_caractere + 2]
 
-            if txt_dois_caracteres == '/*' and not bool_achou_string and not bool_achou_comentario:
-                bool_achou_comentario_longo = True
+        for num_txt_char, txt_char in enumerate(txt_codigo):
+            txt_dois_char = txt_codigo[num_txt_char:num_txt_char+2]
+
+            if txt_dois_char == '/*' and not bool_string and not bool_coment_curto:
+                bool_coment_longo = True
                 continue
 
-            if bool_achou_comentario_longo and txt_codigo[num_txt_caractere-2:num_txt_caractere] == '*/':
-                bool_achou_comentario_longo = False
+            if bool_coment_longo and txt_codigo[num_txt_char-2:num_txt_char] == '*/':
+                bool_coment_longo = False
 
-            if bool_achou_comentario_longo:
+            if bool_coment_longo:
                 continue
 
             # Ignorar comentário #
-            if( txt_caractere == '#' or txt_dois_caracteres == '//') and not bool_achou_string:
-                bool_achou_comentario = True
+            if(txt_char == '#' or txt_dois_char == '//') and not bool_string:
+                bool_coment_curto = True
 
-            if bool_achou_comentario and txt_caractere == "\n":
-                bool_achou_comentario = False
+            if bool_coment_curto and txt_char == "\n":
+                bool_coment_curto = False
 
-            elif bool_achou_comentario:
+            elif bool_coment_curto:
                 continue
 
             # Executar o comando de uma linha
             # Se chegar no fim da linha ou iniciar um bloco e um bloco não estiver sendo salvo e nem estiver em uma string
-            if ( txt_caractere == "\n" or txt_caractere == ";" or txt_caractere == "{" and not bool_salvar_bloco and not bool_achou_string ):
+            if (txt_char == "\n" or txt_char == ";" or txt_char == "{" and not bool_salvar_bloco and not bool_string):
 
                 # Se tiver alguma coisa na linha
                 if len(txt_linha_comando.strip()) > 0:
@@ -274,26 +273,26 @@ class Interpretador():
 
                         txt_linha_comando = ""
 
-                        if txt_caractere == "\n" and lst_ultimo_teste[3] == 'fazerNada':
+                        if txt_char == "\n" and lst_ultimo_teste[3] == 'fazerNada':
                             continue
 
             # Quando começar uma string
-            if txt_caractere == '"' and not bool_achou_string and not bool_salvar_bloco:
-                bool_achou_string = True
+            if txt_char == '"' and not bool_string and not bool_salvar_bloco:
+                bool_string = True
 
-            elif txt_caractere == '"' and bool_achou_string and not bool_salvar_bloco:
-                bool_achou_string = False
+            elif txt_char == '"' and bool_string and not bool_salvar_bloco:
+                bool_string = False
 
             # Quando começar um bloco
-            if txt_caractere == "{" and not bool_achou_string:
+            if txt_char == "{" and not bool_string:
                 int_profundidade_bloco += 1
                 bool_salvar_bloco = True
 
-            elif txt_caractere == "}" and not bool_achou_string:
+            elif txt_char == "}" and not bool_string:
                 int_profundidade_bloco -= 1
 
             # Quando finalizar um bloco
-            if txt_caractere == "}" and not bool_achou_string and int_profundidade_bloco == 0:
+            if txt_char == "}" and not bool_string and int_profundidade_bloco == 0:
                 #Interpretador.log(self, '!<Analisa bloco salvo>:"' + str_bloco_salvo + '"')
 
                 bool_salvar_bloco = False
@@ -341,7 +340,6 @@ class Interpretador():
 
                         if lst_ultimo_teste[3] == "retornarOrquestrador":
                             return [True, lst_ultimo_teste[1], lst_ultimo_teste[2], "retornarOrquestrador"]
-
 
                 elif lst_ultimo_teste[3] == "declararLoopRepetir":
                     historico_fluxo_de_dados.append('declararLoopRepetir') # Encaixa Loop
@@ -399,7 +397,6 @@ class Interpretador():
                             self.numero_threads_ativos -= 1
                             return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
 
-
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads_ativos -= 1
@@ -451,7 +448,6 @@ class Interpretador():
                         bool_ultimo_teste == False
 
                 elif lst_ultimo_teste[3] == 'declararSenaoSe':
-
 
                     if len(historico_fluxo_de_dados) == 0:
                         Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "1", "")
@@ -553,10 +549,10 @@ class Interpretador():
                         self.numero_threads_ativos -= 1
                         return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
 
-                    bool_execucao_deu_erro_temporario = False
+                    bool_erro_tentar = False
 
                     if lst_resultado_execucao[0] == False:
-                        bool_execucao_deu_erro_temporario = True
+                        bool_erro_tentar = True
 
                         if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                             self.numero_threads_ativos -= 1
@@ -578,7 +574,7 @@ class Interpretador():
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
                     # Teste deu erro
-                    if bool_execucao_deu_erro_temporario:
+                    if bool_erro_tentar:
                         lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
 
                         if lst_resultado_execucao[3] == "continuarLoop":
@@ -615,7 +611,7 @@ class Interpretador():
                         return [False, self.msg("precisa_def_tente_p_n_der_erro"), 'string', "fazerNada"]
 
                     # Teste deu erro
-                    if bool_execucao_deu_erro_temporario == False:
+                    if bool_erro_tentar == False:
                         lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
 
                         if lst_resultado_execucao[3] == "continuarLoop":
@@ -629,7 +625,7 @@ class Interpretador():
                         if lst_resultado_execucao[3] == "retornarOrquestrador":
                             self.numero_threads_ativos -= 1
                             return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
-                        
+
                         if lst_resultado_execucao[0] == False:
                             if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
                                 self.numero_threads_ativos -= 1
@@ -652,7 +648,7 @@ class Interpretador():
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
                     # Teste deu erro
-                    if bool_execucao_deu_erro_temporario:
+                    if bool_erro_tentar:
 
                         lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
                         if lst_resultado_execucao[3] == "continuarLoop":
@@ -662,7 +658,7 @@ class Interpretador():
                         if lst_resultado_execucao[3] == "pararLoop":
                             self.numero_threads_ativos -= 1
                             return lst_resultado_execucao
-                        
+
                         if lst_resultado_execucao[3] == "retornarOrquestrador":
                             self.numero_threads_ativos -= 1
                             return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
@@ -701,7 +697,7 @@ class Interpretador():
                     if lst_resultado_execucao[3] == "retornarOrquestrador":
                         self.numero_threads_ativos -= 1
                         return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
-                        
+
                     if lst_resultado_execucao[0] == False:
 
                         if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
@@ -715,16 +711,16 @@ class Interpretador():
                 str_bloco_salvo = ""
                 continue
 
-            # Se for para salvar bloco, salve o txt_caractere
+            # Se for para salvar bloco, salve o txt_char
             if bool_salvar_bloco:
-                str_bloco_salvo += txt_caractere
+                str_bloco_salvo += txt_char
 
             # Armazene os comandos
-            elif not bool_achou_comentario:
-                txt_linha_comando += txt_caractere
+            elif not bool_coment_curto:
+                txt_linha_comando += txt_char
 
         # Se chegar no final do código e tiver comando para analisar
-        if len(txt_linha_comando.strip()) > 0 and int_tamanho_codigo -1 == num_txt_caractere:
+        if len(txt_linha_comando.strip()) > 0 and len_cod -1 == num_txt_char:
 
             txt_linha_comando = txt_linha_comando.replace("\n","").strip()
             lst_ultimo_teste =Interpretador.interpretador(self, txt_linha_comando)
@@ -740,7 +736,7 @@ class Interpretador():
             if lst_ultimo_teste[0][3] == "retornarOrquestrador":
                 self.numero_threads_ativos -= 1
                 return [True, lst_ultimo_teste[0][1], lst_ultimo_teste[0][2], "retornarOrquestrador"]
-                        
+
             txt_comando_testado = txt_linha_comando
             num_linha_analisada = lst_ultimo_teste[1]
             arq_script_erro = lst_ultimo_teste[2]
@@ -767,6 +763,9 @@ class Interpretador():
             return [False, self.msg("nao_fechou_chave"), 'string', "fazerNada"]
 
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
+
+
+
 
     def analisa_instrucao(self, comando, texto):
         re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
@@ -848,26 +847,24 @@ class Interpretador():
 
             if linha == '':
                 return [[True, None, 'vazio', 'linhaVazia'], "1", ""]
- 
+
             caractere_inicio = linha[0]
 
             ##################################################################
             #                          LIMPAR A TELA                         #
             ##################################################################
-    
+
             if caractere_inicio in self.dicLetras["limpatela"]:
                 analisa000 = Interpretador.analisa_instrucao(self, '^(<limpatela>)$', linha)
                 if analisa000[0]: return [Interpretador.funcao_limpar_o_termin(self), self.num_linha, "limpaTela"]
 
-
             ##################################################################
             #                             RETORNE                            #
             ##################################################################
-    
+
             if caractere_inicio in self.dicLetras["retorne"]:
                 analisa000 = Interpretador.analisa_instrucao(self, '^(<retorne>)(.*)$', linha)
                 if analisa000[0]: return [Interpretador.funcao_retorne(self, analisa000[1][2]), self.num_linha, ""]
-
 
             ##################################################################
             #                              LOOPS                             #
@@ -897,7 +894,6 @@ class Interpretador():
                 analisa025 =Interpretador.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
                 if analisa025[0]: return [Interpretador.funcao_loop_para_cada_(self, analisa025[1][2], analisa025[1][4], analisa025[1][6]), self.num_linha, "para_cada"]
 
-
             ##################################################################
             #                            EXIBIÇÃO                            #
             ##################################################################
@@ -910,7 +906,6 @@ class Interpretador():
                 analisa002 =Interpretador.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
                 if analisa002[0]: return [Interpretador.funcao_exibir_outra_ln(self, analisa002[1][2]), self.num_linha, "exibiçãoNaTela"]
 
-
             ##################################################################
             #                             ESPERA                             #
             ##################################################################
@@ -918,8 +913,6 @@ class Interpretador():
             if caractere_inicio in self.dicLetras["aguarde"]:
                 analisa005 =Interpretador.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
                 if analisa005[0]: return [Interpretador.funcao_esperar_n_tempo(self, analisa005[1][2], analisa005[1][3]), self.num_linha, "esperar"]
-
-
 
             ##################################################################
             #                             ENTRADA                            #
@@ -929,7 +922,6 @@ class Interpretador():
                 analisa020 =Interpretador.analisa_instrucao(self, '^(<digitado>)$', linha)
                 if analisa020[0]: return [Interpretador.funcao_ovalor_digitado(self, analisa020[1][1]), self.num_linha, "tudo_entradas"]
 
-
             ##################################################################
             #                         NUMERO ALEATÓRIO                       #
             ##################################################################
@@ -938,7 +930,6 @@ class Interpretador():
                 analisa018 =Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
                 if analisa018[0]: return [Interpretador.funcao_numer_aleatorio(self, analisa018[1][2], analisa018[1][4]), self.num_linha, "aleatorio"]
 
-
             ##################################################################
             #                           BIBLIOTECAS                          #
             ##################################################################
@@ -946,7 +937,6 @@ class Interpretador():
             if caractere_inicio in self.dicLetras["importe"]:
                 analisa041 =Interpretador.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
                 if analisa041[0]: return [Interpretador.funcao_importe(self, analisa041[1][2]), self.num_linha, "importe"]
-
 
             ##################################################################
             #                    TENTE EXECUTAR O COMANDO                    #
@@ -1122,7 +1112,8 @@ class Interpretador():
             if analisa024[0]: return [Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes"]
 
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', linha)
-            if analisa024[0]: 
+            if analisa024[0]:
+
                 return [Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3]), self.num_linha, "funcoes"]
 
             analisa044 =Interpretador.analisa_instrucao(self, '^[A-Z0-9a-z_]*\\s*$', linha)
@@ -1131,7 +1122,6 @@ class Interpretador():
             return [ [False, "{}'{}'".format(  self.msg('comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
 
         return [[True, None, 'vazio', 'fazerNada'], str(self.num_linha), ""]
-    
 
     def comandos_uso_geral(self, possivelVariavel):
         Interpretador.log(self, "comandos_uso_geral: '{}'".format(possivelVariavel))
@@ -1177,10 +1167,8 @@ class Interpretador():
             analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
             if analisa024[0]: return Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
 
-
         analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', possivelVariavel)
         if analisa024[0]: return Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
-
 
         ##################################################################
         #                             ENTRADA                            #
@@ -1190,7 +1178,6 @@ class Interpretador():
             analisa020 =Interpretador.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
             if analisa020[0]: return Interpretador.funcao_ovalor_digitado(self, analisa020[1][1])
 
-
         ##################################################################
         #                       SISTEMA OPERACIONAL                      #
         ##################################################################
@@ -1198,7 +1185,6 @@ class Interpretador():
         if caractere_inicio in self.dicLetras["obter_diretorio"]:
             analisa032 =Interpretador.analisa_instrucao(self, '^(<obter_diretorio>)$', possivelVariavel)
             if analisa032[0]: return Interpretador.funcao_obter_diretorio_atual(self)
-
 
         ##################################################################
         #                     MANIPULAÇÃO DE ARQUIVOS                    #
@@ -1290,7 +1276,7 @@ class Interpretador():
         except Exception as erro:
             #if  'already exists' in erro:
             return [False, self.msg("erro_mover_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
-        
+
         return [True, True , 'booleano', 'fazerNada']
 
     def funcao_copiar_arquivo(self, arquivo, objetivo):
@@ -1308,7 +1294,7 @@ class Interpretador():
         except Exception as erro:
             #if  'already exists' in erro:
             return [False, self.msg("erro_copiar_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
-        
+
         return [True, True , 'booleano', 'fazerNada']
 
     def funcao_substituir_texto(self, valor1, valor2, variavel):
@@ -1556,7 +1542,6 @@ class Interpretador():
         else:
             return [True, digitado, 'string', 'fazerNada']
 
-
     # ======== métodos altamente depdendentes ============= #
     # ======== métodos altamente depdendentes ============= #
     # ======== métodos altamente depdendentes ============= #
@@ -1615,7 +1600,6 @@ class Interpretador():
             anterior = valor.end() + normalizacao
 
         return [True, linha, 'string']
-
 
     def fazer_contas(self, linha):
         Interpretador.log(self, "fazer_contas")
@@ -1687,7 +1671,6 @@ class Interpretador():
     def abstrair_mostre_valor(self, possivelVariavel):
         Interpretador.log(self, "abstrair_mostre_valor")
 
-
         # Caso existam contas entre strings ( Formatação )
         if possivelVariavel[0] == ',':
             possivelVariavel = possivelVariavel[1:]
@@ -1696,7 +1679,6 @@ class Interpretador():
         if len(possivelVariavel) > 1:
             if possivelVariavel[-1] == ',':
                 possivelVariavel = possivelVariavel[0:len(possivelVariavel)-1]
-
 
         testa = Interpretador.verifica_se_tem(self, possivelVariavel, ",")
         if testa != []:
@@ -1715,7 +1697,6 @@ class Interpretador():
             return [True, listaValores, "string"]
 
         return Interpretador.abstrair_valor_linha(self, possivelVariavel)
-
 
     def abstrair_valor_linha(self, possivelVariavel):
         Interpretador.log(self, "abstrair_valor_linha: possivelVariavel = '{}'".format(possivelVariavel))
@@ -1769,12 +1750,10 @@ class Interpretador():
         else:
             return [True, numero, 'float']
 
-
     # ======== fim métodos altamente depdendentes ============= #
     # ======== fim métodos altamente depdendentes ============= #
     # ======== fim métodos altamente depdendentes ============= #
     # ======== fim métodos altamente depdendentes ============= #
-
 
     def funcao_importe(self, biblioteca):
         Interpretador.log(self, "__funcao_importe: biblioteca = '{}'".format(biblioteca))
@@ -1805,7 +1784,6 @@ class Interpretador():
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
-
     # =================== ARQUIVOS =================== #
     def funcao_ler_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_ler_arquivo")
@@ -1833,7 +1811,6 @@ class Interpretador():
             return [True, True, "booleano", "fazerNada"]
 
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
-
 
     def funcao_sobrescrever_arquivo(self, texto, nome_arquivo):
         Interpretador.log(self, "__funcao_sobrescrever_arquivo")
@@ -1895,15 +1872,9 @@ class Interpretador():
             return [True, True, "booleano", "fazerNada"]
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
-
-
-
-
-
     def funcao_diretorio_existe(self, nome_diretorio):
         Interpretador.log(self, "__funcao_diretorio_existe")
 
-    
         if nome_diretorio == "":
             return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
 
@@ -1935,12 +1906,9 @@ class Interpretador():
         else:
             return [True, True, "booleano", "fazerNada"]
 
-
-
     # Precisa disferenciar diretório de arquivo
     def funcao_arquivo_existe(self, nome_arquivo):
         Interpretador.log(self, "__funcao_arquivo_existe")
-
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
@@ -1973,12 +1941,6 @@ class Interpretador():
         else:
             return [True, True, "booleano", "fazerNada"]
 
-
-
-
-
-
-
     def funcao_excluir_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_excluir_arquivo")
 
@@ -2007,7 +1969,6 @@ class Interpretador():
     def funcao_criar_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_criar_arquivo")
 
-
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
 
@@ -2027,7 +1988,6 @@ class Interpretador():
                 return [False, self.msg("erro_criar_arquivo").format(erro), 'string', ' exibirNaTela']
 
         return [True, "", "vazio", "fazerNada"]
-
 
     def funcao_incremente_vari(self, valor, variavel):
         Interpretador.log(self, "__funcao_incremente_vari")
@@ -2064,7 +2024,6 @@ class Interpretador():
 
     def teste_generico_lista(self, variavel, valor):
         Interpretador.log(self, "teste_generico_lista")
-
 
         if variavel == '' or valor == '':
             return [False,self.msg("variavel_valor_nao_informado"), 'exibirNaTela']
@@ -2129,7 +2088,6 @@ class Interpretador():
     def funcao_add_itns_lst_ps(self, valor, posicao, variavel):
         Interpretador.log(self, "__funcao_add_itns_lst_ps")
 
-
         if variavel == '' or valor == '':
             return [False, self.msg("necessario_informar_variavel_valor") ]
 
@@ -2156,7 +2114,6 @@ class Interpretador():
 
         self.dic_variaveis[variavel][0].insert(posicao - 1, [teste_valor[1], teste_valor[2]])
         return [True, True, 'booleano', 'fazerNada']
-
 
     # ============ mostre ==================#
     def funcao_exibir_outra_ln(self, linha):
@@ -2246,7 +2203,6 @@ class Interpretador():
 
         return [True, [variavel, int(teste_valorI[1]), int(teste_valorF[1]), passo], "lista", "declararLoopParaCada"]
 
-
     def funcao_add_lst_na_posi(self, variavelLista, posicao, valor):
         Interpretador.log(self, "__funcao_add_lst_na_posi")
 
@@ -2262,7 +2218,7 @@ class Interpretador():
 
         if not teste_posic[0]:
             return teste_posic
-        
+
         if not teste_valor[0]:
             return teste_valor
 
@@ -2602,7 +2558,7 @@ class Interpretador():
                 return [False,self.msg("funcao_nao_passou_parametros").format(nomeDaFuncao, len(
                     self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
-            resultadoOrquestrador =Interpretador.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
+            resultadoOrquestrador = Interpretador.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
             if not resultadoOrquestrador[0]:
                 return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
@@ -2676,7 +2632,7 @@ class Interpretador():
             linha = linha.replace(comando[0], substituicao)
 
         return linha
-        
+
     def funcao_testar_condicao(self, linha):
         Interpretador.log(self, "__funcao_testar_condicao")
 
@@ -2745,7 +2701,7 @@ class Interpretador():
             anterior = item.end()
 
         boolTemTiverLista = False
-        resultado =Interpretador.tiver_valor_lista(self, linha[anterior:].strip())
+        resultado = Interpretador.tiver_valor_lista(self, linha[anterior:].strip())
 
         if not resultado[0]:
             return resultado

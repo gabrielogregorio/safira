@@ -7,7 +7,7 @@ class Mensagens:
         json_link = "mensagens.json"
 
         try:
-            with open('libs/'.format(json_link), encoding='utf8') as json_file:
+            with open('libs/{}'.format(json_link), encoding='utf8') as json_file:
                 self.mensagens = load(json_file)
         except:
             with open(json_link, encoding='utf8') as json_file:
