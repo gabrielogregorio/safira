@@ -35,9 +35,17 @@
       "pt-br":"  Verificar Atualização",
       "en-us":"Check for Update"
     },
+    "label_mais":{
+      "pt-br":"  Aumentar fonte",
+      "en-us":"  Increase font"
+    },
+    "label_menos":{
+      "pt-br":"  Diminuir fonte",
+      "en-us":"  Decrease font"
+    },
     "label_logs":{
       "pt-br":"  Logs",
-      "en-us":"Logs"
+      "en-us":"  Logs"
     },
     "label_arquivo":{
       "pt-br":"  Arquivo",
@@ -49,63 +57,63 @@
     },
     "label_exemplos":{
       "pt-br":"  Exemplos",
-      "en-us":"Examples"
+      "en-us":"  Examples"
     },
     "label_interface":{
       "pt-br":"  Interface",
-      "en-us":"Interface"
+      "en-us":"  Interface"
     },
     "label_ajuda":{
       "pt-br":"  Ajuda/Sobre",
-      "en-us":"Help / About"
+      "en-us":"  Help/About"
     },
     "label_dev":{
       "pt-br":"  Dev",
-      "en-us":"Dev"
+      "en-us":"  Dev"
     },
     "label_abrir_arquivo":{
       "pt-br":"  Abrir arquivo (Ctrl+O)",
-      "en-us":"Open file (Ctrl + O)"
+      "en-us":"  Open file (Ctrl + O)"
     },
     "label_nova_aba":{
       "pt-br":"  Nova Aba (Ctrl-N)",
-      "en-us":"New Tab (Ctrl-N)"
+      "en-us":"  New Tab (Ctrl-N)"
     },
     "label_salvar":{
       "pt-br":"  Salvar (Ctrl-S)",
-      "en-us":"Save (Ctrl-S)"
+      "en-us":"  Save (Ctrl-S)"
     },
     "label_salvar_como":{
       "pt-br":"  Salvar Como (Ctrl-Shift-S)",
-      "en-us":"Save As (Ctrl-Shift-S)"
+      "en-us":"  Save As (Ctrl-Shift-S)"
     },
     "label_executar_tudo":{
       "pt-br":"  Executar Tudo (F5)",
-      "en-us":"Run Everything (F5)"
+      "en-us":"  Run Everything (F5)"
     },
     "label_linha_por_linha":{
       "pt-br":"  Executar linha por linha (F6)",
-      "en-us":"Run line by line (F6)"
+      "en-us":"  Run line by line (F6)"
     },
     "label_ate_breakpoint":{
       "pt-br":"  Executar até breakpoint (F7)",
-      "en-us":"Run to breakpoint (F7)"
+      "en-us":"  Run to breakpoint (F7)"
     },
     "label_parar_execucao":{
       "pt-br":"  Parar execução (F9)",
-      "en-us":"Stop execution (F9)"
+      "en-us":"  Stop execution (F9)"
     },
     "label_inserir_breakpoint":{
       "pt-br":"  Inserir breakpoint (F10)",
-      "en-us":"Insert breakpoint (F10)"
+      "en-us":"  Insert breakpoint (F10)"
     },
     "label_cascate_temas":{
       "pt-br":"  Temas",
-      "en-us":"Themes"
+      "en-us":"  Themes"
     },
     "label_cascate_sintaxe":{
       "pt-br":"  sintaxe",
-      "en-us":"syntax"
+      "en-us":"  syntax"
     },
     "erro_ver_exemplo":{
       "pt-br":"Ver um exemplo ",
@@ -113,7 +121,7 @@
     },
     "encontrou_bug":{
         "pt-br":"  Então você encontrou um bug?  ",
-        "en-us":"So did you find a bug?"
+        "en-us":"  So did you find a bug?"
       },
       "texto_reportar_bug":{
         "pt-br":"\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n",

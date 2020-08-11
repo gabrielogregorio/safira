@@ -448,7 +448,13 @@ class Interface():
         self.frame_tela = Frame(self.tela)
         self.frame_tela.grid(row=1, column=1, sticky=NSEW)
         self.frame_tela.update()
+        self.tela.title('Combratec -  Safira Lang')
+        self.tela.call('wm', 'iconphoto', self.tela._w, PhotoImage(file='imagens/icone.png'))
+        self.frame_tela.rowconfigure(2, weight=1)
+        self.frame_tela.grid_columnconfigure(1, weight=1)
 
+
+        # COMANDOS
         comando_abriro_arquivo = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_dialog")
         comando_salvararq_como = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_como_dialog")
         comando_acao_salvararq = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo")
@@ -461,17 +467,18 @@ class Interface():
         comando_abrir_abrir_nova_aba = lambda event=None: Interface.abrir_nova_aba(self, event)
         comando_ativar_fullscr = lambda event: Interface.ativar_desativar_full_screen(self, event)
         comando_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
-
         comando_abrir_comunida = lambda: webbrowser.open("https://safiraide.blogspot.com/p/comunidade.html")
         comando_abrirl_projeto = lambda: webbrowser.open("http://safiraide.blogspot.com/")
         comando_abrirlnk_ajuda = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
         comando_ativaropc_logs = lambda: Interface.ativar_logs(self)
         comando_ativarop_debug = lambda: Interface.ativar_modo_debug_temas(self)
         comando_atualizar_idioma = lambda: Interface.atualizar_idioma(self)
-
+        comando_aumentar_fonte = lambda: Interface.aumentar_diminuir_fonte(self, "+")
+        comando_diminuir_fonte = lambda: Interface.aumentar_diminuir_fonte(self, "-")
         comando_copiar = lambda: Interface.copiar_selecao(self)
         comando_colar = lambda: Interface.colar_selecao(self)
 
+        # TECLAS DE ATALHOS
         self.tela.bind('<Control-n>', comando_abrir_abrir_nova_aba)
         self.tela.bind('<Control-s>', comando_acao_salvararq)
         self.tela.bind('<Control-o>', comando_abriro_arquivo)
@@ -482,16 +489,11 @@ class Interface():
         self.tela.bind('<F10>', comando_inserir_breakp)
         self.tela.bind('<F11>', comando_ativar_fullscr)
 
-        self.tela.title('Combratec -  Safira Lang')
-        self.tela.call('wm', 'iconphoto', self.tela._w, PhotoImage(file='imagens/icone.png'))
-
-        self.frame_tela.rowconfigure(2, weight=1)
-        self.frame_tela.grid_columnconfigure(1, weight=1)
-
-        # ************************** MENUS ************************** #
+        # MENU
         self.mn_barra = Menu(self.tela)
         self.tela.config(menu=self.mn_barra)
 
+        # MENU OPCOES
         self.mn_intfc = Menu( self.mn_barra)
         self.mn_exect = Menu( self.mn_barra)
         self.mn_exemp = Menu( self.mn_barra)
@@ -500,40 +502,45 @@ class Interface():
         self.mn_ajuda = Menu( self.mn_barra)
         self.mn_devel = Menu( self.mn_barra)
 
+        # ADICAO DOS MENUS NA INTERFACE
         self.mn_barra.add_cascade(label=self.interface_idioma["label_arquivo"][self.idioma], menu=self.mn_arqui)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_executar"][self.idioma], menu=self.mn_exect)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_exemplos"][self.idioma], menu=self.mn_exemp)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_interface"][self.idioma], menu=self.mn_intfc)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_ajuda"][self.idioma], menu=self.mn_ajuda)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_dev"][self.idioma], menu=self.mn_devel)
-       
 
-        self.mn_arqui.add_separator()
+        # MENU ARQUIVOS
         self.mn_arqui.add_command(label=self.interface_idioma["label_abrir_arquivo"][self.idioma], command=comando_abriro_arquivo)
         self.mn_arqui.add_command(label=self.interface_idioma["label_nova_aba"][self.idioma], command=comando_abrir_abrir_nova_aba)
         self.mn_arqui.add_command(label=self.interface_idioma["label_salvar"][self.idioma], command=comando_acao_salvararq)
         self.mn_arqui.add_command(label=self.interface_idioma["label_salvar_como"][self.idioma], command=comando_salvararq_como)
 
+        # MENU EXECUTAR
         self.mn_exect.add_command(label=self.interface_idioma["label_executar_tudo"][self.idioma], command=comando_executar_progr)
         self.mn_exect.add_command(label=self.interface_idioma["label_linha_por_linha"][self.idioma], command =comando_executar_linha)
         self.mn_exect.add_command(label=self.interface_idioma["label_ate_breakpoint"][self.idioma], command=comando_executar_brakp)
         self.mn_exect.add_command(label=self.interface_idioma["label_parar_execucao"][self.idioma], command=comando_parar_execucao)
         self.mn_exect.add_command(label=self.interface_idioma["label_inserir_breakpoint"][self.idioma], command=comando_inserir_breakp)
 
+        # MENU INTERFACE
         Interface.carregar_cascata_scripts(self)
         Interface.carregar_cascata_temas(self)
         Interface.carregar_cascata_sintaxe(self)
+        self.mn_intfc.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=comando_aumentar_fonte)
+        self.mn_intfc.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=comando_diminuir_fonte)
 
+        # MENU AJUDA
         self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=comando_abrirlnk_ajuda)
         self.mn_ajuda.add_command(label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=comando_abrir_disponiv)
-        self.mn_ajuda.add_separator()
         self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug.interface())
         self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.atualizar.verificar_versao())
-   
-
+        
+        # MENU DESENVOLVIMENTO
         self.mn_devel.add_command(label=self.interface_idioma["label_logs"][self.idioma], command=comando_ativaropc_logs)
         self.mn_devel.add_command(label='  Debug', command=comando_ativarop_debug)
 
+        # IMAGENS PARA O MENU DE ACESSO RÁPIDO
         self.ic_left = PhotoImage(file='imagens/left.png')
         self.ic_rigth = PhotoImage(file='imagens/right.png')
         self.ic_salva = PhotoImage(file='imagens/ic_salvar.png')
@@ -548,6 +555,7 @@ class Interface():
         self.iclp_bkp = PhotoImage(file="imagens/limpar_bkp.png")
         self.ic_idiom = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
 
+        # AJUSTES NO TAMANHO
         self.ic_salva = self.ic_salva.subsample(4, 4)
         self.ic_playP = self.ic_playP.subsample(4, 4)
         self.ic_PStop = self.ic_PStop.subsample(4, 4)
@@ -562,9 +570,10 @@ class Interface():
         self.ic_left  = self.ic_left.subsample(4, 4)
         self.ic_rigth = self.ic_rigth.subsample(4, 4)
 
-        # ************ Icones de opções rápidas ************** #
+        # CRIANDO AS OPÇÔES RÁPIDAS
         self.fr_opcoe = Frame(self.frame_tela)
 
+        # CARREGANDO AS OPÇÔES
         self.bt_salva = Button(self.fr_opcoe, image=self.ic_salva, command=comando_acao_salvararq)
         self.bt_playP = Button(self.fr_opcoe, image=self.ic_playP, command=comando_executar_progr)
         self.bt_breaP = Button(self.fr_opcoe, image=self.ic_breaP, command=comando_executar_brakp)
@@ -666,8 +675,6 @@ class Interface():
 
     def carregar_cascata_sintaxe(self):
         self.mn_intfc_casct_sintx = Menu(self.mn_intfc, tearoff=False)
-
-
         self.mn_intfc.add_cascade(label=self.interface_idioma["label_cascate_sintaxe"][self.idioma], menu=self.mn_intfc_casct_sintx)
 
         for file in listdir('temas/'):
@@ -1147,9 +1154,12 @@ class Interface():
     def iniciar_terminal_debug(self):
         Interface.destruir_instancia_terminal(self)
 
-        coluna_identificadores = (self.interface_idioma["debug_variavel"][self.idioma], self.interface_idioma["debug_tipo"][self.idioma], self.interface_idioma["debug_valor"][self.idioma])
+        coluna_identificadores = (
+            self.interface_idioma["debug_variavel"][self.idioma],
+            self.interface_idioma["debug_tipo"][self.idioma],
+            self.interface_idioma["debug_valor"][self.idioma])
+
         frame_terminal_e_grid = Frame(self.fr_princ, bg="#191913")
-        self.frame_terminal_e_grid.protocol("WM_DELETE_WINDOW", lambda event=None: Interface.destruir_instancia_terminal(self))
         frame_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
         frame_terminal_e_grid.grid_columnconfigure(1, weight=1)
         frame_terminal_e_grid.rowconfigure(1, weight=1)

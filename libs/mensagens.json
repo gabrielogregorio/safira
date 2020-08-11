@@ -82,6 +82,12 @@
     "pt-br":"A função \"{}\" tem {} parametros, mas você passou {} parametros!",
     "en-us":"The \"{}\" function has {} parameters, but you passed {} parameters!"
   },
+  
+  "funcao_informou_mais_parametros":{
+    "pt-br":"A função '{}' não possui parâmetros, mas você informou parâmetros!",
+    "en-us":"The function '{}' has no parameters, but you have entered parameters!"
+  },
+
  "funcao_passou_um_parametros":{
     "pt-br":"A função \"{}\" tem {} parametros, mas você passou 1 parametro",
     "en-us":"The \"{}\" function has {} parameters, but you passed 1 parameter"

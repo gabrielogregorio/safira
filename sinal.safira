@@ -1,0 +1,37 @@
+vermelho = " "
+verde = " "
+amarelo = " "
+
+def renderiza {
+    limpe a tela
+    print "["
+    print vermelho
+    print "]\n"
+
+    print "["
+    print amarelo
+    print "]\n"
+
+    print "["
+    print verde
+    print "]\n"
+
+}
+
+
+while 1 == 1 {
+    amarelo = " "
+    vermelho = "x"
+   renderiza
+   espere 5 s
+
+    vermelho = " "
+    verde = "x"
+    renderiza
+    espere 2 s
+
+    verde = " "
+    amarelo = "x"
+    renderiza
+    espere 5 s
+}

@@ -1,8 +1,8 @@
-def para_minusculo2 (texto) {
+def para_minusculo2 () {
     return texto to upper
 }
 
-p = para_minusculo2("GaBRiEL")
+p = para_minusculo2(texto, lixo, 123, true )
 print p
 
 

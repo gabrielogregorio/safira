@@ -1435,7 +1435,11 @@ class Interpretador():
 
         variavel = str(variavel)
         variavel = variavel.replace("_", "")  # _ também é valido
+        variavel = variavel.strip()
 
+        if len(variavel) == 0:
+            return [False, self.msg("variaveis_comecar_por_letra"), "string", 'exibirNaTela']
+    
         if not variavel[0].isalpha():
             return [False, self.msg("variaveis_comecar_por_letra"), "string", 'exibirNaTela']
 
@@ -2413,7 +2417,8 @@ class Interpretador():
             return [False, '{} {}'.format(teste_variavel[1], self.msg("nao_e_lista")), 'string', 'exibirNaTela']
 
         resultado_posicao = Interpretador.abstrair_valor_linha(self, posicao)
-        if not resultado_posicao[0]: return resultado_posicao
+        if not resultado_posicao[0]:
+            return resultado_posicao
         if resultado_posicao[2] != 'float':
             return Interpretador.msg_variavel_numerica(self, 'naoNumerico', linha[1])
 
@@ -2489,6 +2494,9 @@ class Interpretador():
     def funcao_declarar_funcao(self, nomeDaFuncao, parametros=None):
         Interpretador.log(self, "__funcao_declarar_funcao: nomeDaFuncao = '{}', parametros = '{}'".format(nomeDaFuncao, parametros))
 
+        if parametros.strip() == "":
+            parametros = None
+
         # Se o nome da função não está no padrão
         teste =Interpretador.analisa_padrao_variavel(self, nomeDaFuncao)
         if not teste[0]:
@@ -2544,37 +2552,42 @@ class Interpretador():
     def funcao_executar_funcao(self, nomeDaFuncao, parametros=None):
         Interpretador.log(self, "__funcao_executar_funcao: nomeDaFuncao = '{}', parametros='{}'".format(nomeDaFuncao, parametros))
 
+        if parametros.strip() == "":
+            parametros = None
+            
         try:
             self.dic_funcoes[nomeDaFuncao]
         except Exception as erro:
-            return [False,self.msg("funcao_nao_existe").format(nomeDaFuncao), 'string',
-                    'exibirNaTela']
+            return [False, self.msg("funcao_nao_existe").format(nomeDaFuncao), 'string', 'exibirNaTela']
 
         # Se não veio parâmetros
         if parametros is None:
-
-            # Se a função tem parâmetros
+            # Se a função tem parâmetros, mas não foi informando nenhum
             if self.dic_funcoes[nomeDaFuncao]['parametros'] != None:
                 return [False,self.msg("funcao_nao_passou_parametros").format(nomeDaFuncao, len(
                     self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
+            # Executa o bloco de instrução da função
             resultadoOrquestrador = Interpretador.orquestrador_interpretador_(self, self.dic_funcoes[nomeDaFuncao]['bloco'])
 
+            # Se deu erro
             if not resultadoOrquestrador[0]:
                 return [resultadoOrquestrador[0], resultadoOrquestrador[1], resultadoOrquestrador[2], 'exibirNaTela']
             return [True, None, 'vazio', 'fazerNada']
 
-        # Não tem multiplos parâmetros
+        # Verifica se tem virgulas separando os parâmetros
         testa = Interpretador.verifica_se_tem(self, parametros, ',')
+
+        # Se tinha multiplos parâmetros
         if testa != []:
             anterior = 0
             listaParametros = []
 
-            # Anda pelos valores
+            # Anda pelos parâmetros
             for valorItem in testa:
 
                 # Obtem os parâmetros
-                if len(parametros[anterior: valorItem[0]]) > 0:
+                if len(parametros[anterior:valorItem[0]]) > 0:
                     listaParametros.append(parametros[anterior: valorItem[0]])
                     anterior = valorItem[1]
 
@@ -2587,11 +2600,15 @@ class Interpretador():
             for parametro in listaParametros:
                 listaFinalDeParametros.append(parametro.strip())
 
+            # Foi informando parâmetros, mas a função não tem parâmetros
+            if self.dic_funcoes[nomeDaFuncao]['parametros'] is None:
+                return [False,self.msg("funcao_informou_mais_parametros").format(nomeDaFuncao), 'string', 'exibirNaTela']
+
             # Se a quantidade de itens for a mesma dessa funcao
             if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == len(listaFinalDeParametros):
 
                 for parametroDeclarar in range(len(self.dic_funcoes[nomeDaFuncao]['parametros'])):
-                    resultado =Interpretador.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'][
+                    resultado = Interpretador.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'][
                         parametroDeclarar], listaFinalDeParametros[parametroDeclarar])
 
                     if resultado[0] == False:
@@ -2599,18 +2616,24 @@ class Interpretador():
             else:
                 return [False,self.msg("funcao_tem_parametros_divergentes").format(
                     nomeDaFuncao,
+                    len(self.dic_funcoes[nomeDaFuncao]['parametros']),
                     len(listaFinalDeParametros)),
                     'string', 'fazerNada']
 
+
+        # Se não vieram parâmetros
         elif parametros is not None:
 
-            if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == 1:
-                resultado =Interpretador.funcao_realizar_atribu(
-                    self,
-                    self.dic_funcoes[nomeDaFuncao]['parametros'][0],
-                    parametros)
+            # Foi informando parâmetros, mas a função não tem parâmetros
+            if self.dic_funcoes[nomeDaFuncao]['parametros'] is None:
+                return [False,self.msg("funcao_informou_mais_parametros").format(nomeDaFuncao), 'string', 'exibirNaTela']
 
-                if not resultado[0]: return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+
+            if len(self.dic_funcoes[nomeDaFuncao]['parametros']) == 1:
+                resultado =Interpretador.funcao_realizar_atribu(self, self.dic_funcoes[nomeDaFuncao]['parametros'][0], parametros)
+
+                if not resultado[0]:
+                    return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
             else:
                  return [False,self.msg("funcao_passou_um_parametros").format(nomeDaFuncao, len(self.dic_funcoes[nomeDaFuncao]['parametros'])), 'string', 'exibirNaTela']
 
