@@ -31,22 +31,20 @@ class Log:
         a.write(base + msg)
         a.close()
 
-    def atualizar_dicionario(self, arquivo, chave, valor):
-        json = Log.abrir_json(self, arquivo)
-        json[chave] = valor
+    def adicionar_novo_acesso(self, arquivo, chave):
+        try:
+            json = Log.abrir_json(self, arquivo)
+            json[chave] = json[chave] + 1
+    
+            json = str(json).replace('\'', '\"')
+    
+            Log.salvar_json(self, arquivo, json)
+            return json
+        except:
+            print("Erro ao salvar log: , arquivo='{}', chave='{}'".format(arquivo, chave))
+            return False
 
-        json = str(json).replace('\'', '\"')
-
-        Log.salvar_json(self, arquivo, json)
-        return json
-
-l = Log()
-l.atualizar_dicionario('logs/registros.json', 'acessos', 1000)
-
-
-#l.registrar_log("\nInicio da execução\n")
-#l.registrar_log("Guia Aberta\n")
-#l.registrar_log("Guia fechada\n")
-#l.registrar_log("Interpretador acionado\n")
-#l.registrar_log("Interpretador Finalizado!\n")
-#l.registrar_log("Programa finalizado\n")
+if __name__ == '__main__':
+    l = Log()
+    l.adicionar_novo_acesso('logs/registros.json', 'vezes_interpretador_iniciado')
+    l.adicionar_novo_acesso('logs/registros.json', 'acessos')

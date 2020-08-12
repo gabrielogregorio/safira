@@ -49,6 +49,7 @@ from colorir import Colorir
 from splash import Splash
 from design import Design
 from bug import Bug
+from log import Log
 
 
 # Theme One Dark
@@ -139,7 +140,10 @@ class Interface():
         self.bt_bt = None
         self.lb_bt = None
         self.bt_bt = None
+        self.log = Log()
         self.imgs = []
+
+        self.log.adicionar_novo_acesso('logs/registros.json', 'acessos')
         # ============ IDIOMA ================#
 
         self.tx_erro_aviso_texto_erro = None
@@ -1483,7 +1487,6 @@ class Interface():
             self.num_lin_bkp = posCorrente
 
     def arquivo_de_configuracoes_interface(self, chave, novo):
-
         arquivo = 'configuracoes/configuracoes.json'
 
         config_json = funcoes.carregar_json(arquivo)
