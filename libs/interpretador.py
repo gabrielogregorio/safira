@@ -1212,6 +1212,9 @@ class Interpretador():
         #                            VARIAVEIS                           #
         ##################################################################
 
+        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*\\s*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
+        if analisa042[0]: return Interpretador.funcao_fatiamento(self, analisa042[1][1], analisa042[1][3], analisa042[1][5])
+
         if caractere_inicio in self.dicLetras["tipo_variavel"]:
             analisa033 =Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
             if analisa033[0]: return Interpretador.funcao_tipo_variavel(self, analisa033[1][2])
@@ -1337,6 +1340,40 @@ class Interpretador():
         Interpretador.log(self, '<funcao_interrompa>:')
         self.aconteceu_erro = True
         return [False, 'indisponibilidade_terminal', "string", "fazerNada"]
+
+
+    def funcao_fatiamento(self, variavel, de, ate):
+        variavel = variavel.strip()
+        Interpretador.log(self, "__funcao_fatiamento")
+
+
+        abstrair_variavel = Interpretador.obter_valor_variavel(self, variavel)
+        if not abstrair_variavel[0]: return abstrair_variavel
+        if abstrair_variavel[2] not in ("string", "lista"):
+            return [False, self.msg("p_usar_substituicao_variavel"), 'string', 'fazerNada']
+
+
+
+        # Obter o valor do de
+        abstrair_de = Interpretador.abstrair_valor_linha(self, de)
+        if not abstrair_de[0]: return abstrair_de
+
+        if abstrair_de[2] != 'float':
+            return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_de[1])
+    
+        # Obter o valor do ate
+        abstrair_ate = Interpretador.abstrair_valor_linha(self, ate)
+        if not abstrair_ate[0]: return abstrair_ate
+
+        if abstrair_ate[2] != 'float':
+            return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_ate[1])
+
+ 
+
+        return [True, "variavel = {}, de = {}, ate = {}".format(variavel, abstrair_de[1], abstrair_ate[1]), "string", 'fazerNada']
+
+        
+
 
     def funcao_para_maiusculo(self, texto):
         Interpretador.log(self, "__funcao_para_maiusculo")

@@ -525,12 +525,6 @@
     "cor":"lista"
   },
 
-
-
-
-
-
-  
   "diretorio_existe":{
     "comando":[
       ["el directorio ", "es"],
@@ -545,7 +539,7 @@
       ["path ", "en-us"],
       ["the ", "en-us"],
       ["", "all"]
-          ],
+    ],
     "cor":"lista"
   },
 
@@ -637,6 +631,41 @@
     ],
     "cor":"condicionais"
   },
+
+"percorrer_lst_str_ate":{
+  "comando":[
+    ["from ","en-us"],
+    ["de ","pt-br"],
+    ["\\[","all"],
+    ["","all"]
+
+  ],
+  "cor":"lista"
+},
+
+"percorrer_lst_str_ate_sub":{
+  "comando":[
+    [" ate ","pt-br"],
+    [" to ","'en'-us"],
+    [" a ","pt-br"],
+    [":","all"]
+  ],
+  "cor":"lista"
+},
+
+"percorrer_lst_str_ate_final":{
+  "comando":[
+    ["\\]","'all"],
+    ["","all"]
+
+  ],
+  "cor":"lista"
+},
+
+
+  
+
+
   "declaraListas":{
     "comando":[
       ["lista de ","pt-br"],

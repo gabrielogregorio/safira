@@ -1,21 +1,161 @@
-def para_minusculo2 () {
-    return texto to upper
-}
+lista de nomes recebe "131", 123
 
-p = para_minusculo2(texto, lixo, 123, true )
-print p
+println nomes [ 1 ate 2 ]
+println nomes[ 3 : 6   ]
+println nomes de 7 a 12
+
+break
+
+
+
+
+[
+""
+de 
+from 
+
+numero
+
+:
+a
+to
+ate
+
+numero
+""
+]
+
+
+
+
+
+
+
+
+
+
+print 2 ate 3 a cada 2
+print [ 2 ate 3 a cada 2 ]
+print nomes[ 1 : 2 : 2]
+[
+""
+de 
+from 
+
+numero
+
+:
+a 
+to 
+ate 
+
+numero
+
+:
+cada
+a cada
+every
+
+numero
+
+]
+""
+
+
+
+
+
+
+
+
+
+print nomes de 2 a 10 de 2 em 2
+print nomes     2 ate 15 de 2 em 2
+print nomes  [2 ate 15 de 2 em 2]
+
+""
+[
+de 
+from 
+
+numero
+
+to 
+a 
+ate 
+
+
+numero
+
+of 
+de 
+
+numero
+
+in
+em
+en
+
+numero
+
+]
+""
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 retorne 0
 
+def para_minusculo2 () {
+    return texto to upper
+}
+
+texto = "sdsd"
+p = para_minusculo2()
+print paponesa
 
 crie o arquivo "ola_mundo/"
-
 
 Se o que o usuario digitar for igual a "safira" entao {
      mostre "Esse é um nome legal"
 }
-
 If  user digits is equal to  "sapphire" then {
      show "This is a nice name"
 }
