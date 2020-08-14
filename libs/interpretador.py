@@ -1212,8 +1212,13 @@ class Interpretador():
         #                            VARIAVEIS                           #
         ##################################################################
 
-        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*\\s*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
+        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_sub1>)(.*)(<percorrer_lst_str_a_cada_sub2>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
+        if analisa042[0]: return Interpretador.funcao_fatiamento(self, analisa042[1][1], analisa042[1][3], analisa042[1][5], analisa042[1][7])
+
+        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
         if analisa042[0]: return Interpretador.funcao_fatiamento(self, analisa042[1][1], analisa042[1][3], analisa042[1][5])
+
+
 
         if caractere_inicio in self.dicLetras["tipo_variavel"]:
             analisa033 =Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
@@ -1342,17 +1347,15 @@ class Interpretador():
         return [False, 'indisponibilidade_terminal', "string", "fazerNada"]
 
 
-    def funcao_fatiamento(self, variavel, de, ate):
+    def funcao_fatiamento(self, variavel, de, ate, cada=None):
+        print("variavel={}, de={}, ate={}, cada = {}".format(variavel, de, ate, cada))
         variavel = variavel.strip()
         Interpretador.log(self, "__funcao_fatiamento")
-
 
         abstrair_variavel = Interpretador.obter_valor_variavel(self, variavel)
         if not abstrair_variavel[0]: return abstrair_variavel
         if abstrair_variavel[2] not in ("string", "lista"):
             return [False, self.msg("p_usar_substituicao_variavel"), 'string', 'fazerNada']
-
-
 
         # Obter o valor do de
         abstrair_de = Interpretador.abstrair_valor_linha(self, de)
@@ -1361,6 +1364,7 @@ class Interpretador():
         if abstrair_de[2] != 'float':
             return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_de[1])
     
+
         # Obter o valor do ate
         abstrair_ate = Interpretador.abstrair_valor_linha(self, ate)
         if not abstrair_ate[0]: return abstrair_ate
@@ -1368,11 +1372,67 @@ class Interpretador():
         if abstrair_ate[2] != 'float':
             return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_ate[1])
 
- 
+        if cada is not None:
+            # Obter o valor do cada
+            abstrair_cada = Interpretador.abstrair_valor_linha(self, cada)
+            if not abstrair_cada[0]: return abstrair_cada
 
-        return [True, "variavel = {}, de = {}, ate = {}".format(variavel, abstrair_de[1], abstrair_ate[1]), "string", 'fazerNada']
+            if abstrair_cada[2] != 'float':
+                return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_cada[1])
 
-        
+
+
+        de = int(abstrair_ate[1])
+        ate = int(abstrair_de[1])
+        if cada is not None:
+            cada = int(abstrair_cada[1])
+    
+        if abstrair_variavel[2] == "string":
+            texto = abstrair_variavel[1]
+            texto_final = ""
+            tamanho_string = len(texto)
+
+            if ate > tamanho_string:
+                return [False, 'O valor inicial precisa ser menor que o tamanho total do texto. O texto tem {} você digitou {}'.format(tamanho_string, ate), 'string', 'fazerNada']
+
+            if de > tamanho_string:
+                return [False, 'O valor inicial precisa ser menor que o tamanho total do texto. O texto tem {} você digitou {}'.format(tamanho_string, de), 'string', 'fazerNada']
+
+            if ate <= 0:
+                return [False, 'O final precisa ser maior do que 0. Você digitou {}'.format(ate), 'string', 'fazerNada']
+            if de <= 0:
+                return [False, 'O final precisa ser maior do que 0. Você digitou {}'.format(de), 'string', 'fazerNada']
+
+            if de == ate:
+                return [True, texto[ate], 'string', 'fazerNada']
+
+            if cada is not None:
+                if cada <= 0:
+                    return [False, 'O final precisa ser maior do que 0. Você digitou {}'.format(cada), 'string', 'fazerNada']
+            
+            if de > ate:
+                maior = de + 1
+                marcar = 0 if cada is None else cada
+                for x in range(ate, de+1):
+                    if marcar == 0:
+                        marcar = 0 if cada is None else cada
+                        texto_final = texto[maior-x-1] + texto_final
+                    else:
+                        marcar -= 1
+
+                return [True, texto_final, 'string', 'fazerNada']
+
+            if de < ate:
+                marcar = 0 if cada is None else cada
+                for char in range(de, ate+1):
+                    if marcar == 0:
+                        marcar = 0 if cada is None else cada
+                        texto_final = texto[char-1] + texto_final
+                    else:
+                        marcar -= 1
+                return [True, texto_final, 'string', 'fazerNada']
+
+        return [False, "Erro, não era um dos tipos esperados!", 'string', 'fazerNada']
 
 
     def funcao_para_maiusculo(self, texto):
@@ -1740,6 +1800,7 @@ class Interpretador():
         return Interpretador.abstrair_valor_linha(self, possivelVariavel)
 
     def abstrair_valor_linha(self, possivelVariavel):
+        print(possivelVariavel)
         Interpretador.log(self, "abstrair_valor_linha: possivelVariavel = '{}'".format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
@@ -1765,6 +1826,7 @@ class Interpretador():
 
         # Aplicação de possíveis comandos internos
         resultado = Interpretador.comandos_uso_geral(self, possivelVariavel)
+        print(resultado)
 
         # Se estourar um erro e com valor
         if resultado[0] and resultado[1] != None:

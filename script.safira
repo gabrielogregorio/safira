@@ -1,42 +1,15 @@
-lista de nomes recebe "131", 123
+#lista de nomes recebe "131", 123
 
-println nomes [ 1 ate 2 ]
-println nomes[ 3 : 6   ]
-println nomes de 7 a 12
+nomes = "gabriel"
+println nomes [ 1 ate 6 ]
+println nomes[3:6]
+println nomes de 1 a 7 
 
+#print nomes[ 1 : 2 : 2 ]
+
+#print nomes de 2 ate 3 a cada 2
+#print nomes [ 2 ate 3 a cada 2 ]
 break
-
-
-
-
-[
-""
-de 
-from 
-
-numero
-
-:
-a
-to
-ate
-
-numero
-""
-]
-
-
-
-
-
-
-
-
-
-
-print 2 ate 3 a cada 2
-print [ 2 ate 3 a cada 2 ]
-print nomes[ 1 : 2 : 2]
 [
 ""
 de 
@@ -100,41 +73,6 @@ numero
 
 ]
 ""
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

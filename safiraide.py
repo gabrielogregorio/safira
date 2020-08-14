@@ -289,7 +289,7 @@ class Interface():
         self.tx_editor_codigo.update()
         self.tx_terminal.update()
         self.instancia = Interpretador(self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
-
+        print(linhas)
         linhas = self.instancia.cortar_comentarios(linhas)
 
         t = Thread(target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
@@ -874,7 +874,6 @@ class Interface():
             if dados_aba["foco"]:
                 self.num_aba_focada = num_aba
                 dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
-
                 dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
                 dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
             else:

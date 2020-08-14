@@ -632,6 +632,43 @@
     "cor":"condicionais"
   },
 
+  "percorrer_lst_str_a_cada":{
+    "comando":[
+      ["\\s{1,}from ","en-us"],
+      ["\\s{1,}de ","pt-br"],
+      ["\\[","all"],
+      ["","all"]
+    ],
+    "cor":"lista"
+  },
+    "percorrer_lst_str_a_cada_sub1":{
+      "comando":[
+        [" ate ","pt-br"],
+        [" to ","en-us"],
+        [" a ","es"],
+        [":","all"]
+      ],
+      "cor":"lista"
+    },
+      "percorrer_lst_str_a_cada_sub2":{
+        "comando":[
+          [" a cada ","pt-br"],
+          [" every ","en-us"],
+          [" cada ","es"],
+          [":","all"]
+        ],
+        "cor":"lista"
+      },
+        "percorrer_lst_str_a_cada_final":{
+          "comando":[
+            ["\\]","all"],
+            ["","all"]
+          ],
+          "cor":"lista"
+        },
+  
+
+
 "percorrer_lst_str_ate":{
   "comando":[
     ["from ","en-us"],
