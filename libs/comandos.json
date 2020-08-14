@@ -147,6 +147,23 @@
   },
 
 
+  "esta_contido":{
+    "comando":[
+      [" esta contenida en ","es"],
+      [" esta contido em ","pt-br"],
+      [" esta contido ","pt-br"],
+      [" is contained in ","en-us"]
+    ],
+    "cor":"logico"
+  },
+
+  "esta_contido_apenas_visualizacao":{
+    "comando":[
+      [" in ","en-us"]
+    ],
+    "cor":"logico"
+  },
+
 
 
   "obter_diretorio":{
@@ -356,7 +373,8 @@
       ["volver ","es"]
     ],
     "cor":"contas"
-  },  "interrompa":{
+  },
+  "interrompa":{
     "comando":[
       ["interrupt","en-us"],
       ["interrompa","pt-br"],
@@ -372,45 +390,6 @@
       ["seguir","es"]
     ],
     "cor":"contas"
-  },
-  "a_imagem_aparecer":{
-    "comando":[
-      ["aguarde a imagem ","pt-br"],
-      ["a imagem ","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "a_imagem_aparecer_interno":{
-    "comando":[
-      [" aparecer em ","pt-br"],
-      [" apareceu em ","pt-br"],
-      [" carregou em ","pt-br"],
-      [" apareceu ","pt-br"],
-      [" carregou ","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "a_imagem_aparecer_interno_segundos":{
-    "comando":[
-      [" segundos","pt-br"],
-      [" segundo","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "a_imagem_aparecer_interno_minutos":{
-    "comando":[
-      [" minutos","pt-br"],
-      [" min","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "tire_um_print_salve_como":{
-    "comando":[
-      ["tire uma captura de tela e salve como ","pt-br"],
-      ["tire um print da tela e salve como ","pt-br"],
-      ["tire um print e salve como ","pt-br"]
-    ],
-    "cor":"lista"
   },
   "abra_um_arquivo":{
     "comando":[
@@ -632,49 +611,51 @@
     "cor":"condicionais"
   },
 
+
+
   "percorrer_lst_str_a_cada":{
     "comando":[
       ["\\s{1,}from ","en-us"],
       ["\\s{1,}de ","pt-br"],
-      ["\\[","all"],
+      ["\\s*\\[","all"],
+      ["\\s{1,}","all"]
+    ],
+    "cor":"lista"
+  },
+  "percorrer_lst_str_a_cada_subum":{
+    "comando":[
+      [" ate ","pt-br"],
+      [" to ","en-us"],
+      [" a ","es"],
+      [":","all"]
+    ],
+    "cor":"lista"
+  },
+  "percorrer_lst_str_a_cada_subdois":{
+    "comando":[
+      [" a cada ","pt-br"],
+      [" every ","en-us"],
+      [" cada ","es"],
+      [":","all"]
+    ],
+    "cor":"lista"
+  },
+  "percorrer_lst_str_a_cada_final":{
+    "comando":[
+      ["\\]","all"],
       ["","all"]
     ],
     "cor":"lista"
   },
-    "percorrer_lst_str_a_cada_sub1":{
-      "comando":[
-        [" ate ","pt-br"],
-        [" to ","en-us"],
-        [" a ","es"],
-        [":","all"]
-      ],
-      "cor":"lista"
-    },
-      "percorrer_lst_str_a_cada_sub2":{
-        "comando":[
-          [" a cada ","pt-br"],
-          [" every ","en-us"],
-          [" cada ","es"],
-          [":","all"]
-        ],
-        "cor":"lista"
-      },
-        "percorrer_lst_str_a_cada_final":{
-          "comando":[
-            ["\\]","all"],
-            ["","all"]
-          ],
-          "cor":"lista"
-        },
-  
+
 
 
 "percorrer_lst_str_ate":{
   "comando":[
-    ["from ","en-us"],
-    ["de ","pt-br"],
-    ["\\[","all"],
-    ["","all"]
+    ["\\s{1,}from ","en-us"],
+    ["\\s{1,}de ","pt-br"],
+    ["\\s*\\[","all"],
+    ["\\s{1,}","all"]
 
   ],
   "cor":"lista"

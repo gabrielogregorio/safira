@@ -1,85 +1,40 @@
-#lista de nomes recebe "131", 123
+# Usar como um comando
+# E não como substituição
+se "abc" esta contido em nome
+if nome contem 121
 
-nomes = "gabriel"
-println nomes [ 1 ate 6 ]
-println nomes[3:6]
-println nomes de 1 a 7 
 
-#print nomes[ 1 : 2 : 2 ]
+se nome for vazio
+se idade for vazio
 
-#print nomes de 2 ate 3 a cada 2
-#print nomes [ 2 ate 3 a cada 2 ]
-break
-[
-""
-de 
-from 
+Liste todos os arquivos do diretório "/home"
 
-numero
 
-:
-a 
-to 
-ate 
+Criar um diretório "/home"
+Apagar um diretório "/simpsons"
+se termina com ".txt"
+se comeca com "ola"
 
-numero
 
-:
-cada
-a cada
-every
 
-numero
+Obtenção de metadados de arquivos
 
-]
-""
+obtenha a data atual
+obtenha a hora atua
+obtenha a data e hora atual
+Obtenha o dia, o mes e o ano atual separados por "/"
+o dia atual
+o mes atual
+o ano atual
+
+Converta nome para texto
+Converta nome para string
+Converta nome para numero
+Converta nome para numerico
 
 
 
 
-
-
-
-
-
-print nomes de 2 a 10 de 2 em 2
-print nomes     2 ate 15 de 2 em 2
-print nomes  [2 ate 15 de 2 em 2]
-
-""
-[
-de 
-from 
-
-numero
-
-to 
-a 
-ate 
-
-
-numero
-
-of 
-de 
-
-numero
-
-in
-em
-en
-
-numero
-
-]
-""
-
-
-
-
-
-
-retorne 0
 
 def para_minusculo2 () {
     return texto to upper

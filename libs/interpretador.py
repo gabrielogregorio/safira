@@ -804,6 +804,10 @@ class Interpretador():
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
+        print("-----")
+        print(comando)
+        print(texto)
+        print("111111")
 
         if re_texto == []:
             return [False, 0]
@@ -1127,6 +1131,7 @@ class Interpretador():
         Interpretador.log(self, "comandos_uso_geral: '{}'".format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
+        print("'{}'".format(possivelVariavel))
 
         caractere_inicio = None
         if possivelVariavel != "":
@@ -1212,13 +1217,11 @@ class Interpretador():
         #                            VARIAVEIS                           #
         ##################################################################
 
-        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_sub1>)(.*)(<percorrer_lst_str_a_cada_sub2>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
+        analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_subum>)(.*)(<percorrer_lst_str_a_cada_subdois>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
         if analisa042[0]: return Interpretador.funcao_fatiamento(self, analisa042[1][1], analisa042[1][3], analisa042[1][5], analisa042[1][7])
 
         analisa042 =Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
         if analisa042[0]: return Interpretador.funcao_fatiamento(self, analisa042[1][1], analisa042[1][3], analisa042[1][5])
-
-
 
         if caractere_inicio in self.dicLetras["tipo_variavel"]:
             analisa033 =Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
@@ -1382,8 +1385,8 @@ class Interpretador():
 
 
 
-        de = int(abstrair_ate[1])
-        ate = int(abstrair_de[1])
+        de = int(abstrair_de[1])
+        ate = int(abstrair_ate[1])
         if cada is not None:
             cada = int(abstrair_cada[1])
     
@@ -1420,17 +1423,15 @@ class Interpretador():
                     else:
                         marcar -= 1
 
-                return [True, texto_final, 'string', 'fazerNada']
-
             if de < ate:
                 marcar = 0 if cada is None else cada
                 for char in range(de, ate+1):
                     if marcar == 0:
                         marcar = 0 if cada is None else cada
-                        texto_final = texto[char-1] + texto_final
+                        texto_final += texto[char-1] 
                     else:
                         marcar -= 1
-                return [True, texto_final, 'string', 'fazerNada']
+            return [True, texto_final, 'string', 'fazerNada']
 
         return [False, "Erro, não era um dos tipos esperados!", 'string', 'fazerNada']
 
@@ -1725,6 +1726,10 @@ class Interpretador():
 
         for comando in self.dic_comandos["logico_false"]["comando"]:
             linha = linha.replace(comando[0], ' False ')
+
+        for comando in self.dic_comandos["esta_contido"]["comando"]:
+            linha = linha.replace(comando[0], ' in ')
+
 
         if '"' in linha: return [False, "Isso é uma string", 'string']
 

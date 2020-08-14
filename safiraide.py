@@ -289,7 +289,7 @@ class Interface():
         self.tx_editor_codigo.update()
         self.tx_terminal.update()
         self.instancia = Interpretador(self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
-        print(linhas)
+
         linhas = self.instancia.cortar_comentarios(linhas)
 
         t = Thread(target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
@@ -300,6 +300,7 @@ class Interface():
         while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
             # Se existir uma interface gráfica
             if tx_terminal is not None:
+
                 # Tela principal
                 self.tela.update()
 
@@ -315,6 +316,7 @@ class Interface():
             if acao != "":
                 # exibição na tela
                 if acao.startswith(':nessaLinha:'):
+
                     # Exibir mensagem ou mostrar no terminal
                     if self.tx_terminal is None:
                         print(acao[len(':nessaLinha:'):], end="")
@@ -498,13 +500,13 @@ class Interface():
         self.tela.config(menu=self.mn_barra)
 
         # MENU OPCOES
-        self.mn_intfc = Menu( self.mn_barra)
-        self.mn_exect = Menu( self.mn_barra)
-        self.mn_exemp = Menu( self.mn_barra)
-        self.mn_arqui = Menu( self.mn_barra)
-        self.mn_edita = Menu( self.mn_barra)
-        self.mn_ajuda = Menu( self.mn_barra)
-        self.mn_devel = Menu( self.mn_barra)
+        self.mn_intfc = Menu(self.mn_barra)
+        self.mn_exect = Menu(self.mn_barra)
+        self.mn_exemp = Menu(self.mn_barra)
+        self.mn_arqui = Menu(self.mn_barra)
+        self.mn_edita = Menu(self.mn_barra)
+        self.mn_ajuda = Menu(self.mn_barra)
+        self.mn_devel = Menu(self.mn_barra)
 
         # ADICAO DOS MENUS NA INTERFACE
         self.mn_barra.add_cascade(label=self.interface_idioma["label_arquivo"][self.idioma], menu=self.mn_arqui)
@@ -531,6 +533,7 @@ class Interface():
         Interface.carregar_cascata_scripts(self)
         Interface.carregar_cascata_temas(self)
         Interface.carregar_cascata_sintaxe(self)
+
         self.mn_intfc.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=comando_aumentar_fonte)
         self.mn_intfc.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=comando_diminuir_fonte)
 
@@ -652,7 +655,7 @@ class Interface():
         t_width = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        self.tela.geometry("{}x{}+0+0".format(t_width - 1, t_heigth - 1 ))
+        self.tela.geometry("{}x{}+0+0".format(t_width, t_heigth))
         self.colorir_codigo.tela = self.tela
 
         Interface.manipular_arquivos(self, None, "abrirArquivo", 'script.safira')
@@ -1138,7 +1141,7 @@ class Interface():
         t_width  = self.tela.winfo_screenwidth()
         t_heigth = self.tela.winfo_screenheight()
 
-        self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/2-720/2), int(t_heigth/2-450/2)))
+        self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/720/2), int(t_heigth/450/2)))
         self.top_janela_terminal.deiconify()
         self.tela.update()
         self.tx_terminal = Text(self.top_janela_terminal)
