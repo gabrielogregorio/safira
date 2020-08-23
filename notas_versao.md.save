@@ -1,0 +1,16 @@
+# Versão 0.3
+
+### Novos recursos
+Adição do loop por listas ou strings
+Adição de fatiamento de texto (slicing)
+
+
+Mova o arquivo "ola mundo" para o diretório "/home" Copia o arquivo "ola 
+mundo" para o diretório Liste todos os arquivos do diretório Verificar 
+se um diretório existe Obtenção de metadados de arquivos Criar um 
+diretório Apagar um diretório Ver se um arquivo termina com uma extensão 
+Verifique se um diretório existe
+
+### Correções
+Correção do Bug da interface travada em certas condições quando a safira tentava buscar atualizações
+
