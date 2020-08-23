@@ -648,8 +648,6 @@
     "cor":"lista"
   },
 
-
-
 "percorrer_lst_str_ate":{
   "comando":[
     ["\\s{1,}from ","en-us"],
@@ -682,6 +680,84 @@
 
 
   
+
+
+
+
+
+
+"percorra_lista":{
+  "comando":[
+    ["scroll through the list of ","en-us"],
+    ["desplazarse por la lista de ","es"],
+    ["percorra a lista de ","pt-br"]
+  ],
+  "cor":"lista"
+},
+
+"percorra_items":{
+  "comando":[
+    ["desplazarse por los ", "es"],
+    ["desplacese por las ", "es"],
+    ["scroll through ", "en-us"],
+    ["caminhe por ", "pt-br"],
+    ["caminar por ", "pt-br"],
+    ["caminar en ", "es"],
+    ["desplazar ", "es"],
+    ["percorra ", "pt-br"],
+    ["walk for ", "en-us"],
+    ["ande por ", "pt-br"],
+    ["ande em ", "pt-br"],
+    ["caminhe ", "pt-br"],
+    ["walk in ", "en-us"],
+    ["caminar ", "pt-br"],
+    ["buscar ", "pt-br"],
+    ["scroll ", "en-us"],
+    ["browse ", "en-us"],
+    ["walk ", "en-us"]
+  ],
+  "cor":"lista"
+},
+
+"percorra_items_lista_sub":{
+  "comando":[
+    [" by assigning the variable ","en-us"],
+    [" atribuindo na variavel ","pt-br"],
+    [" by assigning variable ","en-us"],
+    [" asignando la variable ","es"],
+    [" atribuindo para cada ","pt-br"],
+    [" atribuindo para cada ","pt-br"],
+
+    [" atribuindo cada valor em ","pt-br"],
+    [" atribuindo cada valor na variavel ","pt-br"],
+    [" atribuindo em cada ","pt-br"],
+    [" assigning for each ","en-us"],
+    [" assigning at each ","en-us"],
+    [" asignando a cada ","es"],
+    [" by assigning in ","en-us"],
+    [" atribuindo em ","pt-br"],
+    [" asignando en ","es"],
+    [" asignando un ","es"],
+    [" assigning in ","es"],
+    [" para cada ","pt-br"],
+    [" for each ","en-us"]
+  ],
+  "cor":"lista"
+},
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
   "declaraListas":{

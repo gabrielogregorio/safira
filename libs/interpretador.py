@@ -367,6 +367,94 @@ class Interpretador():
                     lst_ultimo_teste[1] = 0
                     lst_ultimo_teste = [True, False, 'booleano']
 
+
+
+
+                elif lst_ultimo_teste[3] == "declararLoopParaItemString":
+                    historico_fluxo_de_dados.append('declararLoopParaItemString') # Encaixa Loop
+
+                    lst_ultimo_teste[3] = 'fazerNada'
+
+                    variavel_string, variavel_atribuir = lst_ultimo_teste[1]
+
+                    for valor in variavel_string[1]:
+
+                        criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, '"{}"'.format(valor))
+
+                        if criar_variavel[0] == False:
+                            self.numero_threads_ativos -= 1
+                            return criar_variavel
+
+                        lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            break
+
+                        if lst_resultado_execucao[3] == "retornarOrquestrador":
+                            self.numero_threads_ativos -= 1
+                            return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
+
+                        if lst_resultado_execucao[0] == False:
+                            if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                                self.numero_threads_ativos -= 1
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
+
+                            Interpretador.orq_erro(self, lst_resultado_execucao[1], num_linha_analisada, arq_script_erro)
+                            self.numero_threads_ativos -= 1
+                            return lst_resultado_execucao
+
+                    lst_ultimo_teste[1] = 0
+                    lst_ultimo_teste = [True, False, 'booleano']
+
+
+
+
+
+                elif lst_ultimo_teste[3] == "declararLoopParaItemLista":
+                    historico_fluxo_de_dados.append('declararLoopParaItemLista') # Encaixa Loop
+
+                    lst_ultimo_teste[3] = 'fazerNada'
+
+                    variavel_listas, variavel_atribuir = lst_ultimo_teste[1]
+
+                    for valor in variavel_listas[1]:
+
+                        if valor[1] == 'string':
+                            criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, '"{}"'.format(valor[0]))
+                        elif valor[1] == 'float':
+                            criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, str(valor[0]))
+
+                        if criar_variavel[0] == False:
+                            self.numero_threads_ativos -= 1
+                            return criar_variavel
+
+                        lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
+                        if lst_resultado_execucao[3] == "pararLoop":
+                            break
+
+                        if lst_resultado_execucao[3] == "retornarOrquestrador":
+                            self.numero_threads_ativos -= 1
+                            return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
+
+                        if lst_resultado_execucao[0] == False:
+                            if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
+                                self.numero_threads_ativos -= 1
+                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
+
+                            Interpretador.orq_erro(self, lst_resultado_execucao[1], num_linha_analisada, arq_script_erro)
+                            self.numero_threads_ativos -= 1
+                            return lst_resultado_execucao
+
+                    lst_ultimo_teste[1] = 0
+                    lst_ultimo_teste = [True, False, 'booleano']
+
+
+
+
+
+
+
+
+
                 elif lst_ultimo_teste[3] == "declararLoopParaCada":
                     historico_fluxo_de_dados.append('declararLoopParaCada') # Encaixa Loop
 
@@ -804,10 +892,6 @@ class Interpretador():
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
-        print("-----")
-        print(comando)
-        print(texto)
-        print("111111")
 
         if re_texto == []:
             return [False, 0]
@@ -1080,8 +1164,26 @@ class Interpretador():
             analisa010 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, "listas"]
 
+
+
+
+
+
+
+            analisa011 =Interpretador.analisa_instrucao(self, '^(<percorra_lista>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
+            if analisa011[0]: return [Interpretador.funcao_percorra_lista(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
+
+            analisa011 =Interpretador.analisa_instrucao(self, '^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
+            if analisa011[0]: return [Interpretador.funcao_percorra_string(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
+
+
+
             analisa011 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
             if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
+
+
+
+
 
             analisa012 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa012[0]: return [Interpretador.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas"]
@@ -1308,23 +1410,125 @@ class Interpretador():
 
         return [True, True , 'booleano', 'fazerNada']
 
+    def operacoes_variaveis(self, entrada, pipeline):
+        """
+            pipeline = [
+                ["obter_valor_variavel", "", "", ""],
+                ["teste_tipo", "!=", "lista", ""],
+                ["teste_tipo", "!=", "string", ""],
+                ["abstrair_valor_linha", "", "", ""]
+            ]
+        """
+        saida = entrada
+        for passo in pipeline:
+            operacao, teste, esperado, msg = passo
+
+            if operacao == "obter_valor_variavel":
+                testa_entrada = Interpretador.obter_valor_variavel(self, saida)
+                if not testa_entrada[0]: return testa_entrada
+                saida = testa_entrada
+            
+            elif operacao == "teste_tipo":
+                if teste == "==":
+                    if saida[2] == esperado: return [False, self.msg("__LISTA__NAO_DEFINIDA__"), 'string', 'fazerNada']
+
+                elif teste == "!=":
+                    if saida[2] == esperado: return [False, self.msg("__LISTA__NAO_DEFINIDA__"), 'string', 'fazerNada']
+                saida = saida
+
+            elif operacao == "abstrair_valor_linha":
+                teste_abstracao = Interpretador.abstrair_valor_linha(self, saida)
+                if not teste_abstracao[0]: return teste_abstracao
+                saida = teste_abstracao
+
+            return saida
+
+
+    def funcao_percorra_lista(self, variavel, variavel_atribuir):
+        Interpretador.log(self, "__funcao_percorra_lista")
+
+        teste_variavel = Interpretador.operacoes_variaveis(self, variavel,
+            pipeline = [
+                ["obter_valor_variavel", "", "", ""],
+                ["teste_tipo", "!=", "lista", ""]
+            ]
+        )
+        if not teste_variavel[0]: return teste_variavel
+        # variável => teste_variavel[1]
+
+        testa_existencia = Interpretador.operacoes_variaveis(self, variavel_atribuir,
+            pipeline = [
+                ["obter_valor_variavel", "", "", ""]
+            ]
+        )
+        # Variável não existe
+        if not testa_existencia[0]:
+            criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, "0")
+
+            if not criar_variavel[0]:
+                return criar_variavel
+
+
+        return [True, [teste_variavel, variavel_atribuir], "lista", "declararLoopParaItemLista"]
+
+
+    def funcao_percorra_string(self, variavel, variavel_atribuir):
+        Interpretador.log(self, "__funcao_percorra_string")
+
+        testa_valor = Interpretador.operacoes_variaveis(self, variavel,
+            pipeline = [
+                ["abstrair_valor_linha", "", "", ""],
+                ["teste_tipo", "!=", "string", ""]
+            ]
+        )
+        if not testa_valor[0]: return testa_valor
+        # variável => teste_variavel[1]
+        testa_existencia = Interpretador.operacoes_variaveis(self, variavel_atribuir,
+            pipeline = [
+                ["obter_valor_variavel", "", "", ""]
+            ]
+        )
+        # Variável não existe
+        if not testa_existencia[0]:
+            criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, "0")
+
+            if not criar_variavel[0]:
+                return criar_variavel
+
+
+        return [True, [testa_valor, variavel_atribuir], "lista", "declararLoopParaItemString"]
+
+
+
+
+
+
     def funcao_substituir_texto(self, valor1, valor2, variavel):
         Interpretador.log(self, "__funcao_substituir_texto")
 
-        teste_variavel = Interpretador.obter_valor_variavel(self, variavel)
+        teste_variavel = Interpretador.operacoes_variaveis(self, variavel,
+            pipeline = [
+                ["obter_valor_variavel", "", "", ""],
+                ["teste_tipo", "!=", "string", "p_usar_substituicao_variavel"]
+            ]
+        )
         if not teste_variavel[0]: return teste_variavel
-        if teste_variavel[2] != "string":
-            return [False, self.msg("p_usar_substituicao_variavel"), 'string', 'fazerNada']
-
-        abstrairv1 = Interpretador.abstrair_valor_linha(self, valor1)
+ 
+        abstrairv1 = Interpretador.operacoes_variaveis(self, valor1,
+            pipeline = [
+                ["abstrair_valor_linha", "", "", ""],
+                ["teste_tipo", "!=", "string", self.msg("p_substituir_texto_valor").format(1, 1, "__abstrairv1[2])__")]
+            ]
+        )
         if not abstrairv1[0]: return abstrairv1
-        if abstrairv1[2] != "string":
-            return [False, self.msg("p_substituir_texto_valor").format(1, 1, abstrairv1[2]), 'string', 'fazerNada']
 
-        abstrairv2 = Interpretador.abstrair_valor_linha(self, valor2)
+        abstrairv2 = Interpretador.operacoes_variaveis(self, valor1,
+            pipeline = [
+                ["abstrair_valor_linha", "", "", ""],
+                ["teste_tipo", "!=", "string", self.msg("p_substituir_texto_valor").format(1, 1, "__abstrairv2[2])__")]
+            ]
+        )
         if not abstrairv2[0]: return abstrairv2
-        if abstrairv2[2] != "string":
-            return [False, self.msg("p_substituir_texto_valor").format(2, 2, abstrairv2[2]), 'string', 'fazerNada']
 
         self.dic_variaveis[variavel][0] = self.dic_variaveis[variavel][0].replace(abstrairv1[1], abstrairv2[1])
 
@@ -2656,8 +2860,9 @@ class Interpretador():
     def funcao_executar_funcao(self, nomeDaFuncao, parametros=None):
         Interpretador.log(self, "__funcao_executar_funcao: nomeDaFuncao = '{}', parametros='{}'".format(nomeDaFuncao, parametros))
 
-        if parametros.strip() == "":
-            parametros = None
+        if parametros is not None:
+            if parametros.strip() == "":
+                parametros = None
             
         try:
             self.dic_funcoes[nomeDaFuncao]

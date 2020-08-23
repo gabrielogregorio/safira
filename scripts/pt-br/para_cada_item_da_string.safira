@@ -1,0 +1,6 @@
+nome = "gabriel"
+percorra nome atribuindo em letras_do_nome {
+    mostre letras_do_nome
+    mostre o tipo de letras_do_nome
+}
+

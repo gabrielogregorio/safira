@@ -662,8 +662,14 @@ class Interface():
 
         self.tela.deiconify()
         self.tela.update()
-        self.atualizar.verificar_versao(primeira_vez=True)
+
+        t = Thread(target=lambda self=self: Interface.buscar_atualização(self))
+        t.start()
+ 
         self.tela.mainloop()
+
+    def buscar_atualização(self):
+        self.atualizar.verificar_versao(primeira_vez=True)
 
 
     def carregar_cascata_temas(self):

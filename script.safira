@@ -1,9 +1,11 @@
-# Usar como um comando
-# E não como substituição
-se "abc" esta contido em nome
-if nome contem 121
+nome = "gabriel"
+percorra nome atribuindo em letras_do_nome {
+    mostre letras_do_nome
+    mostre o tipo de letras_do_nome
+}
 
 
+pare
 se nome for vazio
 se idade for vazio
 
@@ -60,3 +62,4 @@ si el usuario escribe es igual a "zafiro" {
 if input == "sapphire" {
     println "naturalness"
 }
+

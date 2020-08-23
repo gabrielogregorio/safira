@@ -1,0 +1,13 @@
+#percorra a lista de nomes atribuindo cada valor na variavel nome
+
+lista de nomes recebe 1, 2, 3, "gabriel", 1, 333
+
+percorra a lista de nomes atribuindo em nome {
+    as = " "
+    print  type of variable nome
+    print "  "
+    print nome, "\n"
+}
+
+
+pare
