@@ -1,65 +1,8 @@
-nome = "gabriel"
-percorra nome atribuindo em letras_do_nome {
-    mostre letras_do_nome
-    mostre o tipo de letras_do_nome
-}
+println "texto texto"# na cor "#11ddaa"
 
-
-pare
 se nome for vazio
-se idade for vazio
-
-Liste todos os arquivos do diretório "/home"
-
-
+mostre "gabriel" na cor verde
+liste todos os arquivos do diretório "/home"
 Criar um diretório "/home"
 Apagar um diretório "/simpsons"
-se termina com ".txt"
-se comeca com "ola"
-
-
-
-Obtenção de metadados de arquivos
-
-obtenha a data atual
-obtenha a hora atua
-obtenha a data e hora atual
-Obtenha o dia, o mes e o ano atual separados por "/"
-o dia atual
-o mes atual
-o ano atual
-
-Converta nome para texto
-Converta nome para string
-Converta nome para numero
-Converta nome para numerico
-
-
-
-
-
-def para_minusculo2 () {
-    return texto to upper
-}
-
-texto = "sdsd"
-p = para_minusculo2()
-print paponesa
-
-crie o arquivo "ola_mundo/"
-
-Se o que o usuario digitar for igual a "safira" entao {
-     mostre "Esse é um nome legal"
-}
-If  user digits is equal to  "sapphire" then {
-     show "This is a nice name"
-}
-
-si el usuario escribe es igual a "zafiro" {
-       muestra "Este es un buen nombre"
-}
-
-if input == "sapphire" {
-    println "naturalness"
-}
 

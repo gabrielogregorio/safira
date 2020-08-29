@@ -1,37 +1,33 @@
-vermelho = " "
-verde = " "
-amarelo = " "
+vermelho vale " "
+verde vale " "
+amarelo vale " "
 
-def renderiza {
+funcao renderizasemaforo recebe parametros tempo {
     limpe a tela
-    print "["
-    print vermelho
-    print "]\n"
+    v1 = "[vermelho]"
+    v2 = "[amarelo]"
+    v3 = "[verde]"
 
-    print "["
-    print amarelo
-    print "]\n"
+    mostre v1 na cor "#ff4444"
+    mostre v2 na cor "#ffaa11"
+    mostre v3 na cor "#22ff22"
 
-    print "["
-    print verde
-    print "]\n"
-
+    espere o tempo segundos
 }
 
-
 while 1 == 1 {
-    amarelo = " "
-    vermelho = "x"
-   renderiza
-   espere 5 s
+    amarelo recebe " "
+    vermelho recebe "x"
 
-    vermelho = " "
-    verde = "x"
-    renderiza
-    espere 2 s
+    renderizasemaforo passando parametro 5
 
-    verde = " "
-    amarelo = "x"
-    renderiza
-    espere 5 s
+    vermelho recebe " "
+    verde recebe "x"
+
+    renderizasemaforo passando parametro 2
+
+    verde recebe " "
+    amarelo recebe "x"
+
+    renderizasemaforo passando parametro 5
 }

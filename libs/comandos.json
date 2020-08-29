@@ -101,8 +101,6 @@
       [" for igual a ","pt-br"],
       [" es igual a ","es"],
       [" is equal to ","en-us"],
-      [" for ","pt-br"],
-      [" is ","pt-br"],
       [" == ","all"]
     ],
     "cor":"logico"
@@ -227,6 +225,47 @@
     "cor":"lista"
   },
 
+ 
+  "for_vazio":{
+    "comando":[
+      [" for vazio","pt-br"],
+      [" is empty","en-us"],
+      [" esta vacio","es"]
+        ],
+    "cor":"condicionais"
+  },
+
+
+
+
+
+
+
+
+  "na_cor":{
+    "comando":[
+      [" na cor ", "pt-br"],
+      [" en color ", "es"],
+      [" in color ", "en-us"],
+      [" en ", "es"],
+      [" in ", "en-us"]
+        ],
+    "cor":"condicionais"
+  },
+
+
+
+
+  "for_vazio":{
+    "comando":[
+      [" for vazio","pt-br"],
+      [" is empty","en-us"],
+      [" esta vacio","es"]
+        ],
+    "cor":"condicionais"
+  },
+
+
 
 
 
@@ -324,10 +363,6 @@
     ],
     "cor":"lista"
   },
-
-
-
-  
   "limpatela":{
     "comando":[
       ["limpar a tela","pt-br"],
@@ -351,10 +386,14 @@
   "se":{
     "comando":[
       ["quando ","pt-br"],
+      ["if the ","en-us"],
+      ["si el ","es"],
+      ["se o ","pt-br"],
       ["caso ","pt-br"],
-      ["se ","pt-br"],
       ["if ","en-us"],
+      ["se ","pt-br"],
       ["si ","es"]
+
     ],
     "cor":"condicionais"
   },
@@ -546,9 +585,6 @@
     ],
     "cor":"lista"
   },
-
-
-
   "arquivo_existe":{
     "comando":[
       ["o arquivo ","pt-br"],
@@ -573,9 +609,6 @@
     ],
     "cor":"lista"
   },
-  
-
-
   "delete_arquivo":{
     "comando":[
       ["delete o arquivo ","pt-br"],
@@ -610,8 +643,6 @@
     ],
     "cor":"condicionais"
   },
-
-
 
   "percorrer_lst_str_a_cada":{
     "comando":[
@@ -678,14 +709,6 @@
   "cor":"lista"
 },
 
-
-  
-
-
-
-
-
-
 "percorra_lista":{
   "comando":[
     ["scroll through the list of ","en-us"],
@@ -744,21 +767,6 @@
   ],
   "cor":"lista"
 },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   "declaraListas":{
     "comando":[
@@ -981,11 +989,13 @@
   },
   "aguarde":{
     "comando":[
-      ["espere ","pt-br"],
+      ["aguarde o ","pt-br"],
+      ["espere o ","pt-br"],
       ["aguarde ","pt-br"],
-      ["wait ","en-us"],
+      ["esperar ","es"],
+      ["espere ","pt-br"],
       ["delay ","en-us"],
-      ["esperar ","es"]
+      ["wait ","en-us"]
     ],
     "cor":"tempo"
   },
@@ -1064,21 +1074,52 @@
     "cor":"condicionais"
   },
 
+
+  "esperaEmSegundos":{
+    "comando":[
+      [" em segundos","pt-br"],
+      [" in seconds","en-us"],
+      [" segundos","pt-br"],
+      [" segundo","pt-br"],
+      [" seconds","en-us"],
+      [" second","en-us"],
+      [" s","all"]
+    ],
+    "cor":"tempo"
+  },
+
+
+  "esperaEmMs":{
+    "comando":[
+      [" milissegundos","pt-br"],
+      [" milissegundo","pt-br"],
+      [" milisegundos","en-us"],
+      [" milisegundos","es"],
+      [" millisecond","en-us"],
+      [" milisegundo","es"],  
+      [" ms","all"]
+    ],
+    "cor":"tempo"
+  },
+
+
+
   "esperaEm":{
     "comando":[
       [" milissegundos","pt-br"],
       [" milissegundo","pt-br"],
+      [" milisegundos","en-us"],
+      [" em segundos","pt-br"],
+      [" in seconds","en-us"],
       [" segundos","pt-br"],
       [" segundo","pt-br"],
-
-      [" milisegundos","en-us"],
-      [" millisecond","en-us"],
       [" seconds","en-us"],
       [" second","en-us"],
 
-      [" milisegundos","es"],
-      [" milisegundo","es"],  
 
+      [" milisegundos","es"],
+      [" millisecond","en-us"],
+      [" milisegundo","es"],  
       [" ms","all"],
       [" s","all"]
     ],
@@ -1133,7 +1174,6 @@
   ],
   "cor":"condicionais"
 },
-
 
   "recebeParametros_parentese_abre":{
     "comando":[

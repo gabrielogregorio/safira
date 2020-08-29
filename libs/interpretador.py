@@ -6,8 +6,9 @@ from random import randint
 from time import sleep
 from time import time
 from json import load
-from re import findall
+from re import findall, search
 from re import finditer
+
 import shutil
 from os import system
 
@@ -111,8 +112,9 @@ class Interpretador():
 
         string = ""
         for linha in lista:
-            bool_iniciou_string = False
             linha = linha.strip()
+            bool_iniciou_string = False
+
             temp = ""
 
             for char in range(len(linha)):
@@ -122,6 +124,8 @@ class Interpretador():
                         bool_iniciou_string = True
                     else:
                         bool_iniciou_string = False
+                    temp += linha[char]
+                    continue
 
                 if not bool_iniciou_string:
                     if linha[char] == "#" or linha[char:char+2] == "//":
@@ -162,10 +166,17 @@ class Interpretador():
                 self.erro_alertado = True
 
     def orq_exibir_tela(self, lst_retorno_ultimo_comando):
-        if ":nessaLinha:" in str(lst_retorno_ultimo_comando[1]):
-            self.controle_interpretador = lst_retorno_ultimo_comando[1]
+        regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
+        valores = search(regex, str(lst_retorno_ultimo_comando[1]))
+
+        instrucao = valores.group(1)
+        cor = valores.group(3)
+        linha = valores.group(4)
+
+        if instrucao == "nessaLinha":
+            self.controle_interpretador = ':nessaLinha:exibirCor:{}:{}'.format(cor ,linha)
         else:
-            self.controle_interpretador = ':mostreLinha:' + lst_retorno_ultimo_comando[1]
+            self.controle_interpretador = ':mostreLinha:exibirCor:{}:{}'.format(cor ,linha)
 
         while self.controle_interpretador != "":
             sleep(0.0001)
@@ -174,20 +185,18 @@ class Interpretador():
         if self.bool_logs:
             agora = time() - self.inicio
             self.inicio = agora
-            print('[{0:<15.2f}] => '.format(agora), r'{}'.format(msg_log))
+
+            print('[{0:<15.3f}] => '.format(agora), r'{}'.format(msg_log))
 
     def orquestrador_interpretador_(self, txt_codigo):
         Interpretador.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
 
         self.numero_threads_ativos += 1
-        # Indica que já está contando os Thread
         self.boo_orquestrador_iniciado = True
 
         len_cod = len(txt_codigo)
 
         bool_erro_tentar = False
-        bool_coment_longo = False
-        bool_coment_curto = False
         bool_salvar_bloco = False
         bool_ultimo_teste = False
         bool_string = False
@@ -201,26 +210,6 @@ class Interpretador():
 
         for num_txt_char, txt_char in enumerate(txt_codigo):
             txt_dois_char = txt_codigo[num_txt_char:num_txt_char+2]
-
-            if txt_dois_char == '/*' and not bool_string and not bool_coment_curto:
-                bool_coment_longo = True
-                continue
-
-            if bool_coment_longo and txt_codigo[num_txt_char-2:num_txt_char] == '*/':
-                bool_coment_longo = False
-
-            if bool_coment_longo:
-                continue
-
-            # Ignorar comentário #
-            if(txt_char == '#' or txt_dois_char == '//') and not bool_string:
-                bool_coment_curto = True
-
-            if bool_coment_curto and txt_char == "\n":
-                bool_coment_curto = False
-
-            elif bool_coment_curto:
-                continue
 
             # Executar o comando de uma linha
             # Se chegar no fim da linha ou iniciar um bloco e um bloco não estiver sendo salvo e nem estiver em uma string
@@ -301,7 +290,10 @@ class Interpretador():
                     historico_fluxo_de_dados.append('declararLoop') # Encaixa Loop
 
                     # Enquanto a condição for verdadeira
-                    while lst_ultimo_teste[1] and not self.aconteceu_erro:
+                    while lst_ultimo_teste[1]:
+                        if self.aconteceu_erro:
+                            return [False, "Interrompido", "string", "exibirNaTela"]
+
 
                         # Executar o bloco completo
                         lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
@@ -347,6 +339,9 @@ class Interpretador():
                     lst_ultimo_teste[3] = 'fazerNada'
 
                     for valor in range(0, lst_ultimo_teste[1]):
+                        if self.aconteceu_erro:
+                            return [False, "Interrompido", "string", "exibirNaTela"]
+
                         lst_resultado_execucao = Interpretador.orquestrador_interpretador_(self, str_bloco_salvo[1:].strip())
                         if lst_resultado_execucao[3] == "pararLoop":
                             break
@@ -378,6 +373,8 @@ class Interpretador():
                     variavel_string, variavel_atribuir = lst_ultimo_teste[1]
 
                     for valor in variavel_string[1]:
+                        if self.aconteceu_erro:
+                            return [False, "Interrompido", "string", "exibirNaTela"]
 
                         criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, '"{}"'.format(valor))
 
@@ -417,6 +414,8 @@ class Interpretador():
                     variavel_listas, variavel_atribuir = lst_ultimo_teste[1]
 
                     for valor in variavel_listas[1]:
+                        if self.aconteceu_erro:
+                            return [False, "Interrompido", "string", "exibirNaTela"]
 
                         if valor[1] == 'string':
                             criar_variavel = Interpretador.funcao_realizar_atribu(self, variavel_atribuir, '"{}"'.format(valor[0]))
@@ -447,14 +446,6 @@ class Interpretador():
                     lst_ultimo_teste[1] = 0
                     lst_ultimo_teste = [True, False, 'booleano']
 
-
-
-
-
-
-
-
-
                 elif lst_ultimo_teste[3] == "declararLoopParaCada":
                     historico_fluxo_de_dados.append('declararLoopParaCada') # Encaixa Loop
 
@@ -471,6 +462,8 @@ class Interpretador():
                         final_para_cada = lst_ultimo_teste[1][2] - 1
 
                     for valor in range(inici_para_cada, final_para_cada, passo_para_cada):
+                        if self.aconteceu_erro:
+                            return [False, "Interrompido", "string", "exibirNaTela"]
 
                         criar_variavel = Interpretador.funcao_realizar_atribu(self, lst_ultimo_teste[1][0], str(valor))
                         if criar_variavel[0] == False:
@@ -499,6 +492,7 @@ class Interpretador():
 
                 elif lst_ultimo_teste[3] == "declararFuncao":
                     lst_ultimo_teste[3] = "fazerNada"
+                    print("BLOCO>>>>", str_bloco_salvo[1:])
 
                     self.dic_funcoes[lst_ultimo_teste[4]] = {'parametros':self.dic_funcoes[lst_ultimo_teste[4]]['parametros'], 'bloco':str_bloco_salvo[1:].strip()}
 
@@ -804,7 +798,7 @@ class Interpretador():
                 str_bloco_salvo += txt_char
 
             # Armazene os comandos
-            elif not bool_coment_curto:
+            else:
                 txt_linha_comando += txt_char
 
         # Se chegar no final do código e tiver comando para analisar
@@ -1164,26 +1158,14 @@ class Interpretador():
             analisa010 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa010[0]: return [Interpretador.funcao_add_lst_na_posi(self, analisa010[1][2], analisa010[1][4], analisa010[1][6]), self.num_linha, "listas"]
 
-
-
-
-
-
-
             analisa011 =Interpretador.analisa_instrucao(self, '^(<percorra_lista>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
             if analisa011[0]: return [Interpretador.funcao_percorra_lista(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
 
             analisa011 =Interpretador.analisa_instrucao(self, '^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
             if analisa011[0]: return [Interpretador.funcao_percorra_string(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
 
-
-
             analisa011 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
             if analisa011[0]: return [Interpretador.funcao_dec_lst_posicoe(self, analisa011[1][2], analisa011[1][4]), self.num_linha, "listas"]
-
-
-
-
 
             analisa012 =Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
             if analisa012[0]: return [Interpretador.funcao_declarar_listas(self, analisa012[1][2], analisa012[1][4]), self.num_linha, "listas"]
@@ -1231,13 +1213,20 @@ class Interpretador():
 
     def comandos_uso_geral(self, possivelVariavel):
         Interpretador.log(self, "comandos_uso_geral: '{}'".format(possivelVariavel))
-
         possivelVariavel = str(possivelVariavel).strip()
-        print("'{}'".format(possivelVariavel))
 
         caractere_inicio = None
         if possivelVariavel != "":
             caractere_inicio = possivelVariavel[0]
+
+        ##################################################################
+        #                           FOR VAZIO                            #
+        ##################################################################
+        analisa020 =Interpretador.analisa_instrucao(self, '^(.*)(<na_cor>)(.*)$', possivelVariavel)
+        if analisa020[0]: return Interpretador.funcao_na_cor(self, analisa020[1][1], analisa020[1][3])
+
+        analisa020 =Interpretador.analisa_instrucao(self, '^(.*)(<for_vazio>)$', possivelVariavel)
+        if analisa020[0]: return Interpretador.funcao_for_vazio(self, analisa020[1][1])
 
         ##################################################################
         #                         NUMERO ALEATÓRIO                       #
@@ -1276,6 +1265,8 @@ class Interpretador():
 
         analisa024 =Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', possivelVariavel)
         if analisa024[0]: return Interpretador.funcao_executar_funcao(self, analisa024[1][1], analisa024[1][3])
+
+
 
         ##################################################################
         #                             ENTRADA                            #
@@ -1339,6 +1330,16 @@ class Interpretador():
         if analisa050[0]: return Interpretador.funcao_para_captalize(self, analisa050[1][1])
 
         return [True, None, 'vazio']
+
+
+    def funcao_for_vazio(self, valor):
+        teste_valor = Interpretador.abstrair_valor_linha(self, valor)
+        if not teste_valor[0]:
+            return teste_valor
+
+        if teste_valor[1] == "":
+            return [True, True, "booleano", "fazerNada"]
+        return [True, False, "booleano", "fazerNada"]
 
     def verificar_se_existe(self, arquivo_diretorio, ja_foi_abstraido = False):
         Interpretador.log(self, "verificar_se_existe")
@@ -1537,11 +1538,12 @@ class Interpretador():
     def funcao_limpar_o_termin(self):
         Interpretador.log(self, "__funcao_limpar_o_termin")
 
-        Interpretador.log(self, '<funcao_limpar_o_termin>:')
-
         self.controle_interpretador = "limpar_tela"
 
         while self.controle_interpretador != "":
+
+            if self.aconteceu_erro:
+                return [False, "Interrompido", "string", "exibirNaTela"]
             sleep(0.0001)
 
         return [True, None, 'vazio', 'fazerNada']
@@ -1555,7 +1557,6 @@ class Interpretador():
 
 
     def funcao_fatiamento(self, variavel, de, ate, cada=None):
-        print("variavel={}, de={}, ate={}, cada = {}".format(variavel, de, ate, cada))
         variavel = variavel.strip()
         Interpretador.log(self, "__funcao_fatiamento")
 
@@ -1877,7 +1878,7 @@ class Interpretador():
         return [True, valorFinal, 'string']
 
     def localiza_transforma_variavel(self, linha):
-        Interpretador.log(self, "localiza_transforma_variavel")
+        Interpretador.log(self, "localiza_transforma_variavel:{}".format(linha))
 
         anterior = 0
         normalizacao = 0
@@ -1908,7 +1909,7 @@ class Interpretador():
         return [True, linha, 'string']
 
     def fazer_contas(self, linha):
-        Interpretador.log(self, "fazer_contas")
+        Interpretador.log(self, "fazer_contas:linha={}".format(linha))
 
         for comando in self.dic_comandos["matematica_mult"]["comando"]:
             linha = linha.replace(comando[0], ' * ')
@@ -1933,7 +1934,6 @@ class Interpretador():
 
         for comando in self.dic_comandos["esta_contido"]["comando"]:
             linha = linha.replace(comando[0], ' in ')
-
 
         if '"' in linha: return [False, "Isso é uma string", 'string']
 
@@ -1980,6 +1980,7 @@ class Interpretador():
 
     def abstrair_mostre_valor(self, possivelVariavel):
         Interpretador.log(self, "abstrair_mostre_valor")
+        possivelVariavel = possivelVariavel.strip()
 
         # Caso existam contas entre strings ( Formatação )
         if possivelVariavel[0] == ',':
@@ -1988,7 +1989,7 @@ class Interpretador():
         # Caso existam contas entre strings ( Formatação )
         if len(possivelVariavel) > 1:
             if possivelVariavel[-1] == ',':
-                possivelVariavel = possivelVariavel[0:len(possivelVariavel)-1]
+                possivelVariavel = possivelVariavel[0:-1]
 
         testa = Interpretador.verifica_se_tem(self, possivelVariavel, ",")
         if testa != []:
@@ -2009,10 +2010,17 @@ class Interpretador():
         return Interpretador.abstrair_valor_linha(self, possivelVariavel)
 
     def abstrair_valor_linha(self, possivelVariavel):
-        print(possivelVariavel)
         Interpretador.log(self, "abstrair_valor_linha: possivelVariavel = '{}'".format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
+
+        # Sem dados
+        if possivelVariavel == '':
+            return [True, '', 'string']
+
+        # Sem dados
+        if possivelVariavel[-1] == ',':
+            possivelVariavel = possivelVariavel[:-1]
 
         # Sem dados
         if possivelVariavel == '':
@@ -2025,9 +2033,12 @@ class Interpretador():
         if possivelVariavel.lower() in [comando[0] for comando in self.dic_comandos["logico_false"]["comando"]]:
             return [True, 'False', 'booleano']
 
-        # String declarada
-        if possivelVariavel[-1] == '"' and possivelVariavel[0] == '"':
-            return [True, possivelVariavel[1:-1], 'string']
+        if possivelVariavel[0] == '"':
+            if len(possivelVariavel) > 1:
+                pos = possivelVariavel[1:].find('"')
+                if pos != -1:
+                    if pos+1 == len(possivelVariavel)-1:
+                        return [True, possivelVariavel[1:-1], 'string']
 
         # Tentar fazer Contas
         resultado =Interpretador.fazer_contas(self, possivelVariavel)
@@ -2035,7 +2046,6 @@ class Interpretador():
 
         # Aplicação de possíveis comandos internos
         resultado = Interpretador.comandos_uso_geral(self, possivelVariavel)
-        print(resultado)
 
         # Se estourar um erro e com valor
         if resultado[0] and resultado[1] != None:
@@ -2431,20 +2441,50 @@ class Interpretador():
     def funcao_exibir_outra_ln(self, linha):
         Interpretador.log(self, "__funcao_exibir_outra_ln: {}".format(linha))
 
-        resultado =Interpretador.abstrair_mostre_valor(self, linha)
-        if not resultado[0]: return resultado
+        resultado = Interpretador.abstrair_mostre_valor(self, linha)
+        print(resultado)
+
+        if not resultado[0]:
+            return resultado
 
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
-        return [resultado[0], resultado[1], resultado[2], 'exibirNaTela']
+
+        if len(resultado) > 3:
+            if "exibirCor" in resultado[3]:
+                return [resultado[0], ':mostreLinha:{}'.format(resultado[3]) + str(resultado[1]), resultado[2], 'exibirNaTela']
+        return [resultado[0], ':mostreLinha:::' + str(resultado[1]), resultado[2], 'exibirNaTela']
+
 
     def funcao_exibir_mesma_ln(self, linha):
         Interpretador.log(self, "__funcao_exibir_mesma_ln: {}".format(linha))
 
-        resultado =Interpretador.abstrair_mostre_valor(self, linha)
-        if not resultado[0]: return resultado
+        resultado = Interpretador.abstrair_mostre_valor(self, linha)
+        print(resultado)
+
+        if not resultado[0]:
+            return resultado
 
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
-        return [resultado[0], ':nessaLinha:' + str(resultado[1]), resultado[2], 'exibirNaTela']
+
+        if len(resultado) > 3:
+            if "exibirCor" in resultado[3]:
+                return [resultado[0], ':nessaLinha:{}'.format(resultado[3]) + str(resultado[1]), resultado[2], 'exibirNaTela']
+        return [resultado[0], ':nessaLinha:::' + str(resultado[1]), resultado[2], 'exibirNaTela']
+
+    def funcao_na_cor(self, linha, cor):
+        Interpretador.log(self, "___funcao_na_cor: linha={}, cor={}".format(linha, cor))
+
+        teste_linha = Interpretador.abstrair_valor_linha(self, linha)
+        if not teste_linha[0]:
+            return teste_linha
+
+        teste_cor = Interpretador.abstrair_valor_linha(self, cor)
+        if not teste_cor[0]:
+            return teste_cor
+
+        return [True, teste_linha[1], teste_linha[2], "exibirCor:{}:".format(teste_cor[1])]
+
+
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
         Interpretador.log(self, "__funcao_esperar_n_tempo: tempo = '{}', espera = '{}'".format(tempo, tipo_espera))
@@ -2452,10 +2492,12 @@ class Interpretador():
         resultado =Interpretador.abstrair_valor_linha(self, tempo)
         if not resultado[0]: return resultado
 
-        if tipo_espera in ["segundos", "s", "segundo", "second", "seconds"]:
+
+        if tipo_espera in [comando[0].strip() for comando in self.dic_comandos['esperaEmSegundos']['comando']]:
             sleep(resultado[1])
 
-        elif tipo_espera in ["milissegundos", "ms", "milissegundo", "millisecond", "milliseconds", "milisegundo", "milisegundos"]:
+
+        elif tipo_espera in [ comando[0].strip() for comando in self.dic_comandos['esperaEmMs']['comando']]:
             sleep(resultado[1] / 1000)
 
         return [True, None, 'vazio', 'fazerNada']

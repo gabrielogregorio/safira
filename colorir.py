@@ -1,7 +1,7 @@
 from threading import Thread
 from tkinter import END
 from copy import deepcopy
-from re import finditer
+from re import finditer, search
 from time import time
 
 
@@ -86,16 +86,27 @@ class Colorir():
             regex_numerico = '(^|\\s|\\,)([0-9\\.]\\s*){1,}($|\\s|\\,)'
             regex_string = """\"[^"]*\""""
             regex_chave = "{|}"
+            regex_cor = "na\\s*cor\\s*\"(.*?)\""
+
 
             cor_comentario = self.cor_do_comando["comentario"]["foreground"]
             cor_numerico = self.cor_do_comando["numerico"]["foreground"]
             cor_chave = self.cor_do_comando["logico"]["foreground"]
             cor_string = self.cor_do_comando["string"]["foreground"]
 
+            cor_cor = search(regex_cor, str(lista[linha]))
+
             Colorir.__marcar_coloracao(self, regex_numerico, lista, linha, 'numerico', cor_numerico)
             Colorir.__marcar_coloracao(self, regex_chave, lista, linha, 'chave', cor_chave)
             Colorir.__marcar_coloracao(self, regex_string, lista, linha, '"', cor_string)
-            Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
+
+            if "#" in lista[linha]:
+                Colorir.__marcar_coloracao(self, regex_comentario, lista, linha, 'comentario', cor_comentario)
+
+            if cor_cor is not None:
+                cor_cor = str(cor_cor.group(1))
+                Colorir.__marcar_coloracao(self, regex_cor, lista, linha, 'corcor', cor_cor)
+
 
     def coordena_coloracao(self, event, tx_editor_codigo):
         self.tx_editor_codigo = tx_editor_codigo
@@ -116,3 +127,9 @@ class Colorir():
             self.tela.update()
 
         return 0
+
+
+
+
+
+
