@@ -424,7 +424,8 @@ class Interface():
                         try:
                             #self.tx_terminal.get(1.0, END)
                             self.tx_terminal.update()
-                        except:
+                        except Exception as erro:
+                            print("[---]", erro)
                             self.instancia.aconteceu_erro = True
                             break
 

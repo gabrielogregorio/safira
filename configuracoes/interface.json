@@ -20,8 +20,8 @@
       "en-us":"Variable"
     },
     "debug_faca_busca":{
-      "pt-br":"Faça a busca por variáveis",
-      "en-us":"Search for variables"
+      "pt-br":"Busque por variáveis (clique e pressione F7)",
+      "en-us":"Search for variables (click and press F7)"
     },
     "label_comandos_disponiveis":{
       "pt-br":" Comandos Disponíveis",

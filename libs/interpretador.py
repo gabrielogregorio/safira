@@ -10,7 +10,7 @@ from re import findall, search
 from re import finditer
 
 import shutil
-from os import system
+from os import system, listdir
 
 try:
     import libs.funcoes as funcoes
@@ -1092,7 +1092,7 @@ class Interpretador():
             ##################################################################
 
             if caractere_inicio in self.dicLetras["se_nao_se"]:
-                analisa035 =Interpretador.analisa_instrucao(self, '^(<se_nao_se>)(.*)$', linha)
+                analisa035 =Interpretador.analisa_instrucao(self, '^(<se_nao_se>)(.*)(<se_final>)$', linha)
                 if analisa035[0]: return [Interpretador.funcao_senao_se(self, analisa035[1][2]), self.num_linha, "condicionais"]
 
             if caractere_inicio in self.dicLetras["se_nao"]:
@@ -1306,6 +1306,16 @@ class Interpretador():
             analisa032 =Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
             if analisa032[0]: return Interpretador.funcao_ler_arquivo(self, analisa032[1][2])
 
+
+
+
+
+        ##################################################################
+        #                             ARQUIVOS                           #
+        ##################################################################
+        if caractere_inicio in self.dicLetras["lista_arquivos_diretorio"]:
+            analisa032 =Interpretador.analisa_instrucao(self, '^(<lista_arquivos_diretorio>)(.*)(<lista_arquivos_diretorio_final>)$', possivelVariavel)
+            if analisa032[0]: return Interpretador.funcao_listar_arquivos(self, analisa032[1][2])
         ##################################################################
         #                            VARIAVEIS                           #
         ##################################################################
@@ -2014,6 +2024,43 @@ class Interpretador():
 
         possivelVariavel = str(possivelVariavel).strip()
 
+
+
+
+
+
+
+
+
+        # Caso existam contas entre strings ( Formatação )
+        if possivelVariavel[0] == ',':
+            possivelVariavel = possivelVariavel[1:]
+
+        # Caso existam contas entre strings ( Formatação )
+        if len(possivelVariavel) > 1:
+            if possivelVariavel[-1] == ',':
+                possivelVariavel = possivelVariavel[0:-1]
+
+        testa = Interpretador.verifica_se_tem(self, possivelVariavel, ",")
+        if testa != []:
+
+            listaLinhas = [possivelVariavel[: testa[0][0]], possivelVariavel[testa[0][1]:]]
+            listaValores = ''
+
+            for linha in listaLinhas:
+                valor =Interpretador.abstrair_valor_linha(self, linha)
+
+                if not valor[0]:
+                    return valor
+
+                listaValores += str(valor[1])
+
+            return [True, listaValores, "string"]
+
+
+
+
+
         # Sem dados
         if possivelVariavel == '':
             return [True, '', 'string']
@@ -2106,7 +2153,11 @@ class Interpretador():
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
+
     # =================== ARQUIVOS =================== #
+
+
+
     def funcao_ler_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_ler_arquivo")
 
@@ -2193,6 +2244,33 @@ class Interpretador():
                 return [False,  self.msg("erro_adicionar_texto_arquivo").format(texto, nome_arquivo, e), 'string', ' exibirNaTela']
             return [True, True, "booleano", "fazerNada"]
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
+
+
+
+
+    def funcao_listar_arquivos(self, nome_diretorio):
+        Interpretador.log(self, "__funcao_listar_arquivos")
+
+        if nome_diretorio == "":
+            return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
+
+        teste_valor =Interpretador.abstrair_valor_linha(self, nome_diretorio)
+        if teste_valor[0] == False: return teste_valor
+
+        nome_diretorio = str(teste_valor[1])
+        nome_diretorio = Interpretador.formatar_arquivo(self, nome_diretorio)
+        teste_diretorio = Interpretador.funcao_diretorio_existe(self, '"{}"'.format(nome_diretorio))
+        if not teste_diretorio[0]:
+            return teste_diretorio
+
+        if not teste_diretorio[1]:
+            return [False, self.msg('diretório_não_existe').format(nome_diretorio), 'string', 'fazerNada']
+
+        lista_retorno = listdir(nome_diretorio)
+        lista_resultado = [[x, "string"] for x in lista_retorno]
+
+        return [True, lista_resultado, "lista", "fazerNada"]
+
 
     def funcao_diretorio_existe(self, nome_diretorio):
         Interpretador.log(self, "__funcao_diretorio_existe")
@@ -2586,11 +2664,11 @@ class Interpretador():
 
         # Posição estoura posições da lista
         if posicao - 1 > len(self.dic_variaveis[variavelLista][0]):
-            return [False, '{} {}'.format(self.msg("posicao_maior_limite_lista"), posicao),
+            return [False, '{} {}'.format(self.msg("posicao_maior_limite_lista"),'string', posicao),
                     'string', 'exibirNaTela']
 
         if posicao < 1:
-            return [False, '{} {}'.format(self.msg("posicao_menor_limite_lista"), posicao),
+            return [False, '{} {}'.format(self.msg("posicao_menor_limite_lista"), 'string', posicao),
                     'string', 'exibirNaTela']
 
         self.dic_variaveis[variavelLista][0][posicao - 1] = [ teste_valor[1], teste_valor[2] ]
@@ -2619,10 +2697,10 @@ class Interpretador():
         resultado = teste_variavel[1]
 
         if posicao < 1:
-            return [False, self.msg("posicao_menor_limite_lista"), 'exibirNaTela']
+            return [False, self.msg("posicao_menor_limite_lista"),'string', 'exibirNaTela']
 
         if len(resultado) < posicao:
-            return [False, self.msg("posicao_maior_limite_lista"), 'exibirNaTela']
+            return [False, self.msg("posicao_maior_limite_lista"),'string', 'exibirNaTela']
 
         return [True, resultado[posicao - 1][0], resultado[posicao - 1][1], 'exibirNaTela']
 

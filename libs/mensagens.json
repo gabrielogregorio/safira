@@ -1,4 +1,8 @@
 {
+  "diretório_não_existe":{
+    "pt-br":"O diretório '{}' não existe!",
+    "en-us":"The '{}' directory does not exist!"
+  },
   "precisa_nome_diretorio":{
     "pt-br":"Você precisa informar o nome de um diretorio",
     "en-us":"You need to provide the name of a directory"

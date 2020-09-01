@@ -1,8 +1,39 @@
-println "texto texto"# na cor "#11ddaa"
+vermelho = "  "
+laranja = "  "
+verde = "  "
 
-se nome for vazio
-mostre "gabriel" na cor verde
-liste todos os arquivos do diretório "/home"
-Criar um diretório "/home"
-Apagar um diretório "/simpsons"
+def mostra_tela(verde, vermelho, laranja, tempo){
+    s_vm = "[" , vermelho , "]" 
+    s_la = "[" , laranja , "]" 
+    s_vd = "[" , verde  , "]" 
+
+    mostre s_vm na cor "#ff5588"
+    mostre s_la  na cor "#ff8822"
+    mostre s_vd  na cor "#21ff22"
+
+    repita 10 vezes {
+       mostre " || " na cor "#aaaaaa"
+    }
+
+    repita 4 vezes {
+       mostre nessa linha "__________________" na cor "#aaaaaa"
+    }
+
+   espere tempo s
+   limpe a tela
+}
+
+while True {
+    vermelho = "X"
+    laranja = "  "
+    mostra_tela(verde, vermelho, laranja, 5)
+
+    vermelho = "  "
+    verde = "X"
+    mostra_tela(verde, vermelho, laranja, 5)
+
+    verde = "  "
+    laranja = "X"
+    mostra_tela(verde, vermelho, laranja, 2)
+}
 

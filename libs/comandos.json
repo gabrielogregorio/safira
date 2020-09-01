@@ -189,6 +189,41 @@
 
 
 
+
+
+
+  "lista_arquivos_diretorio":{
+    "comando":[
+      ["una lista de todos los archivos en el directorio ", "es"],
+      ["uma lista com todos os arquivos do diretorio ", "pt-br"],
+      ["lista com todos os arquivos do diretorio ", "pt-br"],
+      ["una lista de archivos en el directorio ", "es"],
+      ["una lista con archivos del directorio ", "es"],
+      ["lista com arquivos do diretorio ", "pt-br"],
+      ["lista de arquivos do diretorio ", "pt-br"],
+      ["a list of all files in the ", "en-us"],
+      ["os arquivos do diretorio ", "pt-br"],
+      ["archivos del directorio ", "es"],
+      ["list with files from the ", "en-us"],
+      ["arquivos do diretorio ", "pt-br"],
+      ["list of files in the ", "en-us"],
+      ["files from the ", "en-us"]
+    ],
+    "cor":"lista"
+  },
+
+  "lista_arquivos_diretorio_final":{
+    "comando":[
+      [" directory", "en-us"],
+      ["", "all"]
+    ],
+    "cor":"lista"
+  },
+
+
+
+
+
   "copie":{
     "comando":[
       ["copie el archivo ","es"],
@@ -933,6 +968,21 @@
     "cor":"exibicao"
   },
 
+  "recebeParametros":{
+    "comando":[
+      [" receives parameters ","en-us"],
+      [" recebe parametros ","pt-br"],
+      [" recibe parametros ","es"],
+      [" receives ","en-us"],
+      [" receive ","en-us"],
+      [" recibe ","es"],
+      [" recebe ","pt-br"]
+    ],
+    "cor":"condicionais"
+
+
+
+  },
   "declaraVariaveis":{
     "comando":[
       [" has the value of ","en-us"],
@@ -1145,21 +1195,7 @@
     ],
     "cor":"tempo"
   },
-  "recebeParametros":{
-    "comando":[
-      [" receives parameters ","en-us"],
-      [" recebe parametros ","pt-br"],
-      [" recibe parametros ","es"],
-      [" receives ","en-us"],
-      [" receive ","en-us"],
-      [" recibe ","es"],
-      [" recebe ","pt-br"]
-    ],
-    "cor":"condicionais"
 
-
-
-  },
 
 
 "passando_parametros_abrir":{
