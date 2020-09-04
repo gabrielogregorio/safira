@@ -8,7 +8,7 @@ from interpretador import Interpretador
 import funcoes as funcoes
 import os
 
-
+import re
 LST_BREAKPOINTS = []
 BOOL_IGNORAR_TODOS_BREAKPOINTS = True
 ESPERAR_PRESSIONAR_ENTER = False
@@ -77,115 +77,167 @@ class Console:
 
         # Executa as intruções do interpretador
         # Enquanto não finalizar ou o interpretador não ser iniciado
+        valor_antigo = 0
+        tx_terminal = self.tx_terminal
+        p_cor_num = 0
         while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
-                # Se existir uma interface gráfica
-                if tx_terminal is not None:
-                    # Tela principal
+            if tx_terminal is not None:
+
+                try:
                     self.tela.update()
-
-                    # Editor
                     self.tx_editor_codigo.update()
-
-                    # console
                     self.tx_terminal.update()
+                except:
+                    self.instancia.aconteceu_erro = True
+                    break
 
-                # Obtem uma instrução do interpretador
-                acao = self.instancia.controle_interpretador
 
-                if acao != "":
-                    # exibição na tela
-                    if acao.startswith(':nessaLinha:'):
+            acao = self.instancia.controle_interpretador
 
-                        # Exibir mensagem ou mostrar no terminal
-                        if self.tx_terminal is None:
-                            print(acao[len(':nessaLinha:'):], end="")
-                        else:
-                            self.tx_terminal.insert(END, acao[len(':nessaLinha:'):])
+            if acao != "":
 
-                        self.instancia.controle_interpretador = ""
+                regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
+                valores = None
+                valores = re.search(regex, acao)
+                cor = ""
+                instrucao = ""
 
-                    elif acao.startswith(':mostreLinha:'):
+                if valores is not None:            
+                    instrucao = valores.group(1)
+                    cor = valores.group(3)
+                    linha = valores.group(4)
 
-                        # Exibir mensagem ou mostrar no terminal
-                        if self.tx_terminal is None:
-                            print(acao[len(':mostreLinha:'):])
-                        else:
-                            self.tx_terminal.insert(END, acao[len(':mostreLinha:'):]+'\n')
+                if instrucao == 'nessaLinha':
 
-                        self.instancia.controle_interpretador = ""
+                    if self.tx_terminal is None:
+                        print(linha, end="")
+                    else:
 
-                    elif acao == ':input:':
-
-                        # Entrada de dados
-                        if self.tx_terminal is None:
-                            digitado = input()
-
-                        else:
-                            # Salva o tamanho do texto
-                            textoOriginal = len(self.tx_terminal.get(1.0, END))
-
-                            # Espera o usuário pressionar enter
-                            self.esperar_pressionar_enter = True
-                            while self.esperar_pressionar_enter:
-
-                                # Atualiza a interface
-                                self.tx_terminal.update()
-                                self.tx_editor_codigo.update()
-                                self.tela.update()
-
-                            # Salva tamanho do novo texto
-                            digitado = self.tx_terminal.get(1.0, END)
-
-                            # Corta o texto antigo
-                            digitado = digitado[textoOriginal - 1:-2]
-
-                            # Sinaliza que o enter já foi pressionado
-                            self.esperar_pressionar_enter = False
-
-                        # Atualiza o o interpretador com o texto
-                        self.instancia.texto_digitado = digitado.replace("\n", "")
-
-                        # Atualiza o interpretador para continuar
-                        self.instancia.controle_interpretador = ""
-
-                    elif acao == 'limpar_tela':
-
-                        # Limpar a interface ou o terminal
-                        if self.tx_terminal is None:
-                            clear()
-                        else:
-                            self.tx_terminal.delete('1.0', END)
-
-                        # Atualiza o interpretador para continuar
-                        self.instancia.controle_interpretador = ""
-
-                    elif acao == 'aguardando_breakpoint':
-                        # Modo debug
-                        if tipo_exec == 'debug':
-                            try:
-                                self.linha_analise = int(self.instancia.num_linha)
-                                if self.linha_analise != valor_antigo:
-                                    valor_antigo = self.linha_analise
-                                    self.cont_lin.linha_analise = self.linha_analise
-                                    self.cont_lin.desenhar_linhas()
-                                    self.tela.update()
-                                    self.tx_editor_codigo.update()
-                            except Exception as erro:
-                                print("Erro update", erro)
-
-                        libera_breakpoint = False
-                        while not libera_breakpoint:
+                        try:
                             self.tx_terminal.update()
+                        except:
+                            self.instancia.aconteceu_erro = True
+                            break
+
+                        inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+                        self.tx_terminal.insert(END, linha)
+    
+                        if cor != "":
+                            fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+
+                            self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                            self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
+                            p_cor_num += 1
+                        self.tx_terminal.update()
+
+                    self.instancia.controle_interpretador = ""
+
+                elif instrucao == 'mostreLinha':
+
+                    if self.tx_terminal is None:
+                        print(linha)
+                    else:
+
+                        try:
+                            self.tx_terminal.update()
+                        except:
+                            self.instancia.aconteceu_erro = True
+                            break
+ 
+                        inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+
+                        self.tx_terminal.insert(END, linha + '\n')
+                        self.tx_terminal.update()
+
+                        if cor != "":
+                            fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                            self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                            self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
+                            p_cor_num += 1
+                        self.tx_terminal.update()
+
+                    self.instancia.controle_interpretador = ""
+
+
+
+
+                elif acao == ':input:':
+
+                    if self.tx_terminal is None:
+                        digitado = input()
+
+                    else:
+                        textoOriginal = len(self.tx_terminal.get(1.0, END))
+
+                        # Espera o usuário pressionar enter
+                        self.esperar_pressionar_enter = True
+                        while self.esperar_pressionar_enter:
+
+                            # Atualiza a interface
                             self.tx_editor_codigo.update()
                             self.tela.update()
 
-                        libera_breakpoint = False
+                            try:
+                                self.tx_terminal.update()
+                            except:
+                                self.instancia.aconteceu_erro = True
+                                break
 
-                        self.instancia.controle_interpretador = ""
+                        if not self.instancia.aconteceu_erro:
+                            digitado = self.tx_terminal.get(1.0, END)
+                            digitado = digitado[textoOriginal - 1:-2]
+
+                            self.esperar_pressionar_enter = False
+                        else:
+                            break
+
+                    self.instancia.texto_digitado = digitado.replace("\n", "")
+                    self.instancia.controle_interpretador = ""
+
+                elif acao == 'limpar_tela':
+
+                    # Limpar a interface ou o terminal
+                    if self.tx_terminal is None:
+                        clear()
                     else:
-                        print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
+                        try:
+                            self.tx_terminal.delete('1.0', END)
+                        except Exception as erro:
+                            self.instancia.aconteceu_erro = True
+                            break
 
-        # Se der erro
+                        
+
+                    # Atualiza o interpretador para continuar
+                    self.instancia.controle_interpretador = ""
+
+                elif acao == 'aguardando_breakpoint':
+                    # Modo debug
+                    if tipo_exec == 'debug':
+                        try:
+                            self.linha_analise = int(self.instancia.num_linha)
+                            if self.linha_analise != valor_antigo:
+                                valor_antigo = self.linha_analise
+                                self.cont_lin.linha_analise = self.linha_analise
+                                self.cont_lin.desenhar_linhas()
+                                self.tela.update()
+                                self.tx_editor_codigo.update()
+                        except Exception as erro:
+                            print("Erro update", erro)
+
+                    libera_breakpoint = False
+                    while not libera_breakpoint:
+                        self.tx_terminal.update()
+                        self.tx_editor_codigo.update()
+                        self.tela.update()
+
+                    libera_breakpoint = False
+
+                    self.instancia.controle_interpretador = ""
+                else:
+                    print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
+
+
         if self.instancia.aconteceu_erro:
             if tx_terminal is None:
                 print("Erro : ", self.instancia.mensagem_erro)

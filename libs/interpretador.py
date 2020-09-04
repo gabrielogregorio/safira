@@ -492,7 +492,6 @@ class Interpretador():
 
                 elif lst_ultimo_teste[3] == "declararFuncao":
                     lst_ultimo_teste[3] = "fazerNada"
-                    print("BLOCO>>>>", str_bloco_salvo[1:])
 
                     self.dic_funcoes[lst_ultimo_teste[4]] = {'parametros':self.dic_funcoes[lst_ultimo_teste[4]]['parametros'], 'bloco':str_bloco_salvo[1:].strip()}
 
@@ -1783,7 +1782,7 @@ class Interpretador():
         return lista
 
     def obter_valor_variavel(self, variavel):
-        Interpretador.log(self, "obter_valor_variavel: '{}'".format(variavel))
+        Interpretador.log(self, "obter_valor_variavel:: '{}'".format(variavel))
 
         variavel = variavel.strip()
         variavel = variavel.replace('\n', '')
@@ -1887,8 +1886,24 @@ class Interpretador():
 
         return [True, valorFinal, 'string']
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     def localiza_transforma_variavel(self, linha):
         Interpretador.log(self, "localiza_transforma_variavel:{}".format(linha))
+        print('..........', linha)
 
         anterior = 0
         normalizacao = 0
@@ -1896,6 +1911,10 @@ class Interpretador():
         tipos_obtidos = []
 
         for valor in finditer(' ', linha_base):
+            # ([^\w^\d^\"]{1})([a-zA-Z]{1,}[\w\d\_]*)
+
+
+            
             palavra = linha[anterior: valor.start() + normalizacao]
 
             if palavra.isalnum() and palavra[0].isalpha():
@@ -1904,9 +1923,17 @@ class Interpretador():
                 if not variavelDessaVez[0]: return variavelDessaVez
 
                 tipos_obtidos.append(variavelDessaVez[2])
-                linha = str(linha[:anterior]) + str(
-                    variavelDessaVez[1]) + str(
-                    linha[valor.start() + normalizacao:])
+
+                if variavelDessaVez[2] == 'string':
+                    # coloca "" em caso de strings
+                    linha = str(linha[:anterior]) + '"'+ str(
+                        variavelDessaVez[1]) + '"' + str(
+                        linha[valor.start() + normalizacao:])
+                else:
+                    # Só adiciona o valor da variável
+                    linha = str(linha[:anterior]) + str(
+                        variavelDessaVez[1]) + str(
+                        linha[valor.start() + normalizacao:])
 
                 if len(palavra) < len(str(variavelDessaVez[1])):
                     normalizacao += (len(str(variavelDessaVez[1])) - len(palavra))
@@ -1915,8 +1942,25 @@ class Interpretador():
                     normalizacao -= (len(palavra) - len(str(variavelDessaVez[1])))
 
             anterior = valor.end() + normalizacao
+        print(linha, '......,,')
+        print(linha_base, '----------')
 
         return [True, linha, 'string']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     def fazer_contas(self, linha):
         Interpretador.log(self, "fazer_contas:linha={}".format(linha))
@@ -1945,7 +1989,7 @@ class Interpretador():
         for comando in self.dic_comandos["esta_contido"]["comando"]:
             linha = linha.replace(comando[0], ' in ')
 
-        if '"' in linha: return [False, "Isso é uma string", 'string']
+        #if '"' in linha: return [False, "Isso é uma string", 'string']
 
         linha = ' {} '.format(linha)
 
@@ -1962,6 +2006,7 @@ class Interpretador():
 
         # Se não tiver nenhuma operação
         if qtd_simbolos_especiais == 0:
+
             return [False, self.msg("nao_possui_operacao_matematica"), 'string']
 
         # Correção de caracteres
@@ -1972,25 +2017,32 @@ class Interpretador():
 
         # Abstrai o valor de todas as variáveis
         linha =Interpretador.localiza_transforma_variavel(self, linha)
+
         if not linha[0]: return linha
 
         # Se sobrou texto
-        for caractere in linha[1]:
-            if str(caractere).isalpha():
-                return [False, self.msg("nao_possivel_conta_string") + str(linha[1]), 'string']
+        #for caractere in linha[1]:
+        #    if str(caractere).isalpha():
+        #        return [False, self.msg("nao_possivel_conta_string") + str(linha[1]), 'string']
 
         # Tente fazer uma conta com isso
+
         try:
+
             resutadoFinal = eval(linha[1])
         except Exception as erro:
+
             return [False, "{} |{}|".format(self.msg("nao_possivel_fazer_conta"), linha[1]),
                     'string']
         else:
+
             return [True, resutadoFinal, 'float']
 
     def abstrair_mostre_valor(self, possivelVariavel):
         Interpretador.log(self, "abstrair_mostre_valor")
         possivelVariavel = possivelVariavel.strip()
+        if possivelVariavel == '':
+            return [True, '', 'vazio', 'exibirNaTela']
 
         # Caso existam contas entre strings ( Formatação )
         if possivelVariavel[0] == ',':
@@ -2024,13 +2076,8 @@ class Interpretador():
 
         possivelVariavel = str(possivelVariavel).strip()
 
-
-
-
-
-
-
-
+        if possivelVariavel == '':
+            return [True, "", "vazio", "fazerNada"]
 
         # Caso existam contas entre strings ( Formatação )
         if possivelVariavel[0] == ',':
@@ -2056,10 +2103,6 @@ class Interpretador():
                 listaValores += str(valor[1])
 
             return [True, listaValores, "string"]
-
-
-
-
 
         # Sem dados
         if possivelVariavel == '':
@@ -2520,7 +2563,6 @@ class Interpretador():
         Interpretador.log(self, "__funcao_exibir_outra_ln: {}".format(linha))
 
         resultado = Interpretador.abstrair_mostre_valor(self, linha)
-        print(resultado)
 
         if not resultado[0]:
             return resultado
@@ -2537,7 +2579,6 @@ class Interpretador():
         Interpretador.log(self, "__funcao_exibir_mesma_ln: {}".format(linha))
 
         resultado = Interpretador.abstrair_mostre_valor(self, linha)
-        print(resultado)
 
         if not resultado[0]:
             return resultado

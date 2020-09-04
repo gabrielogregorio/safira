@@ -1,33 +1,30 @@
-vermelho vale " "
-verde vale " "
-amarelo vale " "
+vermelho = "  "
+laranja = "  "
+verde = "  "
 
-funcao renderizasemaforo recebe parametros tempo {
+funcao mostra_tela(verde, vermelho, laranja, tempo){
     limpe a tela
-    v1 = "[vermelho]"
-    v2 = "[amarelo]"
-    v3 = "[verde]"
+    mostre "[" + vermelho  + "]" na cor "#ff5588"
+    mostre "[" + laranja + "]" na cor "#ff8822"
+    mostre "[" + verde  + "]" na cor "#21ff22"
 
-    mostre v1 na cor "#ff4444"
-    mostre v2 na cor "#ffaa11"
-    mostre v3 na cor "#22ff22"
+    repita 10 vezes { mostre " || " na cor "#aaaaaa" }
+    repita 2 vezes { mostre nessa linha "__________________________" na cor "#aaaaaa" }
 
-    espere o tempo segundos
+   espere tempo s
 }
 
-while 1 == 1 {
-    amarelo recebe " "
-    vermelho recebe "x"
+while True {
+    vermelho = "X"
+    laranja = "  "
+    mostra_tela(verde, vermelho, laranja, 5)
 
-    renderizasemaforo passando parametro 5
+    vermelho = "  "
+    verde = "X"
+    mostra_tela(verde, vermelho, laranja, 5)
 
-    vermelho recebe " "
-    verde recebe "x"
-
-    renderizasemaforo passando parametro 2
-
-    verde recebe " "
-    amarelo recebe "x"
-
-    renderizasemaforo passando parametro 5
+    verde = "  "
+    laranja = "X"
+    mostra_tela(verde, vermelho, laranja, 2)
 }
+

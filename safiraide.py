@@ -86,21 +86,21 @@ class Safira():
         self.tela.overrideredirect(1)
         self.tela.rowconfigure(1, weight=1)
         self.tela.grid_columnconfigure(1, weight=1)
+        self.splash = None
 
     def main(self):
-        splash = Splash(self.tela, self.design)
-        interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando, self.interface_idioma)
+        self.splash = Splash(self.design)
+        interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando, self.interface_idioma, self.splash)
 
-        splash.splash_inicio()
-        sleep(0.1)
-        splash.splash_fim()
+        self.splash.splash_inicio()
 
         interf.carregar_tela_principal()
 
 
 class Interface():
-    def __init__(self, tela, dic_comandos, design, cor_do_comando, interface_idioma):
+    def __init__(self, tela, dic_comandos, design, cor_do_comando, interface_idioma, splash):
         self.design = design
+        self.splash = splash
 
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
@@ -315,8 +315,6 @@ class Interface():
             acao = self.instancia.controle_interpretador
 
             if acao != "":
-                print(acao)
-
                 regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
                 valores = None
                 valores = re.search(regex, acao)
@@ -369,14 +367,14 @@ class Interface():
                         self.tx_terminal.insert(END, linha + '\n')
                         self.tx_terminal.update()
 
-                    self.instancia.controle_interpretador = ""
+                        if cor != "":
+                            fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                            self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                            self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
+                            p_cor_num += 1
+                        self.tx_terminal.update()
 
-                    if cor != "":
-                        fim_cor = float(self.tx_terminal.index("end-1line lineend"))
-                        self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
-                        self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
-                        p_cor_num += 1
-                    self.tx_terminal.update()
+                    self.instancia.controle_interpretador = ""
 
 
 
@@ -422,14 +420,12 @@ class Interface():
                         clear()
                     else:
                         try:
-                            #self.tx_terminal.get(1.0, END)
-                            self.tx_terminal.update()
+                            self.tx_terminal.delete('1.0', END)
                         except Exception as erro:
-                            print("[---]", erro)
                             self.instancia.aconteceu_erro = True
                             break
 
-                        self.tx_terminal.delete('1.0', END)
+                        
 
                     # Atualiza o interpretador para continuar
                     self.instancia.controle_interpretador = ""
@@ -705,6 +701,8 @@ class Interface():
         self.colorir_codigo.tela = self.tela
 
         Interface.manipular_arquivos(self, None, "abrirArquivo", 'script.safira')
+
+        self.splash.splash_fim()
 
         self.tela.deiconify()
         self.tela.update()

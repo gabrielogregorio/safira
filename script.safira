@@ -2,25 +2,16 @@ vermelho = "  "
 laranja = "  "
 verde = "  "
 
-def mostra_tela(verde, vermelho, laranja, tempo){
-    s_vm = "[" , vermelho , "]" 
-    s_la = "[" , laranja , "]" 
-    s_vd = "[" , verde  , "]" 
+funcao mostra_tela(verde, vermelho, laranja, tempo){
+    limpe a tela
+    mostre "[" + vermelho  + "]" na cor "#ff5588"
+    mostre "[" + laranja + "]" na cor "#ff8822"
+    mostre "[" + verde  + "]" na cor "#21ff22"
 
-    mostre s_vm na cor "#ff5588"
-    mostre s_la  na cor "#ff8822"
-    mostre s_vd  na cor "#21ff22"
-
-    repita 10 vezes {
-       mostre " || " na cor "#aaaaaa"
-    }
-
-    repita 4 vezes {
-       mostre nessa linha "__________________" na cor "#aaaaaa"
-    }
+    repita 10 vezes { mostre " || " na cor "#aaaaaa" }
+    repita 2 vezes { mostre nessa linha "__________________________" na cor "#aaaaaa" }
 
    espere tempo s
-   limpe a tela
 }
 
 while True {
