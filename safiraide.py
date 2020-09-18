@@ -376,12 +376,7 @@ class Interface():
 
                     self.instancia.controle_interpretador = ""
 
-
-
-
-
                 elif acao == ':input:':
-
                     if self.tx_terminal is None:
                         digitado = input()
 
@@ -425,7 +420,6 @@ class Interface():
                             self.instancia.aconteceu_erro = True
                             break
 
-                        
 
                     # Atualiza o interpretador para continuar
                     self.instancia.controle_interpretador = ""

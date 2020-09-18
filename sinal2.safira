@@ -1,8 +1,0 @@
-mostre "[  ] " na cor "#ff4444"
-mostre "[X]" na cor "#ffaa11"                                                                                                                                #na cor "#ffaa11"
-mostre "[  ]" na cor "#22ff22"
-
-repita 10 vezes
-{
-    mostre " || " na cor "#999999"   
-}
