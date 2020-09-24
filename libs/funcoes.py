@@ -25,7 +25,6 @@ def carregar_json(arquivo):
 def transformar_em_json(texto):
     return loads(texto)
 
-
 def atualiza_configuracoes_temas():
     dicionario_comandos = carregar_json('libs/comandos.json')
     config = carregar_json('configuracoes/configuracoes.json')

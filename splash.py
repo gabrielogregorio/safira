@@ -12,6 +12,7 @@ class Splash():
         self.fr_splash = None
         self.l1_splash = None
         self.l2_splash = None
+
         self.tela_splash = Tk()
         self.tela_splash.withdraw()
         self.tela_splash.overrideredirect(1)
@@ -49,7 +50,9 @@ class Splash():
         t_width = self.tela_splash.winfo_screenwidth()
         t_heigth = self.tela_splash.winfo_screenheight()
 
-        self.tela_splash.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
+        geometria = "+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2))
+
+        self.tela_splash.geometry(geometria)
         self.tela_splash.deiconify()
         self.tela_splash.update()
 
@@ -57,7 +60,6 @@ class Splash():
         self.fr_splash.destroy()
         self.l1_splash.destroy()
         self.l2_splash.destroy()
-
         self.frame_splash.destroy()
         self.tela_splash.destroy()
 

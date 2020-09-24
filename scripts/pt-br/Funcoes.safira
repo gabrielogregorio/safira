@@ -2,26 +2,21 @@
 # executado em qualquer parte do código
 # através da palavra atribuida
 
-
-
-
-
-#****** Uso simples comando ******#
 # Criando uma função
 funcao mostraArvore
 {
-    mostre "    *    "
-    mostre "   ***   "
-    mostre "  *****  "
-    mostre " ******* "
-    mostre "    *    "
+    mostre " ***********************************************************************"
+    mostre " ***      ****      ****    *********      **************      ************     ***"
+    mostre " ***     ******   ****   ***     ***        ************       ***         ***      ***"
+    mostre " ***   ****  ******    ***      ***              ***              ************       ***"
+    mostre " ***  ***     ****    **********               ***              ***        ***         ***"       
+    mostre " ***********************************************************************"
 }
 
-# Chamando a função. Você pode chamar ela 
-# Quantas vezes e onde quiser
+# Chamando a função
 mostraArvore
 
-# Você também pode criar uma função com parâmetros
+# Uma função com parâmetros
 funcao calculaMedia recebe parametros nota1, nota2
 {
     mostre "Sua média final é ", (nota1 + nota2) / 2
@@ -29,36 +24,3 @@ funcao calculaMedia recebe parametros nota1, nota2
 
 calculaMedia passando parametros 9.8, 7.5
 
-
-
-
-
-
-#****** Variações dos comandos ******#
-# function 
-# funcao 
-# funcion 
-# def 
-
-#****** Variações dos subcomandos ******#
-# recebe parametros 
-# receives parameters 
-# recibe parametros 
-# 
-# passando parametros
-# passando parametro 
-# parametros 
-# passando 
-# parametro 
-# 
-# passing parameters 
-# passing parameter 
-# parameters 
-# passing 
-# parameter 
-# 
-# parametros de paso 
-# parametro de paso 
-# parametros 
-# pasando los 
-# parametro 
