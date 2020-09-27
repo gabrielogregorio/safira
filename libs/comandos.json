@@ -155,127 +155,6 @@
     "cor":"logico"
   },
 
-  "esta_contido_apenas_visualizacao":{
-    "comando":[
-      [" in ","en-us"]
-    ],
-    "cor":"logico"
-  },
-
-
-
-  "obter_diretorio":{
-    "comando":[
-      ["del directorio de trabajo actual", "es"],
-      ["ele diretorio de trabalho atual", "es"],
-      ["the current working directory", "en-us"],
-      ["o diretorio de trabalho atual", "pt-br"],
-      ["directorio de trabajo actual", "es"],
-      ["diretorio de trabalho atual", "pt-br"],
-      ["current working directory", "en-us"],
-      ["o diretorio de trabalho", "pt-br"],
-      ["take the current path ", "en-us"],
-      ["the current directory", "en-us"],
-      ["the current folder", "en-us"],
-      ["el directorio actual", "es"],
-      ["o diretorio atual", "pt-br"],
-      ["o diretorio atual", "pt-br"],
-      ["la carpeta actual", "es"],
-      ["a pasta atual", "pt-br"]
-          ],
-    "cor":"lista"
-  },
-
-
-
-
-
-
-
-  "lista_arquivos_diretorio":{
-    "comando":[
-      ["una lista de todos los archivos en el directorio ", "es"],
-      ["uma lista com todos os arquivos do diretorio ", "pt-br"],
-      ["lista com todos os arquivos do diretorio ", "pt-br"],
-      ["una lista de archivos en el directorio ", "es"],
-      ["una lista con archivos del directorio ", "es"],
-      ["lista com arquivos do diretorio ", "pt-br"],
-      ["lista de arquivos do diretorio ", "pt-br"],
-      ["a list of all files in the ", "en-us"],
-      ["os arquivos do diretorio ", "pt-br"],
-      ["archivos del directorio ", "es"],
-      ["list with files from the ", "en-us"],
-      ["arquivos do diretorio ", "pt-br"],
-      ["list of files in the ", "en-us"],
-      ["files from the ", "en-us"]
-    ],
-    "cor":"lista"
-  },
-
-  "lista_arquivos_diretorio_final":{
-    "comando":[
-      [" directory", "en-us"],
-      ["", "all"]
-    ],
-    "cor":"lista"
-  },
-
-
-
-
-
-  "copie":{
-    "comando":[
-      ["copie el archivo ","es"],
-      ["copia o arquivo ","pt-br"],
-      ["copy the file ","en-us"],
-      ["copia ","pt-br"],
-      ["copie ","es"],
-      ["copy ","en-us"]
-    ],
-    "cor":"lista"
-  },
-  "copie_para":{
-    "comando":[
-      [" to the directory ","en-us"],
-      [" en el directorio ","es"],
-      [" para o diretorio ","pt-br"],
-      [" al directorio ","es"],
-      [" to the folder ","en-us"],
-      [" para a pasta ","pt-br"],
-      [" a la carpeta ","es"],
-      [" to the ","en-us"],
-      [" para ","pt-br"],
-      [" to ","en-us"],
-      [" a ","es"]
-    ],
-    "cor":"lista"
-  },
-  "copie_para_opcional":{
-    "comando":[
-      [" directory","en-us"],
-      [" folder","en-us"],
-      ["","all"]
-    ],
-    "cor":"lista"
-  },
-
- 
-  "for_vazio":{
-    "comando":[
-      [" for vazio","pt-br"],
-      [" is empty","en-us"],
-      [" esta vacio","es"]
-        ],
-    "cor":"condicionais"
-  },
-
-
-
-
-
-
-
 
   "na_cor":{
     "comando":[
@@ -287,59 +166,6 @@
         ],
     "cor":"condicionais"
   },
-
-
-
-
-  "for_vazio":{
-    "comando":[
-      [" for vazio","pt-br"],
-      [" is empty","en-us"],
-      [" esta vacio","es"]
-        ],
-    "cor":"condicionais"
-  },
-
-
-
-
-
-  "mova":{
-    "comando":[
-      ["mueva el archivo ","es"],
-      ["mova o arquivo ","pt-br"],
-      ["move the ","en-us"],
-      ["mova ","pt-br"],
-      ["mueve ","es"],
-      ["move ","en-us"]
-        ],
-    "cor":"lista"
-  },
-  "mova_para":{
-    "comando":[
-      [" para o diretorio ", "pt-br"],
-      [" al directorio ", "en-us"],
-      [" para a pasta ", "pt-br"],
-      [" a la carpeta ", "es"],
-      [" file to the ", "en-us"],
-      [" file to ", "en-us"],
-      [" to the ", "en-us"],
-      [" para ", "pt-br"],
-      [" to ", "en-us"]
-        ],
-    "cor":"lista"
-  },
-  "mova_para_opcional":{
-    "comando":[
-      [" directory","en-us"],
-      [" folder","en-us"],
-      ["","all"]
-    ],
-    "cor":"lista"
-  },
-
-
-
 
   "substitua":{
     "comando":[
@@ -365,9 +191,6 @@
     ],
     "cor":"lista"
   },
-
-
-
 
   "to_lower":{
     "comando":[
@@ -465,20 +288,7 @@
     ],
     "cor":"contas"
   },
-  "abra_um_arquivo":{
-    "comando":[
-      ["abra o arquivo ","pt-br"],
-      ["abra a imagem ","pt-br"],
-      ["abra a foto ","pt-br"]
-    ],
-    "cor":"lista"
-  },
-  "abra_um_arquivo_no":{
-    "comando":[
-      [" no ","pt-br"]
-    ],
-    "cor":"lista"
-  },
+
    "importe":{
     "comando":[
       ["importe a biblioteca ","pt-br"],
@@ -1151,9 +961,6 @@
     ],
     "cor":"tempo"
   },
-
-
-
   "esperaEm":{
     "comando":[
       [" milissegundos","pt-br"],
@@ -1195,9 +1002,6 @@
     ],
     "cor":"tempo"
   },
-
-
-
 "passando_parametros_abrir":{
   "comando":[
     ["\\s*\\(\\s*","all"]
@@ -1324,36 +1128,6 @@
       ["finally","en-us"]
     ],
     "cor":"condicionais"
-  },
-
-  "crie_um_diretorio":{
-    "comando":[
-      ["crie uma pasta com o nome de ", "pt-br"],
-      ["crie um diretorio com o nome ", "pt-br"],
-      ["crie um diretorio chamado ", "pt-br"],
-      ["crie uma pasta com o nome ", "pt-br"],
-      ["crie uma pasta chamada ", "pt-br"],
-      ["create a folder called ", "en-us"],
-      ["create a folder named ", "en-us"],
-      ["crear un directorio ", "es"],
-      ["criar um diretorio ", "pt-br"],
-      ["crear una carpeta ", "es"],
-      ["crie o diretorio ", "pt-br"],
-      ["crie uma pasta ", "pt-br"],
-      ["crie a pasta ", "pt-br"],
-      ["create the ", "en-us"],
-      ["create a ", "en-us"]
-      
-          ],
-    "cor":"lista"
-  },
-  "crie_um_diretorio_sub":{
-    "comando":[
-      [" directory","en-us"],
-      [" folder","en-us"],
-      ["","all"]
-    ],
-    "cor":"lista"
   }
 }
 

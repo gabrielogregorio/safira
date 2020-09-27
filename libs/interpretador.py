@@ -8,7 +8,6 @@ from time import time
 from json import load
 from re import findall, search
 from re import finditer
-
 import shutil
 from os import system, listdir
 
@@ -1061,22 +1060,6 @@ class Interpretador():
                 if instrucao_analise[0]: return [Interpretador.funcao_ler_arquivo(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
             ##################################################################
-            #                       SISTEMA OPERACIONAL                      #
-            ##################################################################
-
-            #if caractere_inicio in self.dicLetras["obter_diretorio"]:
-            #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<obter_diretorio>)$', linha)
-            #    if instrucao_analise[0]: return [Interpretador.funcao_obter_diretorio_atual(self), self.num_linha, ""]
-
-            #if caractere_inicio in self.dicLetras["mova"]:
-            #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<mova>)(.*)(<mova_para>)(.*)(<mova_para_opcional>)$', linha)
-            #    if instrucao_analise[0]: return [Interpretador.funcao_mover_arquivo(self, instrucao_analise[1][2], instrucao_analise[1][4] ), self.num_linha, ""]
-
-            #if caractere_inicio in self.dicLetras["copie"]:
-            #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<copie>)(.*)(<copie_para>)(.*)(<copie_para_opcional>)$', linha)
-            #    if instrucao_analise[0]: return [Interpretador.funcao_copiar_arquivo(self, instrucao_analise[1][2], instrucao_analise[1][4] ), self.num_linha, ""]
-
-            ##################################################################
             #                            CONDIÇÔES                           #
             ##################################################################
 
@@ -1208,13 +1191,10 @@ class Interpretador():
             caractere_inicio = possivelVariavel[0]
 
         ##################################################################
-        #                           FOR VAZIO                            #
+        #                            DIVERSOS                            #
         ##################################################################
         instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<na_cor>)(.*)$', possivelVariavel)
         if instrucao_analise[0]: return Interpretador.funcao_na_cor(self, instrucao_analise[1][1], instrucao_analise[1][3])
-
-        #instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<for_vazio>)$', possivelVariavel)
-        #if instrucao_analise[0]: return Interpretador.funcao_for_vazio(self, instrucao_analise[1][1])
 
         ##################################################################
         #                         NUMERO ALEATÓRIO                       #
@@ -1255,7 +1235,6 @@ class Interpretador():
         if instrucao_analise[0]: return Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1], instrucao_analise[1][3])
 
 
-
         ##################################################################
         #                             ENTRADA                            #
         ##################################################################
@@ -1265,51 +1244,33 @@ class Interpretador():
             if instrucao_analise[0]: return Interpretador.funcao_ovalor_digitado(self, instrucao_analise[1][1])
 
         ##################################################################
-        #                       SISTEMA OPERACIONAL                      #
-        ##################################################################
-
-        if caractere_inicio in self.dicLetras["obter_diretorio"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<obter_diretorio>)$', possivelVariavel)
-            if instrucao_analise[0]: return Interpretador.funcao_obter_diretorio_atual(self)
-
-        ##################################################################
         #                     MANIPULAÇÃO DE ARQUIVOS                    #
         ##################################################################
 
-        #if caractere_inicio in self.dicLetras["arquivo_existe"]:
-        #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
-        #    if instrucao_analise[0]: return Interpretador.funcao_arquivo_nao_existe(self, instrucao_analise[1][2])
+        if caractere_inicio in self.dicLetras["arquivo_existe"]:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
+            if instrucao_analise[0]: return Interpretador.funcao_arquivo_nao_existe(self, instrucao_analise[1][2])
 
-        #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
-        #    if instrucao_analise[0]: return Interpretador.funcao_arquivo_existe(self, instrucao_analise[1][2])
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
+            if instrucao_analise[0]: return Interpretador.funcao_arquivo_existe(self, instrucao_analise[1][2])
 
-        #if caractere_inicio in self.dicLetras["diretorio_existe"]:
-        #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_nao_sub_existe>)$', possivelVariavel)
-        #    if instrucao_analise[0]: return Interpretador.funcao_diretorio_nao_existe(self, instrucao_analise[1][2])
+        if caractere_inicio in self.dicLetras["diretorio_existe"]:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_nao_sub_existe>)$', possivelVariavel)
+            if instrucao_analise[0]: return Interpretador.funcao_diretorio_nao_existe(self, instrucao_analise[1][2])
 
-        #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_sub_existe>)$', possivelVariavel)
-        #    if instrucao_analise[0]: return Interpretador.funcao_diretorio_existe(self, instrucao_analise[1][2])
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_sub_existe>)$', possivelVariavel)
+            if instrucao_analise[0]: return Interpretador.funcao_diretorio_existe(self, instrucao_analise[1][2])
 
         if caractere_inicio in self.dicLetras["leia_arquivo"]:
             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
             if instrucao_analise[0]: return Interpretador.funcao_ler_arquivo(self, instrucao_analise[1][2])
 
-
-
-
-
-        ##################################################################
-        #                             ARQUIVOS                           #
-        ##################################################################
-        #if caractere_inicio in self.dicLetras["lista_arquivos_diretorio"]:
-        #    instrucao_analise = Interpretador.analisa_instrucao(self, '^(<lista_arquivos_diretorio>)(.*)(<lista_arquivos_diretorio_final>)$', possivelVariavel)
-        #    if instrucao_analise[0]: return Interpretador.funcao_listar_arquivos(self, instrucao_analise[1][2])
         ##################################################################
         #                            VARIAVEIS                           #
         ##################################################################
 
-        #instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_subum>)(.*)(<percorrer_lst_str_a_cada_subdois>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
-        #if instrucao_analise[0]: return Interpretador.funcao_fatiamento(self, instrucao_analise[1][1], instrucao_analise[1][3], instrucao_analise[1][5], instrucao_analise[1][7])
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_subum>)(.*)(<percorrer_lst_str_a_cada_subdois>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
+        if instrucao_analise[0]: return Interpretador.funcao_fatiamento(self, instrucao_analise[1][1], instrucao_analise[1][3], instrucao_analise[1][5], instrucao_analise[1][7])
 
         instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
         if instrucao_analise[0]: return Interpretador.funcao_fatiamento(self, instrucao_analise[1][1], instrucao_analise[1][3], instrucao_analise[1][5])
@@ -1329,15 +1290,6 @@ class Interpretador():
 
         return [True, None, 'vazio']
 
-
-    def funcao_for_vazio(self, valor):
-        teste_valor = Interpretador.abstrair_valor_linha(self, valor)
-        if not teste_valor[0]:
-            return teste_valor
-
-        if teste_valor[1] == "":
-            return [True, True, "booleano", "fazerNada"]
-        return [True, False, "booleano", "fazerNada"]
 
     def verificar_se_existe(self, arquivo_diretorio, ja_foi_abstraido = False):
         Interpretador.log(self, "verificar_se_existe")
@@ -1367,47 +1319,6 @@ class Interpretador():
 
         return teste_arquivo
 
-    # Funções do Sistema Operacional
-    def funcao_obter_diretorio_atual(self):
-        Interpretador.log(self, "__funcao_obter_diretorio_atual")
-
-        return [True, os.getcwd() , 'string', 'fazerNada']
-
-    def funcao_mover_arquivo(self, arquivo, objetivo):
-        Interpretador.log(self, "__funcao_mover_arquivo")
-
-        # Abstrair o valor do arquivo e do objetivo
-        teste_arquivo = Interpretador.testar_existencia(self, arquivo)
-        if not teste_arquivo[0]: return teste_arquivo
-
-        teste_objetivo = Interpretador.testar_existencia(self, objetivo)
-        if not teste_objetivo[0]: return teste_objetivo
-
-        try:
-            shutil.move(teste_arquivo[1], teste_objetivo[1])
-        except Exception as erro:
-            #if  'already exists' in erro:
-            return [False, self.msg("erro_mover_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
-
-        return [True, True , 'booleano', 'fazerNada']
-
-    def funcao_copiar_arquivo(self, arquivo, objetivo):
-        Interpretador.log(self, "__funcao_copiar_arquivo")
-
-        # Abstrair o valor do arquivo e do objetivo
-        teste_arquivo = Interpretador.testar_existencia(self, arquivo)
-        if not teste_arquivo[0]: return teste_arquivo
-
-        teste_objetivo = Interpretador.testar_existencia(self, objetivo)
-        if not teste_objetivo[0]: return teste_objetivo
-
-        try:
-            shutil.copy(teste_arquivo[1], teste_objetivo[1])
-        except Exception as erro:
-            #if  'already exists' in erro:
-            return [False, self.msg("erro_copiar_arquivo").format(teste_arquivo[1], teste_objetivo[1], erro), 'string', 'fazerNada']
-
-        return [True, True , 'booleano', 'fazerNada']
 
     def operacoes_variaveis(self, entrada, pipeline):
         """
@@ -1497,11 +1408,6 @@ class Interpretador():
 
         return [True, [testa_valor, variavel_atribuir], "lista", "declararLoopParaItemString"]
 
-
-
-
-
-
     def funcao_substituir_texto(self, valor1, valor2, variavel):
         Interpretador.log(self, "__funcao_substituir_texto")
 
@@ -1585,7 +1491,6 @@ class Interpretador():
 
             if abstrair_cada[2] != 'float':
                 return Interpretador.msg_variavel_numerica(self, 'naoNumerico', abstrair_cada[1])
-
 
 
         de = int(abstrair_de[1])
@@ -1962,6 +1867,10 @@ class Interpretador():
 
         for comando in self.dic_comandos["matematica_elev"]["comando"]:
             linha = linha.replace(comando[0], ' ** ')
+
+        for comando in self.dic_comandos["matematica_mod"]["comando"]:
+            linha = linha.replace(comando[0], ' % ')
+
 
         for comando in self.dic_comandos["matematica_add"]["comando"]:
             linha = linha.replace(comando[0], ' + ')

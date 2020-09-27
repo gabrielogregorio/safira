@@ -483,6 +483,7 @@ class Interface():
     #                             INTERFACE PRINCIPA                            #
     # ************************************************************************* #
     def carregar_tela_principal(self):
+
         self.tela.overrideredirect(0) # Traz barra de titulo
         self.tela.withdraw() # Ocultar tkinter
 
@@ -568,6 +569,8 @@ class Interface():
         Interface.carregar_cascata_scripts(self)
         Interface.carregar_cascata_temas(self)
         Interface.carregar_cascata_sintaxe(self)
+
+        print(1)
 
         self.mn_intfc.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=comando_aumentar_fonte)
         self.mn_intfc.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=comando_diminuir_fonte)
@@ -693,7 +696,7 @@ class Interface():
         self.tela.geometry("{}x{}+0+0".format(t_width, t_heigth))
         self.colorir_codigo.tela = self.tela
 
-        Interface.manipular_arquivos(self, None, "abrirArquivo", 'script.safira')
+        #Interface.manipular_arquivos(self, None, "abrirArquivo", 'script.safira')
 
         self.splash.splash_fim()
 
@@ -764,6 +767,8 @@ class Interface():
 
         if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
             Interface.atualizar_codigo_editor(self, self.num_aba_focada)
+
+        return 0
 
     def aumentar_diminuir_fonte(self, acao):
         print("aumentar_diminuir_fonte")
