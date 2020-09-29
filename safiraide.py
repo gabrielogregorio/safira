@@ -62,10 +62,10 @@ __author__ = 'Gabriel Gregório da Silva'
 __email__ = 'gabriel.gregorio.1@outlook.com'
 __github__ = 'https://github.com/Combratec/safira'
 __description__ = 'Linguagem de programação focada em lógica'
-__status__ = 'Desenvolvimento'
-__project__ = 'Combratec'
-__date__ = '01/08/2019'
 __version__ = '0.3'
+__project__ = 'Combratec'
+__status__ = 'Desenvolvimento'
+__date__ = '01/08/2019'
 
 
 class Safira():
@@ -79,8 +79,8 @@ class Safira():
 
         self.tela = Tk()
         self.tela.withdraw()
-        self.tela.overrideredirect(1)
         self.tela.rowconfigure(1, weight=1)
+        self.tela.overrideredirect(1)
         self.tela.grid_columnconfigure(1, weight=1)
         self.splash = None
 
@@ -140,8 +140,6 @@ class Interface():
         self.dic_imgs = {"pt-br": "ic_pt_br.png", "en-us": "ic_en_us.png"}
         self.idioma = "pt-br"
         self.base = "imagens/"
-
-
 
         self.tp_interface_idioma = None
 
@@ -208,7 +206,15 @@ class Interface():
                     if valor[0] not in self.dicLetras[k]:
                         self.dicLetras[k].append(valor[0])
 
-    def colocar_linhas_codigo(self, linhas):
+    def colocar_linhas_codigo(self, linhas: str) -> str:
+        """Adiciona [[numero_linha] no inicio de todas as linhas]
+
+        Args:
+            linhas (str): [O código qualquer ]
+
+        Returns:
+            str: [O código com o [numero_linha] em todas as linhas]
+        """
         nova_linha = ''
         lista = linhas.split('\n')
         for linha in range(len(lista)):
@@ -216,7 +222,17 @@ class Interface():
 
         return nova_linha
 
-    def inicializar_interpretador(self, event=None, libera_break_point_executa=False, linha_linha=False):
+    def inicializar_interpretador(self, libera_break_point_executa: bool, linha_linha: bool):
+        """inicia uma instância do interpretador informando um código
+
+        Args:
+            libera_break_point_executa (bool): Se o breakpoint estiver ativo, envie True para liberar
+            linha_linha (bool): Executa linha por linha
+
+        Returns:
+            None:
+        """
+
         print("Inicializador do orquestrador iniciado")
 
         self.bt_playP.configure(image=self.ic_PStop)
@@ -479,8 +495,10 @@ class Interface():
         self.bt_playP.configure(image=self.ic_playP)
         self.bool_interpretador_iniciado = False
 
+        return 0
+
     # ************************************************************************* #
-    #                             INTERFACE PRINCIPA                            #
+    #                             INTERFACE PRINCIPAL                           #
     # ************************************************************************* #
     def carregar_tela_principal(self):
 
@@ -500,12 +518,12 @@ class Interface():
         comando_abrir_arquivo = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_dialog")
         comando_salvar_arquivo_como = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_como_dialog")
         comando_acao_salvararq = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo")
-        comando_executar_brakp = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=True)
+        comando_executar_brakp = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=True, linha_linha=False)
         comando_inserir_breakp = lambda event=None: Interface.adicionar_remover_breakpoint(self, event)
-        comando_parar_execucao = lambda event=None: Interface.inicializar_interpretador(self, event)
+        comando_parar_execucao = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=False, linha_linha=False)
         comando_executar_linha = lambda event=None: Interface.inicia_marca_break_point_geral(self)
         comando_limpa_breakpon = lambda event=None: Interface.limpar_breakpoints(self)
-        comando_executar_progr = lambda event=None: Interface.inicializar_interpretador(self)
+        comando_executar_progr = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=False, linha_linha=False)
         comando_abrir_abrir_nova_aba = lambda event=None: Interface.abrir_nova_aba(self, event)
         comando_ativar_fullscr = lambda event: Interface.ativar_desativar_full_screen(self, event)
         comando_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
@@ -788,10 +806,6 @@ class Interface():
         self.cont_lin.desenhar_linhas()
         self.tela.update()
 
-
-       
-
-
     # ************************************************************************* #
     #                             MENU DE IDIOMAS                               #
     # ************************************************************************* #
@@ -803,8 +817,6 @@ class Interface():
 
         self.lb1 = Label(self.fr_top_idioma, fg="#343434", bg="#efefef", text=self.interface_idioma["texto_atualizacao"][self.idioma])
         self.lb1.grid(row=1, column=1)
-
-       
 
         self.fr_idionas = Frame(self.tp_interface_idioma, bg="#efefef")
         self.fr_idionas.grid(row=2, column=1)
@@ -867,7 +879,6 @@ class Interface():
                 bandeira[0].configure(bg="#efefef")
                 bandeira[1].configure(bg="#efefef", activebackground="#efefef")
                 bandeira[2].configure(bg="#efefef", activebackground="#efefef", fg="black")
-
 
     # ************************************************************************* #
     #                                  Abas                                     #
@@ -1346,7 +1357,7 @@ class Interface():
         Interface.marca_todos_breakpoint(self)
         self.tx_editor_codigo.update()
 
-        Interface.inicializar_interpretador(self, libera_break_point_executa=True)
+        Interface.inicializar_interpretador(self, libera_break_point_executa=True, linha_linha=False)
 
     def adicionar_remover_breakpoint(self, event=None):
         # Marcar um breakpoint

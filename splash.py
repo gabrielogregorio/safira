@@ -23,13 +23,13 @@ class Splash():
     def splash_inicio(self):
         self.frame_splash = Frame(self.tela_splash)
 
-        self.frame_splash.configure(background=self.design.dic["cor_intro"]["background"])
-        self.frame_splash.rowconfigure(1, weight=1)
-        self.frame_splash.grid_columnconfigure(0, weight=1)
-
         self.fr_splash = Frame(self.frame_splash)
         self.l1_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
         self.l2_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
+
+        self.frame_splash.configure(background=self.design.dic["cor_intro"]["background"])
+        self.frame_splash.rowconfigure(1, weight=1)
+        self.frame_splash.grid_columnconfigure(0, weight=1)
 
         self.fr_splash.configure(background=self.design.dic["cor_intro"]["background"])
         self.l1_splash.configure(text=" COMBRATEC ", font=("Lucida Sans", 90), bd=80)
@@ -39,8 +39,9 @@ class Splash():
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
         self.l1_splash.grid(row=1, column=1, sticky=NSEW)
         self.l2_splash.grid(row=2, column=1, sticky=NSEW)
-        self.frame_splash.update()
 
+        # Ocultar tela
+        self.frame_splash.update()
         self.tela_splash.update()
         self.tela_splash.withdraw()
 
@@ -52,6 +53,7 @@ class Splash():
 
         geometria = "+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2))
 
+        # Tornar tela visível
         self.tela_splash.geometry(geometria)
         self.tela_splash.deiconify()
         self.tela_splash.update()

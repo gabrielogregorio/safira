@@ -9,19 +9,3 @@ nome = "Kellen"
 mostre "Bom dia "
 mostre nome
 
-
-#****** Variações dos comandos ******#
-# mostre 
-# imprima 
-# escreva 
-# escreval 
-# exiba 
-# 
-# show 
-# write 
-# printf 
-# println 
-# 
-# mostrar 
-# escribe
-# imprimir

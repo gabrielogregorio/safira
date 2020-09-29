@@ -29,7 +29,19 @@ __version__ = '0.2'
 
 
 class Interpretador():
-    def __init__(self, bool_logs, lst_breakpoints, bool_ignorar_todos_breakpoints, diretorio_base, dicLetras, dic_comandos, idioma):
+    def __init__(self, bool_logs: bool, lst_breakpoints: list, bool_ignorar_todos_breakpoints: bool, diretorio_base: str, dicLetras: dict, dic_comandos: dict, idioma: str):
+        """Cria uma instância do interpretador
+
+        Args:
+            bool_logs (bool): Ativar Logs do interpretador (Reduz drasticamente o desempenho)
+            lst_breakpoints (list): Lista com todos as linhas com breakpoints
+            bool_ignorar_todos_breakpoints (bool): Ignorar todos os breakpoints
+            diretorio_base (str): diretório onde o script será executado
+            dicLetras (dict): Dicionário com letras iniciais de cada comando
+            dic_comandos (dict): Dicionário com os comandos
+            idioma (str): Idioma que o interpretador deverá ser executado
+        """
+
         self.boo_orquestrador_iniciado = False
 
         # Avisa que aconteceu um erro, para quebrar todos os loops
@@ -91,9 +103,9 @@ class Interpretador():
 
         self.inicio = time()
 
+        # Carregar as mensagens do interpretador
         self.msg_inst = Mensagens(self.idioma)
-        chave = ""
-        self.msg = lambda acesso=chave: self.msg_inst.text(acesso)
+        self.msg = lambda acesso="": self.msg_inst.text(acesso)
 
     def analisa_inicio_codigo(self, linha):
         linha = linha.strip()
@@ -106,27 +118,35 @@ class Interpretador():
 
         return num_linha
 
-    def cortar_comentarios(self, codigo):
+    def cortar_comentarios(self, codigo: str) -> str:
+        """ Remover os comentários
+
+        Args:
+            codigo (str): O código completo com os comentários
+
+        Returns:
+            str: O código com todos os comentários removidos
+        """
         lista = codigo.split('\n')
 
         string = ""
         for linha in lista:
             linha = linha.strip()
-            bool_iniciou_string = False
+            iniciou_string = False
 
             temp = ""
 
             for char in range(len(linha)):
 
                 if linha[char] == '"':
-                    if not bool_iniciou_string:
-                        bool_iniciou_string = True
+                    if not iniciou_string:
+                        iniciou_string = True
                     else:
-                        bool_iniciou_string = False
+                        iniciou_string = False
                     temp += linha[char]
                     continue
 
-                if not bool_iniciou_string:
+                if not iniciou_string:
                     if linha[char] == "#" or linha[char:char+2] == "//":
                         break
 
@@ -180,7 +200,12 @@ class Interpretador():
         while self.controle_interpretador != "":
             sleep(0.0001)
 
-    def log(self, msg_log):
+    def log(self, msg_log: str) -> str:
+        """ Exibe um log no terminal
+
+        Args:
+            msg_log (str): a mensagem para exibir
+        """
         if self.bool_logs:
             agora = time() - self.inicio
             self.inicio = agora
@@ -196,7 +221,7 @@ class Interpretador():
         len_cod = len(txt_codigo)
 
         bool_erro_tentar = False
-        bool_salvar_bloco = False
+        salvar_bloco = False
         bool_ultimo_teste = False
         bool_string = False
 
@@ -212,7 +237,7 @@ class Interpretador():
 
             # Executar o comando de uma linha
             # Se chegar no fim da linha ou iniciar um bloco e um bloco não estiver sendo salvo e nem estiver em uma string
-            if (txt_char == "\n" or txt_char == ";" or txt_char == "{" and not bool_salvar_bloco and not bool_string):
+            if (txt_char == "\n" or txt_char == ";" or txt_char == "{" and not salvar_bloco and not bool_string):
 
                 # Se tiver alguma coisa na linha
                 if len(txt_linha_comando.strip()) > 0:
@@ -265,16 +290,16 @@ class Interpretador():
                             continue
 
             # Quando começar uma string
-            if txt_char == '"' and not bool_string and not bool_salvar_bloco:
+            if txt_char == '"' and not bool_string and not salvar_bloco:
                 bool_string = True
 
-            elif txt_char == '"' and bool_string and not bool_salvar_bloco:
+            elif txt_char == '"' and bool_string and not salvar_bloco:
                 bool_string = False
 
             # Quando começar um bloco
             if txt_char == "{" and not bool_string:
                 int_profundidade_bloco += 1
-                bool_salvar_bloco = True
+                salvar_bloco = True
 
             elif txt_char == "}" and not bool_string:
                 int_profundidade_bloco -= 1
@@ -283,7 +308,7 @@ class Interpretador():
             if txt_char == "}" and not bool_string and int_profundidade_bloco == 0:
                 #Interpretador.log(self, '!<Analisa bloco salvo>:"' + str_bloco_salvo + '"')
 
-                bool_salvar_bloco = False
+                salvar_bloco = False
 
                 if lst_ultimo_teste[3] == 'declararLoop':
                     historico_fluxo_de_dados.append('declararLoop') # Encaixa Loop
@@ -785,7 +810,7 @@ class Interpretador():
                 continue
 
             # Se for para salvar bloco, salve o txt_char
-            if bool_salvar_bloco:
+            if salvar_bloco:
                 str_bloco_salvo += txt_char
 
             # Armazene os comandos
@@ -1760,9 +1785,6 @@ class Interpretador():
     def obter_valor_string(self, string):
         Interpretador.log(self, "obter_valor_string")
 
-        """
-            Extrai e isola valor de variáveis
-        """
         valorFinal = ''
         anterior = 0
 
@@ -1780,24 +1802,8 @@ class Interpretador():
 
         return [True, valorFinal, 'string']
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     def localiza_transforma_variavel(self, linha):
         Interpretador.log(self, "localiza_transforma_variavel:{}".format(linha))
-        print('..........', linha)
 
         anterior = 0
         normalizacao = 0
@@ -1806,9 +1812,6 @@ class Interpretador():
 
         for valor in finditer(' ', linha_base):
             # ([^\w^\d^\"]{1})([a-zA-Z]{1,}[\w\d\_]*)
-
-
-            
             palavra = linha[anterior: valor.start() + normalizacao]
 
             if palavra.isalnum() and palavra[0].isalpha():
@@ -1836,25 +1839,7 @@ class Interpretador():
                     normalizacao -= (len(palavra) - len(str(variavelDessaVez[1])))
 
             anterior = valor.end() + normalizacao
-        print(linha, '......,,')
-        print(linha_base, '----------')
-
         return [True, linha, 'string']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     def fazer_contas(self, linha):
         Interpretador.log(self, "fazer_contas:linha={}".format(linha))
@@ -1870,7 +1855,6 @@ class Interpretador():
 
         for comando in self.dic_comandos["matematica_mod"]["comando"]:
             linha = linha.replace(comando[0], ' % ')
-
 
         for comando in self.dic_comandos["matematica_add"]["comando"]:
             linha = linha.replace(comando[0], ' + ')
@@ -1926,14 +1910,12 @@ class Interpretador():
         # Tente fazer uma conta com isso
 
         try:
-
             resutadoFinal = eval(linha[1])
         except Exception as erro:
 
             return [False, "{} |{}|".format(self.msg("nao_possivel_fazer_conta"), linha[1]),
                     'string']
         else:
-
             return [True, resutadoFinal, 'float']
 
     def abstrair_mostre_valor(self, possivelVariavel):
@@ -2094,11 +2076,7 @@ class Interpretador():
         resultado[1] = str(resultado[1]).replace("\\n", "\n")
         return [resultado[0], resultado[2], resultado[2], 'exibirNaTela']
 
-
     # =================== ARQUIVOS =================== #
-
-
-
     def funcao_ler_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_ler_arquivo")
 
@@ -2186,9 +2164,6 @@ class Interpretador():
             return [True, True, "booleano", "fazerNada"]
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
-
-
-
     def funcao_listar_arquivos(self, nome_diretorio):
         Interpretador.log(self, "__funcao_listar_arquivos")
 
@@ -2211,7 +2186,6 @@ class Interpretador():
         lista_resultado = [[x, "string"] for x in lista_retorno]
 
         return [True, lista_resultado, "lista", "fazerNada"]
-
 
     def funcao_diretorio_existe(self, nome_diretorio):
         Interpretador.log(self, "__funcao_diretorio_existe")
@@ -2282,7 +2256,18 @@ class Interpretador():
         else:
             return [True, True, "booleano", "fazerNada"]
 
-    def funcao_excluir_arquivo(self, nome_arquivo):
+    def funcao_excluir_arquivo(self, nome_arquivo: str) -> list:
+        """ Recebe um diretóirio e exclui um arquivo
+
+        Args:
+            nome_arquivo (str): diretório e o arquivo, exemplo: /home/gabriel/ola.txt
+                                ele também pode passar um arquivo que esteja no mesmo
+                                caminho relativo do script.
+
+        Returns:
+            list: [sucesso: bool, mensagem: str, tipo_mensagem: str, acao: str]
+        """
+
         Interpretador.log(self, "__funcao_excluir_arquivo")
 
         if nome_arquivo == "":
@@ -2294,18 +2279,15 @@ class Interpretador():
         nome_arquivo = str(teste_valor[1])
         nome_arquivo = Interpretador.formatar_arquivo(self, nome_arquivo)
 
-        if os.path.exists(nome_arquivo):
-            try:
-                os.remove(nome_arquivo)
-
-            except Exception as erro:
-                return [False, self.msg("erro_deletar_arquivo").format(erro), 'string', ' exibirNaTela']
-
-            else:
-                return [True, "", "vazio", "fazerNada"]
-
-        else:
+        try:
+            os.remove(nome_arquivo)
+        except FileNotFoundError:
             return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
+        except Exception as erro:
+            return [False, self.msg("erro_deletar_arquivo").format(erro), 'string', ' exibirNaTela']
+        else:
+            return [True, "", "vazio", "fazerNada"]
+            
 
     def funcao_criar_arquivo(self, nome_arquivo):
         Interpretador.log(self, "__funcao_criar_arquivo")

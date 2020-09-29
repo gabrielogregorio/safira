@@ -64,5 +64,4 @@ class EditorDeCodigo(Text):
 
             return result
         except Exception as erro:
-            print("Erro em _proxy: ", erro)
-            return ""
+            return str(erro)
