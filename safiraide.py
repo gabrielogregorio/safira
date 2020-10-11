@@ -69,14 +69,19 @@ __date__ = '01/08/2019'
 
 
 class Safira():
+    """Classe que carrega o programa"""
+
     def __init__(self):
         self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
         self.design = Design()
         self.design.update_design_dic()
+
+        # Obter o design configurado atualmente
         self.dic_design = self.design.get_design_dic()
         self.interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
+        # Instância de tela principal
         self.tela = Tk()
         self.tela.withdraw()
         self.tela.rowconfigure(1, weight=1)
@@ -85,16 +90,21 @@ class Safira():
         self.splash = None
 
     def main(self):
+
+        # Carregarmento do splash e da interface
         self.splash = Splash(self.design)
         interf = Interface(self.tela, self.dic_comandos, self.design, self.cor_do_comando, self.interface_idioma, self.splash)
 
         self.splash.splash_inicio()
+        sleep(1)
 
         interf.carregar_tela_principal()
 
 
 class Interface():
     def __init__(self, tela, dic_comandos, design, cor_do_comando, interface_idioma, splash):
+        """ Classe da interface principal"""
+
         self.interface_idioma = interface_idioma
         self.cor_do_comando = cor_do_comando
         self.dic_comandos = dic_comandos
@@ -141,70 +151,139 @@ class Interface():
         self.idioma = "pt-br"
         self.base = "imagens/"
 
-        self.tp_interface_idioma = None
-
+        self.tx_erro_aviso_texto_erro = None
+        self.fr_erro_aviso_texto_erro = None
         self.bt_erro_aviso_exemplo = None
         self.bt_erro_aviso_fechar = None
-        self.bt_brkp1 = None
+        self.tp_interface_idioma = None
+        self.controle_arquivos = None
+        self.tx_editor_codigo = None
+        self.icone_breakpoint = None
+        self.botao_pesquisar = None
+        self.icone_play_stop = None
+        self.icone_pesquisa = None
+        self.fr_top_idioma = None
+        self.fr_erro_aviso = None
+        self.botao_salvar = None
+        self.icone_salvar = None
+        self.botao_copiar = None
+        self.botao_idioma = None
+        self.botao_colar = None
+        self.icone_ajuda = None
+        self.botao_ajuda = None
+        self.icone_stop = None
+        self.fr_idionas = None
+        self.cont_lin = None
+        self.cont_lin1 = None
+        self.ic_brk_p = None
+        self.fr_opcoe = None
+        self.fr_princ = None
         self.bt_lp_bk = None
-        self.bt_salva = None
         self.bt_playP = None
         self.bt_breaP = None
         self.bt_brk_p = None
-        self.bt_desfz = None
-        self.bt_redsf = None
-        self.bt_ajuda = None
-        self.bt_pesqu = None
-        self.bt_idiom = None
-        self.bt_copia = None
-        self.bt_colar = None
+        self.fr__abas = None
         self.bt_play = None
-        self.bt_bt = None
-        self.bt_bt = None
-
-        self.fr_top_idioma = None
-        self.fr_idionas = None
-        self.fr_bt = None
-        self.fr_erro_aviso_texto_erro = None
-        self.fr_opcoe = None
-        self.fr_erro_aviso = None
-        self.fr_princ = None
         self.fr_tela = None
-
+        self.bt_bt = None
+        self.bt_bt = None
+        self.fr_bt = None
         self.lb_bt = None
         self.lb1 = None
-
-        self.tx_erro_aviso_texto_erro = None
-        self.tx_editor_codigo = None
-
-        self.controle_arquivos = None
-        self.cont_lin = None
-
-        self.ic_salva = None
-        self.ic_playP = None
-        self.ic_PStop = None
-        self.ic_breaP = None
-        self.ic_brk_p = None
-        self.ic_desfz = None
-        self.ic_redsf = None
-        self.ic_ajuda = None
-        self.ic_pesqu = None
-        self.fr__abas = None
         self.id = None
+        self.interpretador_finalizado = True
 
-        self.dicLetras = {}
-        for k, v in self.dic_comandos.items():
-            self.dicLetras[k] = []
+        self.interpretador_status = 'parado'
+
+        # Carrega um dicionário com as primeiras letras de todos os comandos disponíveis
+        self.dicLetras = Interface.carregar_dicionario_letra(self.dic_comandos)
+        self.style_terminal = Interface.carregar_estilos_terminal(self)
+
+    def carregar_estilos_terminal(self):
+
+        relief_titulo = self.design.dic["titulo_terminal"]["relief"]
+
+        background_titulo = self.design.dic["titulo_terminal"]["background"]
+        foreground_titulo = self.design.dic["titulo_terminal"]["foreground"]
+
+        active_foreground_titulo = self.design.dic["titulo_terminal"]["active_foreground"]
+        active_background_titulo = self.design.dic["titulo_terminal"]["active_background"]
+
+        pressed_foreground_titulo = self.design.dic["titulo_terminal"]["pressed_foreground"]
+        pressed_background_titulo = self.design.dic["titulo_terminal"]["pressed_background"]
+
+        background_linha = self.design.dic["linha_terminal"]["background"]
+        foreground_linha = self.design.dic["linha_terminal"]["foreground"]
+        fieldbackground_linha = self.design.dic["linha_terminal"]["fieldbackground"]
+
+        self.style_terminal = Style()
+        self.style_terminal.element_create("Custom.Treeheading.border", "from", "default")
+
+        self.style_terminal.layout("Custom.Treeview.Heading", [
+            ("Custom.Treeheading.cell", {'sticky': 'nswe'}),
+            ("Custom.Treeheading.border", {'sticky':'nswe', 'children': [
+                ("Custom.Treeheading.padding", {'sticky':'nswe', 'children': [
+                    ("Custom.Treeheading.image", {'side':'right', 'sticky':''}),
+                    ("Custom.Treeheading.text", {'sticky':'we'})
+                ]})
+            ]}),
+        ])
+
+
+        # Titulo das colunas
+        self.style_terminal.configure("Custom.Treeview.Heading",
+            background=self.design.dic["titulo_terminal"]["background"],
+            foreground=self.design.dic["titulo_terminal"]["foreground"],
+            relief=relief_titulo)
+
+        # Linhas 
+        self.style_terminal.configure(style="Custom.Treeview",
+            background=background_linha,
+            foreground=foreground_linha,
+            fieldbackground=fieldbackground_linha)
+        
+        # Mapeamento especial dos titulos
+        self.style_terminal.map("Custom.Treeview.Heading",
+            relief=[('active', relief_titulo), ('pressed', relief_titulo)],
+
+            foreground=[
+                ('pressed', '!disabled', pressed_foreground_titulo),
+                ('active', '!disabled', active_foreground_titulo)],
+            
+            background=[
+                ('pressed', '!disabled', pressed_background_titulo),
+                ('active', '!disabled', active_background_titulo)]
+        )
+
+        return self.style_terminal
+
+    def carregar_dicionario_letra(dic_comandos:dict) -> dict:
+        """
+
+        """
+        dic_letras = {}
+
+        # Anda por todos os comandos
+        for k, v in dic_comandos.items():
+
+            # Cria uma lista pela chave de cada comando
+            dic_letras[k] = []
+
+            # Para cada subcomando
             for valor in v["comando"]:
+
+                # Pega a primeira letra do subcomando
                 valor = valor[0].strip()
 
+                # Adiona no dicionário a primeira letra do comando
                 if valor == "":
-                    self.dicLetras[k].append(valor)
+                    dic_letras[k].append(valor)
                 else:
                     valor = valor.lower()
 
-                    if valor[0] not in self.dicLetras[k]:
-                        self.dicLetras[k].append(valor[0])
+                    if valor[0] not in dic_letras[k]:
+                        dic_letras[k].append(valor[0])
+        return dic_letras
 
     def colocar_linhas_codigo(self, linhas: str) -> str:
         """Adiciona [[numero_linha] no inicio de todas as linhas]
@@ -215,6 +294,7 @@ class Interface():
         Returns:
             str: [O código com o [numero_linha] em todas as linhas]
         """
+
         nova_linha = ''
         lista = linhas.split('\n')
         for linha in range(len(lista)):
@@ -222,12 +302,11 @@ class Interface():
 
         return nova_linha
 
-    def inicializar_interpretador(self, libera_break_point_executa: bool, linha_linha: bool):
+    def inicializar_interpretador(self, tipo_execucao: str):
         """inicia uma instância do interpretador informando um código
 
         Args:
-            libera_break_point_executa (bool): Se o breakpoint estiver ativo, envie True para liberar
-            linha_linha (bool): Executa linha por linha
+        tipo_execucao = "debug", "parar", "direto"
 
         Returns:
             None:
@@ -235,267 +314,299 @@ class Interface():
 
         print("Inicializador do orquestrador iniciado")
 
-        self.bt_playP.configure(image=self.ic_PStop)
-        self.bt_playP.update()
-
-        tipo_exec = 'producao'
-        if linha_linha is True:
-            if len(self.tx_editor_codigo.get(1.0, END).split("\n")) != len(self.instancia.lst_breakpoints):
-                self.instancia.lst_breakpoints = [x for x in range(0, len(self.tx_editor_codigo.get(1.0, END).split("\n")))]
-            else:
-                Interface.liberar_um_breakpoint(self)
-
-        print("\n Orquestrador iniciado")
-
-        # Se o interpretador já foi iniciado e o breakpoint for falso
-        try:
-            print(self.instancia.numero_threads_ativos)
-        except:
-            print("Thread Parou")
-        else:
-
-            # interromper terminal
-            if self.bool_interpretador_iniciado and libera_break_point_executa is False:
-                self.instancia.aconteceu_erro = True
-                return 0
-
-        # Se for executar até o breakpoint
-        if libera_break_point_executa:
-
-            bool_ignorar_todos_breakpoints = False
+        if self.interpretador_status == 'iniciado' or tipo_execucao == 'parar':
+            # Para o interpretador
             try:
-                Interface.liberar_um_breakpoint(self)
-                self.instancia.bool_ignorar_todos_breakpoints = False
-            except:
-                print("Iniciando programa até breakpoint")
+                self.instancia.aconteceu_erro = True
+
+                if self.interpretador_finalizado:
+                    # FINALIZAÇÃO COMPLETA
+                    # Delete a instância
+                    del self.instancia
+
+                    # Insere mensagem de finalização
+                    self.cont_lin1.linha_analise = 0
+                    self.cont_lin1.desenhar_linhas()
+
+                    self.bt_playP.configure(image=self.icone_play_stop)
+                    print("############### FIM ############")
+                    self.interpretador_status = 'parado'
+
+            except Exception as erro:
+                print("Instância inexistente")
+
+            return 0
+
+        elif self.interpretador_status == 'parado':
+            self.interpretador_status = 'iniciado'
+            self.interpretador_finalizado = False
+
+            # Configura o icone de parar
+            self.bt_playP.configure(image=self.icone_stop)
+            self.bt_playP.update()
+            
+            # Carregar o console
+            if tipo_execucao == 'debug':
+                Interface.iniciar_terminal_debug(self)
+                bool_ignorar_todos_breakpoints = False
             else:
-                print("Liberando programa, breakpoint liberado!")
-                return 0
-        else:
-            bool_ignorar_todos_breakpoints = True
+                Interface.iniciar_terminal_direto(self)
 
-        inicio = time()
+                # A principio, ignore todos os breakpoint
+                bool_ignorar_todos_breakpoints = True
 
-        self.bool_interpretador_iniciado = True
-        if libera_break_point_executa:
-            Interface.iniciar_terminal_debug(self)
-            tipo_exec = 'debug'
+            # Marcar o inicio do interpretador
+            inicio = time()
 
-        else:
-            Interface.iniciar_terminal_direto(self)
-            tipo_exec = 'producao'
+            # Limpar o terminal
+            self.tx_terminal.delete('1.0', END)
+            self.tx_terminal.update()
 
-        self.tx_terminal.delete('1.0', END)
-        self.tx_terminal.update()
+            # Atualizar os elementos da interface
+            self.tela.update()
+            self.tx_editor_codigo.update()
+            self.tx_terminal.update()
 
-        self.linha_analise = 0
+            # Linha que o interpretador está executando
+            self.linha_analise = None
 
-        linhas = self.tx_editor_codigo.get('1.0', END)[0:-1]
+            # Obter o código
+            linhas = self.tx_editor_codigo.get('1.0', END)[0:-1]
 
-        linhas = Interface.colocar_linhas_codigo(self, linhas)
+            # Adicionar marcação do número da linha
+            linhas = Interface.colocar_linhas_codigo(self, linhas)
 
-        # Obter o diretório base
-        diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
+            # Obter o diretório base
+            diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
 
-        # Obter diretório apenas
-        diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
+            # Obter apenas o diretório
+            diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
 
-        self.tela.update()
-        self.tx_editor_codigo.update()
-        self.tx_terminal.update()
+            # Criar uma instância do interpretador
+            self.instancia = Interpretador(self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
 
-        self.instancia = Interpretador(self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
+            # Remover os comentárioos
+            linhas = self.instancia.cortar_comentarios(linhas)
 
-        linhas = self.instancia.cortar_comentarios(linhas)
+            # iniciar um thread do interpretador
+            t = Thread(target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
+            t.start()
 
-        t = Thread(target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
-        t.start()
+            # Referenciar o terminal
+            tx_terminal = self.tx_terminal
+            valor_antigo = 0
+            p_cor_num = 0
 
-        tx_terminal = self.tx_terminal
-        valor_antigo = 0
-        p_cor_num = 0
-
-        while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
-            if tx_terminal is not None:
+            # Enquanto o interpretador não iniciar
+            while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
 
                 try:
+                    # Atualize a interface
                     self.tela.update()
                     self.tx_editor_codigo.update()
                     self.tx_terminal.update()
                 except:
+
+                    # Se alguma coisa foi fechada, finalize o interpretador
                     self.instancia.aconteceu_erro = True
                     break
 
+                if tipo_execucao == 'debug':
+                    # Marca que chegou até a linha
+                    linha_analise = int(self.instancia.num_linha)
+                    self.cont_lin1.linha_analise = linha_analise
+                    self.cont_lin1.desenhar_linhas() 
+                    self.tx_editor_codigo.update()
+                    self.tela.update()
 
-            acao = self.instancia.controle_interpretador
 
-            if acao != "":
-                cor = ""
-                instrucao = ""
-                regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
-                valores = None
-                valores = re.search(regex, acao)
+                acao = ""
+                # Obtem uma instrução do interpretador
+                acao = self.instancia.controle_interpretador
 
-                if valores is not None:            
-                    instrucao = valores.group(1)
-                    linha = valores.group(4)
-                    cor = valores.group(3)
+                # Se existe uma ação
+                if acao != "":
+                    regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
+                    valores = None
+                    valores = re.search(regex, acao)
 
-                if instrucao == 'nessaLinha':
+                    # Se a instrução é de exibição na tela
+                    if valores is not None:            
 
-                    if self.tx_terminal is None:
-                        print(linha, end="")
-                    else:
+                        # Obter instrução
+                        # Numero da 
+                        instrucao = valores.group(1)
+                        linha = valores.group(4)
+                        cor = valores.group(3)
 
-                        try:
-                            self.tx_terminal.update()
-                        except:
-                            self.instancia.aconteceu_erro = True
-                            break
+                        if instrucao == 'nessaLinha':
 
-                        inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
-                        self.tx_terminal.insert(END, linha)
-    
-                    self.instancia.controle_interpretador = ""
-                    if cor != "":
-                        fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                            try:
 
-                        self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
-                        self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
-                        p_cor_num += 1
-                    self.tx_terminal.update()
+                                # Insere o texto e libera o interpretador
+                                inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                self.tx_terminal.insert(END, linha)
+                                self.instancia.controle_interpretador = ""
 
-                elif instrucao == 'mostreLinha':
+                                # Se era para exibir com alguma cor especial
+                                if cor != "":
+                                    # Adiciona a cor
+                                    fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                    self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                                    self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
 
-                    if self.tx_terminal is None:
-                        print(linha)
-                    else:
+                                    # Marca onde a cor foi inserida
+                                    p_cor_num += 1
+                                self.tx_terminal.update()
 
-                        try:
-                            self.tx_terminal.update()
-                        except:
-                            self.instancia.aconteceu_erro = True
-                            break
- 
-                        inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+                            except:
+                                self.instancia.aconteceu_erro = True
+                                break
 
-                        self.tx_terminal.insert(END, linha + '\n')
-                        self.tx_terminal.update()
+                        elif instrucao == 'mostreLinha':
 
-                        if cor != "":
-                            fim_cor = float(self.tx_terminal.index("end-1line lineend"))
-                            self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
-                            self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
-                            p_cor_num += 1
-                        self.tx_terminal.update()
+                                try:
+                                    # Insere  texto
+                                    inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                    self.tx_terminal.insert(END, linha + '\n')
 
-                    self.instancia.controle_interpretador = ""
+                                    # Libera o interpreteador
+                                    self.instancia.controle_interpretador = ""
 
-                elif acao == ':input:':
-                    if self.tx_terminal is None:
-                        digitado = input()
+                                    # Se era para exibir em uma cor
+                                    if cor != "":
 
-                    else:
+                                        # Exibe nesta cor
+                                        fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                        self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                                        self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
+                                        p_cor_num += 1
+
+                                    self.tx_terminal.update()
+                                except:
+                                    self.instancia.aconteceu_erro = True
+                                    break
+         
+
+                    elif acao == ':input:':
+                        # Obtem como está o código agora
                         textoOriginal = len(self.tx_terminal.get(1.0, END))
 
                         # Espera o usuário pressionar enter
                         self.esperar_pressionar_enter = True
                         while self.esperar_pressionar_enter:
 
-                            # Atualiza a interface
-                            self.tx_editor_codigo.update()
-                            self.tela.update()
-
                             try:
+                                self.tela.update()
+                                self.tx_editor_codigo.update()
                                 self.tx_terminal.update()
                             except:
                                 self.instancia.aconteceu_erro = True
                                 break
 
-                        if not self.instancia.aconteceu_erro:
-                            digitado = self.tx_terminal.get(1.0, END)
-                            digitado = digitado[textoOriginal - 1:-2]
+                        # Marca que já foi pressionado enter
+                        self.esperar_pressionar_enter = False
 
-                            self.esperar_pressionar_enter = False
-                        else:
-                            break
+                        # Obtem o novo texto com o que o usuário digitou
+                        digitado = self.tx_terminal.get(1.0, END)
+                        digitado = digitado[textoOriginal - 1:-2]
 
-                    self.instancia.texto_digitado = digitado.replace("\n", "")
-                    self.instancia.controle_interpretador = ""
+                        # Atribui o texto
+                        self.instancia.texto_digitado = digitado.replace("\n", "")
 
-                elif acao == 'limpar_tela':
+                        # Libera o interpretador
+                        self.instancia.controle_interpretador = ""
 
-                    # Limpar a interface ou o terminal
-                    if self.tx_terminal is None:
-                        clear()
-                    else:
+                    elif acao == 'limpar_tela':
+
+                        # Limpa o terminal
                         try:
                             self.tx_terminal.delete('1.0', END)
+
+                            # Atualiza o interpretador para continuar
+                            self.instancia.controle_interpretador = ""
                         except Exception as erro:
                             self.instancia.aconteceu_erro = True
                             break
 
 
-                    # Atualiza o interpretador para continuar
-                    self.instancia.controle_interpretador = ""
+                    elif acao == 'aguardando_breakpoint':
+                            # Aguarda o breakpoint ser liberado
 
-                elif acao == 'aguardando_breakpoint':
-                    # Modo debug
-                    if tipo_exec == 'debug':
-                        try:
-                            self.linha_analise = int(self.instancia.num_linha)
-                            if self.linha_analise != valor_antigo:
-                                valor_antigo = self.linha_analise
-                                self.cont_lin.linha_analise = self.linha_analise
-                                self.cont_lin.desenhar_linhas()
-                                self.tela.update()
+                            try:
+                                # Marca que chegou até a linha
+                                linha_analise = int(self.instancia.num_linha)
+
+                                self.cont_lin1.linha_analise = linha_analise
+                                self.cont_lin1.desenhar_linhas() 
                                 self.tx_editor_codigo.update()
-                        except Exception as erro:
-                            print("Erro update", erro)
+                                self.tela.update()
 
-                    self.libera_breakpoint = False
-                    while not self.libera_breakpoint:
-                        self.tx_terminal.update()
-                        self.tx_editor_codigo.update()
-                        self.tela.update()
+                                
+                                # Enquanto o breakpoint estiver preso
+                                self.libera_breakpoint = False
 
-                    self.libera_breakpoint = False
+                                # Enquanto o breakpoint não for liberado
+                                while not self.libera_breakpoint:
 
-                    self.instancia.controle_interpretador = ""
-                else:
-                    print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
+                                    # Atualiza a tela
+                                    self.tx_terminal.update()
+                                    self.tx_editor_codigo.update()
+                                    self.tela.update()
+
+                                    if self.instancia.aconteceu_erro:
+                                        break
+
+                                # Libera o interpretador
+                                self.instancia.controle_interpretador = ""
+
+                                # Deixa breakpoint liberado
+                                self.libera_breakpoint = False
 
 
-        if self.instancia.aconteceu_erro:
-            if tx_terminal is None:
-                print("Erro : ", self.instancia.mensagem_erro)
-                print("Linha: ", self.instancia.linha_que_deu_erro)
+                            except Exception as erro:
+                                self.instancia.aconteceu_erro = True
+                                break
+                    else:
+                        print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
 
-            else:
+            if self.instancia.aconteceu_erro:
                 # Se o erro foi avisado
                 if self.instancia.erro_alertado is True:
+
+                    # Se não foi interrompido
                     if self.instancia.mensagem_erro != "Interrompido":
+
+                        # Se não foi erro ao iniciar
                         if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
+
+                            # Mostre uma mensagem complementar na tela
                             Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
 
-        del self.instancia
+            else:
+                try:
+                    self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(time() - inicio))
+                    self.tx_terminal.see("end")
 
-        try:
-            #self.tx_terminal.config(state=NORMAL)
-            self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(time() - inicio))
-            self.tx_terminal.see("end")
+                except Exception as erro:
+                    print('Impossível exibir mensagem de finalização, erro: '+str(erro))
 
-        except Exception as erro:
-            print('Impossível exibir mensagem de finalização, erro: '+str(erro))
+            self.interpretador_finalizado = True
 
-        self.cont_lin.linha_analise = 0
-        self.cont_lin.desenhar_linhas()
-        self.tela.update()
+            # Em modo que não seja debug, finalize o interpretador
+            if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
+                Interface.inicializar_interpretador(self, tipo_execucao = 'parar')
 
-        self.bt_playP.configure(image=self.ic_playP)
-        self.bool_interpretador_iniciado = False
+            return 0
 
-        return 0
+    def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
+
+        print(self.interpretador_status)
+
+        if self.interpretador_status == 'parado':
+            Interface.inicializar_interpretador(self, tipo_execucao='debug')
+        else:
+            self.libera_breakpoint = True
 
     # ************************************************************************* #
     #                             INTERFACE PRINCIPAL                           #
@@ -514,16 +625,20 @@ class Interface():
         self.fr_tela.grid_columnconfigure(1, weight=1)
 
 
+
         # COMANDOS
         comando_abrir_arquivo = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_dialog")
         comando_salvar_arquivo_como = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo_como_dialog")
         comando_acao_salvararq = lambda event=None: Interface.manipular_arquivos(self, None, "salvar_arquivo")
-        comando_executar_brakp = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=True, linha_linha=False)
         comando_inserir_breakp = lambda event=None: Interface.adicionar_remover_breakpoint(self, event)
-        comando_parar_execucao = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=False, linha_linha=False)
-        comando_executar_linha = lambda event=None: Interface.inicia_marca_break_point_geral(self)
+
+
+        
+        comando_executar_brakp = lambda event=None: Interface.liberar_breakpoint_ou_inicicar(self, tipo_execucao='debug')
+        comando_parar_execucao = lambda event=None: Interface.inicializar_interpretador(self, tipo_execucao='parar')
+        comando_executar_progr = lambda event=None: Interface.inicializar_interpretador(self, tipo_execucao='continua')
+
         comando_limpa_breakpon = lambda event=None: Interface.limpar_breakpoints(self)
-        comando_executar_progr = lambda event=None: Interface.inicializar_interpretador(self, libera_break_point_executa=False, linha_linha=False)
         comando_abrir_abrir_nova_aba = lambda event=None: Interface.abrir_nova_aba(self, event)
         comando_ativar_fullscr = lambda event: Interface.ativar_desativar_full_screen(self, event)
         comando_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
@@ -544,7 +659,6 @@ class Interface():
         self.tela.bind('<Control-o>', comando_abrir_arquivo)
         self.tela.bind('<Control-S>', comando_salvar_arquivo_como)
         self.tela.bind('<F5>', comando_executar_progr)
-        self.tela.bind('<F6>', comando_executar_linha)
         self.tela.bind('<F7>', comando_executar_brakp)
         self.tela.bind('<F10>', comando_inserir_breakp)
         self.tela.bind('<F11>', comando_ativar_fullscr)
@@ -578,7 +692,6 @@ class Interface():
 
         # MENU EXECUTAR
         self.mn_exect.add_command(label=self.interface_idioma["label_executar_tudo"][self.idioma], command=comando_executar_progr)
-        self.mn_exect.add_command(label=self.interface_idioma["label_linha_por_linha"][self.idioma], command =comando_executar_linha)
         self.mn_exect.add_command(label=self.interface_idioma["label_ate_breakpoint"][self.idioma], command=comando_executar_brakp)
         self.mn_exect.add_command(label=self.interface_idioma["label_parar_execucao"][self.idioma], command=comando_parar_execucao)
         self.mn_exect.add_command(label=self.interface_idioma["label_inserir_breakpoint"][self.idioma], command=comando_inserir_breakp)
@@ -606,30 +719,28 @@ class Interface():
         # IMAGENS PARA O MENU DE ACESSO RÁPIDO
         self.ic_left = PhotoImage(file='imagens/left.png')
         self.ic_rigth = PhotoImage(file='imagens/right.png')
-        self.ic_salva = PhotoImage(file='imagens/ic_salvar.png')
-        self.ic_playP = PhotoImage(file='imagens/ic_play.png')
-        self.ic_PStop = PhotoImage(file='imagens/ic_parar.png')
-        self.ic_breaP = PhotoImage(file='imagens/ic_play_breakpoint.png')
+        self.icone_salvar = PhotoImage(file='imagens/ic_salvar.png')
+        self.icone_play_stop = PhotoImage(file='imagens/ic_play.png')
+        self.icone_stop = PhotoImage(file='imagens/ic_parar.png')
+        self.icone_breakpoint = PhotoImage(file='imagens/ic_play_breakpoint.png')
         self.ic_brk_p = PhotoImage(file='imagens/breakPoint.png')
-        self.ic_brkp1 = PhotoImage(file='imagens/ic_play_breakpoint_um.png')
-        self.ic_ajuda = PhotoImage(file='imagens/ic_duvida.png')
-        self.ic_pesqu = PhotoImage(file='imagens/ic_pesquisa.png')
+        self.icone_ajuda = PhotoImage(file='imagens/ic_duvida.png')
+        self.icone_pesquisa = PhotoImage(file='imagens/ic_pesquisa.png')
         self.ic_nsalv = PhotoImage(file="imagens/nao_salvo.png")
         self.iclp_bkp = PhotoImage(file="imagens/limpar_bkp.png")
-        self.ic_idiom = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
+        self.icone_idioma = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
 
         # AJUSTES NO TAMANHO
-        self.ic_salva = self.ic_salva.subsample(4, 4)
-        self.ic_playP = self.ic_playP.subsample(4, 4)
-        self.ic_PStop = self.ic_PStop.subsample(4, 4)
-        self.ic_breaP = self.ic_breaP.subsample(4, 4)
+        self.icone_salvar = self.icone_salvar.subsample(4, 4)
+        self.icone_play_stop = self.icone_play_stop.subsample(4, 4)
+        self.icone_stop = self.icone_stop.subsample(4, 4)
+        self.icone_breakpoint = self.icone_breakpoint.subsample(4, 4)
         self.ic_brk_p = self.ic_brk_p.subsample(4, 4)
-        self.ic_ajuda = self.ic_ajuda.subsample(4, 4)
-        self.ic_pesqu = self.ic_pesqu.subsample(4, 4)
+        self.icone_ajuda = self.icone_ajuda.subsample(4, 4)
+        self.icone_pesquisa = self.icone_pesquisa.subsample(4, 4)
         self.ic_nsalv = self.ic_nsalv.subsample(2, 2)
-        self.ic_brkp1 = self.ic_brkp1.subsample(4, 4)
         self.iclp_bkp = self.iclp_bkp.subsample(4, 4)
-        self.ic_idiom = self.ic_idiom.subsample(4, 4)
+        self.icone_idioma = self.icone_idioma.subsample(4, 4)
         self.ic_left  = self.ic_left.subsample(4, 4)
         self.ic_rigth = self.ic_rigth.subsample(4, 4)
 
@@ -637,19 +748,18 @@ class Interface():
         self.fr_opcoe = Frame(self.fr_tela)
 
         # CARREGANDO AS OPÇÔES
-        self.bt_salva = Button(self.fr_opcoe, image=self.ic_salva, command=comando_acao_salvararq)
-        self.bt_playP = Button(self.fr_opcoe, image=self.ic_playP, command=comando_executar_progr)
-        self.bt_breaP = Button(self.fr_opcoe, image=self.ic_breaP, command=comando_executar_brakp)
+        self.botao_salvar = Button(self.fr_opcoe, image=self.icone_salvar, command=comando_acao_salvararq)
+        self.bt_playP = Button(self.fr_opcoe, image=self.icone_play_stop, command=comando_executar_progr)
+        self.bt_breaP = Button(self.fr_opcoe, image=self.icone_breakpoint, command=comando_executar_brakp)
         self.bt_brk_p = Button(self.fr_opcoe, image=self.ic_brk_p, command=comando_inserir_breakp)
-        self.bt_brkp1 = Button(self.fr_opcoe, image=self.ic_brkp1, command=comando_executar_linha)
         self.bt_lp_bk = Button(self.fr_opcoe, image=self.iclp_bkp, command=comando_limpa_breakpon)
-        self.bt_ajuda = Button(self.fr_opcoe, image=self.ic_ajuda)
-        self.bt_pesqu = Button(self.fr_opcoe, image=self.ic_pesqu)
-        self.bt_idiom = Button(self.fr_opcoe, image=self.ic_idiom, command=comando_atualizar_idioma)
+        self.botao_ajuda = Button(self.fr_opcoe, image=self.icone_ajuda)
+        self.botao_pesquisar = Button(self.fr_opcoe, image=self.icone_pesquisa)
+        self.botao_idioma = Button(self.fr_opcoe, image=self.icone_idioma, command=comando_atualizar_idioma)
         self.bt_left = Button(self.fr_opcoe, image=self.ic_left)
         self.bt_rigth = Button(self.fr_opcoe, image=self.ic_rigth)
-        self.bt_copia = Button(self.fr_opcoe, text="copiar", command=comando_copiar)
-        self.bt_colar = Button(self.fr_opcoe, text="colar", command=comando_colar)
+        self.botao_copiar = Button(self.fr_opcoe, text="copiar", command=comando_copiar)
+        self.botao_colar = Button(self.fr_opcoe, text="colar", command=comando_colar)
 
 
         self.fr_princ = Frame(self.fr_tela)
@@ -678,29 +788,33 @@ class Interface():
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_editor_codigo.yview, relief=FLAT)
         self.tx_editor_codigo.configure(yscrollcommand=self.sb_codfc.set)
 
-        self.cont_lin = ContadorLinhas(self.fr_princ, self.design)
+
+        self.cont_lin = ContadorLinhas(self.fr_princ, self.design, bool_tem_linha = True)
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
         self.cont_lin.atribuir(self.tx_editor_codigo)
 
+        self.cont_lin1 = ContadorLinhas(self.fr_princ, self.design, bool_tem_linha = False)
+        self.cont_lin1.aba_focada2 = self.num_aba_focada
+        self.cont_lin1.dic_abas2 = self.dic_abas
+        self.cont_lin1.atribuir(self.tx_editor_codigo)
+
         self.fr_espac.grid(row=1, column=0, sticky=NSEW)
         self.fr_opcoe.grid(row=1, column=1, sticky=NSEW, columnspan=2)
-        self.bt_salva.grid(row=1, column=1)
+        self.botao_salvar.grid(row=1, column=1)
         self.bt_playP.grid(row=1, column=4)
         self.bt_breaP.grid(row=1, column=5)
         self.bt_brk_p.grid(row=1, column=6)
-        self.bt_brkp1.grid(row=1, column=7)
         self.bt_lp_bk.grid(row=1, column=8)
-        #self.bt_left.grid(row=1, column=9)
-        #self.bt_rigth.grid(row=1, column=10)
-        self.bt_ajuda.grid(row=1, column=11)
-        self.bt_pesqu.grid(row=1, column=12)
-        self.bt_idiom.grid(row=1, column=13)
-        self.bt_copia.grid(row=1, column=14)
-        self.bt_colar.grid(row=1, column=15)
+        self.botao_ajuda.grid(row=1, column=11)
+        self.botao_pesquisar.grid(row=1, column=12)
+        self.botao_idioma.grid(row=1, column=13)
+        self.botao_copiar.grid(row=1, column=14)
+        self.botao_colar.grid(row=1, column=15)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
         self.fr__abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
-        self.cont_lin.grid(row=1, column=1, sticky=NSEW)
+        self.cont_lin.grid(row=1, column=0, sticky=NSEW)
+        self.cont_lin1.grid(row=1, column=1, sticky=NSEW)
         self.tx_editor_codigo.grid(row=1, column=2, sticky=NSEW)
         self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
@@ -804,6 +918,8 @@ class Interface():
 
         self.tx_editor_codigo.configure(self.design.dic["tx_codificacao"])
         self.cont_lin.desenhar_linhas()
+        self.cont_lin1.desenhar_linhas()
+
         self.tela.update()
 
     # ************************************************************************* #
@@ -858,9 +974,9 @@ class Interface():
                 bandeira[2].configure(bg="#bbbbbb", activebackground="#bbbbbb", fg="green" )
                 self.idioma = bandeira[2]["text"]
 
-                self.ic_idiom = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
-                self.ic_idiom = self.ic_idiom.subsample(4, 4)
-                self.bt_idiom["image"] = self.ic_idiom
+                self.icone_idioma = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
+                self.icone_idioma = self.icone_idioma.subsample(4, 4)
+                self.botao_idioma["image"] = self.icone_idioma
 
                 Interface.atualizar_tema_sintaxe_da_interface(self, "idioma", self.idioma)
 
@@ -1238,27 +1354,21 @@ class Interface():
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-        fram_grid_variaveis = Frame(frame_terminal_e_grid, bg="#222222")
+        fram_grid_variaveis = Frame(frame_terminal_e_grid, self.design.dic["cor_grid_variaveis"])
         fram_grid_variaveis.grid(row=2, column=1, sticky=NSEW)
 
         fram_grid_variaveis.grid_columnconfigure(1, weight=1)
         fram_grid_variaveis.rowconfigure(2, weight=1)
 
-        self.texto_busca = Label(fram_grid_variaveis, text=self.interface_idioma["debug_faca_busca"][self.idioma], bg="#222222", fg="white")
-        self.campo_busca = Entry(fram_grid_variaveis, font=("", 13), bg="#222222", fg="white", highlightthickness=0, insertbackground="white")
+        self.texto_busca = Label(fram_grid_variaveis, self.design.dic["cor_grid_variaveis_texto_busca"], text=self.interface_idioma["debug_faca_busca"][self.idioma])
+        self.campo_busca = Entry(fram_grid_variaveis, self.design.dic["cor_grid_variaveis_campo_busca"])
         self.campo_busca.bind("<KeyRelease>", lambda event: Interface.retornar_variaveis(self))
-
-        style = Style()
-        style.theme_use("clam")
-
-        style.configure("Custom.Treeview", background="#222222", fieldbackground="#222222", foreground="white")
-        style.map("Custom.Treeview.Heading", relief=[('active', 'flat'), ('pressed', 'flat')])
 
         self.arvores_grid = Treeview(fram_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
         self.arvores_grid.tag_configure('RED_TAG', foreground='red', font=('arial', 12))
 
-        vsroolb = Scrollbar(fram_grid_variaveis, orient="vertical", command=self.arvores_grid.yview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
-        hsroolb = Scrollbar(fram_grid_variaveis, orient="horizontal", command=self.arvores_grid.xview, bg="#222222", bd=0, relief=FLAT, highlightthickness=0, activebackground="#222232")
+        vsroolb = Scrollbar(fram_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="vertical", command=self.arvores_grid.yview)
+        hsroolb = Scrollbar(fram_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="horizontal", command=self.arvores_grid.xview)
 
         self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
 
@@ -1277,7 +1387,17 @@ class Interface():
         hsroolb.grid(row=3, column=1,  sticky='ew')
 
         Interface.retornar_variaveis(self)
-        self.lista_terminal_destruir = [frame_terminal_e_grid, fram_grid_variaveis, self.arvores_grid, self.tx_terminal, self.texto_busca, self.campo_busca, fr_fechar_menu, bt_fechar, vsroolb, hsroolb]
+        self.lista_terminal_destruir = [
+            frame_terminal_e_grid,
+            fram_grid_variaveis,
+            self.arvores_grid,
+            self.tx_terminal,
+            self.texto_busca,
+            self.campo_busca,
+            fr_fechar_menu,
+            bt_fechar,
+            vsroolb,
+            hsroolb]
 
     # ************************************************************************* #
     #                           TRATAMENTO DE ERROS                             #
@@ -1349,15 +1469,6 @@ class Interface():
     # ************************************************************************* #
     #                            PONTOS DE PARADA                               #
     # ************************************************************************* #
-    def marca_todos_breakpoint(self):
-        self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = [x for x in range(len(self.tx_editor_codigo.get(1.0, END)))]
-        Interface.desenhar_atualizar_linhas(self, event=None)
-
-    def inicia_marca_break_point_geral(self):
-        Interface.marca_todos_breakpoint(self)
-        self.tx_editor_codigo.update()
-
-        Interface.inicializar_interpretador(self, libera_break_point_executa=True, linha_linha=False)
 
     def adicionar_remover_breakpoint(self, event=None):
         # Marcar um breakpoint
@@ -1377,11 +1488,12 @@ class Interface():
 
     def limpar_breakpoints(self):
         if self.dic_abas[self.num_aba_focada]["lst_breakpoints"] == []:
-            Interface.marca_todos_breakpoint(self)
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = [x for x in range(0, len(self.tx_editor_codigo.get(1.0, END).split("\n")))]
 
         else:
             self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = []
-            Interface.desenhar_atualizar_linhas(self, event=None)
+        
+        Interface.desenhar_atualizar_linhas(self, event=None)
 
         try:
             self.instancia.lst_breakpoints = self.dic_abas[self.num_aba_focada]["lst_breakpoints"]
@@ -1449,6 +1561,10 @@ class Interface():
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
         self.cont_lin.desenhar_linhas()
+
+        self.cont_lin1.aba_focada2 = self.num_aba_focada
+        self.cont_lin1.dic_abas2 = self.dic_abas
+        self.cont_lin1.desenhar_linhas()
         self.tela.update()
 
     def ativar_desativar_full_screen(self, event=None):
@@ -1487,6 +1603,10 @@ class Interface():
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
 
+        self.cont_lin1.aba_focada2 = self.num_aba_focada
+        self.cont_lin1.dic_abas2 = self.dic_abas
+
+
         Interface.atualizar_design_objeto(self, self.mn_intfc_casct_sintx, "cor_menu")
         Interface.atualizar_design_objeto(self, self.mn_intfc_casct_temas, "cor_menu")
         Interface.atualizar_design_objeto(self, self.mn_intfc, "cor_menu")
@@ -1497,18 +1617,15 @@ class Interface():
         Interface.atualizar_design_objeto(self, self.mn_barra, "cor_menu")
         Interface.atualizar_design_objeto(self, self.mn_ajuda, "cor_menu")
         Interface.atualizar_design_objeto(self, self.mn_devel, "cor_menu")
-        Interface.atualizar_design_objeto(self, self.bt_salva, "dicBtnMenus")
+        Interface.atualizar_design_objeto(self, self.botao_salvar, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_playP, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_breaP, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_desfz, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_redsf, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_ajuda, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_pesqu, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_copia, "dicBtnCopiarColar")
-        Interface.atualizar_design_objeto(self, self.bt_colar, "dicBtnCopiarColar")
-        Interface.atualizar_design_objeto(self, self.bt_idiom, "dicBtnMenus")
+        Interface.atualizar_design_objeto(self, self.botao_ajuda, "dicBtnMenus")
+        Interface.atualizar_design_objeto(self, self.botao_pesquisar, "dicBtnMenus")
+        Interface.atualizar_design_objeto(self, self.botao_copiar, "dicBtnCopiarColar")
+        Interface.atualizar_design_objeto(self, self.botao_colar, "dicBtnCopiarColar")
+        Interface.atualizar_design_objeto(self, self.botao_idioma, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_brk_p, "dicBtnMenus")
-        Interface.atualizar_design_objeto(self, self.bt_brkp1, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.bt_lp_bk, "dicBtnMenus")
         Interface.atualizar_design_objeto(self, self.fr_princ, "fr_princ")
         Interface.atualizar_design_objeto(self, self.tela, "tela")
@@ -1516,6 +1633,7 @@ class Interface():
         Interface.atualizar_design_objeto(self, self.sb_codfc, "scrollbar_text")
         Interface.atualizar_design_objeto(self, self.fr_opcoe, "fr_opcoes_rapidas")
         Interface.atualizar_design_objeto(self, self.cont_lin, "lb_linhas")
+        Interface.atualizar_design_objeto(self, self.cont_lin1, "lb_linhas")
         Interface.atualizar_design_objeto(self, self.fr__abas, "dic_cor_abas_frame")
         Interface.atualizar_design_objeto(self, self.fr_espac, "dic_cor_abas_frame")
 
@@ -1561,6 +1679,9 @@ class Interface():
                 Interface.atualizar_design_interface(self)
                 self.cont_lin.aba_focada2 = self.num_aba_focada
                 self.cont_lin.dic_abas2 = self.dic_abas
+
+                self.cont_lin1.aba_focada2 = self.num_aba_focada
+                self.cont_lin1.dic_abas2 = self.dic_abas
                 Interface.atualizar_coloracao_codigo_aba(self)
 
             except Exception as erro:

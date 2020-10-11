@@ -172,6 +172,57 @@
       13
     ]
   },
+    "titulo_terminal":{
+    "background":"#393939",
+    "foreground":"white",
+    "relief":"flat",
+    "active_foreground":["white"],
+    "active_background":["#393939"],
+    "pressed_foreground":["white"],
+    "pressed_background":["#393939"]
+  },
+
+  "linha_terminal":{
+    "background":"222222",
+    "foreground":"#ffffff",
+    "fieldbackground":"222233"
+  },
+
+
+
+
+  "cor_grid_variaveis":{
+    "background":"#222222"
+  },
+
+  "cor_grid_variaveis_texto_busca":{
+    "background":"#222222",
+    "foreground":"white"
+  },
+
+  "cor_grid_variaveis_campo_busca":{
+    "font":["", 13],
+    "background":"#222222",
+    "foreground":"white",
+    "highlightthickness":0,
+    "insertbackground":"white"
+  },
+
+  "cor_grid_variaveis_scrollbar":{
+    "background":"#222222",
+    "bd":0,
+    "highlightthickness":0,
+    "activebackground":"#232323"
+  },
+
+
+
+
+
+
+
+
+
   "fr_ajuda": {
     "width":25,
     "background":"#ababab",

@@ -10,7 +10,7 @@ import webbrowser
 import requests
 
 
-VERSAO_ATUAL = {"versao": 0.25}
+VERSAO_ATUAL = {"versao": 0.3}
 
 
 class Atualizar():

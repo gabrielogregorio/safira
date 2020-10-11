@@ -155,6 +155,7 @@
     "highlightthickness":0,
     "background": "#353542"
   },
+
   "tx_terminal": {
     "width": 50,
     "background": "#191913",
@@ -165,6 +166,7 @@
       13
     ]
   },
+
   "tx_pesqu": {
     "foreground": "#676767",
     "font": [
@@ -172,6 +174,56 @@
       13
     ]
   },
+
+  "titulo_terminal":{
+    "background":"#393939",
+    "foreground":"white",
+    "relief":"flat",
+    "active_foreground":["white"],
+    "active_background":["#393939"],
+    "pressed_foreground":["white"],
+    "pressed_background":["#393939"]
+  },
+
+  "linha_terminal":{
+    "background":"222222",
+    "foreground":"#ffffff",
+    "fieldbackground":"222233"
+  },
+
+
+  "cor_grid_variaveis":{
+    "background":"#222222"
+  },
+
+  "cor_grid_variaveis_texto_busca":{
+    "background":"#222222",
+    "foreground":"white"
+  },
+
+  "cor_grid_variaveis_campo_busca":{
+    "font":["", 13],
+    "background":"#222222",
+    "foreground":"white",
+    "highlightthickness":0,
+    "insertbackground":"white"
+  },
+
+  "cor_grid_variaveis_scrollbar":{
+    "background":"#222222",
+    "bd":0,
+    "highlightthickness":0,
+    "activebackground":"#232323"
+  },
+
+
+
+
+
+
+
+
+
   "fr_ajuda": {
     "width":25,
     "background":"#ababab",
@@ -260,19 +312,19 @@
     "anchor":"nw",
     "fg":"#343434",
     "bg":"#fafafa",
-    "font":["", 11]
+    "font":["", 11, "bold"]
   },
   "aviso_bt_cancelar": {
     "bg":"#ff2200",
     "activebackground":"#ff2200",
-    "fg":"#730000",
-    "activeforeground":"#730000"
+    "fg":"#ffffff",
+    "activeforeground":"#ffffff"
   },
   "aviso_versao_bt_facebook_atualizada": {
     "bg":"#0088ff",
     "activebackground":"#0088ff",
-    "fg":"#003d73",
-    "activeforeground":"#003d73"
+    "fg":"#ffffff",
+    "activeforeground":"#ffffff"
 
   },
   "aviso_versao_fr_inf_atualizada": {
@@ -281,8 +333,8 @@
   "aviso_versao_bt_blog_atualizada": {
     "bg":"#ff7003",
     "activebackground":"#ff7003",
-    "fg":"#873a00",
-    "activeforeground":"#873a00"
+    "fg":"#ffffff",
+    "activeforeground":"#ffffff"
   },
 
   "lb1_encontrou_bug":{

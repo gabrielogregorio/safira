@@ -55,10 +55,6 @@ class Bug():
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
 
-        print(self.interface_idioma["encontrou_bug"])
-        print(self.idioma)
-        print(self.interface_idioma["encontrou_bug"][self.idioma])
-
         self.lb_label1 = Label(self.tp_princi)
         self.lb_label2 = Label(self.tp_princi)
         self.lb_label3 = Label(self.tp_princi)

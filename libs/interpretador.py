@@ -165,6 +165,9 @@ class Interpretador():
             self.controle_interpretador = "aguardando_breakpoint"
 
             while self.controle_interpretador != "":
+                if self.aconteceu_erro:
+                    return [False, "Interrompido", "string", "exibirNaTela"]
+
                 sleep(0.0001)
 
     def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
@@ -198,6 +201,8 @@ class Interpretador():
             self.controle_interpretador = ':mostreLinha:exibirCor:{}:{}'.format(cor ,linha)
 
         while self.controle_interpretador != "":
+            if self.aconteceu_erro:
+                return [False, "Interrompido", "string", "exibirNaTela"]
             sleep(0.0001)
 
     def log(self, msg_log: str) -> str:

@@ -5,12 +5,13 @@ from tkinter import Text
 
 
 class ContadorLinhas(Canvas):
-    def __init__(self, frame, design):
+    def __init__(self, frame, design, bool_tem_linha):
         Canvas.__init__(self, frame)
 
         self.textwidget = None
         self.linha_analise = 0
         self.design = design
+        self.bool_tem_linha = bool_tem_linha
 
     def atribuir(self, tx_editor_codigo):
         self.textwidget = tx_editor_codigo
@@ -25,25 +26,38 @@ class ContadorLinhas(Canvas):
                 break
 
             y = dline[1]
-            num_linha = str(i).split(".")[0]
+            num_linha = str(i).split(".")[0].strip()
             cor_padrao = "#777777"
 
             if int(num_linha) == self.linha_analise and not int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
-                num_linha = ">" + num_linha + "   "
-                cor_padrao = "#7dff63"
+                if not self.bool_tem_linha:
+                    num_linha = ">   "
+                    cor_padrao = "#7dff63"
+                else:
+                    num_linha = " " + num_linha + " "
 
             elif int(num_linha) == self.linha_analise and int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
-                num_linha = ">" + num_linha + " * "
-                cor_padrao = "#ff7a95"
+                if not self.bool_tem_linha:
+                    num_linha = " *> "
+                    cor_padrao = "#7aff95"
+                else:
+                    num_linha = " " + num_linha + " "
 
             elif int(num_linha) in self.dic_abas2[self.aba_focada2]["lst_breakpoints"]:
-                num_linha = "  " + num_linha + " * "
-                cor_padrao = "#ff7a95"
+                if not self.bool_tem_linha:
+                    num_linha = " * "
+                    cor_padrao = "#ff7a95"
+                else:
+                    num_linha = " " + num_linha + "  "
             else:
-                num_linha = " " + num_linha + "  "
+                if not self.bool_tem_linha:
+                    num_linha = "  "
+                else:
+                    num_linha = " " + num_linha + "  "
 
             self.create_text(2, y, anchor="nw", text=num_linha, font=self.design.dic["fonte_ct_linha"]["font"],  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
+
 
 
 class EditorDeCodigo(Text):
