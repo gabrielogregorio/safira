@@ -32,6 +32,7 @@ from time import time
 from json import load
 from os import getcwd
 from os import listdir
+from re import compile
 from sys import version
 
 import webbrowser
@@ -199,6 +200,37 @@ class Interface():
         self.dicLetras = Interface.carregar_dicionario_letra(self.dic_comandos)
         self.style_terminal = Interface.carregar_estilos_terminal(self)
 
+        self.dic_regex_compilado = None
+        self.re_comandos = None
+        Interface.gerar_regex_compilado_interpretador(self)
+        self.regex_interpretador = compile(r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)")
+
+    def gerar_regex_compilado_interpretador(self) -> None:
+        print("Inicializador do orquestrador iniciado")
+        diretorio_base = ''
+        bool_ignorar_todos_breakpoints = True
+        bool_logs = False
+
+
+        instancia = Interpretador(
+            bool_logs,
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"],
+            bool_ignorar_todos_breakpoints,
+            diretorio_base,
+            self.dicLetras,
+            self.dic_comandos,
+            self.idioma,
+            dic_regex_compilado=self.dic_regex_compilado,
+            re_comandos = self.re_comandos)
+
+        self.dic_regex_compilado = instancia.dic_regex_compilado
+        self.re_comandos = instancia.re_comandos 
+        del instancia
+
+
+
+
+
     def carregar_estilos_terminal(self):
 
         relief_titulo = self.design.dic["titulo_terminal"]["relief"]
@@ -355,8 +387,6 @@ class Interface():
                 # A principio, ignore todos os breakpoint
                 bool_ignorar_todos_breakpoints = True
 
-            # Marcar o inicio do interpretador
-            inicio = time()
 
             # Limpar o terminal
             self.tx_terminal.delete('1.0', END)
@@ -383,10 +413,21 @@ class Interface():
             diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
 
             # Criar uma instância do interpretador
-            self.instancia = Interpretador(self.bool_logs, self.dic_abas[self.num_aba_focada]["lst_breakpoints"], bool_ignorar_todos_breakpoints, diretorio_base, self.dicLetras, self.dic_comandos, self.idioma)
+            self.instancia = Interpretador(
+                self.bool_logs,
+                self.dic_abas[self.num_aba_focada]["lst_breakpoints"],
+                bool_ignorar_todos_breakpoints,
+                diretorio_base,
+                self.dicLetras,
+                self.dic_comandos,
+                self.idioma,
+                dic_regex_compilado=None, re_comandos=self.re_comandos)
 
             # Remover os comentárioos
             linhas = self.instancia.cortar_comentarios(linhas)
+
+            # Marcar o inicio do interpretador
+            inicio = time()
 
             # iniciar um thread do interpretador
             t = Thread(target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(codigoPrograma))
@@ -426,9 +467,8 @@ class Interface():
 
                 # Se existe uma ação
                 if acao != "":
-                    regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
                     valores = None
-                    valores = re.search(regex, acao)
+                    valores = re.search(self.regex_interpretador, acao)
 
                     # Se a instrução é de exibição na tela
                     if valores is not None:            
@@ -440,13 +480,13 @@ class Interface():
                         cor = valores.group(3)
 
                         if instrucao == 'nessaLinha':
+                            self.instancia.controle_interpretador = ""
 
                             try:
 
                                 # Insere o texto e libera o interpretador
                                 inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
                                 self.tx_terminal.insert(END, linha)
-                                self.instancia.controle_interpretador = ""
 
                                 # Se era para exibir com alguma cor especial
                                 if cor != "":
@@ -457,35 +497,34 @@ class Interface():
 
                                     # Marca onde a cor foi inserida
                                     p_cor_num += 1
-                                self.tx_terminal.update()
+                                self.tx_terminal.see('end')
+
 
                             except:
                                 self.instancia.aconteceu_erro = True
                                 break
-
                         elif instrucao == 'mostreLinha':
+                            self.instancia.controle_interpretador = ""
 
-                                try:
-                                    # Insere  texto
-                                    inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
-                                    self.tx_terminal.insert(END, linha + '\n')
+                            try:
+                                # Insere  texto
+                                inicio_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                self.tx_terminal.insert(END, linha + '\n')
 
-                                    # Libera o interpreteador
-                                    self.instancia.controle_interpretador = ""
+                                # Se era para exibir em uma cor
+                                if cor != "":
 
-                                    # Se era para exibir em uma cor
-                                    if cor != "":
+                                    # Exibe nesta cor
+                                    fim_cor = float(self.tx_terminal.index("end-1line lineend"))
+                                    self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
+                                    self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
+                                    p_cor_num += 1
 
-                                        # Exibe nesta cor
-                                        fim_cor = float(self.tx_terminal.index("end-1line lineend"))
-                                        self.tx_terminal.tag_add("palavra"+str(p_cor_num), inicio_cor, fim_cor)
-                                        self.tx_terminal.tag_config("palavra"+str(p_cor_num), foreground=cor)
-                                        p_cor_num += 1
+                                self.tx_terminal.see('end')
 
-                                    self.tx_terminal.update()
-                                except:
-                                    self.instancia.aconteceu_erro = True
-                                    break
+                            except:
+                                self.instancia.aconteceu_erro = True
+                                break
          
 
                     elif acao == ':input:':
@@ -518,6 +557,7 @@ class Interface():
                         self.instancia.controle_interpretador = ""
 
                     elif acao == 'limpar_tela':
+                        self.instancia.controle_interpretador = ""
 
                         # Limpa o terminal
                         try:

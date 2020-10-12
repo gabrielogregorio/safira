@@ -1,12 +1,13 @@
 # Espera durante um intervalo definido
 
 
-
+x = 0
 
 #****** Uso simples comando ******#
-repita 100 vezes
+repita 10000 vezes
 {
-    mostre "Repetindo todo o bloco 100 vezes"
+    mostre x
+    incremente 1 em x
 }
 
 

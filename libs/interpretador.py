@@ -7,7 +7,7 @@ from time import sleep
 from time import time
 from json import load
 from re import findall, search
-from re import finditer
+from re import finditer, compile
 import shutil
 from os import system, listdir
 
@@ -29,7 +29,15 @@ __version__ = '0.2'
 
 
 class Interpretador():
-    def __init__(self, bool_logs: bool, lst_breakpoints: list, bool_ignorar_todos_breakpoints: bool, diretorio_base: str, dicLetras: dict, dic_comandos: dict, idioma: str):
+    def __init__(self, bool_logs: bool,
+        lst_breakpoints: list,
+        bool_ignorar_todos_breakpoints: bool,
+        diretorio_base: str,
+        dicLetras: dict,
+        dic_comandos: dict,
+        idioma: str,
+        dic_regex_compilado: dict,
+        re_comandos: str):
         """Cria uma instância do interpretador
 
         Args:
@@ -107,6 +115,28 @@ class Interpretador():
         self.msg_inst = Mensagens(self.idioma)
         self.msg = lambda acesso="": self.msg_inst.text(acesso)
 
+
+        if re_comandos is not None:
+            self.re_comandos = re_comandos
+        else:
+            self.re_comandos = compile("(\\<[a-zA-Z\\_]*\\>)")
+
+        # Regex não compilado!
+        # Se foi informando um dicionário com o regex preparado
+        if dic_regex_compilado is not None:
+            self.dic_regex_compilado = dic_regex_compilado
+            self.compilado = True
+        else:
+            # Se o dicionário compilado não está pronto
+            self.compilado = False
+            self.dic_regex_compilado = {}
+    
+            Interpretador.interpretador(self, linha='[1] ............')
+            Interpretador.comandos_uso_geral(self, possivelVariavel= '.................')
+            Interpretador.tiver_valor_lista(self, linha='.................')
+            self.compilado = True
+
+
     def analisa_inicio_codigo(self, linha):
         linha = linha.strip()
         posicoes = finditer(r'^(\[\d*\])', linha)
@@ -168,7 +198,7 @@ class Interpretador():
                 if self.aconteceu_erro:
                     return [False, "Interrompido", "string", "exibirNaTela"]
 
-                sleep(0.0001)
+                sleep(0.000001)
 
     def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
 
@@ -203,7 +233,7 @@ class Interpretador():
         while self.controle_interpretador != "":
             if self.aconteceu_erro:
                 return [False, "Interrompido", "string", "exibirNaTela"]
-            sleep(0.0001)
+            sleep(0.000001)
 
     def log(self, msg_log: str) -> str:
         """ Exibe um log no terminal
@@ -218,7 +248,7 @@ class Interpretador():
             print('[{0:<15.3f}] => '.format(agora), r'{}'.format(msg_log))
 
     def orquestrador_interpretador_(self, txt_codigo):
-        Interpretador.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
+        #Interpretador.log(self, '<orquestrador_interpretador_>:' + txt_codigo)
 
         self.numero_threads_ativos += 1
         self.boo_orquestrador_iniciado = True
@@ -311,7 +341,7 @@ class Interpretador():
 
             # Quando finalizar um bloco
             if txt_char == "}" and not bool_string and int_profundidade_bloco == 0:
-                #Interpretador.log(self, '!<Analisa bloco salvo>:"' + str_bloco_salvo + '"')
+                ##Interpretador.log(self, '!<Analisa bloco salvo>:"' + str_bloco_salvo + '"')
 
                 salvar_bloco = False
 
@@ -867,40 +897,47 @@ class Interpretador():
 
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-    def analisa_instrucao(self, comando, texto):
-        re_comandos = "(\\<[a-zA-Z\\_]*\\>)"
-        re_groups = findall(re_comandos, comando)
+    def analisa_instrucao(self, comando, texto, compilado):
+        comando_original = comando
+        re_groups = findall(self.re_comandos, comando)
         if re_groups == None:
             return [False]
 
         dic_options = {}
 
-        # Anda pelos grupos <se>, <esperar>
-        for grupo in re_groups:
+        if not compilado:
+            # Anda pelos grupos <se>, <esperar>
+            for grupo in re_groups:
 
-            # Anda pelos comandos no dicionários, [se], [if]...
-            for n_comando in range(0, len(self.dic_comandos[grupo[1:-1]]["comando"])):
+                # Anda pelos comandos no dicionários, [se], [if]...
+                for n_comando in range(0, len(self.dic_comandos[grupo[1:-1]]["comando"])):
 
-                # Obtem um comando. se, if
-                txt_comando_analisar = self.dic_comandos[grupo[1:-1]]["comando"][n_comando][0]
+                    # Obtem um comando. se, if
+                    txt_comando_analisar = self.dic_comandos[grupo[1:-1]]["comando"][n_comando][0]
 
-                # Substitui o grupo pelo comando. <se>, if
-                comando_analise = comando.replace(grupo, txt_comando_analisar)
+                    # Substitui o grupo pelo comando. <se>, if
+                    comando_analise = comando.replace(grupo, txt_comando_analisar)
 
-                try:
-                    dic_options[grupo] = dic_options[grupo] + "|" + str(txt_comando_analisar)
-                except Exception as err:
-                    dic_options[grupo] = txt_comando_analisar
+                    try:
+                        dic_options[grupo] = dic_options[grupo] + "|" + str(txt_comando_analisar)
+                    except Exception as err:
+                        dic_options[grupo] = txt_comando_analisar
 
-        for k, v in dic_options.items():
-            v_add = v.replace(' ', '[\\s{1,}|_]')
-            comando = comando.replace(k, v_add)
+            for k, v in dic_options.items():
+                v_add = v.replace(' ', '[\\s{1,}|_]')
+                comando = comando.replace(k, v_add)
 
-        # o ? evita a gulidisse do .*, ele pode remover um passando parametros e considerar só o parametros, por exemplo
-        comando = comando.replace('(.*)', '(\\"[^\\"]*\\"|.*?)')
+            # o ? evita a gulidisse do .*, ele pode remover um passando parametros e considerar só o parametros, por exemplo
+            comando = comando.replace('(.*)', '(\\"[^\\"]*\\"|.*?)')
 
-        # Marca o padrão de variável
-        comando = comando.replace('__var__', '({})'.format(self.rgx_padrao_variavel))
+            # Marca o padrão de variável
+            comando = comando.replace('__var__', '({})'.format(self.rgx_padrao_variavel))
+
+            # SE FOR APENAS PARA COMPILAR O REGEX
+            self.dic_regex_compilado[comando_original] = compile(comando)
+            return [False, 0]
+        else:
+            comando = self.dic_regex_compilado[comando_original]
 
         # Aplicar no texto
         re_texto = findall(comando, texto)
@@ -917,7 +954,7 @@ class Interpretador():
         return [True, [saida.strip() for saida in lista_itens]]
 
     def interpretador(self, linha):
-        Interpretador.log(self, '\n\ninterpretador')
+        #Interpretador.log(self, '\n\ninterpretador')
 
         # [[False, 'indisponibilidade_terminal', 'string', 'exibirNaTela'], "1", ""]
 
@@ -954,258 +991,258 @@ class Interpretador():
             #                          LIMPAR A TELA                         #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["limpatela"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<limpatela>)$', linha)
+            if caractere_inicio in self.dicLetras["limpatela"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<limpatela>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_limpar_o_termin(self), self.num_linha, "limpaTela"]
 
             ##################################################################
             #                             RETORNE                            #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["retorne"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<retorne>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["retorne"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<retorne>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_retorne(self, instrucao_analise[1][2]), self.num_linha, ""]
 
             ##################################################################
             #                              LOOPS                             #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["continue"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<continue>)$', linha)
+            if caractere_inicio in self.dicLetras["continue"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<continue>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_continuar(self), self.num_linha, "continue"]
 
-            if caractere_inicio in self.dicLetras["pare"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<pare>)$', linha)
+            if caractere_inicio in self.dicLetras["pare"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<pare>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_parar(self), self.num_linha, "pare"]
 
-            if caractere_inicio in self.dicLetras["interrompa"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<interrompa>)$', linha)
+            if caractere_inicio in self.dicLetras["interrompa"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<interrompa>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_interrompa(self), self.num_linha, "interrompa"]
 
-            if caractere_inicio in self.dicLetras["enquanto"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<enquanto>)(.*)(<enquanto_final>)$', linha)
+            if caractere_inicio in self.dicLetras["enquanto"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<enquanto>)(.*)(<enquanto_final>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_loops_enquantox(self, instrucao_analise[1][2]), self.num_linha, "enquanto"]
 
-            if caractere_inicio in self.dicLetras["repita"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha)
+            if caractere_inicio in self.dicLetras["repita"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<repita>)(.*)(<repitaVezes>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_repetir_n_vezes(self, instrucao_analise[1][2]), self.num_linha, "repetir"]
 
-            if caractere_inicio in self.dicLetras["para_cada"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["para_cada"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_loop_para_cada_(self, instrucao_analise[1][2], instrucao_analise[1][4], instrucao_analise[1][6]), self.num_linha, "para_cada"]
 
             ##################################################################
             #                            EXIBIÇÃO                            #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["mostreNessa"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["mostreNessa"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<mostreNessa>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_exibir_mesma_ln(self, instrucao_analise[1][2]), self.num_linha, "exibiçãoNaTela"]
 
-            if caractere_inicio in self.dicLetras["mostre"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<mostre>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["mostre"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<mostre>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_exibir_outra_ln(self, instrucao_analise[1][2]), self.num_linha, "exibiçãoNaTela"]
 
             ##################################################################
             #                             ESPERA                             #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["aguarde"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha)
+            if caractere_inicio in self.dicLetras["aguarde"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aguarde>)(.*)(<esperaEm>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_esperar_n_tempo(self, instrucao_analise[1][2], instrucao_analise[1][3]), self.num_linha, "esperar"]
 
             ##################################################################
             #                             ENTRADA                            #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["digitado"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<digitado>)$', linha)
+            if caractere_inicio in self.dicLetras["digitado"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<digitado>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_ovalor_digitado(self, instrucao_analise[1][1]), self.num_linha, "tudo_entradas"]
 
             ##################################################################
             #                         NUMERO ALEATÓRIO                       #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["aleatorio"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["aleatorio"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_numer_aleatorio(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "aleatorio"]
 
             ##################################################################
             #                           BIBLIOTECAS                          #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["importe"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<importe>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["importe"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<importe>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_importe(self, instrucao_analise[1][2]), self.num_linha, "importe"]
 
             ##################################################################
             #                    TENTE EXECUTAR O COMANDO                    #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["se_der_erro"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_der_erro>)$', linha)
+            if caractere_inicio in self.dicLetras["se_der_erro"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_der_erro>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_se_der_erro(self), self.num_linha, "tente"]
 
-            if caractere_inicio in self.dicLetras["senao_der_erro"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<senao_der_erro>)$', linha)
+            if caractere_inicio in self.dicLetras["senao_der_erro"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<senao_der_erro>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_senao_der_erro(self), self.num_linha, "tente"]
 
-            if caractere_inicio in self.dicLetras["em_qualquer_caso"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha)
+            if caractere_inicio in self.dicLetras["em_qualquer_caso"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<em_qualquer_caso>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_em_qualquer_caso(self), self.num_linha, "tente"]
 
-            if caractere_inicio in self.dicLetras["tente"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tente>)$', linha)
+            if caractere_inicio in self.dicLetras["tente"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tente>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_tente(self), self.num_linha, "tente"]
 
             ##################################################################
             #                     MANIPULAÇÃO DE ARQUIVOS                    #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["crie_arquivo"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["crie_arquivo"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<crie_arquivo>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_criar_arquivo(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
-            if caractere_inicio in self.dicLetras["delete_arquivo"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["delete_arquivo"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<delete_arquivo>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_excluir_arquivo(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
-            if caractere_inicio in self.dicLetras["arquivo_existe"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha)
+            if caractere_inicio in self.dicLetras["arquivo_existe"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_arquivo_nao_existe(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_arquivo_existe(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
-            if caractere_inicio in self.dicLetras["adicione_texto_arquivo"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["adicione_texto_arquivo"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_adicionar_arquivo(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "arquivos"]
 
-            if caractere_inicio in self.dicLetras["sobrescreva_texto_arquivo"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha)
+            if caractere_inicio in self.dicLetras["sobrescreva_texto_arquivo"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_sobrescrever_arquivo(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "arquivos"]
 
-            if caractere_inicio in self.dicLetras["leia_arquivo"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["leia_arquivo"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_ler_arquivo(self, instrucao_analise[1][2]), self.num_linha, "arquivos"]
 
             ##################################################################
             #                            CONDIÇÔES                           #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["se_nao_se"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_nao_se>)(.*)(<se_final>)$', linha)
+            if caractere_inicio in self.dicLetras["se_nao_se"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_nao_se>)(.*)(<se_final>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_senao_se(self, instrucao_analise[1][2]), self.num_linha, "condicionais"]
 
-            if caractere_inicio in self.dicLetras["se_nao"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_nao>)$', linha)
+            if caractere_inicio in self.dicLetras["se_nao"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se_nao>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_senao(self), self.num_linha, "condicionais"]
 
-            if caractere_inicio in self.dicLetras["se"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha)
+            if caractere_inicio in self.dicLetras["se"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<se>)(.*)(<se_final>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_testar_condicao(self, instrucao_analise[1][2]), self.num_linha, "condicionais"]
 
             ##################################################################
             #                            VARIAVEIS                           #
             ##################################################################
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^([a-zA-Z_0-9]*)(<declaraVariaveis>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^([a-zA-Z_0-9]*)(<declaraVariaveis>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_realizar_atribu(self, instrucao_analise[1][1], instrucao_analise[1][3]), self.num_linha, "atribuicoes"]
 
-            if caractere_inicio in self.dicLetras["incremente"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["incremente"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<incremente>)(.*)(<incrementeDecremente>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_incremente_vari(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "incremente_decremente"]
 
-            if caractere_inicio in self.dicLetras["decremente"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["decremente"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<decremente>)(.*)(<incrementeDecremente>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_decremente_vari(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "incremente_decremente"]
 
-            if caractere_inicio in self.dicLetras["tipo_variavel"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["tipo_variavel"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_tipo_variavel(self, instrucao_analise[1][2]), self.num_linha, ""]
 
-            if caractere_inicio in self.dicLetras["substitua"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<substitua>)(.*)(<substitua_por>)(.*)(<substitua_na_variavel>)(\\s*[A-Z0-9a-z\\_]*\\s*)$', linha)
+            if caractere_inicio in self.dicLetras["substitua"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<substitua>)(.*)(<substitua_por>)(.*)(<substitua_na_variavel>)(\\s*[A-Z0-9a-z\\_]*\\s*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_substituir_texto(self, instrucao_analise[1][2],instrucao_analise[1][4],instrucao_analise[1][6] ), self.num_linha, ""]
 
             ##################################################################
             #                              LISTA                             #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["tiverLista"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["tiverLista"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_tiver_valor_lst(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "se tiver"]
 
-            if caractere_inicio in self.dicLetras["tamanhoDaLista"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["tamanhoDaLista"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_otamanho_da_lst(self, instrucao_analise[1][2]), self.num_linha, "listas"]
 
-            if caractere_inicio in self.dicLetras["RemoverItensListas"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["RemoverItensListas"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<RemoverItensListas>)(.*)(<RemoverItensListasInterno>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_rem_itns_na_lst(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            if caractere_inicio in self.dicLetras["adicionarItensListas"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<listaNaPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha)
+            if caractere_inicio in self.dicLetras["adicionarItensListas"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<listaNaPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_add_itns_lst_ps(self, instrucao_analise[1][2], instrucao_analise[1][4], instrucao_analise[1][6]), self.num_linha, "listas"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_add_itns_na_lst(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_add_itns_lst_in(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_add_itns_na_lst(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_add_lst_na_posi(self, instrucao_analise[1][2], instrucao_analise[1][4], instrucao_analise[1][6]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<percorra_lista>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<percorra_lista>)(.*)(<percorra_items_lista_sub>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_percorra_lista(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_percorra_string(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_dec_lst_posicoe(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_declarar_listas(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_retornar_lista(self, instrucao_analise[1][2], ), self.num_linha, "listas"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)(<declaraVariaveis>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)(<declaraVariaveis>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_realiza_atribuica_posicao_lista(self, instrucao_analise[1][2], instrucao_analise[1][4], instrucao_analise[1][6]), self.num_linha, "lista"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_obter_valor_lst(self, instrucao_analise[1][2], instrucao_analise[1][4]), self.num_linha, "lista"]
 
             ##################################################################
             #                             FUNÇÕES                            #
             ##################################################################
 
-            if caractere_inicio in self.dicLetras["funcoes"]:
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros_parentese_abre>)(.*)(<recebeParametros_parentese_fecha>)$', linha)
+            if caractere_inicio in self.dicLetras["funcoes"] or not self.compilado:
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros_parentese_abre>)(.*)(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_declarar_funcao(self, instrucao_analise[1][2], instrucao_analise[1][4]),self.num_linha, "funcoes"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_declarar_funcao(self, instrucao_analise[1][2], instrucao_analise[1][4]),self.num_linha, "funcoes"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)(<recebeParametros_parentese_abre>)\\s*(<recebeParametros_parentese_fecha>)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)(<recebeParametros_parentese_abre>)\\s*(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_declarar_funcao(self, instrucao_analise[1][2]), self.num_linha, "funcoes"]
 
-                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha)
+                instrucao_analise = Interpretador.analisa_instrucao(self, '^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha, self.compilado)
                 if instrucao_analise[0]: return [Interpretador.funcao_declarar_funcao(self, instrucao_analise[1][2]), self.num_linha, "funcoes"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1], instrucao_analise[1][3]), self.num_linha, "funcoes"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', linha, self.compilado)
             if instrucao_analise[0]:
                 return [Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1], instrucao_analise[1][3]), self.num_linha, "funcoes"]
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^[A-Z0-9a-z_]*\\s*$', linha)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^[A-Z0-9a-z_]*\\s*$', linha, self.compilado)
             if instrucao_analise[0]: return [Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1]), self.num_linha, "funcoes"]
 
             return [ [False, "{}'{}'".format(  self.msg('comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
@@ -1213,7 +1250,7 @@ class Interpretador():
         return [[True, None, 'vazio', 'fazerNada'], str(self.num_linha), ""]
 
     def comandos_uso_geral(self, possivelVariavel):
-        Interpretador.log(self, "comandos_uso_geral: '{}'".format(possivelVariavel))
+        #Interpretador.log(self, "comandos_uso_geral: '{}'".format(possivelVariavel))
         possivelVariavel = str(possivelVariavel).strip()
 
         caractere_inicio = None
@@ -1223,45 +1260,45 @@ class Interpretador():
         ##################################################################
         #                            DIVERSOS                            #
         ##################################################################
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<na_cor>)(.*)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<na_cor>)(.*)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_na_cor(self, instrucao_analise[1][1], instrucao_analise[1][3])
 
         ##################################################################
         #                         NUMERO ALEATÓRIO                       #
         ##################################################################
 
-        if caractere_inicio in self.dicLetras["aleatorio"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["aleatorio"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<aleatorio>)(.*)(<aleatorioEntre>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_numer_aleatorio(self, instrucao_analise[1][2], instrucao_analise[1][4])
 
         ##################################################################
         #                              LISTA                             #
         ##################################################################
 
-        if caractere_inicio in self.dicLetras["declaraListas"]:
-             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["declaraListas"] or not self.compilado:
+             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', possivelVariavel, self.compilado)
              if instrucao_analise[0]: return Interpretador.funcao_retornar_lista(self, instrucao_analise[1][2])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_obter_valor_lst(self, instrucao_analise[1][2], instrucao_analise[1][4])
 
-        if caractere_inicio in self.dicLetras["tiverLista"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["tiverLista"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_tiver_valor_lst(self, instrucao_analise[1][2], instrucao_analise[1][4])
 
-        if caractere_inicio in self.dicLetras["tamanhoDaLista"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["tamanhoDaLista"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tamanhoDaLista>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_otamanho_da_lst(self, instrucao_analise[1][2])
 
         ##################################################################
         #                            FUNÇÔES                             #
         ##################################################################
 
-        if caractere_inicio in self.dicLetras["passandoParametros"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["passandoParametros"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passandoParametros>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1], instrucao_analise[1][3])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_executar_funcao(self, instrucao_analise[1][1], instrucao_analise[1][3])
 
 
@@ -1269,60 +1306,60 @@ class Interpretador():
         #                             ENTRADA                            #
         ##################################################################
 
-        if caractere_inicio in self.dicLetras["digitado"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["digitado"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<digitado>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_ovalor_digitado(self, instrucao_analise[1][1])
 
         ##################################################################
         #                     MANIPULAÇÃO DE ARQUIVOS                    #
         ##################################################################
 
-        if caractere_inicio in self.dicLetras["arquivo_existe"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["arquivo_existe"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_arquivo_nao_existe(self, instrucao_analise[1][2])
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_arquivo_existe(self, instrucao_analise[1][2])
 
-        if caractere_inicio in self.dicLetras["diretorio_existe"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_nao_sub_existe>)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["diretorio_existe"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_nao_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_diretorio_nao_existe(self, instrucao_analise[1][2])
 
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_sub_existe>)$', possivelVariavel)
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_diretorio_existe(self, instrucao_analise[1][2])
 
-        if caractere_inicio in self.dicLetras["leia_arquivo"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["leia_arquivo"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_ler_arquivo(self, instrucao_analise[1][2])
 
         ##################################################################
         #                            VARIAVEIS                           #
         ##################################################################
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_subum>)(.*)(<percorrer_lst_str_a_cada_subdois>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_a_cada>)(.*)(<percorrer_lst_str_a_cada_subum>)(.*)(<percorrer_lst_str_a_cada_subdois>)(.*)(<percorrer_lst_str_a_cada_final>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_fatiamento(self, instrucao_analise[1][1], instrucao_analise[1][3], instrucao_analise[1][5], instrucao_analise[1][7])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(\\s*[\\w*\\_]*)(<percorrer_lst_str_ate>)(.*)(<percorrer_lst_str_ate_sub>)(.*)(<percorrer_lst_str_ate_final>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_fatiamento(self, instrucao_analise[1][1], instrucao_analise[1][3], instrucao_analise[1][5])
 
-        if caractere_inicio in self.dicLetras["tipo_variavel"]:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel)
+        if caractere_inicio in self.dicLetras["tipo_variavel"] or not self.compilado:
+            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tipo_variavel>)(.*)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_tipo_variavel(self, instrucao_analise[1][2])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_upper>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_upper>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_para_maiusculo(self, instrucao_analise[1][1])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_lower>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_lower>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_para_minusculo(self, instrucao_analise[1][1])
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_captalize>)$', possivelVariavel)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(.*)(<to_captalize>)$', possivelVariavel, self.compilado)
         if instrucao_analise[0]: return Interpretador.funcao_para_captalize(self, instrucao_analise[1][1])
 
         return [True, None, 'vazio']
 
 
     def verificar_se_existe(self, arquivo_diretorio, ja_foi_abstraido = False):
-        Interpretador.log(self, "verificar_se_existe")
+        #Interpretador.log(self, "verificar_se_existe")
 
         if not ja_foi_abstraido:
             teste_arquivo = Interpretador.abstrair_valor_linha(self, arquivo_diretorio)
@@ -1336,7 +1373,7 @@ class Interpretador():
         return [True, False, "booleano", "fazerNada"]
 
     def testar_existencia(self, arquivo):
-        Interpretador.log(self, "testar_existencia")
+        #Interpretador.log(self, "testar_existencia")
 
         # Abstrair o valor do arquivo e do objetivo
         teste_arquivo = Interpretador.abstrair_valor_linha(self, arquivo)
@@ -1385,7 +1422,7 @@ class Interpretador():
 
 
     def funcao_percorra_lista(self, variavel, variavel_atribuir):
-        Interpretador.log(self, "__funcao_percorra_lista")
+        #Interpretador.log(self, "__funcao_percorra_lista")
 
         teste_variavel = Interpretador.operacoes_variaveis(self, variavel,
             pipeline = [
@@ -1413,7 +1450,7 @@ class Interpretador():
 
 
     def funcao_percorra_string(self, variavel, variavel_atribuir):
-        Interpretador.log(self, "__funcao_percorra_string")
+        #Interpretador.log(self, "__funcao_percorra_string")
 
         testa_valor = Interpretador.operacoes_variaveis(self, variavel,
             pipeline = [
@@ -1439,7 +1476,7 @@ class Interpretador():
         return [True, [testa_valor, variavel_atribuir], "lista", "declararLoopParaItemString"]
 
     def funcao_substituir_texto(self, valor1, valor2, variavel):
-        Interpretador.log(self, "__funcao_substituir_texto")
+        #Interpretador.log(self, "__funcao_substituir_texto")
 
         teste_variavel = Interpretador.operacoes_variaveis(self, variavel,
             pipeline = [
@@ -1470,7 +1507,7 @@ class Interpretador():
         return [True, True , 'booleano', 'fazerNada']
 
     def funcao_limpar_o_termin(self):
-        Interpretador.log(self, "__funcao_limpar_o_termin")
+        #Interpretador.log(self, "__funcao_limpar_o_termin")
 
         self.controle_interpretador = "limpar_tela"
 
@@ -1478,21 +1515,21 @@ class Interpretador():
 
             if self.aconteceu_erro:
                 return [False, "Interrompido", "string", "exibirNaTela"]
-            sleep(0.0001)
+            sleep(0.000001)
 
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_interrompa(self):
-        Interpretador.log(self, "__funcao_interrompa")
+        #Interpretador.log(self, "__funcao_interrompa")
 
-        Interpretador.log(self, '<funcao_interrompa>:')
+        #Interpretador.log(self, '<funcao_interrompa>:')
         self.aconteceu_erro = True
         return [False, 'indisponibilidade_terminal', "string", "fazerNada"]
 
 
     def funcao_fatiamento(self, variavel, de, ate, cada=None):
         variavel = variavel.strip()
-        Interpretador.log(self, "__funcao_fatiamento")
+        #Interpretador.log(self, "__funcao_fatiamento")
 
         abstrair_variavel = Interpretador.obter_valor_variavel(self, variavel)
         if not abstrair_variavel[0]: return abstrair_variavel
@@ -1575,7 +1612,7 @@ class Interpretador():
 
 
     def funcao_para_maiusculo(self, texto):
-        Interpretador.log(self, "__funcao_para_maiusculo")
+        #Interpretador.log(self, "__funcao_para_maiusculo")
 
         abstrair = Interpretador.abstrair_valor_linha(self, texto)
         if not abstrair[0]: return abstrair
@@ -1586,7 +1623,7 @@ class Interpretador():
         return [True, abstrair[1].upper(), "string", "fazerNada"]
 
     def funcao_para_minusculo(self, texto):
-        Interpretador.log(self, "__funcao_para_minusculo")
+        #Interpretador.log(self, "__funcao_para_minusculo")
 
         abstrair = Interpretador.abstrair_valor_linha(self, texto)
         if not abstrair[0]: return abstrair
@@ -1597,7 +1634,7 @@ class Interpretador():
         return [True, abstrair[1].lower(), "string", "fazerNada"]
 
     def funcao_para_captalize(self, texto):
-        Interpretador.log(self, "__funcao_para_captalize")
+        #Interpretador.log(self, "__funcao_para_captalize")
 
         abstrair = Interpretador.abstrair_valor_linha(self, texto)
         if not abstrair[0]: return abstrair
@@ -1608,7 +1645,7 @@ class Interpretador():
         return [True, abstrair[1].capitalize(), "string", "fazerNada"]
 
     def funcao_retorne(self, valor):
-        Interpretador.log(self, "__funcao_retorne")
+        #Interpretador.log(self, "__funcao_retorne")
 
         abstrair =Interpretador.abstrair_valor_linha(self, valor)
         if not abstrair[0]: return abstrair
@@ -1616,42 +1653,42 @@ class Interpretador():
         return [True, abstrair[1], abstrair[2], "retornarOrquestrador"]
 
     def funcao_parar(self):
-        Interpretador.log(self, "__funcao_parar")
+        #Interpretador.log(self, "__funcao_parar")
 
         return [True, True, "booleano", "pararLoop"]
 
     def funcao_continuar(self):
-        Interpretador.log(self, "__funcao_continuar")
+        #Interpretador.log(self, "__funcao_continuar")
 
         return [True, True, "booleano", "continuarLoop"]
 
     def funcao_tente(self):
-        Interpretador.log(self, "__funcao_tente")
+        #Interpretador.log(self, "__funcao_tente")
 
         return [True, True, 'string', 'tenteAlgo']
 
     def funcao_se_der_erro(self):
-        Interpretador.log(self, "__funcao_se_der_erro")
+        #Interpretador.log(self, "__funcao_se_der_erro")
 
         return [True, True, 'string', 'seDerErro']
 
     def funcao_senao_der_erro(self):
-        Interpretador.log(self, "__funcao_senao_der_erro")
+        #Interpretador.log(self, "__funcao_senao_der_erro")
 
         return [True, True, 'string', 'seNaoErro']
 
     def funcao_em_qualquer_caso(self):
-        Interpretador.log(self, "__funcao_em_qualquer_caso")
+        #Interpretador.log(self, "__funcao_em_qualquer_caso")
 
         return [True, True, 'string', 'emQualquerCaso']
 
     def funcao_senao(self):
-        Interpretador.log(self, "__funcao_senao")
+        #Interpretador.log(self, "__funcao_senao")
 
         return [True, True, 'string', 'declararSenao']
 
     def formatar_arquivo(self, nome_arquivo):
-        Interpretador.log(self, "formatar_arquivo")
+        #Interpretador.log(self, "formatar_arquivo")
 
         if "/" not in nome_arquivo:
             nome_arquivo = self.diretorio_base + nome_arquivo
@@ -1661,13 +1698,13 @@ class Interpretador():
         return nome_arquivo
 
     def msg_variavel_numerica(self, msg, variavel):
-        Interpretador.log(self, "msg_variavel_numerica")
+        #Interpretador.log(self, "msg_variavel_numerica")
 
         if msg == 'naoNumerico':
             return [False, self.msg("variavel_nao_numerica").format(variavel), 'string', 'exibirNaTela']
 
     def analisa_padrao_variavel(self, variavel):
-        Interpretador.log(self, "analisa_padrao_variavel")
+        #Interpretador.log(self, "analisa_padrao_variavel")
 
         variavel = str(variavel)
         variavel = variavel.replace("_", "")  # _ também é valido
@@ -1685,7 +1722,7 @@ class Interpretador():
         return [True, True, 'booleano']
 
     def verifica_se_tem(self, linha, a_buscar):
-        Interpretador.log(self, "verifica_se_tem")
+        #Interpretador.log(self, "verifica_se_tem")
 
         analisar = True
         lista = []
@@ -1706,7 +1743,7 @@ class Interpretador():
         return lista
 
     def obter_valor_variavel(self, variavel):
-        Interpretador.log(self, "obter_valor_variavel:: '{}'".format(variavel))
+        #Interpretador.log(self, "obter_valor_variavel:: '{}'".format(variavel))
 
         variavel = variavel.strip()
         variavel = variavel.replace('\n', '')
@@ -1720,7 +1757,7 @@ class Interpretador():
             return [True, self.dic_variaveis[variavel][0], self.dic_variaveis[variavel][1], 'fazerNada']
 
     def obter_valor_lista(self, linha):
-        Interpretador.log(self, "obter_valor_lista")
+        #Interpretador.log(self, "obter_valor_lista")
 
         teste = Interpretador.obter_valor_variavel(self, linha)
 
@@ -1733,7 +1770,7 @@ class Interpretador():
         return teste
 
     def funcao_retornar_lista(self, variavel):
-        Interpretador.log(self, "__funcao_retornar_lista")
+        #Interpretador.log(self, "__funcao_retornar_lista")
 
         teste_variavel = Interpretador.obter_valor_lista(self, variavel)
 
@@ -1743,7 +1780,7 @@ class Interpretador():
         return [True, teste_variavel[1], "lista", 'fazerNada']
 
     def funcao_otamanho_da_lst(self, variavel):
-        Interpretador.log(self, "__funcao_otamanho_da_lst")
+        #Interpretador.log(self, "__funcao_otamanho_da_lst")
 
         variavel = variavel.strip()
 
@@ -1758,7 +1795,7 @@ class Interpretador():
                     'exibirNaTela']
 
     def funcao_ovalor_digitado(self, linha):
-        Interpretador.log(self, "__funcao_ovalor_digitado: {}".format(linha))
+        #Interpretador.log(self, "__funcao_ovalor_digitado: {}".format(linha))
 
         self.controle_interpretador = ':input:'
 
@@ -1766,7 +1803,7 @@ class Interpretador():
         while self.controle_interpretador != "":
             if self.aconteceu_erro:
                 return [False, "Interrompido", "string", "exibirNaTela"]
-            sleep(0.0001)
+            sleep(0.000001)
 
         digitado = self.texto_digitado
 
@@ -1788,7 +1825,7 @@ class Interpretador():
     # ======== métodos altamente depdendentes ============= #
 
     def obter_valor_string(self, string):
-        Interpretador.log(self, "obter_valor_string")
+        #Interpretador.log(self, "obter_valor_string")
 
         valorFinal = ''
         anterior = 0
@@ -1808,7 +1845,7 @@ class Interpretador():
         return [True, valorFinal, 'string']
 
     def localiza_transforma_variavel(self, linha):
-        Interpretador.log(self, "localiza_transforma_variavel:{}".format(linha))
+        #Interpretador.log(self, "localiza_transforma_variavel:{}".format(linha))
 
         anterior = 0
         normalizacao = 0
@@ -1847,7 +1884,7 @@ class Interpretador():
         return [True, linha, 'string']
 
     def fazer_contas(self, linha):
-        Interpretador.log(self, "fazer_contas:linha={}".format(linha))
+        #Interpretador.log(self, "fazer_contas:linha={}".format(linha))
 
         for comando in self.dic_comandos["matematica_mult"]["comando"]:
             linha = linha.replace(comando[0], ' * ')
@@ -1924,7 +1961,7 @@ class Interpretador():
             return [True, resutadoFinal, 'float']
 
     def abstrair_mostre_valor(self, possivelVariavel):
-        Interpretador.log(self, "abstrair_mostre_valor")
+        #Interpretador.log(self, "abstrair_mostre_valor")
         possivelVariavel = possivelVariavel.strip()
         if possivelVariavel == '':
             return [True, '', 'vazio', 'exibirNaTela']
@@ -1957,7 +1994,7 @@ class Interpretador():
         return Interpretador.abstrair_valor_linha(self, possivelVariavel)
 
     def abstrair_valor_linha(self, possivelVariavel):
-        Interpretador.log(self, "abstrair_valor_linha: possivelVariavel = '{}'".format(possivelVariavel))
+        #Interpretador.log(self, "abstrair_valor_linha: possivelVariavel = '{}'".format(possivelVariavel))
 
         possivelVariavel = str(possivelVariavel).strip()
 
@@ -2053,7 +2090,7 @@ class Interpretador():
     # ======== fim métodos altamente depdendentes ============= #
 
     def funcao_importe(self, biblioteca):
-        Interpretador.log(self, "__funcao_importe: biblioteca = '{}'".format(biblioteca))
+        #Interpretador.log(self, "__funcao_importe: biblioteca = '{}'".format(biblioteca))
 
         biblioteca = Interpretador.formatar_arquivo(self, biblioteca.lower()) + str(".safira")
 
@@ -2071,7 +2108,7 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_tipo_variavel(self, variavel):
-        Interpretador.log(self, "__funcao_tipo_variavel")
+        #Interpretador.log(self, "__funcao_tipo_variavel")
 
         resultado =Interpretador.abstrair_valor_linha(self, variavel)
 
@@ -2083,7 +2120,7 @@ class Interpretador():
 
     # =================== ARQUIVOS =================== #
     def funcao_ler_arquivo(self, nome_arquivo):
-        Interpretador.log(self, "__funcao_ler_arquivo")
+        #Interpretador.log(self, "__funcao_ler_arquivo")
 
         teste_valor_arquivo =Interpretador.abstrair_valor_linha(self, nome_arquivo)
         if teste_valor_arquivo[0] == False: return teste_valor_arquivo
@@ -2110,7 +2147,7 @@ class Interpretador():
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_sobrescrever_arquivo(self, texto, nome_arquivo):
-        Interpretador.log(self, "__funcao_sobrescrever_arquivo")
+        #Interpretador.log(self, "__funcao_sobrescrever_arquivo")
 
         teste_valor_arquivo =Interpretador.abstrair_valor_linha(self, nome_arquivo)
         teste_valor_texto =Interpretador.abstrair_valor_linha(self, texto)
@@ -2141,7 +2178,7 @@ class Interpretador():
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_adicionar_arquivo(self, texto, nome_arquivo):
-        Interpretador.log(self, "__funcao_adicionar_arquivo")
+        #Interpretador.log(self, "__funcao_adicionar_arquivo")
 
         teste_valor_arquivo =Interpretador.abstrair_valor_linha(self, nome_arquivo)
         teste_valor_texto =Interpretador.abstrair_valor_linha(self, texto)
@@ -2170,7 +2207,7 @@ class Interpretador():
         return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
 
     def funcao_listar_arquivos(self, nome_diretorio):
-        Interpretador.log(self, "__funcao_listar_arquivos")
+        #Interpretador.log(self, "__funcao_listar_arquivos")
 
         if nome_diretorio == "":
             return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
@@ -2193,7 +2230,7 @@ class Interpretador():
         return [True, lista_resultado, "lista", "fazerNada"]
 
     def funcao_diretorio_existe(self, nome_diretorio):
-        Interpretador.log(self, "__funcao_diretorio_existe")
+        #Interpretador.log(self, "__funcao_diretorio_existe")
 
         if nome_diretorio == "":
             return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
@@ -2210,7 +2247,7 @@ class Interpretador():
             return [True, False, "booleano", "fazerNada"]
 
     def funcao_diretorio_nao_existe(self, nome_diretorio):
-        Interpretador.log(self, "__funcao_diretorio_nao_existe")
+        #Interpretador.log(self, "__funcao_diretorio_nao_existe")
 
         if nome_diretorio == "":
             return [False, self.msg("precisa_nome_diretorio"), 'string', ' exibirNaTela']
@@ -2228,7 +2265,7 @@ class Interpretador():
 
     # Precisa disferenciar diretório de arquivo
     def funcao_arquivo_existe(self, nome_arquivo):
-        Interpretador.log(self, "__funcao_arquivo_existe")
+        #Interpretador.log(self, "__funcao_arquivo_existe")
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
@@ -2245,7 +2282,7 @@ class Interpretador():
             return [True, False, "booleano", "fazerNada"]
 
     def funcao_arquivo_nao_existe(self, nome_arquivo):
-        Interpretador.log(self, "__funcao_arquivo_nao_existe")
+        #Interpretador.log(self, "__funcao_arquivo_nao_existe")
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
@@ -2273,7 +2310,7 @@ class Interpretador():
             list: [sucesso: bool, mensagem: str, tipo_mensagem: str, acao: str]
         """
 
-        Interpretador.log(self, "__funcao_excluir_arquivo")
+        #Interpretador.log(self, "__funcao_excluir_arquivo")
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
@@ -2295,7 +2332,7 @@ class Interpretador():
             
 
     def funcao_criar_arquivo(self, nome_arquivo):
-        Interpretador.log(self, "__funcao_criar_arquivo")
+        #Interpretador.log(self, "__funcao_criar_arquivo")
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']
@@ -2318,17 +2355,17 @@ class Interpretador():
         return [True, "", "vazio", "fazerNada"]
 
     def funcao_incremente_vari(self, valor, variavel):
-        Interpretador.log(self, "__funcao_incremente_vari")
+        #Interpretador.log(self, "__funcao_incremente_vari")
 
         return Interpretador.incremente_decremente(self, valor, variavel, 'incremente')
 
     def funcao_decremente_vari(self, valor, variavel):
-        Interpretador.log(self, "__funcao_decremente_vari")
+        #Interpretador.log(self, "__funcao_decremente_vari")
 
         return Interpretador.incremente_decremente(self, valor, variavel, 'decremente')
 
     def incremente_decremente(self, valor, variavel, acao):
-        Interpretador.log(self, "incremente_decremente")
+        #Interpretador.log(self, "incremente_decremente")
 
         teste_exist =Interpretador.obter_valor_variavel(self, variavel)
         teste_valor =Interpretador.abstrair_valor_linha(self, valor)
@@ -2351,7 +2388,7 @@ class Interpretador():
         return [True, True, "booleano", "fazerNada"]
 
     def teste_generico_lista(self, variavel, valor):
-        Interpretador.log(self, "teste_generico_lista")
+        #Interpretador.log(self, "teste_generico_lista")
 
         if variavel == '' or valor == '':
             return [False,self.msg("variavel_valor_nao_informado"), 'exibirNaTela']
@@ -2368,7 +2405,7 @@ class Interpretador():
         return [True, teste_variavel, teste_valor]
 
     def funcao_rem_itns_na_lst(self, valor, variavel):
-        Interpretador.log(self, "__funcao_rem_itns_na_lst")
+        #Interpretador.log(self, "__funcao_rem_itns_na_lst")
 
         teste_generico = Interpretador.teste_generico_lista(self, variavel, valor)
         if not teste_generico[0]:
@@ -2384,7 +2421,7 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_add_itns_na_lst(self, valor, variavel):
-        Interpretador.log(self, "__funcao_add_itns_na_lst")
+        #Interpretador.log(self, "__funcao_add_itns_na_lst")
 
         teste_generico = Interpretador.teste_generico_lista(self, variavel, valor)
         if not teste_generico[0]:
@@ -2401,7 +2438,7 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_add_itns_lst_in(self, valor, variavel):
-        Interpretador.log(self, "__funcao_add_itns_lst_in")
+        #Interpretador.log(self, "__funcao_add_itns_lst_in")
 
         teste_generico = Interpretador.teste_generico_lista(self, variavel, valor)
         if not teste_generico[0]:
@@ -2414,7 +2451,7 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_add_itns_lst_ps(self, valor, posicao, variavel):
-        Interpretador.log(self, "__funcao_add_itns_lst_ps")
+        #Interpretador.log(self, "__funcao_add_itns_lst_ps")
 
         if variavel == '' or valor == '':
             return [False, self.msg("necessario_informar_variavel_valor") ]
@@ -2445,7 +2482,7 @@ class Interpretador():
 
     # ============ mostre ==================#
     def funcao_exibir_outra_ln(self, linha):
-        Interpretador.log(self, "__funcao_exibir_outra_ln: {}".format(linha))
+        #Interpretador.log(self, "__funcao_exibir_outra_ln: {}".format(linha))
 
         resultado = Interpretador.abstrair_mostre_valor(self, linha)
 
@@ -2461,7 +2498,7 @@ class Interpretador():
 
 
     def funcao_exibir_mesma_ln(self, linha):
-        Interpretador.log(self, "__funcao_exibir_mesma_ln: {}".format(linha))
+        #Interpretador.log(self, "__funcao_exibir_mesma_ln: {}".format(linha))
 
         resultado = Interpretador.abstrair_mostre_valor(self, linha)
 
@@ -2476,7 +2513,7 @@ class Interpretador():
         return [resultado[0], ':nessaLinha:::' + str(resultado[1]), resultado[2], 'exibirNaTela']
 
     def funcao_na_cor(self, linha, cor):
-        Interpretador.log(self, "___funcao_na_cor: linha={}, cor={}".format(linha, cor))
+        #Interpretador.log(self, "___funcao_na_cor: linha={}, cor={}".format(linha, cor))
 
         teste_linha = Interpretador.abstrair_valor_linha(self, linha)
         if not teste_linha[0]:
@@ -2491,15 +2528,13 @@ class Interpretador():
 
 
     def funcao_esperar_n_tempo(self, tempo, tipo_espera):
-        Interpretador.log(self, "__funcao_esperar_n_tempo: tempo = '{}', espera = '{}'".format(tempo, tipo_espera))
+        #Interpretador.log(self, "__funcao_esperar_n_tempo: tempo = '{}', espera = '{}'".format(tempo, tipo_espera))
 
         resultado =Interpretador.abstrair_valor_linha(self, tempo)
         if not resultado[0]: return resultado
 
-
         if tipo_espera in [comando[0].strip() for comando in self.dic_comandos['esperaEmSegundos']['comando']]:
             sleep(resultado[1])
-
 
         elif tipo_espera in [ comando[0].strip() for comando in self.dic_comandos['esperaEmMs']['comando']]:
             sleep(resultado[1] / 1000)
@@ -2507,30 +2542,30 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def tiver_valor_lista(self, linha):
-        Interpretador.log(self, "tiver_valor_lista")
+        #Interpretador.log(self, "tiver_valor_lista")
 
         linha = linha.strip()
 
-        instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha)
+        instrucao_analise = Interpretador.analisa_instrucao(self, '^(<tiverLista>)(.*)(<tiverInternoLista>)(.*)$', linha, self.compilado)
         if instrucao_analise[0]:
             return Interpretador.funcao_tiver_valor_lst(self, instrucao_analise[1][2], instrucao_analise[1][4])
 
         return [True, None, 'booleano']
 
     def funcao_senao_se(self, condicao):
-        Interpretador.log(self, "__funcao_senao_se")
+        #Interpretador.log(self, "__funcao_senao_se")
 
         resultado =Interpretador.funcao_testar_condicao(self, condicao)
         return [resultado[0], resultado[1], resultado[2], 'declararSenaoSe']
 
     def funcao_loops_enquantox(self, linha):
-        Interpretador.log(self, "__funcao_loops_enquantox")
+        #Interpretador.log(self, "__funcao_loops_enquantox")
 
         resultado =Interpretador.funcao_testar_condicao(self, linha)
         return [resultado[0], resultado[1], resultado[2], 'declararLoop']
 
     def funcao_loop_para_cada_(self, variavel, inicio, fim):
-        Interpretador.log(self, "__funcao_loop_para_cada_")
+        #Interpretador.log(self, "__funcao_loop_para_cada_")
 
         teste_exist =Interpretador.obter_valor_variavel(self, variavel)
         teste_valorI =Interpretador.abstrair_valor_linha(self, inicio)
@@ -2562,7 +2597,7 @@ class Interpretador():
         return [True, [variavel, int(teste_valorI[1]), int(teste_valorF[1]), passo], "lista", "declararLoopParaCada"]
 
     def funcao_add_lst_na_posi(self, variavelLista, posicao, valor):
-        Interpretador.log(self, "__funcao_add_lst_na_posi")
+        #Interpretador.log(self, "__funcao_add_lst_na_posi")
 
         if variavelLista == '' or posicao == '' or valor == '':  # Veio sem dados
             return [False, self.msg('add_lst_posicao_separador'), 'string', ' exibirNaTela']
@@ -2601,9 +2636,9 @@ class Interpretador():
         return [True, True, 'booleano', 'fazerNada']
 
     def funcao_obter_valor_lst(self, variavel, posicao):
-        Interpretador.log(self, "__funcao_obter_valor_lst")
+        #Interpretador.log(self, "__funcao_obter_valor_lst")
 
-        Interpretador.log(self, '<funcao_obter_valor_lst>:')
+        #Interpretador.log(self, '<funcao_obter_valor_lst>:')
         if variavel == '' or posicao == '':
             return [False, self.msg("variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
 
@@ -2631,7 +2666,7 @@ class Interpretador():
         return [True, resultado[posicao - 1][0], resultado[posicao - 1][1], 'exibirNaTela']
 
     def funcao_tiver_valor_lst(self, valor, variavel):
-        Interpretador.log(self, "__funcao_tiver_valor_lst")
+        #Interpretador.log(self, "__funcao_tiver_valor_lst")
 
         if variavel == '' or valor == '':
             return [False, self.msg("variavel_valor_nao_informado"), 'exibirNaTela']
@@ -2653,9 +2688,9 @@ class Interpretador():
         return [True, False, 'booleano', 'fazerNada']
 
     def funcao_dec_lst_posicoe(self, variavel, posicoes):
-        Interpretador.log(self, "__funcao_dec_lst_posicoe")
+        #Interpretador.log(self, "__funcao_dec_lst_posicoe")
 
-        Interpretador.log(self, '<funcao_dec_lst_posicoe>:')
+        #Interpretador.log(self, '<funcao_dec_lst_posicoe>:')
         teste =Interpretador.analisa_padrao_variavel(self, variavel)
         resultado =Interpretador.abstrair_valor_linha(self, posicoes)
 
@@ -2676,7 +2711,7 @@ class Interpretador():
         return [True, None, 'vazio', 'fazerNada']
 
     def funcao_repetir_n_vezes(self, linha):
-        Interpretador.log(self, "__funcao_repetir_n_vezes")
+        #Interpretador.log(self, "__funcao_repetir_n_vezes")
 
         linha = linha.replace('vezes', '')
         linha = linha.replace('vez', '')
@@ -2702,7 +2737,7 @@ class Interpretador():
             return [True, funcao_repita, 'float', 'declararLoopRepetir']
 
     def funcao_numer_aleatorio(self, num1, num2):
-        Interpretador.log(self, "__funcao_numer_aleatorio: num1 = '{}', num2 = '{}'".format(num1, num2))
+        #Interpretador.log(self, "__funcao_numer_aleatorio: num1 = '{}', num2 = '{}'".format(num1, num2))
 
         num1 =Interpretador.abstrair_valor_linha(self, num1)
         num2 =Interpretador.abstrair_valor_linha(self, num2)
@@ -2732,7 +2767,7 @@ class Interpretador():
         return [True, randint(n1, n2), 'float', 'fazerNada']
 
     def funcao_realizar_atribu(self, variavel, valor):
-        Interpretador.log(self, "__funcao_realizar_atribu: variavel = '{}', valor='{}'".format(variavel, valor))
+        #Interpretador.log(self, "__funcao_realizar_atribu: variavel = '{}', valor='{}'".format(variavel, valor))
 
         if variavel == '' or valor == '':
             return [False,self.msg("variavel_valor_nao_informado"), 'string', 'exibirNaTela']
@@ -2754,7 +2789,7 @@ class Interpretador():
         return [resultado[0], resultado[1], resultado[2], 'fazerNada']
 
     def funcao_realiza_atribuica_posicao_lista(self, variavel, posicao, itens):
-        Interpretador.log(self, "__funcao_realiza_atribuica_posicao_lista")
+        #Interpretador.log(self, "__funcao_realiza_atribuica_posicao_lista")
 
         variavel = variavel.strip()
         posicao = posicao.strip()
@@ -2796,7 +2831,7 @@ class Interpretador():
     # ========== FUNÇÔES GRANDES ======================= #
 
     def funcao_declarar_listas(self, variavel, itens):
-        Interpretador.log(self, "__funcao_declarar_listas")
+        #Interpretador.log(self, "__funcao_declarar_listas")
 
         if itens == '' or variavel == '':
             return [False,self.msg("variavel_posicao_nao_informada"), 'string', 'exibirNaTela']
@@ -2846,7 +2881,7 @@ class Interpretador():
             return [True, None, 'vazio', 'fazerNada']
 
     def funcao_declarar_funcao(self, nomeDaFuncao, parametros=None):
-        Interpretador.log(self, "__funcao_declarar_funcao: nomeDaFuncao = '{}', parametros = '{}'".format(nomeDaFuncao, parametros))
+        #Interpretador.log(self, "__funcao_declarar_funcao: nomeDaFuncao = '{}', parametros = '{}'".format(nomeDaFuncao, parametros))
 
         if parametros is not None:
             if parametros.strip() == "":
@@ -2905,7 +2940,7 @@ class Interpretador():
         return [True, True, 'booleano', 'declararFuncao', funcao_em_analise]
 
     def funcao_executar_funcao(self, nomeDaFuncao, parametros=None):
-        Interpretador.log(self, "__funcao_executar_funcao: nomeDaFuncao = '{}', parametros='{}'".format(nomeDaFuncao, parametros))
+        #Interpretador.log(self, "__funcao_executar_funcao: nomeDaFuncao = '{}', parametros='{}'".format(nomeDaFuncao, parametros))
 
         if parametros is not None:
             if parametros.strip() == "":
@@ -3005,7 +3040,7 @@ class Interpretador():
             return [True, resultadoOrquestrador[1], resultadoOrquestrador[2], 'fazerNada']
 
     def filtrar_comando(self, linha, comando, substituicao):
-        Interpretador.log(self, "filtrar_comando")
+        #Interpretador.log(self, "filtrar_comando")
 
         for comando in self.dic_comandos[comando]["comando"]:
             linha = linha.replace(comando[0], substituicao)
@@ -3013,7 +3048,7 @@ class Interpretador():
         return linha
 
     def funcao_testar_condicao(self, linha):
-        Interpretador.log(self, "__funcao_testar_condicao")
+        #Interpretador.log(self, "__funcao_testar_condicao")
 
         linha = Interpretador.filtrar_comando(self, linha, "logico_maior_igual", ' >= ')
         linha = Interpretador.filtrar_comando(self, linha, "logico_menor_igual", ' <= ')
