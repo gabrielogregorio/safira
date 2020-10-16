@@ -16,12 +16,7 @@ fr_texto.grid_columnconfigure(1, weight=1)
 fr_texto.grid(column=1, sticky= NSEW)
 
 
-def add_image():
-    #tx.image_create(END, image = img)
-    tx.window_create(END, window = Label(tx, image = img, bg='blue'))
 
-def add_text(texto):
-    tx.insert(END, texto)
 
 tx = Text(fr_texto, design,wrap=WORD,  font=('', 14), bd=0, padx=0, pady=0, inactiveselectbackground='#11fdfd', selectbackground='white', relief=FLAT)
 ys = Scrollbar(tela, orient = 'vertical', command = tx.yview)
@@ -31,35 +26,17 @@ tx['xscrollcommand'] = xs.set
 
 tx.grid()
 img = PhotoImage(file = "exemplo.png")
+img = img.subsample(5, 5)
 
- 
+tx.insert (END, 'Merge sort', ('titulo'))
+tx.insert (END, '\nAlgoritmo de ordenação', ('subtitulo'))
+tx.insert (END, '\n\nO merge sort, ou ordenação por mistura, é um exemplo de algoritmo de ordenação por comparação do tipo dividir-para-conquistar. Sua ideia básica consiste em Dividir e Conquistar.', ('texto'))
 
-tx.tag_add ('destaque', 1.0,  'end')
+tx.tag_configure('titulo', font=('',20, 'bold'), selectbackground='#11fdfd')
+tx.tag_configure('subtitulo', font=('',15), selectbackground='#11fdfd')
+tx.tag_configure('texto', font=('',13), selectbackground='#11fdfd')
 
-tx.tag_configure('destaque', background='yellow', font=('',20))
-tx.insert (END, 'novo material a inserir', ('destaque'))
-
-
-add_text("""\nOrigem: red     car Wikipédia, """) #a enciclopédia livre. Saltar par Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort Origem: Wikipédia, a enciclopédia livre. Saltar para a navegaçãoSaltar para a pesquisa Merge sort fim, esta é a uma linha da bagaça
-
-countVar = StringVar()
-pos = tx.search("red\\s*car", "1.0", stopindex="end", count=countVar, regexp=True)
-inicio = str(pos)
-
-x, y = inicio.split('.')
-y = int(y) + int(countVar.get())
-fim = '{}.{}'.format(x, y)
-
-tx.tag_add ('search', str(pos),  fim)
-tx.tag_configure('search', background='green', font=('',20))
-
-print()
-
-
-
-#add_image()
-
-
+tx.window_create(END, window = Label(tx, image = img, bg='blue'))
 
 
 tx.configure(state=DISABLED)
