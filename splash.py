@@ -6,22 +6,20 @@ from tkinter import Tk
 from time import sleep
 
 
-class Splash():
+class Splash:
     def __init__(self, design):
-        self.frame_splash = None
-        self.fr_splash = None
-        self.l1_splash = None
-        self.l2_splash = None
 
         self.tela_splash = Tk()
         self.tela_splash.withdraw()
         self.tela_splash.overrideredirect(1)
         self.tela_splash.rowconfigure(1, weight=1)
         self.tela_splash.grid_columnconfigure(1, weight=1)
+
+
+        # Design da tela
         self.design = design
 
-    def splash_inicio(self):
-        self.frame_splash = Frame(self.tela_splash)
+        self.frame_splash = Frame(master=self.tela_splash)
 
         self.fr_splash = Frame(self.frame_splash)
         self.l1_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
@@ -59,19 +57,32 @@ class Splash():
         self.tela_splash.update()
 
     def splash_fim(self):
+        self.frame_splash.update()
+        self.tela_splash.update()
+        self.tela_splash.withdraw()
+
         self.fr_splash.destroy()
         self.l1_splash.destroy()
         self.l2_splash.destroy()
         self.frame_splash.destroy()
         self.tela_splash.destroy()
 
+
 if __name__ == '__main__':
     from design import Design
 
+    tela_splash = Tk()
+    tela_splash.withdraw()
+    tela_splash.overrideredirect(1)
+    tela_splash.rowconfigure(1, weight=1)
+    tela_splash.grid_columnconfigure(1, weight=1)
+
+    # Obter o Design de interfaces
     design = Design()
     design.update_design_dic()
 
-    splash = Splash(design)
-    splash.splash_inicio()
+    sp = Splash(tela_splash, design)
     sleep(5)
-    splash.splash_fim()
+    sp.splash_fim()
+
+    tela_splash.mainloop()

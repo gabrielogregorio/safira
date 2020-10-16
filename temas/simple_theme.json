@@ -5,7 +5,7 @@
   },
   "cor_menu": {
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ],
     "background": "#ffffff",
@@ -18,7 +18,7 @@
   },
   "lb_sobDeTitulo": {
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ],
     "height": 2,
@@ -27,7 +27,7 @@
   },
   "lb_sobDAutores": {
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ],
     "background": "#222232",
@@ -35,7 +35,7 @@
   },
   "lb_sobDesenAno": {
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ],
     "background": "#222232",
@@ -50,7 +50,7 @@
     "selectbackground": "#333343",
     "selectforeground": "#ffffff",
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ]
   },
@@ -73,7 +73,7 @@
     "background": "#222232",
     "foreground":"#fa0104",
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ]
   },
@@ -87,7 +87,7 @@
     "foreground":"#deffe1",
     "activeforeground":"#deffe1",
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ]
   },
@@ -161,14 +161,14 @@
     "foreground": "#f1f1f1",
     "highlightthickness": 0,
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ]
   },
   "tx_pesqu": {
     "foreground": "#676767",
     "font": [
-      "Consolas Regular",
+      "Monospace",
       13
     ]
   },
@@ -257,7 +257,7 @@
     "anchor":"w"
   },
   "fonte_ct_linha":{
-    "font":["Consolas Regular", 13],
+    "font":["Monospace", 13],
     "width":2000
   },
   "aviso_versao_top_level":{

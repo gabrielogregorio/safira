@@ -24,16 +24,16 @@
       "en-us":"Search for variables (click and press F7)"
     },
     "label_comandos_disponiveis":{
-      "pt-br":" Comandos Disponíveis",
-      "en-us":"Available commands"
+      "pt-br":"  Comandos Disponíveis",
+      "en-us":"  Available commands"
     },
     "label_reportar_bug":{
       "pt-br":"  Reportar um Bug",
-      "en-us":"Report a Bug"
+      "en-us":"  Report a Bug"
     },
     "label_verificar_atualizacao":{
       "pt-br":"  Verificar Atualização",
-      "en-us":"Check for Update"
+      "en-us":"  Check for Update"
     },
     "label_mais":{
       "pt-br":"  Aumentar fonte",

@@ -1,10 +1,8 @@
 # Espera durante um intervalo definido
-
-
 x = 0
 
 #****** Uso simples comando ******#
-repita 10000 vezes
+repita 2000 vezes
 {
     mostre x
     incremente 1 em x
