@@ -4,8 +4,13 @@ from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Frame
 from tkinter import Button
-from tkinter import FLAT, NSEW
+from tkinter import NSEW
+from tkinter import FLAT
 from tkinter import PhotoImage
+from tkinter import Tk
+from design import Design
+import libs.funcoes as funcoes
+
 
 
 class Bug():
@@ -87,3 +92,24 @@ class Bug():
 
         self.tp_princi.deiconify()
         self.tp_princi.update()
+
+
+
+
+if __name__ == '__main__':
+    master = Tk()
+
+    design = Design()
+    design.update_design_dic()
+
+    # Configurações da IDE
+    arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
+
+    # Idioma que a safira está configurada
+    idioma = arquivo_configuracoes['idioma']
+    interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+
+    bug = Bug(master, design, idioma, interface_idioma)
+    bug.interface()
+
+    master.mainloop()

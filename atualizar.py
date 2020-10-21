@@ -8,6 +8,9 @@ from threading import Thread
 from tkinter import messagebox
 import webbrowser
 import requests
+from tkinter import Tk
+from design import Design
+import libs.funcoes as funcoes
 
 
 VERSAO_ATUAL = {"versao": 0.3}
@@ -154,3 +157,53 @@ class Atualizar():
         self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
         self.tp_atualizacao.deiconify()
         self.tp_atualizacao.update()
+
+
+
+if __name__ == '__main__':
+
+    # Simular estar atualizado
+    VERSAO_ATUAL = {"versao": 0.3}
+
+    # Simular estar desatualizado
+    # VERSAO_ATUAL = {"versao": 0.1}
+
+
+
+
+    master = Tk()
+
+    design = Design()
+    design.update_design_dic()
+
+    # Configurações da IDE
+    arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
+
+    # Idioma que a safira está configurada
+    idioma = arquivo_configuracoes['idioma']
+    interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+
+    atualizar = Atualizar(master, design, idioma, interface_idioma)
+
+
+
+
+    # Quando a safira é iniciado
+    # Verificar a primeira vez
+    # Primeira vez não mostra mensagem de erro
+    # e nem mensagem se estiver atualizado
+    #atualizar.verificar_versao(primeira_vez=True)
+
+    # Quando o usuário tenta buscar atualizações de
+    atualizar.verificar_versao()
+
+
+
+
+
+
+    master.mainloop()
+
+
+
+

@@ -1,0 +1,64 @@
+{
+	"idade":"",
+	"sexo":"",
+	"escolaridade":[],
+
+	"acesso_hardware":[
+		{
+			"timstamp":{
+				"data_acesso":"",
+				"memoria_ram":"",
+				"resolucao_tela":"",
+
+                "tema": "",
+                "sintaxe": "",
+                "fonte": "",
+                "idioma": "",
+
+				"processador":"",
+				"tempo_calculo":"",
+				"sistema_operacional":"",
+				"data_finalizacao"
+			}
+		}
+
+	],
+
+	"movimento_mouse":{
+		"timstamp":[0, 0],
+		"timstamp":[0, 0],
+		"timstamp":[0, 0],
+		"timstamp":[0, 0]
+	},
+
+	"tamanho_janela":"",
+
+	"cliques_mouse":{
+		"timstamp":["left", ],
+		"timstamp":["left", ],
+		"timstamp":["left", ],
+		"timstamp":["left", ]
+	},
+
+	"safira": {
+	   "quantidade_vezes_acessada":[
+	   	    "timstamp"
+	   ],
+       "quantidade_vezes_interpretador":[
+            "timstamp"
+       ],
+       "botoes_clicados":{
+       	    "timstamp":"nome_botao",
+       	    "timstamp":"nome_botao"
+       },
+       "quantidade_erros_interpretador":[
+       	    "timstamp"
+       ],
+       "quantidade_erros_interface":[
+       	    "timstamp"
+       ]
+    }
+}                "tema": "",
+                "sintaxe": "",
+                "fonte": "",
+                "idioma": "",

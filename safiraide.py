@@ -51,9 +51,15 @@ from splash import Splash
 from design import Design
 from bug import Bug
 from log import Log
+from Report import Report
 
 class Interface:
     def __init__(self, master):
+
+        # Reporte de eventos
+        self.report = None
+
+
         self.master = master
         self.master.withdraw()
         """ Classe da interface principal"""
@@ -185,6 +191,7 @@ class Interface:
 
         # MENU OPCOES
         self.mn_intfc = Menu(self.mn_barra)
+        self.mn_repor = Menu(self.mn_barra)
         self.mn_exect = Menu(self.mn_barra)
         self.mn_exemp = Menu(self.mn_barra)
         self.mn_arqui = Menu(self.mn_barra)
@@ -197,6 +204,8 @@ class Interface:
         self.mn_barra.add_cascade(label=self.interface_idioma["label_executar"][self.idioma], menu=self.mn_exect)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_exemplos"][self.idioma], menu=self.mn_exemp)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_interface"][self.idioma], menu=self.mn_intfc)
+        self.mn_barra.add_cascade(label='Report a combratec', menu=self.mn_repor)
+        
         self.mn_barra.add_cascade(label=self.interface_idioma["label_ajuda"][self.idioma], menu=self.mn_ajuda)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_dev"][self.idioma], menu=self.mn_devel)
 
@@ -221,6 +230,8 @@ class Interface:
 
         self.mn_intfc.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=comando_aumentar_fonte)
         self.mn_intfc.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=comando_diminuir_fonte)
+
+        self.mn_repor.add_command(label='Enviar dados a Combratec', command=lambda event=None: self.comando_enviar_dados())
 
         # MENU AJUDA
         self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=comando_abrirlnk_ajuda)
@@ -348,13 +359,10 @@ class Interface:
         t = Thread(target=lambda self=self: self.buscar_atualização())
         t.start()
 
-
-
         t_width = self.fr_tela.winfo_screenwidth()
         t_heigth = self.fr_tela.winfo_screenheight()
 
         master.geometry("{}x{}+0+0".format(t_width, t_heigth))
-
  
         sleep(2)
         self.splash.splash_fim()
@@ -366,6 +374,27 @@ class Interface:
         master.deiconify()
         master.update()
 
+        # Registro de reports
+        self.report = Report('1231123')
+
+        t2 = Thread(target = lambda event=None: self.report_thread())
+        t2.start()
+  
+    def report_thread(self):
+        self.report.hardware()
+
+        master.bind('<Motion>', lambda event: self.registrar_report(event))
+        master.bind('<ButtonRelease>', lambda event: self.registrar_clique(event))
+
+    def comando_enviar_dados(self):
+        self.report.salvar_report()
+        self.report.enviar_report()
+        
+    def registrar_report(self, event):
+        self.report.posicao_mouse(event.state, event.x, event.y)
+
+    def registrar_clique(self, event):
+        self.report.clique_mouse(event.state, event.num, event.x, event.y)
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
@@ -375,6 +404,7 @@ class Interface:
             Interface.inicializar_interpretador(self, tipo_execucao='debug')
         else:
             self.libera_breakpoint = True
+
 
 
     def colocar_linhas_codigo(self, linhas: str) -> str:
@@ -1541,6 +1571,10 @@ class Interface:
             self.bool_debug_temas = True
 
     def desenhar_atualizar_linhas(self, event):
+        if event is not None:
+            if self.report is not None:
+                self.report.ajuste_tela(event.width, event.height)
+
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
         self.cont_lin.desenhar_linhas()
