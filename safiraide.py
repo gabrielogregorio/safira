@@ -74,11 +74,13 @@ class Interface:
 
         # Comandos e as respectivas cores de cada umn
         self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+            
 
         # Design da interface
         self.design = Design()
         self.design.update_design_dic()
         self.splash = Splash(self.design)
+
 
 
         # Configurações da IDE
@@ -706,14 +708,13 @@ class Interface:
                             # Mostre uma mensagem complementar na tela
                             Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
 
-            else:
-                try:
-                    self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(
-                        round(time() - inicio, 4)))
-                    self.tx_terminal.see("end")
+            try:
+                self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(
+                    round(time() - inicio, 4)))
+                self.tx_terminal.see("end")
 
-                except Exception as erro:
-                    print('Impossível exibir mensagem de finalização, erro: '+str(erro))
+            except Exception as erro:
+                print('Impossível exibir mensagem de finalização, erro: '+str(erro))
 
             self.interpretador_finalizado = True
 
@@ -857,7 +858,7 @@ class Interface:
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_temas"][self.idioma], menu=self.mn_interface_cascate_temas)
 
         for file in listdir('temas/'):
-            if 'theme.json' in file:
+            if file.startswith('tema_'):
 
                 arquivo = " " + file
                 if self.arquivo_configuracoes["tema"] == file:
@@ -871,7 +872,7 @@ class Interface:
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_sintaxe"][self.idioma], menu=self.mn_interface_cascata_sintaxe)
 
         for file in listdir('temas/'):
-            if 'sintaxe.json' in file:
+            if file.startswith('sintaxe_'):
 
                 arquivo = " " + file
                 if self.arquivo_configuracoes["sintaxe"] == file:

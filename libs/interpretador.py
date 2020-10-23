@@ -1,4 +1,4 @@
-import threading
+import threading 
 import os.path
 import os
 from tkinter import END
@@ -1313,20 +1313,13 @@ class Interpretador():
         ##################################################################
         #                     MANIPULAÇÃO DE ARQUIVOS                    #
         ##################################################################
-
+ 
         if caractere_inicio in self.dicLetras["arquivo_existe"] or not self.compilado:
             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_arquivo_nao_existe(self, instrucao_analise[1][2])
 
             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', possivelVariavel, self.compilado)
             if instrucao_analise[0]: return Interpretador.funcao_arquivo_existe(self, instrucao_analise[1][2])
-
-        if caractere_inicio in self.dicLetras["diretorio_existe"] or not self.compilado:
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_nao_sub_existe>)$', possivelVariavel, self.compilado)
-            if instrucao_analise[0]: return Interpretador.funcao_diretorio_nao_existe(self, instrucao_analise[1][2])
-
-            instrucao_analise = Interpretador.analisa_instrucao(self, '^(<diretorio_existe>)(.*)(<diretorio_existe_sub_existe>)$', possivelVariavel, self.compilado)
-            if instrucao_analise[0]: return Interpretador.funcao_diretorio_existe(self, instrucao_analise[1][2])
 
         if caractere_inicio in self.dicLetras["leia_arquivo"] or not self.compilado:
             instrucao_analise = Interpretador.analisa_instrucao(self, '^(<leia_arquivo>)(.*)$', possivelVariavel, self.compilado)
@@ -1910,8 +1903,6 @@ class Interpretador():
         for comando in self.dic_comandos["logico_false"]["comando"]:
             linha = linha.replace(comando[0], ' False ')
 
-        for comando in self.dic_comandos["esta_contido"]["comando"]:
-            linha = linha.replace(comando[0], ' in ')
 
         #if '"' in linha: return [False, "Isso é uma string", 'string']
 

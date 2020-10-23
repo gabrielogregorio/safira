@@ -1,4 +1,4 @@
-{
+{ 
   "matematica_mod":{
     "comando":[
       [" % ","all"]
@@ -143,18 +143,6 @@
     ],
     "cor":"logico"
   },
-
-
-  "esta_contido":{
-    "comando":[
-      [" esta contenida en ","es"],
-      [" esta contido em ","pt-br"],
-      [" esta contido ","pt-br"],
-      [" is contained in ","en-us"]
-    ],
-    "cor":"logico"
-  },
-
 
   "na_cor":{
     "comando":[
@@ -387,54 +375,12 @@
     ],
     "cor":"lista"
   },
-
-  "diretorio_existe":{
-    "comando":[
-      ["el directorio ", "es"],
-      ["o diretorio ", "pt-br"],
-      ["la carpeta ", "es"],
-      ["o caminho ", "pt-br"],
-      ["o diretorio ", "pt-br"],
-      ["diretorio ", "pt-br"],
-      ["a pasta ", "pt-br"],
-      ["folder ", "en-us"],
-      ["pasta ", "pt-br"],
-      ["path ", "en-us"],
-      ["the ", "en-us"],
-      ["", "all"]
-    ],
-    "cor":"lista"
-  },
-
-  "diretorio_existe_sub_existe":{
-    "comando":[
-      [" directory exists", "en-us"],
-      [" folder exists", "en-us"],
-      [" existir", "pt-br"],
-      [" exists", "en-us"],
-      [" existe", "pt-br"]      
-    ],
-    "cor":"lista"
-  },
-
-  "diretorio_existe_nao_sub_existe":{
-    "comando":[
-      [" directory does not exist", "en-us"],
-      [" folder does not exist", "en-us"],
-      [" path does not exist", "en-us"],
-      [" not exists","en-us"],
-      [" does not exist", "en-us"],
-      [" não existir", "pt-br"],
-      [" não existe", "pt-br"],
-      [" no existe", "en-us"]
-    ],
-    "cor":"lista"
-  },
   "arquivo_existe":{
     "comando":[
       ["o arquivo ","pt-br"],
       ["the file ","en-us"],
-      ["el archivo ","es"]
+      ["el archivo ","es"],
+      ["arquivo ","pt-br"]
     ],
     "cor":"lista"
   },
@@ -1122,7 +1068,7 @@
       ["si no sale mal","es"]
     ],
     "cor":"condicionais"
-  },
+  }, 
    "em_qualquer_caso":{
     "comando":[
       ["em qualquer caso","pt-br"],

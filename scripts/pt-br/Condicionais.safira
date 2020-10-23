@@ -4,9 +4,6 @@
 # depois você pode testar ou não a condição "senao se " ou a "senao "
 
 
-
-
-
 #****** Uso simples comando ******#
 se 1 for igual a 1
 {

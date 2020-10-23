@@ -2,15 +2,10 @@
 # Você pode separar valores pela virgula, exemplo:
 # mostre "Digite sua idade ", variavelNome
 
-
-
-
 #****** Uso simples comando ******#
-nome = "Kellen"
+nome = "Safira"
 mostre nessa linha "Bom dia "
 mostre nessa linha nome
-
-
 
 
 #****** Variações dos comandos ******#
@@ -28,4 +23,4 @@ mostre nessa linha nome
 # 
 # mostrar en esa línea
 # escribe en esa línea
-# imprimir en esa línea 
+# imprimir en esa línea

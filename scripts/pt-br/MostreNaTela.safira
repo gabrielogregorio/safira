@@ -5,7 +5,6 @@
 
 
 #****** Uso simples comando ******#
-nome = "Kellen"
-mostre "Bom dia "
-mostre nome
+nome = "Safira"
+mostre "Bom dia ", nome
 

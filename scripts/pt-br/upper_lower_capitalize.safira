@@ -1,10 +1,11 @@
-nome = "gabRIel"
+nome = "safira LINGUAGEM"
 
-nome_lower       = nome to lower
-nome_upper      = nome to upper
-nome_captalize = nome captalize
+nome_em_minusculo recebe nome em minusculo
+nome_em_maiusculo recebe nome em maiusculo
+nome_captalizado recebe nome captalizado
 
-println nome_lower
-println nome_upper
-println nome_captalize
+println nome_em_minusculo
+println nome_em_maiusculo
+println nome_captalizado
+
 
