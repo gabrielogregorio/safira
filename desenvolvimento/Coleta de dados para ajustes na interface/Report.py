@@ -1,13 +1,13 @@
 # pip install crypto graphy
 # pip install pycrypto
 
-from cryptography.fernet import Fernet
-import bcrypt
+#from cryptography.fernet import Fernet
+#import bcrypt
 # pip3.8screeninfo install screeninfo
 from datetime import datetime
 from screeninfo import get_monitors
 import platform
-import psutil
+#import psutil
 import requests
 from copy import deepcopy
 from json import dumps
@@ -116,3 +116,19 @@ print(plain_text)
 print(cipher_text)
 
 '''
+
+    def report_thread(self):
+        #self.report.hardware()
+        #self.master.bind('<Motion>', lambda event: self.registrar_report(event))
+        #self.master.bind('<ButtonRelease>', lambda event: self.registrar_clique(event))
+
+    def comando_enviar_dados(self):
+        self.report.salvar_report()
+        self.report.enviar_report()
+        
+    def registrar_report(self, event):
+        self.report.posicao_mouse(event.state, event.x, event.y)
+
+    def registrar_clique(self, event):
+        self.report.clique_mouse(event.state, event.num, event.x, event.y)
+

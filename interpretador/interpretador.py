@@ -1,22 +1,21 @@
 import threading 
-import os.path
-import os
 from tkinter import END
 from random import randint
 from time import sleep
 from time import time
-from json import load
-from re import findall, search
-from re import finditer, compile
-import shutil
-from os import system, listdir
+from re import findall
+from re import search
+from re import finditer
+from re import compile
+from os import listdir
+from os import system
+import os.path
+import os 
 
-try:
-    import libs.funcoes as funcoes
-    from libs.mensagens import Mensagens
-except:
-    import funcoes as funcoes
-    from mensagens import Mensagens
+import shutil
+
+import util.funcoes as funcoes
+from interpretador.mensagens import Mensagens
 
 
 __author__ = 'Gabriel Gregório da Silva'
@@ -195,10 +194,11 @@ class Interpretador():
             self.controle_interpretador = "aguardando_breakpoint"
 
             while self.controle_interpretador != "":
+                print("Aguardando")
                 if self.aconteceu_erro:
                     return [False, "Interrompido", "string", "exibirNaTela"]
 
-                sleep(0.000001)
+                sleep(0.001)
 
     def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
 

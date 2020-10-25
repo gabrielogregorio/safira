@@ -29,7 +29,6 @@ from threading import Thread
 from os.path import abspath
 from time import sleep
 from time import time
-from json import load
 from os import getcwd
 from os import listdir
 from re import compile
@@ -39,10 +38,11 @@ import webbrowser
 import requests
 import re
 
-from libs.interpretador import Interpretador
-from libs.funcoes import carregar_json
-from libs.arquivo import Arquivo
-import libs.funcoes as funcoes
+from interpretador.interpretador import Interpretador
+from util.funcoes import carregar_json
+from util.arquivo import Arquivo
+import util.funcoes as funcoes
+
 from visualizacao import ContadorLinhas
 from visualizacao import EditorDeCodigo
 from atualizar import Atualizar
@@ -51,14 +51,9 @@ from splash import Splash
 from design import Design
 from bug import Bug
 from log import Log
-from Report import Report
 
 class Interface:
     def __init__(self, master):
-
-        # Reporte de eventos
-        self.report = None
-
 
         self.master = master
         self.master.withdraw()
@@ -96,6 +91,7 @@ class Interface:
         self.idioma = self.arquivo_configuracoes['idioma']
         self.interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
+
         # Registro de logs
         self.log = Log() 
 
@@ -130,8 +126,8 @@ class Interface:
         self.posAbsuluta = 0
         self.posCorrente = 0
 
+        # Idiomas disponíveis
         self.dic_imgs = {"pt-br": "ic_pt_br.png", "en-us": "ic_en_us.png"}
-        #self.idioma = "pt-br"
         self.base = "imagens/"
 
         self.controle_arquivos = None
@@ -193,7 +189,6 @@ class Interface:
 
         # MENU OPCOES
         self.mn_interface = Menu(self.mn_barra)
-        self.mn_reportar = Menu(self.mn_barra)
         self.mn_executar = Menu(self.mn_barra)
         self.mn_exemplos = Menu(self.mn_barra)
         self.mn_arquivo = Menu(self.mn_barra)
@@ -206,7 +201,6 @@ class Interface:
         self.mn_barra.add_cascade(label=self.interface_idioma["label_executar"][self.idioma], menu=self.mn_executar)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_exemplos"][self.idioma], menu=self.mn_exemplos)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_interface"][self.idioma], menu=self.mn_interface)
-        self.mn_barra.add_cascade(label='Report a combratec', menu=self.mn_reportar)
         
         self.mn_barra.add_cascade(label=self.interface_idioma["label_ajuda"][self.idioma], menu=self.mn_ajuda)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_dev"][self.idioma], menu=self.mn_dev)
@@ -232,8 +226,6 @@ class Interface:
 
         self.mn_interface.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=cm_aumentar_fonte)
         self.mn_interface.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=cm_diminuir_fonte)
-
-        self.mn_reportar.add_command(label='Enviar dados a Combratec', command=lambda event=None: self.comando_enviar_dados())
 
         # MENU AJUDA
         self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=cm_abrirlnk_ajuda)
@@ -319,12 +311,10 @@ class Interface:
         self.tx_editor_codigo.bind('<Control-Button-4>', lambda event: self.aumentar_diminuir_fonte("+"))
         self.tx_editor_codigo.bind('<Control-Button-5>', lambda event: self.aumentar_diminuir_fonte("-"))
 
-
         self.sb_codfc = Scrollbar(self.fr_princ, orient="vertical", command=self.tx_editor_codigo.yview, relief=FLAT)
         self.tx_editor_codigo.configure(yscrollcommand=self.sb_codfc.set)
         
         self.tx_editor_codigo.bind("<Tab>", lambda event=None: self.txt_editor_tab())
-    
 
         self.cont_lin = ContadorLinhas(self.fr_princ, self.design, bool_tem_linha = True)
         self.cont_lin.aba_focada2 = self.num_aba_focada
@@ -376,28 +366,6 @@ class Interface:
         master.deiconify()
         master.update()
 
-        # Registro de reports
-        self.report = Report('1231123')
-
-        t2 = Thread(target = lambda event=None: self.report_thread())
-        t2.start()
-  
-    def report_thread(self):
-        self.report.hardware()
-
-        #self.master.bind('<Motion>', lambda event: self.registrar_report(event))
-        #self.master.bind('<ButtonRelease>', lambda event: self.registrar_clique(event))
-
-    def comando_enviar_dados(self):
-        self.report.salvar_report()
-        self.report.enviar_report()
-        
-    def registrar_report(self, event):
-        self.report.posicao_mouse(event.state, event.x, event.y)
-
-    def registrar_clique(self, event):
-        self.report.clique_mouse(event.state, event.num, event.x, event.y)
-
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
         print(self.interpretador_status)
@@ -406,8 +374,6 @@ class Interface:
             Interface.inicializar_interpretador(self, tipo_execucao='debug')
         else:
             self.libera_breakpoint = True
-
-
 
     def colocar_linhas_codigo(self, linhas: str) -> str:
         """Adiciona [[numero_linha] no inicio de todas as linhas]
@@ -440,7 +406,7 @@ class Interface:
                 self.instancia.aconteceu_erro = True
 
                 if self.interpretador_finalizado:
-                    # FINALIZAÇÃO COMPLETA
+                    # Finalização completa
                     # Delete a instância
                     del self.instancia
 
@@ -498,6 +464,17 @@ class Interface:
             # Obter apenas o diretório
             diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
 
+            
+            print(self.bool_logs)
+            print(self.dic_abas[self.num_aba_focada]["lst_breakpoints"])
+            print(bool_ignorar_todos_breakpoints)
+            print(diretorio_base)
+            #print(self.dicLetras)
+            #print(self.dic_comandos)
+            print(self.idioma)
+            print(self.re_comandos)
+            print('-----------')
+
             # Criar uma instância do interpretador
             self.instancia = Interpretador(
                 self.bool_logs,
@@ -524,6 +501,8 @@ class Interface:
             valor_antigo = 0
             p_cor_num = 0
 
+            print("fogo")
+
             # Enquanto o interpretador não iniciar
             while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
 
@@ -546,7 +525,7 @@ class Interface:
                     self.tx_editor_codigo.update()
                     self.master.update()
 
-
+                sleep(0.0001)
                 acao = ""
                 # Obtem uma instrução do interpretador
                 acao = self.instancia.controle_interpretador
@@ -694,7 +673,7 @@ class Interface:
                                 break
                     else:
                         print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
-
+            mensagem_erro = ""
             if self.instancia.aconteceu_erro:
                 # Se o erro foi avisado
                 if self.instancia.erro_alertado is True:
@@ -706,11 +685,23 @@ class Interface:
                         if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
 
                             # Mostre uma mensagem complementar na tela
+                            mensagem_erro = self.instancia.mensagem_erro
                             Interface.mostrar_mensagem_de_erro(self, self.instancia.mensagem_erro, self.instancia.dir_script_aju_erro, self.instancia.linha_que_deu_erro)
 
-            try:
-                self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(
-                    round(time() - inicio, 4)))
+            try: 
+                if not mensagem_erro:
+                    self.tx_terminal.insert(END, self.interface_idioma["script_finalizado"][self.idioma].format(
+                        round(time() - inicio, 4)))
+
+                else:
+                    self.tx_terminal.tag_add('erro_terminal', END)
+                    self.tx_terminal.tag_configure('erro_terminal', foreground='#ff80a2') 
+
+                    self.tx_terminal.insert(END, '\n\n{}\n\n'.format(mensagem_erro), 'erro_terminal')
+                    self.tx_terminal.insert(END, 'Finalizado em {} s'.format(
+                        round(time() - inicio, 4)))
+
+
                 self.tx_terminal.see("end")
 
             except Exception as erro:
@@ -737,6 +728,7 @@ class Interface:
         diretorio_base = ''
         bool_ignorar_todos_breakpoints = True
         bool_logs = False
+
 
         instancia = Interpretador(
             bool_logs,
@@ -814,8 +806,8 @@ class Interface:
             
             background=[
                 ('pressed', '!disabled', pressed_background_titulo),
-                ('active', '!disabled', active_background_titulo)]
-        )
+                ('active', '!disabled', active_background_titulo)])
+        
 
         return self.style_terminal
 
@@ -1415,6 +1407,8 @@ class Interface:
             bt_fechar,
             vsroolb,
             hsroolb]
+        print('fim')
+
 
     # ************************************************************************* #
     #                           TRATAMENTO DE ERROS                             #
@@ -1508,18 +1502,21 @@ class Interface:
         self.desenhar_atualizar_linhas(event=None)
 
     def limpar_breakpoints(self):
+        # Marcar um breakpoint
         if self.dic_abas[self.num_aba_focada]["lst_breakpoints"] == []:
-            self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = [x for x in range(0, len(self.tx_editor_codigo.get(1.0, END).split("\n")))]
+            self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = [int(x) for x in range(1, len(self.tx_editor_codigo.get(1.0, END).split("\n")))]
 
         else:
             self.dic_abas[self.num_aba_focada]["lst_breakpoints"] = []
-        
-        self.desenhar_atualizar_linhas(event=None)
 
+        # Atualizar Breakpont no interpretador
         try:
             self.instancia.lst_breakpoints = self.dic_abas[self.num_aba_focada]["lst_breakpoints"]
         except Exception as e:
             print("Programa não está em execução, bkp ignorados", e)
+
+        self.desenhar_atualizar_linhas(event=None)
+
 
     def liberar_um_breakpoint(self):
         self.libera_breakpoint = True
@@ -1579,10 +1576,6 @@ class Interface:
             self.bool_debug_temas = True
 
     def desenhar_atualizar_linhas(self, event):
-        if event is not None:
-            if self.report is not None:
-                self.report.ajuste_tela(event.width, event.height)
-
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
         self.cont_lin.desenhar_linhas()

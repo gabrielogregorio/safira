@@ -1,16 +1,17 @@
+from threading import Thread
 from tkinter import Toplevel
 from tkinter import Frame
 from tkinter import Button
 from tkinter import Message
 from tkinter import Label
 from tkinter import FLAT, NSEW
-from threading import Thread
 from tkinter import messagebox
+from tkinter import Tk
 import webbrowser
 import requests
-from tkinter import Tk
+
 from design import Design
-import libs.funcoes as funcoes
+import util.funcoes as funcoes
 
 
 VERSAO_ATUAL = {"versao": 0.3}
@@ -168,9 +169,6 @@ if __name__ == '__main__':
     # Simular estar desatualizado
     # VERSAO_ATUAL = {"versao": 0.1}
 
-
-
-
     master = Tk()
 
     design = Design()
@@ -185,9 +183,6 @@ if __name__ == '__main__':
 
     atualizar = Atualizar(master, design, idioma, interface_idioma)
 
-
-
-
     # Quando a safira é iniciado
     # Verificar a primeira vez
     # Primeira vez não mostra mensagem de erro
@@ -196,11 +191,6 @@ if __name__ == '__main__':
 
     # Quando o usuário tenta buscar atualizações de
     atualizar.verificar_versao()
-
-
-
-
-
 
     master.mainloop()
 

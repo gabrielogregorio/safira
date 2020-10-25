@@ -1,5 +1,4 @@
-from libs.funcoes import carregar_json
-
+from util.funcoes import carregar_json
 
 class Design():
     def __init__(self):

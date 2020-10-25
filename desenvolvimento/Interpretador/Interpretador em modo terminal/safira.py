@@ -1,5 +1,3 @@
-#!/usr/bin/python3.8
-
 from time import sleep
 from threading import Thread
 from os import system, name, path

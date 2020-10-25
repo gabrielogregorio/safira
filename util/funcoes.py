@@ -26,7 +26,7 @@ def transformar_em_json(texto):
     return loads(texto)
 
 def atualiza_configuracoes_temas():
-    dicionario_comandos = carregar_json('libs/comandos.json')
+    dicionario_comandos = carregar_json('interpretador/comandos.json')
     config = carregar_json('configuracoes/configuracoes.json')
     cor_da_sintaxe = carregar_json('temas/{}'.format(config["sintaxe"]))
 

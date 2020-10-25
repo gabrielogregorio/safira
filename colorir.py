@@ -1,7 +1,8 @@
 from threading import Thread
 from tkinter import END
 from copy import deepcopy
-from re import finditer, search
+from re import finditer
+from re import search
 from time import time
 
 

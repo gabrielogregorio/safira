@@ -1,8 +1,7 @@
 from tkinter import filedialog
 from tkinter import messagebox
 from tkinter import END
-
-import libs.funcoes as funcoes
+import util.funcoes as funcoes
 
 
 class Arquivo():

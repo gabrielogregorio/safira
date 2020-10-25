@@ -1,7 +1,5 @@
 # Versão 0.3
 
-
-
 ## Novos recursos
 - [Percorrer listas ou strings](#Percorrer-listas-ou-strings)
 - [Adição de fatiamento de texto (slicing)](#)
@@ -13,7 +11,6 @@
 - [Bug da interface que travava ao buscar atualizações](#)
 
 ---------------------------
-
 
 ### Percorrer listas ou strings
 Agora você pode percorrer os valores de uma string usando o comando percorra. Ele retornará o valor do item percorrido. Se for um texto, exemplo, "olá" ele retornará na variável o "o", depois o "l" e posteriormente o "á". O mesmo serve para listas, com a diferença que ele vai percorrer apenas os itens de um lista. Para usar o comando, basta seguir uma destas estruturas  

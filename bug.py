@@ -1,5 +1,4 @@
 from threading import Thread
-import webbrowser
 from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Frame
@@ -8,9 +7,10 @@ from tkinter import NSEW
 from tkinter import FLAT
 from tkinter import PhotoImage
 from tkinter import Tk
-from design import Design
-import libs.funcoes as funcoes
+import webbrowser
 
+import util.funcoes as funcoes
+from design import Design
 
 
 class Bug():
