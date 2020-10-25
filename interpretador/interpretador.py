@@ -130,7 +130,7 @@ class Interpretador():
             self.compilado = False
             self.dic_regex_compilado = {}
     
-            Interpretador.interpretador(self, linha='[1] ............')
+            Interpretador.interpretador(self, linha='[0] ............')
             Interpretador.comandos_uso_geral(self, possivelVariavel= '.................')
             Interpretador.tiver_valor_lista(self, linha='.................')
             self.compilado = True
@@ -194,7 +194,6 @@ class Interpretador():
             self.controle_interpretador = "aguardando_breakpoint"
 
             while self.controle_interpretador != "":
-                print("Aguardando")
                 if self.aconteceu_erro:
                     return [False, "Interrompido", "string", "exibirNaTela"]
 
@@ -583,13 +582,13 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'declararSenaoSe':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "0", "")
                         self.numero_threads_ativos -= 1
 
                         return [False, self.msg("precisa_def_p_cond_senao"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'declararCondicional':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "0", "")
                         self.numero_threads_ativos -= 1
 
                         return [False, self.msg("precisa_def_p_cond_senao"), 'string', "fazerNada"]
@@ -628,12 +627,12 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'declararSenao':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_p_cond_senao"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'declararCondicional':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_p_cond_senao"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_p_cond_senao"), 'string', "fazerNada"]
 
@@ -697,12 +696,12 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'seDerErro':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'tenteAlgo':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
@@ -734,12 +733,12 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'seNaoErro':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_n_der_erro"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'tenteAlgo':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_n_der_erro"), 'string', "fazerNada"]
 
@@ -771,12 +770,12 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'seDerErro':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'tenteAlgo':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_der_erro"), 'string', "fazerNada"]
 
@@ -809,12 +808,12 @@ class Interpretador():
                 elif lst_ultimo_teste[3] == 'emQualquerCaso':
 
                     if len(historico_fluxo_de_dados) == 0:
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_n_der_erro"), 'string', "fazerNada"]
 
                     if historico_fluxo_de_dados[-1] != 'tenteAlgo':
-                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "1", "")
+                        Interpretador.orq_erro(self, self.msg("precisa_def_tente_p_n_der_erro"), "0", "")
                         self.numero_threads_ativos -= 1
                         return [False, self.msg("precisa_def_tente_p_n_der_erro"), 'string', "fazerNada"]
 
@@ -956,16 +955,16 @@ class Interpretador():
     def interpretador(self, linha):
         #Interpretador.log(self, '\n\ninterpretador')
 
-        # [[False, 'indisponibilidade_terminal', 'string', 'exibirNaTela'], "1", ""]
+        # [[False, 'indisponibilidade_terminal', 'string', 'exibirNaTela'], "0", ""]
 
         if self.aconteceu_erro:
-            return [[False, 'Erro ao iniciar o Interpretador', 'string', 'exibirNaTela'], "1", ""]
+            return [[False, 'Erro ao iniciar o Interpretador', 'string', 'exibirNaTela'], "0", ""]
 
         linha = linha.replace('\n', '')
         linha = linha.strip()
 
         if linha == '':
-            return [[True, None, 'vazio', 'linhaVazia'], "1", ""]
+            return [[True, None, 'vazio', 'linhaVazia'], "0", ""]
 
         else:
             self.num_linha = "0"
@@ -983,7 +982,7 @@ class Interpretador():
                Interpretador.aguardar_liberacao_breakPoint(self)
 
             if linha == '':
-                return [[True, None, 'vazio', 'linhaVazia'], "1", ""]
+                return [[True, None, 'vazio', 'linhaVazia'], "0", ""]
 
             caractere_inicio = linha[0]
 

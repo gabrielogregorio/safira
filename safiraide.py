@@ -368,8 +368,6 @@ class Interface:
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
-        print(self.interpretador_status)
-
         if self.interpretador_status == 'parado':
             Interface.inicializar_interpretador(self, tipo_execucao='debug')
         else:
@@ -397,7 +395,6 @@ class Interface:
         Returns:
             None:
         """
-
         print("Inicializador do orquestrador iniciado")
 
         if self.interpretador_status == 'iniciado' or tipo_execucao == 'parar':
@@ -464,17 +461,6 @@ class Interface:
             # Obter apenas o diretório
             diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
 
-            
-            print(self.bool_logs)
-            print(self.dic_abas[self.num_aba_focada]["lst_breakpoints"])
-            print(bool_ignorar_todos_breakpoints)
-            print(diretorio_base)
-            #print(self.dicLetras)
-            #print(self.dic_comandos)
-            print(self.idioma)
-            print(self.re_comandos)
-            print('-----------')
-
             # Criar uma instância do interpretador
             self.instancia = Interpretador(
                 self.bool_logs,
@@ -501,7 +487,6 @@ class Interface:
             valor_antigo = 0
             p_cor_num = 0
 
-            print("fogo")
 
             # Enquanto o interpretador não iniciar
             while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
@@ -659,6 +644,8 @@ class Interface:
                                     self.tx_editor_codigo.update()
                                     self.master.update()
 
+                                    sleep(0.001)
+
                                     if self.instancia.aconteceu_erro:
                                         break
 
@@ -710,8 +697,8 @@ class Interface:
             self.interpretador_finalizado = True
 
             # Em modo que não seja debug, finalize o interpretador
-            if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
-                Interface.inicializar_interpretador(self, tipo_execucao = 'parar')
+            #if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
+            Interface.inicializar_interpretador(self, tipo_execucao = 'parar')
 
             return 0
 
@@ -1297,6 +1284,12 @@ class Interface:
             except Exception as e:
                 pass
 
+        try:
+            self.instancia.aconteceu_erro = True
+            self.libera_breakpoint = True 
+        except AttributeError:
+            pass
+
     def iniciar_terminal_direto(self):
         self.destruir_instancia_terminal()
 
@@ -1492,6 +1485,7 @@ class Interface:
 
         else:
             self.dic_abas[self.num_aba_focada]["lst_breakpoints"].append(int(self.num_lin_bkp))
+
 
         # Atualizar Breakpont no interpretador
         try:
