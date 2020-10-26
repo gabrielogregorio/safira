@@ -1,4 +1,43 @@
 {
+    "msg_erro_fr1":{
+        "height":50,
+        "bg":"#111121",
+        "bd":10,
+        "highlightthickness":10,
+        "highlightbackground":"#222232",
+        "highlightcolor":"#222232"
+    },
+    "msg_erro_fr2":{
+        "bg":"#111121"
+    },
+    "msg_erro_tx1":{
+        "bg":"#111121",
+        "fg":"#ff9696",
+        "height":2,
+        "highlightthickness":0
+    },
+    "msg_erro_tx1_disable":{
+        "state":"disable",
+        "selectbackground":"#222232"
+    },
+    "msg_erro_bt1":{
+        "relief":"flat",
+        "fg":"green",
+        "activeforeground":"green",
+        "bg":"#111121",
+        "activebackground":"#111121",
+        "font":["", 13]
+    },
+    "msg_erro_bt2":{
+        "relief":"sunken",
+        "fg":"#ff9696",
+        "activeforeground":"#ff9696",
+        "bg":"#111121",
+        "activebackground":"#111121",
+        "font":["", 13],
+        "highlightthickness":0,
+        "bd":0
+    },
     "idioma_tp":{
         "bd":10,
         "bg":"#efefef"
@@ -147,6 +186,8 @@
         "foreground":"#565656"
     },
     "dic_cor_abas_focada":{
+        "border":0,
+        "highlightthickness":0,
         "background":"#e6edff",
         "activebackground":"#e6edff",
         "activeforeground":"#565656",
@@ -186,7 +227,10 @@
         "background":"#e6edff",
         "activebackground":"#e6edff",
         "activeforeground":"black",
-        "foreground":"#e6edff"
+        "foreground":"#e6edff",
+        "relief":"flat",
+        "border":0,
+        "highlightthickness":0
     },
     "dic_cor_abas_nao_focada_botao":{
         "font":[
@@ -219,6 +263,23 @@
             "Lucida Sans",
             13
         ]
+    },
+    "tx_terminal_debug_fr1":{
+        "bg":"#191913"
+    },
+    "tx_terminal_debug_fr2":{
+        "height":10,
+        "bg":"#191913"
+    },
+    "tx_terminal_debug_bt1":{
+        "text":"x",
+        "fg":"#f1f1f1",
+        "bg":"#191913",
+        "activebackground":"#191913",
+        "relief":"flat",
+        "highlightthickness":0,
+        "bd":0,
+        "font":["", 12]
     },
     "tx_pesqu":{
         "foreground":"#676767",
@@ -271,6 +332,10 @@
         "bd":0,
         "highlightthickness":0,
         "activebackground":"#232323"
+    },
+    "cor_grid_treeview_red_tag":{
+        "foreground":"red",
+        "font":["arial", 12]
     },
     "fr_ajuda":{
         "width":25,

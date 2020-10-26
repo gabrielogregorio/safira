@@ -155,6 +155,7 @@
       [" na cor ", "pt-br"],
       [" en color ", "es"],
       [" in color ", "en-us"],
+      
       [" en ", "es"],
       [" in ", "en-us"]
         ],
@@ -310,6 +311,7 @@
     "comando":[
       ["senao","pt-br"],
       ["else","en-us"],
+      ["if no", "en-us"],
       ["si no","es"]
     ],
     "cor":"condicionais"
@@ -699,6 +701,7 @@
       ["escreva ","pt-br"],
 
       ["show on that line ","en-us"],
+      ["show in that line ","en-us"],
       ["show in this line ","en-us"],
       ["show that line ","en-us"],
 
@@ -730,6 +733,7 @@
         ["mostrar en la pantalla ", "es"],
         ["imprimir en la pantalla ", "es"],
         ["escribe en la pantalla ", "es"],
+        ["show on screen ","en-us"],
 
         ["escreval ","pt-br"],
         ["imprima ","pt-br"],
@@ -886,7 +890,8 @@
       ["digitado","pt-br"],
       ["entrada","pt-br"],
       ["input","en-us"],
-      ["typed","en-us"]
+      ["typed","en-us"],
+      ["typing","en-us"]
     ],
     "cor":"tempo"
   },

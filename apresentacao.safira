@@ -1,0 +1,16 @@
+nome vale "combratec"
+
+se o que for digitado for igual a "safira" entao {
+    mostre "Esta é a linguagem de programação Safira"
+}
+
+if nome == "combratec" {
+    exiba "este projeto é legal!"
+} 
+
+println "hello" na cor "#86ff40"
+println "hello" na cor "#05ffea"
+println "hello" na cor "#da7dff"
+
+
+
