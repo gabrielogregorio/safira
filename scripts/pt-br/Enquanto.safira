@@ -3,10 +3,6 @@
 # do comando de condicionais. Consulte esse comando
 # para ter mais informações
 
-
-
-
-
 #****** Uso simples comando ******#
 opcao = 1
 enquanto opcao for diferente de 0
@@ -20,23 +16,4 @@ enquanto opcao for diferente de 0
 
     opcao recebe o numero que o usuario digitar
 }
-
-
-#****** Variações dos comandos ******#
-# mientras que 
-# enquanto
-# mientras 
-# while
-
-#****** Comandos opcionais ******#
-# entao faca isso
-# entonces cuchillo
-# entao faca
-# then knife
-# cuchillo
-# entonces
-# entao
-# knife
-# then
-# faca
 

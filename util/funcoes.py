@@ -31,3 +31,11 @@ def atualiza_configuracoes_temas():
     cor_da_sintaxe = carregar_json('temas/{}'.format(config["sintaxe"]))
 
     return [dicionario_comandos, cor_da_sintaxe]
+
+def arquivo_de_configuracoes_interface(chave, novo):
+    arquivo = 'configuracoes/configuracoes.json'
+
+    config_json = carregar_json(arquivo)
+    config_json[chave] = novo
+    config_json = str(config_json).replace('\'', '\"')
+    salvar_arquivo(arquivo, config_json)

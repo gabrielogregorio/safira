@@ -1,0 +1,9 @@
+si existe el archivo "Biblioteca.safira"
+{
+    eliminar el archivo "Biblioteca.safira"
+}
+
+crea el archivo "Biblioteca.safira"
+agregue "show 123" al archivo "library.safira"
+
+importar biblioteca biblioteca

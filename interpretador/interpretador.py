@@ -2272,7 +2272,7 @@ class Interpretador():
             return [True, False, "booleano", "fazerNada"]
 
     def funcao_arquivo_nao_existe(self, nome_arquivo):
-        #Interpretador.log(self, "__funcao_arquivo_nao_existe")
+        #Interpretador.log(self, "__funcao_arquivo_nao_existe"+ nome_arquivo)
 
         if nome_arquivo == "":
             return [False, self.msg("precisa_nome_arquivo"), 'string', ' exibirNaTela']

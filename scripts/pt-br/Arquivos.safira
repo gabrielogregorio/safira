@@ -1,9 +1,9 @@
 # Diversos Comandos para manipular arquivos
-# Criação
-# Inserção de texto
-# Leitura
-# Verificar se existe
-# Remover
+# * Criação
+# * Inserção de texto
+# * Leitura
+# * Verificar se existe
+# * Remover
 
 #******************************* Uso simples dos comandos **************************#
 # Criar um arquivo qualquer
@@ -31,71 +31,4 @@ se o arquivo "arquivo.txt" existe
     mostre "Esse arquivo Existe e será removido"
     delete o arquivo "arquivo.txt"
 }
-
-
-
-
-#****************** Variações dos comandos ****************#
-# -------------------------------- Criação de arquivo -------------------------- #
-# * crie o arquivo
-# * create the file
-# * crea el archivo
-
-# --------------------------------- Adição de texto ----------------------------- #
-# * escreva 
-# * adicione 
-# * write 
-# * add 
-# * escriba 
-# * agregue 
-
-# * no arquivo
-# * in the file
-# * en el archivo
-# * to the
-# * al archivo
-
-
-# ---------------------------- Sobrescrever o arquivo --------------------------- #
-# * sobrescreva
-# * sobrescrever
-# * overwrite
-# * sobrescriba
-
-# * no arquivo
-# * en el archivo
-# * in the
-
-# * file
-
-# ------------------------- Ler todo o texto do arquivo ----------------------#
-# * leia o texto do arquivo
-# * get the text from the file
-# * obtenha o texto do arquivo
-# * read the text of the file
-# * obtener el texto del archivo
-# * lea el texto del archivo
-# * leia o arquivo
-# * read the file
-# * lea el archivo
-
-# ---------------------------- Verifica se um arquivo existe ----------------#
-# COMANDO
-# * o arquivo
-# * the file
-# * el archivo
-
-# * nao existe
-# * not exists
-
-# * existe
-# * exists
-
-# ----------------------------------- Deletar um arquivo ----------------------- #
-# * delete o arquivo
-# * remova o arquivo
-# * exclua o arquivo
-# * delete the file
-# * eliminar el archivo
-
 

@@ -1,199 +1,247 @@
 {
   "diretório_não_existe":{
     "pt-br":"O diretório '{}' não existe!",
-    "en-us":"The '{}' directory does not exist!"
+    "en-us":"The '{}' directory does not exist!",
+    "es":"¡El directorio '{}' no existe!"
   },
   "precisa_nome_diretorio":{
     "pt-br":"Você precisa informar o nome de um diretorio",
-    "en-us":"You need to provide the name of a directory"
+    "en-us":"You need to provide the name of a directory",
+    "es":"Debe proporcionar el nombre de un directorio"
   },
   "erro_copiar_arquivo":{
     "pt-br":"Erro ao copiar o arquivo '{}' para o diretório '{}'. Erro : '{}'",
-    "en-us":"Error copying file '{}' to directory '{}'. Mistake : '{}'"
+    "en-us":"Error copying file '{}' to directory '{}'. Mistake : '{}'",
+    "es":"Error al copiar el archivo '{}' al directorio '{}'. Error : '{}'"
   },
   "erro_mover_arquivo":{
     "pt-br":"Erro ao mover o arquivo '{}' para o diretório '{}'. Erro : '{}'",
-    "en-us":"Error moving file '{}' to directory '{}'. Mistake : '{}'"
+    "en-us":"Error moving file '{}' to directory '{}'. Mistake : '{}'",
+    "es":"Error al mover el archivo '{}' al directorio '{}'. Error : '{}'"
   },
   "comando_desconhecido":{
     "pt-br":"Um comando desconhecido foi localizado: ",
-    "en-us":"An unknown command was found: "
+    "en-us":"An unknown command was found: ",
+    "es":"Se encontró un comando desconocido:"
   },
   "add_lst_posicao_separador":{
     "pt-br":"Comando não possui um separador, exemplo: lista de nomes na posicao 2 recebe \"Maria\"",
-    "en-us":"Command does not have a separator, example: list of names in position 2 receives \"Maria \""
+    "en-us":"Command does not have a separator, example: list of names in position 2 receives \"Maria \"",
+    "es":"El comando no tiene separador, ejemplo: la lista de nombres en la posición 2 recibe \"Maria \""
   },
   "nao_e_lista":{
     "pt-br":"não é uma lista",
-    "en-us":"it's not a list"
+    "en-us":"it's not a list",
+    "es":"no es una lista"
   },
   "posicao_maior_limite_lista":{
     "pt-br":"A posição está acima do tamanho da lista:",
-    "en-us":"The position is above the list size:"
+    "en-us":"The position is above the list size:",
+    "es":"La posición está por encima del tamaño de la lista:"
   },
   "posicao_menor_limite_lista":{
     "pt-br":"A posição está abaixo do tamanho da lista: ",
-    "en-us":"The position is below the list size: "
+    "en-us":"The position is below the list size: ",
+    "es":"La posición está debajo del tamaño de la lista:"
   },
   "variavel_posicao_nao_informada":{
     "pt-br":"Variável ou posição não foi informada.",
-    "en-us":"Variable or position was not informed."
+    "en-us":"Variable or position was not informed.",
+    "es":"Variable o cargo no informado."
   },
   "variavel_valor_nao_informado":{
     "pt-br":"Variável ou valor não foi informada.",
-    "en-us":"Variable or value was not reported."
+    "en-us":"Variable or value was not reported.",
+    "es":"No se informó la variable o el valor."
   },
   "erro_obter_tamanho_lista":{
     "pt-br":"Erro ao obter o tamanho da lista: ",
-    "en-us":"Error getting list size: "
+    "en-us":"Error getting list size: ",
+    "es":"Error al obtener el tamaño de la lista:"
   },
   "nao_esta_na_lista":{
     "pt-br":"não está na lista",
-    "en-us":"is not on the list"
+    "en-us":"is not on the list",
+    "es":"no esta en la lista"
   },
   "digitou_caractere":{
     "pt-br":"Você disse que queria digitar um número, mas digitou um texto: ",
-    "en-us":"You said you wanted to enter a number, but you entered text:"
+    "en-us":"You said you wanted to enter a number, but you entered text:",
+    "es":"Dijiste que querías ingresar un número, pero ingresaste texto:"
   },
   "repetir_nao_informou_inteiro":{
     "pt-br":"Para usar a função repetir, você precisa passar um número inteiro. Você informou ",
-    "en-us":"To use the repeat function, you need to pass an integer. You reported "
+    "en-us":"To use the repeat function, you need to pass an integer. You reported ",
+    "es":"Para utilizar la función de repetición, debe pasar un número entero. Tu reportaste"
   },
  "aleatorio_valor1_nao_numerico":{
     "pt-br":"O valor 1 não é numérico",
-    "en-us":"The value 1 is not numeric"
+    "en-us":"The value 1 is not numeric",
+    "es":"El valor 1 no es numérico"
   },
  "aleatorio_valor2_nao_numerico":{
     "pt-br":"O valor 2 não é numérico",
-    "en-us":"The value 2 is not numeric"
+    "en-us":"The value 2 is not numeric",
+    "es":"El valor 2 no es numérico"
   },
  "aleatorio_valor1_igual_valo2":{
     "pt-br":"O valor 1 e o valor 2 da função aleatório tem que ser diferentes",
-    "en-us":"The value 1 and value 2 of the random function must be different"
+    "en-us":"The value 1 and value 2 of the random function must be different",
+    "es":"El valor 1 y el valor 2 de la función aleatoria deben ser diferentes"
   },
  "aleatorio_valor1_maior_valo2":{
     "pt-br":"O valor 1 é maior que o valor 2, o valor 1 tem que ser maior",
-    "en-us":"Value 1 is greater than value 2, value 1 must be greater"
+    "en-us":"Value 1 is greater than value 2, value 1 must be greater",
+    "es":"El valor 1 es mayor que el valor 2, el valor 1 debe ser mayor"
   },
  "funcao_nao_existe":{
     "pt-br":"A função  '{}'não existe",
-    "en-us":"The function '{}' does not exist"
+    "en-us":"The function '{}' does not exist",
+    "es":"La función '{}' no existe"
   },
   "funcao_nao_passou_parametros":{
     "pt-br":"A função '{}' possui '{}' parâmetros, você precisa informa-los!"
   },
  "funcao_tem_parametros_divergentes":{
     "pt-br":"A função \"{}\" tem {} parametros, mas você passou {} parametros!",
-    "en-us":"The \"{}\" function has {} parameters, but you passed {} parameters!"
+    "en-us":"The \"{}\" function has {} parameters, but you passed {} parameters!",
+    "es":"La función \"{}\" tiene {} parámetros, ¡pero pasaste {} parámetros!"
   },
   
   "funcao_informou_mais_parametros":{
     "pt-br":"A função '{}' não possui parâmetros, mas você informou parâmetros!",
-    "en-us":"The function '{}' has no parameters, but you have entered parameters!"
+    "en-us":"The function '{}' has no parameters, but you have entered parameters!",
+    "es":"La función '{}' no tiene parámetros, ¡pero ha ingresado parámetros!"
   },
 
  "funcao_passou_um_parametros":{
     "pt-br":"A função \"{}\" tem {} parametros, mas você passou 1 parametro",
-    "en-us":"The \"{}\" function has {} parameters, but you passed 1 parameter"
+    "en-us":"The \"{}\" function has {} parameters, but you passed 1 parameter",
+    "es":"La función \"{}\" tiene {} parámetros, pero pasaste 1 parámetro"
   },
  "nao_possivel_conta_string":{
     "pt-br":"Não é possível fazer contas com strings: ",
-    "en-us":"It is not possible to do accounts with strings: "
+    "en-us":"It is not possible to do accounts with strings: ",
+    "es":"No es posible hacer cuentas con cadenas:"
   },
  "nao_possivel_fazer_conta":{
     "pt-br":"Não foi possivel realizar a conta ",
-    "en-us":"Unable to complete account "
+    "en-us":"Unable to complete account ",
+    "es":"No se puede completar la cuenta"
   },
  "voce_precisa_definir_variavel":{
     "pt-br":"Você precisa definir a variável ",
-    "en-us":"You need to define the variable "
+    "en-us":"You need to define the variable ",
+    "es":"Necesitas definir la variable"
   },
  "variaveis_comecar_por_letra":{
     "pt-br":"Variáveis devem começar por uma letra.",
-    "en-us":"Variables must start with a letter."
+    "en-us":"Variables must start with a letter.",
+    "es":"Las variables deben comenzar con una letra."
   },
  "variaveis_devem_conter":{
     "pt-br":"Variáveis devem conter apenas letras, numeros ou underline \"_\".",
-    "en-us":"Variables must contain only letters, numbers or underline \"_\"."
+    "en-us":"Variables must contain only letters, numbers or underline \"_\".",
+    "es":"Las variables deben contener solo letras, números o subrayado \"_\"."
   },
  "condicao_nao_possui_condicao":{
     "pt-br":"A condição não possui nenhuma condição!.",
-    "en-us":"The condition has no condition!"
+    "en-us":"The condition has no condition!",
+    "es":"¡La condición no tiene condición!"
   },
  "nao_possivel_fazer_condicao":{
     "pt-br":"Não foi possível realizar a condição: ",
-    "en-us":"The condition could not be fulfilled: "
+    "en-us":"The condition could not be fulfilled: ",
+    "es":"La condición no se pudo cumplir:"
   },
   "necessario_informar_variavel_valor":{
     "pt-br":"É necessário informar uma variável ou um valor",
-    "en-us":"You need to enter a variable or value"
+    "en-us":"You need to enter a variable or value",
+    "es":"Debes ingresar una variable o valor"
   },
   "erro_criar_arquivo":{
     "pt-br":"Erro ao criar o arquivo, erro '{}'",
-    "en-us":"Error creating the file, error '{}'"
+    "en-us":"Error creating the file, error '{}'",
+    "es":"Error al crear el archivo, error '{}'"
   },
   "erro_deletar_arquivo":{
     "pt-br":"Erro ao deletar o arquivo, erro '{}'",
-    "en-us":"Error deleting the file, error '{}'"
+    "en-us":"Error deleting the file, error '{}'",
+    "es":"Error al eliminar el archivo, error '{}'"
   },
   "erro_adicionar_texto_arquivo":{
     "pt-br":"Erro ao adicionar o texto '{}' no arquivo '{}'. Erro '{}'",
-    "en-us":"Error adding the text '{}' in the file '{}'. Error '{}'"
+    "en-us":"Error adding the text '{}' in the file '{}'. Error '{}'",
+    "es":"Error al agregar el texto '{}' en el archivo '{}'. Error '{}'"
   },
   "arquivo_nao_existe":{
     "pt-br":"O arquivo '{}' não existe!",
-    "en-us":"The file '{}' does not exist!"
+    "en-us":"The file '{}' does not exist!",
+    "es":"¡El archivo no existe!"
   },
   "erro_abrir_arquivo":{
     "pt-br":"Erro ao abrir o arquivo '{}'', erro '{}'",
-    "en-us":"Error opening file '{}' ', error' {}'"
+    "en-us":"Error opening file '{}' ', error' {}'",
+    "es":"Error al abrir el archivo '{}' ', error' {} '"
   },
   "precisa_nome_arquivo":{
     "pt-br":"Você precisa informar o nome de um arquivo",
-    "en-us":"You need to enter a file name"
+    "en-us":"You need to enter a file name",
+    "es":"Debes ingresar un nombre de archivo"
   },
   "erro_abrir_biblioteca":{
     "pt-br":"Erro ao abrir a biblioteca '{}', erro '{}'",
-    "en-us":"Error opening the library '{}', error '{}'"
+    "en-us":"Error opening the library '{}', error '{}'",
+    "es":"Error al abrir la biblioteca '{}', error '{}'"
   },
   "nao_possui_operacao_matematica":{
     "pt-br":"Não foi possivel realizar a conta, porque não nenhuma operação matemática",
-    "en-us":"It was not possible to perform the account, because there is no mathematical operation"
+    "en-us":"It was not possible to perform the account, because there is no mathematical operation",
+    "es":"No fue posible realizar la cuenta, porque no hay operación matemática"
   },
   "variavel_nao_numerica":{
     "pt-br":"A variável '{}' não é numérica!",
-    "en-us":"The variable '{}' is not numeric!"
+    "en-us":"The variable '{}' is not numeric!",
+    "es":"¡La variable '{}' no es numérica!"
   },
   "p_maiusc_minusc_cap_texto":{
     "pt-br":"Para usar o recurso de conversão para {}, é necessário informar uma string",
-    "en-us":"To use the {} conversion feature, you need to enter a string"
+    "en-us":"To use the {} conversion feature, you need to enter a string",
+    "es":"Para utilizar la función de conversión {}, debe ingresar una cadena"
   },
   "p_substituir_texto_valor":{
     "pt-br":"Para substituir um texto, o valor {} precisa ser uma string. O valor {} é do tipo '{}'",
-    "en-us":"To replace text, the value {} must be a string. The value {} is of type '{}'"
+    "en-us":"To replace text, the value {} must be a string. The value {} is of type '{}'",
+    "es":"Para reemplazar el texto, el valor {} debe ser una cadena. El valor {} es de tipo '{}'"
   },
   "p_usar_substituicao_variavel":{
     "pt-br":"Para usar o recurso substituição, é necessário informar uma variável string",
-    "en-us":"To use the substitution feature, you must enter a string variable"
+    "en-us":"To use the substitution feature, you must enter a string variable",
+    "es":"Para usar la función de sustitución, debe ingresar una variable de cadena"
   },
   "nao_abriu_chave":{
     "pt-br":"Você usou mais { do que o normal",
-    "en-us":"You used more {than usual"
+    "en-us":"You used more {than usual",
+    "es":"Usaste más {de lo habitual"
   },
   "nao_fechou_chave":{
     "pt-br":"Você precisa de fechar uma {",
-    "en-us":"You need to close a {"
+    "en-us":"You need to close a {",
+    "es":"Necesitas cerrar un {"
   },
   "precisa_def_tente_p_n_der_erro":{
     "pt-br":"Você precisa definir um tente, para testar o se não der erro",
-    "en-us":"You need to define a try, to test it if it doesn't go wrong"
+    "en-us":"You need to define a try, to test it if it doesn't go wrong",
+    "es":"Necesita definir un intento, para probarlo si no sale mal"
   },
   "precisa_def_tente_p_der_erro":{
     "pt-br":"Você precisa definir um tente, para testar o se der erro",
-    "en-us":"You need to define a try, to test the error"
+    "en-us":"You need to define a try, to test the error",
+    "es":"Necesitas definir un intento, para probar el error."
   },
   "precisa_def_p_cond_senao":{
     "pt-br":"Você precisa definir uma condição, para testar o senão",
-    "en-us":"You need to define a condition, to test the snag"
+    "en-us":"You need to define a condition, to test the snag",
+    "es":"Necesitas definir una condición para probar el problema"
   }
 }

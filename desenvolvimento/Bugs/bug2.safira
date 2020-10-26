@@ -1,0 +1,10 @@
+nombre = "IDIOMA zafiro"
+
+lowercase_name recibe el nombre en minusculas
+uppercase_name recibe el nombre en mayusculas
+capitalized_name recibe el nombre en mayuscula
+
+println minuscule_name
+println capital_name
+println cap_name
+

@@ -1,0 +1,9 @@
+name = "sapphire LANGUAGE"
+
+lowercase_name receives lowercase name
+uppercase_name receives uppercase name
+capitalized_name receives capitalized name
+
+println minuscule_name
+println capital_name
+println cap_name

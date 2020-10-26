@@ -1,86 +1,107 @@
 {
   "limpaTela":{
      "pt-br":"",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "exibiçãoNaTela":{
      "pt-br":"pt-br/MostreNaTela.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "enquanto":{
      "pt-br":"pt-br/Enquanto.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "esperar":{
      "pt-br":"pt-br/Espere.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "repetir":{
      "pt-br":"pt-br/Repita.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "funcoes":{
      "pt-br":"pt-br/Funcoes.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "tudo_entradas":{
      "pt-br":"pt-br/Digitado.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "listas":{
      "pt-br":"pt-br/Listas.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "aleatorio":{
      "pt-br":"pt-br/Aleatorio.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "se tiver":{
      "pt-br":"pt-br/Listas.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "condicionais":{
      "pt-br":"pt-br/Condicionais.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "atribuicoes":{
      "pt-br":"pt-br/Variaveis.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "para_cada":{
      "pt-br":"pt-br/Para cada.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "espere":{
      "pt-br":"pt-br/Espere.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "tente":{
      "pt-br":"pt-br/Tente.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "importe":{
      "pt-br":"pt-br/Importe.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "arquivos":{
      "pt-br":"pt-br/Arquivos.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "incremente_decremente":{
      "pt-br":"pt-br/Incremente-decremente.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "pare":{
      "pt-br":"pt-br/pare.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "continue":{
      "pt-br":"pt-br/continue.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   },
   "interrompa":{
      "pt-br":"pt-br/interrompa.safira",
-     "en-us":""
+     "en-us":"",
+     "es":""
   }
 }

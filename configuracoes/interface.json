@@ -1,190 +1,262 @@
 {
+    "modelo":{
+        "pt-br":"",
+        "en-us":"",
+        "es":""
+    },
+    "tit_fechar_safira":{
+        "pt-br":"Fechar",
+        "en-us":"Close",
+        "es":"Cerca"
+    },
+    "msg_fechar_safira":{
+        "pt-br":"Deseja mesmo fechar a Safira?",
+        "en-us":"Do you really want to close Safira?",
+        "es":"¿De verdad quieres cerrar Safira?"
+    },
+    "copiar":{
+        "pt-br":"copiar",
+        "en-us":"copy",
+        "es":"copiar"
+    },
+    "colar":{
+        "pt-br":"colar",
+        "en-us":"paste",
+        "es":"pegar"
+    },
     "texto_atualizacao":{
-      "pt-br":"Essa escolha afetará a Interface gráfica e o idioma que as mensagens de erros serão exibidas\n\nÉ necessário reiniciar a Safira para a interface ser atualizada!",
-      "en-us":"This choice will affect the graphical interface and the language in which error messages will be displayed\n\nIt is necessary to restart Sapphire for the interface to be updated!"
+        "pt-br":"Essa escolha afetará a Interface gráfica e o idioma que as mensagens de erros serão exibidas\n\nÉ necessário reiniciar a Safira para a interface ser atualizada!",
+        "en-us":"This choice will affect the graphical interface and the language in which error messages will be displayed\n\nIt is necessary to restart Sapphire for the interface to be updated!",
+        "es":"Esta elección afectará a la interfaz gráfica y al idioma en el que se mostrarán los mensajes de error\n\n¡Es necesario reiniciar Sapphire para que la interfaz se actualice!"
     },
     "script_finalizado":{
-      "pt-br":"\n\nScript finalizado em {:.5} segundos",
-      "en-us":"\n\nScript finished in {: .5} seconds"
+        "pt-br":"\n\nScript finalizado em {:.5} segundos",
+        "en-us":"\n\nScript finished in {:.5} seconds",
+        "es":"\n\nLa secuencia de comandos finalizó en {:.5} segundos"
     },
     "debug_valor":{
-      "pt-br":"Valor",
-      "en-us":"Value"
+        "pt-br":"Valor",
+        "en-us":"Value",
+        "es":"Valor"
     },
     "debug_tipo":{
-      "pt-br":"Tipo",
-      "en-us":"Type"
+        "pt-br":"Tipo",
+        "en-us":"Type",
+        "es":"Tipo"
     },
     "debug_variavel":{
-      "pt-br":"Variavel",
-      "en-us":"Variable"
+        "pt-br":"Variavel",
+        "en-us":"Variable",
+        "es":"Variable"
     },
     "debug_faca_busca":{
-      "pt-br":"Busque por variáveis (clique e pressione F7)",
-      "en-us":"Search for variables (click and press F7)"
+        "pt-br":"Busque por variáveis (clique e pressione F7)",
+        "en-us":"Search for variables (click and press F7)",
+        "es":"Busque variables (haga clic y presione F7)"
     },
     "label_comandos_disponiveis":{
-      "pt-br":"  Comandos Disponíveis",
-      "en-us":"  Available commands"
+        "pt-br":"  Comandos Disponíveis",
+        "en-us":"  Available commands",
+        "es":"  Comandos disponibles"
     },
     "label_reportar_bug":{
-      "pt-br":"  Reportar um Bug",
-      "en-us":"  Report a Bug"
+        "pt-br":"  Reportar um Bug",
+        "en-us":"  Report a Bug",
+        "es":"  Reportar un error"
     },
     "label_verificar_atualizacao":{
-      "pt-br":"  Verificar Atualização",
-      "en-us":"  Check for Update"
+        "pt-br":"  Verificar Atualização",
+        "en-us":"  Check for Update",
+        "es":"  Comprueba la actualización"
     },
     "label_mais":{
-      "pt-br":"  Aumentar fonte",
-      "en-us":"  Increase font"
+        "pt-br":"  Aumentar fonte",
+        "en-us":"  Increase font",
+        "es":"  Aumentar fuente"
     },
     "label_menos":{
-      "pt-br":"  Diminuir fonte",
-      "en-us":"  Decrease font"
+        "pt-br":"  Diminuir fonte",
+        "en-us":"  Decrease font",
+        "es":"  Disminuir fuente"
     },
     "label_logs":{
-      "pt-br":"  Logs",
-      "en-us":"  Logs"
+        "pt-br":"  Logs",
+        "en-us":"  Logs",
+        "es":"  Registros"
     },
     "label_arquivo":{
-      "pt-br":"  Arquivo",
-      "en-us":"  Archive"
+        "pt-br":"  Arquivo",
+        "en-us":"  Archive",
+        "es":"  Archivo"
     },
     "label_executar":{
-      "pt-br":"  Executar",
-      "en-us":"  Run"
+        "pt-br":"  Executar",
+        "en-us":"  Run",
+        "es":"  Correr"
     },
     "label_exemplos":{
-      "pt-br":"  Exemplos",
-      "en-us":"  Examples"
+        "pt-br":"  Exemplos",
+        "en-us":"  Examples",
+        "es":"  Ejemplos"
     },
     "label_interface":{
-      "pt-br":"  Interface",
-      "en-us":"  Interface"
+        "pt-br":"  Interface",
+        "en-us":"  Interface",
+        "es":"  Interfaz"
     },
     "label_ajuda":{
-      "pt-br":"  Ajuda/Sobre",
-      "en-us":"  Help/About"
+        "pt-br":"  Ajuda/Sobre",
+        "en-us":"  Help/About",
+        "es":"  Ayuda sobre"
     },
     "label_dev":{
-      "pt-br":"  Dev",
-      "en-us":"  Dev"
+        "pt-br":"  Dev",
+        "en-us":"  Dev",
+        "es":"  Dev"
     },
     "label_abrir_arquivo":{
-      "pt-br":"  Abrir arquivo (Ctrl+O)",
-      "en-us":"  Open file (Ctrl + O)"
+        "pt-br":"  Abrir arquivo (Ctrl+O)",
+        "en-us":"  Open file (Ctrl + O)",
+        "es":"  Abrir archivo (Ctrl + O)"
     },
     "label_nova_aba":{
-      "pt-br":"  Nova Aba (Ctrl-N)",
-      "en-us":"  New Tab (Ctrl-N)"
+        "pt-br":"  Nova Aba (Ctrl-N)",
+        "en-us":"  New Tab (Ctrl-N)",
+        "es":"  Nueva pestaña (Ctrl-N)"
     },
     "label_salvar":{
-      "pt-br":"  Salvar (Ctrl-S)",
-      "en-us":"  Save (Ctrl-S)"
+        "pt-br":"  Salvar (Ctrl-S)",
+        "en-us":"  Save (Ctrl-S)",
+        "es":"  Guardar (Ctrl-S)"
     },
     "label_salvar_como":{
-      "pt-br":"  Salvar Como (Ctrl-Shift-S)",
-      "en-us":"  Save As (Ctrl-Shift-S)"
+        "pt-br":"  Salvar Como (Ctrl-Shift-S)",
+        "en-us":"  Save As (Ctrl-Shift-S)",
+        "es":"  Guardar como (Ctrl-Shift-S)"
     },
     "label_executar_tudo":{
-      "pt-br":"  Executar Tudo (F5)",
-      "en-us":"  Run Everything (F5)"
+        "pt-br":"  Executar Tudo (F5)",
+        "en-us":"  Run Everything (F5)",
+        "es":"  Ejecutar todo (F5)"
     },
     "label_linha_por_linha":{
-      "pt-br":"  Executar linha por linha (F6)",
-      "en-us":"  Run line by line (F6)"
+        "pt-br":"  Executar linha por linha (F6)",
+        "en-us":"  Run line by line (F6)",
+        "es":"  Ejecutar línea por línea (F6)"
     },
     "label_ate_breakpoint":{
-      "pt-br":"  Executar até breakpoint (F7)",
-      "en-us":"  Run to breakpoint (F7)"
+        "pt-br":"  Executar até breakpoint (F7)",
+        "en-us":"  Run to breakpoint (F7)",
+        "es":"  Ejecutar hasta el punto de interrupción (F7)"
     },
     "label_parar_execucao":{
-      "pt-br":"  Parar execução (F9)",
-      "en-us":"  Stop execution (F9)"
+        "pt-br":"  Parar execução (F9)",
+        "en-us":"  Stop execution (F9)",
+        "es":"  Detener ejecución (F9)"
     },
     "label_inserir_breakpoint":{
-      "pt-br":"  Inserir breakpoint (F10)",
-      "en-us":"  Insert breakpoint (F10)"
+        "pt-br":"  Inserir breakpoint (F10)",
+        "en-us":"  Insert breakpoint (F10)",
+        "es":"  Insertar punto de interrupción (F10)"
     },
     "label_cascate_temas":{
-      "pt-br":"  Temas",
-      "en-us":"  Themes"
+        "pt-br":"  Temas",
+        "en-us":"  Themes",
+        "es":"  Temas"
     },
     "label_cascate_sintaxe":{
-      "pt-br":"  sintaxe",
-      "en-us":"  syntax"
+        "pt-br":"  sintaxe",
+        "en-us":"  syntax",
+        "es":"  sintaxis"
     },
     "erro_ver_exemplo":{
-      "pt-br":"Ver um exemplo ",
-      "en-us":"See an example"
+        "pt-br":"Ver um exemplo ",
+        "en-us":"See an example",
+        "es":"Ver un ejemplo "
     },
     "encontrou_bug":{
         "pt-br":"  Então você encontrou um bug?  ",
-        "en-us":"  So did you find a bug?"
-      },
-      "texto_reportar_bug":{
+        "en-us":"  So did you find a bug?",
+        "es":"  Entonces, ¿encontraste un error?  "
+    },
+    "texto_reportar_bug":{
         "pt-br":"\nVocê gostaria de reportar para nós?\n Isso nos ajuda a produzir algo melhor, vamos\n ficar felizes em ter o seu feedback!\n",
-        "en-us":"\nWould you like to report to us? \n This helps us produce something better, \n we will be happy to have your feedback! \n"
-      },
-      "texto_depois":{
-        "pt-br":"Depois",
-        "en-us":"After"
-      },
-      "texto_reporte_bug":{
+        "en-us":"\nWould you like to report to us? \n This helps us produce something better, \n we will be happy to have your feedback! \n",
+        "es":"\n¿Te gustaría informarnos? \n Esto nos ayuda a producir algo mejor, \n ¡estaremos encantados de recibir tus comentarios! \n"
+    },
+    "texto_depois":{
+        "pt-br":"texto_depois",
+        "en-us":"After",
+        "es":"Después"
+    },
+    "texto_reporte_bug":{
         "pt-br":"Reportar o BUG",
-        "en-us":"Report the BUG"
-      },
-      "titulo_aviso_atualizacao":{
+        "en-us":"Report the BUG",
+        "es":"Informar el error"
+    },
+    "titulo_aviso_atualizacao":{
         "pt-br":"Aviso de atualização",
-        "en-us":"Update notice"
-      },
-      "versao_nova_disponivel":{
+        "en-us":"Update notice",
+        "es":"Aviso de actualización"
+    },
+    "versao_nova_disponivel":{
         "pt-br":"Nova versão disponível!",
-        "en-us":"New version available!"
-      },
-      "versao_nao_quero":{
+        "en-us":"New version available!",
+        "es":"No quiero"
+    },
+    "versao_nao_quero":{
         "pt-br":"Não quero",
-        "en-us":"I do not want"
-      },      
-      "titulo_aviso_atualizado":{
+        "en-us":"I do not want",
+        "es":""
+    },
+    "titulo_aviso_atualizado":{
         "pt-br":"Você está Atualizado!",
-        "en-us":"You are Updated!"
-      },      
-      "atualizado_versao_ultima":{
+        "en-us":"You are Updated!",
+        "es":"¡Estás actualizado!"
+    },
+    "atualizado_versao_ultima":{
         "pt-br":"Sua versão é a última!",
-        "en-us":"Your version is the last one!"
-      },      
-      "atualizado_facebook":{
+        "en-us":"Your version is the last one!",
+        "es":"¡Tu versión es la última!"
+    },
+    "atualizado_facebook":{
         "pt-br":"Facebook",
-        "en-us":"Facebook"
-      },
-      "atualizado_blog":{
+        "en-us":"Facebook",
+        "es":"Facebook"
+    },
+    "atualizado_blog":{
         "pt-br":"Blog",
-        "en-us":"Blog"
-      },
+        "en-us":"Blog",
+        "es":"Blog"
+    },
     "texto_update_disponivel":{
         "pt-br":"\n A versão {} esta disponível para download. Avalie a posiblidade de fazer a atualização. A atualizações de software pode trazer novos comandos e recursos de segurança, porém, também pode trazer novos bugs.\n",
-        "en-us":"\n Version {} is available for download. Assess the ability to upgrade. Software updates can bring new commands and security features, however, it can also bring new bugs. \n "
-      },
-      "texto_atualizado":{
+        "en-us":"\n Version {} is available for download. Assess the ability to upgrade. Software updates can bring new commands and security features, however, it can also bring new bugs. \n ",
+        "es":"\n La versión {} está disponible para descargar. Evalúe la posibilidad de actualización. Las actualizaciones de software pueden traer nuevos comandos y funciones de seguridad, sin embargo, también pueden traer nuevos errores.\n"
+    },
+    "texto_atualizado":{
         "pt-br":"\nVocê está usando a versão {}. Se você quer receber aviso de novas versões, nos acompanhe no Facebook ou no nosso blog.\n",
-        "en-us":"\n You are using version {}. If you want to receive notice of new versions, follow us on Facebook or on our blog. \n"
-      },
-      "erro_generico":{
+        "en-us":"\n You are using version {}. If you want to receive notice of new versions, follow us on Facebook or on our blog. \n",
+        "es":"\nEstás usando la versión {}. Si desea recibir un aviso de nuevas versiones, síganos en Facebook o en nuestro blog. \n"
+    },
+    "erro_generico":{
         "pt-br":"Aconteceu um erro ao buscar a atualização, você precisa estar conectado a internet para buscar a atualizações",
-        "en-us":"An error occurred while fetching the update, you need to be connected to the internet to fetch updates"
-      },
-      "texto_nao_quero":{
+        "en-us":"An error occurred while fetching the update, you need to be connected to the internet to fetch updates",
+        "es":"Se produjo un error al obtener la actualización, debe estar conectado a Internet para obtener actualizaciones"
+    },
+    "texto_nao_quero":{
         "pt-br":"Não quero",
-        "en-us":"I do not want"
+        "en-us":"I do not want",
+        "es":"No quiero"
     },
     "abrir_formulario":{
-      "pt-br":"Abrindo formulário do Google",
-      "en-us":"Opening Google form"
+        "pt-br":"Abrindo formulário do Google",
+        "en-us":"Opening Google form",
+        "es":"Abriendo formulario de Google"
     },
     "atualizar_agora":{
-      "pt-br":"Atualizar Agora",
-      "en-us":"Update now"
+        "pt-br":"Atualizar Agora",
+        "en-us":"Update now",
+        "es":"Actualizar ahora"
     }
 }
