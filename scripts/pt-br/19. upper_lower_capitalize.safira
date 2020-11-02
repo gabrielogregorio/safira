@@ -1,3 +1,9 @@
+# Cenário:
+# Você quer formatar um texto que está sem padrão
+# Você tem 3 opções básicas, colocar todo o texto
+# em maiuscula, em minuscula ou deixar a primeira 
+# letra em maisucula. Segue o exemplo abaixo
+
 nome = "safira LINGUAGEM"
 
 nome_em_minusculo recebe nome em minusculo

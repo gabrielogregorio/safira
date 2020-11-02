@@ -1,8 +1,0 @@
-# Sorteia um número aleatório
-# Os valores podem ser variáveis
-# ou resultados de outros comandos
-
-#****** Uso simples comando ******#
-numeroSorteado = um numero aleatorio entre 10 e 20
-mostre numeroSorteado
-

@@ -1,10 +1,11 @@
 # Cenário:
 # Agora imagine que você queira saber
-# Se o aluno pasou de ano ou não, você 
+# se o aluno pasou de ano ou não, você 
 # precisará fazer um teste, para isso
-# usamos o seguinte comando
+# usamos o comando de condicionais, o se
 
-media = 6.8
+mostre "Digite sua média "
+media vale entrada numerica
 
 se media for igual a 10
 {

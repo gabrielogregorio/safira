@@ -1,12 +1,23 @@
-soma = 0    
+# Cenário:
+# Mudando só um pouquinho do cenário anterior
+#
+# E se você quisesse executar um loop, porém, quando 
+# chegar em uma condição, você quer para o loop.
+# Como fazer isso? Vamos usar o pare
+
+
+soma = 1
 enquanto soma for menor que 10
 {
-    soma recebe soma mais 1
+    # Incrementando o valor da soma em +1
+    soma vale soma mais 1
 
-    se soma for igual a 5 {
-       pare  # para um loop
-   }
-    mostre soma
+    # Se o valor for igual a 5, pare o loop!
+    se soma for igual a 5 { pare }
+
+    # Mostrando na tela
+    mostre "soma: ", soma
 }
 
-print "Programa continuou"
+mostre ""
+mostre "+====================+"

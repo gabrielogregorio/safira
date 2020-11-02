@@ -1,47 +1,33 @@
-#****** Nome do comando ******#
-# Tente
-
-#****** Descrição do comando ******#
-# Executa um comando, se ele for executado com sucesso 
-# ou com erros ele irá executar os blocos especificos. O comando 
-# tente deve ser o primeiro e é obrigatório, os outros são opcionais
-# e podem estar em qualquer ordem
+# Cenário:
+# Você tem um trecho de código que pode acontecer erro
+# e você precisa que o programa continue rodando.
+# Como fazer isso? Você pode usar o tente
 
 
-#****** Uso simples comando ******#
 tente
 {
-    mostre "Isso não deve provocar um erro"
+    mostre "1. Isso não deve provocar um erro"
     isso não faz sentido e deve provocar um erro
 }
 se der erro
 {
-    mostre "Aconteceu um erro"
+    mostre "2. Aconteceu um erro!"
 }
 senao der erro
 {
-    mostre "Não aconteceu um erro"
+    mostre "3. Não aconteceu um erro!"
 }
 em qualquer caso
 {
-    mostre "Deu um erro ou não"
+    mostre "4. Deu um erro ou não!"
 }
 
+mostre ""
+mostre "O programa continua executando, independente se deu erro ou não"
 
-#****** Variações dos comandos ******#
-# tente
-# try
-# tratar
+# Os comandos
+# * senao der erro
+# * em qualquer caso
 # 
-# se der erro
-# except
-# si sale mal
-# 
-# if it doesn't go wrong
-# senao der erro
-# si no sale mal
-# 
-# em qualquer caso
-# finalmente
-# finally
-# in any case
+# Você pode colocar eles ou não, é você que escolhe
+

@@ -1,5 +1,13 @@
-mostre "linha 1"
+# Cenário:
+# Você quer finalizar o programa por completo ao chegar em um ponto
+# Como fazer isso? Vamos usar o interrompa!
+
+
+mostre "Executando programa.....1"
+mostre "Executando programa.....2"
 
 interrompa
 
-mostre "linha 5"
+mostre "Executando programa.....3"
+mostre "Executando programa.....4"
+

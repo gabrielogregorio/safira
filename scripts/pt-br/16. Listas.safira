@@ -1,147 +1,55 @@
-# Diversos Comandos para manipular listas
+# Cenário:
+# Você quer trabalhar com uma lista de itens
+# Como fazer isso? Vamos usar os comandos de listas
 
 
 
-#******************************* Uso simples dos comandos **************#
+# Cria uma lista 3 posições com valores já definidos
+lista de compras recebe "Maça", "Melancia"
+mostre compras
 
-# Cria uma lista chamada numeros com 10 posições de texto
-lista de numeros com 100 posicoes
+# Altera o valor de uma posição com outro valor
+lista de compras na posicao 2 recebe "Manga"
+mostre compras
 
-# Declarar uma lista
-lista de nomes recebe "gabriel", "Maria", "Julia"
-mostre nomes
-
-# Adiciona um valor em uma posição
-lista de nomes na posicao 2 recebe "gregório"
-mostre nomes
-
-lista de opcoes recebe "opção1", "opção3"
-mostre opcoes
 
 # Adicionar um valor em uma posição especifica
-# não sobrescrevendo o valor
-adicione "opção2" na posicao 2 da lista de opcoes
-mostre opcoes
+# mudando a posição do valor antigo desta posição
+adicione "Banana" na posicao 2 da lista de compras
+mostre compras
 
-# Adicionar algo no final de uma lista
-adicione "opção4" no final da lista de opcoes
-mostre opcoes
 
-# Adicionar algo na lista de nomes
-adicione "opção5" na lista de opcoes
-mostre opcoes
+
+# Adiciona um item no final da lista
+adicione "Uvas" no final da lista de compras
+mostre compras
 
 # Adicionar algo no inicio da lista
-adicione "opção0" no inicio da lista de opcoes
+adicione "Melão" no inicio da lista de compras
 
-# Remover um item da lista
-remova "opção5" da lista de opcoes
 
-# Retornar um valor em uma posição
-mostre lista de opcoes na posicao 1
+
 
 # Verifica se tem um valor na lista
-se tiver "opção2" na lista de opcoes
+se tiver "opção2" na lista de compras
 {
-    remova "opção2" da lista de opcoes
-    mostre opcoes
+    # Remover um item da lista
+    remova "Melão" da lista de compras
+    mostre compras
 }
 
+
+
+# Retornar um valor em uma posição
+mostre lista de compras na posicao 1
+
+
+
+# Cria uma lista chamada numeros com 100 posições de texto
+lista de numeros com 100 posicoes
+
+
 # Retorna a quantidade de itens de uma lista
-mostre " A lista de nomes tem ", o tamanho da lista de nomes, " posições"
-mostre " A lista de opcoes tem ", o tamanho da lista de opcoes, " posições"
-mostre " A lista de números tem ", o tamanho da lista de numeros, " posições"
+mostre "A lista de nomes tem    : ", o tamanho da lista de compras, " posições"
+mostre "A lista de números tem  : ", o tamanho da lista de numeros, " posições"
 
-
-
-
-
-#****************************** Variações dos comandos *****************#
-# --------------------------- Cria uma lista x posições ----------------#
-# lista de 
-# lista 
-# list of 
-# 
-#  posicoes
-#  positions 
-#  posiciones 
-
-# ------------------------- Declarar uma lista--------------------------#
-#lista de 
-#lista 
-#list of 
-#
-# recebe 
-# com 
-# recibir 
-# receive 
-# is worth 
-
-
-# ---------------- Sobrescrever um valor em uma posição da lista -------#
-#lista de 
-#lista 
-#list of 
-#
-# na posicao 
-# in position 
-# en posicion 
-#
-# recebe 
-# com 
-# recibir 
-# receive 
-# is worth 
-
-# --------------- Adicionar um valor em uma posição especifica ---------#
-# adicione 
-# add 
-# anadir 
-# 
-# na posicao 
-# in position 
-# en posicion 
-# 
-# lista de 
-# lista 
-# list of 
-
-# ------------------ Adicionar algo no final de uma lista --------------#
-# adicione 
-# add 
-# anadir 
-#
-# no final da lista de 
-# no final a lista de 
-# no final na lista 
-
-# ------------------ Adicionar algo no inicio da lista -----------------#
-# no inicio da lista de 
-# no inicio a lista de 
-# no inicio na lista 
-
-# ------------------- Adicionar algo na lista de nomes -----------------#
-# na lista de
-# da lista de
-# a lista de
-# na lista
-# a lista
-
-# --------------------- Remover um item da lista -----------------------#
-# remova 
-# remove 
-# eliminarlo 
-
-
-# tiver 
-# tener 
-# have 
-
-# ----------- Retorna a quantidade de itens de uma lista ---------------#
-# o tamanho da lista de 
-# o tamanho da lista 
-# tamanho da lista de 
-# tamanho da lista 
-# el tamano de la lista
-# tamano de la lista
-# len 

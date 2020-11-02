@@ -1,0 +1,19 @@
+# Cenário:
+# Você quer aumentar o valor de uma variável numérica
+# Você pode usar o comando incremente, ou soma a variável + 1
+
+numero = 1
+mostre "Numero original        : ", numero
+
+incremente 15 em numero
+mostre "Numero somando a 15    : ", numero
+
+decremente 2 em numero
+mostre "Numero subtraido de 2  : ", numero
+
+
+# Uma outra forma de fazer isso, é pegando o
+# número e somando a ele mesmo, exemplo:
+numero recebe numero + 1
+mostre "Numero somando a 1     : ", numero
+

@@ -1,14 +1,23 @@
-soma = 1
+# Cenário:
+# Você quer executar um loop, porém, quando 
+# chegar em uma condição, você não quer executar
+# os comandos restantes. Como fazer isso?
+# Para evitar muitas condições, você pode usar
+# o comando continue
 
+soma = 1
 enquanto soma for menor que 10
 {
-    soma recebe soma mais 1
+    # Incrementando o valor da soma em +1
+    soma vale soma mais 1
 
-    se soma for igual a 5 {
-       # vai para o proximo valor do loop
-       continue 
-   }
+    # Se o valor for igual a 5, ignore o trecho abaixo
+    se soma for igual a 5 { continue }
 
-   mostre "soma vale ", soma
+    # Mostrando na tela
+    mostre "soma: ", soma
 }
 
+
+mostre ""
+mostre "+====================+"

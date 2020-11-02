@@ -1,34 +1,37 @@
-# Diversos Comandos para manipular arquivos
-# * Criação
-# * Inserção de texto
-# * Leitura
-# * Verificar se existe
-# * Remover
+# Cenário:
+# Você quer criar arquivos de texto
+# para salvar configurações, resultados, etc.
+# Você pode usar os comandos para manipulação de arquivos
 
-#******************************* Uso simples dos comandos **************************#
 # Criar um arquivo qualquer
+# Verifique no seu diretório
+# Se esse arquivo foi criado de verdade
 crie o arquivo "arquivo.txt"
 
-# Escrever em um arquivo
+# Escreve um texto na ultima linha do arquivo criado
 adicione "Texto qualquer" no arquivo "arquivo.txt"
 
-# Sobrescrever por completo um arquivo
+# Apaga todo o texto do arquivo e coloca esse texto no lugar
 sobrescreva "Iai, tudo bem amigo" no arquivo "arquivo.txt"
 
-# Ler o conteudo do arquivo
+# Obter todo o texto do arquivo
 conteudo = leia o texto do arquivo "arquivo.txt"
+
+# O resultado é uma String(Texto)
 mostre conteudo
 
-# Verificar se um arquivo existe ou não
+# Verifica se o arquivo existe, retornando verdadeiro ou falso
 se o arquivo "arquivoQUeNaoExiste.txt" nao existe
 {
     mostre "Esse arquivo não existe"
 }
 
-# Deletar um arquivo
+# Se o arquivo existe
 se o arquivo "arquivo.txt" existe
 {
     mostre "Esse arquivo Existe e será removido"
+
+    # Comando para excluir um arquivo
     delete o arquivo "arquivo.txt"
 }
 

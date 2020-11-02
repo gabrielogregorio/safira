@@ -1,24 +1,53 @@
-# Cria um bloco de intruções com um nome que pode ser
-# executado em qualquer parte do código
-# através da palavra atribuida
+# Cenário:
+# Imagine que você queira executar alguns comandos em várias
+# partes do código, para evitar muito código duplicado, você pode
+# usar as funções
 
-# Criando uma função
-funcao mostraArvore
+# Está é uma função com parâmetros
+# Parâmetros são valores que ela pode
+# Receber e trabalhar com eles
+funcao calculaMedia recebe parametros nome, nota1, nota2
 {
-     mostre "    *   "
-     mostre "   ***  "
-     mostre "  ***** "
-     mostre "    *   "
+    media = (nota1 + nota2) / 2
+    mostre nome
+    mostre "+=========================+"
+    mostre "| nota 1     : ", nota1, "        |"   
+    mostre "| nota 2     : ", nota2, "        |"   
+    mostre "| média final: ", media, "        |"   
+    mostre "+=========================+"
+
+    mostre ""
 }
 
-# Chamando a função
-mostraArvore
 
-# Uma função com parâmetros
-funcao calculaMedia recebe parametros nota1, nota2
+# Essa é uma função sem parâmetros
+funcao mostra_logo
 {
-    mostre "Sua média final é ", (nota1 + nota2) / 2
+    mostre "@========= MEDIA ALUNOS ===========@"
+    mostre ""
 }
 
-calculaMedia passando parametros 9.8, 7.5
+# Chamando funções sem parâmetros
+mostra_logo
+
+# Chamando funções com parâmetros
+aluno1_nota1 = 9.8
+aluno1_nota2 = 8.2
+calculaMedia passando parametros "Gabriel Garcia", aluno1_nota1, aluno1_nota2
+
+aluno2_nota1 = 5.7
+aluno2_nota2 = 8.1
+calculaMedia passando parametros "Maria Helena", aluno2_nota1, aluno2_nota2
+
+aluno3_nota1 = 6.5
+aluno3_nota2 = 7.5
+calculaMedia passando parametros "João da Silva", aluno3_nota1, aluno3_nota2
+
+aluno4_nota1 = 9.1
+aluno4_nota2 = 2.7
+calculaMedia passando parametros "Mile Santos", aluno4_nota1, aluno4_nota2
+
+
+# Chamando funções sem parâmetros
+mostra_logo
 

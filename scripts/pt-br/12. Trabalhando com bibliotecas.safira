@@ -1,22 +1,36 @@
-#****** Nome do comando ******#
-# Importação
+# Cenário:
+# O seu programa está ficando muito grande
+# e você quer dividir seu código, salvando algumas funções
+# em outro arquivo. Você pode criar uma biblioteca!
+# Biblioteca são códigos exatamente iguais a esse, com a 
+# diferença que você pode chama-los em outro arquivo.
 
 
-#****** Descrição do comando ******#
-# Carrega e executa um código inteiro na linguagem Feynman
-
-
-#****** Preparação do ambiente ******#
-# Criação de um arquivo, que conterá um código na linguagem Feynman
+# Se a biblioteca já existe, vamos deleta-la
 se o arquivo "biblioteca.safira" existe
 {
     delete o arquivo "biblioteca.safira"
 }
 
+# Vamos criar a biblioteca (Um arquivo exatamente
+# igual a esse que você está programando)
 crie o arquivo "biblioteca.safira"
-adicione "mostre 123" no arquivo "biblioteca.safira"
+
+# Vamos adicionar um comando dentro desse arquivo
+# Você pode fazer isso com o bloco de notas de preferir
+# O comando \n dentro de um texto serve para pular uma
+# linha
+adicione "mostre 123\n" no arquivo "biblioteca.safira" 
+adicione "idade recebe 21 " no arquivo "biblioteca.safira"
 
 
-#****** Uso simples comando ******#
+# Vamos importar a biblioteca para nosso programa.
+# A partir disso, o código dentro deste arquivo será
+# executado e teremos acesso as funções e variáveis dentro dele.
+
 importe a biblioteca biblioteca
+mostre "A idade é ", idade
+
+# Perceba que o arquivo chama "biblioteca.safira", mas para importa-lo,
+# só precisamos digitar biblioteca e a safirá irá entender o resto
 

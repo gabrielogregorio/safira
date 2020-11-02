@@ -1,0 +1,17 @@
+# Cenário:
+# Imagine que você queira executar um trecho várias vezes
+# você pode usar o comando repita
+
+mostre "[X]" na cor "#ff4488"
+mostre "[ ]" na cor "#ffaa22"
+mostre "[ ]" na cor "#44ff44"
+
+repita 10 vezes
+{
+    mostre " | " na cor "#dddddd"
+}
+
+repita 20 vezes
+{
+    mostre nessa linha "-*"    
+} 

@@ -1,0 +1,15 @@
+# Cenário:
+# Você quer esperar um pouco antes de executar o
+# proximo comando, você pode usar o comando espere
+
+
+mostre "Olá, amigo(a)!"
+espere 2 segundos         # Espera em segundos
+
+mostre "Como você está?"
+espere 2000 milisegundos  # Esperaem milesegundos
+
+mostre "Você conhece a Safira?"
+
+
+

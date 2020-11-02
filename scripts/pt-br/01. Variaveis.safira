@@ -2,6 +2,7 @@
 
 # Está é a variável chamada idade,
 # Ela tem o valor de 20
+# Na safira, todos os números são chamados de floats
 idade =  20
 
 # Essa é uma variável nome,
@@ -20,7 +21,7 @@ mostre idade
 mostre nome
 mostre casado
 
-mostre ""
+mostre "..."
 
 # Vamos exibir o tipo de cada variável
 mostre o tipo da variavel idade

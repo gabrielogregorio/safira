@@ -1,7 +1,14 @@
-#percorra a lista de nomes atribuindo cada valor na variavel nome
+# Cenário:
+# Você quer uma forma simples de percorrer
+# toda a lista, obtendo o valor de cada item
 
-lista de nomes recebe 1, 2, 3, "Safira" , 5
+lista de compras recebe "uva", "maça", "manga", "laranja"
 
-percorra a lista de nomes atribuindo em nome {
-    mostre nome, " ", type of variable nome
+contador = 1
+percorra a lista de compras atribuindo em item_compra {
+    mostre contador, " - ", item_compra
+
+    contador = contador + 1
 }
+
+
