@@ -1,11 +1,13 @@
-![PyPI - License](https://img.shields.io/pypi/l/requests?color=blue&label=requests)
-![GitHub estrelas](https://img.shields.io/github/stars/safira-ide/safira-ide)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/safira-lang/safira-ide?style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/safira-lang/safira-ide)
+
+![GitHub contributors](https://img.shields.io/github/contributors/safira-lang/safira-ide)
+![GitHub language count](https://img.shields.io/github/languages/count/safira-lang/safira-ide)
+![GitHub repo size](https://img.shields.io/github/repo-size/safira-lang/safira-ide)
+
 
 # Introdução
-
-* [Ler em português-br](#)
-* [Read in english](#)
-* [Leer en español](#)
 
 A Safira é uma linguagem de programação focada na lógica com o objetivo de amortecer o impacto do primeiro contato com o mundo da programação, oferecendo uma interface simples, intuitiva e uma codificação natural.
 
