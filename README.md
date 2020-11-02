@@ -1,8 +1,7 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/safira-lang/safira-ide?style=flat-square)
-![GitHub commit activity](https://img.shields.io/github/commit-activity/m/safira-lang/safira-ide)
-
 ![GitHub contributors](https://img.shields.io/github/contributors/safira-lang/safira-ide)
+
 ![GitHub language count](https://img.shields.io/github/languages/count/safira-lang/safira-ide)
 ![GitHub repo size](https://img.shields.io/github/repo-size/safira-lang/safira-ide)
 
