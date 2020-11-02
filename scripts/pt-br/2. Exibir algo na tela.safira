@@ -1,0 +1,20 @@
+# Este comando exibe alguma coisa na tela
+# Uma mensagem por exemplo
+
+
+nome = "Safira"
+
+mostre "Bom dia "
+mostre nome
+
+mostre ""
+mostre "Você deve ter notado que o comando mostre "
+mostre "exibir cada coisa em uma linha diferente "
+mostre "Se você quiser exibir tudo na mesma linha"
+mostre "precisa usar o comando mostre nessa linha"
+mostre ""
+
+
+mostre nessa linha "Bom dia "
+mostre nessa linha nome
+

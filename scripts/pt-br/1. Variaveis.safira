@@ -1,0 +1,29 @@
+# Uma variável é um nome associado a um valor.
+
+# Está é a variável chamada idade,
+# Ela tem o valor de 20
+idade =  20
+
+# Essa é uma variável nome,
+# Ela tem o valor do texto "CJ".
+# Na programação, textos são chamados de Strings
+nome =   "CJ"
+
+# Essa é uma variável casado,
+# Ela tem o valor de verdadeiro
+# Na programação, verdadeiro ou falso é chamado
+# de booleano
+casado = falso
+
+# Vamos exibir o valor destas variáveis na tela
+mostre idade
+mostre nome
+mostre casado
+
+mostre ""
+
+# Vamos exibir o tipo de cada variável
+mostre o tipo da variavel idade
+mostre o tipo da variavel nome
+mostre o tipo da variavel casado
+

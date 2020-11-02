@@ -1,0 +1,25 @@
+# Cenário:
+# Agora imagine que você queira saber
+# Se o aluno pasou de ano ou não, você 
+# precisará fazer um teste, para isso
+# usamos o seguinte comando
+
+media = 6.8
+
+se media for igual a 10
+{
+    mostre "Você foi excelente"
+}
+senao se media for maior que 9
+{
+    mostre "Você foi muito bom"
+}
+senao se media for maior ou igual a 6
+{
+    mostre "Você passou!"
+}
+senao 
+{
+    mostre "Tente novamente"
+}
+

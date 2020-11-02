@@ -1,0 +1,21 @@
+# Cenário:
+# Você quer perguntar a um usuário as notas que
+# ele tirou, para mostrar a média final dele, como
+# fazer isso?
+
+# Para fazer isso usamos o comando de entrada, esse
+# comando vai ler o que a pessoa digitar e salvar
+# em algum lugar, no caso, uma variável
+ 
+ 
+mostre "Qual é o seu nome?"
+nome = o que o usuario digitar
+
+mostre "Digite sua primeira nota: "
+nota1 = o numero que o usuario digitar
+
+mostre "Digite sua segunda nota: "
+nota2 = o numero que o usuario digitar
+
+mostre nome, " sua média final é ", (nota1 + nota2) / 2
+
