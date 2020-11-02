@@ -1,13 +1,25 @@
-# Introdução
-
 ![Imagem](imagens/projeto.gif)
 
 -------
+
+
+<p align="center">
+  Desenvolvimento da linguagem de programação Safira
+  <br>
+  <a href="https://safiralang.blogspot.com/"><strong>Faça do Download das versões estáveis >> </strong></a>
+  <br>
+  <br>
+
+</p>
+
 ![GitHub estrelas](https://img.shields.io/github/stars/safira-lang/safira-ide)
 ![GitHub last commit](https://img.shields.io/github/last-commit/safira-lang/safira-ide?style=flat-square)
 ![GitHub contributors](https://img.shields.io/github/contributors/safira-lang/safira-ide)
 ![GitHub language count](https://img.shields.io/github/languages/count/safira-lang/safira-ide)
 ![GitHub repo size](https://img.shields.io/github/repo-size/safira-lang/safira-ide)
+
+# Introdução
+
 
 A Safira é uma linguagem de programação focada na lógica com o objetivo de amortecer o impacto do primeiro contato com o mundo da programação, oferecendo uma interface simples, intuitiva e uma codificação natural.
 
@@ -75,7 +87,7 @@ Confira os principais comandos aqui: https://safiralang.blogspot.com/p/comandos.
 
 # Como fazer parte do desenvolvimento da safira?
 Entre em contato com:
-* combratectecnologias@gmail.com
+* safira.ide@gmail.com
 
 # Quem pode ajudar no desenvolvimento?
 Atualmente precisamos de pessoas que possam dar feedback sobre o projeto, que possam usá-la, de desenvolvedores que possam melhorar o código, tornando o mais escalável, de designs para ajudar no desenvolvimento de interfaces mais bonitas e que sejam úteis para os usuários e de pessoas que possam contribuir de outras formas.
