@@ -9,6 +9,8 @@
 
 A Safira é uma linguagem de programação focada na lógica com o objetivo de amortecer o impacto do primeiro contato com o mundo da programação, oferecendo uma interface simples, intuitiva e uma codificação natural.
 
+Aviso: Uma versão dos outros repositórios estão embutidos neste repositório.
+
 Esta é a Safira  
 ![Imagem](imagens/projeto.gif)
 
