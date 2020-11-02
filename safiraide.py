@@ -35,7 +35,6 @@ from re import compile
 from sys import version
 
 import webbrowser
-import requests
 import re
 
 try:
@@ -57,7 +56,6 @@ from splash import Splash
 from design import Design
 from bug import Bug
 from log import Log
-
 
 
 class Interface:
@@ -366,10 +364,10 @@ class Interface:
         t = Thread(target=lambda self=self: self.buscar_atualização())
         t.start()
 
-        t_width = self.fr_tela.winfo_screenwidth()
-        t_heigth = self.fr_tela.winfo_screenheight()
+        t_width = self.fr_tela.winfo_screenwidth() - 10
+        t_heigth = self.fr_tela.winfo_screenheight() - 10
 
-        master.geometry("{}x{}+0+0".format(t_width, t_heigth))
+        master.geometry("{}x{}+10+10".format(t_width, t_heigth))
 
         sleep(2)
         self.splash.splash_fim()
@@ -380,6 +378,7 @@ class Interface:
 
         master.deiconify()
         master.update()
+        master.state('zoomed')
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
@@ -738,6 +737,8 @@ class Interface:
         fieldbackground_linha = self.design.dic["linha_terminal"]["fieldbackground"]
 
         self.style_terminal = Style()
+        self.style_terminal.theme_use("clam")
+
         self.style_terminal.element_create("Custom.Treeheading.border", "from", "default")
 
         self.style_terminal.layout("Custom.Treeview.Heading", [
@@ -756,8 +757,13 @@ class Interface:
             foreground=self.design.dic["titulo_terminal"]["foreground"],
             relief=relief_titulo)
 
-        # Linhas
+        # Titulo das colunas
+        self.style_terminal.configure("Custom.Treeview",
+            background=self.design.dic["linha_terminal"]["background"],
+            foreground=self.design.dic["linha_terminal"]["foreground"],
+            fieldbackground=self.design.dic["linha_terminal"]["fieldbackground"])
 
+        # Linhas
         self.style_terminal.configure(style="Custom.Treeview",
             background=background_linha,
             foreground=foreground_linha,
@@ -1171,6 +1177,7 @@ class Interface:
         self.destruir_instancia_terminal()
 
         self.top_janela_terminal = Toplevel(self.fr_tela)
+
         self.top_janela_terminal.protocol("WM_DELETE_WINDOW", lambda event=None: self.destruir_instancia_terminal())
 
         self.top_janela_terminal.grid_columnconfigure(1, weight=1)
@@ -1178,10 +1185,10 @@ class Interface:
         # Ocultar tkinter
         self.top_janela_terminal.withdraw()
 
-        t_width  = self.fr_tela.winfo_screenwidth()
-        t_heigth = self.fr_tela.winfo_screenheight()
+        t_width  = self.master.winfo_screenwidth()
+        t_heigth = self.master.winfo_screenheight()
 
-        self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/720/2), int(t_heigth/450/2)))
+        self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/2-(720/2)), int(t_heigth/2-(450/2))))
         self.top_janela_terminal.deiconify()
         self.fr_tela.update()
         self.tx_terminal = Text(self.top_janela_terminal)
@@ -1247,14 +1254,15 @@ class Interface:
             foreground=self.design.dic["cor_grid_treeview_red_tag"]['foreground'],
             font=self.design.dic["cor_grid_treeview_red_tag"]['font'])
 
-        vsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="vertical", command=self.arvores_grid.yview)
-        hsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="horizontal", command=self.arvores_grid.xview)
+        #vsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="vertical", command=self.arvores_grid.yview)
+        #hsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="horizontal", command=self.arvores_grid.xview)
 
-        self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
+        #self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
+
 
         for coluna in coluna_identificadores:
             # parametro a se analisar = selectmode="#f1a533")
-            self.arvores_grid.heading(coluna, text=coluna.title())
+            self.arvores_grid.heading(coluna, text=coluna.title())#
 
             # selectmode="orange")
             self.arvores_grid.column(coluna, width=tkFont.Font().measure(coluna.title())+20)
@@ -1263,8 +1271,8 @@ class Interface:
         self.et_campo_busca.grid(row=1, column=1, sticky=NSEW)
         self.arvores_grid.grid(row=2, column=1, sticky=NSEW)
 
-        vsroolb.grid(row=2, column=2, sticky='ns')
-        hsroolb.grid(row=3, column=1,  sticky='ew')
+        #vsroolb.grid(row=2, column=2, sticky='ns')
+        #hsroolb.grid(row=3, column=1,  sticky='ew')
 
         self.retornar_variaveis()
         self.lista_terminal_destruir = [
@@ -1275,9 +1283,7 @@ class Interface:
             self.tx_busca,
             self.et_campo_busca,
             fr_fechar_menu,
-            bt_fechar,
-            vsroolb,
-            hsroolb]
+            bt_fechar]
         print('fim')
 
     # ************************************************************************* #
