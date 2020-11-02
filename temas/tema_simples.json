@@ -312,9 +312,9 @@
 
 
     "linha_terminal":{
-        "background":"222222",
+        "background":"#222222",
         "foreground":"#ffffff",
-        "fieldbackground":"222233"
+        "fieldbackground":"#222233"
     },
     "cor_grid_variaveis":{
         "background":"#222222"
