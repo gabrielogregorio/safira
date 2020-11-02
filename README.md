@@ -3,7 +3,7 @@
 ![Imagem](imagens/projeto.gif)
 
 -------
-
+![GitHub estrelas](https://img.shields.io/github/stars/safira-lang/safira-ide)
 ![GitHub last commit](https://img.shields.io/github/last-commit/safira-lang/safira-ide?style=flat-square)
 ![GitHub contributors](https://img.shields.io/github/contributors/safira-lang/safira-ide)
 ![GitHub language count](https://img.shields.io/github/languages/count/safira-lang/safira-ide)
