@@ -8,7 +8,7 @@ from tkinter import FLAT, NSEW
 from tkinter import messagebox
 from tkinter import Tk
 import webbrowser
-import requests
+
 
 from design import Design
 import util.funcoes as funcoes
@@ -26,6 +26,7 @@ class Atualizar():
         self.tela = tela
 
     def obter_versao_mais_recente_dev(self):
+        import requests
         resposta = requests.get("https://safiralang.blogspot.com/p/downloads.html")
         texto = str(resposta.text)
 
