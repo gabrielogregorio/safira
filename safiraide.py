@@ -378,7 +378,16 @@ class Interface:
 
         master.deiconify()
         master.update()
-        master.state('zoomed')
+        try:
+            master.state('zoomed')
+        except Exception as e1:
+
+            print(e1)
+            try:
+                master.wm_attributes('-zoomed', 1)
+            except Exception as e2:
+                print(e2)
+
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
