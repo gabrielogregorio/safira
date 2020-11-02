@@ -1,5 +1,5 @@
 ![PyPI - License](https://img.shields.io/pypi/l/requests?color=blue&label=requests)
-![GitHub estrelas](https://img.shields.io/github/stars/combratec/safira)
+![GitHub estrelas](https://img.shields.io/github/stars/safira-ide/safira-ide)
 
 # Introdução
 
