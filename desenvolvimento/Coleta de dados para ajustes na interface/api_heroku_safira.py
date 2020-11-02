@@ -7,9 +7,6 @@ app = Flask(__name__)
 
 data = []
 
-"""
-Grava os dados de um usuário
-"""
 @app.route('/gravar/', methods=['POST'])
 def gravar_dados():
     dicionario = request.get_json()

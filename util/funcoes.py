@@ -1,4 +1,4 @@
-from json import load, loads
+from json import load, loads, dumps
 
 
 def abrir_arquivo(filename):
@@ -37,5 +37,4 @@ def arquivo_de_configuracoes_interface(chave, novo):
 
     config_json = carregar_json(arquivo)
     config_json[chave] = novo
-    config_json = str(config_json).replace('\'', '\"')
-    salvar_arquivo(arquivo, config_json)
+    salvar_arquivo(arquivo,  str(dumps(config_json, indent=4)))

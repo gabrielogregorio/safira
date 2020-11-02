@@ -637,7 +637,7 @@
     ],
     "cor":"lista"
   },
-  "RemoverItensListas":{
+  "remover_itens_listas":{
     "comando":[
       ["remova ","pt-br"],
       ["remove ","en-us"],
@@ -651,7 +651,7 @@
     ],
     "cor":"lista"
   },
-  "tamanhoDaLista":{
+  "tamanho_da_lista":{
     "comando":[
       ["o tamanho da lista de ","pt-br"],
       ["o tamanho da lista ","pt-br"],
@@ -663,7 +663,7 @@
     ],
     "cor":"lista"
   },
-  "tiverLista":{
+  "tiver_lista":{
     "comando":[
       ["tiver ","pt-br"],
       ["tener ","es"],
@@ -681,6 +681,7 @@
       ["a random number between ","en-us"],
       ["random number between ","en-us"]
     ],
+
     "cor":"tempo"
   },
   "aleatorioEntre":{
@@ -772,7 +773,7 @@
 
 
   },
-  "declaraVariaveis":{
+  "declara_variaveis":{
     "comando":[
       [" has the value of ","en-us"],
       [" tem o valor do ","pt-br"],
@@ -869,28 +870,33 @@
       ["que o usuario digitar","pt-br"],
       ["number that is typed","en-us"],
       ["numero que está escrito","es"],
+      ["uma entrada numerica","pt-br"],
       ["what the user types","en-us"],
       ["o que for digitado","pt-br"],
       ["el usuario a escribir","es"],
       ["whatever is typed","en-us"],
+      ["una entrada numerica","es"],
       ["the user to type","en-us"],
       ["que for digitado","pt-br"],
+      ["entrada numerica","pt-br"],
       ["numero digitado","pt-br"],
       ["el usuario escribe","es"],
+      ["a numeric entry","en-us"],
       ["eso está escrito","es"],
-      ["lo que escribes","es"],
       ["that is typed","en-us"],
       ["what you type","en-us"],
+      ["numeric entry","en-us"],
       ["typed number","en-us"],
       ["lo que escriba", "es"],
+      ["lo que escribes","es"],
       ["numero escrito","es"],
       ["mecanografiado","es"],
       ["user digits","en-us"],
       ["digitado","pt-br"],
       ["entrada","pt-br"],
+      ["typing","en-us"],
       ["input","en-us"],
-      ["typed","en-us"],
-      ["typing","en-us"]
+      ["typed","en-us"]
     ],
     "cor":"tempo"
   },
@@ -1058,14 +1064,14 @@
     ],
     "cor":"lista"
   },
-  "RemoverItensListasInterno":{
+  "remover_itens_listas_interno":{
     "comando":[
       [" da lista de ","pt-br"],
       [" da lista ","pt-br"]
     ],
     "cor":"lista"
   },
-  "tiverInternoLista":{
+  "tiver_interno_lista":{
     "comando":[
       [" na lista de ","pt-br"],
       [" na lista ","pt-br"],
@@ -1073,7 +1079,7 @@
     ],
     "cor":"lista"
   },
-  "incrementeDecremente":{
+  "incremente_decremente":{
     "comando":[
       [" na variavel ","pt-br"],
       [" da variavel ","pt-br"],

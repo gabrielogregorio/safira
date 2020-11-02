@@ -1,0 +1,52 @@
+// Função : Controlar a venda de água (Galão)
+  Galao <- 20000
+  Copo200 <- 0
+  Copo300 <- 0
+  Copo500 <- 0
+  Caixa <- 0
+
+  resp <- "S"
+  enquanto resp == "S" faca {
+
+     limpatela
+     escreval "Total água disponível...: ", Galao
+     escreval ""
+     escreva "Tamanho do copo: <200, 300, 500>ml : "
+    Copo = o numero que o usuario digitar
+     
+     se Galao >= Copo  entao {
+        se Copo == 200 entao {
+           Galao <- Galao - 200
+           Copo200 <- Copo200 + 1
+           Caixa <- Caixa + 0.80
+        }
+        se Copo == 300 entao {
+           Galao <- Galao - 300
+           Copo300 <- Copo300 + 1
+           Caixa <- Caixa + 1.00
+       }
+
+        se Copo == 500 entao {
+           Galao <- Galao - 500
+           Copo500 <- Copo500 + 1
+           Caixa <- Caixa + 2.00
+        }
+     }
+     senao
+    {
+        escreval "Não há água suficiente no Galão!"
+    }
+     
+     
+     escreva "Quer continuar <S/N>? "
+     resp = entrada para maiusculo
+}
+  
+  escreval "RELATÓRIO GERENCIAL"
+  escreval ""
+  escreval "Total Copos de 200ml...: ", Copo200 
+  escreval "Total Copos de 300ml...: ", Copo300
+  escreval "Total Copos de 500ml...: ", Copo500
+  escreval ""
+  escreval "Total em R$ arrecadado.: ", Caixa
+

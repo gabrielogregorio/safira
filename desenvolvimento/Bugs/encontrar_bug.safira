@@ -1,5 +1,0 @@
-nombre = "gabriel"
-desplazar el nombre asignando en name {
-    mostrar name
-    mostrar type name
-}

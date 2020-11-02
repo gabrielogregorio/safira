@@ -1,0 +1,26 @@
+// Função : Cadastrar o nome e a altura de pessoas
+
+lista nome com 4 posicoes
+lista altura com 4 posicoes
+   i = 1
+   //cadastro
+   i <- 1
+   enquanto i < 4 faca {
+      escreva "Qual é seu nome......: "
+      nome na posicao i = entrada
+      escreva "Qual é a sua altura..: "
+      altura na posicao i recebe o numero que o usuario digitar
+
+      i <- i + 1
+}
+
+   limpatela
+
+   //imprimir
+   i <- 1
+   enquanto i <= 4 faca {
+      escreval nome na posicao i, altura na posicao i
+      i <- i + 1
+}
+
+

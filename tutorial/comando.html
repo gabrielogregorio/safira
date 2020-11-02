@@ -1,772 +1,263 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta charset="utf-8">
+   <head>
 
-    <style>
-        .collapsible {
-            background-color: #777;
-            color:white;
-            cursor: pointer;
-            padding: 18px;
-            width: 100%;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 15px;
-        }
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        .active, .collapsible:hover {
-            background-color: #555;
-        }
+      <!-- Bootstrap CSS -->
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+      <title>Tutorial da Safira</title>
+   </head>
 
-        .collapsible:after {
-            content: '+';
-            color: white;
-            font-weight: bold;
-            float: right;
-            margin-left: 5px;
-        }
+   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+      <a class="navbar-brand" href="#">Opções</a>
 
-        .active:after {
-            content: "-";
-        }
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+      </button>
 
-        .content {
-            padding: 0 18px;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.2s ease-out;
-            background-color: #222232;
-        }
-
-    body {
-        background-color: #222232;
-        color:white;
-    }
-    </style>
-</head>
-<body>
-    <h2>Comandos da Safira</h2>
-
- <button class="collapsible">Exibir na tela</button>
- <div class="content">
-    #****** Nome do comando ******#
-        # Exiba na tela<br>
-        <br>
-        #****** Descrição do comando ******#<br>
-        # Exibe alguma coisa na tela, indo para a linha de baixo<br>
-        # Você pode separar valores pela virgula, exemplo:<br>
-        # mostre "Digite sua idade ", variavelNome<br>
-        <br>
-        #****** Uso simples comando ******#<br>
-        <font color="#ffffff">nome = "Kellen"<br>
-        mostre "Bom dia "<br>
-        mostre nome<br>
-        <br>
-        #****** Variações dos comandos ******#<br>
-        # mostre , imprima , escreva , exiba , printf , println&nbsp;<br>
-    </p>
- </div>
+      <div class="collapse navbar-collapse" id="navbarNav">
+         <ul class="navbar-nav">
+            <li class="nav-item active">
+               <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
+            </li>
+         </ul>
+      </div>
+   </nav>
 
 
- <button class="collapsible">Exibir na mesma linha</button>
- <div class="content">
-    <p>
-        #****** Nome do comando ******#<br>
-        # Exiba na mesma linha<br>
-        <br>
-        #****** Descrição do comando ******#<br>
-        # Exibe alguma coisa na tela, sem ir para a linha de baixo<br>
-        # Você pode separar valores pela virgula, exemplo:<br>
-        # mostre "Digite sua idade ", variavelNome<br>
-        <br>
-        #****** Uso simples comando ******#<br>
-        nome = "Kellen"<br>
-        mostre nessa linha "Bom dia "<br>
-        mostre nessa linha nome<br>
-        <br/><br>
-        #****** Variações dos comandos ******#<br>
-        # imprima nessa linha , display , escreva nessa linha , print , exiba nessa linha&nbsp;<br>
-    </p>
- </div>
+   <body>
+
+      <div class="row">
+        <div class="col-3">
+          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+            <a class="nav-link active" id="v-pills-Variaveis-tab" data-toggle="pill" href="#v-pills-Variaveis" role="tab" aria-controls="v-pills-Variaveis" aria-selected="true">Variaveis</a>
+            <a class="nav-link" id="v-pills-Mostrarcoisasnatela-tab" data-toggle="pill" href="#v-pills-Mostrarcoisasnatela" role="tab" aria-controls="v-pills-Mostrarcoisasnatela" aria-selected="false">Mostrar coisas na tela</a>
+            <a class="nav-link" id="v-pills-Sortearnumerosaleatórios-tab" data-toggle="pill" href="#v-pills-Sortearnumerosaleatórios" role="tab" aria-controls="v-pills-Sortearnumerosaleatórios" aria-selected="false">Sortear numeros aleatórios</a>
+            <a class="nav-link" id="v-pills-Incrementarvariáveis-tab" data-toggle="pill" href="#v-pills-Incrementarvariáveis" role="tab" aria-controls="v-pills-Incrementarvariáveis" aria-selected="false">Incrementar variáveis</a>
 
 
- <button class="collapsible">Variáveis</button>
- <div class="content">
-    <p>
-        # VARIAVEIS
-        #****** Nome do comando ******#
-        # Declarar variável
-        <br/>
-        #****** Descrição do comando ******#
-        # Atribui um valor a um nome, exemplo:
-        # idade = 20
-        # Nesta situação, ao usar a palavra idade,
-        # ela terá o valor 20
-        <br/>
-        #****** Uso simples comando ******#
-        <br/>
-        # Variável numérica
-        idade =&nbsp; 20
-        <br/>
-        # Variável texto
-        nome =&nbsp; &nbsp;"CJ"
-        <br/>
-        # Variável booleana (Verdadeira ou falsa)
-        casado = falso
-        <br/>
-        # Você pode realizar testes com as variáveis
-        se casado for igual a falso
-        {
-        &nbsp; &nbsp; mostre "Você não é casado."
-        }
-        <br/>
-        # Você pode ver o tipo de uma variável com o comando tipo
-        mostre "idade é do tipo -&gt; ", o tipo da variavel idade
-        mostre "idade é do nome -&gt; "o tipo da variavel nome
-        mostre "idade é do casado -&gt; "o tipo da variavel casado
-        <br/>
-        #****** Variações dos comandos ******#
-        # recebe , vale , =&nbsp;
-        # o tipo da variavel , tipo da variavel , type of variable , o tipo de , o tipo da , tipo de , tipo da , tipo&nbsp;
-        <br/>
-    </p>
- </div>
+            <a class="nav-link" id="v-pills-Testarcondições-tab" data-toggle="pill" href="#v-pills-Testarcondições" role="tab" aria-controls="v-pills-Testarcondições" aria-selected="false">Testar condições</a>
 
 
- <button class="collapsible">Incrementar/Decrementar variáveis</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Incremente/Decremente</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Aumenta ou diminui o valor de uma variável numérica</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>numero = 1</p>
-    <p>mostre numero</p>
-    <p><br/></p>
-    <p>incremente 15 em numero</p>
-    <p>mostre numero</p>
-    <p><br/></p>
-    <p>decremente 2 em numero</p>
-    <p>mostre numero</p>
-    
-    #****** Variações dos comandos ******#</p>
-    # decremente</p>
-    # incremente</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # na variavel , da variavel , no , na , em</p>
-    <br/>
-    <p><br/></p>
- </div>
+            <a class="nav-link" id="v-pills-LoopEnquanto-tab" data-toggle="pill" href="#v-pills-LoopEnquanto" role="tab" aria-controls="v-pills-LoopEnquanto" aria-selected="false">Loop Enquanto</a>
+            <a class="nav-link" id="v-pills-PercorrerListas-tab" data-toggle="pill" href="#v-pills-PercorrerListas" role="tab" aria-controls="v-pills-PercorrerListas" aria-selected="false">Percorrer Listas</a>
+            <a class="nav-link" id="v-pills-LoopRepitaxvezes-tab" data-toggle="pill" href="#v-pills-LoopRepitaxvezes" role="tab" aria-controls="v-pills-LoopRepitaxvezes" aria-selected="false">Loop Repita x vezes</a>
+            <a class="nav-link" id="v-pills-ManipularListas-tab" data-toggle="pill" href="#v-pills-ManipularListas" role="tab" aria-controls="v-pills-ManipularListas" aria-selected="false">Manipular Listas</a>
+            <a class="nav-link" id="v-pills-Loopparacada-tab" data-toggle="pill" href="#v-pills-Loopparacada" role="tab" aria-controls="v-pills-Loopparacada" aria-selected="false">Loop para cada</a>
+            <a class="nav-link" id="v-pills-PercorrerTextos-tab" data-toggle="pill" href="#v-pills-PercorrerTextos" role="tab" aria-controls="v-pills-PercorrerTextos" aria-selected="false">Percorrer Textos</a>
+
+            <a class="nav-link" id="v-pills-Lerconteudodigitadopelousuário-tab" data-toggle="pill" href="#v-pills-Lerconteudodigitadopelousuário" role="tab" aria-controls="v-pills-Lerconteudodigitadopelousuário" aria-selected="false">Ler conteudo digitado pelo usuário</a>
+
+            <a class="nav-link" id="v-pills-ManipularArquivos-tab" data-toggle="pill" href="#v-pills-ManipularArquivos" role="tab" aria-controls="v-pills-ManipularArquivos" aria-selected="false">Manipular Arquivos</a>
+            <a class="nav-link" id="v-pills-Bibliotecas-tab" data-toggle="pill" href="#v-pills-Bibliotecas" role="tab" aria-controls="v-pills-Bibliotecas" aria-selected="false">Bibliotecas</a>
+
+            <a class="nav-link" id="v-pills-Esperarporumtempo-tab" data-toggle="pill" href="#v-pills-Esperarporumtempo" role="tab" aria-controls="v-pills-Esperarporumtempo" aria-selected="false">Esperar por um tempo</a>
+            <a class="nav-link" id="v-pills-ManipulaçãodeStrings-tab" data-toggle="pill" href="#v-pills-ManipulaçãodeStrings" role="tab" aria-controls="v-pills-ManipulaçãodeStrings" aria-selected="false">Manipulação de Strings</a>
+            <a class="nav-link" id="v-pills-Criaremanipularfunções-tab" data-toggle="pill" href="#v-pills-Criaremanipularfunções" role="tab" aria-controls="v-pills-Criaremanipularfunções" aria-selected="false">Funções</a>
+            <a class="nav-link" id="v-pills-Tentarexecutarumcomando-tab" data-toggle="pill" href="#v-pills-Tentarexecutarumcomando" role="tab" aria-controls="v-pills-Tentarexecutarumcomando" aria-selected="false">Tratar erros</a>
+            <a class="nav-link" id="v-pills-Outros-tab" data-toggle="pill" href="#v-pills-Outros" role="tab" aria-controls="v-pills-Outros" aria-selected="false">Outros</a>
+          </div>
+        </div>
 
 
- <button class="collapsible">Testar uma condição</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Condicionais</p>
-    <p><br/></p>
-    #****** Descrição do comando ******#</p>
-    # Testa se uma ou mais condições são verdadeiras, a primeira que atender</p>
-    # será executada, as outras serão ignoradas, mesmo que também</p>
-    # sejam verdadeiras. Sempre será necessário testar a condição "se ",</p>
-    # depois você pode testar ou não a condição "senao se " ou a "senao "</p>
-    <p><br/></p>
-    <p><br/></p>
-    #****** Uso simples comando ******#</p>
-    <p>se 1 for igual a 1</p>
-    <p>{</p>
-    mostre "A condição é verdadeira"</p>
-    <p>}</p>
-    <p>senao se 2 for diferente de 10 ou "teste" for igual a "teste"</p>
-    <p>{</p>
-    mostre "Essa condição é verdadeira e a de cima é falsa"</p>
-    <p>}</p>
-    <p>senao&nbsp;</p>
-    <p>{</p>
-    mostre "Nenhuma das condições são verdadeiras"</p>
-    <p>}</p>
-    <p><br/></p>
-    
-    #****** Variações dos comandos ******#</p>
-    # se, quando, if</p>
-    # senao se, else if</p>
-    # senao, else</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # for maior ou igual a , &lt;=&nbsp;</p>
-    # for menor ou igual a , &gt;=&nbsp;</p>
-    # for menor que , &lt;</p>
-    # for maior que , &gt;&nbsp;</p>
-    # for diferente de , !=</p>
-    # for igual a , ==&nbsp;</p>
-    # true , verdadeiro , verdadeira , verdade</p>
-    # falso , mentira , false</p>
-    
-    #****** Subcomandos de junção de multiplos testes ******#</p>
-    # e , and , &amp;&amp;</p>
-    # ou , or&nbsp; , ||</p>
-    <p><br/></p>
- </div>
-
-
- <button class="collapsible">Enquanto</button>
- <div class="content">
-    <p><br/></p>
-    #****** Nome do comando ******#</p>
-    # Comando Enquanto</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Repete um bloco de intrução enquanto uma condição for verdadeira</p>
-    # Aviso, OS TESTES REALIZADOS obedecem as mesmas opções</p>
-    # do comando de condicionais. Consulte esse comando</p>
-    # para ter mais informações</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>opcao = 1</p>
-    <p>enquanto opcao for diferente de 0</p>
-    <p>{</p>
-    <p>&nbsp; &nbsp; limpar a tela</p>
-    mostre "Escolha uma opção"</p>
-    mostre "0 - Sair "</p>
-    mostre "1 - Consulta Saldo "</p>
-    mostre "2 - Consulta CPF "</p>
-    mostre "3 - Consulta Identidade "</p>
-    <p><br/></p>
-    <p>&nbsp; &nbsp; opcao recebe o numero que o usuario digitar</p>
-    <p>}</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # enquanto , while&nbsp;</p>
-    <p><br/></p>
- </div>
-
- <button class="collapsible">Para cada</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Para cada</p>
-    <p><br/></p>
-    #****** Descrição do comando ******#</p>
-    # Cria uma variável ou modifica o valor de uma</p>
-    # Atribuindo dinamicamente o valor de uma variável</p>
-    # Executando ao mesmo tempo um laço</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>para cada x de 0 ate 10</p>
-    <p>{</p>
-    mostre "X vale -&gt; ", x</p>
-    <p>}</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # para cada , for</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # de</p>
-    # ate&nbsp;</p>
-    <p><br/></p>
- </div>
-
- <button class="collapsible">Repetir</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Repita</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Espera durante um intervalo definido</p>
-    &nbsp; &nbsp; &nbsp;&nbsp;</p>
-    #****** Uso simples comando ******#</p>
-    <p>repita 10 vezes</p>
-    <p>{</p>
-    mostre "Repetindo todo o bloco 10 vezes"</p>
-    <p>}</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # repita , repitir&nbsp;</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # vezes , vez&nbsp;</p>
-    <p><br/></p>
-    <p><br/></p>
- </div>
+        <div class="col-9">
+          <div class="tab-content" id="v-pills-tabContent">
+            <div class="tab-pane fade show active" id="v-pills-PercorrerTextos" role="tabpanel" aria-labelledby="v-pills-PercorrerTextos-tab">Percorrer Textos</div>
+            <div class="tab-pane fade" id="v-pills-ManipulaçãodeStrings" role="tabpanel" aria-labelledby="v-pills-ManipulaçãodeStrings-tab">Manipulação de Strings</div>
+            <div class="tab-pane fade" id="v-pills-Incrementarvariáveis" role="tabpanel" aria-labelledby="v-pills-Incrementarvariáveis-tab">Incrementar variáveis</div>
+            <div class="tab-pane fade" id="v-pills-PercorrerListas" role="tabpanel" aria-labelledby="v-pills-PercorrerListas-tab">Percorrer Listas</div>
+            <div class="tab-pane fade" id="v-pills-Mostrarcoisasnatela" role="tabpanel" aria-labelledby="v-pills-Mostrarcoisasnatela-tab">Mostrar coisas na tela</div>
+            <div class="tab-pane fade" id="v-pills-Testarcondições" role="tabpanel" aria-labelledby="v-pills-Testarcondições-tab">Testar condições</div>
+            <div class="tab-pane fade" id="v-pills-Loopparacada" role="tabpanel" aria-labelledby="v-pills-Loopparacada-tab">Loop para cada</div>
+            <div class="tab-pane fade" id="v-pills-Variaveis" role="tabpanel" aria-labelledby="v-pills-Variaveis-tab">Variaveis</div>
+            <div class="tab-pane fade" id="v-pills-Sortearnumerosaleatórios" role="tabpanel" aria-labelledby="v-pills-Sortearnumerosaleatórios-tab">Sortear numeros aleatórios</div>
+            <div class="tab-pane fade" id="v-pills-Lerconteudodigitadopelousuário" role="tabpanel" aria-labelledby="v-pills-Lerconteudodigitadopelousuário-tab">Ler conteudo digitado pelo usuário</div>
+            <div class="tab-pane fade" id="v-pills-ManipularArquivos" role="tabpanel" aria-labelledby="v-pills-ManipularArquivos-tab">Manipular Arquivos</div>
+            <div class="tab-pane fade" id="v-pills-Bibliotecas" role="tabpanel" aria-labelledby="v-pills-Bibliotecas-tab">Bibliotecas</div>
+            <div class="tab-pane fade" id="v-pills-LoopEnquanto" role="tabpanel" aria-labelledby="v-pills-LoopEnquanto-tab">Loop Enquanto</div>
+            <div class="tab-pane fade" id="v-pills-Esperarporumtempo" role="tabpanel" aria-labelledby="v-pills-Esperarporumtempo-tab">Esperar por um tempo</div>
+            <div class="tab-pane fade" id="v-pills-ManipularListas" role="tabpanel" aria-labelledby="v-pills-ManipularListas-tab">Manipular Listas</div>
+            <div class="tab-pane fade" id="v-pills-LoopRepitaxvezes" role="tabpanel" aria-labelledby="v-pills-LoopRepitaxvezes-tab">Loop Repita x vezes</div>
+            <div class="tab-pane fade" id="v-pills-Criaremanipularfunções" role="tabpanel" aria-labelledby="v-pills-Criaremanipularfunções-tab">Funções</div>
+            <div class="tab-pane fade" id="v-pills-Tentarexecutarumcomando" role="tabpanel" aria-labelledby="v-pills-Tentarexecutarumcomando-tab">Tratar erros</div>
+            <div class="tab-pane fade" id="v-pills-Outros" role="tabpanel" aria-labelledby="v-pills-Outros-tab">Outros</div>
+          </div>
+        </div>
+      </div>
 
 
 
- <button class="collapsible">Funções</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Funções</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Cria um bloco de intruções com um nome que pode ser</p>
-    # executado em qualquer parte do código</p>
-    # através da palavra atribuida</p>
-    
-    #****** Uso simples comando ******#</p>
-    # Criando uma função</p>
-    <p>funcao mostraArvore</p>
-    <p>{</p>
-    mostre "&nbsp; &nbsp; *&nbsp; &nbsp; "</p>
-    mostre "&nbsp; &nbsp;***&nbsp; &nbsp;"</p>
-    mostre "&nbsp; *****&nbsp; "</p>
-    mostre " ******* "</p>
-    mostre "&nbsp; &nbsp; *&nbsp; &nbsp; "</p>
-    <p>}</p>
-    # Chamando a função. Você pode chamar ela&nbsp;</p>
-    # Quantas vezes e onde quiser</p>
-    <p>mostraArvore</p>
-    
-    # Você também pode criar uma função com parâmetros</p>
-    <p>funcao calculaMedia recebe parametros nota1, nota2</p>
-    <p>{</p>
-    mostre "Sua média final é ", (nota1 + nota2) / 2</p>
-    <p>}</p>
-    <p><br/></p>
-    <p>calculaMedia passando parametros 9.8, 7.5</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # function , funcao , def&nbsp;</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # recebe parametros</p>
-    # passando parametros , parametros , passando parametro , passando , parametro&nbsp;</p>
-    
-    <p><br/></p>
- </div>
+
+         <div class="col-md-10">
+            <div class="tab-pane fade show active" id="OlaMundo2" role="tabpanel" aria-labelledby="OlaMundo2-tab">
+               <h1>Como exibir algo na tela</h1>
+               <ul class="nav nav-tabs" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link active" id="Safira-tab" data-toggle="tab" href="#Safira" role="tab" aria-controls="Safira" aria-selected="true">Safira</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link" id="Python-tab" data-toggle="tab" href="#Python" role="tab" aria-controls="Python" aria-selected="false">Python</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link" id="CSharp-tab" data-toggle="tab" href="#CSharp" role="tab" aria-controls="CSharp" aria-selected="false">CSharp</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link" id="Java-tab" data-toggle="tab" href="#Java" role="tab" aria-controls="Java" aria-selected="false">Java</a>
+                  </li>
+                  <li class="nav-item" role="presentation">
+                     <a class="nav-link" id="Javascript-tab" data-toggle="tab" href="#Javascript" role="tab" aria-controls="Javascript" aria-selected="false">Javascript</a>
+                  </li>
+               </ul>
+               <div class="tab-content" id="myTabContent">
+                  <div class="tab-pane fade show active" id="Safira" role="tabpanel" aria-labelledby="Safira-tab">
+                     <h2>Mostrar algo na tela</h2>
+
+                     <p>Exibe alguma coisa na tela, um texto, um número ou o valor de uma variável.</p>
+
+                     <pre><code>
+# Declaramos uma variável
+nome = "Safira"
+
+# Mostra o valor da variável nome na tela
+mostre nome
+
+# Mostra o valor de um número
+mostre 10
+
+# Mostra vários tipos de variáveis diferentes
+mostre "Nome: ", nome, " Idade: ", 25 
+                     </code></pre>
+
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">
+<pre>Safira
+10.0
+Nome: Safira Idade: 25.0</pre>
+
+</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+
+
+                     <p>Se você notou, cada texto vem em uma linha, e se você quisesse manter tudo na mesma linha você pode usar o comando</p>
+
+                     <pre><code>
+# Declaramos uma variável
+nome = "Safira"
+
+# Mostra as variáveis em uma mesma linha
+mostre nessa linha "Nome: "
+mostre nessa linha nome
+mostre nessa linha " Idade: "
+mostre nessa linha 25
+
+                     </code></pre>
 
 
 
- <button class="collapsible">Esperar</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Aguarde</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Espera durante um intervalo definido</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>mostre "Olá, amigo(a)!"</p>
-    <p>espere 2 segundos</p>
-    <p>mostre "Como você está?"</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # espere , aguarde&nbsp;</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # milisegundos, milisegundo, segundos, segundo, ms, s</p>
-    <p><br/></p>
- </div>
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">
+<pre>Nome: Safira Idade: 25.0</pre>
 
+</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     
 
- <button class="collapsible">Número aleatório</button>
- <div class="content">
-    # ALEATORIO</p>
-    #****** Nome do comando ******#</p>
-    # Aleatório</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Sorteia um número aleatório</p>
-    # Os valores podem ser variáveis</p>
-    # ou resultados de outros comandos</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>numeroSorteado = um numero aleatorio entre 10 e 20</p>
-    <p>mostre numeroSorteado</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # um numero aleatorio entre , numero aleatorio entre</p>
-    
-    #****** Variações dos subcomandos ******#</p>
-    # e</p>
-    <br/>
- </div>
+                  </div>
+                  <div class="tab-pane fade" id="Python" role="tabpanel" aria-labelledby="Python-tab">
+                     <code>print("Olá mundo")</code>
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">
 
+</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Velocidade: 0.25 milisegundos</p>
+                  </div>
+                  <div class="tab-pane fade" id="CSharp" role="tabpanel" aria-labelledby="CSharp-tab">
+                     <code>Console.println("Olá mundo");</code>
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">Olá mundo</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Velocidade: 0.04 milisegundos</p>
+                  </div>
+                  <div class="tab-pane fade" id="Java" role="tabpanel" aria-labelledby="Java-tab">
+                     <code>System.out.println("Olá mundo");</code>
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">Olá mundo</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Velocidade: 0.1 milisegundos</p>
+                  </div>
+                  <div class="tab-pane fade" id="Javascript" role="tabpanel" aria-labelledby="Javascript-tab">
+                     <code>console.log("Olá mundo");</code>
+                     <div class="row">
+                        <div class="col-sm-6">
+                           <div class="card">
+                              <div class="card-header">
+                                 Saída
+                              </div>
+                              <div class="card-body">
+                                 <h5 class="card-title">Olá mundo</h5>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                     <p>Velocidade: 0.3 milisegundos</p>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </div>
 
- <button class="collapsible">Ler o que o usuário digitar</button>
- <div class="content">
-    # DIGITADO</p>
-    #****** Nome do comando ******#</p>
-    # Digitado</p>
-    
-    #****** Descrição do comando ******#</p>
-    # Recebe um valor que o usuario digitar</p>
-    
-    #****** Uso simples comando ******#</p>
-    <p>mostre nessa linha "Digite seu nome: "</p>
-    <p>nome = o que o usuario digitar</p>
-    <p><br/></p>
-    <p>mostre nessa linha "Digite sua idade: "</p>
-    <p>idade = o numero que o usuario digitar</p>
-    <p><br/></p>
-    <p>mostre nome, " sua idade é ", idade</p>
-    <p><br/></p>
-    #****** Variações dos comandos ******#</p>
-    # o numero que o usuario digitar , numero que o usuario digitar , o numero que for digitado, numero que for digitado , numero digitado
-    
-    # o que o usuario digitar , que o usuario digitar , o que for digitado , que for digitado , digitado , input , entrada
-    <br/>
- </div>
-
-
-
- <button class="collapsible">Trabalhando com listas</button>
- <div class="content">
-    <p><br/></p>
-    #******************************* Nome dos comandos *********************#</p>
-    # Manipulação e criação de listas</p>
-    
-    #******************************* Descrição dos comandos ****************#</p>
-    # Diversos Comandos para manipular listas</p>
-    
-    #******************************* Uso simples dos comandos **************#</p>
-    <p><br/></p>
-    <p><br/></p>
-    # Cria uma lista chamada numeros com 10 posições de texto</p>
-    <p>lista de numeros com 100 posicoes</p>
-    <p><br/></p>
-    # Declarar uma lista</p>
-    <p>lista de nomes recebe "gabriel", "Maria", "Julia"</p>
-    <p>mostre nomes</p>
-    <p><br/></p>
-    # Adiciona um valor em uma posição</p>
-    <p>lista de nomes na posicao 2 recebe "gregório"</p>
-    <p>mostre nomes</p>
-    <p><br/></p>
-    <p>lista de opcoes recebe "opção1", "opção3"</p>
-    <p>mostre opcoes</p>
-    <p><br/></p>
-    # Adicionar um valor em uma posição especifica</p>
-    # não sobrescrevendo o valor</p>
-    <p>adicione "opção2" na posicao 2 da lista de opcoes</p>
-    <p>mostre opcoes</p>
-    <p><br/></p>
-    # Adicionar algo no final de uma lista</p>
-    <p>adicione "opção4" no final da lista de opcoes</p>
-    <p>mostre opcoes</p>
-    <p><br/></p>
-    # Adicionar algo na lista de nomes</p>
-    <p>adicione "opção5" na lista de opcoes</p>
-    <p>mostre opcoes</p>
-    
-    # Adicionar algo no inicio da lista</p>
-    <p>adicione "opção0" no inicio da lista de opcoes</p>
-    <p><br/></p>
-    # Remover um item da lista</p>
-    <p>remova "opção5" da lista de opcoes</p>
-    <p><br/></p>
-    <p><br/></p>
-    <p><br/></p>
-    <p><br/></p>
-    # Retornar um valor em uma posição</p>
-    <p>mostre lista de opcoes na posicao 1</p>
-    <p><br/></p>
-    <p># Verifica se tem um valor na lista</p>
-    <p>se tiver "opção2" na lista de opcoes</p>
-    <p>{</p>
-    <p>&nbsp; &nbsp; remova "opção2" da lista de opcoes</p>
-    mostre opcoes</p>
-    <p>}</p>
-    <p><br/></p>
-    # Retorna a quantidade de itens de uma lista</p>
-    <p>mostre " A lista de nomes tem ", o tamanho da lista de nomes, " posições"</p>
-    <p>mostre " A lista de opcoes tem ", o tamanho da lista de opcoes, " posições"</p>
-    <p>mostre " A lista de números tem ", o tamanho da lista de numeros, " posições"</p>
-    
-    #****************************** Variações dos comandos *****************#</p>
-    # --------------------------- Cria uma lista x posições ----------------#</p>
-    # * lista de</p>
-    # * lista</p>
-    
-    # * com</p>
-    
-    # * posicoes</p>
-    
-    
-    # ------------------------- Declarar uma lista--------------------------#</p>
-    # * lista de</p>
-    # * lista</p>
-    
-    # * recebe</p>
-    # * com</p>
-    
-    
-    # ---------------- Sobrescrever um valor em uma posição da lista -------#</p>
-    # * lista de</p>
-    # * lista</p>
-    
-    # * na posicao</p>
-    
-    # * recebe</p>
-    # * com</p>
-    
-    
-    # --------------- Adicionar um valor em uma posição especifica ---------#</p>
-    # * adicione</p>
-    
-    # * na posicao</p>
-    
-    # * da lista de</p>
-    
-    
-    # ------------------ Adicionar algo no final de uma lista --------------#</p>
-    # * adicione</p>
-    
-    # * no final da lista de</p>
-    # * no final a lista de</p>
-    # * no final na lista</p>
-    
-    
-    # ------------------ Adicionar algo no inicio da lista -----------------#</p>
-    # * adicione</p>
-    
-    # * no inicio da lista de</p>
-    # * no inicio a lista de</p>
-    # * no inicio na lista</p>
-    
-    
-    # ------------------- Adicionar algo na lista de nomes -----------------#</p>
-    # * adicione</p>
-    
-    # * na lista de</p>
-    # * da lista de</p>
-    # * a lista de</p>
-    # * na lista</p>
-    # * a lista</p>
-    
-    
-    # --------------------- Remover um item da lista -----------------------#</p>
-    # * remova</p>
-    
-    # * da lista de</p>
-    # * da lista</p>
-    
-    
-    # ----------------- Retornar um valor em uma posição -------------------#</p>
-    # * lista de</p>
-    # * lista</p>
-    
-    # * na posicao</p>
-    
-    
-    # ---------------- Verifica se tem um valor na lista -------------------#</p>
-    # * tiver</p>
-    
-    # * na lista de</p>
-    # * na lista</p>
-    # * em</p>
-    
-    
-    # ----------- Retorna a quantidade de itens de uma lista ---------------#</p>
-    # * o tamanho da lista de</p>
-    # * o tamanho da lista</p>
-    # * tamanho da lista de</p>
-    # * tamanho da lista</p>
-    <p><br/></p>
-    <p><br/></p>
- </div>
-
-
- <button class="collapsible">Manipulação de arquivos</button>
- <div class="content">
-    #******************************* Nome dos comandos **************************#</p>
-    # Manipulação de arquivos</p>
-    
-    #******************************* Descrição dos comandos **************************#</p>
-    # Diversos Comandos para manipular arquivos</p>
-    # Criação</p>
-    # Inserção de texto</p>
-    # Leitura</p>
-    # Verificar se existe</p>
-    # Remover</p>
-    
-    #******************************* Uso simples dos comandos **************************#</p>
-    # Criar um arquivo qualquer</p>
-    <p>crie o arquivo "arquivo.txt"</p>
-    <p><br/></p>
-    # Escrever em um arquivo</p>
-    <p>adicione "Texto qualquer" no arquivo "arquivo.txt"</p>
-    <p><br/></p>
-    # Sobrescrever por completo um arquivo</p>
-    <p>sobrescreva "Iai, tudo bem amigo" no arquivo "arquivo.txt"</p>
-    <p><br/></p>
-    # Ler o conteudo do arquivo</p>
-    <p>conteudo = leia o texto do arquivo "arquivo.txt"</p>
-    <p>mostre conteudo</p>
-    <p><br/></p>
-    # Verificar se um arquivo existe ou não</p>
-    <p>se o arquivo "arquivoQUeNaoExiste.txt" nao existe</p>
-    <p>{</p>
-    mostre "Esse arquivo não existe"</p>
-    <p>}</p>
-    <p><br/></p>
-    # Deletar um arquivo</p>
-    <p>se o arquivo "arquivo.txt" existe</p>
-    <p>{</p>
-    mostre "Esse arquivo Existe e será removido"</p>
-    <p>&nbsp; &nbsp; delete o arquivo "arquivo.txt"</p>
-    <p>}</p>
-    <p><br/></p>
-    <p>
-    #****************** Variações dos comandos ****************#</p>
-    # -------------------------------- Criação de arquivo -------------------------- #</p>
-    # * crie o arquivo</p>
-    # * create the file</p>
-    # * crea el archivo</p>
-    
-    # --------------------------------- Adição de texto ----------------------------- #</p>
-    # * escreva&nbsp;</p>
-    # * adicione&nbsp;</p>
-    # * write&nbsp;</p>
-    # * add&nbsp;</p>
-    # * escriba&nbsp;</p>
-    # * agregue&nbsp;</p>
-    
-    # * no arquivo</p>
-    # * in the file</p>
-    # * en el archivo</p>
-    # * to the</p>
-    # * al archivo</p>
-    
-    
-    # ---------------------------- Sobrescrever o arquivo --------------------------- #</p>
-    # * sobrescreva</p>
-    # * sobrescrever</p>
-    # * overwrite</p>
-    # * sobrescriba</p>
-    
-    # * no arquivo</p>
-    # * en el archivo</p>
-    # * in the</p>
-    
-    # * file</p>
-    
-    # ------------------------- Ler todo o texto do arquivo ----------------------#</p>
-    # * leia o texto do arquivo</p>
-    # * get the text from the file</p>
-    # * obtenha o texto do arquivo</p>
-    # * read the text of the file</p>
-    # * obtener el texto del archivo</p>
-    # * lea el texto del archivo</p>
-    # * leia o arquivo</p>
-    # * read the file</p>
-    # * lea el archivo</p>
-    
-    # ---------------------------- Verifica se um arquivo existe ----------------#</p>
-    # COMANDO</p>
-    # * o arquivo</p>
-    # * the file</p>
-    # * el archivo</p>
-    
-    # * nao existe</p>
-    # * not exists</p>
-    
-    # * existe</p>
-    # * exists</p>
-    
-    # ----------------------------------- Deletar um arquivo ----------------------- #</p>
-    # * delete o arquivo</p>
-    # * remova o arquivo</p>
-    # * exclua o arquivo</p>
-    # * delete the file</p>
-    # * eliminar el archivo</p>
-    <p>
-    <p><br/></p>
- </div>
-
-
- <button class="collapsible">Importar</button>
- <div class="content">
-    #****** Nome do comando ******#</p>
-    # Importação</p>
-    
-    
-    #****** Descrição do comando ******#</p>
-    # Carrega e executa um código inteiro na linguagem Feynman</p>
-    <p><br/></p>
-    <p><br/></p>
-    #****** Preparação do ambiente ******#</p>
-    # Criação de um arquivo, que conterá um código na linguagem Feynman</p>
-    <p>se o arquivo "biblioteca.fyn" existe</p>
-    <p>{</p>
-    <p>&nbsp; &nbsp; delete o arquivo "biblioteca.fyn"</p>
-    <p>}</p>
-    <p><br/></p>
-    <p>crie o arquivo "biblioteca.fyn"</p>
-    <p>adicione "mostre 123" no arquivo "biblioteca.fyn"</p>
-    <p><br/></p>
-    <p><br/></p>
-    #****** Uso simples comando ******#</p>
-    <p>importe a biblioteca biblioteca</p>
-    <p>importe biblioteca</p>
-    <p>import&nbsp; biblioteca</p>
-    <p><br/></p>
- </div>
-
- 
- <button class="collapsible">Tente executar algo</button>
- <div class="content">
-    <div>#****** Nome do comando ******#</div>
-    <div># Tente</div>
-    <div><br/></div>
-    <div>#****** Descrição do comando ******#</div>
-    <div># Executa um comando, se ele for executado com sucesso&nbsp;</div>
-    <div># ou com erros ele irá executar os blocos especificos. O comando&nbsp;</div>
-    <div># tente deve ser o primeiro e é obrigatório, os outros são opcionais</div>
-    <div># e podem estar em qualquer ordem</div>
-    <div><br/></div>
-    <div><br/></div>
-    <div>#****** Uso simples comando ******#</div>
-    <div>tente</div>
-    <div>{</div>
-    <div>&nbsp; &nbsp; mostre "Isso não deve provocar um erro"</div>
-    <div>&nbsp; &nbsp; isso não faz sentido e deve provocar um erro</div>
-    <div>}</div>
-    <div>se der erro</div>
-    <div>{</div>
-    <div>&nbsp; &nbsp; mostre "Aconteceu um erro"</div>
-    <div>}</div>
-    <div>senao der erro</div>
-    <div>{</div>
-    <div>&nbsp; &nbsp; mostre "Não aconteceu um erro"</div>
-    <div>}</div>
-    <div>em qualquer caso</div>
-    <div>{</div>
-    <div>&nbsp; &nbsp; mostre "Deu um erro ou não"</div>
-    <div>}</div>
-    <div><br/></div>
-    <div><br/></div>
-    <div>#****** Variações dos comandos ******#</div>
-    <div># tente , try</div>
-    <div># se der erro , except</div>
-    <div># senao der erro</div>
-    <div># em qualquer caso , finalmente , finally</div>
-    <div><br/></div>
-    <p></p>
- </div>
-
-    <script>
-        var coll = document.getElementsByClassName("collapsible");
-        var i;
-
-        for (i = 0; i < coll.length; i++) {
-            coll[i].addEventListener("click", function() {
-
-                this.classList.toggle("active");
-                var content = this.nextElementSibling;
-                
-                if (content.style.maxHeight){
-                    content.style.maxHeight = null;
-                } else {
-                    content.style.maxHeight = content.scrollHeight + "px";
-                } 
-
-            });
-
-        }
-    </script>
-
-</body>
+      <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
+      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
+   </body>
 </html>

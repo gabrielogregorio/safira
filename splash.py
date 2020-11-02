@@ -5,6 +5,12 @@ from tkinter import NSEW
 from tkinter import Tk
 from time import sleep
 
+dicas = {
+    'mostre':
+    {
+        "pt-br":"Se você colocar alguma coisa entre aspas, ela se tornará um texto, mesmo que seja um numero"
+    }
+}
 
 class Splash:
     def __init__(self, design):
@@ -30,8 +36,8 @@ class Splash:
         self.frame_splash.grid_columnconfigure(0, weight=1)
 
         self.fr_splash.configure(background=self.design.dic["cor_intro"]["background"])
-        self.l1_splash.configure(text=" COMBRATEC ", font=("Lucida Sans", 90), bd=80)
-        self.l2_splash.configure(text="Safira IDE beta 0.3", font=("Lucida Sans", 12))
+        self.l1_splash.configure(text=" Safira B0.3", font=("Lucida Sans", 90), bd=80)
+        self.l2_splash.configure(text=dicas['mostre']['pt-br'], font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
@@ -71,18 +77,11 @@ class Splash:
 if __name__ == '__main__':
     from design import Design
 
-    tela_splash = Tk()
-    tela_splash.withdraw()
-    tela_splash.overrideredirect(1)
-    tela_splash.rowconfigure(1, weight=1)
-    tela_splash.grid_columnconfigure(1, weight=1)
-
     # Obter o Design de interfaces
     design = Design()
     design.update_design_dic()
 
-    sp = Splash(tela_splash, design)
+    sp = Splash(design)
     sleep(5)
     sp.splash_fim()
 
-    tela_splash.mainloop()

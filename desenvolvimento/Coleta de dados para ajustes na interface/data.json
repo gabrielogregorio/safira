@@ -57,8 +57,12 @@
        "quantidade_erros_interface":[
        	    "timstamp"
        ]
+    },
+
+    "outras_configs": {
+	    "tema": "",
+	    "sintaxe": "",
+	    "fonte": "",
+	    "idioma": ""
     }
-}                "tema": "",
-                "sintaxe": "",
-                "fonte": "",
-                "idioma": "",
+}

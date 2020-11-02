@@ -1,5 +1,0 @@
-name = "gabriel"
-
-if name  == "gabriel" {
-    print "text"
-} 

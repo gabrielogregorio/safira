@@ -1,1 +1,8 @@
-{"tema": "tema_escuro.json", "sintaxe": "sintaxe_escuro.json", "fonte": "Garuda", "logs": "ativado", "abertos": [], "idioma": "pt-br"}
+{
+    "tema": "tema_simples.json",
+    "sintaxe": "sintaxe_simples.json",
+    "fonte": "Garuda",
+    "logs": "ativado",
+    "abertos": [],
+    "idioma": "pt-br"
+}

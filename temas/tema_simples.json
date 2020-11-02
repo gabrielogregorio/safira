@@ -262,6 +262,7 @@
         "background":"#191913",
         "foreground":"#f1f1f1",
         "highlightthickness":0,
+        "insertbackground":"#ffffff",
         "font":[
             "Monospace",
             13

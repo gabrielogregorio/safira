@@ -1,0 +1,45 @@
+// Função : Mostrar o dia da semana
+//Crie um algoritmo que o usuário digita um dia do mês corrente e o algoritmo calcule o dia da semana.
+
+dia = 0
+auxDia = 0
+
+escreva "Digite um dia do mês de Maio de 2020..: "
+dia = o numero que o usuario digitar
+
+   auxDia <- dia
+
+   enquanto auxDia >= 7 faca {
+      auxDia <- auxDia - 7
+   
+
+
+   se auxDia == 1 entao {
+      escreval "O dia ", dia, " é uma sexta-feira."
+   }
+
+   se auxDia == 2 entao {
+      escreval "O dia ", dia, " é um sábado."
+   }
+  
+   se auxDia == 3 entao {
+      escreval "O dia ", dia, " é um domingo."
+   }
+
+   se auxDia == 4 entao {
+      escreval "O dia ", dia, " é um segunda-feira."
+  }
+
+   se auxDia == 5 entao {
+      escreval "O dia ", dia, " é um terça-feira."
+     break
+ }
+   se auxDia == 6 entao {
+      escreval "O dia ", dia, " é um quarta-feira."
+}
+   se auxDia == 7 entao {
+      escreval "O dia ", dia, " é um quinta-feira."
+}
+   }
+
+

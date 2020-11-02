@@ -1,0 +1,35 @@
+#algoritmo "Ordenacao"
+# Função : Ordenar um vetor de números/letras
+# Autor : Ronnie
+# Data : 02/06/2020
+lista numero com 4 posicoes
+
+i = 1
+enquanto i <= 4 faca {
+   mostre nessa linha "Digite um número...: "
+   numero na posicao i recebe o numero que for digitado
+   i = i + 1
+}
+   
+#ordenação
+i <- 1
+enquanto i < 4 faca {
+   j = i + 1
+  enquanto j <= 4 faca {
+      se numero na posicao i > numero na posicao j entao {
+        aux = numero na posicao i
+        numero na posicao i = numero na posicao j
+        numero na posicao j = aux
+     }
+     incremente 1 em j
+  }
+   incremente 1 em i
+}
+   
+# impressão
+i = 1
+enquanto i <= 4 faca {
+   mostre numero na posicao i
+   incremente 1 em i
+}
+

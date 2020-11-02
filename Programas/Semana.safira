@@ -1,0 +1,46 @@
+#algoritmo "DiadaSemana"
+#Função : Mostrar o dia da semana
+# Autor : Ronnie
+# Data : 18/05/2020
+# Crie um algoritmo que o usuário digita um dia do mês corrente e o algoritmo calcule o dia da semana.
+
+mostre "Digite um dia do mês de Maio2020..: "
+dia recebe o numero que o usuario digitar
+   
+auxDia = dia
+   
+enquanto auxDia > 7 faca {
+   decremente 7 em auxDia
+}
+   
+#auxDia = 4
+#dia = 18
+   
+se auxDia == 1 entao {
+   mostre "O dia ", dia, " é uma sexta-feira."
+}
+
+senao se auxDia == 2 entao {
+   mostre "O dia ", dia, " é um sábado."
+}
+ 
+senao se auxDia == 3 entao {
+   mostre "O dia ", dia, " é um domingo."
+}
+
+senao se auxDia == 4 entao {
+   mostre "O dia ", dia, " é um segunda-feira."
+}
+
+senao se auxDia == 5 entao {
+   mostre "O dia ", dia, " é um terça-feira."
+}
+
+senao se auxDia == 6 entao {
+   mostre "O dia ", dia, " é um quarta-feira."
+}
+
+senao se auxDia == 7 entao {
+   mostre "O dia ", dia, " é um quinta-feira."
+}
+

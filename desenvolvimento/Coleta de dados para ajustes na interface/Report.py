@@ -15,11 +15,6 @@ from json import dumps
 host = 'http://0.0.0.0:5723/gravar/'
 
 class Report: 
-    """
-        Reporta dados de acesso a combratec, informando dezenas de informações de uso
-        sobre a plataforma a fim de coletarmos dados que possam fornecer insights sobre
-        a experiência no uso da safira
-    """
     def __init__(self, id):
         self.data = {
             'id': id,
@@ -67,16 +62,15 @@ class Report:
 
 
     def posicao_mouse(self, state, x, y):
+        return 0
         self.data["movimento_mouse"].append([str(datetime.now()), state, x, y])
 
-
     def clique_mouse(self, state, num, x, y):
+        return 0
         self.data["cliques_mouse"].append([str(datetime.now()), state, num, x, y])
-
 
     def ajuste_tela(self, width, height):
         self.data["ajuste_janela"].append([str(datetime.now()), width, height])
-
 
     def salvar_report(self):
         self.data['data_fim'] = str(datetime.now())
@@ -90,14 +84,17 @@ class Report:
             print("Erro ao enviar dados: ", erro)
 
 
+report = Report('1312312312312')
+report.hardware()
+report.salvar_report()
+report.enviar_report()
 
-#report = Report('1312312312312')
-#report.hardware()
-#report.salvar_report()
-#report.enviar_report()
+
+
+
+
+
 '''
-
-
 import uuid
 
 chave1 = str(uuid.uuid4())
@@ -115,12 +112,13 @@ print(chave)
 print(plain_text)
 print(cipher_text)
 
-'''
+
+
 
     def report_thread(self):
-        #self.report.hardware()
-        #self.master.bind('<Motion>', lambda event: self.registrar_report(event))
-        #self.master.bind('<ButtonRelease>', lambda event: self.registrar_clique(event))
+        self.report.hardware()
+        self.master.bind('<Motion>', lambda event: self.registrar_report(event))
+        self.master.bind('<ButtonRelease>', lambda event: self.registrar_clique(event))
 
     def comando_enviar_dados(self):
         self.report.salvar_report()
@@ -131,4 +129,4 @@ print(cipher_text)
 
     def registrar_clique(self, event):
         self.report.clique_mouse(event.state, event.num, event.x, event.y)
-
+'''

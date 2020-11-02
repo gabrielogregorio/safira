@@ -1,0 +1,19 @@
+// Função : Guardar o nome de cinco pessoas
+
+  lista de Nomes com 4 posicoes
+
+   //cadastro
+   i <- 1
+   enquanto i <= 4 faca {
+      escreva "Digite o nome da ", i, " a. pessoa. "
+      Nomes na posicao i recebe entrada
+      i <- i + 1 
+   }
+
+   //imprimir
+   i <- 1
+   enquanto i <= 4 faca {
+      escreval Nomes na posicao i 
+      i <- i + 1
+}
+

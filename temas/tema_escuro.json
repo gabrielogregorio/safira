@@ -259,6 +259,7 @@
         "background":"#191913",
         "foreground":"#ffffff",
         "highlightthickness":0,
+        "insertbackground":"#ffffff",
         "font":[
             "Lucida Sans",
             13

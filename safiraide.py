@@ -7,7 +7,7 @@ from tkinter import Scrollbar
 from tkinter import Toplevel
 from tkinter import CURRENT
 from tkinter import Message
-from tkinter import Button
+from tkinter import Button 
 from tkinter import INSERT
 from tkinter import RAISED
 from tkinter import Frame
@@ -38,7 +38,12 @@ import webbrowser
 import requests
 import re
 
-from interpretador.interpretador import Interpretador
+try:
+    from interpretador.interpretador import Interpretador
+    from Configurar import ConfigurarInterpretador
+except Exception as erro:
+    print("Interpretador Não localizado: ",erro)
+
 from util.funcoes import carregar_json
 from util.arquivo import Arquivo
 import util.funcoes as funcoes
@@ -53,7 +58,7 @@ from design import Design
 from bug import Bug
 from log import Log
 
-from Configurar import ConfigurarInterpretador
+
 
 class Interface:
     def __init__(self, master):
@@ -98,9 +103,6 @@ class Interface:
         self.style_terminal = self.carregar_estilos_terminal()
         self.dic_imgs = {"pt-br": "ic_pt_br.png", "en-us": "ic_en_us.png", "es": "ic_es.png"}
 
-        # Dicionário de comandos disponíveis
-        self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
-
         # Dicionário de configurações da Safira
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
 
@@ -117,6 +119,8 @@ class Interface:
         self.interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
        
+        # Dicionário de comandos disponíveis
+        self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
 
 
 
@@ -143,7 +147,6 @@ class Interface:
         self.path = abspath(getcwd())
 
 
-        # otimização do interpretador 
         configurar_interpretador = ConfigurarInterpretador()
         self.dicLetras = configurar_interpretador.carregar_dicionario_letra(self.dic_comandos)
         self.dic_regex_compilado, self.re_comandos = configurar_interpretador.gerar_regex_compilado_interpretador(self.dicLetras, self.dic_comandos, self.idioma)
@@ -472,7 +475,7 @@ class Interface:
 
             # Obter apenas o diretório
             diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
-
+ 
             # Criar uma instância do interpretador
             self.instancia = Interpretador(
                 self.bool_logs,
@@ -600,9 +603,13 @@ class Interface:
                                 self.master.update()
                                 self.tx_editor.update()
                                 self.tx_terminal.update()
+                                self.tx_terminal.get(1.0, END)
                             except:
                                 self.instancia.aconteceu_erro = True
                                 break
+
+                        if self.instancia.aconteceu_erro:
+                            continue
 
                         # Marca que já foi pressionado enter
                         self.esperar_pressionar_enter = False
@@ -618,7 +625,6 @@ class Interface:
                         self.instancia.controle_interpretador = ""
 
                     elif acao == 'limpar_tela':
-                        self.instancia.controle_interpretador = ""
 
                         # Limpa o terminal
                         try:
@@ -629,6 +635,8 @@ class Interface:
                         except Exception as erro:
                             self.instancia.aconteceu_erro = True
                             break
+
+                        self.instancia.controle_interpretador = ""
 
                     elif acao == 'aguardando_breakpoint':
                             # Aguarda o breakpoint ser liberado
@@ -778,7 +786,7 @@ class Interface:
     def carregar_cascata_temas(self):
         self.mn_interface_cascate_temas = Menu(self.mn_interface, tearoff=False)
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_temas"][self.idioma], menu=self.mn_interface_cascate_temas)
-
+        
         for file in listdir('temas/'):
             if file.startswith('tema_'):
 
@@ -804,7 +812,10 @@ class Interface:
                 self.mn_interface_cascata_sintaxe.add_command(label=arquivo, command=funcao)
 
     def carregar_cascata_scripts(self):
-        for file in listdir('scripts/' + self.idioma):
+        scripts = listdir('scripts/' + self.idioma)
+        scripts.sort()
+
+        for file in scripts:
             if file.endswith("safira"):
                 funcao = lambda link = file:  self.abrir_um_script(link)
                 self.mn_exemplos.add_command(label="  " + file + "  ", command=funcao)
@@ -1541,7 +1552,7 @@ class Interface:
                 self.tx_editor.insert('{}.{}'.format(p1, int(p2)), texto_inserir)
                 self.tx_editor.mark_set("insert", "{}.{}".format(int(p1)+1, int(p2)+4))
 
-            self.num_lin_bkp = posCorrente
+            self.num_lin_bkp = posCorrente 
 
 
 
@@ -1550,7 +1561,7 @@ class Interface:
             try:
                 funcoes.arquivo_de_configuracoes_interface(chave, novo)
             except Exception as e:
-                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas')
+                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas: '+ str(e))
                 return 0
 
             self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
