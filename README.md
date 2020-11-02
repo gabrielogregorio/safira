@@ -1,9 +1,10 @@
 
 ![GitHub last commit](https://img.shields.io/github/last-commit/safira-lang/safira-ide?style=flat-square)
 ![GitHub contributors](https://img.shields.io/github/contributors/safira-lang/safira-ide)
-
 ![GitHub language count](https://img.shields.io/github/languages/count/safira-lang/safira-ide)
 ![GitHub repo size](https://img.shields.io/github/repo-size/safira-lang/safira-ide)
+
+![Imagem](imagens/projeto.gif)
 
 
 # Introdução
@@ -11,9 +12,6 @@
 A Safira é uma linguagem de programação focada na lógica com o objetivo de amortecer o impacto do primeiro contato com o mundo da programação, oferecendo uma interface simples, intuitiva e uma codificação natural.
 
 Aviso: Uma versão dos outros repositórios estão embutidos neste repositório.
-
-Esta é a Safira  
-![Imagem](imagens/projeto.gif)
 
 A Safira é focada apenas na estrutura básica e em pequenos scripts, sendo que o principal diferencial dela é aceitar comandos em níveis naturais, como se fosse uma pessoa conversando com outra e comandos em linguagem similar as principais linguagens do mercado.
 
