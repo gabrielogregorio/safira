@@ -7,7 +7,7 @@ from tkinter import Scrollbar
 from tkinter import Toplevel
 from tkinter import CURRENT
 from tkinter import Message
-from tkinter import Button 
+from tkinter import Button
 from tkinter import INSERT
 from tkinter import RAISED
 from tkinter import Frame
