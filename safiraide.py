@@ -908,13 +908,9 @@ class Interface:
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
-        self.dic_abas[self.num_aba_focada]["listaAbas"][3].update()
         self.dic_abas[self.num_aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
-        self.dic_abas[self.num_aba_focada]["listaAbas"][2].update()
         self.dic_abas[self.num_aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
-        self.dic_abas[self.num_aba_focada]["listaAbas"][1].update()
         self.dic_abas[self.num_aba_focada]["listaAbas"][0].configure(background=bg_padrao)
-        self.dic_abas[self.num_aba_focada]["listaAbas"][0].update()
 
     def carregar_abas_inicio(self):
         """
@@ -955,16 +951,17 @@ class Interface:
             lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=num_aba: self.atualizar_foco_da_aba(num_aba))
             bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: self.fechar_uma_aba(bt_fechar))
 
-            fr_uma_aba.update()
-            fr_marcador.update()
-            lb_aba.update()
-            bt_fechar.update()
 
             fr_uma_aba.grid(row=1, column=num_aba+2, sticky=N)
             fr_marcador.grid(row=0, column=1, columnspan=2, sticky=NSEW)
             lb_aba.grid(row=1, column=1, sticky=NSEW)
             bt_fechar.grid(row=1, column=2)
 
+            fr_uma_aba.update()
+            fr_marcador.update()
+            lb_aba.update()
+            bt_fechar.update()
+            
             self.dic_abas[num_aba]["listaAbas"].append(fr_uma_aba)
             self.dic_abas[num_aba]["listaAbas"].append(fr_marcador)
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
@@ -1072,6 +1069,35 @@ class Interface:
             self.lst_historico_abas_focadas.append(chave)
             self.atualizar_coloracao_codigo_aba()
             return 0
+
+
+
+    def atualizar_cor_abas(self):
+        for num_aba, dados_aba in self.dic_abas.items():
+
+            # Coloração da aba
+            if num_aba == self.num_aba_focada:
+                dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
+                dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
+                dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
+            else:
+                dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
+                dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
+                dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
+
+            fr_uma_aba = self.dic_abas[num_aba]["listaAbas"][0]
+            fr_marcador = self.dic_abas[num_aba]["listaAbas"][1]
+            lb_aba = self.dic_abas[num_aba]["listaAbas"][2]
+            bt_fechar = self.dic_abas[num_aba]["listaAbas"][3]
+
+            fr_uma_aba.configure(backgroun=dic_cor_finao["background"])
+            fr_marcador.configure(dic_cor_marcador)
+            lb_aba.configure(dic_cor_finao)
+            bt_fechar.configure(dic_cor_botao)
+
+
+
+
 
     def atualizar_foco_da_aba(self, num_aba):
         if num_aba == self.num_aba_focada:
@@ -1543,6 +1569,7 @@ class Interface:
         self.atualizar_design_objeto(self.cont_lin1, "lb_linhas")
         self.atualizar_design_objeto(self.fr_abas, "dic_cor_abas_frame")
         self.atualizar_design_objeto(self.fr_espaco, "dic_cor_abas_frame")
+        self.atualizar_cor_abas()
 
     def obter_posicao_do_cursor(self, event=None):
         self.tx_editor.update()
