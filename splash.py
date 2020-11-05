@@ -5,12 +5,9 @@ from tkinter import NSEW
 from tkinter import Tk
 from time import sleep
 
-dicas = {
-    'mostre':
-    {
-        "pt-br":"Se você colocar alguma coisa entre aspas, ela se tornará um texto, mesmo que seja um numero"
-    }
-}
+"""
+Tela inicial de Splash
+"""
 
 class Splash:
     def __init__(self, design):
@@ -36,8 +33,8 @@ class Splash:
         self.frame_splash.grid_columnconfigure(0, weight=1)
 
         self.fr_splash.configure(background=self.design.dic["cor_intro"]["background"])
-        self.l1_splash.configure(text=" Safira B0.3", font=("Lucida Sans", 90), bd=80)
-        self.l2_splash.configure(text=dicas['mostre']['pt-br'], font=("Lucida Sans", 12))
+        self.l1_splash.configure(text=" SAFIRA 0.3", font=("Lucida Sans", 90), bd=80)
+        self.l2_splash.configure(text='versão beta de desenvolvimento', font=("Lucida Sans", 12))
 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)

@@ -2,7 +2,7 @@ from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Frame
 from tkinter import Button
-from tkinter import GROOVE, GROOVE
+from tkinter import GROOVE, GROOVE, NSEW
 from tkinter import PhotoImage
 from tkinter import Tk
 import util.funcoes as funcoes 
@@ -17,29 +17,35 @@ class Idioma():
         self.base = "imagens/" 
         self.tp_interface_idioma = None
         self.bt_idioma = None
+        self.lb1 = None
+        self.dic_imgs = None
 
-    def selecionar_idioma(self, dic_imgs):
+    def selecionar_idioma(self, dic_imgs): 
+        self.dic_imgs = dic_imgs 
         self.tp_interface_idioma = Toplevel(self.tela, self.design.dic["idioma_tp"]) 
+        self.tp_interface_idioma.grid_columnconfigure(1, weight=1)
+        self.tp_interface_idioma.title('Escolha de Idioma')
         self.tp_interface_idioma.withdraw()
 
         self.fr_top_idioma = Frame(self.tp_interface_idioma, self.design.dic["idioma_fr"])
-        self.fr_top_idioma.grid(row=1, column=1)
+        self.fr_top_idioma.grid_columnconfigure(1, weight=1)
+        self.fr_top_idioma.grid(row=1, column=1, sticky=NSEW)
 
         self.lb1 = Label(self.fr_top_idioma, self.design.dic['idioma_lb'], text=self.interface_idioma["texto_atualizacao"][self.idioma])
-        self.lb1.grid(row=1, column=1)
+        self.lb1.grid(row=1, column=1, sticky=NSEW)
 
         self.fr_idionas = Frame(self.tp_interface_idioma, self.design.dic['idioma_fr2'])
         self.fr_idionas.grid(row=2, column=1)
 
         # Carregar as imagens
         self.imgs = []
-        for k, v in dic_imgs.items():
+        for k, v in self.dic_imgs.items():
             self.imgs.append(PhotoImage(file=self.base+v))
 
         # Carregar os botões
         x = 0
         self.lista_botoes = []
-        for k, v in dic_imgs.items():
+        for k, v in self.dic_imgs.items():
 
             if self.idioma == k:
                 self.fr_bt = Frame(self.fr_idionas, self.design.dic['idioma_fr3'])
@@ -50,7 +56,7 @@ class Idioma():
                 self.bt_bt = Button(self.fr_bt, self.design.dic['idioma_bt2'], relief=GROOVE, image=self.imgs[x],)
                 self.lb_bt = Label(self.fr_bt, self.design.dic['idioma_lb3'], relief=GROOVE, text=k)
 
-            self.bt_bt["command"] = lambda bt_bt=self.bt_bt, dic=dic_imgs : self.marcar_opcao_idioma(bt_bt, dic)
+            self.bt_bt["command"] = lambda bt_bt=self.bt_bt, dic=self.dic_imgs : self.marcar_opcao_idioma(bt_bt, dic)
 
             self.lista_botoes.append([self.fr_bt, self.bt_bt, self.lb_bt])
 
@@ -63,18 +69,24 @@ class Idioma():
         self.tp_interface_idioma.deiconify()
 
     def marcar_opcao_idioma(self, botao, dic_imgs):
+        self.dic_imgs = dic_imgs
         self.tp_interface_idioma.withdraw()
 
         for bandeira in self.lista_botoes:
             if bandeira[1] == botao:
                 self.idioma = bandeira[2]["text"]
 
-                self.ic_idioma = PhotoImage( file="imagens/{}".format(dic_imgs[self.idioma]) )
+                self.ic_idioma = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
                 self.ic_idioma = self.ic_idioma.subsample(4, 4)
                 funcoes.arquivo_de_configuracoes_interface("idioma", self.idioma)
 
+
+                #self.lb1.configure(text=self.interface_idioma["texto_atualizacao"][self.idioma])
+
                 self.tp_interface_idioma.destroy()
                 del bandeira
+
+                self.selecionar_idioma(self.dic_imgs)
 
             else:
                 pass

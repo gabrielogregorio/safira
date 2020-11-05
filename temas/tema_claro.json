@@ -58,7 +58,10 @@
     },
     "idioma_lb":{
         "fg":"#343434",
-        "bg":"#efefef"
+        "bg":"#efefef",
+        "font":["",13],
+        "wraplength":700,
+        "justify":"left"
     },
     "idioma_lb2":{
         "bg":"#bbbbbb",

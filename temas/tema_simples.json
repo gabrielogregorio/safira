@@ -46,7 +46,7 @@
         "bg":"#efefef"
     },
     "idioma_fr2":{
-        "bg":"#efefef"
+        "bg":"#efefef" 
     },
     "idioma_fr3":{
         "bd":10,
@@ -58,7 +58,10 @@
     },
     "idioma_lb":{
         "fg":"#343434",
-        "bg":"#efefef"
+        "bg":"#efefef",
+        "font":["",13],
+        "wraplength":700,
+        "justify":"left"
     },
     "idioma_lb2":{
         "bg":"#bbbbbb",

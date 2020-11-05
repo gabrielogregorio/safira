@@ -1,6 +1,10 @@
 from tkinter import Canvas
 from tkinter import Text
 
+"""
+Parte responsável pela exibição do contador de linhas
+"""
+
 
 class ContadorLinhas(Canvas):
     def __init__(self, frame, design, bool_tem_linha):

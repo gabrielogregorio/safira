@@ -1,3 +1,4 @@
+'''
 class Inicializar:
     def __init__(self, master):
         self.master = master
@@ -314,3 +315,4 @@ class Inicializar:
             # Em modo que não seja debug, finalize o interpretador
             #if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
             Interface.inicializar_interpretador(self, tipo_execucao = 'parar')
+'''
