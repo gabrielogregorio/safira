@@ -64,24 +64,17 @@
   ],
   "cor":"lista"
 },
-
-"percorra_lista":{
+"percorra_items":{
   "comando":[
     ["scroll through the list of ","en-us"],
     ["desplazarse por la lista de ","es"],
     ["percorra a lista de ","pt-br"],
-    ["desplazar el ","es"]
-  ],
-  "cor":"lista"
-},
-
-"percorra_items":{
-  "comando":[
     ["desplazarse por los ", "es"],
     ["desplacese por las ", "es"],
     ["scroll through ", "en-us"],
     ["caminhe por ", "pt-br"],
     ["caminar por ", "pt-br"],
+    ["desplazar el ","es"],
     ["caminar en ", "es"],
     ["desplazar ", "es"],
     ["percorra ", "pt-br"],

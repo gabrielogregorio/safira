@@ -30,9 +30,9 @@
     "es":"El comando no tiene separador, ejemplo: la lista de nombres en la posición 2 recibe \"Maria \""
   },
   "nao_e_lista":{
-    "pt-br":"não é uma lista",
-    "en-us":"it's not a list",
-    "es":"no es una lista"
+    "pt-br":"{} não é uma lista",
+    "en-us":"{} it's not a list",
+    "es":"{} no es una lista"
   },
   "posicao_maior_limite_lista":{
     "pt-br":"A posição está acima do tamanho da lista:",

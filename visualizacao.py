@@ -14,6 +14,20 @@ class ContadorLinhas(Canvas):
         self.linha_analise = 0
         self.design = design
         self.bool_tem_linha = bool_tem_linha
+        self.size = 1
+
+
+    
+    def marcar_bkp(self, event):
+        n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
+        n_posicao_bkp = event.y
+        #print(n_fonte, n_posicao_bkp, self.size)
+
+        #print(int(n_posicao_bkp/n_fonte)+1)
+
+
+
+
 
     def atribuir(self, tx_editor_codigo):
         self.textwidget = tx_editor_codigo
@@ -22,12 +36,19 @@ class ContadorLinhas(Canvas):
         self.delete("all")
 
         i = self.textwidget.index("@0,0")
+        self.bind("<Button-1>", self.marcar_bkp)
+
         while True:
             dline = self.textwidget.dlineinfo(i)
             if dline is None:
                 break
 
+            
+
+
             y = dline[1]
+            #print(dline)
+            self.size= y
             num_linha = str(i).split(".")[0].strip()
             cor_padrao = "#777777"
 
@@ -59,6 +80,8 @@ class ContadorLinhas(Canvas):
 
             self.create_text(2, y, anchor="nw", text=num_linha, font=self.design.dic["fonte_ct_linha"]["font"],  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
+
+
 
 
 

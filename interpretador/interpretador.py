@@ -429,50 +429,14 @@ class Interpretador():
                     variavel_string, variavel_atribuir = lst_ultimo_teste[1]
 
                     for valor in variavel_string[1]:
+                        # Se for uma lista
+                        if isinstance(valor, list):
+                            valor = valor[0]
+
                         if self.aconteceu_erro:
                             return [False, "Interrompido", "string", "exibirNaTela"]
 
                         criar_variavel = self.funcao_realizar_atribu(variavel_atribuir, '"{}"'.format(valor))
-
-                        if criar_variavel[0] == False:
-                            self.numero_threads_ativos -= 1
-                            return criar_variavel
-
-                        lst_resultado_execucao = self.orquestrador_interpretador_(str_bloco_salvo[1:].strip())
-                        if lst_resultado_execucao[3] == "pararLoop":
-                            break
-
-                        if lst_resultado_execucao[3] == "retornarOrquestrador":
-                            self.numero_threads_ativos -= 1
-                            return [True, lst_resultado_execucao[1], lst_resultado_execucao[2], "retornarOrquestrador"]
-
-                        if lst_resultado_execucao[0] == False:
-                            if lst_resultado_execucao[1] == 'indisponibilidade_terminal':
-                                self.numero_threads_ativos -= 1
-                                return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
-
-                            self.orq_erro(lst_resultado_execucao[1], num_linha_analisada, arq_script_erro)
-                            self.numero_threads_ativos -= 1
-                            return lst_resultado_execucao
-
-                    lst_ultimo_teste[1] = 0
-                    lst_ultimo_teste = [True, False, 'booleano']
-
-                elif lst_ultimo_teste[3] == "declararLoopParaItemLista":
-                    historico_fluxo_de_dados.append('declararLoopParaItemLista') # Encaixa Loop
-
-                    lst_ultimo_teste[3] = 'fazerNada'
-
-                    variavel_listas, variavel_atribuir = lst_ultimo_teste[1]
-
-                    for valor in variavel_listas[1]:
-                        if self.aconteceu_erro:
-                            return [False, "Interrompido", "string", "exibirNaTela"]
-
-                        if valor[1] == 'string':
-                            criar_variavel = self.funcao_realizar_atribu(variavel_atribuir, '"{}"'.format(valor[0]))
-                        elif valor[1] == 'float':
-                            criar_variavel = self.funcao_realizar_atribu(variavel_atribuir, str(valor[0]))
 
                         if criar_variavel[0] == False:
                             self.numero_threads_ativos -= 1
@@ -1198,9 +1162,6 @@ class Interpretador():
             __resultado = self.analisa_instrucao('^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha, self.compilado)
             if __resultado[0]: return [self.funcao_add_lst_na_posi(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "listas"]
 
-            __resultado = self.analisa_instrucao('^(<percorra_lista>)(.*)(<percorra_items_lista_sub>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_percorra_lista(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
-
             __resultado = self.analisa_instrucao('^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha, self.compilado)
             if __resultado[0]: return [self.funcao_percorra_string(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
 
@@ -1414,34 +1375,6 @@ class Interpretador():
                 saida = teste_abstracao
 
             return saida
-
-
-    def funcao_percorra_lista(self, variavel, variavel_atribuir):
-        #self.log("__funcao_percorra_lista")
-
-        teste_variavel = self.operacoes_variaveis(variavel,
-            pipeline = [
-                ["obter_valor_variavel", "", "", ""],
-                ["teste_tipo", "!=", "lista", ""]
-            ]
-        )
-        if not teste_variavel[0]: return teste_variavel
-        # variável => teste_variavel[1]
-
-        testa_existencia = self.operacoes_variaveis(variavel_atribuir,
-            pipeline = [
-                ["obter_valor_variavel", "", "", ""]
-            ]
-        )
-        # Variável não existe
-        if not testa_existencia[0]:
-            criar_variavel = self.funcao_realizar_atribu(variavel_atribuir, "0")
-
-            if not criar_variavel[0]:
-                return criar_variavel
-
-
-        return [True, [teste_variavel, variavel_atribuir], "lista", "declararLoopParaItemLista"]
 
 
     def funcao_percorra_string(self, variavel, variavel_atribuir):

@@ -350,8 +350,8 @@ class Interface:
         self.bt_colar.grid(row=1, column=15)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
         self.fr_abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
-        self.cont_lin.grid(row=1, column=0, sticky=NSEW)
-        self.cont_lin1.grid(row=1, column=1, sticky=NSEW)
+        self.cont_lin1.grid(row=1, column=0, sticky=NSEW)
+        self.cont_lin.grid(row=1, column=1, sticky=NSEW)
         self.tx_editor.grid(row=1, column=2, sticky=NSEW)
         self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
 
@@ -369,7 +369,7 @@ class Interface:
 
         master.geometry("{}x{}+10+10".format(t_width, t_heigth))
 
-        sleep(2)
+        #sleep(1)
         self.splash.splash_fim()
 
         self.master.withdraw()
@@ -388,6 +388,8 @@ class Interface:
             except Exception as e2:
                 print(e2)
 
+    def test(self, event):
+        print(event)
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
