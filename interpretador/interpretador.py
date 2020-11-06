@@ -1073,11 +1073,17 @@ class Interpretador():
                 if __resultado[0]: return [self.funcao_excluir_arquivo(__resultado[1][2]), self.num_linha, "arquivos"]
 
             if caractere in self.dicLetras["arquivo_existe"] or not self.compilado:
+                __resultado = self.analisa_instrucao('^(<arquivo_existe_completo>)(.*)$', linha, self.compilado)
+                if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "arquivos"]
+
                 __resultado = self.analisa_instrucao('^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha, self.compilado)
                 if __resultado[0]: return [self.funcao_arquivo_nao_existe(__resultado[1][2]), self.num_linha, "arquivos"]
 
                 __resultado = self.analisa_instrucao('^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha, self.compilado)
                 if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "arquivos"]
+
+
+
 
             if caractere in self.dicLetras["adicione_texto_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha, self.compilado)
@@ -1221,12 +1227,6 @@ class Interpretador():
             caractere = possivel_variavel[0]
 
         ##################################################################
-        #                            DIVERSOS                            #
-        ##################################################################
-        __resultado = self.analisa_instrucao('^(.*)(<na_cor>)(.*)$', possivel_variavel, self.compilado)
-        if __resultado[0]: return self.funcao_na_cor(__resultado[1][1], __resultado[1][3])
-
-        ##################################################################
         #                         NUMERO ALEATÓRIO                       #
         ##################################################################
 
@@ -1278,6 +1278,9 @@ class Interpretador():
         ##################################################################
  
         if caractere in self.dicLetras["arquivo_existe"] or not self.compilado:
+            __resultado = self.analisa_instrucao('^(<arquivo_existe_completo>)(.*)$', possivel_variavel, self.compilado)
+            if __resultado[0]: return self.funcao_arquivo_existe(__resultado[1][2])
+
             __resultado = self.analisa_instrucao('^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', possivel_variavel, self.compilado)
             if __resultado[0]: return self.funcao_arquivo_nao_existe(__resultado[1][2])
 
@@ -1310,6 +1313,13 @@ class Interpretador():
 
         __resultado = self.analisa_instrucao('^(.*)(<to_captalize>)$', possivel_variavel, self.compilado)
         if __resultado[0]: return self.funcao_para_captalize(__resultado[1][1])
+
+        ##################################################################
+        #                            DIVERSOS                            #
+        ##################################################################
+        __resultado = self.analisa_instrucao('^(.*)(<na_cor>)(.*)$', possivel_variavel, self.compilado)
+        if __resultado[0]: return self.funcao_na_cor(__resultado[1][1], __resultado[1][3])
+
 
         return [True, None, 'vazio']
 
@@ -1783,9 +1793,12 @@ class Interpretador():
 
         for valor in finditer(' ', linha_base):
             # ([^\w^\d^\"]{1})([a-zA-Z]{1,}[\w\d\_]*)
-            palavra = linha[anterior: valor.start() + normalizacao]
+            palavra = linha[anterior: valor.start() + normalizacao].strip()
+            palavra_analise = palavra.replace('_','')
+            print('____', palavra)
 
-            if palavra.isalnum() and palavra[0].isalpha():
+            if palavra_analise.isalnum() and palavra_analise[0].isalpha():
+                print('ponto_chave')
 
                 variavelDessaVez =self.abstrair_valor_linha(palavra)
                 if not variavelDessaVez[0]: return variavelDessaVez
@@ -1920,7 +1933,7 @@ class Interpretador():
 
         return self.abstrair_valor_linha(possivel_variavel)
 
-    def abstrair_valor_linha(self, possivel_variavel):
+    def abstrair_valor_linha(self, possivel_variavel:str):
         #self.log("abstrair_valor_linha: possivel_variavel = '{}'".format(possivel_variavel))
 
         possivel_variavel = str(possivel_variavel).strip()
@@ -2019,7 +2032,7 @@ class Interpretador():
     def funcao_importe(self, biblioteca):
         #self.log("__funcao_importe: biblioteca = '{}'".format(biblioteca))
 
-        biblioteca = self.formatar_arquivo(biblioteca.lower()) + str(".safira")
+        biblioteca = self.formatar_arquivo(biblioteca) + str(".safira")
 
         # Tenta abrir o texto da biblioteca
         teste = funcoes.abrir_arquivo(biblioteca)

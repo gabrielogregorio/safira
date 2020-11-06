@@ -330,20 +330,20 @@
     "comando":[
       [" para minusculo","pt-br"],
       [" em minusculo","pt-br"],
-      [" to lower","en-us"],
+      [" in lower case","en-us"],
       [" en minusculas","es"],
-      [" in lower case","en-us"]
+      [" to lower","en-us"]
     ],
     "cor":"lista"
   },
   "to_upper":{
     "comando":[
       [" para maiusculo","pt-br"],
-      [" em maiusculo","pt-br"],
-      [" to upper","en-us"],
       [" in upper case","en-us"],
+      [" em maiusculo","pt-br"],
       [" en mayusculas","es"],
-      [" en mayuscula","es"]
+      [" en mayuscula","es"],
+      [" to upper","en-us"]
     ],
     "cor":"lista"
   },
@@ -545,6 +545,16 @@
     ],
     "cor":"lista"
   },
+
+
+  "arquivo_existe_completo":{
+    "comando":[
+      ["existe el archivo ", "es"]
+    ],
+    "cor":"lista"
+  },
+
+
   "arquivo_existe_nao_sub_existe":{
     "comando":[
       [" does not exist", "en-us"],
@@ -563,6 +573,11 @@
     ],
     "cor":"lista"
   },
+
+
+
+
+
   "delete_arquivo":{
     "comando":[
       ["delete o arquivo ","pt-br"],
@@ -704,9 +719,11 @@
       ["display ","en-us"],
       ["print ","pt-br"],
 
-      ["mostrar en esa línea ","es"],
-      ["escribe en esa línea ","es"],
-      ["imprimir en esa línea ","es"]
+      ["mostrar en esta linea ","es"],
+      ["mostrar en esa linea ","es"],
+
+      ["escribe en esa linea ","es"],
+      ["imprimir en esa linea ","es"]
     ],
     "cor":"exibicao"
   },
@@ -773,16 +790,16 @@
       [" tem o valor de ","pt-br"],
       [" tiene el valor ","es"],
       [" tem o valor ","pt-br"],
-      [" is worth ", "en-us"],
       [" recibe el ", "es"],
+      [" is worth ", "en-us"],
       [" receives ","en-us"],
+      [" obtiene ","es"],
       [" receive ","en-us"],
       [" equals ","en-us"],
       [" recibe ", "es"],
       [" recebe ","pt-br"],
       [" worth ","en-us"],
       [" vale ","pt-br"],
-      [" obtiene ","es"],
       [" := ","all"],
       [" <- ","all"],
       [" = ","all"]
