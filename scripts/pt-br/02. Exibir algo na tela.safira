@@ -2,7 +2,7 @@
 # Uma mensagem por exemplo
 
 
-nome = "Safira"
+nome = "Safira" 
 
 mostre "Bom dia "
 mostre nome, " tudo bem?"

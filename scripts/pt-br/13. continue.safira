@@ -6,7 +6,7 @@
 # o comando continue
 
 soma = 1
-enquanto soma for menor que 10
+enquanto soma for menor que 10   REMOVER
 {
     # Incrementando o valor da soma em +1
     soma vale soma mais 1

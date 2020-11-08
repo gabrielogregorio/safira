@@ -1,6 +1,6 @@
 # Cenário:
 # O seu programa está ficando muito grande
-# e você quer dividir seu código, salvando algumas funções
+# e você quer dividir seu código, salvando algumas fun ções
 # em outro arquivo. Você pode criar uma biblioteca!
 # Biblioteca são códigos exatamente iguais a esse, com a 
 # diferença que você pode chama-los em outro arquivo.

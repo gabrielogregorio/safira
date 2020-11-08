@@ -9,6 +9,26 @@
         "en-us":"Close",
         "es":"Cerca"
     },
+    
+
+
+
+
+    "tit_fechar_aba_safira":{
+        "pt-br":"Cuidado!",
+        "en-us":"Caution!",
+        "es":"¡Precaución!"
+    },
+    "msg_fechar_aba_safira":{
+        "pt-br":"Deseja salvar seu programa?",
+        "en-us":"Do you want to save your program?",
+        "es":"¿Quieres guardar tu programa?"
+    },
+
+
+
+
+
     "msg_fechar_safira":{
         "pt-br":"Deseja mesmo fechar a Safira?",
         "en-us":"Do you really want to close Safira?",

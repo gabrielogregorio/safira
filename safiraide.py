@@ -57,6 +57,12 @@ from design import Design
 from bug import Bug
 from log import Log
 
+from pyglet import resource
+from pyglet import font
+
+fonte = 'fonte/Syne_Mono/SyneMono-Regular.ttf'
+resource.add_font(fonte)
+action_man = font.load('Syne Mono')
 
 class Interface:
     def __init__(self, master):
@@ -162,6 +168,7 @@ class Interface:
         cm_abrir_arquivo = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo_dialog")
         cm_salvar_arquivo_como = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo_como_dialog")
         cm_acao_salva_arquivo = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo")
+       
         cm_inserir_bkp = lambda event=None: self.adicionar_remover_breakpoint(event)
         cm_executar_bkp = lambda event=None: self.liberar_breakpoint_ou_inicicar(tipo_execucao='debug')
         cm_parar_execucao = lambda event=None: self.inicializar_interpretador(tipo_execucao='parar')
@@ -843,6 +850,7 @@ class Interface:
 
         self.manipular_arquivos(None, "abrirArquivo" , 'scripts/'+ self.idioma + '/' + str(link) )
 
+
     def manipular_arquivos(self, event, comando:str, link=None):
         if self.controle_arquivos is None: return 0
         retorno_salvar_como = None
@@ -950,7 +958,7 @@ class Interface:
             bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: self.realcar_cor_botao_fechar_aba(bt_fechar))
             bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
 
-            lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=num_aba: self.atualizar_foco_da_aba(num_aba))
+            lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=num_aba: self.focar_aba(num_aba))
             bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: self.fechar_uma_aba(bt_fechar))
 
 
@@ -969,61 +977,105 @@ class Interface:
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
+
     def abrir_nova_aba(self, event=None):
+        sleep(0.1)
         # Adicionar na posição 0
         posicao_adicionar = 0
 
+        # Se tem mais de uma aba
         if len(self.dic_abas) != 0:
+            # Cores
             dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
             dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
             dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
 
+            # Remover o foco da aba focada
             self.configurar_cor_aba(dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
+
+            # Obter posição final
             posicao_adicionar = max(self.dic_abas.keys())+1
 
+        # Adicionar nova Aba
         self.dic_abas[posicao_adicionar] = funcoes.carregar_json("configuracoes/guia.json")
 
+        # Cores
         dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
         dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
         dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
 
+        # Criando uma Aba
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
-
-        fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
-        lb_aba = Button(fr_uma_aba, dic_cor_finao, text="              ")
+        fr_marcador = Frame(fr_uma_aba, dic_cor_marcador) 
+        lb_aba = Button(fr_uma_aba, dic_cor_finao, text=" "*14)
         bt_fechar = Button(fr_uma_aba, dic_cor_botao, text="x ")
 
-        lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=posicao_adicionar: self.atualizar_foco_da_aba(num_aba))
+        # Eventos
+        lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=posicao_adicionar: self.focar_aba(num_aba))
         bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: self.fechar_uma_aba(bt_fechar))
         bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: self.realcar_cor_botao_fechar_aba(bt_fechar))
         bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
 
+        # Layout
         fr_uma_aba.rowconfigure(1, weight=1)
-
         fr_uma_aba.grid(row=1, column=posicao_adicionar+2, sticky=N)
         fr_marcador.grid(row=0, column=1, columnspan=2, sticky=NSEW)
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
 
+        # Configuração de Aba
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_marcador)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(bt_fechar)
 
+        # Atualizar Aba focada
         self.num_aba_focada = posicao_adicionar
+        self.lst_historico_abas_focadas.append(posicao_adicionar)
+
+        # Focar nova aba
         self.atualizar_codigo_editor(self.num_aba_focada)
+
 
     def fechar_uma_aba(self, bt_fechar):
         bool_era_focado = False
+        dic_cor_abas = self.design.dic["dic_cor_abas"] 
+        print('[HISTÓRICO DE ABAS] = {}'.format(self.lst_historico_abas_focadas))
 
-        dic_cor_abas = self.design.dic["dic_cor_abas"]
         for chave, valor in self.dic_abas.items():
+
+            # Se for a aba para focar
             if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
 
+                # Se a aba não estava salva 
+                if self.dic_abas[chave]["ja_foi_marcado_nao_salvo"]:
+
+                    # Focar a aba que erapara fechar
+                    self.focar_aba(chave)
+
+                    # Deseja salvar seu código nesta aba?
+                    resposta = messagebox.askyesnocancel(
+                        self    .interface_idioma["tit_fechar_aba_safira"][self.idioma],
+                        self.interface_idioma["msg_fechar_aba_safira"][self.idioma], 
+                        icon='warning')
+
+                    if resposta is True:  # yes
+                        self.manipular_arquivos(None, "salvar_arquivo")
+                    elif resposta is False: # No
+                        pass
+                    elif resposta is None: # Cancel
+                        return 0
+                    else:
+                        print("Mensagem: {}".format(resposta))
+                        return 0
+
+                # Remover a chave do histórico de abas focadas
                 while chave in self.lst_historico_abas_focadas:
                     self.lst_historico_abas_focadas.remove(chave)
 
 
+                # Se tinha só uma Aba
+                # Limpar os dados e atualizar o texto
                 if len(self.dic_abas) == 1:
                     self.dic_abas[chave]["nome"] =""
                     self.dic_abas[chave]["lst_breakpoints"] = []
@@ -1031,45 +1083,54 @@ class Interface:
                     self.dic_abas[chave]["arquivoAtual"] = {"texto": ""}
 
                     self.atualizar_codigo_editor(chave)
+                    # Adicionando novamente a chave
                     self.lst_historico_abas_focadas.append(chave)
                     return 0
 
                 else:
-                    self.dic_abas[chave]["listaAbas"][3].update()
-                    self.dic_abas[chave]["listaAbas"][3].grid_forget()
-                    self.dic_abas[chave]["listaAbas"][2].update()
-                    self.dic_abas[chave]["listaAbas"][2].grid_forget()
-                    self.dic_abas[chave]["listaAbas"][1].update()
-                    self.dic_abas[chave]["listaAbas"][1].grid_forget()
+                    # Tem mais de uma aba
+
+                    # Destrua ela
                     self.dic_abas[chave]["listaAbas"][0].update()
                     self.dic_abas[chave]["listaAbas"][0].grid_forget()
 
+                    # Se esta aba estava focada
                     if self.dic_abas[chave]["foco"] is True:
                         bool_era_focado = True
+
+                    # Deletar o registro
                     del self.dic_abas[chave]
                     break
 
-        # Aba fechada era a focada
+        # Aba fechada era a aba que estava focada
         if bool_era_focado:
 
-            try:
-                chave = self.lst_historico_abas_focadas[-1]
-            except:
-                for k, valor in self.dic_abas.items():
-                    chave = k
-                    break
+            # Obter a penultima aba focada
+            chave = self.lst_historico_abas_focadas[-1]
 
+            # Obter cores para uma nova aba
             dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
             dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
             dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
-            self.num_aba_focada = chave
-            self.dic_abas[chave]["foco"] =True
 
+            # Atualizar a aba focada
+            self.num_aba_focada = chave
+
+            # Informar que a aba será focada
+            self.dic_abas[chave]["foco"] = True
+
+            # Atualizar cor da aba focada
             self.configurar_cor_aba(dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
+
+            # Atualizar código no editor
             self.atualizar_codigo_editor(chave)
 
+            # Adicionar no histórico
             self.lst_historico_abas_focadas.append(chave)
+
+            # Atualizar Aba
             self.atualizar_coloracao_codigo_aba()
+
             return 0
 
 
@@ -1098,10 +1159,7 @@ class Interface:
             bt_fechar.configure(dic_cor_botao)
 
 
-
-
-
-    def atualizar_foco_da_aba(self, num_aba):
+    def focar_aba(self, num_aba):
         if num_aba == self.num_aba_focada:
             return 0
 
@@ -1634,9 +1692,12 @@ class Interface:
                 break
 
     def fechar_janela(self, inst):
-        if messagebox.askokcancel(
+        resposta = messagebox.askquestion(
             self.interface_idioma["tit_fechar_safira"][self.idioma],
-            self.interface_idioma["msg_fechar_safira"][self.idioma]):
+            self.interface_idioma["msg_fechar_safira"][self.idioma],
+            icon='warning')
+
+        if resposta == 'yes':
             inst.withdraw() # Ocultar tkinter
             inst.destroy()
 

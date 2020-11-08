@@ -5,7 +5,7 @@
     "arquivoSalvo":{"link": "","texto": "\n"},
     "arquivoAtual":{"texto": ""},
     "listaContextos":[],
-    "contexto":0,
+    "contexto":0, 
     "ja_foi_marcado_nao_salvo":false,
     "listaAbas":[]
 }
