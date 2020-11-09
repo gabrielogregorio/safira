@@ -1,106 +1,106 @@
 {
-  "limpaTela":{
-     "pt-br":"",
+   "Variaveis":{
+     "pt-br":"pt-br/01. Variaveis.safira",
      "en-us":"",
      "es":""
   },
-  "exibiçãoNaTela":{
-     "pt-br":"pt-br/MostreNaTela.safira",
+   "Exibir":{
+     "pt-br":"pt-br/02. Exibir algo na tela.safira",
      "en-us":"",
      "es":""
   },
-  "enquanto":{
-     "pt-br":"pt-br/Enquanto.safira",
+   "Digitado":{
+     "pt-br":"pt-br/03. Digitado.safira",
      "en-us":"",
      "es":""
   },
-  "esperar":{
-     "pt-br":"pt-br/Espere.safira",
+   "Condicoes":{
+     "pt-br":"pt-br/04. Testar Condicoes.safira",
      "en-us":"",
      "es":""
   },
-  "repetir":{
-     "pt-br":"pt-br/Repita.safira",
+   "Enquanto":{
+     "pt-br":"pt-br/05. Enquanto.safira",
      "en-us":"",
      "es":""
   },
-  "funcoes":{
-     "pt-br":"pt-br/Funcoes.safira",
+   "Repita":{
+     "pt-br":"pt-br/06. Repita.safira",
      "en-us":"",
      "es":""
   },
-  "tudo_entradas":{
-     "pt-br":"pt-br/Digitado.safira",
+   "Espere":{
+     "pt-br":"pt-br/07. Espere.safira",
      "en-us":"",
      "es":""
   },
-  "listas":{
-     "pt-br":"pt-br/Listas.safira",
+   "aleatorio":{
+     "pt-br":"pt-br/08. Sortear um número aleatorio.safira",
      "en-us":"",
      "es":""
   },
-  "aleatorio":{
-     "pt-br":"pt-br/Aleatorio.safira",
+   "Incremente-decremente":{
+     "pt-br":"pt-br/09. Incremente-decremente.safira",
      "en-us":"",
      "es":""
   },
-  "se tiver":{
-     "pt-br":"pt-br/Listas.safira",
+   "Funcoes":{
+     "pt-br":"pt-br/10. Funcoes.safira",
      "en-us":"",
      "es":""
   },
-  "condicionais":{
-     "pt-br":"pt-br/Condicionais.safira",
+   "Arquivos":{
+     "pt-br":"pt-br/11. Arquivos.safira",
      "en-us":"",
      "es":""
   },
-  "atribuicoes":{
-     "pt-br":"pt-br/Variaveis.safira",
+   "bibliotecas":{
+     "pt-br":"pt-br/12. Trabalhando com bibliotecas.safira",
      "en-us":"",
      "es":""
   },
-  "para_cada":{
-     "pt-br":"pt-br/Para cada.safira",
+   "continue":{
+     "pt-br":"pt-br/13. continue.safira",
      "en-us":"",
      "es":""
   },
-  "espere":{
-     "pt-br":"pt-br/Espere.safira",
+   "pare":{
+     "pt-br":"pt-br/14. pare.safira",
      "en-us":"",
      "es":""
   },
-  "tente":{
-     "pt-br":"pt-br/Tente.safira",
+   "interrompa":{
+     "pt-br":"pt-br/15. interrompa.safira",
      "en-us":"",
      "es":""
   },
-  "importe":{
-     "pt-br":"pt-br/Importe.safira",
+   "Listas":{
+     "pt-br":"pt-br/16. Listas.safira",
      "en-us":"",
      "es":""
   },
-  "arquivos":{
-     "pt-br":"pt-br/Arquivos.safira",
+   "para_cada_item_da_lista":{
+     "pt-br":"pt-br/17. para_cada_item_da_lista.safira",
      "en-us":"",
      "es":""
   },
-  "incremente_decremente":{
-     "pt-br":"pt-br/Incremente-decremente.safira",
+   "para_cada_item_da_string":{
+     "pt-br":"pt-br/18. para_cada_item_da_string.safira",
      "en-us":"",
      "es":""
   },
-  "pare":{
-     "pt-br":"pt-br/pare.safira",
+   "upper_lower_capitalize":{
+     "pt-br":"pt-br/19. upper_lower_capitalize.safira",
      "en-us":"",
      "es":""
   },
-  "continue":{
-     "pt-br":"pt-br/continue.safira",
+   "para cada":{
+     "pt-br":"pt-br/20. para cada.safira",
      "en-us":"",
      "es":""
   },
-  "interrompa":{
-     "pt-br":"pt-br/interrompa.safira",
+   "Tente":{
+     "pt-br":"pt-br/21. Tente.safira",
      "en-us":"",
      "es":""
   }

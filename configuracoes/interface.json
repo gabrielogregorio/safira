@@ -205,7 +205,7 @@
         "es":"\n¿Te gustaría informarnos? \n Esto nos ayuda a producir algo mejor, \n ¡estaremos encantados de recibir tus comentarios! \n"
     },
     "texto_depois":{
-        "pt-br":"texto_depois",
+        "pt-br":"Outra hora",
         "en-us":"After",
         "es":"Después"
     },
@@ -214,6 +214,15 @@
         "en-us":"Report the BUG",
         "es":"Informar el error"
     },
+
+    "titulo_reporte_bug":{
+        "pt-br":"Informar um bug",
+        "en-us":"Report a bug",
+        "es":"Reportar un error"
+    },
+
+
+
     "titulo_aviso_atualizacao":{
         "pt-br":"Aviso de atualização",
         "en-us":"Update notice",
