@@ -958,7 +958,7 @@ class Interpretador():
 
             if caractere in self.dicLetras["limpatela"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<limpatela>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_limpar_o_termin(), self.num_linha, "limpaTela"]
+                if __resultado[0]: return [self.funcao_limpar_o_termin(), self.num_linha, ""]
 
             ##################################################################
             #                             RETORNE                            #
@@ -986,15 +986,15 @@ class Interpretador():
 
             if caractere in self.dicLetras["enquanto"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<enquanto>)(.*)(<enquanto_final>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_loops_enquantox(__resultado[1][2]), self.num_linha, "enquanto"]
+                if __resultado[0]: return [self.funcao_loops_enquantox(__resultado[1][2]), self.num_linha, "Enquanto"]
 
             if caractere in self.dicLetras["repita"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<repita>)(.*)(<repitaVezes>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_repetir_n_vezes(__resultado[1][2]), self.num_linha, "repetir"]
+                if __resultado[0]: return [self.funcao_repetir_n_vezes(__resultado[1][2]), self.num_linha, "Repita"]
 
             if caractere in self.dicLetras["para_cada"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<para_cada>)__var__(<para_cada_de>)(.*)(<para_cada_ate>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_loop_para_cada_(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "para_cada"]
+                if __resultado[0]: return [self.funcao_loop_para_cada_(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "para_cada_item_da_lista"]
 
             ##################################################################
             #                            EXIBIÇÃO                            #
@@ -1002,11 +1002,11 @@ class Interpretador():
 
             if caractere in self.dicLetras["mostreNessa"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<mostreNessa>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_exibir_mesma_ln(__resultado[1][2]), self.num_linha, "exibiçãoNaTela"]
+                if __resultado[0]: return [self.funcao_exibir_mesma_ln(__resultado[1][2]), self.num_linha, "Exibir"]
 
             if caractere in self.dicLetras["mostre"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<mostre>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_exibir_outra_ln(__resultado[1][2]), self.num_linha, "exibiçãoNaTela"]
+                if __resultado[0]: return [self.funcao_exibir_outra_ln(__resultado[1][2]), self.num_linha, "Exibir"]
 
             ##################################################################
             #                             ESPERA                             #
@@ -1014,7 +1014,7 @@ class Interpretador():
 
             if caractere in self.dicLetras["aguarde"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<aguarde>)(.*)(<esperaEm>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_esperar_n_tempo(__resultado[1][2], __resultado[1][3]), self.num_linha, "esperar"]
+                if __resultado[0]: return [self.funcao_esperar_n_tempo(__resultado[1][2], __resultado[1][3]), self.num_linha, "Espere"]
 
             ##################################################################
             #                             ENTRADA                            #
@@ -1022,7 +1022,7 @@ class Interpretador():
 
             if caractere in self.dicLetras["digitado"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<digitado>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_ovalor_digitado(__resultado[1][1]), self.num_linha, "tudo_entradas"]
+                if __resultado[0]: return [self.funcao_ovalor_digitado(__resultado[1][1]), self.num_linha, "Digitado"]
 
             ##################################################################
             #                         NUMERO ALEATÓRIO                       #
@@ -1038,7 +1038,7 @@ class Interpretador():
 
             if caractere in self.dicLetras["importe"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<importe>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_importe(__resultado[1][2]), self.num_linha, "importe"]
+                if __resultado[0]: return [self.funcao_importe(__resultado[1][2]), self.num_linha, "bibliotecas"]
 
             ##################################################################
             #                    TENTE EXECUTAR O COMANDO                    #
@@ -1046,19 +1046,19 @@ class Interpretador():
 
             if caractere in self.dicLetras["se_der_erro"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<se_der_erro>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_se_der_erro(), self.num_linha, "tente"]
+                if __resultado[0]: return [self.funcao_se_der_erro(), self.num_linha, "Tente"]
 
             if caractere in self.dicLetras["senao_der_erro"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<senao_der_erro>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_senao_der_erro(), self.num_linha, "tente"]
+                if __resultado[0]: return [self.funcao_senao_der_erro(), self.num_linha, "Tente"]
 
             if caractere in self.dicLetras["em_qualquer_caso"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<em_qualquer_caso>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_em_qualquer_caso(), self.num_linha, "tente"]
+                if __resultado[0]: return [self.funcao_em_qualquer_caso(), self.num_linha, "Tente"]
 
             if caractere in self.dicLetras["tente"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<tente>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_tente(), self.num_linha, "tente"]
+                if __resultado[0]: return [self.funcao_tente(), self.num_linha, "Tente"]
 
             ##################################################################
             #                     MANIPULAÇÃO DE ARQUIVOS                    #
@@ -1066,36 +1066,36 @@ class Interpretador():
 
             if caractere in self.dicLetras["crie_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<crie_arquivo>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_criar_arquivo(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_criar_arquivo(__resultado[1][2]), self.num_linha, "Arquivos"]
 
             if caractere in self.dicLetras["delete_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<delete_arquivo>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_excluir_arquivo(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_excluir_arquivo(__resultado[1][2]), self.num_linha, "Arquivos"]
 
             if caractere in self.dicLetras["arquivo_existe"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<arquivo_existe_completo>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "Arquivos"]
 
                 __resultado = self.analisa_instrucao('^(<arquivo_existe>)(.*)(<arquivo_existe_nao_sub_existe>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_arquivo_nao_existe(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_arquivo_nao_existe(__resultado[1][2]), self.num_linha, "Arquivos"]
 
                 __resultado = self.analisa_instrucao('^(<arquivo_existe>)(.*)(<arquivo_existe_sub_existe>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_arquivo_existe(__resultado[1][2]), self.num_linha, "Arquivos"]
 
 
 
 
             if caractere in self.dicLetras["adicione_texto_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<adicione_texto_arquivo>)(.*)(<adicione_texto_arquivo_sub>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_adicionar_arquivo(__resultado[1][2], __resultado[1][4]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_adicionar_arquivo(__resultado[1][2], __resultado[1][4]), self.num_linha, "Arquivos"]
 
             if caractere in self.dicLetras["sobrescreva_texto_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<sobrescreva_texto_arquivo>)(.*)(<sobrescreva_texto_arquivo_sub>)(.*)(<sobrescreva_texto_arquivo_sub_sub>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_sobrescrever_arquivo(__resultado[1][2], __resultado[1][4]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_sobrescrever_arquivo(__resultado[1][2], __resultado[1][4]), self.num_linha, "Arquivos"]
 
             if caractere in self.dicLetras["leia_arquivo"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<leia_arquivo>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_ler_arquivo(__resultado[1][2]), self.num_linha, "arquivos"]
+                if __resultado[0]: return [self.funcao_ler_arquivo(__resultado[1][2]), self.num_linha, "Arquivos"]
 
             ##################################################################
             #                            CONDIÇÔES                           #
@@ -1103,30 +1103,30 @@ class Interpretador():
 
             if caractere in self.dicLetras["se_nao_se"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<se_nao_se>)(.*)(<se_final>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_senao_se(__resultado[1][2]), self.num_linha, "condicionais"]
+                if __resultado[0]: return [self.funcao_senao_se(__resultado[1][2]), self.num_linha, "Condicoes"]
 
             if caractere in self.dicLetras["se_nao"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<se_nao>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_senao(), self.num_linha, "condicionais"]
+                if __resultado[0]: return [self.funcao_senao(), self.num_linha, "Condicoes"]
 
             if caractere in self.dicLetras["se"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<se>)(.*)(<se_final>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_testar_condicao(__resultado[1][2]), self.num_linha, "condicionais"]
+                if __resultado[0]: return [self.funcao_testar_condicao(__resultado[1][2]), self.num_linha, "Condicoes"]
 
             ##################################################################
             #                            VARIAVEIS                           #
             ##################################################################
 
             __resultado = self.analisa_instrucao('^([a-zA-Z_0-9]*)(<declara_variaveis>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_realizar_atribu(__resultado[1][1], __resultado[1][3]), self.num_linha, "atribuicoes"]
+            if __resultado[0]: return [self.funcao_realizar_atribu(__resultado[1][1], __resultado[1][3]), self.num_linha, "Variaveis"]
 
             if caractere in self.dicLetras["incremente"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<incremente>)(.*)(<incremente_decremente>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_incremente_vari(__resultado[1][2], __resultado[1][4]), self.num_linha, "incremente_decremente"]
+                if __resultado[0]: return [self.funcao_incremente_vari(__resultado[1][2], __resultado[1][4]), self.num_linha, "Incremente-decremente"]
 
             if caractere in self.dicLetras["decremente"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<decremente>)(.*)(<incremente_decremente>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_decremente_vari(__resultado[1][2], __resultado[1][4]), self.num_linha, "incremente_decremente"]
+                if __resultado[0]: return [self.funcao_decremente_vari(__resultado[1][2], __resultado[1][4]), self.num_linha, "Incremente-decremente"]
 
             if caractere in self.dicLetras["tipo_variavel"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<tipo_variavel>)(.*)$', linha, self.compilado)
@@ -1142,49 +1142,49 @@ class Interpretador():
 
             if caractere in self.dicLetras["tiver_lista"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<tiver_lista>)(.*)(<tiver_interno_lista>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_tiver_valor_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "se tiver"]
+                if __resultado[0]: return [self.funcao_tiver_valor_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, ""]
 
             if caractere in self.dicLetras["tamanho_da_lista"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<tamanho_da_lista>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_otamanho_da_lst(__resultado[1][2]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_otamanho_da_lst(__resultado[1][2]), self.num_linha, "Listas"]
 
             if caractere in self.dicLetras["remover_itens_listas"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<remover_itens_listas>)(.*)(<remover_itens_listas_interno>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_rem_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_rem_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
             if caractere in self.dicLetras["adicionarItensListas"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<adicionarItensListas>)(.*)(<listaNaPosicao>)(.*)(<addItensListaInternoPosicaoFinaliza>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_add_itns_lst_ps(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_add_itns_lst_ps(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "Listas"]
 
                 __resultado = self.analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInternoFinal>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_add_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_add_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
                 __resultado = self.analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInternoInicio>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_add_itns_lst_in(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_add_itns_lst_in(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
                 __resultado = self.analisa_instrucao('^(<adicionarItensListas>)(.*)(<addItensListaInterno>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_add_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+                if __resultado[0]: return [self.funcao_add_itns_na_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListas>)(.*)(<listaNaPosicao>)(.*)(<recebeDeclaraListas>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_add_lst_na_posi(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "listas"]
+            if __resultado[0]: return [self.funcao_add_lst_na_posi(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<percorra_items>)(.*)(<percorra_items_lista_sub>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_percorra_string(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+            if __resultado[0]: return [self.funcao_percorra_string(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListas>)(.*)(<listaCom>)(.*)(<listaPosicoesCom>)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_dec_lst_posicoe(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+            if __resultado[0]: return [self.funcao_dec_lst_posicoe(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListas>)(.*)(<recebeDeclaraListas>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_declarar_listas(__resultado[1][2], __resultado[1][4]), self.num_linha, "listas"]
+            if __resultado[0]: return [self.funcao_declarar_listas(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListas>)(\\s*[a-zA-Z\\_0-9]*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_retornar_lista(__resultado[1][2], ), self.num_linha, "listas"]
+            if __resultado[0]: return [self.funcao_retornar_lista(__resultado[1][2], ), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)(<declara_variaveis>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_realiza_atribuica_posicao_lista(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "lista"]
+            if __resultado[0]: return [self.funcao_realiza_atribuica_posicao_lista(__resultado[1][2], __resultado[1][4], __resultado[1][6]), self.num_linha, "Listas"]
 
             __resultado = self.analisa_instrucao('^(<declaraListasObterPosicao>)(.*)(<listaNaPosicao>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_obter_valor_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "lista"]
+            if __resultado[0]: return [self.funcao_obter_valor_lst(__resultado[1][2], __resultado[1][4]), self.num_linha, "Listas"]
 
 
             ##################################################################
@@ -1193,26 +1193,26 @@ class Interpretador():
 
             if caractere in self.dicLetras["funcoes"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<funcoes>)(.*)(<recebeParametros_parentese_abre>)(.*)(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "funcoes"]
+                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "funcoes"]
+                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(\\s*[\\w*\\_]*\\s*)(<recebeParametros_parentese_abre>)\\s*(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "funcoes"]
+                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "funcoes"]
+                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
 
             __resultado = self.analisa_instrucao('^(.*)(<passandoParametros>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "funcoes"]
+            if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
 
             __resultado = self.analisa_instrucao('^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', linha, self.compilado)
             if __resultado[0]:
-                return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "funcoes"]
+                return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
 
             __resultado = self.analisa_instrucao('^[A-Z0-9a-z_]*\\s*$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1]), self.num_linha, "funcoes"]
+            if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1]), self.num_linha, "Funcoes"]
 
             return [ [False, "{}'{}'".format(  self.msg('comando_desconhecido'), linha  ), 'string', 'fazerNada'], self.num_linha, ""]
 

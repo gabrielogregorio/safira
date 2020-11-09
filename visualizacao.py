@@ -16,17 +16,12 @@ class ContadorLinhas(Canvas):
         self.bool_tem_linha = bool_tem_linha
         self.size = 1
 
-
-    
     def marcar_bkp(self, event):
         n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
         n_posicao_bkp = event.y
         #print(n_fonte, n_posicao_bkp, self.size)
 
         #print(int(n_posicao_bkp/n_fonte)+1)
-
-
-
 
 
     def atribuir(self, tx_editor_codigo):
@@ -43,11 +38,7 @@ class ContadorLinhas(Canvas):
             if dline is None:
                 break
 
-            
-
-
             y = dline[1]
-            #print(dline)
             self.size= y
             num_linha = str(i).split(".")[0].strip()
             cor_padrao = "#777777"

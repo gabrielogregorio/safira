@@ -1,10 +1,10 @@
-nome vale "combratec"
+nome vale "safira"
 
 se o que for digitado for igual a "safira" entao {
     mostre "Esta é a linguagem de programação Safira"
 }
 
-if nome == "combratec" {
+if nome == "safira" {
     exiba "este projeto é legal!"
 } 
 

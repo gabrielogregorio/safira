@@ -1,15 +1,15 @@
 {
   "numerico": {
-    "foreground": "#d67504"
+    "foreground": "#678715"
   },
   "atribuicao": {
     "foreground": "#005aa8"
   },
   "loops": {
-    "foreground": "#c29800"
+    "foreground": "#e06c8f"
   },
   "lista": {
-    "foreground": "#c93b10"
+    "foreground": "#8331c7"
   },
   "logico": {
     "foreground": "#006aeb"
@@ -18,24 +18,24 @@
     "foreground": "#f522f5"
   },
   "exibicao": {
-    "foreground": "#8f09ad"
+    "foreground": "#2f86d3"
   },
   "tempo": {
     "foreground": "#068a91"
   },
   "condicionais": {
-    "foreground": "#e6007e"
+    "foreground": "#e06c8f"
   },
   "contas": {
-    "foreground": "#f522f5"
+    "foreground": "#3869c4"
   },
   "string": {
-    "foreground": "#05a142"
+    "foreground": "#cf8832"
   },
   "comentario": {
-    "foreground": "#6f756e"
+    "foreground": "#a2a3a8"
   },
   "pare": {
-    "foreground": "#ff1212"
+    "foreground": "#b30757"
   }
 }

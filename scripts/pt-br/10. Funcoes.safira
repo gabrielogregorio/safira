@@ -3,9 +3,6 @@
 # partes do código, para evitar muito código duplicado, você pode
 # usar as funções
 
-
-***************************
-
 # Está é uma função com parâmetros
 # Parâmetros são valores que ela pode
 # Receber e trabalhar com eles

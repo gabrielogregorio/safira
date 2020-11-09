@@ -1,6 +1,6 @@
 # Cenário:
 # O seu programa está ficando muito grande
-# e você quer dividir seu código, salvando algumas fun ções
+# e você quer dividir seu código, salvando algumas funções
 # em outro arquivo. Você pode criar uma biblioteca!
 # Biblioteca são códigos exatamente iguais a esse, com a 
 # diferença que você pode chama-los em outro arquivo.
@@ -32,5 +32,4 @@ importe a biblioteca biblioteca
 mostre "A idade é ", idade
 
 # Perceba que o arquivo chama "biblioteca.safira", mas para importa-lo,
-# só precisamos digitar biblioteca e a safirá irá entender o resto
-
+# só precisamos digitar biblioteca e a safira irá entender o resto

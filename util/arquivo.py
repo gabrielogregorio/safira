@@ -73,13 +73,14 @@ class Arquivo():
                     self.dic_abas[self.aba_focada]["arquivoAtual"]['texto'] = programaCodigo
         return None  
 
-    def salvar_arquivo_dialog(self, event=None):
+    def abrir_arquivo_dialog(self, event=None):
 
         arq_tips = [('Scripts Safira', '*.safira'), ('Todos os arquivos', '*')]
         arq_dial = filedialog.Open(filetypes=arq_tips)
         arq_nome = arq_dial.show()
+        print(arq_nome)
 
-        if arq_nome == () :
+        if not arq_nome:
             print(' Nenhum arquivo escolhido')
             return 0
 
@@ -105,7 +106,7 @@ class Arquivo():
 
         arq = funcoes.abrir_arquivo(link)
 
-        if arq[0] is not None:
+        if arq[0] is not None or arq[0] != "":
             self.tx_codfc.delete(1.0, END)
             self.tx_codfc.insert(END, arq[0][0:-1])
 

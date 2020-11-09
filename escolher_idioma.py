@@ -9,7 +9,8 @@ import util.funcoes as funcoes
 from design import Design 
 
 class Idioma():
-    def __init__(self, tela, design, idioma, interface_idioma):
+    def __init__(self, tela, design, idioma, interface_idioma, icon):
+        self.icon = icon
         self.idioma = idioma
         self.interface_idioma = interface_idioma
         self.design = design
@@ -23,9 +24,11 @@ class Idioma():
     def selecionar_idioma(self, dic_imgs): 
         self.dic_imgs = dic_imgs 
         self.tp_interface_idioma = Toplevel(self.tela, self.design.dic["idioma_tp"]) 
+        self.tp_interface_idioma.withdraw()
+
+        self.tp_interface_idioma.tk.call('wm', 'iconphoto', self.tp_interface_idioma._w, self.icon)
         self.tp_interface_idioma.grid_columnconfigure(1, weight=1)
         self.tp_interface_idioma.title('Escolha de Idioma')
-        self.tp_interface_idioma.withdraw()
 
         self.fr_top_idioma = Frame(self.tp_interface_idioma, self.design.dic["idioma_fr"])
         self.fr_top_idioma.grid_columnconfigure(1, weight=1)
@@ -65,6 +68,19 @@ class Idioma():
             self.lb_bt.grid(row=2, column=x)
 
             x += 1
+
+        self.tp_interface_idioma.update()
+
+        t_width  = self.tela.winfo_screenwidth()
+        t_heigth = self.tela.winfo_screenheight()
+
+        j_heigth = self.tp_interface_idioma.winfo_screenmmheight()
+        j_width = self.tp_interface_idioma.winfo_screenmmwidth()
+
+
+
+        self.tp_interface_idioma.geometry("+{}+{}".format(j_width, j_heigth, int(t_width/2-(j_width/2)), int(t_heigth/2-(j_heigth/2))))
+
 
         self.tp_interface_idioma.deiconify()
 
@@ -108,7 +124,9 @@ if __name__ == '__main__':
     idioma = arquivo_configuracoes['idioma']
     interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
-    idioma = Idioma(master, design, idioma, interface_idioma)
+    icon = PhotoImage(file='imagens/icone.png')
+
+    idioma = Idioma(master, design, idioma, interface_idioma, icon)
     Button(master, text="acao", command=lambda id=idioma: atualizar_sistema(id)).grid()
 
 

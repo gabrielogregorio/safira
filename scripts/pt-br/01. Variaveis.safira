@@ -5,14 +5,14 @@
 # Na safira, todos os números são chamados de floats
 idade =  20
 
-# Essa é uma variável nome,
-# Ela tem o valor do texto "CJ".
-# Na programação, textos são chamados de Strings
+# Esta é a variável chamada nome,
+# Ela tem o vaor do texto "CJ".
+# Na programaçãocop textos são chamados de Strings e ficam entre aspas
 nome =   "CJ"
 
 # Essa é uma variável casado,
 # Ela tem o valor de verdadeiro
-# Na programação, verdadeiro ou falso é chamado
+# Na programção, verdadeiro ou falso é chamado
 # de booleano
 casado = falso
 
@@ -27,4 +27,5 @@ mostre "..."
 mostre o tipo da variavel idade
 mostre o tipo da variavel nome
 mostre o tipo da variavel casado
+
 

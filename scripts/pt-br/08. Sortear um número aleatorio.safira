@@ -9,7 +9,7 @@ mostre "Vou pensar em um número aleatório entre 10 e 15 e você vai tentar des
 mostre ""
 mostre nessa linha "Digite um número: "
 
-# Numero que o computador vai pensar
+# Número que o computador vai pensar
 numero_aleatorio = um numero aleatorio entre 10 e 15
 
 # Número que você vai digitar
@@ -20,4 +20,3 @@ se o numero_aleatorio for igual a numero_pensado entao {
 } senao {
     mostre "Eu pensei no número ", numero_aleatorio, " Você errou!"
 } 
-

@@ -2,20 +2,9 @@
 # Atribuindo dinamicamente o valor de uma variável
 # Executando ao mesmo tempo um laço
 
-
-
 #****** Uso simples comando ******#
-para cada x de 0 ate 10
+para cada x de 0 ate 100
 {
     mostre "X vale -> ", x
 }
 
-
-#****** Variações dos comandos ******#
-# para cada 
-# for each 
-# for 
-
-#****** Variações dos subcomandos ******#
-# de
-# ate 

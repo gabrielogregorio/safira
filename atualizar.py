@@ -4,7 +4,8 @@ from tkinter import Frame
 from tkinter import Button
 from tkinter import Message
 from tkinter import Label
-from tkinter import FLAT, NSEW
+from tkinter import PhotoImage
+from tkinter import FLAT, NSEW, RAISED
 from tkinter import messagebox
 from tkinter import Tk
 import webbrowser
@@ -18,7 +19,8 @@ VERSAO_ATUAL = {"versao": 0.3}
 
 
 class Atualizar():
-    def __init__(self, tela, design, idioma, interface_idioma):
+    def __init__(self, tela, design, idioma, interface_idioma, icon):
+        self.icon = icon
         self.interface_idioma = interface_idioma
         self.tp_atualizacao = None
         self.idioma = idioma
@@ -64,6 +66,9 @@ class Atualizar():
 
     def aviso_versao(self, baixada, recente):
         self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_top_level"])
+        self.tp_atualizacao.focus_force()
+        self.tp_atualizacao.resizable(False, False)
+        self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
         self.tp_atualizacao.withdraw()
 
         try:
@@ -84,8 +89,8 @@ class Atualizar():
         lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["versao_nova_disponivel"][self.idioma])
         lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_update_disponivel"][self.idioma]).format(recente))
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["versao_nao_quero"][self.idioma])
 
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["versao_nao_quero"][self.idioma])
         bt_atualiza = Button(fr_botoes, text=self.interface_idioma["atualizar_agora"][self.idioma])
 
         fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
@@ -115,6 +120,9 @@ class Atualizar():
     def aviso_versao_atualizada(self, baixada):
 
         self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_tp_atualizada"])
+        self.tp_atualizacao.focus_force()
+        self.tp_atualizacao.resizable(False, False)
+        self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
         self.tp_atualizacao.withdraw()
 
         try:
@@ -136,9 +144,9 @@ class Atualizar():
         lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(baixada["versao"]), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
 
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["texto_nao_quero"][self.idioma])
-        bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=FLAT)
-        bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text=self.interface_idioma["atualizado_blog"][self.idioma], relief=FLAT)
+        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["texto_nao_quero"][self.idioma], relief=RAISED)
+        bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=RAISED)
+        bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text=self.interface_idioma["atualizado_blog"][self.idioma], relief=RAISED)
         bt_cancela.configure(command=lambda event=None: self.tp_atualizacao.destroy())
         bt_facebook.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiralang/"))
         bt_blogger_.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/"))
@@ -181,8 +189,9 @@ if __name__ == '__main__':
     # Idioma que a safira está configurada
     idioma = arquivo_configuracoes['idioma']
     interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+    icon = PhotoImage(file='imagens/icone.png')
 
-    atualizar = Atualizar(master, design, idioma, interface_idioma)
+    atualizar = Atualizar(master, design, idioma, interface_idioma, icon)
 
     # Quando a safira é iniciado
     # Verificar a primeira vez
@@ -197,4 +206,8 @@ if __name__ == '__main__':
 
 
 
+
+#F694C1
+#A9DEF9
+#EDE7B1
 

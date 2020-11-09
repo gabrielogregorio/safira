@@ -5,7 +5,7 @@
 nome = "Safira" 
 
 mostre "Bom dia "
-mostre nome, " tudo bem?"
+mostre nome, " tudo bem?" 
 
 mostre ""
 mostre ":--------------------------------------------:"
@@ -26,6 +26,4 @@ mostre ""
 # Basta informar um código Hexadecimal ou o nome das cores,
 # por enquanto em inglês. Pesquise por esse código no Google #88ffff
 mostre "Texto colorido" na cor "#88ffff"
-
-
 

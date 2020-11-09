@@ -14,7 +14,8 @@ from design import Design
 
 
 class Bug():
-    def __init__(self, tela, design, idioma, interface_idioma):
+    def __init__(self, tela, design, idioma, interface_idioma, icon):
+        self.icon = icon
         self.idioma = idioma
         self.interface_idioma = interface_idioma
         self.design = design
@@ -50,9 +51,12 @@ class Bug():
 
     def interface(self):
         self.image_bug = PhotoImage(file="imagens/bug.png")
-        self.image_bug = self.image_bug.subsample(4)
+        self.image_bug = self.image_bug.subsample(4) 
 
-        self.tp_princi = Toplevel(self.tela, bd=10, bg="#3e4045")
+        self.tp_princi = Toplevel(self.tela, bd=10, bg=self.design.dic["lb1_encontrou_bug"]["bg"])
+        self.tp_princi.resizable(False, False)
+        self.tp_princi.title(self.interface_idioma["titulo_reporte_bug"][self.idioma])
+        self.tp_princi.tk.call('wm', 'iconphoto', self.tp_princi._w, self.icon)
         self.tp_princi.withdraw()
 
         try:
@@ -90,10 +94,8 @@ class Bug():
         self.bt_cancel.grid(row=1, column=1)
         self.bt_report.grid(row=1, column=2)
 
+        self.tp_princi.update() 
         self.tp_princi.deiconify()
-        self.tp_princi.update()
-
-
 
 
 if __name__ == '__main__':
@@ -108,8 +110,9 @@ if __name__ == '__main__':
     # Idioma que a safira está configurada
     idioma = arquivo_configuracoes['idioma']
     interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+    icon = PhotoImage(file='imagens/icone.png')
 
-    bug = Bug(master, design, idioma, interface_idioma)
+    bug = Bug(master, design, idioma, interface_idioma, icon)
     bug.interface()
 
     master.mainloop()

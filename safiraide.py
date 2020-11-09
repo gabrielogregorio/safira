@@ -27,6 +27,7 @@ from tkinter.ttk import Style
 import tkinter.font as tkFont
 from threading import Thread
 from os.path import abspath
+from os.path import join
 from time import sleep
 from time import time
 from os import getcwd
@@ -57,20 +58,47 @@ from design import Design
 from bug import Bug
 from log import Log
 
-from pyglet import resource
-from pyglet import font
 
-fonte = 'fonte/Syne_Mono/SyneMono-Regular.ttf'
-resource.add_font(fonte)
-action_man = font.load('Syne Mono')
+
+def carregar_fonte():
+    erro = ""
+    try:
+        # Carregamento da fonte
+        from pyglet import resource
+        from pyglet import font, window
+
+        #fonte_terminal = 'fonte/Roboto_Mono/RobotoMono-Regular.ttf'
+        fonte_sistema = 'fonte/OpenSans/OpenSans-Regular.ttf'
+        fonte_terminal = 'fonte/Consolas/ConsolaMono.ttf'
+
+
+        fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono']
+
+        action_man = font.load(name = fontes, dpi=400.0, size=14)
+
+        resource.add_font(fonte_terminal)
+        resource.add_font(fonte_sistema)
+
+    except ModuleNotFoundError:
+        erro = "Você precisa instalar a biblioteca pyglet para que as fontes sejam carregadas"
+
+    except Exception as e:
+        erro = e
+
+    if erro != "":
+        print("Erro "+str(erro))
+       
+
+carregar_fonte() 
 
 class Interface:
-    def __init__(self, master):
+    def __init__(self, master, icon):
         """ Classe da interface principal"""
 
         # Oculta a contrução da interface
         self.master = master
         self.master.withdraw()
+        self.icon = icon
 
         # Design da interface
         self.design = Design()
@@ -133,16 +161,16 @@ class Interface:
         self.log = Log()
 
         # Verificações de bugs
-        self.bug = Bug(self.master, self.design, self.idioma, self.interface_idioma)
+        self.bug = Bug(self.master, self.design, self.idioma, self.interface_idioma, self.icon)
 
         # Verificações de versões diponíveis para atualizar
-        self.atualizar = Atualizar(self.master, self.design, self.idioma, self.interface_idioma)
+        self.atualizar = Atualizar(self.master, self.design, self.idioma, self.interface_idioma, self.icon)
 
         # Coloração de código
         self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
 
         # Escolha do idioma
-        self.escolher_idioma = Idioma(self.master,  self.design, self.idioma, self.interface_idioma)
+        self.escolher_idioma = Idioma(self.master,  self.design, self.idioma, self.interface_idioma, self.icon)
 
         # Inserção de log
         self.log.adicionar_novo_acesso('logs/registros.json', 'acessos')
@@ -165,7 +193,7 @@ class Interface:
         self.fr_tela.grid_columnconfigure(1, weight=1)
 
         # COMANDOS
-        cm_abrir_arquivo = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo_dialog")
+        cm_abrir_arquivo = lambda event=None: self.manipular_arquivos(None, "abrir_arquivo_dialog")
         cm_salvar_arquivo_como = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo_como_dialog")
         cm_acao_salva_arquivo = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo")
        
@@ -371,20 +399,16 @@ class Interface:
         t = Thread(target=lambda self=self: self.buscar_atualização())
         t.start()
 
-        t_width = self.fr_tela.winfo_screenwidth() - 10
-        t_heigth = self.fr_tela.winfo_screenheight() - 10
+        t_width = self.fr_tela.winfo_screenwidth()
+        t_heigth = self.fr_tela.winfo_screenheight()
 
-        master.geometry("{}x{}+10+10".format(t_width, t_heigth))
+        master.geometry("{}x{}+1+1".format(t_width, t_heigth))
 
-        #sleep(1)
+        sleep(1)
         self.splash.splash_fim()
 
         self.master.withdraw()
-        # Atualizar a interface graficaa
         self.atualizar_design_interface()
-
-        master.deiconify()
-        master.update()
         try:
             master.state('zoomed')
         except Exception as e1:
@@ -394,6 +418,12 @@ class Interface:
                 master.wm_attributes('-zoomed', 1)
             except Exception as e2:
                 print(e2)
+
+
+
+        # Atualizar a interface graficaa
+        master.deiconify()
+        master.update()
 
     def test(self, event):
         print(event)
@@ -857,15 +887,26 @@ class Interface:
 
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.num_aba_focada, self.tx_editor)
 
-        if comando == "abrirArquivo": self.controle_arquivos.abrirArquivo(link)
-        elif comando == "salvar_arquivo_dialog": self.controle_arquivos.salvar_arquivo_dialog(event)
-        elif comando == "salvar_arquivo": retorno_salvar_como = self.controle_arquivos.salvar_arquivo(event)
-        elif comando == "salvar_arquivo_como_dialog": self.controle_arquivos.salvar_arquivo_como_dialog(event)
+        if comando == "abrirArquivo":
+            print("abrirArquivo")
+            self.controle_arquivos.abrirArquivo(link)
+
+        elif comando == "abrir_arquivo_dialog":
+            print("abrir_arquivo_dialog")
+            self.controle_arquivos.abrir_arquivo_dialog(event)
+
+        elif comando == "salvar_arquivo":
+            print("salvar_arquivo")
+            retorno_salvar_como = self.controle_arquivos.salvar_arquivo(event)
+
+        elif comando == "salvar_arquivo_como_dialog":
+            print("salvar_arquivo_como_dialog")
+            self.controle_arquivos.salvar_arquivo_como_dialog(event)
 
         self.num_aba_focada = self.controle_arquivos.aba_focada
         self.dic_abas = self.controle_arquivos.dic_abas
 
-        if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "salvar_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
+        if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "abrir_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
             self.atualizar_codigo_editor(self.num_aba_focada)
 
         return 0
@@ -1245,7 +1286,7 @@ class Interface:
         try:
             self.lista_terminal_destruir[0].withdraw()
         except Exception as erro:
-            print(erro)
+            print('destruir_instancia_terminal', erro)
 
         for widget in self.lista_terminal_destruir:
             try:
@@ -1272,8 +1313,10 @@ class Interface:
         self.destruir_instancia_terminal()
 
         self.top_janela_terminal = Toplevel(self.fr_tela)
+        self.top_janela_terminal.tk.call('wm', 'iconphoto', self.top_janela_terminal._w, icon)
 
         self.top_janela_terminal.protocol("WM_DELETE_WINDOW", lambda event=None: self.destruir_instancia_terminal())
+
 
         self.top_janela_terminal.grid_columnconfigure(1, weight=1)
         self.top_janela_terminal.rowconfigure(1, weight=1)
@@ -1448,6 +1491,7 @@ class Interface:
         self.tx_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
 
         if dir_script != "":
+
             self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso,
                     self.design.dic['msg_erro_bt1'],
                     text=self.interface_idioma["erro_ver_exemplo"][self.idioma],
@@ -1710,9 +1754,13 @@ tela.grid_columnconfigure(1, weight=1)
 tela.overrideredirect(0) # Traz barra de titulo
 tela.withdraw() # Ocultar tkinter
 tela.title('Safira')
-tela.call('wm', 'iconphoto', tela._w, PhotoImage(file='imagens/icone.png'))
+icon = PhotoImage(file='imagens/icone.png')
+tela.call('wm', 'iconphoto', tela._w, icon)
 
-instancia = Interface(tela)
+
+instancia = Interface(tela, icon)
 tela.protocol("WM_DELETE_WINDOW", lambda inst=tela: instancia.fechar_janela(inst))
+
+
 
 tela.mainloop()

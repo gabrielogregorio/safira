@@ -1,6 +1,6 @@
 # Cenário:
 # Agora imagine que você queira saber
-# se o aluno pasou de ano ou não, você 
+# se o aluno passou de ano ou não, você 
 # precisará fazer um teste, para isso
 # usamos o comando de condicionais, o se
 
@@ -23,4 +23,3 @@ senao
 {
     mostre "Tente novamente"
 }
-

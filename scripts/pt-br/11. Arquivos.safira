@@ -8,7 +8,7 @@
 # Se esse arquivo foi criado de verdade
 crie o arquivo "arquivo.txt"
 
-# Escreve um texto na ultima linha do arquivo criado
+# Escreve um texto na última linha do arquivo criado
 adicione "Texto qualquer" no arquivo "arquivo.txt"
 
 # Apaga todo o texto do arquivo e coloca esse texto no lugar

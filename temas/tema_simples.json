@@ -26,7 +26,7 @@
         "activeforeground":"green",
         "bg":"#111121",
         "activebackground":"#111121",
-        "font":["", 13]
+        "font":["Open Sans", 13]
     },
     "msg_erro_bt2":{
         "relief":"sunken",
@@ -34,7 +34,7 @@
         "activeforeground":"#ff9696",
         "bg":"#111121",
         "activebackground":"#111121",
-        "font":["", 13],
+        "font":["Open Sans", 13],
         "highlightthickness":0,
         "bd":0
     },
@@ -59,7 +59,7 @@
     "idioma_lb":{
         "fg":"#343434",
         "bg":"#efefef",
-        "font":["",13],
+        "font":["Open Sans",13],
         "wraplength":700,
         "justify":"left"
     },
@@ -93,7 +93,7 @@
     },
     "cor_menu":{
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ],
         "background":"#ffffff",
@@ -106,7 +106,7 @@
     },
     "lb_sobDeTitulo":{
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ],
         "height":2,
@@ -115,7 +115,7 @@
     },
     "lb_sobDAutores":{
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ],
         "background":"#222232",
@@ -123,7 +123,7 @@
     },
     "lb_sobDesenAno":{
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ],
         "background":"#222232",
@@ -138,7 +138,7 @@
         "selectbackground":"#333343",
         "selectforeground":"#ffffff",
         "font":[
-            "Monospace",
+            "Consola Mono",
             13
         ]
     },
@@ -161,7 +161,7 @@
         "background":"#222232",
         "foreground":"#fa0104",
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ]
     },
@@ -175,7 +175,7 @@
         "foreground":"#deffe1",
         "activeforeground":"#deffe1",
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ]
     },
@@ -198,7 +198,7 @@
         "padx":30,
         "pady":7,
         "font":[
-            "Lucida Sans",
+            "Open Sans",
             11
         ]
     },
@@ -210,7 +210,7 @@
         "padx":30,
         "pady":7,
         "font":[
-            "Lucida Sans",
+            "Open Sans",
             11
         ]
     },
@@ -224,7 +224,7 @@
     },
     "dic_cor_abas_focada_botao":{
         "font":[
-            "Lucida Sans",
+            "Open Sans",
             14
         ],
         "background":"#222232",
@@ -237,7 +237,7 @@
     },
     "dic_cor_abas_nao_focada_botao":{
         "font":[
-            "Lucida Sans",
+            "Open Sans",
             14
         ],
         "background":"#444454",
@@ -251,9 +251,6 @@
     "fr_opcoes_rapidas":{
         "background":"#222232"
     },
-    "fr_ajuda":{
-        "background":"#222232"
-    },
     "lb_linhas":{
         "border":0,
         "width":40,
@@ -261,18 +258,22 @@
         "background":"#222232"
     },
     "tx_terminal":{
-        "width":50,
+        "width":50, 
         "background":"#191913",
         "foreground":"#f1f1f1",
-        "highlightthickness":0,
+        "highlightcolor":"#191913",
+        "highlightbackground":"#191913",
+        "bd":0,
+        "highlightthickness":5,
         "insertbackground":"#ffffff",
         "font":[
-            "Monospace",
+            "Consola Mono",
             13
         ]
     },
     "tx_terminal_debug_fr1":{
-        "bg":"#191913"
+        "bg":"#191913",
+        "highlightbackground":"#191913"
     },
     "tx_terminal_debug_fr2":{
         "height":10,
@@ -283,15 +284,15 @@
         "fg":"#f1f1f1",
         "bg":"#191913",
         "activebackground":"#191913",
-        "relief":"flat",
+        "relief":"groove",
         "highlightthickness":0,
         "bd":0,
-        "font":["", 12]
+        "font":["Consola Mono", 12]
     },
     "tx_pesqu":{
         "foreground":"#676767",
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ]
     },
@@ -312,8 +313,6 @@
             "#393939"
         ]
     },
-
-
     "linha_terminal":{
         "background":"#222222",
         "foreground":"#ffffff",
@@ -328,7 +327,7 @@
     },
     "cor_grid_variaveis_campo_busca":{
         "font":[
-            "",
+            "Open Sans",
             13
         ],
         "background":"#222222",
@@ -344,7 +343,7 @@
     },
     "cor_grid_treeview_red_tag":{
         "foreground":"red",
-        "font":["arial", 12]
+        "font":["Open Sans", 12]
     },
     "fr_ajuda":{ 
         "width":25,
@@ -368,7 +367,7 @@
     "lb_ajuda_texto_c":{
         "background":"#fefefe",
         "font":[
-            "",
+            "Open Sans",
             13
         ],
         "width":25,
@@ -379,7 +378,7 @@
         "justify":"left",
         "background":"#fefefe",
         "font":[
-            "",
+            "Open Sans",
             10
         ],
         "width":25,
@@ -387,7 +386,7 @@
     },
     "fonte_ct_linha":{
         "font":[
-            "Monospace",
+            "Open Sans",
             13
         ],
         "width":2000
@@ -409,7 +408,7 @@
         "fg":"#744aff",
         "bg":"#fafafa",
         "font":[
-            "",
+            "Open Sans",
             20
         ]
     },
@@ -418,7 +417,7 @@
         "fg":"#343434",
         "bg":"#fafafa",
         "font":[
-            "",
+            "Open Sans",
             11
         ]
     },
@@ -444,7 +443,7 @@
         "fg":"#744aff",
         "bg":"#fafafa",
         "font":[
-            "",
+            "Open Sans",
             20
         ]
     },
@@ -453,34 +452,34 @@
         "fg":"#343434",
         "bg":"#fafafa",
         "font":[
-            "",
+            "Open Sans",
             11
         ]
     },
     "aviso_bt_cancelar":{
-        "bg":"#ff2200",
-        "activebackground":"#ff2200",
-        "fg":"#730000",
-        "activeforeground":"#730000"
+        "bg":"#E4C1F9",
+        "activebackground":"#E4C1F9",
+        "fg":"#000000",
+        "activeforeground":"#000000"
     },
     "aviso_versao_bt_facebook_atualizada":{
-        "bg":"#0088ff",
-        "activebackground":"#0088ff",
-        "fg":"#003d73",
-        "activeforeground":"#003d73"
+        "bg":"#A9DEF9",
+        "activebackground":"#A9DEF9",
+        "fg":"#000000",
+        "activeforeground":"#000000"
     },
     "aviso_versao_fr_inf_atualizada":{
         "bg":"#fafafa"
     },
     "aviso_versao_bt_blog_atualizada":{
-        "bg":"#ff7003",
-        "activebackground":"#ff7003",
-        "fg":"#873a00",
-        "activeforeground":"#873a00"
+        "bg":"#ffa36c",
+        "activebackground":"#ffa36c",
+        "fg":"#000000",
+        "activeforeground":"#000000"
     },
     "lb1_encontrou_bug":{
         "font":[
-            "",
+            "Open Sans",
             20
         ],
         "bg":"#3e4045",
@@ -492,7 +491,7 @@
     },
     "lb3_encontrou_bug":{
         "font":[
-            "",
+            "Open Sans",
             11
         ],
         "bg":"#3e4045",
@@ -503,7 +502,7 @@
     },
     "bt_canc_encontrou_bug":{
         "font":[
-            "",
+            "Open Sans",
             13
         ],
         "highlightbackground":"#972121",
@@ -514,7 +513,7 @@
     },
     "bt_report_encontrou_bug":{
         "font":[
-            "",
+            "Open Sans",
             13
         ],
         "highlightbackground":"#219791",
