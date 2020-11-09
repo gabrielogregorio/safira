@@ -179,6 +179,27 @@
             13
         ]
     },
+    "fr_dict_aviso":{
+        "border":0,
+        "highlightthickness":0,
+        "highlightbackground":"#deffe1",
+        "highlightcolor":"#deffe1",
+        "background":"#222232"
+    },
+    "dicBtnAviso":{
+        "border":0,
+        "highlightthickness":0,
+        "highlightbackground":"#deffe1",
+        "activebackground":"#222232",
+        "highlightcolor":"#deffe1",
+        "background":"#222232",
+        "foreground":"#deffe1",
+        "activeforeground":"#deffe1",
+        "font":[
+            "Open Sans",
+            13
+        ]
+    },
     "dic_cor_abas_frame":{
         "background":"#111121"
     },
@@ -196,6 +217,7 @@
         "activeforeground":"#efefef",
         "foreground":"#efefef",
         "padx":30,
+        "relief":"sunken",
         "pady":7,
         "font":[
             "Open Sans",
@@ -208,6 +230,7 @@
         "activeforeground":"#a1a1a1",
         "foreground":"#a1a1a1",
         "padx":30,
+        "relief":"sunken",
         "pady":7,
         "font":[
             "Open Sans",
@@ -231,7 +254,7 @@
         "activebackground":"#222232",
         "activeforeground":"white",
         "foreground":"#222232",
-        "relief":"flat",
+        "relief":"sunken",
         "border":0,
         "highlightthickness":0
     },

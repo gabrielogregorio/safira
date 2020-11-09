@@ -35,6 +35,9 @@ from os import listdir
 from re import compile
 from sys import version
 
+
+
+
 import webbrowser
 import re
 
@@ -57,6 +60,10 @@ from splash import Splash
 from design import Design
 from bug import Bug
 from log import Log
+
+
+
+
 
 
 
@@ -294,6 +301,9 @@ class Interface:
         self.ic_nao_salvo = PhotoImage(file="imagens/nao_salvo.png")
         self.ic_marcar_bkp = PhotoImage(file="imagens/limpar_bkp.png")
         self.ic_idioma = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
+        self.ic_aviso = PhotoImage(file="imagens/aviso.png")
+
+
 
         # AJUSTES NO TAMANHO
         self.ic_salvar = self.ic_salvar.subsample(4, 4)
@@ -308,6 +318,7 @@ class Interface:
         self.ic_idioma = self.ic_idioma.subsample(4, 4)
         self.ic_redesfazer = self.ic_redesfazer.subsample(4, 4)
         self.ic_desfazer = self.ic_desfazer.subsample(4, 4)
+        self.ic_aviso = self.ic_aviso.subsample(1, 1)
 
         # CRIANDO AS OPÇÔES RÁPIDAS
         self.fr_opcoes = Frame(self.fr_tela)
@@ -323,8 +334,15 @@ class Interface:
         self.bt_idioma = Button(self.fr_opcoes, image=self.ic_idioma, command=cm_atualizar_idioma)
         self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_redesfazer)
         self.bt_desfazer = Button(self.fr_opcoes, image=self.ic_desfazer)
+
         self.bt_copiar = Button(self.fr_opcoes, text=self.interface_idioma["copiar"][self.idioma], command=cm_copiar)
         self.bt_colar = Button(self.fr_opcoes, text=self.interface_idioma["colar"][self.idioma], command=cm_colar)
+        self.fr_aviso = Frame(self.fr_opcoes)
+        self.lb_aviso = Label(self.fr_aviso)
+        self.bt_aviso = Button(self.fr_aviso)
+
+        self.lb_aviso.grid(row=1, column=1)
+        self.bt_aviso.grid(row=1, column=2, sticky=NSEW)
 
 
         self.fr_princ = Frame(self.fr_tela)
@@ -383,6 +401,7 @@ class Interface:
         self.bt_idioma.grid(row=1, column=13)
         self.bt_copiar.grid(row=1, column=14)
         self.bt_colar.grid(row=1, column=15)
+        self.fr_aviso.grid(row=1, column=16)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
         self.fr_abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
         self.cont_lin1.grid(row=1, column=0, sticky=NSEW)
@@ -401,6 +420,7 @@ class Interface:
 
         t_width = self.fr_tela.winfo_screenwidth()
         t_heigth = self.fr_tela.winfo_screenheight()
+        print("resolução:", t_width, t_heigth)
 
         master.geometry("{}x{}+1+1".format(t_width, t_heigth))
 
@@ -425,8 +445,22 @@ class Interface:
         master.deiconify()
         master.update()
 
-    def test(self, event):
-        print(event)
+        self.avisos()
+
+    def avisos(self):
+        t_width  = int(self.master.winfo_screenwidth())
+        t_heigth = int(self.master.winfo_screenheight())
+
+        if t_width < 1366 and t_heigth < 768:
+            self.fr_aviso.configure(highlightthickness=1)
+            self.lb_aviso.configure(image=self.ic_aviso)
+            self.bt_aviso.configure(text=self.interface_idioma["aviso_resolucao_alta"][self.idioma])
+
+        elif t_width == 1366 and t_heigth == 768:
+            self.fr_aviso.configure(highlightthickness=1)
+            self.lb_aviso.configure(image=self.ic_aviso)
+            self.bt_aviso.configure(text=self.interface_idioma["aviso_resolucao_baixa"][self.idioma])
+
 
     def liberar_breakpoint_ou_inicicar(self, tipo_execucao):
 
@@ -958,6 +992,7 @@ class Interface:
             self.obter_posicao_do_cursor(event)
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
+        print('configurar_cor_aba', 'dic_cor_abas', bg_padrao, 'dic_cor_botao', 'dic_cor_marcador')
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
@@ -967,6 +1002,8 @@ class Interface:
         """
             Usado apenas no inicio do programa *****1 VEZ*****
         """
+
+        print('carregar_abas_inicio')
         for num_aba, dados_aba in self.dic_abas.items():
             # Coloração da aba
             if dados_aba["foco"]:
@@ -994,7 +1031,7 @@ class Interface:
 
             fr_marcador = Frame(fr_uma_aba, dic_cor_marcador, padx=100, bd=10)
             lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0)
-            bt_fechar = Button(fr_uma_aba, dic_cor_botao, text=txt_btn, relief=FLAT, border=0, highlightthickness=0)
+            bt_fechar = Button(fr_uma_aba, dic_cor_botao, text=txt_btn, relief='groove', border=0, highlightthickness=0)
 
             bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: self.realcar_cor_botao_fechar_aba(bt_fechar))
             bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
@@ -1021,6 +1058,7 @@ class Interface:
 
     def abrir_nova_aba(self, event=None):
         sleep(0.1)
+        print('abrir_nova_aba', event)
         # Adicionar na posição 0
         posicao_adicionar = 0
 
@@ -1041,7 +1079,7 @@ class Interface:
         self.dic_abas[posicao_adicionar] = funcoes.carregar_json("configuracoes/guia.json")
 
         # Cores
-        dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
+        dic_cor_finao = self.design.dic["dic_cor_abas_focada"] 
         dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
         dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
 
@@ -1049,7 +1087,8 @@ class Interface:
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
         fr_marcador = Frame(fr_uma_aba, dic_cor_marcador) 
         lb_aba = Button(fr_uma_aba, dic_cor_finao, text=" "*14)
-        bt_fechar = Button(fr_uma_aba, dic_cor_botao, text="x ")
+        bt_fechar = Button(fr_uma_aba, dic_cor_botao)
+        print('pg')
 
         # Eventos
         lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=posicao_adicionar: self.focar_aba(num_aba))
@@ -1102,6 +1141,7 @@ class Interface:
 
                     if resposta is True:  # yes
                         self.manipular_arquivos(None, "salvar_arquivo")
+
                     elif resposta is False: # No
                         pass
                     elif resposta is None: # Cancel
@@ -1177,6 +1217,8 @@ class Interface:
 
 
     def atualizar_cor_abas(self):
+        print('atualizar_cor_abas')
+
         for num_aba, dados_aba in self.dic_abas.items():
 
             # Coloração da aba
@@ -1201,6 +1243,7 @@ class Interface:
 
 
     def focar_aba(self, num_aba):
+        print('focar_aba', num_aba)
         if num_aba == self.num_aba_focada:
             return 0
 
@@ -1325,6 +1368,7 @@ class Interface:
 
         t_width  = self.master.winfo_screenwidth()
         t_heigth = self.master.winfo_screenheight()
+        print("resolução:", t_width, t_heigth)
 
         self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/2-(720/2)), int(t_heigth/2-(450/2))))
         self.top_janela_terminal.deiconify()
@@ -1658,9 +1702,13 @@ class Interface:
         self.atualizar_design_objeto(self.bt_executar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar_bkp, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
+        self.atualizar_design_objeto(self.lb_aviso, "dicBtnMenus")
+        self.atualizar_design_objeto(self.fr_aviso, "fr_dict_aviso")
+
         self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_copiar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_colar, "dicBtnCopiarColar")
+        self.atualizar_design_objeto(self.bt_aviso, "dicBtnAviso")
         self.atualizar_design_objeto(self.bt_idioma, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_inserir_bkp, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_limpar_bkp, "dicBtnMenus")
@@ -1757,10 +1805,7 @@ tela.title('Safira')
 icon = PhotoImage(file='imagens/icone.png')
 tela.call('wm', 'iconphoto', tela._w, icon)
 
-
 instancia = Interface(tela, icon)
 tela.protocol("WM_DELETE_WINDOW", lambda inst=tela: instancia.fechar_janela(inst))
-
-
 
 tela.mainloop()

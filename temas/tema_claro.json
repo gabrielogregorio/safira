@@ -165,6 +165,28 @@
             13
         ]
     },
+
+    "fr_dict_aviso":{
+        "border":0,
+        "highlightthickness":0,
+        "highlightbackground":"#ededed",
+        "highlightcolor":"#ededed",
+        "background":"#ededed"
+    },
+    "dicBtnAviso":{
+        "border":0,
+        "highlightthickness":0,
+        "highlightbackground":"#ededed",
+        "activebackground":"#ededed",
+        "highlightcolor":"#ededed",
+        "background":"#ededed",
+        "foreground":"#4d4d4d",
+        "activeforeground":"#4d4d4d",
+        "font":[
+            "Open Sans",
+            13
+        ]
+    },
     "dicBtnCopiarColar":{
         "border":0,
         "highlightthickness":0,
@@ -196,6 +218,7 @@
         "activeforeground":"#565656",
         "foreground":"#565656",
         "padx":30,
+        "relief":"sunken",
         "pady":7,
         "font":[
             "Open Sans",
@@ -208,6 +231,7 @@
         "activeforeground":"#767676",
         "foreground":"#767676",
         "padx":30,
+        "relief":"sunken",
         "pady":7,
         "font":[
             "Open Sans",
