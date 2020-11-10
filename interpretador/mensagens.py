@@ -7,7 +7,6 @@ class Mensagens:
 
         self.mensagens = funcoes.carregar_json('interpretador/{}'.format(json_link))
 
-
     def text(self, chave):
         if chave == "":
             return None

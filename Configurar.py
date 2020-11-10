@@ -64,4 +64,3 @@ class ConfigurarInterpretador:
                     if valor[0] not in dic_letras[k]:
                         dic_letras[k].append(valor[0])
         return dic_letras
-

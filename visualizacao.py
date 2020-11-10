@@ -1,28 +1,24 @@
 from tkinter import Canvas
 from tkinter import Text
 
-"""
-Parte responsável pela exibição do contador de linhas
-"""
+""" Parte responsável pela exibição do contador de linhas """
 
 
 class ContadorLinhas(Canvas):
     def __init__(self, frame, design, bool_tem_linha):
         Canvas.__init__(self, frame)
 
+        self.bool_tem_linha = bool_tem_linha
         self.textwidget = None
         self.linha_analise = 0
         self.design = design
-        self.bool_tem_linha = bool_tem_linha
         self.size = 1
 
     def marcar_bkp(self, event):
         n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
         n_posicao_bkp = event.y
         #print(n_fonte, n_posicao_bkp, self.size)
-
         #print(int(n_posicao_bkp/n_fonte)+1)
-
 
     def atribuir(self, tx_editor_codigo):
         self.textwidget = tx_editor_codigo
@@ -39,7 +35,7 @@ class ContadorLinhas(Canvas):
                 break
 
             y = dline[1]
-            self.size= y
+            self.size = y
             num_linha = str(i).split(".")[0].strip()
             cor_padrao = "#777777"
 
@@ -71,9 +67,6 @@ class ContadorLinhas(Canvas):
 
             self.create_text(2, y, anchor="nw", text=num_linha, font=self.design.dic["fonte_ct_linha"]["font"],  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
-
-
-
 
 
 class EditorDeCodigo(Text):

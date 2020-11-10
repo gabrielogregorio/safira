@@ -5,9 +5,8 @@ from tkinter import NSEW
 from tkinter import Tk
 from time import sleep
 
-"""
-Tela inicial de Splash
-"""
+""" Tela inicial de Splash """
+
 
 class Splash:
     def __init__(self, design):
@@ -17,7 +16,6 @@ class Splash:
         self.tela_splash.overrideredirect(1)
         self.tela_splash.rowconfigure(1, weight=1)
         self.tela_splash.grid_columnconfigure(1, weight=1)
-
 
         # Design da tela
         self.design = design

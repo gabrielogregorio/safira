@@ -34,24 +34,12 @@ from os import getcwd
 from os import listdir
 from re import compile
 from sys import version
-
-
-
-
 import webbrowser
 import re
-
-try:
-    from interpretador.interpretador import Interpretador
-    from Configurar import ConfigurarInterpretador
-except Exception as erro:
-    print("Interpretador Não localizado: ",erro)
-
 from util.funcoes import carregar_json
 from util.arquivo import Arquivo
 import util.funcoes as funcoes
 from escolher_idioma import Idioma
-
 from visualizacao import ContadorLinhas
 from visualizacao import EditorDeCodigo
 from atualizar import Atualizar
@@ -61,10 +49,11 @@ from design import Design
 from bug import Bug
 from log import Log
 
-
-
-
-
+try:
+    from interpretador.interpretador import Interpretador
+    from Configurar import ConfigurarInterpretador
+except Exception as erro:
+    print("Interpretador Não localizado: ", erro)
 
 
 def carregar_fonte():
@@ -74,13 +63,11 @@ def carregar_fonte():
         from pyglet import resource
         from pyglet import font, window
 
-        #fonte_terminal = 'fonte/Roboto_Mono/RobotoMono-Regular.ttf'
+        # fonte_terminal = 'fonte/Roboto_Mono/RobotoMono-Regular.ttf'
         fonte_sistema = 'fonte/OpenSans/OpenSans-Regular.ttf'
         fonte_terminal = 'fonte/Consolas/ConsolaMono.ttf'
 
-
         fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono']
-
         action_man = font.load(name = fontes, dpi=400.0, size=14)
 
         resource.add_font(fonte_terminal)
@@ -94,9 +81,8 @@ def carregar_fonte():
 
     if erro != "":
         print("Erro "+str(erro))
-       
 
-carregar_fonte() 
+carregar_fonte()
 
 class Interface:
     def __init__(self, master, icon):
@@ -157,11 +143,8 @@ class Interface:
         # Textos em cada Idioma
         self.interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
 
-       
         # Dicionário de comandos disponíveis
         self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
-
-
 
         # Classes
         # Registro de logs
@@ -203,12 +186,10 @@ class Interface:
         cm_abrir_arquivo = lambda event=None: self.manipular_arquivos(None, "abrir_arquivo_dialog")
         cm_salvar_arquivo_como = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo_como_dialog")
         cm_acao_salva_arquivo = lambda event=None: self.manipular_arquivos(None, "salvar_arquivo")
-       
         cm_inserir_bkp = lambda event=None: self.adicionar_remover_breakpoint(event)
         cm_executar_bkp = lambda event=None: self.liberar_breakpoint_ou_inicicar(tipo_execucao='debug')
         cm_parar_execucao = lambda event=None: self.inicializar_interpretador(tipo_execucao='parar')
         cm_executar_programa = lambda event=None: self.inicializar_interpretador(tipo_execucao='continua')
-
         cm_limpa_breakpoints = lambda event=None: self.limpar_breakpoints()
         cm_abrir_abrir_nova_aba = lambda event=None: self.abrir_nova_aba(event)
         cm_ativar_fullscreen = lambda event: self.ativar_desativar_full_screen(event)
@@ -796,8 +777,9 @@ class Interface:
             self.interpretador_finalizado = True
 
             # Em modo que não seja debug, finalize o interpretador
-            #if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
-            Interface.inicializar_interpretador(self, tipo_execucao = 'parar')
+            # if tipo_execucao == 'continua' or not self.instancia.aconteceu_erro:
+            tipo_execucao = 'parar'
+            Interface.inicializar_interpretador(self, tipo_execucao)
 
             return 0
 
@@ -835,9 +817,9 @@ class Interface:
 
         # Titulo das colunas
         self.style_terminal.configure("Custom.Treeview.Heading",
-            background=self.design.dic["titulo_terminal"]["background"],
-            foreground=self.design.dic["titulo_terminal"]["foreground"],
-            relief=relief_titulo)
+                background=self.design.dic["titulo_terminal"]["background"],
+                foreground=self.design.dic["titulo_terminal"]["foreground"],
+                relief=relief_titulo)
 
         # Titulo das colunas
         self.style_terminal.configure("Custom.Treeview",
@@ -874,7 +856,7 @@ class Interface:
     def carregar_cascata_temas(self):
         self.mn_interface_cascate_temas = Menu(self.mn_interface, tearoff=False)
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_temas"][self.idioma], menu=self.mn_interface_cascate_temas)
-        
+
         for file in listdir('temas/'):
             if file.startswith('tema_'):
 
@@ -912,7 +894,8 @@ class Interface:
         if self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"].strip() != "":
             self.abrir_nova_aba(None)
 
-        self.manipular_arquivos(None, "abrirArquivo" , 'scripts/'+ self.idioma + '/' + str(link) )
+        self.manipular_arquivos(None, "abrirArquivo",
+            'scripts/'+ self.idioma + '/' + str(link))
 
 
     def manipular_arquivos(self, event, comando:str, link=None):
@@ -942,7 +925,6 @@ class Interface:
 
         if comando in ["abrirArquivo", "salvar_arquivo_como_dialog", "abrir_arquivo_dialog"] or retorno_salvar_como == "salvar_arquivo_como_dialog":
             self.atualizar_codigo_editor(self.num_aba_focada)
-
         return 0
 
     def aumentar_diminuir_fonte(self, acao:str):
@@ -971,10 +953,10 @@ class Interface:
         self.atualizar_coloracao_codigo_aba(True, event)
 
         if self.dic_abas != {}:
-            self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] = self.tx_editor.get(1.0, END)
-            if self.dic_abas[ self.num_aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.num_aba_focada ]["arquivoSalvo"]['texto']:
+            self.dic_abas[self.num_aba_focada ]["arquivoAtual"]['texto'] = self.tx_editor.get(1.0, END)
+            if self.dic_abas[self.num_aba_focada ]["arquivoAtual"]['texto'] != self.dic_abas[ self.num_aba_focada ]["arquivoSalvo"]['texto']:
 
-                if self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] == False:
+                if self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] is False:
                     self.dic_abas[self.num_aba_focada]["ja_foi_marcado_nao_salvo"] = True
 
                     largura_original = self.dic_abas[self.num_aba_focada]["listaAbas"][3].winfo_reqwidth()
@@ -1079,13 +1061,13 @@ class Interface:
         self.dic_abas[posicao_adicionar] = funcoes.carregar_json("configuracoes/guia.json")
 
         # Cores
-        dic_cor_finao = self.design.dic["dic_cor_abas_focada"] 
+        dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
         dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
         dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
 
         # Criando uma Aba
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
-        fr_marcador = Frame(fr_uma_aba, dic_cor_marcador) 
+        fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
         lb_aba = Button(fr_uma_aba, dic_cor_finao, text=" "*14)
         bt_fechar = Button(fr_uma_aba, dic_cor_botao)
         print('pg')
@@ -1116,10 +1098,9 @@ class Interface:
         # Focar nova aba
         self.atualizar_codigo_editor(self.num_aba_focada)
 
-
     def fechar_uma_aba(self, bt_fechar):
         bool_era_focado = False
-        dic_cor_abas = self.design.dic["dic_cor_abas"] 
+        dic_cor_abas = self.design.dic["dic_cor_abas"]
         print('[HISTÓRICO DE ABAS] = {}'.format(self.lst_historico_abas_focadas))
 
         for chave, valor in self.dic_abas.items():
@@ -1127,7 +1108,7 @@ class Interface:
             # Se for a aba para focar
             if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
 
-                # Se a aba não estava salva 
+                # Se a aba não estava salva
                 if self.dic_abas[chave]["ja_foi_marcado_nao_salvo"]:
 
                     # Focar a aba que erapara fechar
@@ -1136,7 +1117,7 @@ class Interface:
                     # Deseja salvar seu código nesta aba?
                     resposta = messagebox.askyesnocancel(
                         self    .interface_idioma["tit_fechar_aba_safira"][self.idioma],
-                        self.interface_idioma["msg_fechar_aba_safira"][self.idioma], 
+                        self.interface_idioma["msg_fechar_aba_safira"][self.idioma],
                         icon='warning')
 
                     if resposta is True:  # yes
@@ -1417,7 +1398,7 @@ class Interface:
             print("Erro ao configurar os temas ao iniciar o terminal: ", erro)
 
         self.tx_terminal.bind('<Return>', lambda event: self.alterar_status_pressionou_enter())
-        #self.tx_terminal.bind("<KeyRelease>", lambda event: self.capturar_tecla_terminal(event))
+        # self.tx_terminal.bind("<KeyRelease>", lambda event: self.capturar_tecla_terminal(event))
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
@@ -1431,13 +1412,22 @@ class Interface:
         self.et_campo_busca = Entry(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_campo_busca"])
         self.et_campo_busca.bind("<KeyRelease>", lambda event: self.retornar_variaveis())
 
-        self.arvores_grid = Treeview(fr_grid_variaveis, columns=coluna_identificadores, show="headings", style="Custom.Treeview")
+        self.arvores_grid = Treeview(
+            fr_grid_variaveis,
+            columns=coluna_identificadores,
+            show="headings",
+            style="Custom.Treeview")
+
         self.arvores_grid.tag_configure('RED_TAG',
             foreground=self.design.dic["cor_grid_treeview_red_tag"]['foreground'],
             font=self.design.dic["cor_grid_treeview_red_tag"]['font'])
 
-        #vsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="vertical", command=self.arvores_grid.yview)
-        #hsroolb = Scrollbar(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT, orient="horizontal", command=self.arvores_grid.xview)
+        #vsroolb = Scrollbar(fr_grid_variaveis,
+        # self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT,
+        # orient="vertical", command=self.arvores_grid.yview)
+        #hsroolb = Scrollbar(fr_grid_variaveis,
+        # self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT,
+        # orient="horizontal", command=self.arvores_grid.xview)
 
         #self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
 
@@ -1519,10 +1509,8 @@ class Interface:
         except Exception as e:
             print("Não foi possível abrir uma possível mensagem de erro", e)
 
-
-
         self.fr_erro_aviso = Frame(self.fr_princ, self.design.dic['msg_erro_fr1'])
-        self.fr_erro_aviso.grid_columnconfigure(1, weight=1) 
+        self.fr_erro_aviso.grid_columnconfigure(1, weight=1)
         self.fr_erro_aviso.grid(row=2, column=2, sticky=NSEW)
 
         self.fr_erro_aviso_texto_erro = Frame(self.fr_erro_aviso, self.design.dic['msg_erro_fr2'])
@@ -1704,7 +1692,6 @@ class Interface:
         self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
         self.atualizar_design_objeto(self.lb_aviso, "dicBtnMenus")
         self.atualizar_design_objeto(self.fr_aviso, "fr_dict_aviso")
-
         self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_copiar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_colar, "dicBtnCopiarColar")
@@ -1745,17 +1732,16 @@ class Interface:
 
                 self.tx_editor.insert('{}.{}'.format(p1, int(p2)), texto_inserir)
                 self.tx_editor.mark_set("insert", "{}.{}".format(int(p1)+1, int(p2)+4))
-
-            self.num_lin_bkp = posCorrente 
-
-
+            self.num_lin_bkp = posCorrente
 
     def atualizar_tema_sintaxe_da_interface(self, chave, novo):
         while True:
             try:
                 funcoes.arquivo_de_configuracoes_interface(chave, novo)
             except Exception as e:
-                print('Erro ao atualizar o arquivo \'configuracoes/configuracoes.json\'. Sem esse arquivo, não é possível atualizar os temas: '+ str(e))
+                print('''Erro ao atualizar o arquivo 
+                    \'configuracoes/configuracoes.json\'. Sem esse arquivo, não
+                    é possível atualizar os temas: '''+ str(e))
                 return 0
 
             self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
@@ -1778,7 +1764,7 @@ class Interface:
                 print('Temas atualizados')
 
             self.fr_tela.update()
-            self.tx_editor.update() 
+            self.tx_editor.update()
 
             if not self.bool_debug_temas:
                 break
@@ -1790,7 +1776,8 @@ class Interface:
             icon='warning')
 
         if resposta == 'yes':
-            inst.withdraw() # Ocultar tkinter
+            # Ocultar tkinter
+            inst.withdraw()
             inst.destroy()
 
 # Instância de tela principal
@@ -1799,13 +1786,18 @@ tela.withdraw()
 tela.rowconfigure(1, weight=1)
 tela.overrideredirect(1)
 tela.grid_columnconfigure(1, weight=1)
-tela.overrideredirect(0) # Traz barra de titulo
-tela.withdraw() # Ocultar tkinter
+
+# Traz barra de titulo
+tela.overrideredirect(0)
+
+# Ocultar tkinter
+tela.withdraw()
 tela.title('Safira')
 icon = PhotoImage(file='imagens/icone.png')
 tela.call('wm', 'iconphoto', tela._w, icon)
 
 instancia = Interface(tela, icon)
-tela.protocol("WM_DELETE_WINDOW", lambda inst=tela: instancia.fechar_janela(inst))
+func_fechar_tela = lambda inst=tela: instancia.fechar_janela(inst)
+tela.protocol("WM_DELETE_WINDOW", func_fechar_tela)
 
 tela.mainloop()

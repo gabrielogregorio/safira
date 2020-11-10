@@ -8,6 +8,7 @@ from tkinter import Tk
 import util.funcoes as funcoes 
 from design import Design 
 
+
 class Idioma():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
         self.icon = icon
@@ -77,11 +78,7 @@ class Idioma():
         j_heigth = self.tp_interface_idioma.winfo_screenmmheight()
         j_width = self.tp_interface_idioma.winfo_screenmmwidth()
 
-
-
         self.tp_interface_idioma.geometry("+{}+{}".format(j_width, j_heigth, int(t_width/2-(j_width/2)), int(t_heigth/2-(j_heigth/2))))
-
-
         self.tp_interface_idioma.deiconify()
 
     def marcar_opcao_idioma(self, botao, dic_imgs):
@@ -128,6 +125,5 @@ if __name__ == '__main__':
 
     idioma = Idioma(master, design, idioma, interface_idioma, icon)
     Button(master, text="acao", command=lambda id=idioma: atualizar_sistema(id)).grid()
-
 
     master.mainloop()
