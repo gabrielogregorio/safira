@@ -28,7 +28,11 @@ def transformar_em_json(texto):
 def atualiza_configuracoes_temas():
     dicionario_comandos = carregar_json('interpretador/comandos.json')
     config = carregar_json('configuracoes/configuracoes.json')
-    cor_da_sintaxe = carregar_json('temas/{}'.format(config["sintaxe"]))
+    try:
+        cor_da_sintaxe = carregar_json('temas/sintaxe/{}'.format(config["sintaxe"]))
+    except Exception as erro:
+        print(erro)
+        cor_da_sintaxe = {}
 
     return [dicionario_comandos, cor_da_sintaxe]
 

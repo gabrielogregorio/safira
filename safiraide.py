@@ -125,7 +125,14 @@ class Interface:
 
         self.interpretador_status = 'parado'
         self.regex_interpretador = compile(r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)")
-        self.style_terminal = self.carregar_estilos_terminal()
+        try:
+            self.style_terminal = self.carregar_estilos_terminal()
+        except Exception as e:
+            print(e)
+            self.style_terminal = Style()
+            self.style_terminal.theme_use("clam")
+
+
         self.dic_imgs = {"pt-br": "ic_pt_br.png", "en-us": "ic_en_us.png", "es": "ic_es.png"}
 
         # Dicionário de configurações da Safira
@@ -263,7 +270,7 @@ class Interface:
         self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=cm_abrirlnk_ajuda)
         self.mn_ajuda.add_command(label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=cm_abrir_disponiv)
         self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug.interface())
-        self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.atualizar.verificar_versao())
+        self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.buscar_atualização())
 
         # MENU DESENVOLVIMENTO
         self.mn_dev.add_command(label=self.interface_idioma["label_logs"][self.idioma], command=cm_ativaropc_logs)
@@ -396,11 +403,11 @@ class Interface:
             self.num_aba_focada,
             self.tx_editor)
 
-        t = Thread(target=lambda self=self: self.buscar_atualização())
-        t.start()
+        self.buscar_atualização()
 
         t_width = self.fr_tela.winfo_screenwidth()
-        t_heigth = self.fr_tela.winfo_screenheight()
+        t_heigth = se
+        lf.fr_tela.winfo_screenheight()
         print("resolução:", t_width, t_heigth)
 
         master.geometry("{}x{}+1+1".format(t_width, t_heigth))
@@ -785,20 +792,20 @@ class Interface:
 
     def carregar_estilos_terminal(self):
 
-        relief_titulo = self.design.dic["titulo_terminal"]["relief"]
+        relief_titulo = self.design.get("titulo_terminal")["relief"]
 
-        background_titulo = self.design.dic["titulo_terminal"]["background"]
-        foreground_titulo = self.design.dic["titulo_terminal"]["foreground"]
+        background_titulo = self.design.get("titulo_terminal")["background"]
+        foreground_titulo = self.design.get("titulo_terminal")["foreground"]
 
-        active_foreground_titulo = self.design.dic["titulo_terminal"]["active_foreground"]
-        active_background_titulo = self.design.dic["titulo_terminal"]["active_background"]
+        active_foreground_titulo = self.design.get("titulo_terminal")["active_foreground"]
+        active_background_titulo = self.design.get("titulo_terminal")["active_background"]
 
-        pressed_foreground_titulo = self.design.dic["titulo_terminal"]["pressed_foreground"]
-        pressed_background_titulo = self.design.dic["titulo_terminal"]["pressed_background"]
+        pressed_foreground_titulo = self.design.get("titulo_terminal")["pressed_foreground"]
+        pressed_background_titulo = self.design.get("titulo_terminal")["pressed_background"]
 
-        background_linha = self.design.dic["linha_terminal"]["background"]
-        foreground_linha = self.design.dic["linha_terminal"]["foreground"]
-        fieldbackground_linha = self.design.dic["linha_terminal"]["fieldbackground"]
+        background_linha = self.design.get("linha_terminal")["background"]
+        foreground_linha = self.design.get("linha_terminal")["foreground"]
+        fieldbackground_linha = self.design.get("linha_terminal")["fieldbackground"]
 
         self.style_terminal = Style()
         self.style_terminal.theme_use("clam")
@@ -817,15 +824,15 @@ class Interface:
 
         # Titulo das colunas
         self.style_terminal.configure("Custom.Treeview.Heading",
-                background=self.design.dic["titulo_terminal"]["background"],
-                foreground=self.design.dic["titulo_terminal"]["foreground"],
+                background=self.design.get("titulo_terminal")["background"],
+                foreground=self.design.get("titulo_terminal")["foreground"],
                 relief=relief_titulo)
 
         # Titulo das colunas
         self.style_terminal.configure("Custom.Treeview",
-            background=self.design.dic["linha_terminal"]["background"],
-            foreground=self.design.dic["linha_terminal"]["foreground"],
-            fieldbackground=self.design.dic["linha_terminal"]["fieldbackground"])
+            background=self.design.get("linha_terminal")["background"],
+            foreground=self.design.get("linha_terminal")["foreground"],
+            fieldbackground=self.design.get("linha_terminal")["fieldbackground"])
 
         # Linhas
         self.style_terminal.configure(style="Custom.Treeview",
@@ -850,36 +857,34 @@ class Interface:
         self.tx_editor.insert(INSERT, " " * 4)
         return 'break'
 
-    def buscar_atualização(self):
-        self.atualizar.verificar_versao(primeira_vez=True)
+    def buscar_atualização(self, primeira_vez=False):
+        t = Thread(target=lambda primeira_vez=primeira_vez: self.atualizar.verificar_versao(primeira_vez))
+        t.start()
+        
 
     def carregar_cascata_temas(self):
         self.mn_interface_cascate_temas = Menu(self.mn_interface, tearoff=False)
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_temas"][self.idioma], menu=self.mn_interface_cascate_temas)
 
-        for file in listdir('temas/'):
-            if file.startswith('tema_'):
+        for file in listdir('temas/interface/'):
+            arquivo = " " + file
+            if self.arquivo_configuracoes["tema"] == file:
+                arquivo = "*" + file
 
-                arquivo = " " + file
-                if self.arquivo_configuracoes["tema"] == file:
-                    arquivo = "*" + file
-
-                funcao = lambda link = file: self.atualizar_tema_sintaxe_da_interface('tema', str(link))
-                self.mn_interface_cascate_temas.add_command(label=arquivo, command=funcao)
+            funcao = lambda link = file: self.atualizar_tema_sintaxe_da_interface('tema', str(link))
+            self.mn_interface_cascate_temas.add_command(label=arquivo, command=funcao)
 
     def carregar_cascata_sintaxe(self):
         self.mn_interface_cascata_sintaxe = Menu(self.mn_interface, tearoff=False)
         self.mn_interface.add_cascade(label=self.interface_idioma["label_cascate_sintaxe"][self.idioma], menu=self.mn_interface_cascata_sintaxe)
 
-        for file in listdir('temas/'):
-            if file.startswith('sintaxe_'):
+        for file in listdir('temas/sintaxe/'):
+            arquivo = " " + file
+            if self.arquivo_configuracoes["sintaxe"] == file:
+                arquivo = "*" + file
 
-                arquivo = " " + file
-                if self.arquivo_configuracoes["sintaxe"] == file:
-                    arquivo = "*" + file
-
-                funcao = lambda link = file: self.atualizar_tema_sintaxe_da_interface('sintaxe', str(link))
-                self.mn_interface_cascata_sintaxe.add_command(label=arquivo, command=funcao)
+            funcao = lambda link = file: self.atualizar_tema_sintaxe_da_interface('sintaxe', str(link))
+            self.mn_interface_cascata_sintaxe.add_command(label=arquivo, command=funcao)
 
     def carregar_cascata_scripts(self):
         scripts = listdir('scripts/' + self.idioma)
@@ -933,15 +938,15 @@ class Interface:
         if acao == "+": adicao = 1
         else: adicao = -1
 
-        self.design.dic["cor_menu"]["font"][1] = int(self.design.dic["cor_menu"]["font"][1]) + adicao
-        self.design.dic["lb_sobDeTitulo"]["font"][1] = int(self.design.dic["lb_sobDeTitulo"]["font"][1]) + adicao
-        self.design.dic["dicBtnMenus"]["font"][1] = int(self.design.dic["dicBtnMenus"]["font"][1]) + adicao
-        self.design.dic["tx_terminal"]["font"][1] = int(self.design.dic["tx_terminal"]["font"][1]) + adicao
-        self.design.dic["tx_codificacao"]["font"][1] = int(self.design.dic["tx_codificacao"]["font"][1]) + adicao
-        self.design.dic["fonte_ct_linha"]["font"][1] = int(self.design.dic["fonte_ct_linha"]["font"][1]) + adicao
-        self.design.dic["fonte_ct_linha"]["width"] = int(self.design.dic["fonte_ct_linha"]["width"]) + adicao
+        self.design.get("cor_menu")["font"][1] = int(self.design.get("cor_menu")["font"][1]) + adicao
+        self.design.get("lb_sobDeTitulo")["font"][1] = int(self.design.get("lb_sobDeTitulo")["font"][1]) + adicao
+        self.design.get("dicBtnMenus")["font"][1] = int(self.design.get("dicBtnMenus")["font"][1]) + adicao
+        self.design.get("tx_terminal")["font"][1] = int(self.design.get("tx_terminal")["font"][1]) + adicao
+        self.design.get("tx_codificacao")["font"][1] = int(self.design.get("tx_codificacao")["font"][1]) + adicao
+        self.design.get("fonte_ct_linha")["font"][1] = int(self.design.get("fonte_ct_linha")["font"][1]) + adicao
+        self.design.get("fonte_ct_linha")["width"] = int(self.design.get("fonte_ct_linha")["width"]) + adicao
 
-        self.tx_editor.configure(self.design.dic["tx_codificacao"])
+        self.tx_editor.configure(self.design.get("tx_codificacao"))
         self.cont_lin.desenhar_linhas()
         self.cont_lin1.desenhar_linhas()
 
@@ -990,19 +995,24 @@ class Interface:
             # Coloração da aba
             if dados_aba["foco"]:
                 self.num_aba_focada = num_aba
-                dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
-                dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
-                dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
+                dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
+                dic_cor_finao = self.design.get("dic_cor_abas_focada")
+                dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
             else:
-                dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
-                dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
-                dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
+                dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
+                dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
+                dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
 
-            fr_uma_aba = Frame(self.fr_abas, backgroun=dic_cor_finao["background"])
+            fr_uma_aba = Frame(self.fr_abas)
             fr_uma_aba.rowconfigure(1, weight=1)
 
             nome_arquivo = str(dados_aba["arquivoSalvo"]["link"]).split("/")
             nome_arquivo = str(nome_arquivo[-1])
+
+            try:
+                fr_uma_aba.configure(backgroun=dic_cor_finao["background"])
+            except Exception as erro:
+                print(erro)
 
             txt_btn = "x "
 
@@ -1015,8 +1025,14 @@ class Interface:
             lb_aba = Button(fr_uma_aba, dic_cor_finao, text=nome_arquivo, border=0, highlightthickness=0)
             bt_fechar = Button(fr_uma_aba, dic_cor_botao, text=txt_btn, relief='groove', border=0, highlightthickness=0)
 
+            try:
+                padrao = dic_cor_botao["foreground"]
+            except Exception as erro:
+                print(erro)
+                padrao = "white"
+
             bt_fechar.bind("<Enter>", lambda event=None, bt_fechar=bt_fechar: self.realcar_cor_botao_fechar_aba(bt_fechar))
-            bt_fechar.bind("<Leave>", lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
+            bt_fechar.bind("<Leave>", lambda event=None, padrao=padrao, bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
 
             lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=num_aba: self.focar_aba(num_aba))
             bt_fechar.bind('<ButtonPress>', lambda event=None, bt_fechar=bt_fechar: self.fechar_uma_aba(bt_fechar))
@@ -1047,9 +1063,9 @@ class Interface:
         # Se tem mais de uma aba
         if len(self.dic_abas) != 0:
             # Cores
-            dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
-            dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
-            dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
+            dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
+            dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+            dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
 
             # Remover o foco da aba focada
             self.configurar_cor_aba(dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
@@ -1061,9 +1077,9 @@ class Interface:
         self.dic_abas[posicao_adicionar] = funcoes.carregar_json("configuracoes/guia.json")
 
         # Cores
-        dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
-        dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
-        dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
+        dic_cor_finao = self.design.get("dic_cor_abas_focada")
+        dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+        dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
         # Criando uma Aba
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
@@ -1100,7 +1116,7 @@ class Interface:
 
     def fechar_uma_aba(self, bt_fechar):
         bool_era_focado = False
-        dic_cor_abas = self.design.dic["dic_cor_abas"]
+        dic_cor_abas = self.design.get("dic_cor_abas")
         print('[HISTÓRICO DE ABAS] = {}'.format(self.lst_historico_abas_focadas))
 
         for chave, valor in self.dic_abas.items():
@@ -1171,9 +1187,9 @@ class Interface:
             chave = self.lst_historico_abas_focadas[-1]
 
             # Obter cores para uma nova aba
-            dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
-            dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
-            dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
+            dic_cor_finao = self.design.get("dic_cor_abas_focada")
+            dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+            dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
             # Atualizar a aba focada
             self.num_aba_focada = chave
@@ -1204,20 +1220,24 @@ class Interface:
 
             # Coloração da aba
             if num_aba == self.num_aba_focada:
-                dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
-                dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
-                dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
+                dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
+                dic_cor_finao = self.design.get("dic_cor_abas_focada")
+                dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
             else:
-                dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
-                dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
-                dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
+                dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
+                dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
+                dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
 
             fr_uma_aba = self.dic_abas[num_aba]["listaAbas"][0]
             fr_marcador = self.dic_abas[num_aba]["listaAbas"][1]
             lb_aba = self.dic_abas[num_aba]["listaAbas"][2]
             bt_fechar = self.dic_abas[num_aba]["listaAbas"][3]
 
-            fr_uma_aba.configure(backgroun=dic_cor_finao["background"])
+            try:
+                fr_uma_aba.configure(backgroun=dic_cor_finao["background"])
+            except Exception as erro:
+                print(erro)
+
             fr_marcador.configure(dic_cor_marcador)
             lb_aba.configure(dic_cor_finao)
             bt_fechar.configure(dic_cor_botao)
@@ -1228,16 +1248,16 @@ class Interface:
         if num_aba == self.num_aba_focada:
             return 0
 
-        dic_cor_finao = self.design.dic["dic_cor_abas_nao_focada"]
-        dic_cor_botao = self.design.dic["dic_cor_abas_nao_focada_botao"]
-        dic_cor_marcador = self.design.dic["dic_cor_marcador_nao_focado"]
+        dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
+        dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+        dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
         self.configurar_cor_aba(dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
 
         self.dic_abas[self.num_aba_focada]["foco"] = False
 
-        dic_cor_finao = self.design.dic["dic_cor_abas_focada"]
-        dic_cor_botao = self.design.dic["dic_cor_abas_focada_botao"]
-        dic_cor_marcador = self.design.dic["dic_cor_marcador_focado"]
+        dic_cor_finao = self.design.get("dic_cor_abas_focada")
+        dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+        dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
         self.num_aba_focada = num_aba
         self.dic_abas[num_aba]["foco"] = True
@@ -1292,7 +1312,7 @@ class Interface:
     def realcar_cor_botao_fechar_aba(self, bt_fechar):
         for chave, valor in self.dic_abas.items():
             if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
-                self.dic_abas[chave]["listaAbas"][3].configure(self.design.dic["dic_cor_abas_botao_fechar_focada"])
+                self.dic_abas[chave]["listaAbas"][3].configure(self.design.get("dic_cor_abas_botao_fechar_focada"))
                 self.dic_abas[chave]["listaAbas"][3].update()
                 return 0
 
@@ -1357,7 +1377,7 @@ class Interface:
         self.tx_terminal = Text(self.top_janela_terminal)
 
         try:
-            self.tx_terminal.configure(self.design.dic["tx_terminal"])
+            self.tx_terminal.configure(self.design.get("tx_terminal"))
         except Exception as erro:
             print("Erro 2 ao configurar os temas ao iniciar o terminal: ", erro)
 
@@ -1377,23 +1397,23 @@ class Interface:
             self.interface_idioma["debug_tipo"][self.idioma],
             self.interface_idioma["debug_valor"][self.idioma])
 
-        fr_terminal_e_grid = Frame(self.fr_princ, self.design.dic["tx_terminal_debug_fr1"])
+        fr_terminal_e_grid = Frame(self.fr_princ, self.design.get("tx_terminal_debug_fr1"))
         fr_terminal_e_grid.grid(row=1, column=4, rowspan=2, sticky=NSEW)
         fr_terminal_e_grid.grid_columnconfigure(1, weight=1)
         fr_terminal_e_grid.rowconfigure(1, weight=1)
 
-        fr_fechar_menu = Frame(fr_terminal_e_grid, self.design.dic["tx_terminal_debug_fr2"])
+        fr_fechar_menu = Frame(fr_terminal_e_grid, self.design.get("tx_terminal_debug_fr2"))
         fr_fechar_menu.grid_columnconfigure(1, weight=1)
         fr_fechar_menu.grid(row=0, column=1, sticky=NSEW)
 
-        bt_fechar = Button(fr_fechar_menu, self.design.dic["tx_terminal_debug_bt1"])
+        bt_fechar = Button(fr_fechar_menu, self.design.get("tx_terminal_debug_bt1"))
         bt_fechar['command'] = lambda: self.destruir_instancia_terminal()
         bt_fechar.grid(row=0, column=1, sticky="E")
 
         self.tx_terminal = Text(fr_terminal_e_grid)
 
         try:
-            self.tx_terminal.configure(self.design.dic["tx_terminal"])
+            self.tx_terminal.configure(self.design.get("tx_terminal"))
         except Exception as erro:
             print("Erro ao configurar os temas ao iniciar o terminal: ", erro)
 
@@ -1402,14 +1422,14 @@ class Interface:
         self.tx_terminal.focus_force()
         self.tx_terminal.grid(row=1, column=1, sticky=NSEW)
 
-        fr_grid_variaveis = Frame(fr_terminal_e_grid, self.design.dic["cor_grid_variaveis"])
+        fr_grid_variaveis = Frame(fr_terminal_e_grid, self.design.get("cor_grid_variaveis"))
         fr_grid_variaveis.grid(row=2, column=1, sticky=NSEW)
 
         fr_grid_variaveis.grid_columnconfigure(1, weight=1)
         fr_grid_variaveis.rowconfigure(2, weight=1)
 
-        self.tx_busca = Label(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_texto_busca"], text=self.interface_idioma["debug_faca_busca"][self.idioma])
-        self.et_campo_busca = Entry(fr_grid_variaveis, self.design.dic["cor_grid_variaveis_campo_busca"])
+        self.tx_busca = Label(fr_grid_variaveis, self.design.get("cor_grid_variaveis_texto_busca"), text=self.interface_idioma["debug_faca_busca"][self.idioma])
+        self.et_campo_busca = Entry(fr_grid_variaveis, self.design.get("cor_grid_variaveis_campo_busca"))
         self.et_campo_busca.bind("<KeyRelease>", lambda event: self.retornar_variaveis())
 
         self.arvores_grid = Treeview(
@@ -1419,14 +1439,14 @@ class Interface:
             style="Custom.Treeview")
 
         self.arvores_grid.tag_configure('RED_TAG',
-            foreground=self.design.dic["cor_grid_treeview_red_tag"]['foreground'],
-            font=self.design.dic["cor_grid_treeview_red_tag"]['font'])
+            foreground=self.design.get("cor_grid_treeview_red_tag")['foreground'],
+            font=self.design.get("cor_grid_treeview_red_tag")['font'])
 
         #vsroolb = Scrollbar(fr_grid_variaveis,
-        # self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT,
+        # self.design.get("cor_grid_variaveis_scrollbar"), relief=FLAT,
         # orient="vertical", command=self.arvores_grid.yview)
         #hsroolb = Scrollbar(fr_grid_variaveis,
-        # self.design.dic["cor_grid_variaveis_scrollbar"], relief=FLAT,
+        # self.design.get("cor_grid_variaveis_scrollbar"), relief=FLAT,
         # orient="horizontal", command=self.arvores_grid.xview)
 
         #self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
@@ -1509,29 +1529,29 @@ class Interface:
         except Exception as e:
             print("Não foi possível abrir uma possível mensagem de erro", e)
 
-        self.fr_erro_aviso = Frame(self.fr_princ, self.design.dic['msg_erro_fr1'])
+        self.fr_erro_aviso = Frame(self.fr_princ, self.design.get('msg_erro_fr1'))
         self.fr_erro_aviso.grid_columnconfigure(1, weight=1)
         self.fr_erro_aviso.grid(row=2, column=2, sticky=NSEW)
 
-        self.fr_erro_aviso_texto_erro = Frame(self.fr_erro_aviso, self.design.dic['msg_erro_fr2'])
+        self.fr_erro_aviso_texto_erro = Frame(self.fr_erro_aviso, self.design.get('msg_erro_fr2'))
         self.fr_erro_aviso_texto_erro.grid_columnconfigure(1, weight=1)
         self.fr_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
 
-        self.tx_erro_aviso_texto_erro = Text(self.fr_erro_aviso_texto_erro, self.design.dic['msg_erro_tx1'], relief=FLAT)
+        self.tx_erro_aviso_texto_erro = Text(self.fr_erro_aviso_texto_erro, self.design.get('msg_erro_tx1'), relief=FLAT)
         self.tx_erro_aviso_texto_erro.insert(1.0, msg_erro)
-        self.tx_erro_aviso_texto_erro.configure(self.design.dic['msg_erro_tx1_disable'])
+        self.tx_erro_aviso_texto_erro.configure(self.design.get('msg_erro_tx1_disable'))
         self.tx_erro_aviso_texto_erro.grid(row=1, column=1, sticky=NSEW)
 
         if dir_script != "":
 
             self.bt_erro_aviso_exemplo = Button(self.fr_erro_aviso,
-                    self.design.dic['msg_erro_bt1'],
+                    self.design.get('msg_erro_bt1'),
                     text=self.interface_idioma["erro_ver_exemplo"][self.idioma],
                     command=lambda: self.abrir_dica_script_erro(self.arquivo_scripts[dir_script][self.idioma]))
 
             self.bt_erro_aviso_exemplo.grid(row=1, column=2)
 
-        self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, self.design.dic['msg_erro_bt2'], text="x", command=lambda event=None: self.fechar_mensagem_de_erro())
+        self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, self.design.get('msg_erro_bt2'), text="x", command=lambda event=None: self.fechar_mensagem_de_erro())
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
 
     # ************************************************************************* #
@@ -1663,7 +1683,7 @@ class Interface:
 
     def atualizar_design_objeto(self, objeto, menu):
         try:
-            objeto.configure(self.design.dic[menu])
+            objeto.configure(self.design.get(menu))
             objeto.update()
 
         except Exception as erro:

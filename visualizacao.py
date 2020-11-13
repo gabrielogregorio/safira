@@ -15,7 +15,12 @@ class ContadorLinhas(Canvas):
         self.size = 1
 
     def marcar_bkp(self, event):
-        n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
+        try:
+            n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
+        except Exception as erro:
+            n_fonte = 10
+            print(erro)
+
         n_posicao_bkp = event.y
         #print(n_fonte, n_posicao_bkp, self.size)
         #print(int(n_posicao_bkp/n_fonte)+1)
@@ -65,7 +70,13 @@ class ContadorLinhas(Canvas):
                 else:
                     num_linha = " " + num_linha + "  "
 
-            self.create_text(2, y, anchor="nw", text=num_linha, font=self.design.dic["fonte_ct_linha"]["font"],  fill=cor_padrao)
+            try:
+                fonte = self.design.dic["fonte_ct_linha"]["font"]
+            except Exception as erro:
+                print(erro)
+                fonte = 10
+
+            self.create_text(2, y, anchor="nw", text=num_linha, font=fonte,  fill=cor_padrao)
             i = self.textwidget.index("{}+1line".format(i))
 
 

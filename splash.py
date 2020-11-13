@@ -23,14 +23,20 @@ class Splash:
         self.frame_splash = Frame(master=self.tela_splash)
 
         self.fr_splash = Frame(self.frame_splash)
-        self.l1_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
-        self.l2_splash = Label(self.frame_splash, self.design.dic["cor_intro"])
+        self.l1_splash = Label(self.frame_splash, self.design.get("cor_intro"))
+        self.l2_splash = Label(self.frame_splash, self.design.get("cor_intro"))
 
-        self.frame_splash.configure(background=self.design.dic["cor_intro"]["background"])
+        try:
+            background = self.design.get("cor_intro")["background"]
+        except Exception as erro:
+            print(erro)
+            background = "white"
+
+        self.frame_splash.configure(background=background)
         self.frame_splash.rowconfigure(1, weight=1)
         self.frame_splash.grid_columnconfigure(0, weight=1)
 
-        self.fr_splash.configure(background=self.design.dic["cor_intro"]["background"])
+        self.fr_splash.configure(background=background)
         self.l1_splash.configure(text=" SAFIRA 0.3", font=("Lucida Sans", 90), bd=80)
         self.l2_splash.configure(text='versão beta de desenvolvimento', font=("Lucida Sans", 12))
 

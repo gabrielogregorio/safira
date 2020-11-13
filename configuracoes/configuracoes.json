@@ -1,6 +1,6 @@
 {
-    "tema": "tema_simples.json",
-    "sintaxe": "sintaxe_simples.json",
+    "tema": "simples.json",
+    "sintaxe": "simples.json",
     "fonte": "Garuda",
     "logs": "ativado",
     "abertos": [],
