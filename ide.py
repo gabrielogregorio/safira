@@ -1354,7 +1354,7 @@ class Interface:
         self.destruir_instancia_terminal()
 
         self.top_janela_terminal = Toplevel(self.fr_tela)
-        self.top_janela_terminal.tk.call('wm', 'iconphoto', self.top_janela_terminal._w, icon)
+        self.top_janela_terminal.tk.call('wm', 'iconphoto', self.top_janela_terminal._w, self.icon)
 
         self.top_janela_terminal.protocol("WM_DELETE_WINDOW", lambda event=None: self.destruir_instancia_terminal())
 
