@@ -1,84 +1,67 @@
-import os
 import requests
 import zipfile
+import shutil
+import os
 import io
 import re
-import shutil
 
 class Upgrade:
     def __init__(self, dest_download, dest_backup):
         """ Realiza a atualização de uma versão da safira"""
+
         self.dest_download = dest_download
         self.dest_backup = dest_backup
+        self.msg = ""
 
     def obter_informacoes_versao(self):
         """Obtém as versões oficiais da safira"""
         dic_versoes = {}
 
-        versoes = requests.get('https://raw.githubusercontent.com/safira-lang/upgrades/main/safira_ide.txt').text
-        lista = str(versoes).split('\n')
+        # Obter versões
+        try:
+            r = requests.get('https://raw.githubusercontent.com/safira-lang/upgrades/main/upgrades.json', timeout=15)
+            r.json()
+        except Exception as erro:
+            return {"erro":str(erro)}
 
-        regx = "^\\[(\\d{2}\\/\\d{2}\\/\\d{4})\\]\\s*\\-\\s*(.*)$"
-
-        for linha in lista: 
-            dados = re.search(regx, linha)
-
-            if dados is not None:
-                data = dados.group(1)
-                vers = dados.group(2)
-                dic_versoes[data] = vers
-
-        return dic_versoes
+        if r.status_code != 200:
+            return {"erro":'Resposta esperada era 200. Resposta: {}'.format(r.status_code)}
+        return r.json()
 
     def baixar_versao(self, version):
         """Realiza o download de uma versão, salvando um .zip"""
 
-        url = 'https://github.com/safira-lang/safira-ide/archive/{}.zip'
-        zip_url = url.format(version)
+        zip_url = 'https://github.com/safira-lang/safira-ide/archive/{}.zip'.format(version)
+        print('url download "{}"'.format(zip_url))
 
         r = requests.get(zip_url, stream=True)
+        print('resposta: ', r.status_code)
 
         # Se deu resposta ok
-        if r.status_code == 200:
-            try:
-                # Carregar o zip
-                z = zipfile.ZipFile(io.BytesIO(r.content))
+        if r.status_code != 200:
+            return [False, "Erro ao baixar versão: " + str(r.status_code), '']
 
-                # Extração no diretório atual
-                z.extractall(self.dest_download)
-            except Exception as erro:
-                return [False, 'Erro ao extrair arquivos da nova versão: ', erro]
-
-            return [True, '']
-
-        else:
-            return [False, "Erro ao baixar versão: " + str(r.status_code)]
+        return [True, "Versão baixada com sucesso", r]
 
 
-    def aplicar_versao(self, versao):
-        """Aplica uma versão baixada, fazendo backups e restaurando em caso de erros"""
+    def extrair_versao(self, r):
+        """ Extrai os arquivos baixados em uma pasta """
 
-        sucesso_backup = self.fazer_backup_versao()
-        if sucesso_backup[0]:
+        try:
+            # Carregar o zip
+            z = zipfile.ZipFile(io.BytesIO(r.content))
 
-            sucesso_atualizar = self.atualizar_arquivos(versao)
-            if sucesso_atualizar[0]:
-                return [True, 'Versão atualizada com sucesso!']
+            # Extração no diretório atual
+            z.extractall(self.dest_download)
+        except Exception as erro:
+            return [False, 'Erro ao extrair arquivos da nova versão: ', erro]
 
-            else:
-                sucesso_restaurar = self.restaurar_versao()
-                if sucesso_restaurar[0]:
-                    return [False, 'Erro ao aplicar a versão, versão anteriore restaurada!' + sucesso_restaurar[1]]
-                else:
-                    return [False, 'Erro ao aplicar a versão, Erro ao restaurar versão, considere baixar a ultima versão novamente em safira-lang.blogspot.com'+ sucesso_restaurar[1]]
-
-        else:
-            return [False, 'Erro ao fazer o backup de arquivos: ', sucesso_backup[1]]
-
+        return [True, 'Arquivo Extraido com sucesso!']
 
 
     def listar_arquivos2(self, alvo):
         """Lista os arquivos de um diretório para o backup"""
+
         lista_arquivos = []
         for folder, _, file in os.walk(alvo):
             for f in file:
@@ -130,6 +113,7 @@ class Upgrade:
 
         return [True, ""]
 
+
     def restaurar_versao(self):
         return [True, ""]
 
@@ -149,9 +133,7 @@ class Upgrade:
 
             destino_1 = re.search(regx2, str(self.dest_download)).group(1)
 
-   
             destino_final = os.path.join(destino_1, arquivo)
-
             local_arquivo_enviar = os.path.join(destino_upgrade, arquivo)
 
             ultimo_diretorio_destino = re.search(regx2, destino_final).group(1)
@@ -165,7 +147,6 @@ class Upgrade:
             else:
                 print('[exis] ', ultimo_diretorio_destino)
 
-
             try:
                 print('[de  ] ', local_arquivo_enviar)
                 print('[para] ', destino_final)
@@ -173,11 +154,7 @@ class Upgrade:
                 shutil.copy(local_arquivo_enviar, destino_final)
             except Exception as erro:
                 return [False, "Erro ao copiar arquivo: " + erro + 'Arquivo' + local_arquivo_enviar + 'destino' + destino_final]
-
-
         return [True, ""]
-
-
 
     def listar_arquivos(self, alvo, versao):
         """Lista os arquivos de um diretório baixado"""
@@ -191,7 +168,7 @@ class Upgrade:
                 arquivo = os.path.join(folder, f)
 
                 # Não atualizar o arquivo de atualização
-                if 'Upgrade' in arquivo or 'backups/' in arquivo:
+                if 'Upgrade' in arquivo or 'backups/' in arquivo or arquivo.startswith('safira'):
                     print("Arquivo update ignorado")
                     continue
 

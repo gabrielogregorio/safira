@@ -1,22 +1,26 @@
-from threading import Thread
+from tkinter import Tk
+from tkinter import PhotoImage
 from tkinter import Toplevel
+from tkinter import messagebox
 from tkinter import Frame
 from tkinter import Button
 from tkinter import Message
 from tkinter import Label
-from tkinter import PhotoImage
-from tkinter import FLAT, NSEW, RAISED
-from tkinter import messagebox
-from tkinter import Tk
+from tkinter import FLAT
+from tkinter import NSEW
+from tkinter import RAISED
+
+from time import sleep
+from threading import Thread
+from datetime import datetime
 import webbrowser
+import os
 
-
+from AtualizarSafira import Upgrade
 from design import Design
 import util.funcoes as funcoes
 
-
 VERSAO_ATUAL = {"versao": 0.3}
-
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
@@ -27,72 +31,77 @@ class Atualizar():
         self.design = design
         self.tela = tela
 
-    def obter_versao_mais_recente_dev(self):
-        import requests
-        resposta = requests.get("https://safiralang.blogspot.com/p/downloads.html")
-        texto = str(resposta.text)
+        # Destino dos Downloads e Backups
+        data = str(datetime.now()).split('.')[0]
+        data = data.replace(' ', '-')
+        data = data.replace(':', '-')
 
-        lista = texto.split('id="idenficador_de_versao">')
+        dest_download = os.path.join(os.getcwd(), 'AtualizarSafira')
+        dest_backup = os.path.join(os.getcwd(), 'backups' , data)
 
-        temporario = lista[1][0:70]
-        temporario2 = temporario.split("</span>")
+        # Instância de Upgrades
+        self.up = Upgrade.Upgrade(dest_download, dest_backup)
 
-        return float(temporario2[0].strip())
 
     def verificar_versao(self, primeira_vez=False):
-        try:
-            if 1 == 1:
-                baixada = VERSAO_ATUAL
-                recente = Atualizar.obter_versao_mais_recente_dev(self)
 
-                if float(baixada["versao"]) < recente:
-                    Atualizar.aviso_versao(self, baixada, recente)
+        """Verifica se existe uma versão mais recente disponível """
+        try:
+            baixada = VERSAO_ATUAL
+
+            # Obter todas as versões
+            dic_versoes = self.up.obter_informacoes_versao()
+
+            if dic_versoes.get('erro'):
+                print(dic_versoes['erro'])
+
+                self.frame.destroy()
+                messagebox.showinfo("Erro ao buscar versões", "Aconteceu um erro quando a Safira tentou buscar as versões disponíveis. Este foi o erro: {}".format(dic_versoes['erro']))
+            else:
+                # Obter ultima versão
+                recente = max(dic_versoes.keys())
+                if float(VERSAO_ATUAL["versao"]) < float(recente):
+
+                    print('A versão {} disponível, deseja atualizar?'.format(recente))
+                    self.aviso_versao(baixada, recente)
 
                 else:
+                    # Não é necessário avisar que está atualizado
+                    # Se a interface estiver iniciando
                     if not primeira_vez:
-                        Atualizar.aviso_versao_atualizada(self, baixada)
+                        self.aviso_versao_atualizada(baixada)
 
         except Exception as erro:
             if not primeira_vez:
                 messagebox.showinfo("ops", self.interface_idioma["erro_generico"][self.idioma] + str(erro))
 
-        return True
-
-    def abrir_site(self, link):
-        t = Thread(target=lambda event=None: webbrowser.open(link))
-        t.start()
-
-        self.tp_atualizacao.destroy()
-
     def aviso_versao(self, baixada, recente):
+        """ Aviso, existe uma nova versão disponível """
+
         self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_top_level"])
         self.tp_atualizacao.focus_force()
         self.tp_atualizacao.resizable(False, False)
         self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
         self.tp_atualizacao.withdraw()
+        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
+        self.tp_atualizacao.title(self.interface_idioma["titulo_aviso_atualizacao"][self.idioma])
 
+        # Tentar remover a barra de rolagem
         try:
             self.tp_atualizacao.wm_attributes('-type', 'splash')
         except Exception as erro:
             print("Erro ao remover barra de titulos => ", erro)
 
-        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
+        # Objetos da interface
+        fr_atualizaca = Frame(self.tp_atualizacao)
+        lb_versao_dev = Label(fr_atualizaca, text=self.interface_idioma["versao_nova_disponivel"][self.idioma])
+        lb_versao_tex = Message(fr_atualizaca, text='{}'.format(self.interface_idioma["texto_update_disponivel"][self.idioma]).format(recente))
+        fr_botoes = Frame(fr_atualizaca)
 
-        j_width = self.tp_atualizacao.winfo_reqwidth()
-        j_height = self.tp_atualizacao.winfo_reqheight()
-        t_width = self.tela.winfo_screenwidth()
-        t_heigth = self.tela.winfo_screenheight()
-
-        self.tp_atualizacao.title(self.interface_idioma["titulo_aviso_atualizacao"][self.idioma])
-
-        fr_atualizaca = Frame(self.tp_atualizacao, self.design.dic["aviso_versao_fr_atualizada"])
-        lb_versao_dev = Label(fr_atualizaca, self.design.dic["aviso_versao_lb_dev_atualizada"], text=self.interface_idioma["versao_nova_disponivel"][self.idioma])
-        lb_versao_tex = Message(fr_atualizaca, self.design.dic["aviso_versao_ms_atualizada"], text='{}'.format(self.interface_idioma["texto_update_disponivel"][self.idioma]).format(recente))
-        fr_botoes = Frame(fr_atualizaca, self.design.dic["aviso_versao_fr_inf_atualizada"])
-
-        bt_cancela = Button(fr_botoes, self.design.dic["aviso_bt_cancelar"], text=self.interface_idioma["versao_nao_quero"][self.idioma])
+        bt_cancela = Button(fr_botoes, text=self.interface_idioma["versao_nao_quero"][self.idioma])
         bt_atualiza = Button(fr_botoes, text=self.interface_idioma["atualizar_agora"][self.idioma])
 
+        # Configurações de desingn
         fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
         lb_versao_dev.configure(self.design.dic["aviso_versao_lb_dev"])
         lb_versao_tex.configure(self.design.dic["aviso_versao_ms"])
@@ -100,9 +109,11 @@ class Atualizar():
         bt_cancela.configure(self.design.dic["aviso_versao_btn_cancela"], relief=FLAT)
         bt_atualiza.configure(self.design.dic["aviso_versao_btn_atualiza"], relief=FLAT)
 
-        bt_atualiza.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/p/downloads.html"))
+        # Eventos
+        bt_atualiza.configure(command=lambda rec=recente: self.aviso_aguarde_instalando(rec))
         bt_cancela.configure(command=lambda event=None: self.tp_atualizacao.destroy())
 
+        # Posicionamento de itens
         fr_atualizaca.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(2, weight=1)
@@ -113,9 +124,145 @@ class Atualizar():
         bt_cancela.grid(row=1, column=1)
         bt_atualiza.grid(row=1, column=2)
 
+        # Posicionando a tela
+        j_width = self.tp_atualizacao.winfo_reqwidth()
+        j_height = self.tp_atualizacao.winfo_reqheight()
+        t_width = self.tela.winfo_screenwidth()
+        t_heigth = self.tela.winfo_screenheight()
+
         self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
         self.tp_atualizacao.deiconify()
         self.tp_atualizacao.update()
+
+
+    def aviso_aguarde_instalando(self, recente):
+        """ Realizando a atualização """
+
+        if self.tp_atualizacao is not None:
+            self.tp_atualizacao.destroy()
+
+        self.tp_atualizacao = Toplevel(None)
+        self.tp_atualizacao.focus_force()
+        self.tp_atualizacao.resizable(False, False)
+        self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
+        self.tp_atualizacao.withdraw()
+        self.tp_atualizacao.configure(self.design.dic["aviso_versao_top_level"])
+        self.tp_atualizacao.grid_columnconfigure(1, weight=1)
+        self.tp_atualizacao.title('Atualizando.... Não feche a Safira!')
+
+        try:
+            self.tp_atualizacao.wm_attributes('-type', 'splash')
+        except Exception as erro:
+            print("Erro ao remover barra de titulos => ", erro)
+
+
+        fr_atualizaca = Frame(self.tp_atualizacao)
+        lb_versao_dev = Label(fr_atualizaca, text= '{:^30}'.format('Aguarde Atualizando!'))
+        lb_versao_tex = Message(fr_atualizaca, text=' '*50, width=200)
+        fr_botoes = Frame(fr_atualizaca)
+        bt_atualiza = Button(fr_botoes)
+
+        fr_atualizaca.configure(self.design.dic["aviso_versao_fr_atualizacao"])
+        lb_versao_dev.configure(self.design.dic["aviso_versao_lb_dev"])
+        lb_versao_tex.configure(self.design.dic["aviso_versao_ms"])
+        fr_botoes.configure(self.design.dic["aviso_versao_btn"])
+        bt_atualiza.configure(self.design.dic["aviso_versao_btn_atualiza"], relief=FLAT)
+
+        fr_atualizaca.grid_columnconfigure(1, weight=1)
+        fr_botoes.grid_columnconfigure(1, weight=1)
+        fr_botoes.grid_columnconfigure(2, weight=1)
+        fr_atualizaca.grid(row=1, column=1, sticky=NSEW)
+        lb_versao_dev.grid(row=1, column=1)
+        lb_versao_tex.grid(row=2, column=1, sticky=NSEW)
+        fr_botoes.grid(row=3, column=1, sticky=NSEW)
+        
+        j_width = self.tp_atualizacao.winfo_reqwidth()
+        j_height = self.tp_atualizacao.winfo_reqheight()
+        t_width = self.tela.winfo_screenwidth()
+        t_heigth = self.tela.winfo_screenheight()
+
+        self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
+        self.tp_atualizacao.deiconify()
+        self.tp_atualizacao.update()
+
+        th = Thread(target=lambda ver=recente, lb = lb_versao_tex, bt_at=bt_atualiza, lb_2=lb_versao_dev: self.aplica_versao(ver, lb, bt_at, lb_2))
+        th.start()
+
+    def log(self, label, texto):
+        label['text'] = label['text'] + '\n{}'.format(texto)
+
+    def aplica_versao(self, versao, lb_versao_tex, bt_atualiza, lb_versao_dev):
+        """Baixa, faz o download e atualiza a Safira"""
+
+        self.log(lb_versao_tex, "Baixando Versão {}".format(versao))
+
+        atualizar = self.up.baixar_versao(versao)
+        sucesso, msg, arquivo = atualizar
+
+        # Baixou com sucesso
+        if sucesso:
+            self.log(lb_versao_tex, msg)
+            self.log(lb_versao_tex, "Extraindo: {}".format(self.up.dest_download))
+
+            # Extraiu com sucesso
+            sucesso, msg = self.up.extrair_versao(arquivo)
+            if sucesso:
+                self.log(lb_versao_tex, msg)
+                self.log(lb_versao_tex, "Fazendo Backup")
+
+
+                # Backup da versão atual
+                sucesso_bkup, msg_bpk = self.up.fazer_backup_versao()
+                if sucesso_bkup:
+                    self.log(lb_versao_tex, msg_bpk)
+                    self.log(lb_versao_tex, "Atualizando Versão")
+
+                    # Atualizar a versão
+                    sucesso_atualizar, msg_atualizar = self.atualizar_arquivos(versao)
+                    if sucesso_atualizar:
+                        self.log(lb_versao_tex, msg_atualizar)
+                        self.log(lb_versao_tex, "Sucesso!")
+
+                        lb_versao_dev.configure(text='{:^30}'.format('Atualizado com sucesso!'), fg='green')
+                        self.tp_atualizacao.title('Safira Atualizada!')
+
+                    else:
+                        self.log(lb_versao_tex, msg_atualizar)
+                        self.log(lb_versao_tex, "\nRestaurando")
+
+                        sucesso_restaurar, msg_restaurar = self.restaurar_versao()
+
+                        self.log(lb_versao_tex, sucesso_restaurar[1])
+                        lb_versao_dev.configure(text='{:^30}'.format(sucesso_restaurar[1]), fg='orange')
+                        self.tp_atualizacao.title('Safira Não Atualizada!')
+
+                else:
+                    self.log(lb_versao_tex, msg_bpk)
+
+                    lb_versao_dev.configure(text='{:^30}'.format('Erro ao fazer Backup'), fg='orange')
+                    self.tp_atualizacao.title('Safira Não Atualizada!')
+
+        
+            else:
+                self.log(lb_versao_tex, msg)
+
+                lb_versao_dev.configure(text='{:^30}'.format('Erro ao Extrair os arquivos'), fg='orange')
+                self.tp_atualizacao.title('Safira Não Atualizada!')
+
+        else:
+            self.log(lb_versao_tex, msg)
+
+            lb_versao_dev.configure(text='{:^30}'.format('Erro ao fazer Baixar Safira'), fg='orange')
+            self.tp_atualizacao.title('Safira Não Atualizada!')
+
+        bt_atualiza.configure(command=lambda event=None: self.fechar_tudo())
+        
+        bt_atualiza['text'] = 'Reinicie a Safira!'
+        bt_atualiza.grid(row=1, column=2)
+
+
+    def fechar_tudo(self):
+        self.tela.destroy()
 
     def aviso_versao_atualizada(self, baixada):
 
@@ -148,8 +295,8 @@ class Atualizar():
         bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=RAISED)
         bt_blogger_ = Button(fr_botoes, self.design.dic["aviso_versao_bt_blog_atualizada"], text=self.interface_idioma["atualizado_blog"][self.idioma], relief=RAISED)
         bt_cancela.configure(command=lambda event=None: self.tp_atualizacao.destroy())
-        bt_facebook.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://www.facebook.com/safiralang/"))
-        bt_blogger_.configure(command=lambda event=None: Atualizar.abrir_site(self, "https://safiralang.blogspot.com/"))
+        bt_facebook.configure(command=lambda event=None: self.abrir_site("https://www.facebook.com/safiralang/"))
+        bt_blogger_.configure(command=lambda event=None: self.abrir_site("https://safiralang.blogspot.com/"))
 
         fr_atualizaca.grid_columnconfigure(1, weight=1)
         fr_botoes.grid_columnconfigure(1, weight=1)
@@ -173,7 +320,7 @@ class Atualizar():
 if __name__ == '__main__':
 
     # Simular estar atualizado
-    VERSAO_ATUAL = {"versao": 0.3}
+    VERSAO_ATUAL = {"versao": 0.29}
 
     # Simular estar desatualizado
     # VERSAO_ATUAL = {"versao": 0.1}
@@ -201,6 +348,7 @@ if __name__ == '__main__':
 
     # Quando o usuário tenta buscar atualizações de
     atualizar.verificar_versao()
+    #atualizar.aviso_aguarde_instalando('0.25')
 
     master.mainloop()
 

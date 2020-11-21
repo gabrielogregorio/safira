@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 from tkinter import messagebox
 from tkinter import PhotoImage
 from tkinter import messagebox
@@ -80,7 +78,7 @@ def carregar_fonte():
         erro = e
 
     if erro != "":
-        print("Erro "+str(erro))
+        print("Erro a carregar fonte"+str(erro))
 
 carregar_fonte()
 
@@ -406,8 +404,7 @@ class Interface:
         self.buscar_atualização()
 
         t_width = self.fr_tela.winfo_screenwidth()
-        t_heigth = se
-        lf.fr_tela.winfo_screenheight()
+        t_heigth = self.fr_tela.winfo_screenheight()
         print("resolução:", t_width, t_heigth)
 
         master.geometry("{}x{}+1+1".format(t_width, t_heigth))
@@ -1799,25 +1796,3 @@ class Interface:
             # Ocultar tkinter
             inst.withdraw()
             inst.destroy()
-
-# Instância de tela principal
-tela = Tk()
-tela.withdraw()
-tela.rowconfigure(1, weight=1)
-tela.overrideredirect(1)
-tela.grid_columnconfigure(1, weight=1)
-
-# Traz barra de titulo
-tela.overrideredirect(0)
-
-# Ocultar tkinter
-tela.withdraw()
-tela.title('Safira')
-icon = PhotoImage(file='imagens/icone.png')
-tela.call('wm', 'iconphoto', tela._w, icon)
-
-instancia = Interface(tela, icon)
-func_fechar_tela = lambda inst=tela: instancia.fechar_janela(inst)
-tela.protocol("WM_DELETE_WINDOW", func_fechar_tela)
-
-tela.mainloop()
