@@ -86,7 +86,7 @@ class Upgrade:
         for arquivo_origem in lista_arquivos:
             arquivo_origem = arquivo_origem.strip('/')
             # Obter o diretório anterior ../
-            regx2 = '(.{1,})\\/.*$'
+            regx2 = r'(.{1,})(\/|\\).*$'
 
             destino_final_file = self.dest_backup
             destino_final_arquivo = os.path.join(destino_final_file, arquivo_origem)
@@ -129,7 +129,7 @@ class Upgrade:
             arquivo = arquivo.strip('/')
 
             # Obter o diretório anterior ../
-            regx2 = '(.{1,})\\/.*$'
+            regx2 = r'(.{1,})(\/|\\).*$'
 
             destino_1 = re.search(regx2, str(self.dest_download)).group(1)
 
