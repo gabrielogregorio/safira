@@ -13,8 +13,8 @@ from tkinter import RAISED
 from time import sleep
 from threading import Thread
 from datetime import datetime
-import webbrowser
-import os
+from os import path as os_path
+from os import getcwd as os_getcwd
 
 from AtualizarSafira import Upgrade
 from design import Design
@@ -36,8 +36,8 @@ class Atualizar():
         data = data.replace(' ', '-')
         data = data.replace(':', '-')
 
-        dest_download = os.path.join(os.getcwd(), 'AtualizarSafira')
-        dest_backup = os.path.join(os.getcwd(), 'backups' , data)
+        dest_download = os_path.join(os_getcwd(), 'AtualizarSafira')
+        dest_backup = os_path.join(os_getcwd(), 'backups' , data)
 
         # Instância de Upgrades
         self.up = Upgrade.Upgrade(dest_download, dest_backup)

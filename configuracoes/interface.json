@@ -9,11 +9,6 @@
         "en-us":"Close",
         "es":"Cerca"
     },
-    
-
-
-
-
     "tit_fechar_aba_safira":{
         "pt-br":"Cuidado!",
         "en-us":"Caution!",
@@ -24,11 +19,6 @@
         "en-us":"Do you want to save your program?",
         "es":"¿Quieres guardar tu programa?"
     },
-
-
-
-
-
     "msg_fechar_safira":{
         "pt-br":"Deseja mesmo fechar a Safira?",
         "en-us":"Do you really want to close Safira?",
@@ -44,22 +34,16 @@
         "en-us":"paste",
         "es":"pegar"
     },
-
-
     "aviso_resolucao_alta":{
         "pt-br":"Os botões estão muito pequenos?",
         "en-us":"Are the buttons too small?",
         "es":"¿Son los botones demasiado pequeños?"
     },
-
-
     "aviso_resolucao_baixa":{
         "pt-br":"Os botões estão muito grandes?",
         "en-us":"¿Son los botones demasiado grandes?",
         "es":"Are the buttons too big?"
     },
-
-
     "texto_atualizacao":{
         "pt-br":"Essa escolha afetará a Interface gráfica e o idioma que as mensagens de erros serão exibidas\n\nÉ necessário reiniciar a Safira para a interface ser atualizada!",
         "en-us":"This choice will affect the graphical interface and the language in which error messages will be displayed\n\nIt is necessary to restart Sapphire for the interface to be updated!",
@@ -236,9 +220,6 @@
         "en-us":"Report a bug",
         "es":"Reportar un error"
     },
-
-
-
     "titulo_aviso_atualizacao":{
         "pt-br":"Aviso de atualização",
         "en-us":"Update notice",

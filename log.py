@@ -1,5 +1,5 @@
-import json
-import datetime
+from json import loads as json_loads
+from datetime import datetime as datetime_datetime
 
 class Log:
     def __init__(self):
@@ -17,7 +17,7 @@ class Log:
         txt = a.read()
         a.close()
         print(txt)
-        return json.loads(txt)
+        return json_loads(txt)
 
     def salvar_json(self, arquivo, json):
         a = open(arquivo, 'w', encoding='utf-8')
@@ -27,7 +27,7 @@ class Log:
 
     def registrar_log(self, msg):
         a = open(self.arquivo_logs, 'a', encoding='utf-8')
-        base = "[{}] ".format(str(datetime.datetime.now()))
+        base = "[{}] ".format(str(datetime_datetime.now()))
         a.write(base + msg)
         a.close()
 

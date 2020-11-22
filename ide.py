@@ -32,8 +32,7 @@ from os import getcwd
 from os import listdir
 from re import compile
 from sys import version
-import webbrowser
-import re
+from webbrowser import open as webbrowser_open
 from util.funcoes import carregar_json
 from util.arquivo import Arquivo
 import util.funcoes as funcoes
@@ -46,6 +45,9 @@ from splash import Splash
 from design import Design
 from bug import Bug
 from log import Log
+from re import search as re_search
+from re import sub as re_sub
+
 
 try:
     from interpretador.interpretador import Interpretador
@@ -198,10 +200,10 @@ class Interface:
         cm_limpa_breakpoints = lambda event=None: self.limpar_breakpoints()
         cm_abrir_abrir_nova_aba = lambda event=None: self.abrir_nova_aba(event)
         cm_ativar_fullscreen = lambda event: self.ativar_desativar_full_screen(event)
-        cm_abrir_disponiv = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
-        cm_abrir_comunida = lambda: webbrowser.open("https://safiraide.blogspot.com/p/comunidade.html")
-        cm_abrirl_projeto = lambda: webbrowser.open("http://safiraide.blogspot.com/")
-        cm_abrirlnk_ajuda = lambda: webbrowser.open(self.path + "/tutorial/comando.html")
+        cm_abrir_disponiv = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
+        cm_abrir_comunida = lambda: webbrowser_open("https://safiraide.blogspot.com/p/comunidade.html")
+        cm_abrirl_projeto = lambda: webbrowser_open("http://safiraide.blogspot.com/")
+        cm_abrirlnk_ajuda = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
         cm_ativaropc_logs = lambda: self.ativar_logs()
         cm_ativarop_debug = lambda: self.ativar_modo_debug_temas()
         cm_atualizar_idioma = lambda: self.atualizar_idioma()
@@ -401,7 +403,7 @@ class Interface:
             self.num_aba_focada,
             self.tx_editor)
 
-        self.buscar_atualização()
+        #self.buscar_atualização()
 
         t_width = self.fr_tela.winfo_screenwidth()
         t_heigth = self.fr_tela.winfo_screenheight()
@@ -540,7 +542,7 @@ class Interface:
             diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
 
             # Obter apenas o diretório
-            diretorio_base = re.sub('([^\\/]{1,})$', '', diretorio_base)
+            diretorio_base = re_sub('([^\\/]{1,})$', '', diretorio_base)
  
             # Criar uma instância do interpretador
             self.instancia = Interpretador(
@@ -599,7 +601,7 @@ class Interface:
                 # Se existe uma ação
                 if acao != "":
                     valores = None
-                    valores = re.search(self.regex_interpretador, acao)
+                    valores = re_search(self.regex_interpretador, acao)
 
                     # Se a instrução é de exibição na tela
                     if valores is not None:

@@ -7,7 +7,7 @@ from tkinter import NSEW
 from tkinter import FLAT
 from tkinter import PhotoImage
 from tkinter import Tk
-import webbrowser
+from webbrowser import open as webbrowser_open
 
 import util.funcoes as funcoes
 from design import Design
@@ -35,7 +35,7 @@ class Bug():
         self.bt_report.configure(
             text=self.interface_idioma["abrir_formulario"][self.idioma])
 
-        t = Thread(target=lambda event=None: webbrowser.open(website_forms))
+        t = Thread(target=lambda event=None: webbrowser_open(website_forms))
         t.start()
 
         Bug.__destruir_interface(self)

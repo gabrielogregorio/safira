@@ -1,5 +1,4 @@
 { 
-
   "percorrer_lst_str_a_cada":{
     "comando":[
       ["\\s{1,}from ","en-us"],
@@ -34,7 +33,6 @@
     ],
     "cor":"lista"
   },
-
 "percorrer_lst_str_ate":{
   "comando":[
     ["\\s{1,}from ","en-us"],
@@ -45,7 +43,6 @@
   ],
   "cor":"lista"
 },
-
 "percorrer_lst_str_ate_sub":{
   "comando":[
     [" ate ","pt-br"],
@@ -55,7 +52,6 @@
   ],
   "cor":"lista"
 },
-
 "percorrer_lst_str_ate_final":{
   "comando":[
     ["\\]","'all"],
@@ -91,7 +87,6 @@
   ],
   "cor":"lista"
 },
-
 "percorra_items_lista_sub":{
   "comando":[
     [" by assigning the variable ","en-us"],

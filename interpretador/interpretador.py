@@ -1,4 +1,3 @@
-import threading 
 from tkinter import END
 from random import randint
 from time import sleep
@@ -9,10 +8,8 @@ from re import finditer
 from re import compile
 from os import listdir
 from os import system
-import os.path
-import os 
-
-import shutil
+from os import path as os_path
+from os import remove as os_remove
 
 import util.funcoes as funcoes
 from interpretador.mensagens import Mensagens
@@ -1334,7 +1331,7 @@ class Interpretador():
         else:
             teste_arquivo = [True, arquivo_diretorio]
 
-        if os.path.exists(teste_arquivo[1]):
+        if os_path.exists(teste_arquivo[1]):
             return [True, True, "booleano", "fazerNada"]
         return [True, False, "booleano", "fazerNada"]
 
@@ -2071,7 +2068,7 @@ class Interpretador():
         nome_arquivo = str(teste_valor_arquivo[1])
         nome_arquivo = self.formatar_arquivo(nome_arquivo)
 
-        if os.path.exists(nome_arquivo):
+        if os_path.exists(nome_arquivo):
             try:
                 f = open(nome_arquivo, "r")
                 texto = f.read()
@@ -2103,7 +2100,7 @@ class Interpretador():
         texto = str(teste_valor_texto[1])
         texto = texto.replace("\\n", "\n")
 
-        if os.path.exists(nome_arquivo):
+        if os_path.exists(nome_arquivo):
             try:
                 f = open(nome_arquivo, "w", encoding="utf8")
                 f.write(texto)
@@ -2135,7 +2132,7 @@ class Interpretador():
         texto = str(teste_valor_texto[1])
         texto = texto.replace("\\n", "\n")
 
-        if os.path.exists(nome_arquivo):
+        if os_path.exists(nome_arquivo):
             try:
                 f = open(nome_arquivo, "a", encoding="utf8")
                 f.write(texto)
@@ -2181,7 +2178,7 @@ class Interpretador():
         nome_diretorio = str(teste_valor[1])
         nome_diretorio = self.formatar_arquivo(nome_diretorio)
 
-        if os.path.exists(nome_diretorio):
+        if os_path.exists(nome_diretorio):
             return [True, True, "booleano", "fazerNada"]
         else:
             return [True, False, "booleano", "fazerNada"]
@@ -2198,7 +2195,7 @@ class Interpretador():
         nome_diretorio = str(teste_valor[1])
         nome_diretorio = self.formatar_arquivo(nome_diretorio)
 
-        if os.path.exists(nome_diretorio):
+        if os_path.exists(nome_diretorio):
             return [True, False, "booleano", "fazerNada"]
         else:
             return [True, True, "booleano", "fazerNada"]
@@ -2216,7 +2213,7 @@ class Interpretador():
         nome_arquivo = str(teste_valor[1])
         nome_arquivo = self.formatar_arquivo(nome_arquivo)
 
-        if os.path.exists(nome_arquivo):
+        if os_path.exists(nome_arquivo):
             return [True, True, "booleano", "fazerNada"]
         else:
             return [True, False, "booleano", "fazerNada"]
@@ -2233,7 +2230,7 @@ class Interpretador():
         nome_arquivo = str(teste_valor[1])
         nome_arquivo = self.formatar_arquivo(nome_arquivo)
 
-        if os.path.exists(nome_arquivo):
+        if os_path.exists(nome_arquivo):
             return [True, False, "booleano", "fazerNada"]
         else:
             return [True, True, "booleano", "fazerNada"]
@@ -2262,7 +2259,7 @@ class Interpretador():
         nome_arquivo = self.formatar_arquivo(nome_arquivo)
 
         try:
-            os.remove(nome_arquivo)
+            os_remove(nome_arquivo)
         except FileNotFoundError:
             return [False, self.msg("arquivo_nao_existe").format(nome_arquivo), 'string', ' exibirNaTela']
         except Exception as erro:
@@ -2283,7 +2280,7 @@ class Interpretador():
         nome_arquivo = str(teste_valor[1])
         nome_arquivo = self.formatar_arquivo(nome_arquivo)
 
-        if not os.path.exists(nome_arquivo):
+        if not os_path.exists(nome_arquivo):
             try:
                 f = open(nome_arquivo, "w", encoding='utf8')
                 f.write("")

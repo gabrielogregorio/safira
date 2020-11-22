@@ -130,7 +130,7 @@
         "foreground":"#223322"
     },
     "tx_codificacao":{
-        "background":"#fafafa",
+        "background":"#fbfbfb",
         "foreground":"#444444",
         "border":0,
         "highlightthickness":0,
@@ -205,16 +205,16 @@
         "background":"#ededed"
     },
     "dic_cor_abas":{
-        "background":"#fafafa",
-        "activebackground":"#fafafa",
+        "background":"#fbfbfb",
+        "activebackground":"#fbfbfb",
         "activeforeground":"#565656",
         "foreground":"#565656"
     },
     "dic_cor_abas_focada":{
         "border":0,
         "highlightthickness":0,
-        "background":"#fafafa",
-        "activebackground":"#fafafa",
+        "background":"#fbfbfb",
+        "activebackground":"#fbfbfb",
         "activeforeground":"#565656",
         "foreground":"#565656",
         "padx":30,
@@ -251,8 +251,8 @@
             "Open Sans",
             14
         ],
-        "background":"#fafafa",
-        "activebackground":"#fafafa",
+        "background":"#fbfbfb",
+        "activebackground":"#fbfbfb",
         "activeforeground":"black",
         "foreground":"#ededed",
         "relief":"flat",
@@ -417,20 +417,20 @@
     },
     "aviso_versao_top_level":{
         "bd":20,
-        "bg":"#fafafa",
-        "highlightcolor":"#fafafa"
+        "bg":"#fbfbfb",
+        "highlightcolor":"#fbfbfb"
     },
     "aviso_versao_tp_atualizada":{
         "bd":20,
-        "bg":"#fafafa",
-        "highlightcolor":"#fafafa"
+        "bg":"#fbfbfb",
+        "highlightcolor":"#fbfbfb"
     },
     "aviso_versao_fr_atualizacao":{
-        "bg":"#fafafa"
+        "bg":"#fbfbfb"
     },
     "aviso_versao_lb_dev":{
         "fg":"#744aff",
-        "bg":"#fafafa",
+        "bg":"#fbfbfb",
         "font":[
             "Open Sans",
             20
@@ -439,14 +439,14 @@
     "aviso_versao_ms":{
         "anchor":"nw",
         "fg":"212121",
-        "bg":"#fafafa",
+        "bg":"#fbfbfb",
         "font":[
             "Open Sans",
             11
         ]
     },
     "aviso_versao_btn":{
-        "bg":"#fafafa"
+        "bg":"#fbfbfb"
     },
     "aviso_versao_btn_cancela":{
         "bg":"#c7c7c7",
@@ -461,11 +461,11 @@
         "activeforeground":"#094d46"
     },
     "aviso_versao_fr_atualizada":{
-        "bg":"#fafafa"
+        "bg":"#fbfbfb"
     },
     "aviso_versao_lb_dev_atualizada":{
         "fg":"#744aff",
-        "bg":"#fafafa",
+        "bg":"#fbfbfb",
         "font":[
             "Open Sans",
             20
@@ -474,7 +474,7 @@
     "aviso_versao_ms_atualizada":{
         "anchor":"nw",
         "fg":"#212121",
-        "bg":"#fafafa",
+        "bg":"#fbfbfb",
         "font":[
             "Open Sans",
             11
@@ -493,7 +493,7 @@
         "activeforeground":"#fbfbfb"
     },
     "aviso_versao_fr_inf_atualizada":{
-        "bg":"#fafafa"
+        "bg":"#fbfbfb"
     },
     "aviso_versao_bt_blog_atualizada":{
         "bg":"#ff7300",

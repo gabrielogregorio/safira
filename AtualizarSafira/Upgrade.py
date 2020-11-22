@@ -1,9 +1,12 @@
-import requests
-import zipfile
-import shutil
-import os
-import io
-import re
+from os import makedirs as os_makedirs
+from re import search as re_search
+from os import walk as os_walk
+from zipfile import ZipFile
+from io import BytesIO
+from os import path as os_path
+
+from requests import get as requests_get
+from shutil import copy as shutil_copy
 
 class Upgrade:
     def __init__(self, dest_download, dest_backup):
@@ -19,7 +22,7 @@ class Upgrade:
 
         # Obter versões
         try:
-            r = requests.get('https://raw.githubusercontent.com/safira-lang/upgrades/main/upgrades.json', timeout=15)
+            r = requests_get('https://raw.githubusercontent.com/safira-lang/upgrades/main/upgrades.json', timeout=15)
             r.json()
         except Exception as erro:
             return {"erro":str(erro)}
@@ -34,7 +37,7 @@ class Upgrade:
         zip_url = 'https://github.com/safira-lang/safira-ide/archive/{}.zip'.format(version)
         print('url download "{}"'.format(zip_url))
 
-        r = requests.get(zip_url, stream=True)
+        r = requests_get(zip_url, stream=True)
         print('resposta: ', r.status_code)
 
         # Se deu resposta ok
@@ -49,7 +52,7 @@ class Upgrade:
 
         try:
             # Carregar o zip
-            z = zipfile.ZipFile(io.BytesIO(r.content))
+            z = ZipFile(BytesIO(r.content))
 
             # Extração no diretório atual
             z.extractall(self.dest_download)
@@ -63,11 +66,11 @@ class Upgrade:
         """Lista os arquivos de um diretório para o backup"""
 
         lista_arquivos = []
-        for folder, _, file in os.walk(alvo):
+        for folder, _, file in os_walk(alvo):
             for f in file:
 
                 # Arquivo a ser movido
-                arquivo = os.path.join(folder, f)
+                arquivo = os_path.join(folder, f)
 
                 
                 # Não atualizar o arquivo de atualização
@@ -89,16 +92,16 @@ class Upgrade:
             regx2 = r'(.{1,})(\/|\\).*$'
 
             destino_final_file = self.dest_backup
-            destino_final_arquivo = os.path.join(destino_final_file, arquivo_origem)
+            destino_final_arquivo = os_path.join(destino_final_file, arquivo_origem)
 
-            ultimo_diretorio_destino = re.search(regx2, destino_final_arquivo).group(1)
+            ultimo_diretorio_destino = re_search(regx2, destino_final_arquivo).group(1)
 
             # Se o diretório não existe, crie-o
-            if not os.path.exists(ultimo_diretorio_destino):
+            if not os_path.exists(ultimo_diretorio_destino):
                 print('[cria] ', ultimo_diretorio_destino)
 
                 # Cria os diretórios e subdiretórios
-                os.makedirs(ultimo_diretorio_destino)
+                os_makedirs(ultimo_diretorio_destino)
             else:
                 print('[exis] ', ultimo_diretorio_destino)
 
@@ -107,7 +110,7 @@ class Upgrade:
                 print('[de  ] ', arquivo_origem)
                 print('[para] ', destino_final_arquivo)
                 # Tenta copiar o arquivo para o destino
-                shutil.copy(arquivo_origem, destino_final_arquivo)
+                shutil_copy(arquivo_origem, destino_final_arquivo)
             except Exception as erro:
                 return [False, "Erro ao copiar arquivo: " + erro + 'Arquivo' + arquivo_origem + 'destino' + destino_final_arquivo]
 
@@ -121,7 +124,7 @@ class Upgrade:
         """ Pega os arquivos baixados de uma versão e sobrescreve os arquivos
         da versão atualmente em execução """
 
-        destino_upgrade = os.path.join(self.dest_download, 'safira-ide-{}/'.format(versao))
+        destino_upgrade = os_path.join(self.dest_download, 'safira-ide-{}/'.format(versao))
 
         lista_arquivos = self.listar_arquivos(destino_upgrade, versao)
 
@@ -131,19 +134,19 @@ class Upgrade:
             # Obter o diretório anterior ../
             regx2 = r'(.{1,})(\/|\\).*$'
 
-            destino_1 = re.search(regx2, str(self.dest_download)).group(1)
+            destino_1 = re_search(regx2, str(self.dest_download)).group(1)
 
-            destino_final = os.path.join(destino_1, arquivo)
-            local_arquivo_enviar = os.path.join(destino_upgrade, arquivo)
+            destino_final = os_path.join(destino_1, arquivo)
+            local_arquivo_enviar = os_path.join(destino_upgrade, arquivo)
 
-            ultimo_diretorio_destino = re.search(regx2, destino_final).group(1)
+            ultimo_diretorio_destino = re_search(regx2, destino_final).group(1)
 
             # Se o diretório não existe, crie-o
-            if not os.path.exists(ultimo_diretorio_destino):
+            if not os_path.exists(ultimo_diretorio_destino):
                 print('[cria] ', ultimo_diretorio_destino)
 
                 # Cria os diretórios e subdiretórios
-                os.makedirs(ultimo_diretorio_destino)
+                os_makedirs(ultimo_diretorio_destino)
             else:
                 print('[exis] ', ultimo_diretorio_destino)
 
@@ -151,7 +154,7 @@ class Upgrade:
                 print('[de  ] ', local_arquivo_enviar)
                 print('[para] ', destino_final)
                 # Tenta copiar o arquivo para o destino
-                shutil.copy(local_arquivo_enviar, destino_final)
+                shutil_copy(local_arquivo_enviar, destino_final)
             except Exception as erro:
                 return [False, "Erro ao copiar arquivo: " + erro + 'Arquivo' + local_arquivo_enviar + 'destino' + destino_final]
         return [True, ""]
@@ -161,11 +164,11 @@ class Upgrade:
 
         # Futuramente vamos unificar as funções, tem muito código duplicado
         lista_arquivos = []
-        for folder, _, file in os.walk(alvo):
+        for folder, _, file in os_walk(alvo):
             for f in file:
 
                 # Arquivo a ser movido
-                arquivo = os.path.join(folder, f)
+                arquivo = os_path.join(folder, f)
 
                 # Não atualizar o arquivo de atualização
                 if 'Upgrade' in arquivo or 'backups/' in arquivo or arquivo.startswith('safira'):

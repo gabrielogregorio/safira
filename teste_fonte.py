@@ -1,6 +1,8 @@
 from pyglet import resource
 from pyglet import font
-from tkinter import *
+from tkinter import Tk
+from tkinter import Text
+
 
 texto = """
 AAAAAAAA

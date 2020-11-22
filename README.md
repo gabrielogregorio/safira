@@ -54,6 +54,96 @@ A safira entende comando em inglês, português, espanhol e de forma similar a o
 É assim que fica a codificação de um programa maior na Safira.
 ![Imagem](imagens/safira.png)
 
+
+--------------
+# Plataforma Base
+
+A IDE final deve ser leve e independente do Python, devendo funcionar no Windows 10.
+
+--------------------------------
+
+# Como iniciar o desenvolvimento
+Hoje a safira é feita no Python3.8, tenha ele instalado.
+principais plataformas de desenvolvimento é Ubuntu, Linux Mint e Windows por enquanto
+
+#### Crie um ambiente virtuai e ative-o
+```shell
+python3.8 -m venv .
+source ./activate
+```
+
+#### Desenvolva os programas
+Programe seguinte separando as etapas e fazendo muitos testes
+
+#### Instale biblioteca
+Instale as bibliotecas, dentro do ambiente virtual
+```shell
+python -m pip install requests
+```
+
+#### Salve os requisitos
+```shell
+python -m pip freeze > requeriments.txt
+```
+
+-----------------
+## Nomes de Widgets
+
+| Nomes de variáveis | Widgets tkinter |
+|--------------------|-----------------|
+| Button             | bt_             |
+| Label              | lb_             |
+| Frame              | fr_             |
+| Entry              | et_             |
+| Text               | tx_             |
+
+-------------------------
+
+## Classes
+
+Classes devem começar com letra maiúscula, e terem type anotations e docstring para documentá-las
+
+```python
+class Atualizar:
+    """ Essa classe fornece recursos de atualizações """
+    def __init__(self, versao:str) -> None:
+        pass
+```
+
+------------------------
+
+## Funções
+
+todas as letras em **minúscula** e separado por _, usando type anotations e docstrings
+
+```python
+def analisar_comando(self, texto: str, pontos: dict={}) -> dict:
+    return {'pontos': pontos}
+
+```
+
+-------------
+
+### Outras boas prátcas
+
+```python
+    # Recomendado
+    if (valor):
+
+    # Nao recomendado
+    if (valor == True)
+
+
+
+    ### Recomendado
+    if (valor is None):
+
+    ### Não recomendado
+    if (valor == None)
+```
+
+---------------
+
 # Como executar os arquivos do repositório
 ## 1° forma, versão estável para aprender
 Baixe a versão executável, no final da página em **Download**.
