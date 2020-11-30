@@ -5,11 +5,12 @@ class ConfigurarInterpretador:
     def __init__(self):
         pass
 
-    def gerar_regex_compilado_interpretador(self, dicLetras, dic_comandos, idioma) -> tuple:
+    def gerar_regex_compilado_interpretador(self, dicLetras:dict, dic_comandos:dict, idioma:str) -> tuple:
         """Compila todos os regex que o interpretador poderá usar
         Args:
         Returns: (regex_compilado, regex_comandos)
         """
+
         diretorio_base = ''
         bool_ignorar_todos_breakpoints = True
         bool_logs = False

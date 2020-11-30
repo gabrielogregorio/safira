@@ -134,7 +134,7 @@ class Interpretador():
             self.compilado = True
 
 
-    def analisa_inicio_codigo(self, linha):
+    def analisa_inicio_codigo(self, linha:str) -> int:
         linha = linha.strip()
         posicoes = finditer(r'^(\[\d*\])', linha)
 
@@ -197,7 +197,7 @@ class Interpretador():
 
                 sleep(0.001)
 
-    def orq_erro(self, msg_log, linhaAnalise, dir_script_erro):
+    def orq_erro(self, msg_log:str, linhaAnalise:str, dir_script_erro:str):
 
         if self.ignorar_erros:
             return "Ignorar Erro"

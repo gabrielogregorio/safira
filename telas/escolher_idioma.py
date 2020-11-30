@@ -6,7 +6,7 @@ from tkinter import GROOVE, GROOVE, NSEW
 from tkinter import PhotoImage
 from tkinter import Tk
 import util.funcoes as funcoes 
-from design import Design 
+from telas.design import Design 
 
 
 class Idioma():

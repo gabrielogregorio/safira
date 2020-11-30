@@ -36,22 +36,22 @@ from webbrowser import open as webbrowser_open
 from util.funcoes import carregar_json
 from util.arquivo import Arquivo
 import util.funcoes as funcoes
-from escolher_idioma import Idioma
-from visualizacao import ContadorLinhas
-from visualizacao import EditorDeCodigo
-from atualizar import Atualizar
-from colorir import Colorir
-from splash import Splash
-from design import Design
-from bug import Bug
-from log import Log
+from telas.escolher_idioma import Idioma
+from telas.visualizacao import ContadorLinhas
+from telas.visualizacao import EditorDeCodigo
+from telas.atualizar import Atualizar
+from telas.colorir import Colorir
+from telas.splash import Splash
+from telas.design import Design
+from telas.bug import Bug
+from logs.log import Log
 from re import search as re_search
 from re import sub as re_sub
 
 
 try:
     from interpretador.interpretador import Interpretador
-    from Configurar import ConfigurarInterpretador
+    from interpretador.Configurar import ConfigurarInterpretador
 except Exception as erro:
     print("Interpretador Não localizado: ", erro)
 
@@ -438,12 +438,12 @@ class Interface:
         t_width  = int(self.master.winfo_screenwidth())
         t_heigth = int(self.master.winfo_screenheight())
 
-        if t_width < 1366 and t_heigth < 768:
+        if t_width < 1366 or t_heigth < 768:
             self.fr_aviso.configure(highlightthickness=1)
             self.lb_aviso.configure(image=self.ic_aviso)
             self.bt_aviso.configure(text=self.interface_idioma["aviso_resolucao_alta"][self.idioma])
 
-        elif t_width == 1366 and t_heigth == 768:
+        elif t_width > 1366 or t_heigth > 768:
             self.fr_aviso.configure(highlightthickness=1)
             self.lb_aviso.configure(image=self.ic_aviso)
             self.bt_aviso.configure(text=self.interface_idioma["aviso_resolucao_baixa"][self.idioma])
@@ -950,7 +950,6 @@ class Interface:
         self.cont_lin1.desenhar_linhas()
 
         self.fr_tela.update()
-
     def ativar_coordernar_coloracao(self, event=None):
         # Coordena a atualização de uma aba
         self.fechar_mensagem_de_erro()
@@ -976,6 +975,7 @@ class Interface:
 
         if hasattr(event, "keysym"):
             self.obter_posicao_do_cursor(event)
+
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
         print('configurar_cor_aba', 'dic_cor_abas', bg_padrao, 'dic_cor_botao', 'dic_cor_marcador')
@@ -1268,11 +1268,13 @@ class Interface:
 
         self.atualizar_coloracao_codigo_aba()
 
+
+
     def atualizar_coloracao_codigo_aba(self, limpar=False, event=None):
         # num_modulos_acionados => 0
 
         if event is not None:
-            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return', 'BackSpace'):
+            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'BackSpace'):
                 return 0
 
         self.num_coloracao_acionados += 1
@@ -1285,11 +1287,39 @@ class Interface:
                 self.fr_tela.update()
             self.num_coloracao_acionados += 1
 
+        #if limpar:
+        #self.colorir_codigo.historico_coloracao = []
+        self.colorir_codigo.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
+
+        self.num_coloracao_acionados = 0
+
+
+    '''
+    def atualizar_coloracao_codigo_aba_th(self, limpar=False, event=None):
+        inicio = time()
+
+        # num_coloracao_acionados => 0
+        if self.num_coloracao_acionados > 1:
+            return 0
+
+        if self.num_coloracao_acionados == 1:
+            while self.num_coloracao_acionados != 0:
+                pass
+
+        if event is not None:
+            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return', 'BackSpace'):
+                return 0
+
+        self.num_coloracao_acionados += 1
+
         if limpar:
             self.colorir_codigo.historico_coloracao = []
         self.colorir_codigo.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
-        self.num_coloracao_acionados = 0
+        self.num_coloracao_acionados -= 0
+
+        print('\n\ntempo processamento ', time()-inicio)
+    '''
 
     def atualizar_codigo_editor(self, num_aba):
         self.tx_editor.delete(1.0, END)

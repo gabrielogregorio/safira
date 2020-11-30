@@ -1,4 +1,10 @@
 from util.funcoes import carregar_json
+from platform import system as platform_system
+
+#objeto['font'] = ('Ubuntu Mono', '')
+#fonte = "Lucida Sans"
+#if (platform_system() == 'Linux'):
+#    fonte = 'Ubuntu Mono'
 
 class Design():
     def __init__(self):

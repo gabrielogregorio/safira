@@ -3,3 +3,4 @@ libs/__pycache__/
 ..gitignor.swp
 backups
 registros.json
+logs/registros.json

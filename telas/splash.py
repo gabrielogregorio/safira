@@ -4,6 +4,8 @@ from tkinter import Label
 from tkinter import NSEW
 from tkinter import Tk
 from time import sleep
+from platform import system as platform_system
+
 
 """ Tela inicial de Splash """
 
@@ -38,8 +40,9 @@ class Splash:
 
         self.fr_splash.configure(background=background)
         self.l1_splash.configure(text=" SAFIRA 0.3", font=("Lucida Sans", 90), bd=80)
-        self.l2_splash.configure(text='versão beta de desenvolvimento', font=("Lucida Sans", 12))
 
+        #self.l2_splash.configure(text= '  ___\n (^.^)\n  /|\\\n  / \\')
+ 
         self.frame_splash.grid(row=1, column=1, sticky=NSEW)
         self.fr_splash.grid(row=0, column=1, sticky=NSEW)
         self.l1_splash.grid(row=1, column=1, sticky=NSEW)
@@ -73,16 +76,3 @@ class Splash:
         self.l2_splash.destroy()
         self.frame_splash.destroy()
         self.tela_splash.destroy()
-
-
-if __name__ == '__main__':
-    from design import Design
-
-    # Obter o Design de interfaces
-    design = Design()
-    design.update_design_dic()
-
-    sp = Splash(design)
-    sleep(5)
-    sp.splash_fim()
-

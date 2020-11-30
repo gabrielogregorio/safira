@@ -2,7 +2,7 @@ from os import path, walk
 from re import findall, MULTILINE, sub
 lista_imports = []
 
-for _, dirs, files in walk('.'):
+for _, dirs, files in walk('../'):
 
 
 

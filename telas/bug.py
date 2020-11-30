@@ -10,7 +10,7 @@ from tkinter import Tk
 from webbrowser import open as webbrowser_open
 
 import util.funcoes as funcoes
-from design import Design
+from telas.design import Design
 
 
 class Bug():
@@ -96,23 +96,3 @@ class Bug():
 
         self.tp_princi.update() 
         self.tp_princi.deiconify()
-
-
-if __name__ == '__main__':
-    master = Tk()
-
-    design = Design()
-    design.update_design_dic()
-
-    # Configurações da IDE
-    arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
-
-    # Idioma que a safira está configurada
-    idioma = arquivo_configuracoes['idioma']
-    interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
-    icon = PhotoImage(file='imagens/icone.png')
-
-    bug = Bug(master, design, idioma, interface_idioma, icon)
-    bug.interface()
-
-    master.mainloop()
