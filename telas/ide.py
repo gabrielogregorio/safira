@@ -3,14 +3,15 @@ from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
 from tkinter import Toplevel
+from tkinter import Frame
+from subprocess import run as subprocess_run
+from subprocess import PIPE as subprocess_PIPE
+from copy import deepcopy
 from tkinter import CURRENT
-from tkinter import Message
-from tkinter import Button
 from tkinter import INSERT
 from tkinter import RAISED
-from tkinter import Frame
+from tkinter import Button
 from tkinter import Label
-from tkinter import Entry
 from tkinter import NSEW
 from tkinter import Text
 from tkinter import Menu
@@ -47,13 +48,8 @@ from telas.bug import Bug
 from logs.log import Log
 from re import search as re_search
 from re import sub as re_sub
-
-
-try:
-    from interpretador.interpretador import Interpretador
-    from interpretador.Configurar import ConfigurarInterpretador
-except Exception as erro:
-    print("Interpretador Não localizado: ", erro)
+from interpretador.interpretador import Interpretador
+from interpretador.Configurar import ConfigurarInterpretador
 
 
 def carregar_fonte():
@@ -61,7 +57,8 @@ def carregar_fonte():
     try:
         # Carregamento da fonte
         from pyglet import resource
-        from pyglet import font, window
+        from pyglet import font
+        from pyglet import window
 
         # fonte_terminal = 'fonte/Roboto_Mono/RobotoMono-Regular.ttf'
         fonte_sistema = 'fonte/OpenSans/OpenSans-Regular.ttf'
@@ -92,6 +89,8 @@ class Interface:
         self.master = master
         self.master.withdraw()
         self.icon = icon
+
+        self.historico_coloracao = []
 
         # Design da interface
         self.design = Design()
@@ -125,6 +124,7 @@ class Interface:
 
         self.interpretador_status = 'parado'
         self.regex_interpretador = compile(r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)")
+
         try:
             self.style_terminal = self.carregar_estilos_terminal()
         except Exception as e:
@@ -152,6 +152,15 @@ class Interface:
 
         # Dicionário de comandos disponíveis
         self.dic_comandos, self.cor_do_comando = funcoes.atualiza_configuracoes_temas()
+
+        # Carrega os dicionários em uma variável para novo tipo de coloração
+        self.dic_coloracao = {}
+        for k, self.dic_comando in self.dic_comandos.items():
+            for comando in self.dic_comando['comando']:
+                com, cor = comando[0], self.cor_do_comando[self.dic_comando['cor']]['foreground']
+                if not com.strip() == "":
+                    self.dic_coloracao[com] = cor
+        #print(self.dic_coloracao)
 
         # Classes
         # Registro de logs
@@ -951,6 +960,83 @@ class Interface:
 
         self.fr_tela.update()
     def ativar_coordernar_coloracao(self, event=None):
+        '''
+        print('ativar_coordernar_coloracao')
+
+        codigo = self.tx_editor.get(1.0, END)[0:-1]
+        
+
+        posicoes = []
+        for linha in codigo.split('\n'):
+            posicoes.append(len(linha))
+        print('[]', posicoes)
+
+        codigo = codigo.replace('\n', ' \\n ') + ' '
+        print(codigo)
+    
+        output = subprocess_run(["dependencia\\analisador_de_codigo", codigo], stdout = subprocess_PIPE,
+                                universal_newlines = True).stdout
+        print('output:',output)
+
+
+
+
+        adicionados = []
+
+
+
+        opcoes = output.split(';')
+        for opcao in opcoes:
+            if opcao.strip() == '': continue
+            i, f, cor = opcao.split('.')
+            lin = 0
+            for x in posicoes:
+                lin += 1
+                subtract = sum(posicoes[0:lin-1])
+                print('_', lin, '_', subtract)
+                if subtract <= int(i):
+                    
+                    pos = '{}.{}, {}.{}, {}'.format( lin, int(i)-subtract, lin, int(f)-subtract, cor)
+                    print('...', pos)
+
+                    self.tx_editor.tag_add(pos, '{}.{}'.format(lin, int(i)-subtract), '{}.{}'.format(lin, int(f)-subtract))
+                    self.tx_editor.tag_config(pos, foreground=cor)
+                    self.historico_coloracao.append(pos)
+                    adicionados.append(pos)
+                    break
+
+        self.tx_editor.update()
+
+        for ideia in self.historico_coloracao:
+            if ideia not in adicionados:
+                self.tx_editor.tag_delete(ideia)
+        self.historico_coloracao = deepcopy(adicionados)
+
+
+        return 0
+        '''
+
+        '''the highlight function, called when a Key-press event occurs'''
+        '''
+        for k, v in self.dic_coloracao.items():  # iterate over dict
+            if k.strip() == '':
+                continue
+            inicio = '1.0'
+            while True:
+                inicio = self.tx_editor.search(k, inicio, END)
+                print(inicio)
+                if inicio:
+                    fim = self.tx_editor.index('%s+%dc' % (inicio, (len(k))))
+                    self.tx_editor.tag_add(k, inicio, fim)
+                    self.tx_editor.tag_config(k, foreground=v)
+                    inicio = fim
+                else:
+                    break
+                print(k)
+        self.atualizar_coloracao_codigo_aba(True, event)
+
+        return 0
+        '''
         # Coordena a atualização de uma aba
         self.fechar_mensagem_de_erro()
         self.atualizar_coloracao_codigo_aba(True, event)
@@ -1287,8 +1373,8 @@ class Interface:
                 self.fr_tela.update()
             self.num_coloracao_acionados += 1
 
-        #if limpar:
-        #self.colorir_codigo.historico_coloracao = []
+        if limpar:
+            self.colorir_codigo.historico_coloracao = []
         self.colorir_codigo.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
         self.num_coloracao_acionados = 0

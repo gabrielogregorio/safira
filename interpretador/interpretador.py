@@ -134,7 +134,15 @@ class Interpretador():
             self.compilado = True
 
 
-    def analisa_inicio_codigo(self, linha:str) -> int:
+    def analisa_inicio_codigo(self, linha:str) -> str:
+        """Obtem uma linha de código e retorna o número da linha
+
+        Args:
+            linha (str): linha de código
+
+        Returns:
+            str: Retorna a linha do código
+        """
         linha = linha.strip()
         posicoes = finditer(r'^(\[\d*\])', linha)
 
@@ -186,7 +194,12 @@ class Interpretador():
 
         return string
 
-    def aguardar_liberacao_breakPoint(self):
+    def aguardar_liberacao_breakPoint(self) -> None:
+        """Fica em um loop aguardando o Breakpoint ser liberado
+
+        Returns:
+            None: 
+        """
 
         if not self.bool_ignorar_todos_breakpoints:
             self.controle_interpretador = "aguardando_breakpoint"
@@ -197,7 +210,17 @@ class Interpretador():
 
                 sleep(0.001)
 
-    def orq_erro(self, msg_log:str, linhaAnalise:str, dir_script_erro:str):
+    def orq_erro(self, msg_log:str, linhaAnalise:str, dir_script_erro:str) -> None:
+        """Executa as rotinas para avisar o sistema que aconteceu um erro
+
+        Args:
+            msg_log (str): Mensagem de erro
+            linhaAnalise (str): Linha que o erro foi detectado
+            dir_script_erro (str): Script recomendado para a solução do problema
+
+        Returns:
+            None: None
+        """
 
         if self.ignorar_erros:
             return "Ignorar Erro"
@@ -214,7 +237,15 @@ class Interpretador():
 
                 self.erro_alertado = True
 
-    def orq_exibir_tela(self, lst_retorno_ultimo_comando):
+    def orq_exibir_tela(self, lst_retorno_ultimo_comando:list) -> list:
+        """Controla a exibição de mensagens na tela
+
+        Args:
+            lst_retorno_ultimo_comando (list): Lista com instruções no formato [sucesso, mensagem, tipo_mensagem, ação]
+
+        Returns:
+            list: Instruções no formato [sucesso, mensagem, tipo_mensagem, ação]
+        """
         regex = r"^\:(.*?)\:(.*?)\:(.*?)\:(.*)"
         valores = search(regex, str(lst_retorno_ultimo_comando[1]))
 
@@ -230,7 +261,7 @@ class Interpretador():
         while self.controle_interpretador != "":
             if self.aconteceu_erro:
                 return [False, "Interrompido", "string", "exibirNaTela"]
-            sleep(0.000001)
+            sleep(0.00001)
 
     def log(self, msg_log: str) -> str:
         """ Exibe um log no terminal
@@ -244,8 +275,16 @@ class Interpretador():
 
             print('[{0:<15.3f}] => '.format(agora), r'{}'.format(msg_log))
 
-    def orquestrador_interpretador_(self, txt_codigo):
-        #self.log('<orquestrador_interpretador_>:' + txt_codigo)
+    def orquestrador_interpretador_(self, txt_codigo:str) -> list:
+        """Controla a execução de um código, separando blocos, comandos e executando eles
+
+        Args:
+            txt_codigo (str): Bloco completo de código
+
+        Returns:
+            list: Instruções no formato [sucesso, mensagem, tipo_mensagem, ação]
+        """
+
 
         self.numero_threads_ativos += 1
         self.boo_orquestrador_iniciado = True
@@ -859,7 +898,7 @@ class Interpretador():
 
         return [True, 'Orquestrador Finalizado', 'string', "fazerNada"]
 
-    def analisa_instrucao(self, comando, texto, compilado):
+    def analisa_instrucao(self, comando, texto:str, compilado:bool) -> list:
         comando_original = comando
         re_groups = findall(self.re_comandos, comando)
         if re_groups == None:

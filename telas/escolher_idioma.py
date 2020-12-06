@@ -2,7 +2,8 @@ from tkinter import Toplevel
 from tkinter import Label
 from tkinter import Frame
 from tkinter import Button
-from tkinter import GROOVE, GROOVE, NSEW
+from tkinter import GROOVE
+from tkinter import NSEW
 from tkinter import PhotoImage
 from tkinter import Tk
 import util.funcoes as funcoes 

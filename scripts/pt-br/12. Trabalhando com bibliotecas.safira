@@ -8,9 +8,12 @@
 
 # Se a biblioteca já existe, vamos deleta-la
 se o arquivo "biblioteca.safira" existe
-{
-    delete o arquivo "biblioteca.safira"
+ {
 }
+
+
+delete o arquivo "biblioteca.safira"
+
 
 # Vamos criar a biblioteca (Um arquivo exatamente
 # igual a esse que você está programando)

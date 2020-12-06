@@ -1,10 +1,7 @@
-from threading import Thread
 from tkinter import END
 from copy import deepcopy
 from re import finditer
 from re import search
-from re import sub
-from time import time
 from re import compile
 
 

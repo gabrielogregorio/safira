@@ -1,5 +1,3 @@
-from tkinter import Tk
-from tkinter import PhotoImage
 from tkinter import Toplevel
 from tkinter import messagebox
 from tkinter import Frame
@@ -8,20 +6,14 @@ from tkinter import Message
 from tkinter import Label
 from tkinter import FLAT
 from tkinter import NSEW
-from tkinter import RAISED
 from webbrowser import open as webbrowser_open
-from time import sleep
 from threading import Thread
 from datetime import datetime
 from os import path as os_path
 from os import getcwd as os_getcwd
-
 from upgrade import Upgrade
-from telas.design import Design
-import util.funcoes as funcoes
 
-VERSAO_ATUAL = {"versao": 0.2}
-
+VERSAO_ATUAL = {"versao": 0.3}
 
 class Atualizar():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
