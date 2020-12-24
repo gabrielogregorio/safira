@@ -1,14 +1,9 @@
-# Cenário:
 # Você quer uma forma simples de percorrer
 # toda a lista, obtendo o valor de cada item
 
 lista de compras recebe "uva", "maça", "manga", "laranja"
 
-contador = 1
 percorra a lista de compras atribuindo em item_compra {
-    mostre contador, " - ", item_compra
-
-    contador = contador + 1
+    mostre item_compra
 }
-
 

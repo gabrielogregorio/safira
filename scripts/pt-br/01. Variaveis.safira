@@ -3,29 +3,23 @@
 # Está é a variável chamada idade,
 # Ela tem o valor de 20
 # Na safira, todos os números são chamados de floats
-idade =  20
+idade =  123
 
 # Esta é a variável chamada nome,
 # Ela tem o vaor do texto "CJ".
-# Na programaçãocop textos são chamados de Strings e ficam entre aspas
-nome =   "CJ"
+# Textos ficam entre aspas.
+# Na maioria das linguagens de programação, textos são chamados de Strings
+nome =   "julia"
 
 # Essa é uma variável casado,
 # Ela tem o valor de verdadeiro
-# Na programção, verdadeiro ou falso é chamado
-# de booleano
+# Na maioria das linguagens de programação, isso é chamado de booleano
 casado = falso
 
-# Vamos exibir o valor destas variáveis na tela
-mostre idade
-mostre nome
-mostre casado
-
-mostre "..."
-
 # Vamos exibir o tipo de cada variável
-mostre o tipo da variavel idade
-mostre o tipo da variavel nome
-mostre o tipo da variavel casado
-
-
+mostre ""
+mostre "Variável : Valor   : Tipo "
+mostre ".........:.........:......"
+mostre "idade    : ", idade , " : ", o tipo da variavel idade
+mostre "nome     : ", nome  , " : ", o tipo da variavel nome
+mostre "casado   : ", casado, " : ", o tipo da variavel casado

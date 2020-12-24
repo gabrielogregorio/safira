@@ -40,13 +40,13 @@
     },
     "idioma_tp":{
         "bd":10,
-        "bg":"#efefef"
+        "bg":"#dddddd"
     },
     "idioma_fr":{
-        "bg":"#efefef"
+        "bg":"#dddddd"
     },
     "idioma_fr2":{
-        "bg":"#efefef"
+        "bg":"#dddddd"
     },
     "idioma_fr3":{
         "bd":10,
@@ -54,11 +54,11 @@
     },
     "idioma_fr4":{
         "bd":10,
-        "bg":"#efefef"
+        "bg":"#dddddd"
     },
     "idioma_lb":{
         "fg":"#232323",
-        "bg":"#efefef",
+        "bg":"#dddddd",
         "font":["Open Sans",13],
         "wraplength":700,
         "justify":"left"
@@ -70,8 +70,8 @@
         "bd":0
     },
     "idioma_lb3":{
-        "bg":"#efefef",
-        "activebackground":"#efefef",
+        "bg":"#dddddd",
+        "activebackground":"#dddddd",
         "highlightthickness":0,
         "bd":0
     },
@@ -82,13 +82,13 @@
         "bd":0
     },
     "idioma_bt2":{
-        "bg":"#efefef",
-        "activebackground":"#efefef",
+        "bg":"#dddddd",
+        "activebackground":"#dddddd",
         "highlightthickness":0,
         "bd":0
     },
     "cor_intro":{
-        "background":"#c2c2c2",
+        "background":"#ffffff",
         "foreground":"#656565"
     },
     "cor_menu":{
@@ -96,11 +96,11 @@
             "Open Sans",
             13
         ],
-        "background":"#efefef",
+        "background":"#ffffff",
         "foreground":"#454545",
         "border":0,
         "tearoff":false,
-        "activebackground":"#c7c7c7",
+        "activebackground":"#ededed",
         "activeborderwidth":0,
         "activeforeground":"#565656"
     },
@@ -110,15 +110,15 @@
             13
         ],
         "height":5,
-        "background":"#ededed",
-        "foreground":"#ededed"
+        "background":"#ffffff",
+        "foreground":"#ffffff"
     },
     "lb_sobDAutores":{
         "font":[
             "Open Sans",
             13
         ],
-        "background":"#ededed",
+        "background":"#ffffff",
         "foreground":"#223322"
     },
     "lb_sobDesenAno":{
@@ -126,11 +126,11 @@
             "Open Sans",
             13
         ],
-        "background":"#ededed",
+        "background":"#ffffff",
         "foreground":"#223322"
     },
     "tx_codificacao":{
-        "background":"#fbfbfb",
+        "background":"#ffffff",
         "foreground":"#444444",
         "border":0,
         "highlightthickness":0,
@@ -143,22 +143,22 @@
         ]
     },
     "scrollbar_text":{
-        "background":"#efefef",
-        "troughcolor":"#ededed",
+        "background":"#dddddd",
+        "troughcolor":"#ffffff",
         "border":0,
         "width":20,
         "highlightthickness":0,
-        "activebackground":"#ededed",
-        "highlightbackground":"#ededed",
-        "highlightcolor":"#ededed"
+        "activebackground":"#ffffff",
+        "highlightbackground":"#ffffff",
+        "highlightcolor":"#ffffff"
     },
     "dicBtnMenus":{
         "width":30,
         "border":0,
         "highlightthickness":2,
-        "highlightbackground":"#ededed",
-        "activebackground":"#ededed",
-        "background":"#ededed",
+        "highlightbackground":"#f2f2f2",
+        "activebackground":"#f2f2f2",
+        "background":"#f2f2f2",
         "foreground":"#4d4d4d",
         "font":[
             "Open Sans",
@@ -169,17 +169,17 @@
     "fr_dict_aviso":{
         "border":0,
         "highlightthickness":0,
-        "highlightbackground":"#ededed",
-        "highlightcolor":"#ededed",
-        "background":"#ededed"
+        "highlightbackground":"#f2f2f2",
+        "highlightcolor":"#f2f2f2",
+        "background":"#f2f2f2"
     },
     "dicBtnAviso":{
         "border":0,
         "highlightthickness":0,
-        "highlightbackground":"#ededed",
-        "activebackground":"#ededed",
-        "highlightcolor":"#ededed",
-        "background":"#ededed",
+        "highlightbackground":"#f2f2f2",
+        "activebackground":"#f2f2f2",
+        "highlightcolor":"#f2f2f2",
+        "background":"#f2f2f2",
         "foreground":"#4d4d4d",
         "activeforeground":"#4d4d4d",
         "font":[
@@ -190,10 +190,10 @@
     "dicBtnCopiarColar":{
         "border":0,
         "highlightthickness":0,
-        "highlightbackground":"#ededed",
-        "activebackground":"#ededed",
-        "highlightcolor":"#ededed",
-        "background":"#ededed",
+        "highlightbackground":"#f2f2f2",
+        "activebackground":"#f2f2f2",
+        "highlightcolor":"#f2f2f2",
+        "background":"#f2f2f2",
         "foreground":"#4d4d4d",
         "activeforeground":"#4d4d4d",
         "font":[
@@ -202,19 +202,19 @@
         ]
     },
     "dic_cor_abas_frame":{
-        "background":"#ededed"
+        "background":"#e5e5e5"
     },
     "dic_cor_abas":{
-        "background":"#fbfbfb",
-        "activebackground":"#fbfbfb",
+        "background":"#ffffff",
+        "activebackground":"#ffffff",
         "activeforeground":"#565656",
         "foreground":"#565656"
     },
     "dic_cor_abas_focada":{
         "border":0,
         "highlightthickness":0,
-        "background":"#fbfbfb",
-        "activebackground":"#fbfbfb",
+        "background":"#ffffff",
+        "activebackground":"#ffffff",
         "activeforeground":"#565656",
         "foreground":"#565656",
         "padx":30,
@@ -226,10 +226,10 @@
         ]
     },
     "dic_cor_abas_nao_focada":{
-        "background":"#efefef",
-        "activebackground":"#efefef",
-        "activeforeground":"#767676",
-        "foreground":"#767676",
+        "background":"#ededed",
+        "activebackground":"#ededed",
+        "activeforeground":"#9a9a9a",
+        "foreground":"#9a9a9a",
         "padx":30,
         "relief":"sunken",
         "pady":7,
@@ -243,43 +243,46 @@
         "height":1
     },
     "dic_cor_marcador_nao_focado":{
-        "background":"#ededed",
+        "background":"#eeeeee",
         "height":1
     },
-    "dic_cor_abas_focada_botao":{
+    "abas_botao_fechar_focado":{
         "font":[
             "Open Sans",
             14
         ],
-        "background":"#fbfbfb",
-        "activebackground":"#fbfbfb",
-        "activeforeground":"black",
-        "foreground":"#ededed",
+        "background":"#ffffff",
+        "activebackground":"#ffffff",
+        "activeforeground":"#ff8888",
+        "foreground":"#888888",
         "relief":"flat",
         "border":0,
         "highlightthickness":0
     },
-    "dic_cor_abas_nao_focada_botao":{
+    "abas_botao_fechar_desfocado":{
         "font":[
             "Open Sans",
             14
         ],
-        "background":"#efefef",
-        "activebackground":"#efefef",
+        "background":"#ededed",
+        "activebackground":"#ededed",
         "activeforeground":"black",
-        "foreground":"#efefef"
+        "foreground":"#dddddd",
+        "relief":"flat",
+        "border":0,
+        "highlightthickness":0
     },
-    "dic_cor_abas_botao_fechar_focada":{
-        "foreground":"white"
+    "dic_cor_abas_botao_fechar_focado_focada":{
+        "foreground":"red"
     },
     "fr_opcoes_rapidas":{
-        "background":"#ededed"
+        "background":"#f2f2f2"
     },
     "lb_linhas":{
         "border":0,
         "width":40,
         "highlightthickness":0,
-        "background":"#ededed"
+        "background":"#e5e5e5"
     },
     "tx_terminal":{
         "width":50, 
@@ -295,6 +298,15 @@
             13
         ]
     },
+
+
+
+
+
+
+
+
+
     "tx_terminal_debug_fr1":{
         "bg":"#191913",
         "highlightbackground":"#191913"
@@ -340,7 +352,7 @@
     "linha_terminal":{
         "background":"#222222",
         "foreground":"#ffffff",
-        "fieldbackground":"#ededed"
+        "fieldbackground":"#ffffff"
     },
     "cor_grid_variaveis":{
         "background":"#222222"
@@ -376,20 +388,20 @@
         "pady":0
     },
     "fr_princ":{
-        "background":"#ededed"
+        "background":"#e5e5e5"
     },
     "tela":{
-        "background":"#ededed"
+        "background":"#e5e5e5"
     },
     "fr_ajuda_comando":{
         "pady":10,
         "padx":0,
-        "background":"#efefef",
+        "background":"#dddddd",
         "highlightbackground":"#ababab",
         "highlightthickness":2
     },
     "lb_ajuda_texto_c":{
-        "background":"#efefef",
+        "background":"#dddddd",
         "font":[
             "Open Sans",
             13
@@ -400,7 +412,7 @@
     "lb_ajuda_descr_c":{
         "wraplength":200,
         "justify":"left",
-        "background":"#efefef",
+        "background":"#dddddd",
         "font":[
             "Open Sans",
             10
@@ -417,20 +429,20 @@
     },
     "aviso_versao_top_level":{
         "bd":20,
-        "bg":"#fbfbfb",
-        "highlightcolor":"#fbfbfb"
+        "bg":"#ffffff",
+        "highlightcolor":"#ffffff"
     },
     "aviso_versao_tp_atualizada":{
         "bd":20,
-        "bg":"#fbfbfb",
-        "highlightcolor":"#fbfbfb"
+        "bg":"#ffffff",
+        "highlightcolor":"#ffffff"
     },
     "aviso_versao_fr_atualizacao":{
-        "bg":"#fbfbfb"
+        "bg":"#ffffff"
     },
     "aviso_versao_lb_dev":{
         "fg":"#744aff",
-        "bg":"#fbfbfb",
+        "bg":"#ffffff",
         "font":[
             "Open Sans",
             20
@@ -438,19 +450,19 @@
     },
     "aviso_versao_ms":{
         "anchor":"nw",
-        "fg":"212121",
-        "bg":"#fbfbfb",
+        "fg":"#212121",
+        "bg":"#ffffff",
         "font":[
             "Open Sans",
             11
         ]
     },
     "aviso_versao_btn":{
-        "bg":"#fbfbfb"
+        "bg":"#ffffff"
     },
     "aviso_versao_btn_cancela":{
-        "bg":"#c7c7c7",
-        "activebackground":"#c7c7c7",
+        "bg":"#b3b3b3",
+        "activebackground":"#b3b3b3",
         "fg":"#323232",
         "activeforeground":"#323232"
     },
@@ -461,11 +473,11 @@
         "activeforeground":"#094d46"
     },
     "aviso_versao_fr_atualizada":{
-        "bg":"#fbfbfb"
+        "bg":"#ffffff"
     },
     "aviso_versao_lb_dev_atualizada":{
         "fg":"#744aff",
-        "bg":"#fbfbfb",
+        "bg":"#ffffff",
         "font":[
             "Open Sans",
             20
@@ -474,7 +486,7 @@
     "aviso_versao_ms_atualizada":{
         "anchor":"nw",
         "fg":"#212121",
-        "bg":"#fbfbfb",
+        "bg":"#ffffff",
         "font":[
             "Open Sans",
             11
@@ -483,34 +495,34 @@
     "aviso_bt_cancelar":{
         "bg":"#f3503b",
         "activebackground":"#f3503b",
-        "fg":"#fbfbfb",
-        "activeforeground":"#fbfbfb"
+        "fg":"#ffffff",
+        "activeforeground":"#ffffff"
     },
     "aviso_versao_bt_facebook_atualizada":{
         "bg":"#2f86d3",
         "activebackground":"#2f86d3",
-        "fg":"#fbfbfb",
-        "activeforeground":"#fbfbfb"
+        "fg":"#ffffff",
+        "activeforeground":"#ffffff"
     },
     "aviso_versao_fr_inf_atualizada":{
-        "bg":"#fbfbfb"
+        "bg":"#ffffff"
     },
     "aviso_versao_bt_blog_atualizada":{
         "bg":"#ff7300",
         "activebackground":"#ff7300",
-        "fg":"#fbfbfb",
-        "activeforeground":"#fbfbfb"
+        "fg":"#ffffff",
+        "activeforeground":"#ffffff"
     },
     "lb1_encontrou_bug":{
         "font":[
             "Open Sans",
             20
         ],
-        "bg":"#cfcccc",
+        "bg":"#ffffff",
         "fg":"#292929"
     },
     "lb2_encontrou_bug":{
-        "bg":"#cfcccc",
+        "bg":"#ffffff",
         "fg":"#292929"
     },
     "lb3_encontrou_bug":{
@@ -518,11 +530,11 @@
             "Open Sans",
             11
         ],
-        "bg":"#cfcccc",
+        "bg":"#ffffff",
         "fg":"#292929"
     },
     "fr_bt_encontrou_bug":{
-        "bg":"#cfcccc"
+        "bg":"#ffffff"
     },
     "bt_canc_encontrou_bug":{
         "font":[

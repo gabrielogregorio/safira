@@ -1,7 +1,6 @@
-# Cenário:
-# Você tem um trecho de código que pode acontecer erro
-# e você precisa que o programa continue rodando.
-# Como fazer isso? Você pode usar o tente
+# Você tem um trecho de código que pode acontecer um erro
+# e você precisa tratar o erro e o programa continuar rodando mesmo com o erro.
+# Você pode usar o tente
 
 
 tente

@@ -1,4 +1,3 @@
-# Cenário:
 # Imagine que você queira executar alguns comandos em várias
 # partes do código, para evitar muito código duplicado, você pode
 # usar as funções
@@ -8,13 +7,11 @@
 # Receber e trabalhar com eles
 funcao calculaMedia recebe parametros nome, nota1, nota2
 {
-    media = (nota1 + nota2) / 2
-    mostre nome
-    mostre "+=========================+"
-    mostre "| nota 1     : ", nota1, "        |"   
-    mostre "| nota 2     : ", nota2, "        |"   
-    mostre "| média final: ", media, "        |"   
-    mostre "+=========================+"
+    media recebe (nota1 + nota2) / 2
+    mostre "Nome ", nome
+    mostre "Nota 1     : ", nota1
+    mostre "Nota 2     : ", nota2
+    mostre "Média final: ", media
 
     mostre ""
 }
@@ -28,17 +25,9 @@ funcao mostra_logo
 }
 
 # Chamando funções sem parâmetros
-mostra_logo
+mostra_logo()
 
 # Chamando funções com parâmetros
-aluno1_nota1 = 9.8
-aluno1_nota2 = 8.2
-calculaMedia passando parametros "Gabriel Garcia", aluno1_nota1, aluno1_nota2
-
-aluno2_nota1 = 5.7
-aluno2_nota2 = 8.1
-calculaMedia passando parametros "Maria Helena", aluno2_nota1, aluno2_nota2
-
 aluno3_nota1 = 6.5
 aluno3_nota2 = 7.5
 calculaMedia passando parametros "João da Silva", aluno3_nota1, aluno3_nota2
@@ -47,7 +36,6 @@ aluno4_nota1 = 9.1
 aluno4_nota2 = 2.7
 calculaMedia passando parametros "Mile Santos", aluno4_nota1, aluno4_nota2
 
-
 # Chamando funções sem parâmetros
-mostra_logo
+mostra_logo()
 

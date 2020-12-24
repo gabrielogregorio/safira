@@ -247,7 +247,7 @@
         "background":"#696969",
         "height":2
     },
-    "dic_cor_abas_focada_botao":{
+    "abas_botao_fechar_focado":{
         "font":[
             "Open Sans",
             14
@@ -260,7 +260,7 @@
         "border":0,
         "highlightthickness":0
     },
-    "dic_cor_abas_nao_focada_botao":{
+    "abas_botao_fechar_desfocado":{
         "font":[
             "Open Sans",
             14
@@ -270,7 +270,7 @@
         "activeforeground":"orange",
         "foreground":"#393939"
     },
-    "dic_cor_abas_botao_fechar_focada":{
+    "dic_cor_abas_botao_fechar_focado_focada":{
         "foreground":"white"
     },
     "fr_opcoes_rapidas":{

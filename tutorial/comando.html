@@ -1,263 +1,80 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-   <head>
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <!-- Required meta tags -->
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-
-      <!-- Bootstrap CSS -->
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css" integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
-      <title>Tutorial da Safira</title>
-   </head>
-
-   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <a class="navbar-brand" href="#">Opções</a>
-
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-         <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <div class="collapse navbar-collapse" id="navbarNav">
-         <ul class="navbar-nav">
-            <li class="nav-item active">
-               <a class="nav-link" href="#">Inicio <span class="sr-only">(current)</span></a>
-            </li>
-         </ul>
-      </div>
-   </nav>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <title>Hello, world!</title>
+  </head>
+  <body>
 
 
-   <body>
+      <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+         <div class="container-fluid">
+           <a class="navbar-brand" href="#">Documentação</a>
+           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+             <span class="navbar-toggler-icon"></span>
+           </button>
+           <div class="collapse navbar-collapse" id="navbarNavDropdown">
+             <ul class="navbar-nav">
 
-      <div class="row">
-        <div class="col-3">
-          <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-
-            <a class="nav-link active" id="v-pills-Variaveis-tab" data-toggle="pill" href="#v-pills-Variaveis" role="tab" aria-controls="v-pills-Variaveis" aria-selected="true">Variaveis</a>
-            <a class="nav-link" id="v-pills-Mostrarcoisasnatela-tab" data-toggle="pill" href="#v-pills-Mostrarcoisasnatela" role="tab" aria-controls="v-pills-Mostrarcoisasnatela" aria-selected="false">Mostrar coisas na tela</a>
-            <a class="nav-link" id="v-pills-Sortearnumerosaleatórios-tab" data-toggle="pill" href="#v-pills-Sortearnumerosaleatórios" role="tab" aria-controls="v-pills-Sortearnumerosaleatórios" aria-selected="false">Sortear numeros aleatórios</a>
-            <a class="nav-link" id="v-pills-Incrementarvariáveis-tab" data-toggle="pill" href="#v-pills-Incrementarvariáveis" role="tab" aria-controls="v-pills-Incrementarvariáveis" aria-selected="false">Incrementar variáveis</a>
-
-
-            <a class="nav-link" id="v-pills-Testarcondições-tab" data-toggle="pill" href="#v-pills-Testarcondições" role="tab" aria-controls="v-pills-Testarcondições" aria-selected="false">Testar condições</a>
-
-
-            <a class="nav-link" id="v-pills-LoopEnquanto-tab" data-toggle="pill" href="#v-pills-LoopEnquanto" role="tab" aria-controls="v-pills-LoopEnquanto" aria-selected="false">Loop Enquanto</a>
-            <a class="nav-link" id="v-pills-PercorrerListas-tab" data-toggle="pill" href="#v-pills-PercorrerListas" role="tab" aria-controls="v-pills-PercorrerListas" aria-selected="false">Percorrer Listas</a>
-            <a class="nav-link" id="v-pills-LoopRepitaxvezes-tab" data-toggle="pill" href="#v-pills-LoopRepitaxvezes" role="tab" aria-controls="v-pills-LoopRepitaxvezes" aria-selected="false">Loop Repita x vezes</a>
-            <a class="nav-link" id="v-pills-ManipularListas-tab" data-toggle="pill" href="#v-pills-ManipularListas" role="tab" aria-controls="v-pills-ManipularListas" aria-selected="false">Manipular Listas</a>
-            <a class="nav-link" id="v-pills-Loopparacada-tab" data-toggle="pill" href="#v-pills-Loopparacada" role="tab" aria-controls="v-pills-Loopparacada" aria-selected="false">Loop para cada</a>
-            <a class="nav-link" id="v-pills-PercorrerTextos-tab" data-toggle="pill" href="#v-pills-PercorrerTextos" role="tab" aria-controls="v-pills-PercorrerTextos" aria-selected="false">Percorrer Textos</a>
-
-            <a class="nav-link" id="v-pills-Lerconteudodigitadopelousuário-tab" data-toggle="pill" href="#v-pills-Lerconteudodigitadopelousuário" role="tab" aria-controls="v-pills-Lerconteudodigitadopelousuário" aria-selected="false">Ler conteudo digitado pelo usuário</a>
-
-            <a class="nav-link" id="v-pills-ManipularArquivos-tab" data-toggle="pill" href="#v-pills-ManipularArquivos" role="tab" aria-controls="v-pills-ManipularArquivos" aria-selected="false">Manipular Arquivos</a>
-            <a class="nav-link" id="v-pills-Bibliotecas-tab" data-toggle="pill" href="#v-pills-Bibliotecas" role="tab" aria-controls="v-pills-Bibliotecas" aria-selected="false">Bibliotecas</a>
-
-            <a class="nav-link" id="v-pills-Esperarporumtempo-tab" data-toggle="pill" href="#v-pills-Esperarporumtempo" role="tab" aria-controls="v-pills-Esperarporumtempo" aria-selected="false">Esperar por um tempo</a>
-            <a class="nav-link" id="v-pills-ManipulaçãodeStrings-tab" data-toggle="pill" href="#v-pills-ManipulaçãodeStrings" role="tab" aria-controls="v-pills-ManipulaçãodeStrings" aria-selected="false">Manipulação de Strings</a>
-            <a class="nav-link" id="v-pills-Criaremanipularfunções-tab" data-toggle="pill" href="#v-pills-Criaremanipularfunções" role="tab" aria-controls="v-pills-Criaremanipularfunções" aria-selected="false">Funções</a>
-            <a class="nav-link" id="v-pills-Tentarexecutarumcomando-tab" data-toggle="pill" href="#v-pills-Tentarexecutarumcomando" role="tab" aria-controls="v-pills-Tentarexecutarumcomando" aria-selected="false">Tratar erros</a>
-            <a class="nav-link" id="v-pills-Outros-tab" data-toggle="pill" href="#v-pills-Outros" role="tab" aria-controls="v-pills-Outros" aria-selected="false">Outros</a>
-          </div>
-        </div>
+               <li class="nav-item">
+                 <a class="nav-link active" aria-current="page" href="/">Inicio</a>
+               </li>
 
 
-        <div class="col-9">
-          <div class="tab-content" id="v-pills-tabContent">
-            <div class="tab-pane fade show active" id="v-pills-PercorrerTextos" role="tabpanel" aria-labelledby="v-pills-PercorrerTextos-tab">Percorrer Textos</div>
-            <div class="tab-pane fade" id="v-pills-ManipulaçãodeStrings" role="tabpanel" aria-labelledby="v-pills-ManipulaçãodeStrings-tab">Manipulação de Strings</div>
-            <div class="tab-pane fade" id="v-pills-Incrementarvariáveis" role="tabpanel" aria-labelledby="v-pills-Incrementarvariáveis-tab">Incrementar variáveis</div>
-            <div class="tab-pane fade" id="v-pills-PercorrerListas" role="tabpanel" aria-labelledby="v-pills-PercorrerListas-tab">Percorrer Listas</div>
-            <div class="tab-pane fade" id="v-pills-Mostrarcoisasnatela" role="tabpanel" aria-labelledby="v-pills-Mostrarcoisasnatela-tab">Mostrar coisas na tela</div>
-            <div class="tab-pane fade" id="v-pills-Testarcondições" role="tabpanel" aria-labelledby="v-pills-Testarcondições-tab">Testar condições</div>
-            <div class="tab-pane fade" id="v-pills-Loopparacada" role="tabpanel" aria-labelledby="v-pills-Loopparacada-tab">Loop para cada</div>
-            <div class="tab-pane fade" id="v-pills-Variaveis" role="tabpanel" aria-labelledby="v-pills-Variaveis-tab">Variaveis</div>
-            <div class="tab-pane fade" id="v-pills-Sortearnumerosaleatórios" role="tabpanel" aria-labelledby="v-pills-Sortearnumerosaleatórios-tab">Sortear numeros aleatórios</div>
-            <div class="tab-pane fade" id="v-pills-Lerconteudodigitadopelousuário" role="tabpanel" aria-labelledby="v-pills-Lerconteudodigitadopelousuário-tab">Ler conteudo digitado pelo usuário</div>
-            <div class="tab-pane fade" id="v-pills-ManipularArquivos" role="tabpanel" aria-labelledby="v-pills-ManipularArquivos-tab">Manipular Arquivos</div>
-            <div class="tab-pane fade" id="v-pills-Bibliotecas" role="tabpanel" aria-labelledby="v-pills-Bibliotecas-tab">Bibliotecas</div>
-            <div class="tab-pane fade" id="v-pills-LoopEnquanto" role="tabpanel" aria-labelledby="v-pills-LoopEnquanto-tab">Loop Enquanto</div>
-            <div class="tab-pane fade" id="v-pills-Esperarporumtempo" role="tabpanel" aria-labelledby="v-pills-Esperarporumtempo-tab">Esperar por um tempo</div>
-            <div class="tab-pane fade" id="v-pills-ManipularListas" role="tabpanel" aria-labelledby="v-pills-ManipularListas-tab">Manipular Listas</div>
-            <div class="tab-pane fade" id="v-pills-LoopRepitaxvezes" role="tabpanel" aria-labelledby="v-pills-LoopRepitaxvezes-tab">Loop Repita x vezes</div>
-            <div class="tab-pane fade" id="v-pills-Criaremanipularfunções" role="tabpanel" aria-labelledby="v-pills-Criaremanipularfunções-tab">Funções</div>
-            <div class="tab-pane fade" id="v-pills-Tentarexecutarumcomando" role="tabpanel" aria-labelledby="v-pills-Tentarexecutarumcomando-tab">Tratar erros</div>
-            <div class="tab-pane fade" id="v-pills-Outros" role="tabpanel" aria-labelledby="v-pills-Outros-tab">Outros</div>
-          </div>
-        </div>
-      </div>
-
-
-
-
-         <div class="col-md-10">
-            <div class="tab-pane fade show active" id="OlaMundo2" role="tabpanel" aria-labelledby="OlaMundo2-tab">
-               <h1>Como exibir algo na tela</h1>
-               <ul class="nav nav-tabs" id="myTab" role="tablist">
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link active" id="Safira-tab" data-toggle="tab" href="#Safira" role="tab" aria-controls="Safira" aria-selected="true">Safira</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="Python-tab" data-toggle="tab" href="#Python" role="tab" aria-controls="Python" aria-selected="false">Python</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="CSharp-tab" data-toggle="tab" href="#CSharp" role="tab" aria-controls="CSharp" aria-selected="false">CSharp</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="Java-tab" data-toggle="tab" href="#Java" role="tab" aria-controls="Java" aria-selected="false">Java</a>
-                  </li>
-                  <li class="nav-item" role="presentation">
-                     <a class="nav-link" id="Javascript-tab" data-toggle="tab" href="#Javascript" role="tab" aria-controls="Javascript" aria-selected="false">Javascript</a>
-                  </li>
-               </ul>
-               <div class="tab-content" id="myTabContent">
-                  <div class="tab-pane fade show active" id="Safira" role="tabpanel" aria-labelledby="Safira-tab">
-                     <h2>Mostrar algo na tela</h2>
-
-                     <p>Exibe alguma coisa na tela, um texto, um número ou o valor de uma variável.</p>
-
-                     <pre><code>
-# Declaramos uma variável
-nome = "Safira"
-
-# Mostra o valor da variável nome na tela
-mostre nome
-
-# Mostra o valor de um número
-mostre 10
-
-# Mostra vários tipos de variáveis diferentes
-mostre "Nome: ", nome, " Idade: ", 25 
-                     </code></pre>
-
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">
-<pre>Safira
-10.0
-Nome: Safira Idade: 25.0</pre>
-
-</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-
-
-                     <p>Se você notou, cada texto vem em uma linha, e se você quisesse manter tudo na mesma linha você pode usar o comando</p>
-
-                     <pre><code>
-# Declaramos uma variável
-nome = "Safira"
-
-# Mostra as variáveis em uma mesma linha
-mostre nessa linha "Nome: "
-mostre nessa linha nome
-mostre nessa linha " Idade: "
-mostre nessa linha 25
-
-                     </code></pre>
-
-
-
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">
-<pre>Nome: Safira Idade: 25.0</pre>
-
-</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     
-
-                  </div>
-                  <div class="tab-pane fade" id="Python" role="tabpanel" aria-labelledby="Python-tab">
-                     <code>print("Olá mundo")</code>
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">
-
-</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <p>Velocidade: 0.25 milisegundos</p>
-                  </div>
-                  <div class="tab-pane fade" id="CSharp" role="tabpanel" aria-labelledby="CSharp-tab">
-                     <code>Console.println("Olá mundo");</code>
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">Olá mundo</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <p>Velocidade: 0.04 milisegundos</p>
-                  </div>
-                  <div class="tab-pane fade" id="Java" role="tabpanel" aria-labelledby="Java-tab">
-                     <code>System.out.println("Olá mundo");</code>
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">Olá mundo</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <p>Velocidade: 0.1 milisegundos</p>
-                  </div>
-                  <div class="tab-pane fade" id="Javascript" role="tabpanel" aria-labelledby="Javascript-tab">
-                     <code>console.log("Olá mundo");</code>
-                     <div class="row">
-                        <div class="col-sm-6">
-                           <div class="card">
-                              <div class="card-header">
-                                 Saída
-                              </div>
-                              <div class="card-body">
-                                 <h5 class="card-title">Olá mundo</h5>
-                              </div>
-                           </div>
-                        </div>
-                     </div>
-                     <p>Velocidade: 0.3 milisegundos</p>
-                  </div>
-               </div>
-            </div>
+               <p>
+                  <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1">Toggle first element</a>
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#multiCollapseExample2" aria-expanded="false" aria-controls="multiCollapseExample2">Toggle second element</button>
+                  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".multi-collapse" aria-expanded="false" aria-controls="multiCollapseExample1 multiCollapseExample2">Toggle both elements</button>
+                </p>
+             </ul>
+           </div>
          </div>
-      </div>
+       </nav>
+       <br>
 
-      <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
-      <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous"></script>
-   </body>
+
+
+
+       <p>
+         <a class="btn btn-primary" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+           Link with href
+         </a>
+         <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2">
+           Button with data-target
+         </button>
+       </p>
+
+       <div class="collapse" id="collapseExample">
+         <div class="card card-body">
+           Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+         </div>
+       </div>
+
+
+       <div class="collapse" id="collapseExample2">
+         <div class="card card-body">
+           Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
+         </div>
+       </div>
+
+
+
+
+    <!-- Optional JavaScript; choose one of the two! -->
+
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <!-- Option 2: Separate Popper and Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js" integrity="sha384-q2kxQ16AaE6UbzuKqyBE9/u/KzioAlnx2maXQHiDX9d4/zp8Ok3f+M7DPm+Ib6IU" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.min.js" integrity="sha384-pQQkAEnwaBkjpqZ8RU1fF1AKtTcHJwFl3pblpTlHXybJjHpMYo79HY3hIi4NKxyj" crossorigin="anonymous"></script>
+  </body>
 </html>

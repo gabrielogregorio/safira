@@ -1,9 +1,8 @@
-# Cenário:
 # Mudando só um pouquinho do cenário anterior
 #
 # E se você quisesse executar um loop, porém, quando 
 # chegar em uma condição, você quer para o loop.
-# Como fazer isso? Vamos usar o pare
+# Como fazer isso? Vamos usar o pare!
 
 
 soma = 1
@@ -19,5 +18,3 @@ enquanto soma for menor que 10
     mostre "soma: ", soma
 }
 
-mostre ""
-mostre "+====================+"

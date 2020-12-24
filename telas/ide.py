@@ -10,6 +10,7 @@ from copy import deepcopy
 from tkinter import CURRENT
 from tkinter import INSERT
 from tkinter import RAISED
+from tkinter import Entry
 from tkinter import Button
 from tkinter import Label
 from tkinter import NSEW
@@ -65,7 +66,7 @@ def carregar_fonte():
         fonte_terminal = 'fonte/Consolas/ConsolaMono.ttf'
 
         fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono']
-        action_man = font.load(name = fontes, dpi=400.0, size=14)
+        _ = font.load(name = fontes, dpi=400.0, size=14)
 
         resource.add_font(fonte_terminal)
         resource.add_font(fonte_sistema)
@@ -80,6 +81,7 @@ def carregar_fonte():
         print("Erro a carregar fonte"+str(erro))
 
 carregar_fonte()
+
 
 class Interface:
     def __init__(self, master, icon):
@@ -184,6 +186,9 @@ class Interface:
         # Caminho atual
         self.path = abspath(getcwd())
 
+        # Instância do interpretador 
+        self.instancia = None
+
 
         configurar_interpretador = ConfigurarInterpretador()
         self.dicLetras = configurar_interpretador.carregar_dicionario_letra(self.dic_comandos)
@@ -212,7 +217,7 @@ class Interface:
         cm_abrir_disponiv = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
         cm_abrir_comunida = lambda: webbrowser_open("https://safiraide.blogspot.com/p/comunidade.html")
         cm_abrirl_projeto = lambda: webbrowser_open("http://safiraide.blogspot.com/")
-        cm_abrirlnk_ajuda = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
+        #cm_abrirlnk_ajuda = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
         cm_ativaropc_logs = lambda: self.ativar_logs()
         cm_ativarop_debug = lambda: self.ativar_modo_debug_temas()
         cm_atualizar_idioma = lambda: self.atualizar_idioma()
@@ -276,8 +281,8 @@ class Interface:
         self.mn_interface.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=cm_diminuir_fonte)
 
         # MENU AJUDA
-        self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=cm_abrirlnk_ajuda)
-        self.mn_ajuda.add_command(label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=cm_abrir_disponiv)
+        #self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=cm_abrirlnk_ajuda)
+        #self.mn_ajuda.add_command(label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=cm_abrir_disponiv)
         self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug.interface())
         self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.buscar_atualização())
 
@@ -299,8 +304,6 @@ class Interface:
         self.ic_marcar_bkp = PhotoImage(file="imagens/limpar_bkp.png")
         self.ic_idioma = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
         self.ic_aviso = PhotoImage(file="imagens/aviso.png")
-
-
 
         # AJUSTES NO TAMANHO
         self.ic_salvar = self.ic_salvar.subsample(4, 4)
@@ -326,8 +329,8 @@ class Interface:
         self.bt_executar_bkp = Button(self.fr_opcoes, image=self.ic_exec_ate_bkp, command=cm_executar_bkp)
         self.bt_inserir_bkp = Button(self.fr_opcoes, image=self.ic_inserir_bkp, command=cm_inserir_bkp)
         self.bt_limpar_bkp = Button(self.fr_opcoes, image=self.ic_marcar_bkp, command=cm_limpa_breakpoints)
-        self.bt_ajuda = Button(self.fr_opcoes, image=self.ic_ajuda)
-        self.bt_pesquisar = Button(self.fr_opcoes, image=self.ic_pesquisa)
+        #self.bt_ajuda = Button(self.fr_opcoes, image=self.ic_ajuda)
+        #self.bt_pesquisar = Button(self.fr_opcoes, image=self.ic_pesquisa)
         self.bt_idioma = Button(self.fr_opcoes, image=self.ic_idioma, command=cm_atualizar_idioma)
         self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_redesfazer)
         self.bt_desfazer = Button(self.fr_opcoes, image=self.ic_desfazer)
@@ -340,7 +343,6 @@ class Interface:
 
         self.lb_aviso.grid(row=1, column=1)
         self.bt_aviso.grid(row=1, column=2, sticky=NSEW)
-
 
         self.fr_princ = Frame(self.fr_tela)
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -360,7 +362,6 @@ class Interface:
         self.tx_editor.bind("<<Paste>>", lambda event=None: self.colar_selecao())
         self.tx_editor.bind('<Control-a>', lambda event=None: self.selecionar_tudo())
         self.tx_editor.bind("<<Change>>", lambda event: self.desenhar_atualizar_linhas(event))
-        self.tx_editor.bind("<Configure>", lambda event: self.desenhar_atualizar_linhas(event))
         self.tx_editor.bind('<Button>', lambda event:  self.obter_posicao_do_cursor(event))
         self.tx_editor.bind('<KeyRelease>', lambda event: self.ativar_coordernar_coloracao(event))
 
@@ -393,8 +394,8 @@ class Interface:
         self.bt_executar_bkp.grid(row=1, column=5)
         self.bt_inserir_bkp.grid(row=1, column=6)
         self.bt_limpar_bkp.grid(row=1, column=8)
-        self.bt_ajuda.grid(row=1, column=11)
-        self.bt_pesquisar.grid(row=1, column=12)
+        #self.bt_ajuda.grid(row=1, column=11)
+        #self.bt_pesquisar.grid(row=1, column=12)
         self.bt_idioma.grid(row=1, column=13)
         self.bt_copiar.grid(row=1, column=14)
         self.bt_colar.grid(row=1, column=15)
@@ -413,28 +414,29 @@ class Interface:
             self.tx_editor)
 
         #self.buscar_atualização()
-
-        t_width = self.fr_tela.winfo_screenwidth()
-        t_heigth = self.fr_tela.winfo_screenheight()
-        print("resolução:", t_width, t_heigth)
-
-        master.geometry("{}x{}+1+1".format(t_width, t_heigth))
-
-        sleep(1)
         self.splash.splash_fim()
-
         self.master.withdraw()
+
+        #self.master.update_idletasks()
+        #t_width = self.master.winfo_screenwidth()
+        #t_heigth = self.master.winfo_screenheight()
+
+        # Obter o tamanho lateral da tela considerando o espaço extra do Widget
+        #posicao_resetada_x = self.master.winfo_x() -self.master.winfo_rootx()
+        #posicao_resetada_y = self.master.winfo_rooty() - self.master.winfo_y()
+
+        #self.master.geometry("{}x{}+{}+{}".format(t_width, t_heigth, posicao_resetada_x, 0))
+
         self.atualizar_design_interface()
+
         try:
             master.state('zoomed')
-        except Exception as e1:
-
-            print(e1)
+        except Exception as erro1:
+            print(erro1)
             try:
                 master.wm_attributes('-zoomed', 1)
-            except Exception as e2:
-                print(e2)
-
+            except Exception as erro2:
+                print(erro2)
 
 
         # Atualizar a interface graficaa
@@ -960,83 +962,6 @@ class Interface:
 
         self.fr_tela.update()
     def ativar_coordernar_coloracao(self, event=None):
-        '''
-        print('ativar_coordernar_coloracao')
-
-        codigo = self.tx_editor.get(1.0, END)[0:-1]
-        
-
-        posicoes = []
-        for linha in codigo.split('\n'):
-            posicoes.append(len(linha))
-        print('[]', posicoes)
-
-        codigo = codigo.replace('\n', ' \\n ') + ' '
-        print(codigo)
-    
-        output = subprocess_run(["dependencia\\analisador_de_codigo", codigo], stdout = subprocess_PIPE,
-                                universal_newlines = True).stdout
-        print('output:',output)
-
-
-
-
-        adicionados = []
-
-
-
-        opcoes = output.split(';')
-        for opcao in opcoes:
-            if opcao.strip() == '': continue
-            i, f, cor = opcao.split('.')
-            lin = 0
-            for x in posicoes:
-                lin += 1
-                subtract = sum(posicoes[0:lin-1])
-                print('_', lin, '_', subtract)
-                if subtract <= int(i):
-                    
-                    pos = '{}.{}, {}.{}, {}'.format( lin, int(i)-subtract, lin, int(f)-subtract, cor)
-                    print('...', pos)
-
-                    self.tx_editor.tag_add(pos, '{}.{}'.format(lin, int(i)-subtract), '{}.{}'.format(lin, int(f)-subtract))
-                    self.tx_editor.tag_config(pos, foreground=cor)
-                    self.historico_coloracao.append(pos)
-                    adicionados.append(pos)
-                    break
-
-        self.tx_editor.update()
-
-        for ideia in self.historico_coloracao:
-            if ideia not in adicionados:
-                self.tx_editor.tag_delete(ideia)
-        self.historico_coloracao = deepcopy(adicionados)
-
-
-        return 0
-        '''
-
-        '''the highlight function, called when a Key-press event occurs'''
-        '''
-        for k, v in self.dic_coloracao.items():  # iterate over dict
-            if k.strip() == '':
-                continue
-            inicio = '1.0'
-            while True:
-                inicio = self.tx_editor.search(k, inicio, END)
-                print(inicio)
-                if inicio:
-                    fim = self.tx_editor.index('%s+%dc' % (inicio, (len(k))))
-                    self.tx_editor.tag_add(k, inicio, fim)
-                    self.tx_editor.tag_config(k, foreground=v)
-                    inicio = fim
-                else:
-                    break
-                print(k)
-        self.atualizar_coloracao_codigo_aba(True, event)
-
-        return 0
-        '''
         # Coordena a atualização de uma aba
         self.fechar_mensagem_de_erro()
         self.atualizar_coloracao_codigo_aba(True, event)
@@ -1062,9 +987,7 @@ class Interface:
         if hasattr(event, "keysym"):
             self.obter_posicao_do_cursor(event)
 
-
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
-        print('configurar_cor_aba', 'dic_cor_abas', bg_padrao, 'dic_cor_botao', 'dic_cor_marcador')
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
@@ -1082,11 +1005,12 @@ class Interface:
                 self.num_aba_focada = num_aba
                 dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
                 dic_cor_finao = self.design.get("dic_cor_abas_focada")
-                dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+                dic_cor_botao = self.design.get("abas_botao_fechar_focado")
             else:
                 dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
                 dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
-                dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+                dic_cor_botao = self.design.get("abas_botao_fechar_desfocado")
+            
 
             fr_uma_aba = Frame(self.fr_abas)
             fr_uma_aba.rowconfigure(1, weight=1)
@@ -1145,11 +1069,14 @@ class Interface:
         # Adicionar na posição 0
         posicao_adicionar = 0
 
+
+
+
         # Se tem mais de uma aba
         if len(self.dic_abas) != 0:
             # Cores
             dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
-            dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+            dic_cor_botao = self.design.get("abas_botao_fechar_desfocado")
             dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
 
             # Remover o foco da aba focada
@@ -1163,15 +1090,15 @@ class Interface:
 
         # Cores
         dic_cor_finao = self.design.get("dic_cor_abas_focada")
-        dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+        dic_cor_botao = self.design.get("abas_botao_fechar_focado")
         dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
         # Criando uma Aba
         fr_uma_aba = Frame(self.fr_abas, background=dic_cor_finao["background"])
         fr_marcador = Frame(fr_uma_aba, dic_cor_marcador)
         lb_aba = Button(fr_uma_aba, dic_cor_finao, text=" "*14)
-        bt_fechar = Button(fr_uma_aba, dic_cor_botao)
-        print('pg')
+
+        bt_fechar = Button(fr_uma_aba, dic_cor_botao, text='x ', relief='groove', border=0, highlightthickness=0)
 
         # Eventos
         lb_aba.bind('<ButtonPress>', lambda event=None, num_aba=posicao_adicionar: self.focar_aba(num_aba))
@@ -1202,7 +1129,6 @@ class Interface:
     def fechar_uma_aba(self, bt_fechar):
         bool_era_focado = False
         dic_cor_abas = self.design.get("dic_cor_abas")
-        print('[HISTÓRICO DE ABAS] = {}'.format(self.lst_historico_abas_focadas))
 
         for chave, valor in self.dic_abas.items():
 
@@ -1273,7 +1199,7 @@ class Interface:
 
             # Obter cores para uma nova aba
             dic_cor_finao = self.design.get("dic_cor_abas_focada")
-            dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+            dic_cor_botao = self.design.get("abas_botao_fechar_focado")
             dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
             # Atualizar a aba focada
@@ -1301,17 +1227,17 @@ class Interface:
     def atualizar_cor_abas(self):
         print('atualizar_cor_abas')
 
-        for num_aba, dados_aba in self.dic_abas.items():
+        for num_aba, _ in self.dic_abas.items():
 
             # Coloração da aba
             if num_aba == self.num_aba_focada:
                 dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
                 dic_cor_finao = self.design.get("dic_cor_abas_focada")
-                dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+                dic_cor_botao = self.design.get("abas_botao_fechar_focado")
             else:
                 dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
                 dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
-                dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+                dic_cor_botao = self.design.get("abas_botao_fechar_desfocado")
 
             fr_uma_aba = self.dic_abas[num_aba]["listaAbas"][0]
             fr_marcador = self.dic_abas[num_aba]["listaAbas"][1]
@@ -1334,14 +1260,14 @@ class Interface:
             return 0
 
         dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
-        dic_cor_botao = self.design.get("dic_cor_abas_nao_focada_botao")
+        dic_cor_botao = self.design.get("abas_botao_fechar_desfocado")
         dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
         self.configurar_cor_aba(dic_cor_finao, dic_cor_finao["background"], dic_cor_botao, dic_cor_marcador)
 
         self.dic_abas[self.num_aba_focada]["foco"] = False
 
         dic_cor_finao = self.design.get("dic_cor_abas_focada")
-        dic_cor_botao = self.design.get("dic_cor_abas_focada_botao")
+        dic_cor_botao = self.design.get("abas_botao_fechar_focado")
         dic_cor_marcador = self.design.get("dic_cor_marcador_focado")
 
         self.num_aba_focada = num_aba
@@ -1356,11 +1282,12 @@ class Interface:
 
 
 
+
     def atualizar_coloracao_codigo_aba(self, limpar=False, event=None):
         # num_modulos_acionados => 0
 
         if event is not None:
-            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'BackSpace'):
+            if event.keysym in ('Down', 'Up', 'Left', 'Right', 'Return', 'BackSpace'):
                 return 0
 
         self.num_coloracao_acionados += 1
@@ -1378,9 +1305,6 @@ class Interface:
         self.colorir_codigo.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
         self.num_coloracao_acionados = 0
-
-
-    '''
     def atualizar_coloracao_codigo_aba_th(self, limpar=False, event=None):
         inicio = time()
 
@@ -1405,7 +1329,7 @@ class Interface:
         self.num_coloracao_acionados -= 0
 
         print('\n\ntempo processamento ', time()-inicio)
-    '''
+
 
     def atualizar_codigo_editor(self, num_aba):
         self.tx_editor.delete(1.0, END)
@@ -1425,16 +1349,37 @@ class Interface:
         self.atualizar_coloracao_codigo_aba(True)
 
     def realcar_cor_botao_fechar_aba(self, bt_fechar):
-        for chave, valor in self.dic_abas.items():
+   
+        for chave, _ in self.dic_abas.items():
             if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
-                self.dic_abas[chave]["listaAbas"][3].configure(self.design.get("dic_cor_abas_botao_fechar_focada"))
+                if self.dic_abas[chave]['foco']:
+                    dict_cores = self.design.get("abas_botao_fechar_focado")
+                else:
+                    dict_cores = self.design.get("abas_botao_fechar_desfocado")
+
+                activeforeground = dict_cores["foreground"]
+                foreground = dict_cores["activeforeground"]
+
+                self.dic_abas[chave]["listaAbas"][3].configure(activeforeground=activeforeground, foreground=foreground)
                 self.dic_abas[chave]["listaAbas"][3].update()
                 return 0
 
     def voltar_cor_botao_fechar_aba(self, padrao, bt_fechar):
-        for chave, valor in self.dic_abas.items():
+
+
+        for chave, _ in self.dic_abas.items():
             if self.dic_abas[chave]["listaAbas"][3] == bt_fechar:
-                self.dic_abas[chave]["listaAbas"][3].configure(foreground=padrao)
+
+                if self.dic_abas[chave]['foco']:
+                    dict_cores = self.design.get("abas_botao_fechar_focado")
+                else:
+                    dict_cores = self.design.get("abas_botao_fechar_desfocado")
+
+
+                activeforeground = dict_cores["activeforeground"]
+                foreground = dict_cores["foreground"]
+
+                self.dic_abas[chave]["listaAbas"][3].configure(activeforeground=activeforeground, foreground=foreground)
                 self.dic_abas[chave]["listaAbas"][3].update()
                 return 0
 
@@ -1669,10 +1614,6 @@ class Interface:
         self.bt_erro_aviso_fechar = Button(self.fr_erro_aviso, self.design.get('msg_erro_bt2'), text="x", command=lambda event=None: self.fechar_mensagem_de_erro())
         self.bt_erro_aviso_fechar.grid(row=1, column=3)
 
-    # ************************************************************************* #
-    #                            PONTOS DE PARADA                               #
-    # ************************************************************************* #
-
     def adicionar_remover_breakpoint(self, event=None):
         # Marcar um breakpoint
         if int(self.num_lin_bkp) in self.dic_abas[self.num_aba_focada]["lst_breakpoints"]:
@@ -1707,10 +1648,6 @@ class Interface:
 
     def liberar_um_breakpoint(self):
         self.libera_bkp = True
-
-    # ************************************************************************* #
-    #                           GRID DE VARIÀVEIS                               #
-    # ************************************************************************* #
 
     def retornar_variaveis(self):
         try:
@@ -1775,11 +1712,11 @@ class Interface:
     def ativar_desativar_full_screen(self, event=None):
         self.bool_full_screen = False if self.bool_full_screen else True
 
-        self.fr_tela.attributes("-fullscreen", self.bool_full_screen)
+        self.master.attributes("-fullscreen", self.bool_full_screen)
         self.fr_tela.update()
 
     def copiar_selecao(self):
-        self.tx_editor.event_generate("<<Copy>>")
+        print("Copiado: ", self.tx_editor.event_generate("<<Copy>>"))
 
     def colar_selecao(self):
         try:
@@ -1787,7 +1724,12 @@ class Interface:
         except:
             pass
 
-        self.tx_editor.insert("insert", self.tx_editor.clipboard_get())
+        print()
+
+        texto_colar = self.tx_editor.clipboard_get()
+
+        if "text doesn't contain any characters tagged with \"sel\"" != texto_colar:
+            self.tx_editor.insert("insert", self.tx_editor.clipboard_get())
         return "break"
 
     def selecionar_tudo(self):
@@ -1824,10 +1766,10 @@ class Interface:
         self.atualizar_design_objeto(self.bt_salvar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar_bkp, "dicBtnMenus")
-        self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
+        #self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
         self.atualizar_design_objeto(self.lb_aviso, "dicBtnMenus")
         self.atualizar_design_objeto(self.fr_aviso, "fr_dict_aviso")
-        self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")
+        #self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_copiar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_colar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_aviso, "dicBtnAviso")

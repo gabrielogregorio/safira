@@ -1,35 +1,39 @@
-# Cenário:
 # Você quer criar arquivos de texto
 # para salvar configurações, resultados, etc.
 # Você pode usar os comandos para manipulação de arquivos
 
-# Criar um arquivo qualquer
-# Verifique no seu diretório
-# Se esse arquivo foi criado de verdade
+
+# Criar um arquivo qualquer sem nada dentro
 crie o arquivo "arquivo.txt"
+
 
 # Escreve um texto na última linha do arquivo criado
 adicione "Texto qualquer" no arquivo "arquivo.txt"
 
+
 # Apaga todo o texto do arquivo e coloca esse texto no lugar
 sobrescreva "Iai, tudo bem amigo" no arquivo "arquivo.txt"
+
 
 # Obter todo o texto do arquivo
 conteudo = leia o texto do arquivo "arquivo.txt"
 
-# O resultado é uma String(Texto)
-mostre conteudo
 
-# Verifica se o arquivo existe, retornando verdadeiro ou falso
+# O resultado é uma String(Texto)
+mostre "Conteúdo do arquivo: ", conteudo
+
+
+# Verifica se o arquivo não existe
 se o arquivo "arquivoQUeNaoExiste.txt" nao existe
 {
-    mostre "Esse arquivo não existe"
+    mostre "O arquivo ", "'arquivoQUeNaoExiste.txt'", " nãos existe"
 }
 
-# Se o arquivo existe
+# Verifica se o arquivo existe
 se o arquivo "arquivo.txt" existe
 {
-    mostre "Esse arquivo Existe e será removido"
+    mostre "O arquivo ", "'arquivo.txt'", " existe e será removido"
+
 
     # Comando para excluir um arquivo
     delete o arquivo "arquivo.txt"

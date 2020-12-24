@@ -7,7 +7,7 @@ funcao mostra_tela(verde, vermelho, laranja, tempo){
     mostre ""
     mostre " [" + vermelho  + "]" na cor "#ff5588"
     mostre " [" + laranja + "]" na cor "#ff8822"
-    mostre " [" + verde  + "]" na cor "#21ff22"
+    mostre " [" + verde  + "]" na cor "#22bb22"
 
     repita 10 vezes { mostre " || " na cor "#aaaaaa" }
     repita 2 vezes { mostre nessa linha "__________________________" na cor "#aaaaaa" }

@@ -1,7 +1,5 @@
-# Cenário:
-# Você quer esperar um pouco antes de executar o
-# próximo comando, você pode usar o comando espere
-
+# se você quiser esperar um pouco antes de executar o
+# próximo comando, você pode usar o comando espere.
 
 mostre "Olá, amigo(a)!"
 espere 2 segundos         # Espera em segundos

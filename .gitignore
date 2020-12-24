@@ -4,3 +4,4 @@ libs/__pycache__/
 backups
 registros.json
 logs/registros.json
+.vscode/

@@ -1,38 +1,34 @@
-# Cenário:
 # O seu programa está ficando muito grande
 # e você quer dividir seu código, salvando algumas funções
-# em outro arquivo. Você pode criar uma biblioteca!
-# Biblioteca são códigos exatamente iguais a esse, com a 
-# diferença que você pode chama-los em outro arquivo.
+# em outro arquivo.
+
+# Você pode criar uma biblioteca!
+# Bibliotecas são códigos igual a qualquer outro, com a 
+# diferença que você pode chama-los a partir de outro código
 
 
 # Se a biblioteca já existe, vamos deleta-la
 se o arquivo "biblioteca.safira" existe
- {
-}
+{ delete o arquivo "biblioteca.safira" }
 
 
-delete o arquivo "biblioteca.safira"
 
-
-# Vamos criar a biblioteca (Um arquivo exatamente
-# igual a esse que você está programando)
+# Vamos criar a biblioteca.
 crie o arquivo "biblioteca.safira"
+
 
 # Vamos adicionar um comando dentro desse arquivo
 # Você pode fazer isso com o bloco de notas de preferir
-# O comando \n dentro de um texto serve para pular uma
-# linha
-adicione "mostre 123\n" no arquivo "biblioteca.safira" 
-adicione "idade recebe 21 " no arquivo "biblioteca.safira"
+# O \n serve para pular uma linha!
+adicione "idade recebe 25" no arquivo "biblioteca.safira" 
 
 
 # Vamos importar a biblioteca para nosso programa.
-# A partir disso, o código dentro deste arquivo será
+# A partir disso, o código dentro do arquivo "biblioteca.safira" será
 # executado e teremos acesso as funções e variáveis dentro dele.
-
-importe a biblioteca biblioteca
-mostre "A idade é ", idade
-
 # Perceba que o arquivo chama "biblioteca.safira", mas para importa-lo,
 # só precisamos digitar biblioteca e a safira irá entender o resto
+importe biblioteca
+
+mostre "A idade é ", idade
+

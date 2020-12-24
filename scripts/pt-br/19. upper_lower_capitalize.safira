@@ -1,10 +1,10 @@
-# Cenário:
 # Você quer formatar um texto que está sem padrão
-# Você tem 3 opções básicas, colocar todo o texto
-# em maiúscula, em minúscula ou deixar a primeira 
-# letra em maisucula. Segue o exemplo abaixo
+# Você tem 3 opções básicas;
+# 1. colocar todo o texto em maiúscula
+# 2. colocar todo o texto em minúscula
+# 3. deixar a primeira letra em maisucula.
 
-nome = "safira LINGUAGEM"
+nome = "sAfirA LINGUAGeM"
 
 nome_em_minusculo recebe nome em minusculo
 nome_em_maiusculo recebe nome em maiusculo

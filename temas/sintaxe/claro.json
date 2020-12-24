@@ -1,41 +1,41 @@
 {
   "numerico": {
-    "foreground": "#de9826"
+    "foreground": "#0c7a7a"
   },
   "atribuicao": {
-    "foreground": "#95c152"
+    "foreground": "#64b512"
   },
   "loops": {
-    "foreground": "#ff4343"
+    "foreground": "#a18110"
   },
   "lista": {
-    "foreground": "#26acc9"
+    "foreground": "#1441b5"
   },
   "logico": {
-    "foreground": "#dd5bb5"
+    "foreground": "#ff1188"
   },
   "entrada": {
-    "foreground": "#f522f5"
+    "foreground": "#1441b5"
   },
   "exibicao": {
-    "foreground": "#26acc9"
+    "foreground": "#1441b5"
   },
   "tempo": {
-    "foreground": "#068a91"
+    "foreground": "#1441b5"
   },
   "condicionais": {
-    "foreground": "#8501c6"
+    "foreground": "#ff6611"
   },
   "contas": {
-    "foreground": "#3869c4"
+    "foreground": "#ff0000"
   },
   "string": {
-    "foreground": "#cf8832"
+    "foreground": "#ff4411"
   },
   "comentario": {
-    "foreground": "#8cbd7d"
+    "foreground": "#179117"
   },
   "pare": {
-    "foreground": "#b30757"
+    "foreground": "#ff1212"
   }
 }

@@ -7,7 +7,13 @@
 # comando vai ler o que a pessoa digitar e salvar
 # em algum lugar, no caso, uma variável
  
- 
+mostre "********************************"
+mostre "*                              *"
+mostre "* PROGRAMA DE CALCULO DE MÉDIA *"
+mostre "*                              *"
+mostre "********************************"
+
+
 mostre "Qual é o seu nome?"
 nome = o que o usuario digitar
 

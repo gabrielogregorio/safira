@@ -245,20 +245,20 @@
         "background":"#111121",
         "height":1
     },
-    "dic_cor_abas_focada_botao":{
+    "abas_botao_fechar_focado":{
         "font":[
             "Open Sans",
             14
         ],
         "background":"#222232",
         "activebackground":"#222232",
-        "activeforeground":"white",
-        "foreground":"#222232",
+        "activeforeground":"#ff8877",
+        "foreground":"#cccccc",
         "relief":"sunken",
         "border":0,
         "highlightthickness":0
     },
-    "dic_cor_abas_nao_focada_botao":{
+    "abas_botao_fechar_desfocado":{
         "font":[
             "Open Sans",
             14
@@ -268,8 +268,8 @@
         "activeforeground":"white",
         "foreground":"#222232"
     },
-    "dic_cor_abas_botao_fechar_focada":{
-        "foreground":"white"
+    "dic_cor_abas_botao_fechar_focado_focada":{
+        "foreground":"______________"
     },
     "fr_opcoes_rapidas":{
         "background":"#222232"

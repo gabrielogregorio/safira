@@ -1,13 +1,11 @@
-# Cenário:
 # Você quer finalizar o programa por completo ao chegar em um ponto
 # Como fazer isso? Vamos usar o interrompa!
 
 
-mostre "Executando programa.....1"
-mostre "Executando programa.....2"
+mostre "Iniciando sistema!"
+mostre "Carregando dados!"
 
 interrompa
 
-mostre "Executando programa.....3"
-mostre "Executando programa.....4"
+mostre "Enviando Mensagens!"
 

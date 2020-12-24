@@ -1,9 +1,8 @@
-# Cenário:
 # Imagine que você queira executar uma séria
 # de comandos enquanto uma condição for verdadeira.
-# Exemplo, você quer 
+# Exemplo:
 
-opcao = 1
+opcao = 99
 enquanto opcao for diferente de 0
 {
     # Esse comando limpa a tela do terminal

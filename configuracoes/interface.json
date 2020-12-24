@@ -170,9 +170,9 @@
         "es":"  Ejecutar hasta el punto de interrupción (F7)"
     },
     "label_parar_execucao":{
-        "pt-br":"  Parar execução (F9)",
-        "en-us":"  Stop execution (F9)",
-        "es":"  Detener ejecución (F9)"
+        "pt-br":"  Parar execução",
+        "en-us":"  Stop execution",
+        "es":"  Detener ejecución"
     },
     "label_inserir_breakpoint":{
         "pt-br":"  Inserir breakpoint (F10)",
