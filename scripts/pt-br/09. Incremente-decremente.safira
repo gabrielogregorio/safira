@@ -2,19 +2,19 @@
 # Você pode usar o comando incremente, ou somar a variável + 1
 
 numero = 1
-mostre "Numero original : ", numero
+mostre "Número      : %" inserindo numero
 
 
 incremente 15 em numero
-mostre "Numero somando a 15 : ", numero
+mostre "Número + 15 : %" inserindo numero
 
 
 decremente 2 em numero
-mostre "Numero subtraido de 2 : ", numero
+mostre "Número - 2  : %" inserindo numero
 
 
 # Uma outra forma de fazer isso, é pegando o
 # número e somando a ele mesmo, exemplo:
 numero recebe numero + 1
-mostre "Numero somando a 1     : ", numero
+mostre "Número + 1  : %" inserindo numero
 

@@ -48,7 +48,6 @@ class Atualizar():
             if dic_versoes.get('erro'):
                 print(dic_versoes['erro'])
 
-                self.frame.destroy()
                 messagebox.showinfo("Erro ao buscar versões", "Aconteceu um erro quando a Safira tentou buscar as versões disponíveis. Este foi o erro: {}".format(dic_versoes['erro']))
             else:
                 # Obter ultima versão
@@ -72,10 +71,10 @@ class Atualizar():
         """ Aviso, existe uma nova versão disponível """
 
         self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_top_level"])
+        self.tp_atualizacao.withdraw()
         self.tp_atualizacao.focus_force()
         self.tp_atualizacao.resizable(False, False)
         self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
-        self.tp_atualizacao.withdraw()
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
         self.tp_atualizacao.title(self.interface_idioma["titulo_aviso_atualizacao"][self.idioma])
 
@@ -135,10 +134,10 @@ class Atualizar():
             self.tp_atualizacao.destroy()
 
         self.tp_atualizacao = Toplevel(None)
+        self.tp_atualizacao.withdraw()
         self.tp_atualizacao.focus_force()
         self.tp_atualizacao.resizable(False, False)
         self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
-        self.tp_atualizacao.withdraw()
         self.tp_atualizacao.configure(self.design.dic["aviso_versao_top_level"])
         self.tp_atualizacao.grid_columnconfigure(1, weight=1)
         self.tp_atualizacao.title('Atualizando.... Não feche a Safira!')
@@ -203,7 +202,6 @@ class Atualizar():
                 self.log(lb_versao_tex, msg)
                 self.log(lb_versao_tex, "Fazendo Backup")
 
-
                 # Backup da versão atual
                 sucesso_bkup, msg_bpk = self.up.fazer_backup_versao()
                 if sucesso_bkup:
@@ -267,10 +265,10 @@ class Atualizar():
     def aviso_versao_atualizada(self, baixada):
 
         self.tp_atualizacao = Toplevel(self.tela, self.design.dic["aviso_versao_tp_atualizada"])
+        self.tp_atualizacao.withdraw()
         self.tp_atualizacao.focus_force()
         self.tp_atualizacao.resizable(False, False)
         self.tp_atualizacao.tk.call('wm', 'iconphoto', self.tp_atualizacao._w, self.icon)
-        self.tp_atualizacao.withdraw()
 
         #try:
         #    self.tp_atualizacao.wm_attributes('-type', 'splash')
@@ -322,8 +320,8 @@ class Atualizar():
         bt_blogger_.grid(row=1, column=3)
 
         self.tp_atualizacao.geometry("+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2)))
-        self.tp_atualizacao.deiconify()
         self.tp_atualizacao.update()
+        self.tp_atualizacao.deiconify()
 
 
 

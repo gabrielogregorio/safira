@@ -445,6 +445,9 @@ class Interface:
 
         self.avisos()
 
+
+        #self.manipular_arquivos(None, "abrirArquivo", 'natal.safira')
+
     def avisos(self):
         t_width  = int(self.master.winfo_screenwidth())
         t_heigth = int(self.master.winfo_screenheight())
@@ -604,7 +607,6 @@ class Interface:
                     self.tx_editor.update()
                     self.master.update()
 
-                sleep(0.0001)
                 acao = ""
                 # Obtem uma instrução do interpretador
                 acao = self.instancia.controle_interpretador
@@ -741,7 +743,7 @@ class Interface:
                                     self.tx_editor.update()
                                     self.master.update()
 
-                                    sleep(0.001)
+                                    sleep(0.00001)
 
                                     if self.instancia.aconteceu_erro:
                                         break
@@ -1429,7 +1431,6 @@ class Interface:
 
         t_width  = self.master.winfo_screenwidth()
         t_heigth = self.master.winfo_screenheight()
-        print("resolução:", t_width, t_heigth)
 
         self.top_janela_terminal.geometry("720x450+{}+{}".format(int(t_width/2-(720/2)), int(t_heigth/2-(450/2))))
         self.top_janela_terminal.deiconify()
@@ -1536,7 +1537,6 @@ class Interface:
             self.et_campo_busca,
             fr_fechar_menu,
             bt_fechar]
-        print('fim')
 
     # ************************************************************************* #
     #                           TRATAMENTO DE ERROS                             #
@@ -1565,7 +1565,7 @@ class Interface:
             try:
                 self.tx_editor.tag_delete("codigoErro")
             except Exception as erro:
-                print("Errro ao fechar possível mensagem de erro '{}'".format(erro))
+                print("Erro ao fechar possível mensagem de erro '{}'".format(erro))
 
     def realizar_coloração_erro(self, linha_que_deu_erro):
         lista = self.tx_editor .get(1.0, END)
@@ -1653,10 +1653,6 @@ class Interface:
         try:
             dic_variaveis = self.instancia.dic_variaveis
 
-        except Exception as e:
-            print("instancia de variáveos não pronta ", e)
-
-        else:
             # IDS como argumentos
             self.arvores_grid.delete(*self.arvores_grid.get_children())
 
@@ -1664,17 +1660,12 @@ class Interface:
 
             for k, v in dic_variaveis.items():
                 if palavra in k:
-                    caracteres = ""
-                    if v[1] == 'lista':
-                        for x in v[0]:
-                            if caracteres == "":
-                                caracteres += '"' + str(x[0]) + '"'
-                            else:
-                                caracteres += ', "' + str(x[0]) + '"'
-                    else:
-                        caracteres = v[0]
+                    self.arvores_grid.insert('', END, values=(k, self.instancia.verificar_tipo(v), v))
 
-                    self.arvores_grid.insert('', END, values=(k, v[1], caracteres))
+
+        except Exception as e:
+            print("instancia de variáveos não pronta ", e)
+
 
     # *********************************** #
     #          USOS DIVERSOS              #
@@ -1724,8 +1715,6 @@ class Interface:
         except:
             pass
 
-        print()
-
         texto_colar = self.tx_editor.clipboard_get()
 
         if "text doesn't contain any characters tagged with \"sel\"" != texto_colar:
@@ -1744,7 +1733,7 @@ class Interface:
             objeto.update()
 
         except Exception as erro:
-            print("Erro Atualiza interface config = " + str(erro))
+            print("Erro atualizar interface config = " + str(erro))
 
     def atualizar_design_interface(self):
         self.cont_lin.aba_focada2 = self.num_aba_focada

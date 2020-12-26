@@ -18,8 +18,8 @@ casado = falso
 
 # Vamos exibir o tipo de cada variável
 mostre ""
-mostre "Variável : Valor   : Tipo "
-mostre ".........:.........:......"
-mostre "idade    : ", idade , " : ", o tipo da variavel idade
-mostre "nome     : ", nome  , " : ", o tipo da variavel nome
-mostre "casado   : ", casado, " : ", o tipo da variavel casado
+mostre "Variável | % | % " inserindo "Valor", "Tipo"
+mostre "---------+-%-+-%-" inserindo "-----", "----"
+mostre "idade    | % | % " inserindo idade  , o tipo de idade
+mostre "nome     | % | % " inserindo nome   , o tipo de nome
+mostre "casado   | % | % " inserindo casado , o tipo de casado

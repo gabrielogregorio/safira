@@ -20,19 +20,19 @@ conteudo = leia o texto do arquivo "arquivo.txt"
 
 
 # O resultado é uma String(Texto)
-mostre "Conteúdo do arquivo: ", conteudo
+mostre "Conteúdo do arquivo: %" inserindo conteudo
 
 
 # Verifica se o arquivo não existe
 se o arquivo "arquivoQUeNaoExiste.txt" nao existe
 {
-    mostre "O arquivo ", "'arquivoQUeNaoExiste.txt'", " nãos existe"
+    mostre "O arquivo % nãos existe" inserindo "'arquivoQUeNaoExiste.txt'"
 }
 
 # Verifica se o arquivo existe
 se o arquivo "arquivo.txt" existe
 {
-    mostre "O arquivo ", "'arquivo.txt'", " existe e será removido"
+    mostre "O arquivo % existe e será removido" inserindo "'arquivo.txt'"
 
 
     # Comando para excluir um arquivo

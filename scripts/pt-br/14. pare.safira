@@ -15,6 +15,6 @@ enquanto soma for menor que 10
     se soma for igual a 5 { pare }
 
     # Mostrando na tela
-    mostre "soma: ", soma
+    mostre "soma: %" inserindo soma
 }
 

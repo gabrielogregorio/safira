@@ -607,6 +607,34 @@
     ],
     "cor":"condicionais"
   },
+
+
+
+  "formatar_textos":{
+    "comando":[
+      [" formateado por ","es"],
+      [" formatting by ","en-us"],
+      [" formatting ","en-us"],
+      [" insertando ","es"],
+      [" formatear ","es"],
+      [" inserting ","en-us"],
+      [" inserindo ","pt-br"],
+      [" formatando ","pt-br"],
+      [" formato ","es"],
+      [" format ","en-us"],
+      [" % ","all"]
+    ],
+
+    "cor":"tempo"
+  },
+
+
+
+
+
+
+
+
   "declaraListas":{
     "comando":[
       ["lista de ","pt-br"],
@@ -619,8 +647,7 @@
     "comando":[
       ["lista de ","pt-br"],
       ["lista ","pt-br"],
-      ["list of ","en-us"],
-      ["","pt-br"]
+      ["list of ","en-us"]
     ],
     "cor":"lista"
   },

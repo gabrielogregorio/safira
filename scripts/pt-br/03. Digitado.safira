@@ -23,5 +23,5 @@ nota1 = o numero que o usuario digitar
 mostre "Digite sua segunda nota: "
 nota2 = o numero que o usuario digitar
 
-mostre nome, " sua média final é ", (nota1 + nota2) / 2
+mostre "% sua média final é %" inserindo nome, (nota1 + nota2) / 2
 

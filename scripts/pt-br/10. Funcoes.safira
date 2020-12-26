@@ -7,11 +7,11 @@
 # Receber e trabalhar com eles
 funcao calculaMedia recebe parametros nome, nota1, nota2
 {
-    media recebe (nota1 + nota2) / 2
-    mostre "Nome ", nome
-    mostre "Nota 1     : ", nota1
-    mostre "Nota 2     : ", nota2
-    mostre "Média final: ", media
+
+    mostre "Nome %" inserindo nome
+    mostre "Nota 1 = %" inserindo nota1
+    mostre "Nota 2 = %" inserindo nota2
+    mostre "Média  = %" inserindo (nota1 + nota2) / 2
 
     mostre ""
 }

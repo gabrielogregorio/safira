@@ -19,5 +19,5 @@ numero_pensado = o numero que for digitado
 se o numero_aleatorio for igual a numero_pensado entao {
     mostre "Você acertou, incrível!"
 } senao {
-    mostre "Eu pensei no número ", numero_aleatorio, " Você errou!"
+    mostre "Eu pensei no número % você errou!" inserindo numero_aleatorio
 } 

@@ -1,3 +1,6 @@
+# ESSE PROGRAMA NAO PODE MUDAR.
+# BIBLIOTECAS NOVAS DEVERÃO SER ANALISADAS COM CALMA.
+
 from tkinter import PhotoImage
 from tkinter import Tk
 from tkinter import Button

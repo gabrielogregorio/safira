@@ -5,6 +5,6 @@
 #****** Uso simples comando ******#
 para cada x de 0 ate 100
 {
-    mostre "X vale -> ", x
+    mostre "X vale -> %" inserindo x
 }
 

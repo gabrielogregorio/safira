@@ -5,14 +5,14 @@
 
 
 codigo = "!01 é êcov ,aid mob ,álO"
-mostre "Código Secreto   : ", codigo
+mostre "Código Secreto   : %" inserindo codigo
 
 invertido = ""
 
 percorra codigo atribuindo em letra {
     # Atribuindo o valor da letra e do texto invertido
-    invertido = letra, invertido
+    invertido = letra + invertido
 }
 
-mostre "Código Traduzido : ", invertido
+mostre "Código Traduzido : %" inserindo invertido
 

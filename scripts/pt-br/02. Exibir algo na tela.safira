@@ -5,7 +5,7 @@
 nome = "Safira" 
 
 mostre "Bom dia, "
-mostre nome, " tudo bem?" 
+mostre "% tudo bem?" inserindo nome
 
 mostre ""
 mostre ":--------------------------------------------:"

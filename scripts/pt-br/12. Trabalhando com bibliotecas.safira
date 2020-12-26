@@ -30,5 +30,5 @@ adicione "idade recebe 25" no arquivo "biblioteca.safira"
 # só precisamos digitar biblioteca e a safira irá entender o resto
 importe biblioteca
 
-mostre "A idade é ", idade
+mostre "A idade é %" inserindo idade
 
