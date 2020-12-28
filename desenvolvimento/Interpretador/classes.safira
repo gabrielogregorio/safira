@@ -1,0 +1,50 @@
+classe Animal{
+    funcao contrutor recebe nome, dono, tipo {
+        print "classe instânciada"
+
+        nome = nome
+        dono = dono
+        tipo = tipo
+    } 
+
+    funcao privada nome {
+        return nome
+    } 
+
+    funcao publica dono {
+        return dono
+    } 
+
+    funcao muda_nome recebe novo_nome {
+         nome = novo_nome
+    } 
+} 
+
+
+classe gato herda de Animal {
+    funcao contrutor recebe nome, dono, tipo {
+        print "classe instânciada"
+
+        nome = nome
+        dono = dono
+        tipo = tipo
+    } 
+}
+
+# instanciando a classe
+rex = Animal passando "Rex", "Gabriel", "Cachorro"
+mia = Animal "Mia", "mariana", "Gato"
+
+mostre "\nNome:", rex.nome
+mostre "Dono:", rex.dono
+mostre "Tipo:", rex.tipo)
+
+rex.muda_nome("Marlon")
+
+mostre "Nome:", rex.nome
+
+mostre "Nome:", mia.nome
+mostre "Dono:", mia.dono
+mostre "Tipo:", mia.tipo
+
+

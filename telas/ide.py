@@ -8,6 +8,7 @@ from subprocess import run as subprocess_run
 from subprocess import PIPE as subprocess_PIPE
 from copy import deepcopy
 from tkinter import CURRENT
+from telas.tutorial import Tutorial
 from tkinter import INSERT
 from tkinter import RAISED
 from tkinter import Entry
@@ -115,7 +116,7 @@ class Interface:
         self.libera_bkp = False
         self.bool_logs = False
 
-        self.lst_historico_abas_focadas = []
+        self.lst_historico_abas_focadas = [0]
         self.lista_terminal_destruir = []
         self.lista_breakponts = []
 
@@ -217,7 +218,6 @@ class Interface:
         cm_abrir_disponiv = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
         cm_abrir_comunida = lambda: webbrowser_open("https://safiraide.blogspot.com/p/comunidade.html")
         cm_abrirl_projeto = lambda: webbrowser_open("http://safiraide.blogspot.com/")
-        #cm_abrirlnk_ajuda = lambda: webbrowser_open(self.path + "/tutorial/comando.html")
         cm_ativaropc_logs = lambda: self.ativar_logs()
         cm_ativarop_debug = lambda: self.ativar_modo_debug_temas()
         cm_atualizar_idioma = lambda: self.atualizar_idioma()
@@ -281,8 +281,8 @@ class Interface:
         self.mn_interface.add_command(label=self.interface_idioma["label_menos"][self.idioma], command=cm_diminuir_fonte)
 
         # MENU AJUDA
-        #self.mn_ajuda.add_command(label=self.interface_idioma["label_ajuda"][self.idioma], command=cm_abrirlnk_ajuda)
         #self.mn_ajuda.add_command(label=self.interface_idioma["label_comandos_disponiveis"][self.idioma], command=cm_abrir_disponiv)
+        self.mn_ajuda.add_command(label="  Tutorial", command=lambda event=None: self.abrir_aba_tutorial())
         self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug.interface())
         self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.buscar_atualização())
 
@@ -329,7 +329,7 @@ class Interface:
         self.bt_executar_bkp = Button(self.fr_opcoes, image=self.ic_exec_ate_bkp, command=cm_executar_bkp)
         self.bt_inserir_bkp = Button(self.fr_opcoes, image=self.ic_inserir_bkp, command=cm_inserir_bkp)
         self.bt_limpar_bkp = Button(self.fr_opcoes, image=self.ic_marcar_bkp, command=cm_limpa_breakpoints)
-        #self.bt_ajuda = Button(self.fr_opcoes, image=self.ic_ajuda)
+        self.bt_ajuda = Button(self.fr_opcoes, image=self.ic_ajuda, command=lambda event=None: self.abrir_aba_tutorial())
         #self.bt_pesquisar = Button(self.fr_opcoes, image=self.ic_pesquisa)
         self.bt_idioma = Button(self.fr_opcoes, image=self.ic_idioma, command=cm_atualizar_idioma)
         self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_redesfazer)
@@ -350,7 +350,11 @@ class Interface:
 
         self.fr_abas = Frame(self.fr_princ, height=20)
         self.fr_abas.rowconfigure(1, weight=1)
-        self.fr_espaco = Label(self.fr_abas, width=5)
+        self.fr_abas.grid(row=0, column=0, columnspan=4, sticky=NSEW)
+
+        self.fr_espaco = Label(self.fr_abas, width=11)
+        self.fr_espaco.grid(row=1, column=0, sticky=NSEW)
+
 
         self.carregar_abas_inicio()
 
@@ -387,29 +391,27 @@ class Interface:
         self.cont_lin1.dic_abas2 = self.dic_abas
         self.cont_lin1.atribuir(self.tx_editor)
 
-        self.fr_espaco.grid(row=1, column=0, sticky=NSEW)
         self.fr_opcoes.grid(row=1, column=1, sticky=NSEW, columnspan=2)
         self.bt_salvar.grid(row=1, column=1)
         self.bt_executar.grid(row=1, column=4)
         self.bt_executar_bkp.grid(row=1, column=5)
         self.bt_inserir_bkp.grid(row=1, column=6)
         self.bt_limpar_bkp.grid(row=1, column=8)
-        #self.bt_ajuda.grid(row=1, column=11)
+        self.bt_ajuda.grid(row=1, column=11)
         #self.bt_pesquisar.grid(row=1, column=12)
         self.bt_idioma.grid(row=1, column=13)
         self.bt_copiar.grid(row=1, column=14)
         self.bt_colar.grid(row=1, column=15)
         self.fr_aviso.grid(row=1, column=16)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
-        self.fr_abas.grid(row=0, column=1, columnspan=4, sticky=NSEW)
+
         self.cont_lin1.grid(row=1, column=0, sticky=NSEW)
         self.cont_lin.grid(row=1, column=1, sticky=NSEW)
-        self.tx_editor.grid(row=1, column=2, sticky=NSEW)
-        self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
+
 
         # ******** Manipulação dos arquivos **************** #
         self.controle_arquivos = Arquivo(
-            self.dic_abas,
+            self.dic_abas, 
             self.num_aba_focada,
             self.tx_editor)
 
@@ -417,17 +419,10 @@ class Interface:
         self.splash.splash_fim()
         self.master.withdraw()
 
-        #self.master.update_idletasks()
-        #t_width = self.master.winfo_screenwidth()
-        #t_heigth = self.master.winfo_screenheight()
-
-        # Obter o tamanho lateral da tela considerando o espaço extra do Widget
-        #posicao_resetada_x = self.master.winfo_x() -self.master.winfo_rootx()
-        #posicao_resetada_y = self.master.winfo_rooty() - self.master.winfo_y()
-
-        #self.master.geometry("{}x{}+{}+{}".format(t_width, t_heigth, posicao_resetada_x, 0))
-
+        self.tutorial = Tutorial(self.fr_princ,  self.design, self.idioma, self.interface_idioma, self.icon)
         self.atualizar_design_interface()
+
+        self.trocar_interface(troca='codigo')
 
         try:
             master.state('zoomed')
@@ -447,6 +442,35 @@ class Interface:
 
 
         #self.manipular_arquivos(None, "abrirArquivo", 'natal.safira')
+    def trocar_interface(self, troca):
+        if troca == 'tutorial':
+            self.tx_editor.grid_remove()
+            #self.cont_lin1.grid_remove()
+            #self.cont_lin.grid_remove()
+            self.sb_codfc.grid_remove()
+
+            self.tutorial.barra_superior.grid(row=0, column=1, sticky=NSEW)
+            self.tutorial.fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
+            self.tutorial.fr_botoes.grid(row=2, column=2, columnspan=2, sticky=NSEW)
+            
+
+
+        elif troca == 'codigo':
+
+            self.tutorial.fr_botoes.grid_remove()
+            self.tutorial.barra_superior.grid_remove()
+            self.tutorial.fr_texto.grid_remove()
+
+            self.tx_editor.grid(row=1, column=2, sticky=NSEW)
+            self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
+
+    def abrir_aba_tutorial(self):
+        self.abrir_nova_aba(tutorial=True)
+        self.dic_abas[self.num_aba_focada]["tipo"] = 'tutorial'
+        self.trocar_interface(troca='tutorial')
+        self.atualizar_codigo_editor(self.num_aba_focada)
+
+
 
     def avisos(self):
         t_width  = int(self.master.winfo_screenwidth())
@@ -743,7 +767,7 @@ class Interface:
                                     self.tx_editor.update()
                                     self.master.update()
 
-                                    sleep(0.00001)
+                                    sleep(0.0001)
 
                                     if self.instancia.aconteceu_erro:
                                         break
@@ -990,6 +1014,7 @@ class Interface:
             self.obter_posicao_do_cursor(event)
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
+        print('configurar_cor_aba', dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador, self.num_aba_focada)
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
@@ -1065,14 +1090,13 @@ class Interface:
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
 
 
-    def abrir_nova_aba(self, event=None):
+
+
+    def abrir_nova_aba(self, event=None, tutorial=False):
         sleep(0.1)
         print('abrir_nova_aba', event)
         # Adicionar na posição 0
         posicao_adicionar = 0
-
-
-
 
         # Se tem mais de uma aba
         if len(self.dic_abas) != 0:
@@ -1127,6 +1151,8 @@ class Interface:
 
         # Focar nova aba
         self.atualizar_codigo_editor(self.num_aba_focada)
+        self.trocar_interface(troca='codigo')
+
 
     def fechar_uma_aba(self, bt_fechar):
         bool_era_focado = False
@@ -1195,6 +1221,7 @@ class Interface:
 
         # Aba fechada era a aba que estava focada
         if bool_era_focado:
+            print('bool_era_focado', self.lst_historico_abas_focadas)
 
             # Obter a penultima aba focada
             chave = self.lst_historico_abas_focadas[-1]
@@ -1222,7 +1249,12 @@ class Interface:
             # Atualizar Aba
             self.atualizar_coloracao_codigo_aba()
 
-            return 0
+
+        if self.dic_abas[self.num_aba_focada]['tipo'] == 'tutorial':
+            self.trocar_interface(troca='tutorial')
+        else:
+            self.trocar_interface(troca='codigo')
+
 
 
 
@@ -1282,7 +1314,10 @@ class Interface:
 
         self.atualizar_coloracao_codigo_aba()
 
-
+        if self.dic_abas[self.num_aba_focada]['tipo'] == 'tutorial':
+            self.trocar_interface(troca='tutorial')
+        else:
+            self.trocar_interface(troca='codigo')
 
 
     def atualizar_coloracao_codigo_aba(self, limpar=False, event=None):
@@ -1307,6 +1342,7 @@ class Interface:
         self.colorir_codigo.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
         self.num_coloracao_acionados = 0
+
     def atualizar_coloracao_codigo_aba_th(self, limpar=False, event=None):
         inicio = time()
 
@@ -1334,6 +1370,14 @@ class Interface:
 
 
     def atualizar_codigo_editor(self, num_aba):
+        if self.dic_abas[num_aba]['tipo'] == 'tutorial': 
+            self.dic_abas[num_aba]["listaAbas"][2].configure(text='Tutorial Safira')
+
+            for x in range(0, 3):
+                self.dic_abas[num_aba]["listaAbas"][x].update()
+
+            return 0
+
         self.tx_editor.delete(1.0, END)
         self.tx_editor.insert(END, str(self.dic_abas[num_aba]["arquivoAtual"]["texto"])[0:-1])
 
@@ -1347,7 +1391,6 @@ class Interface:
 
         for x in range(0, 3):
             self.dic_abas[num_aba]["listaAbas"][x].update()
-
         self.atualizar_coloracao_codigo_aba(True)
 
     def realcar_cor_botao_fechar_aba(self, bt_fechar):
@@ -1755,7 +1798,7 @@ class Interface:
         self.atualizar_design_objeto(self.bt_salvar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar_bkp, "dicBtnMenus")
-        #self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
+        self.atualizar_design_objeto(self.bt_ajuda, "dicBtnMenus")
         self.atualizar_design_objeto(self.lb_aviso, "dicBtnMenus")
         self.atualizar_design_objeto(self.fr_aviso, "fr_dict_aviso")
         #self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")

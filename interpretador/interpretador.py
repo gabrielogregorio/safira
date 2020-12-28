@@ -208,7 +208,7 @@ class Interpretador():
                 if self.aconteceu_erro:
                     return [False, "Interrompido", "exibirNaTela"]
 
-                sleep(0.00001)
+                sleep(0.0001)
 
     def orq_erro(self, msg_log:str, linhaAnalise:str, dir_script_erro:str) -> None:
         """Executa as rotinas para avisar o sistema que aconteceu um erro
@@ -261,7 +261,7 @@ class Interpretador():
         while self.controle_interpretador != "":
             if self.aconteceu_erro:
                 return [False, "Interrompido", "exibirNaTela"]
-            sleep(0.00001)
+            sleep(0.0001)
 
     def log(self, msg_log: str) -> str:
         """ Exibe um log no terminal
@@ -1341,8 +1341,6 @@ class Interpretador():
         __resultado = self.analisa_instrucao('^(.*)(<to_captalize>)$', possivel_variavel, self.compilado)
         if __resultado[0]: return self.funcao_para_captalize(__resultado[1][1])
 
-        __resultado = self.analisa_instrucao('^(.*)(<formatar_textos>)(.*)$', possivel_variavel, self.compilado)
-        if __resultado[0]: return self.funcao_formatar_texto(__resultado[1][1], __resultado[1][3])
 
 
         ##################################################################
@@ -1352,6 +1350,9 @@ class Interpretador():
         __resultado = self.analisa_instrucao('^(.*)(<na_cor>)(.*)$', possivel_variavel, self.compilado)
         if __resultado[0]: return self.funcao_na_cor(__resultado[1][1], __resultado[1][3])
 
+        # DEBAIXO DO NA COR
+        __resultado = self.analisa_instrucao('^(".*?"|.*)(<formatar_textos>)(.*)$', possivel_variavel, self.compilado)
+        if __resultado[0]: return self.funcao_formatar_texto(__resultado[1][1], __resultado[1][3])
 
         ##################################################################
         #                            FUNÇÔES                             #

@@ -7,5 +7,6 @@
     "listaContextos":[],
     "contexto":0, 
     "ja_foi_marcado_nao_salvo":false,
+    "tipo":"editor",
     "listaAbas":[]
 }

@@ -45,6 +45,11 @@ Português-Brasil
 - [Trabalhando com datas](#Introdução)  
   
 
+
+
+
+O que é a IDE?
+
 ## Introdução
 
 A Safira é uma linguagem de programação focada na naturalidade, na prática, você consegue programar usando palavras como se estivesse conversando com outra pessoa. A Safira também consegue trabalhar em um nível mais direto.

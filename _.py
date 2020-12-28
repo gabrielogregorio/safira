@@ -77,7 +77,7 @@ def splash():
     master.mainloop()
 
 
-
+'''
 root = Tk()
 fonts=list(tkFont.families()) 
 
@@ -85,4 +85,59 @@ for fonte in sorted(fonts):
     if 'mono' in fonte.lower():
         print(fonte)
 
+'''
 
+from telas.tutorial import Tutorial
+from tkinter import NSEW
+def tutorial():
+    master = Tk()
+
+    design = Design()
+    design.update_design_dic()
+
+    # Configurações da IDE
+    arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
+
+    # Idioma que a safira está configurada
+    idioma = arquivo_configuracoes['idioma']
+    interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+    icon = PhotoImage(file='imagens/icone.png')
+
+
+    master.grid_columnconfigure(2, weight=1)
+    master.rowconfigure(1, weight=1)
+
+    tutorial = Tutorial(master, design, idioma, interface_idioma, icon)
+    tutorial.barra_superior.grid(row=0, column=1, sticky=NSEW)
+    tutorial.fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
+    tutorial.fr_botoes.grid(row=2, column=2, columnspan=2, sticky=NSEW)
+
+
+    master.mainloop()
+
+from telas.Inicio import Inicio
+def tela_inicio():
+    master = Tk()
+
+    design = Design()
+    design.update_design_dic()
+
+    # Configurações da IDE
+    arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
+
+    # Idioma que a safira está configurada
+    idioma = arquivo_configuracoes['idioma']
+    interface_idioma = funcoes.carregar_json("configuracoes/interface.json")
+    icon = PhotoImage(file='imagens/icone.png')
+
+
+    master.grid_columnconfigure(2, weight=1)
+    master.rowconfigure(1, weight=1)
+
+    tela_inicio = Inicio(master, design, idioma, interface_idioma, icon)
+    tela_inicio.barra_superior.grid(row=0, column=1, sticky=NSEW)
+    tela_inicio.fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
+
+
+    master.mainloop()
+tela_inicio()

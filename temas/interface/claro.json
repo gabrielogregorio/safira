@@ -202,7 +202,7 @@
         ]
     },
     "dic_cor_abas_frame":{
-        "background":"#e5e5e5"
+        "background":"#d1d1d1"
     },
     "dic_cor_abas":{
         "background":"#ffffff",
@@ -226,10 +226,10 @@
         ]
     },
     "dic_cor_abas_nao_focada":{
-        "background":"#ededed",
-        "activebackground":"#ededed",
+        "background":"#e9e9e9",
+        "activebackground":"#e9e9e9",
         "activeforeground":"#9a9a9a",
-        "foreground":"#9a9a9a",
+        "foreground":"#7a7a7a",
         "padx":30,
         "relief":"sunken",
         "pady":7,
@@ -238,6 +238,18 @@
             11
         ]
     },
+
+
+    "************************************ TUTORIAL ************************************":{},
+
+
+
+
+
+
+
+
+    
     "dic_cor_marcador_focado":{
         "background":"#0a67ad",
         "height":1
@@ -264,8 +276,8 @@
             "Open Sans",
             14
         ],
-        "background":"#ededed",
-        "activebackground":"#ededed",
+        "background":"#e9e9e9",
+        "activebackground":"#e9e9e9",
         "activeforeground":"black",
         "foreground":"#dddddd",
         "relief":"flat",
@@ -298,7 +310,7 @@
             13
         ]
     },
-
+ 
 
 
 
@@ -352,7 +364,7 @@
     "linha_terminal":{
         "background":"#222222",
         "foreground":"#ffffff",
-        "fieldbackground":"#ffffff"
+        "fieldbackground":"#222222"
     },
     "cor_grid_variaveis":{
         "background":"#222222"
@@ -369,7 +381,7 @@
         "background":"#222222",
         "foreground":"white",
         "highlightthickness":0,
-        "insertbackground":"white"
+        "insertbackground":"#222222"
     },
     "cor_grid_variaveis_scrollbar":{
         "background":"#222222",

@@ -3,7 +3,7 @@
 
 from tkinter import PhotoImage
 from tkinter import Tk
-from tkinter import Button
+from tkinter import Button 
 from telas.ide import Interface
 from sys import version
 
@@ -18,7 +18,6 @@ tela.grid_columnconfigure(1, weight=1)
 
 # Traz barra de titulo
 tela.overrideredirect(0)
-
 
 # Ocultar tkinter
 tela.withdraw()
