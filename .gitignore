@@ -5,21 +5,3 @@ backups
 registros.json
 logs/registros.json
 .vscode/
-
-# Python bin
-pyvenv.cfg
-bin/
-lib/
-
-# MacOS X
-.DS_Store
-.AppleDouble
-.LSOverride
-
-.DocumentRevisions-V100
-.fseventsd
-.Spotlight-V100
-.TemporaryItems
-.Trashes
-.VolumeIcon.icns
-.com.apple.timemachine.donotpresent
