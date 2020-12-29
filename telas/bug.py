@@ -5,8 +5,7 @@ from tkinter import Frame
 from tkinter import Button
 from tkinter import NSEW
 from tkinter import FLAT
-#from tkinter import PhotoImage
-from include.PhotoImage import PhotoImage
+from tkinter import PhotoImage
 from webbrowser import open as webbrowser_open
 
 

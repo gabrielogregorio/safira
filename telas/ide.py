@@ -1,6 +1,5 @@
 from tkinter import messagebox
-#from tkinter import PhotoImage
-from include.PhotoImage import PhotoImage
+from tkinter import PhotoImage
 from tkinter import messagebox
 from tkinter import Scrollbar
 from tkinter import Toplevel
@@ -66,7 +65,7 @@ def carregar_fonte():
         fonte_sistema = 'fonte/OpenSans/OpenSans-Regular.ttf'
         fonte_terminal = 'fonte/Consolas/ConsolaMono.ttf'
 
-        fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono', 'Menlo']
+        fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono']
         _ = font.load(name = fontes, dpi=400.0, size=14)
 
         resource.add_font(fonte_terminal)

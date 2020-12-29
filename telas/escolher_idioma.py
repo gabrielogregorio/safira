@@ -4,8 +4,7 @@ from tkinter import Frame
 from tkinter import Button
 from tkinter import GROOVE
 from tkinter import NSEW
-#from tkinter import PhotoImage
-from include.PhotoImage import PhotoImage
+from tkinter import PhotoImage
 from tkinter import Tk
 import util.funcoes as funcoes 
 from telas.design import Design 
