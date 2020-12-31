@@ -66,7 +66,7 @@ def carregar_fonte():
         fonte_sistema = 'fonte/OpenSans/OpenSans-Regular.ttf'
         fonte_terminal = 'fonte/Consolas/ConsolaMono.ttf'
 
-        fontes =  ['Roboto Mono', 'Open Sans', 'Consola Mono']
+        fontes =  ['Open Sans', 'Consola Mono']
         _ = font.load(name = fontes, dpi=400.0, size=14)
 
         resource.add_font(fonte_terminal)

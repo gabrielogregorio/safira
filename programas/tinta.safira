@@ -7,6 +7,8 @@
 resp = "s"
 
 enquanto resp == "s" faca {
+      limpe a tela
+
       mostre "O tamanho da área deve ser sem portas e janelas."
       mostre ""
       mostre nessa linha "Informe o tamanho da área em m2...: "
@@ -16,13 +18,11 @@ enquanto resp == "s" faca {
       mostre nessa linha "Qual é o rendimento da tinta...: "
       rendimento recebe o numero que for digitado
       
-      mostre "A quantidade de tinta será de..: ", tamParede / rendimento
+      mostre "A quantidade de tinta será de..: %" inserindo tamParede / rendimento
 
       mostre ""
 
       mostre "Quer continuar calculando? <s/n>"
       resp recebe o que for digitado em minusculo
-
-      limpe a tela
 }
 

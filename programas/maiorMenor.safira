@@ -1,33 +1,31 @@
-// Função : Mostre o maior e menor número de um vetor
-   lista de  numeros  com 4 posicoes
+#Função : Mostre o maior e menor número de um vetor
+lista de numeros  com 4 posicoes
 
-   //cadastro
-   i <- 1
-   enquanto i <= 4 faca {
+# cadastro
+i <- 1
+enquanto i <= 4 faca {
+    escreva "Digite um número..: "
+    lista de numeros na posicao i recebe o numero que o usuario digitar
+    i <- i +1
+}
    
-      escreva "Digite um número..: "
-      numeros na posicao i recebe o numero que o usuario digitar
-      i <- i +1
-   }
+# procurar maior e menor
+maior <- lista de numeros na posicao 1
+menor <- lista de numeros na posicao 1
    
-   //procurar maior e menor
-   maior <- numeros na posicao 1
-   menor <- numeros na posicao 1
-   
-   i <- 1
-   enquanto i <= 4 faca {
-      se numeros na posicao i > maior entao {
-         maior <- numeros na posicao i
-      }
+i <- 1
+enquanto i <= 4 faca {
+    se lista de numeros na posicao i > maior entao {
+        maior <- lista de numeros na posicao i
+    }
       
-      se numeros na posicao i < menor entao { 
-         menor <- numeros na posicao i
-      }
-      i <- i + 1
-   }
+    se lista de numeros na posicao i < menor entao { 
+        menor <- lista de numeros na posicao i
+    }
+    i <- i + 1
+}
 
-   //imprimir
-   escreval "O maior número digitado foi ",maior
-   escreval "O menor número digitado foi ", menor
-
+# imprimir
+escreval "O maior número digitado foi %" inserindo maior
+escreval "O menor número digitado foi %" inserindo menor
 

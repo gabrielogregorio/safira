@@ -9,7 +9,7 @@
   enquanto resp == "S" faca {
 
      limpatela
-     escreval "Total água disponível...: ", Galao
+     escreval "Total água disponível...: %" % Galao
      escreval ""
      escreva "Tamanho do copo: <200, 300, 500>ml : "
     Copo = o numero que o usuario digitar
@@ -44,9 +44,9 @@
   
   escreval "RELATÓRIO GERENCIAL"
   escreval ""
-  escreval "Total Copos de 200ml...: ", Copo200 
-  escreval "Total Copos de 300ml...: ", Copo300
-  escreval "Total Copos de 500ml...: ", Copo500
+  escreval "Total Copos de 200ml...: %" inserindo Copo200 
+  escreval "Total Copos de 300ml...: %" inserindo Copo300
+  escreval "Total Copos de 500ml...: %" inserindo Copo500
   escreval ""
-  escreval "Total em R$ arrecadado.: ", Caixa
+  escreval "Total em R$ arrecadado.: %" inserindo Caixa
 

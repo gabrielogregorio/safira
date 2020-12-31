@@ -4,7 +4,7 @@
 # Data : 18/05/2020
 # Crie um algoritmo que o usuário digita um dia do mês corrente e o algoritmo calcule o dia da semana.
 
-mostre "Digite um dia do mês de Maio2020..: "
+mostre "Digite um dia do mês de Maio 2020: "
 dia recebe o numero que o usuario digitar
    
 auxDia = dia
@@ -17,30 +17,30 @@ enquanto auxDia > 7 faca {
 #dia = 18
    
 se auxDia == 1 entao {
-   mostre "O dia ", dia, " é uma sexta-feira."
+   mostre "O dia % é uma sexta-feira." inserindo dia
 }
 
 senao se auxDia == 2 entao {
-   mostre "O dia ", dia, " é um sábado."
+   mostre "O dia % é um sábado." inserindo dia
 }
  
 senao se auxDia == 3 entao {
-   mostre "O dia ", dia, " é um domingo."
+   mostre "O dia % é um domingo." inserindo dia
 }
 
 senao se auxDia == 4 entao {
-   mostre "O dia ", dia, " é um segunda-feira."
+   mostre "O dia % é um segunda-feira." inserindo dia
 }
 
 senao se auxDia == 5 entao {
-   mostre "O dia ", dia, " é um terça-feira."
+   mostre "O dia % é um terça-feira." inserindo dia
 }
 
 senao se auxDia == 6 entao {
-   mostre "O dia ", dia, " é um quarta-feira."
+   mostre "O dia % é um quarta-feira." inserindo dia
 }
 
 senao se auxDia == 7 entao {
-   mostre "O dia ", dia, " é um quinta-feira."
+   mostre "O dia % é um quinta-feira." inserindo dia
 }
 

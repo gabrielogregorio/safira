@@ -1,7 +1,0 @@
-i = 1
-f = 1
-
-repita 1000 vezes {
-    f = i + f
-    f = f
-}

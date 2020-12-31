@@ -7,7 +7,7 @@ lista numero com 4 posicoes
 i = 1
 enquanto i <= 4 faca {
    mostre nessa linha "Digite um número...: "
-   numero na posicao i recebe o numero que for digitado
+   lista numero na posicao i recebe o numero que for digitado
    i = i + 1
 }
    
@@ -16,10 +16,10 @@ i <- 1
 enquanto i < 4 faca {
    j = i + 1
   enquanto j <= 4 faca {
-      se numero na posicao i > numero na posicao j entao {
-        aux = numero na posicao i
-        numero na posicao i = numero na posicao j
-        numero na posicao j = aux
+      se lista numero na posicao i > lista numero na posicao j entao {
+        aux = lista numero na posicao i
+        lista numero na posicao i = lista numero na posicao j
+        lista numero na posicao j = aux
      }
      incremente 1 em j
   }
@@ -29,7 +29,7 @@ enquanto i < 4 faca {
 # impressão
 i = 1
 enquanto i <= 4 faca {
-   mostre numero na posicao i
+   mostre lista numero na posicao i
    incremente 1 em i
 }
 
