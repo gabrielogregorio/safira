@@ -47,6 +47,8 @@ from telas.colorir import Colorir
 from telas.splash import Splash
 from telas.design import Design
 from telas.bug import Bug
+from recursos.formatar_sintaxe import Formatar
+
 from logs.log import Log
 from re import search as re_search
 from re import sub as re_sub
@@ -225,6 +227,7 @@ class Interface:
         cm_diminuir_fonte = lambda: self.aumentar_diminuir_fonte("-")
         cm_copiar = lambda: self.copiar_selecao()
         cm_colar = lambda: self.colar_selecao()
+        cm_formatar = lambda: self.formatar_codigo()
 
         # TECLAS DE ATALHOS
         self.master.bind('<Control-n>', cm_abrir_abrir_nova_aba)
@@ -246,14 +249,17 @@ class Interface:
         self.mn_executar = Menu(self.mn_barra)
         self.mn_exemplos = Menu(self.mn_barra)
         self.mn_arquivo = Menu(self.mn_barra)
-        self.mn_editar = Menu(self.mn_barra)
+        self.mn_truques = Menu(self.mn_barra)
         self.mn_ajuda = Menu(self.mn_barra)
         self.mn_dev = Menu(self.mn_barra)
 
         # ADICAO DOS MENUS NA INTERFACE
         self.mn_barra.add_cascade(label=self.interface_idioma["label_arquivo"][self.idioma], menu=self.mn_arquivo)
+
+
         self.mn_barra.add_cascade(label=self.interface_idioma["label_executar"][self.idioma], menu=self.mn_executar)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_exemplos"][self.idioma], menu=self.mn_exemplos)
+        self.mn_barra.add_cascade(label='Truques', menu=self.mn_truques)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_interface"][self.idioma], menu=self.mn_interface)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_ajuda"][self.idioma], menu=self.mn_ajuda)
         self.mn_barra.add_cascade(label=self.interface_idioma["label_dev"][self.idioma], menu=self.mn_dev)
@@ -275,6 +281,10 @@ class Interface:
         self.carregar_cascata_scripts()
         self.carregar_cascata_temas()
         self.carregar_cascata_sintaxe()
+
+
+        self.mn_truques.add_command(label='Formatar Programa', command=cm_formatar)
+
 
         # MENU DE AJUSTES
         self.mn_interface.add_command(label=self.interface_idioma["label_mais"][self.idioma], command=cm_aumentar_fonte)
@@ -304,6 +314,10 @@ class Interface:
         self.ic_marcar_bkp = PhotoImage(file="imagens/limpar_bkp.png")
         self.ic_idioma = PhotoImage(file="imagens/{}".format(self.dic_imgs[self.idioma]))
         self.ic_aviso = PhotoImage(file="imagens/aviso.png")
+        self.ic_formatar = PhotoImage(file="imagens/ic_formatar.png")
+
+
+
 
         # AJUSTES NO TAMANHO
         self.ic_salvar = self.ic_salvar.subsample(4, 4)
@@ -319,6 +333,7 @@ class Interface:
         self.ic_redesfazer = self.ic_redesfazer.subsample(4, 4)
         self.ic_desfazer = self.ic_desfazer.subsample(4, 4)
         self.ic_aviso = self.ic_aviso.subsample(1, 1)
+        self.ic_formatar = self.ic_formatar.subsample(4, 4)
 
         # CRIANDO AS OPÇÔES RÁPIDAS
         self.fr_opcoes = Frame(self.fr_tela)
@@ -334,6 +349,7 @@ class Interface:
         self.bt_idioma = Button(self.fr_opcoes, image=self.ic_idioma, command=cm_atualizar_idioma)
         self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_redesfazer)
         self.bt_desfazer = Button(self.fr_opcoes, image=self.ic_desfazer)
+        self.bt_formatar = Button(self.fr_opcoes, image=self.ic_formatar, command=cm_formatar)
 
         self.bt_copiar = Button(self.fr_opcoes, text=self.interface_idioma["copiar"][self.idioma], command=cm_copiar)
         self.bt_colar = Button(self.fr_opcoes, text=self.interface_idioma["colar"][self.idioma], command=cm_colar)
@@ -402,7 +418,8 @@ class Interface:
         self.bt_idioma.grid(row=1, column=13)
         self.bt_copiar.grid(row=1, column=14)
         self.bt_colar.grid(row=1, column=15)
-        self.fr_aviso.grid(row=1, column=16)
+        self.bt_formatar.grid(row=1, column=16)
+        self.fr_aviso.grid(row=1, column=17)
         self.fr_princ.grid(row=2, column=1, sticky=NSEW)
 
         self.cont_lin1.grid(row=1, column=0, sticky=NSEW)
@@ -1752,6 +1769,15 @@ class Interface:
     def copiar_selecao(self):
         print("Copiado: ", self.tx_editor.event_generate("<<Copy>>"))
 
+    def formatar_codigo(self):
+        codigo = self.tx_editor.get('1.0', END)[0:-1]
+        f = Formatar(codigo)
+        self.tx_editor.delete(1.0, END)
+        self.tx_editor.insert(END, str(f.formatar()))
+        del f
+
+        self.atualizar_coloracao_codigo_aba()
+
     def colar_selecao(self):
         try:
             self.tx_editor.delete("sel.first", "sel.last")
@@ -1790,7 +1816,7 @@ class Interface:
         self.atualizar_design_objeto(self.mn_interface, "cor_menu")
         self.atualizar_design_objeto(self.mn_executar, "cor_menu")
         self.atualizar_design_objeto(self.mn_arquivo, "cor_menu")
-        self.atualizar_design_objeto(self.mn_editar, "cor_menu")
+        self.atualizar_design_objeto(self.mn_truques, "cor_menu")
         self.atualizar_design_objeto(self.mn_exemplos, "cor_menu")
         self.atualizar_design_objeto(self.mn_barra, "cor_menu")
         self.atualizar_design_objeto(self.mn_ajuda, "cor_menu")
@@ -1804,6 +1830,9 @@ class Interface:
         #self.atualizar_design_objeto(self.bt_pesquisar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_copiar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_colar, "dicBtnCopiarColar")
+        self.atualizar_design_objeto(self.bt_formatar, "dicBtnMenus")
+
+
         self.atualizar_design_objeto(self.bt_aviso, "dicBtnAviso")
         self.atualizar_design_objeto(self.bt_idioma, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_inserir_bkp, "dicBtnMenus")

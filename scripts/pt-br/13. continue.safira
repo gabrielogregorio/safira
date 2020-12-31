@@ -1,4 +1,4 @@
-# Você quer executar um loop, porém, quando 
+# Você quer executar um loop, porém, quando
 # chegar em uma condição, você não quer executar
 # os comandos restantes. Como fazer isso?
 # Você pode usar o comando continue
@@ -8,11 +8,16 @@ enquanto soma for menor que 10
 {
     # Incrementando o valor da soma em +1
     soma recebe soma mais 1
-
+    
     # Se o valor for igual a 5, ignore o trecho abaixo
-    se soma for igual a 5 { continue }
-
+    se soma for igual a 5 {
+        continue
+    }
+    
+    
     # Mostrando na tela
     mostre "Soma: %" inserindo soma
 }
 
+
+mostre "oi"
