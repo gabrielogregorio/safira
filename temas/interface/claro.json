@@ -569,5 +569,94 @@
         "fg":"#222222",
         "activebackground":"#00acb5",
         "activeforeground":"#222222"
-    } 
+    },
+
+
+
+ "tutorial_barra_superior":{
+     "height":10,
+     "bg":"#f2f2f2"
+ },
+ "tutorial_tx_tutorial":{
+    "bg":"white",
+
+    "font":["", 14],
+    "bd":0,
+    "padx":10,
+    "pady":1,
+    "inactiveselectbackground":
+    "#11fdfd",
+    "selectbackground":"white",
+    "relief":"flat"
+ },
+
+ "tutorial_fr_botoes":{
+    "bg":"red",
+    "height":60
+ },
+ "tutorial_botao_anterior":{
+   "foreground":"black",
+   "activeforeground":"black",
+   "bg":"#11ffc7",
+   "activebackground":"#11ffc7",
+   "font":["", 13, "bold"],
+   "relief":"groove",
+   "bd":0 
+ },
+
+
+"tutorial_botao_proximo":{
+  "foreground":"black",
+  "activeforeground":"black",
+  "bg":"#1170ff",
+  "activebackground":"#1170ff",
+  "font":["", 13, "bold"],
+  "relief":"groove",
+  "bd":0    
+},
+
+
+"tutorial_tag_titulo":{
+    "font":["",20, "bold"],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+
+"tutorial_tag_subtitulo":{
+    "font":["",15, "bold"],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+
+"tutorial_tag_subtitulo1":{
+    "font":["", 15],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+
+"tutorial_tag_subtitulo2":{
+    "font":["",14],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+"tutorial_tag_texto":{
+    "font":["",13],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+"tutorial_tag_negrito":{
+    "font":["",13, "bold"],
+    "foreground":"black",
+    "selectbackground":"#5b0391"
+},
+
+"tutorial_tag_codigo":{
+    "font":["Consola Mono",13],
+    "foreground":"black",
+    "foreground":"#919191",
+    "background":"#f3f3f3",
+    "selectbackground":"#c7c7c7"
+}
+
+
 }

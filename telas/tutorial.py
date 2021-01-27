@@ -6,25 +6,24 @@ from os import path
 class Tutorial():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
         self.tela = tela
+        self.design = design
 
         LARGURA = int(tela.winfo_screenwidth() / 6)
         t_heigth = tela.winfo_screenheight()
 
-        design = {'bg':'white'}
 
         self.fr_texto = Frame(tela, width=LARGURA)
         self.fr_texto.grid_columnconfigure(1, weight=1)
         self.fr_texto.rowconfigure(2, weight=1)
         
-
-        self.barra_superior = Frame(self.fr_texto, height=10 ,bg='#f2f2f2')
+        self.barra_superior = Frame(self.fr_texto, self.design.get("tutorial_barra_superior"))
         self.barra_superior.grid(row=1, column=1, sticky=NSEW)
 
         self.fr_principal = Frame(self.fr_texto)
         self.fr_principal.grid_columnconfigure(1, weight=1)
         self.fr_principal.rowconfigure(1, weight=1)
 
-        self.tx_tutorial = Text(self.fr_principal, design, wrap=WORD, font=('', 14), bd=0, padx=10, pady=1, inactiveselectbackground='#11fdfd', selectbackground='white', relief=FLAT)
+        self.tx_tutorial = Text(self.fr_principal, self.design.get("tutorial_tx_tutorial"), wrap=WORD)
         self.ys = Scrollbar(self.fr_principal, orient='vertical', command=self.tx_tutorial.yview)
         self.tx_tutorial.configure(yscrollcommand=self.ys.set)
         
@@ -37,13 +36,13 @@ class Tutorial():
         self.arquivos.sort(reverse=False)
         self.posicao = -1
         
-        self.fr_botoes = Frame(tela, bg='red', height=60)
+        self.fr_botoes = Frame(tela, self.design.get("tutorial_fr_botoes"))
         self.fr_botoes.grid_columnconfigure((1,2), weight=1)
 
-        self.botao_anterior = Button(self.fr_botoes, bg="#11ffc7", activebackground="#11ffc7", font=("", 13, 'bold'), text='{:^22}'.format(""), relief='groove', bd=0, command=lambda: self.anterior())
+        self.botao_anterior = Button(self.fr_botoes,  self.design.get("tutorial_botao_anterior"), text="{:^22}".format(""), command=lambda: self.anterior())
         self.botao_anterior.grid(row=1, column=1, stick=NSEW)
 
-        self.botao_proximo = Button(self.fr_botoes,bg='#1170ff', activebackground="#1170ff", font=("", 13, 'bold'),text='{:^22}'.format("Proxima Aula"), relief='groove', bd=0, command=lambda: self.proximo())
+        self.botao_proximo = Button(self.fr_botoes,  self.design.get("tutorial_botao_proximo"), text='{:^22}'.format("Proxima Aula"), command=lambda: self.proximo())
         self.botao_proximo.grid(row=1, column=2, stick=NSEW)
 
         self.proximo()
@@ -178,15 +177,15 @@ class Tutorial():
 
 
 
-        self.tx_tutorial.tag_configure('titulo', font=("",20, 'bold'), selectbackground='#5b0391')
-        self.tx_tutorial.tag_configure('subtitulo', font=("",15, 'bold'), selectbackground='#5b0391')
-        self.tx_tutorial.tag_configure('subtitulo1', font=("",15), selectbackground='#5b0391')
-        self.tx_tutorial.tag_configure('subtitulo2', font=("",14), selectbackground='#5b0391')
+        self.tx_tutorial.tag_configure('titulo', self.design.get("tutorial_tag_titulo"))
+        self.tx_tutorial.tag_configure('subtitulo',  self.design.get("tutorial_tag_subtitulo"))
+        self.tx_tutorial.tag_configure('subtitulo1',  self.design.get("tutorial_tag_subtitulo1"))
+        self.tx_tutorial.tag_configure('subtitulo2',  self.design.get("tutorial_tag_subtitulo2"))
 
-        self.tx_tutorial.tag_configure('texto', font=("",13), selectbackground='#5b0391')
-        self.tx_tutorial.tag_configure('negrito', font=("",13, 'bold'), selectbackground='#5b0391')
+        self.tx_tutorial.tag_configure('texto',  self.design.get("tutorial_tag_texto"))
+        self.tx_tutorial.tag_configure('negrito', self.design.get("tutorial_tag_negrito"))
 
-        self.tx_tutorial.tag_configure('codigo', font=("Consola Mono",13), foreground='#919191', background="#f3f3f3", selectbackground='#c7c7c7')
+        self.tx_tutorial.tag_configure('codigo', self.design.get("tutorial_tag_codigo"))
 
 
 

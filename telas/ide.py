@@ -54,6 +54,7 @@ from re import search as re_search
 from re import sub as re_sub
 from interpretador.interpretador import Interpretador
 from interpretador.Configurar import ConfigurarInterpretador
+from telas.Inicio import Inicio
 
 
 def carregar_fonte():
@@ -439,7 +440,10 @@ class Interface:
         self.tutorial = Tutorial(self.fr_princ,  self.design, self.idioma, self.interface_idioma, self.icon)
         self.atualizar_design_interface()
 
+        self.tela_inicio = Inicio(self.fr_princ, self.design, self.idioma, self.interface_idioma, self.icon)
         self.trocar_interface(troca='codigo')
+
+        #self.abrir_aba_inicio()
 
         try:
             master.state('zoomed')
@@ -465,6 +469,8 @@ class Interface:
             #self.cont_lin1.grid_remove()
             #self.cont_lin.grid_remove()
             self.sb_codfc.grid_remove()
+            self.tela_inicio.barra_superior.grid_remove()
+            self.tela_inicio.fr_texto.grid_remove()
 
             self.tutorial.barra_superior.grid(row=0, column=1, sticky=NSEW)
             self.tutorial.fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
@@ -477,9 +483,26 @@ class Interface:
             self.tutorial.fr_botoes.grid_remove()
             self.tutorial.barra_superior.grid_remove()
             self.tutorial.fr_texto.grid_remove()
+            self.tela_inicio.barra_superior.grid_remove()
+            self.tela_inicio.fr_texto.grid_remove()
 
             self.tx_editor.grid(row=1, column=2, sticky=NSEW)
             self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
+
+        elif troca == 'inicio':
+
+            self.tela_inicio.barra_superior.grid_remove()
+            self.tela_inicio.fr_texto.grid_remove()
+            self.tx_editor.grid_remove()
+            self.sb_codfc.grid_remove()
+            self.tela_inicio.barra_superior.grid_remove()
+            self.tela_inicio.fr_texto.grid_remove()
+
+
+            self.tela_inicio.barra_superior.grid(row=0, column=1, sticky=NSEW)
+            self.tela_inicio.fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
+
+
 
     def abrir_aba_tutorial(self):
         self.abrir_nova_aba(tutorial=True)
@@ -487,6 +510,12 @@ class Interface:
         self.trocar_interface(troca='tutorial')
         self.atualizar_codigo_editor(self.num_aba_focada)
 
+
+    def abrir_aba_inicio(self):
+        self.abrir_nova_aba(tutorial=True)
+        self.dic_abas[self.num_aba_focada]["tipo"] = 'inicio'
+        self.trocar_interface(troca='inicio')
+        self.atualizar_codigo_editor(self.num_aba_focada)
 
 
     def avisos(self):
@@ -1269,6 +1298,8 @@ class Interface:
 
         if self.dic_abas[self.num_aba_focada]['tipo'] == 'tutorial':
             self.trocar_interface(troca='tutorial')
+        elif self.dic_abas[self.num_aba_focada]['tipo'] == 'inicio':
+            self.trocar_interface(troca='inicio')
         else:
             self.trocar_interface(troca='codigo')
 
