@@ -995,6 +995,14 @@ class Interface:
             print("abrirArquivo")
             self.controle_arquivos.abrirArquivo(link)
 
+            # Salva as páginas recentes
+            dic_completo = dict(funcoes.ler_configuracoes())
+            lista = dic_completo['abertos']
+            if lista is not None:
+                lista.append(link)
+                funcoes.arquivo_de_configuracoes_interface(chave="abertos", novo=lista)
+
+
         elif comando == "abrir_arquivo_dialog":
             print("abrir_arquivo_dialog")
             self.controle_arquivos.abrir_arquivo_dialog(event)
@@ -1337,6 +1345,28 @@ class Interface:
 
 
     def focar_aba(self, num_aba):
+
+        nt_dict = {}
+        dict_antigo = self.dic_abas.copy()
+        for k, v in dict_antigo.items():
+
+            # Tive que duplicar, o dicionário estava referenciado o original mesmo com o deepcopy
+
+            nt_dict[k] = {
+                "nome":v['nome'],
+                "foco":v['foco'],
+                "lst_breakpoints":v["lst_breakpoints"],
+                "arquivoSalvo":{"link":  v["arquivoSalvo"]["link"],"texto": v["arquivoSalvo"]["texto"]},
+                "arquivoAtual":{"texto": v["arquivoAtual"]["texto"]},
+                "listaContextos":v["listaContextos"],
+                "contexto":v["contexto"], 
+                "ja_foi_marcado_nao_salvo":v["ja_foi_marcado_nao_salvo"],
+                "tipo":v["tipo"],
+                "listaAbas":[]
+            }
+        funcoes.arquivo_de_configuracoes_interface_load(novo=nt_dict)
+
+
         print('focar_aba', num_aba)
         if num_aba == self.num_aba_focada:
             return 0

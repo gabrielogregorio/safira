@@ -49,7 +49,7 @@ class Bug():
         self.image_bug = PhotoImage(file="imagens/bug.png")
         self.image_bug = self.image_bug.subsample(4) 
 
-        self.tp_princi = Toplevel(self.tela, bd=10, bg=self.design.dic["lb1_encontrou_bug"]["bg"])
+        self.tp_princi = Toplevel(self.tela, bd=10, bg=self.design.dic["bug_lb1_encontrou_bug"]["bg"])
         self.tp_princi.resizable(False, False)
         self.tp_princi.title(self.interface_idioma["titulo_reporte_bug"][self.idioma])
         self.tp_princi.tk.call('wm', 'iconphoto', self.tp_princi._w, self.icon)
@@ -64,11 +64,11 @@ class Bug():
         self.lb_label2 = Label(self.tp_princi)
         self.lb_label3 = Label(self.tp_princi)
 
-        self.lb_label1.configure(self.design.dic["lb1_encontrou_bug"])
-        self.lb_label2.configure(self.design.dic["lb2_encontrou_bug"])
-        self.lb_label3.configure(self.design.dic["lb3_encontrou_bug"])
+        self.lb_label1.configure(self.design.dic["bug_lb1_encontrou_bug"])
+        self.lb_label2.configure(self.design.dic["bug_lb2_encontrou_bug"])
+        self.lb_label3.configure(self.design.dic["bug_lb3_encontrou_bug"])
 
-        self.lb_label1.configure(text=self.interface_idioma["encontrou_bug"][self.idioma])
+        self.lb_label1.configure(text=self.interface_idioma["bug_encontrou_bug"][self.idioma])
         self.lb_label2.configure(image=self.image_bug)
         self.lb_label3.configure(text=self.interface_idioma["texto_reportar_bug"][self.idioma])
 

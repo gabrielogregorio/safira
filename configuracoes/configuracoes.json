@@ -3,6 +3,16 @@
     "sintaxe": "simples.json",
     "fonte": "Garuda",
     "logs": "ativado",
-    "abertos": [],
+    "abertos": [
+        "scripts/pt-br/11. Arquivos.safira",
+        "scripts/pt-br/09. Incremente-decremente.safira",
+        "scripts/pt-br/19. upper_lower_capitalize.safira",
+        "scripts/pt-br/15. interrompa.safira",
+        "scripts/pt-br/14. pare.safira",
+        "scripts/pt-br/03. Digitado.safira",
+        "scripts/pt-br/10. Funcoes.safira",
+        "scripts/pt-br/14. pare.safira",
+        "scripts/pt-br/11. Arquivos.safira"
+    ],
     "idioma": "pt-br"
 }

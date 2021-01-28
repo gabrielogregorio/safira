@@ -1,7 +1,7 @@
 {
     "msg_erro_fr1":{
         "height":50,
-        "bg":"#111121",
+        "bg":"#111121", 
         "bd":10,
         "highlightthickness":10,
         "highlightbackground":"#222232",
@@ -87,7 +87,7 @@
         "highlightthickness":0,
         "bd":0
     },
-    "cor_intro":{
+    "splash_cor_intro":{
         "background":"#222232",
         "foreground":"#f9f9f1"
     },

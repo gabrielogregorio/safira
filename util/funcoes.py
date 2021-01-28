@@ -42,3 +42,17 @@ def arquivo_de_configuracoes_interface(chave, novo):
     config_json = carregar_json(arquivo)
     config_json[chave] = novo
     salvar_arquivo(arquivo,  str(dumps(config_json, indent=4)))
+
+
+def arquivo_de_configuracoes_interface_load(novo):
+    arquivo = 'configuracoes/configuracoes_load.json'
+    salvar_arquivo(arquivo, str(dumps(novo, indent=4)))
+
+def ler_configuracoes():
+    arquivo = 'configuracoes/configuracoes.json'
+    return carregar_json(arquivo)
+
+
+
+
+

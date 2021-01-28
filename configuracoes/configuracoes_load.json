@@ -1,0 +1,36 @@
+{
+    "0": {
+        "nome": "",
+        "foco": true,
+        "lst_breakpoints": [],
+        "arquivoSalvo": {
+            "link": "scripts/pt-br/10. Funcoes.safira",
+            "texto": "# Imagine que voc\u00ea queira executar alguns comandos em v\u00e1rias\n# partes do c\u00f3digo, para evitar muito c\u00f3digo duplicado, voc\u00ea pode\n# usar as fun\u00e7\u00f5es\n\n# Est\u00e1 \u00e9 uma fun\u00e7\u00e3o com par\u00e2metros\n# Par\u00e2metros s\u00e3o valores que ela pode\n# Receber e trabalhar com eles\nfuncao calculaMedia recebe parametros nome, nota1, nota2\n{\n\n    mostre \"Nome %\" inserindo nome\n    mostre \"Nota 1 = %\" inserindo nota1\n    mostre \"Nota 2 = %\" inserindo nota2\n    mostre \"M\u00e9dia  = %\" inserindo (nota1 + nota2) / 2\n\n    mostre \"\"\n}\n\n\n# Essa \u00e9 uma fun\u00e7\u00e3o sem par\u00e2metros\nfuncao mostra_logo\n{\n    mostre \"@========= MEDIA ALUNOS ===========@\"\n    mostre \"\"\n}\n\n# Chamando fun\u00e7\u00f5es sem par\u00e2metros\nmostra_logo()\n\n# Chamando fun\u00e7\u00f5es com par\u00e2metros\naluno3_nota1 = 6.5\naluno3_nota2 = 7.5\ncalculaMedia passando parametros \"Jo\u00e3o da Silva\", aluno3_nota1, aluno3_nota2\n\naluno4_nota1 = 9.1\naluno4_nota2 = 2.7\ncalculaMedia passando parametros \"Mile Santos\", aluno4_nota1, aluno4_nota2\n\n# Chamando fun\u00e7\u00f5es sem par\u00e2metros\nmostra_logo()\n\n"
+        },
+        "arquivoAtual": {
+            "texto": "# Imagine que voc\u00ea queira executar alguns comandos em v\u00e1rias\n# partes do c\u00f3digo, para evitar muito c\u00f3digo duplicado, voc\u00ea pode\n# usar as fun\u00e7\u00f5es\n\n# Est\u00e1 \u00e9 uma fun\u00e7\u00e3o com par\u00e2metros\n# Par\u00e2metros s\u00e3o valores que ela pode\n# Receber e trabalhar com eles\nfuncao calculaMedia recebe parametros nome, nota1, nota2\n{\n\n    mostre \"Nome %\" inserindo nome\n    mostre \"Nota 1 = %\" inserindo nota1\n    mostre \"Nota 2 = %\" inserindo nota2\n    mostre \"M\u00e9dia  = %\" inserindo (nota1 + nota2) / 2\n\n    mostre \"\"\n}\n\n\n# Essa \u00e9 uma fun\u00e7\u00e3o sem par\u00e2metros\nfuncao mostra_logo\n{\n    mostre \"@========= MEDIA ALUNOS ===========@\"\n    mostre \"\"\n}\n\n# Chamando fun\u00e7\u00f5es sem par\u00e2metros\nmostra_logo()\n\n# Chamando fun\u00e7\u00f5es com par\u00e2metros\naluno3_nota1 = 6.5\naluno3_nota2 = 7.5\ncalculaMedia passando parametros \"Jo\u00e3o da Silva\", aluno3_nota1, aluno3_nota2\n\naluno4_nota1 = 9.1\naluno4_nota2 = 2.7\ncalculaMedia passando parametros \"Mile Santos\", aluno4_nota1, aluno4_nota2\n\n# Chamando fun\u00e7\u00f5es sem par\u00e2metros\nmostra_logo()\n\n"
+        },
+        "listaContextos": [],
+        "contexto": 0,
+        "ja_foi_marcado_nao_salvo": false,
+        "tipo": "editor",
+        "listaAbas": []
+    },
+    "1": {
+        "nome": "",
+        "foco": false,
+        "lst_breakpoints": [],
+        "arquivoSalvo": {
+            "link": "scripts/pt-br/14. pare.safira",
+            "texto": "# Mudando s\u00f3 um pouquinho do cen\u00e1rio anterior\n#\n# E se voc\u00ea quisesse executar um loop, por\u00e9m, quando \n# chegar em uma condi\u00e7\u00e3o, voc\u00ea quer para o loop.\n# Como fazer isso? Vamos usar o pare!\n\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma vale soma mais 1\n\n    # Se o valor for igual a 5, pare o loop!\n    se soma for igual a 5 { pare }\n\n    # Mostrando na tela\n    mostre \"soma: %\" inserindo soma\n}\n\n"
+        },
+        "arquivoAtual": {
+            "texto": "# Mudando s\u00f3 um pouquinho do cen\u00e1rio anterior\n#\n# E se voc\u00ea quisesse executar um loop, por\u00e9m, quando \n# chegar em uma condi\u00e7\u00e3o, voc\u00ea quer para o loop.\n# Como fazer isso? Vamos usar o pare!\n\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma vale soma mais 1\n\n    # Se o valor for igual a 5, pare o loop!\n    se soma for igual a 5 { pare }\n\n    # Mostrando na tela\n    mostre \"soma: %\" inserindo soma\n}\n\n"
+        },
+        "listaContextos": [],
+        "contexto": 0,
+        "ja_foi_marcado_nao_salvo": false,
+        "tipo": "editor",
+        "listaAbas": []
+    }
+}

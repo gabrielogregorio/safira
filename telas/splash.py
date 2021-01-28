@@ -25,11 +25,11 @@ class Splash:
         self.frame_splash = Frame(master=self.tela_splash)
 
         self.fr_splash = Frame(self.frame_splash)
-        self.l1_splash = Label(self.frame_splash, self.design.get("cor_intro"))
-        self.l2_splash = Label(self.frame_splash, self.design.get("cor_intro"))
+        self.l1_splash = Label(self.frame_splash, self.design.get("splash_cor_intro"))
+        self.l2_splash = Label(self.frame_splash, self.design.get("splash_cor_intro"))
 
         try:
-            background = self.design.get("cor_intro")["background"]
+            background = self.design.get("splash_cor_intro")["background"]
         except Exception as erro:
             print(erro)
             background = "white"

@@ -1,6 +1,6 @@
 {
     "msg_erro_fr1":{
-        "height":50,
+        "height":50, 
         "bg":"#222232",
         "bd":10,
         "highlightthickness":10,
@@ -87,7 +87,7 @@
         "highlightthickness":0,
         "bd":0
     },
-    "cor_intro":{
+    "splash_cor_intro":{
         "background":"#ffffff",
         "foreground":"#656565"
     },
@@ -525,7 +525,7 @@
         "fg":"#ffffff",
         "activeforeground":"#ffffff"
     },
-    "lb1_encontrou_bug":{
+    "bug_lb1_encontrou_bug":{
         "font":[
             "Open Sans",
             20
@@ -533,11 +533,11 @@
         "bg":"#ffffff",
         "fg":"#292929"
     },
-    "lb2_encontrou_bug":{
+    "bug_lb2_encontrou_bug":{
         "bg":"#ffffff",
         "fg":"#292929"
     },
-    "lb3_encontrou_bug":{
+    "bug_lb3_encontrou_bug":{
         "font":[
             "Open Sans",
             11

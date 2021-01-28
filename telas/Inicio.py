@@ -4,6 +4,12 @@ import re
 from os import listdir
 from os import path
 
+import util.funcoes as funcoes
+
+
+
+
+
 class Inicio():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
 
@@ -94,14 +100,23 @@ class Inicio():
         self.fr_aprender.grid_columnconfigure(1, weight=1)
         self.fr_aprender.grid(row=1, column=1, sticky=NSEW)
 
+
+
+        dic_completo = dict(funcoes.ler_configuracoes())
+
+        lista = dic_completo['abertos']
+        itens = []
+        if lista is not None:
+            for item in lista:
+                itens.append([item, item])
+
+
+
+
+
         self.carregar_opcoes('Recentes', self.fr_aprender,  {
             "tipo": "tutorial", # código
-            "itens": [
-                #["texto", "link"]
-                ["Introdução a Safira","tutorial/introdução.md"],
-                ["Conceitos de programação","tutorial/conceitos.md"],
-                ["Como usar a Safira","tutorial/comoUsarSafira.md"]
-            ]
+            "itens": itens
         })
 
         self.fr_recentes = Frame(self.fr_opcoes_inferior, bg='#222232')
@@ -132,7 +147,7 @@ class Inicio():
         tipo = dados["tipo"]
 
         for k, v in dados["itens"]:
-            bt_item = Button(fr_aprender, text="Contagem Regressiva.safira",bd=0, activebackground="#222232", bg="#222232", justify="left", fg="#3399ff", activeforeground="#dd33ff")
+            bt_item = Button(fr_aprender, text=v,bd=0, activebackground="#222232", bg="#222232", justify="left", fg="#3399ff", activeforeground="#dd33ff")
             bt_item.grid(row=pos, column=1, sticky='w')
             pos = pos + 1
 
