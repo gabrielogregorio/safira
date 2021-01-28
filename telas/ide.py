@@ -435,15 +435,23 @@ class Interface:
 
         #self.buscar_atualização()
         self.splash.splash_fim()
-        self.master.withdraw()
+        self.master.withdraw() 
 
         self.tutorial = Tutorial(self.fr_princ,  self.design, self.idioma, self.interface_idioma, self.icon)
         self.atualizar_design_interface()
 
+
+
         self.tela_inicio = Inicio(self.fr_princ, self.design, self.idioma, self.interface_idioma, self.icon)
         self.trocar_interface(troca='codigo')
+        self.lista_botoes_recentes = self.tela_inicio.lista_botoes
+        self.abrir_aba_inicio()
+        for widget, arquivo in self.lista_botoes_recentes:
+            print(arquivo)
+            widget['command'] = lambda link = arquivo: self.atualizar_temas_e_sintaxe(link)
 
-        #self.abrir_aba_inicio()
+
+
 
         try:
             master.state('zoomed')
@@ -461,8 +469,14 @@ class Interface:
 
         self.avisos()
 
-
         #self.manipular_arquivos(None, "abrirArquivo", 'natal.safira')
+
+
+    def atualizar_temas_e_sintaxe(self, arquivo):
+        self.atualizar_tema_sintaxe_da_interface('tema', arquivo)
+        self.atualizar_tema_sintaxe_da_interface('sintaxe', arquivo)
+
+
     def trocar_interface(self, troca):
         if troca == 'tutorial':
             self.tx_editor.grid_remove()

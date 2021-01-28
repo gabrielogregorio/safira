@@ -7,11 +7,9 @@ from os import path
 import util.funcoes as funcoes
 
 
-
-
-
 class Inicio():
     def __init__(self, tela, design, idioma, interface_idioma, icon):
+        self.lista_botoes = []
 
         self.tema_claro = PhotoImage(file='imagens/tema_claro.png')
         self.tema_escuro = PhotoImage(file='imagens/tema_escuro.png')
@@ -21,16 +19,10 @@ class Inicio():
         self.tema_escuro = self.tema_escuro.subsample(4, 4)
         self.tema_simples = self.tema_simples.subsample(4, 4)
 
-
-
-
-
         self.tela = tela
-
 
         LARGURA = int(tela.winfo_screenwidth() / 6)
         t_heigth = tela.winfo_screenheight()
-
 
         design = {'bg':'#222232'}
 
@@ -81,6 +73,8 @@ class Inicio():
 
         self.bt_tema_3 = Button(self.frame_cor_tema, image=self.tema_claro, bd=0, activebackground="#222232", bg='#222232', foreground="white")
         self.bt_tema_3.grid(row=2, column=3, sticky=NSEW)
+
+        self.lista_botoes = [[self.bt_tema_1, 'simples.json'], [self.bt_tema_2, 'escuro.json'], [self.bt_tema_3, 'claro.json']]
 
         self.lb_espaco = Label(self.frame_cor_tema,  bg="#222232",text=" ", font=("", 20)).grid(row=2, column=4, sticky=NSEW)
 
@@ -133,7 +127,6 @@ class Inicio():
             ]
         })
 
-
     def carregar_opcoes(self, nome, pai, dados):
 
         lb_aprender = Label(pai, text=nome, bg="#222232", fg="white", font=("", 14))
@@ -148,12 +141,9 @@ class Inicio():
 
         for k, v in dados["itens"]:
             bt_item = Button(fr_aprender, text=v,bd=0, activebackground="#222232", bg="#222232", justify="left", fg="#3399ff", activeforeground="#dd33ff")
+            #bt_item['command'] = lambda link = file: self.abrir_um_script(k)
             bt_item.grid(row=pos, column=1, sticky='w')
             pos = pos + 1
 
 
 
-
-
-
-        
