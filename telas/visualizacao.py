@@ -14,7 +14,7 @@ class ContadorLinhas(Canvas):
         self.design = design
         self.size = 1
 
-    def marcar_bkp(self, event):
+    def marcar_bkp(self, event:object):
         try:
             n_fonte = self.design.dic["fonte_ct_linha"]["font"][1]
         except Exception as erro:
@@ -25,7 +25,7 @@ class ContadorLinhas(Canvas):
         #print(n_fonte, n_posicao_bkp, self.size)
         #print(int(n_posicao_bkp/n_fonte)+1)
 
-    def atribuir(self, tx_editor_codigo):
+    def atribuir(self, tx_editor_codigo:object):
         self.textwidget = tx_editor_codigo
 
     def desenhar_linhas(self, *args):

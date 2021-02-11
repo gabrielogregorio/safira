@@ -30,4 +30,3 @@ func_fechar_tela = lambda inst=tela: instancia.fechar_janela(inst)
 tela.protocol("WM_DELETE_WINDOW", func_fechar_tela)
 
 tela.mainloop()
-

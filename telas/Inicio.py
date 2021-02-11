@@ -6,95 +6,84 @@ from os import path
 
 import util.funcoes as funcoes
 
-
+ 
 class Inicio():
-    def __init__(self, tela, design, idioma, interface_idioma, icon):
-        self.lista_botoes = []
+    def __init__(self, frame_referencia:object):
+        self.inicio_lista_botoes = []
 
-        self.tema_claro = PhotoImage(file='imagens/tema_claro.png')
-        self.tema_escuro = PhotoImage(file='imagens/tema_escuro.png')
-        self.tema_simples = PhotoImage(file='imagens/tema_simples.png')
+        self.__tema_claro = PhotoImage(file='imagens/tema_claro.png')
+        self.__tema_escuro = PhotoImage(file='imagens/tema_escuro.png')
+        self.__tema_simples = PhotoImage(file='imagens/tema_simples.png')
 
-        self.tema_claro = self.tema_claro.subsample(4, 4)
-        self.tema_escuro = self.tema_escuro.subsample(4, 4)
-        self.tema_simples = self.tema_simples.subsample(4, 4)
+        self.__tema_claro = self.__tema_claro.subsample(4, 4)
+        self.__tema_escuro = self.__tema_escuro.subsample(4, 4)
+        self.__tema_simples = self.__tema_simples.subsample(4, 4)
 
-        self.tela = tela
+        self.frame_referencia = frame_referencia
 
-        LARGURA = int(tela.winfo_screenwidth() / 6)
-        t_heigth = tela.winfo_screenheight()
+        LARGURA = int(self.frame_referencia.winfo_screenwidth() / 6)
+        t_heigth = self.frame_referencia.winfo_screenheight()
 
-        design = {'bg':'#222232'}
-
-        self.fr_texto = Frame(tela, width=LARGURA)
-        self.fr_texto.grid_columnconfigure(1, weight=1)
-        self.fr_texto.rowconfigure(2, weight=1)
+        self.inicio_fr_texto = Frame(self.frame_referencia, width=LARGURA)
+        self.inicio_fr_texto.grid_columnconfigure(1, weight=1)
+        self.inicio_fr_texto.rowconfigure(2, weight=1)
 
         # ESPAÇO
-        self.barra_superior = Frame(self.fr_texto, height=10, bg='#222232')
-        self.barra_superior.grid(row=1, column=1, sticky=NSEW)
+        self.inicio_barra_superior = Frame(self.inicio_fr_texto,  self.design.get("barra_superior"))
+        self.inicio_barra_superior.grid(row=1, column=1, sticky=NSEW)
 
-        self.fr_principal = Frame(self.fr_texto, bg='#222232')
-        self.fr_principal.grid_columnconfigure(1, weight=1)
-        self.fr_principal.rowconfigure(2, weight=1)
-        self.fr_principal.grid(row=2, column=1, sticky=NSEW)
-
-
-
+        self.__fr_principal = Frame(self.inicio_fr_texto, self.design.get("inicio_fr_principal"))
+        self.__fr_principal.grid_columnconfigure(1, weight=1)
+        self.__fr_principal.rowconfigure(2, weight=1)
+        self.__fr_principal.grid(row=2, column=1, sticky=NSEW)
 
         # PARTE SUPERIOR #
+        self.__fr_botoes_superiores = Frame(self.__fr_principal, self.design.get("inicio_fr_botoes_superiores"))
+        self.__fr_botoes_superiores.grid_columnconfigure(1, weight=1)
+        self.__fr_botoes_superiores.grid(row=0, column=1, sticky=NSEW)
 
-        self.fr_botoes_superiores = Frame(self.fr_principal, height=100, bg='#222232')
-        self.fr_botoes_superiores.grid_columnconfigure(1, weight=1)
-        self.fr_botoes_superiores.grid(row=0, column=1, sticky=NSEW)
+        self.__frame_botoes = Frame(self.__fr_botoes_superiores, self.design.get("inicio_frame_botoes"))
+        self.__frame_botoes.grid(row=1, column=1, sticky=NSEW)
 
-        self.frame_botoes = Frame(self.fr_botoes_superiores, bg='#222232')
-        self.frame_botoes.grid(row=1, column=1, sticky=NSEW)
+        self.__bt_abrir_programa = Button(self.__frame_botoes, self.design.get("inicio_bt_abrir_programa"), text="Abrir Programa")
+        self.__bt_abrir_programa.grid(row=1, column=1)
 
-        self.bt_abrir_programa = Button(self.frame_botoes, text="Abrir Programa", relief='flat', fg="#bb33ff", activeforeground="#bb33ff", bg='#222232', activebackground="#222232", highlightthickness=4, font=("", 14), pady=5, bd=0)
-        self.bt_abrir_programa.grid(row=1, column=1)
+        self.__lb_espaco = Label(self.__frame_botoes,self.design.get("inicio_lb_espaco"), text=" ", ).grid(row=1, column=2)
 
-        self.lb_espaco = Label(self.frame_botoes,text=" ", bg='#222232').grid(row=1, column=2)
+        self.__bt_nova_aba = Button(self.__frame_botoes, self.design.get("inicio_bt_abrir_programa"), text="Nova Aba")
+        self.__bt_nova_aba.grid(row=1, column=3)
 
-        self.bt_nova_aba = Button(self.frame_botoes, text="Nova Aba", relief='flat', fg="#bb33ff",activeforeground="#bb33ff", bg='#222232', activebackground="#222232", highlightthickness=4, font=("", 14), pady=5, bd=0)
-        self.bt_nova_aba.grid(row=1, column=3)
+        self.__frame_cor_tema = Frame(self.__fr_botoes_superiores, self.design.get("inicio_frame_cor_tema"))
+        self.__frame_cor_tema.grid(row=1, column=2)
 
-        self.frame_cor_tema = Frame(self.fr_botoes_superiores, bg='#222232')
-        self.frame_cor_tema.grid(row=1, column=2)
+        self.__lb_tema_cores = Label(self.__frame_cor_tema, self.design.get("inicio_lb_tema_cores"), text="Tema de Cores")
+        self.__lb_tema_cores.grid(row=1, column=1, columnspan=3, stick=NSEW)
 
-        self.lb_tema_cores = Label(self.frame_cor_tema, text="Tema de Cores", bg='#222232', foreground="white")
-        self.lb_tema_cores.grid(row=1, column=1, columnspan=3, stick=NSEW)
+        self.__bt_tema_1 = Button(self.__frame_cor_tema, self.design.get("inicio_bt_tema"), image=self.__tema_simples, )
+        self.__bt_tema_1.grid(row=2, column=1, sticky=NSEW)
 
-        self.bt_tema_1 = Button(self.frame_cor_tema, image=self.tema_simples, bd=0, activebackground="#222232", bg='#222232', foreground="white")
-        self.bt_tema_1.grid(row=2, column=1, sticky=NSEW)
+        self.__bt_tema_2 = Button(self.__frame_cor_tema, self.design.get("inicio_bt_tema"), image=self.__tema_escuro)
+        self.__bt_tema_2.grid(row=2, column=2, sticky=NSEW)
 
-        self.bt_tema_2 = Button(self.frame_cor_tema, image=self.tema_escuro, bd=0, activebackground="#222232", bg='#222232', foreground="white")
-        self.bt_tema_2.grid(row=2, column=2, sticky=NSEW)
+        self.__bt_tema_3 = Button(self.__frame_cor_tema, self.design.get("inicio_bt_tema"), image=self.__tema_claro)
+        self.__bt_tema_3.grid(row=2, column=3, sticky=NSEW)
 
-        self.bt_tema_3 = Button(self.frame_cor_tema, image=self.tema_claro, bd=0, activebackground="#222232", bg='#222232', foreground="white")
-        self.bt_tema_3.grid(row=2, column=3, sticky=NSEW)
+        self.__lb_espaco = Label(self.__frame_cor_tema, self.design.get("inicio_lb_espaco2")).grid(row=2, column=4, sticky=NSEW)
 
-        self.lista_botoes = [[self.bt_tema_1, 'simples.json'], [self.bt_tema_2, 'escuro.json'], [self.bt_tema_3, 'claro.json']]
-
-        self.lb_espaco = Label(self.frame_cor_tema,  bg="#222232",text=" ", font=("", 20)).grid(row=2, column=4, sticky=NSEW)
-
-
+        # Lista de cores/temas
+        self.inicio_lista_botoes = [[self.__bt_tema_1, 'simples.json'], [self.__bt_tema_2, 'escuro.json'], [self.__bt_tema_3, 'claro.json']]
 
         # Meio
-        self.lb_espaco = Label(self.fr_principal,  bg="#222232",text=" ", font=("", 20)).grid(row=1, column=4)
+        self.__lb_espaco = Label(self.__fr_principal, self.design.get("inicio_lb_espaco2")).grid(row=1, column=4)
 
+        # PARTE INFERIOR #
+        self.__fr_opcoes_inferior = Frame(self.__fr_principal, self.design.get("inicio_fr_opcoes"))
+        self.__fr_opcoes_inferior.grid_columnconfigure((1, 2) , weight=1)
+        self.__fr_opcoes_inferior.grid(row=2, column=1, sticky=NSEW)
 
-        # PARTE INFERIOR #         
-
-        self.fr_opcoes_inferior = Frame(self.fr_principal, height=500, bg='#222232')
-        self.fr_opcoes_inferior.grid_columnconfigure((1, 2) , weight=1)
-        self.fr_opcoes_inferior.grid(row=2, column=1, sticky=NSEW)
-
-        self.fr_aprender = Frame(self.fr_opcoes_inferior, bg='#222232')
-        self.fr_aprender.grid_columnconfigure(1, weight=1)
-        self.fr_aprender.grid(row=1, column=1, sticky=NSEW)
-
-
+        self.__fr_aprender = Frame(self.__fr_opcoes_inferior, self.design.get("inicio_fr_opcoes"))
+        self.__fr_aprender.grid_columnconfigure(1, weight=1)
+        self.__fr_aprender.grid(row=1, column=1, sticky=NSEW)
 
         dic_completo = dict(funcoes.ler_configuracoes())
 
@@ -104,20 +93,16 @@ class Inicio():
             for item in lista:
                 itens.append([item, item])
 
-
-
-
-
-        self.carregar_opcoes('Recentes', self.fr_aprender,  {
+        self.__carregar_opcoes('Recentes', self.__fr_aprender,  {
             "tipo": "tutorial", # código
             "itens": itens
         })
 
-        self.fr_recentes = Frame(self.fr_opcoes_inferior, bg='#222232')
-        self.fr_recentes.grid_columnconfigure(1, weight=1)
-        self.fr_recentes.grid(row=1, column=2, sticky=NSEW)
+        self.__fr_recentes = Frame(self.__fr_opcoes_inferior, self.design.get("inicio_fr_recentes"))
+        self.__fr_recentes.grid_columnconfigure(1, weight=1)
+        self.__fr_recentes.grid(row=1, column=2, sticky=NSEW)
 
-        self.carregar_opcoes('Aprender', self.fr_recentes, {
+        self.__carregar_opcoes('Aprender', self.__fr_recentes, {
             "tipo": "tutorial", # código
             "itens": [
                 #["texto", "link"]
@@ -127,12 +112,12 @@ class Inicio():
             ]
         })
 
-    def carregar_opcoes(self, nome, pai, dados):
+    def __carregar_opcoes(self, nome:str, pai:object, dados:list):
 
-        lb_aprender = Label(pai, text=nome, bg="#222232", fg="white", font=("", 14))
+        lb_aprender = Label(pai, self.design.get("inicio_lb_especial"), text=nome)
         lb_aprender.grid(row=1, column=1, sticky='w')
 
-        fr_aprender = Frame(pai, bg="#222232")
+        fr_aprender = Frame(pai, self.design.get("inicio_fr_especial"))
         fr_aprender.grid(row=2, column=1, sticky=NSEW)
         fr_aprender.grid_columnconfigure(1, weight=1)
 
@@ -140,10 +125,15 @@ class Inicio():
         tipo = dados["tipo"]
 
         for k, v in dados["itens"]:
-            bt_item = Button(fr_aprender, text=v,bd=0, activebackground="#222232", bg="#222232", justify="left", fg="#3399ff", activeforeground="#dd33ff")
-            #bt_item['command'] = lambda link = file: self.abrir_um_script(k)
+            if pos == 15:
+                break
+
+            bt_item = Button(fr_aprender, self.design.get("inicio_bt_especial"), text=v)
+            bt_item['command'] = lambda link = v: self.__abrir_script(link)
             bt_item.grid(row=pos, column=1, sticky='w')
             pos = pos + 1
 
 
-
+    def __abrir_script(self, link:str):
+        self.abrir_nova_aba(None)
+        self.manipular_arquivos(None, "abrirArquivo", link)

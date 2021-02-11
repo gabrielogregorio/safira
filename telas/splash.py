@@ -11,22 +11,19 @@ from platform import system as platform_system
 
 
 class Splash:
-    def __init__(self, design):
+    def __init__(self):
 
-        self.tela_splash = Tk()
-        self.tela_splash.withdraw()
-        self.tela_splash.overrideredirect(1)
-        self.tela_splash.rowconfigure(1, weight=1)
-        self.tela_splash.grid_columnconfigure(1, weight=1)
+        self.__tela_splash = Tk()
+        self.__tela_splash.withdraw()
+        self.__tela_splash.overrideredirect(1)
+        self.__tela_splash.rowconfigure(1, weight=1)
+        self.__tela_splash.grid_columnconfigure(1, weight=1)
 
-        # Design da tela
-        self.design = design
+        self.__frame_splash= Frame(master=self.__tela_splash)
 
-        self.frame_splash = Frame(master=self.tela_splash)
-
-        self.fr_splash = Frame(self.frame_splash)
-        self.l1_splash = Label(self.frame_splash, self.design.get("splash_cor_intro"))
-        self.l2_splash = Label(self.frame_splash, self.design.get("splash_cor_intro"))
+        self.__fr_splash = Frame(self.__frame_splash)
+        self.__l1_splash = Label(self.__frame_splash, self.design.get("splash_cor_intro"))
+        self.__l2_splash = Label(self.__frame_splash, self.design.get("splash_cor_intro"))
 
         try:
             background = self.design.get("splash_cor_intro")["background"]
@@ -34,45 +31,43 @@ class Splash:
             print(erro)
             background = "white"
 
-        self.frame_splash.configure(background=background)
-        self.frame_splash.rowconfigure(1, weight=1)
-        self.frame_splash.grid_columnconfigure(0, weight=1)
+        self.__frame_splash.configure(background=background)
+        self.__frame_splash.rowconfigure(1, weight=1)
+        self.__frame_splash.grid_columnconfigure(0, weight=1)
 
-        self.fr_splash.configure(background=background)
-        self.l1_splash.configure(text=" SAFIRA 0.3", font=("Lucida Sans", 90), bd=80)
+        self.__fr_splash.configure(background=background)
+        self.__l1_splash.configure(text=" SAFIRA 0.3", font=("Lucida Sans", 90), bd=80)
 
-        #self.l2_splash.configure(text= '  ___\n (^.^)\n  /|\\\n  / \\')
- 
-        self.frame_splash.grid(row=1, column=1, sticky=NSEW)
-        self.fr_splash.grid(row=0, column=1, sticky=NSEW)
-        self.l1_splash.grid(row=1, column=1, sticky=NSEW)
-        self.l2_splash.grid(row=2, column=1, sticky=NSEW)
+        self.__frame_splash.grid(row=1, column=1, sticky=NSEW)
+        self.__fr_splash.grid(row=0, column=1, sticky=NSEW)
+        self.__l1_splash.grid(row=1, column=1, sticky=NSEW)
+        self.__l2_splash.grid(row=2, column=1, sticky=NSEW)
 
         # Ocultar tela
-        self.frame_splash.update()
-        self.tela_splash.update()
-        self.tela_splash.withdraw()
+        self.__frame_splash.update()
+        self.__tela_splash.update()
+        self.__tela_splash.withdraw()
 
-        j_width = self.tela_splash.winfo_reqwidth()
-        j_height = self.tela_splash.winfo_reqheight()
+        j_width = self.__tela_splash.winfo_reqwidth()
+        j_height = self.__tela_splash.winfo_reqheight()
 
-        t_width = self.tela_splash.winfo_screenwidth()
-        t_heigth = self.tela_splash.winfo_screenheight()
+        t_width = self.__tela_splash.winfo_screenwidth()
+        t_heigth = self.__tela_splash.winfo_screenheight()
 
         geometria = "+{}+{}".format(int(t_width/2)-int(j_width/2), int(t_heigth/2)-int(j_height/2))
 
         # Tornar tela visível
-        self.tela_splash.geometry(geometria)
-        self.tela_splash.deiconify()
-        self.tela_splash.update()
+        self.__tela_splash.geometry(geometria)
+        self.__tela_splash.deiconify()
+        self.__tela_splash.update()
 
     def splash_fim(self):
-        self.frame_splash.update()
-        self.tela_splash.update()
-        self.tela_splash.withdraw()
+        self.__frame_splash.update()
+        self.__tela_splash.update()
+        self.__tela_splash.withdraw()
 
-        self.fr_splash.destroy()
-        self.l1_splash.destroy()
-        self.l2_splash.destroy()
-        self.frame_splash.destroy()
-        self.tela_splash.destroy()
+        self.__fr_splash.destroy()
+        self.__l1_splash.destroy()
+        self.__l2_splash.destroy()
+        self.__frame_splash.destroy()
+        self.__tela_splash.destroy()

@@ -8,6 +8,15 @@ from time import sleep
 import util.funcoes as funcoes
 import tkinter.font as tkFont
 from tkinter import Button
+from telas.Inicio import Inicio
+from telas.tutorial import Tutorial
+from tkinter import NSEW
+
+
+
+
+
+
 
 
 def atualizar():
@@ -87,8 +96,6 @@ for fonte in sorted(fonts):
 
 '''
 
-from telas.tutorial import Tutorial
-from tkinter import NSEW
 def tutorial():
     master = Tk()
 
@@ -115,7 +122,6 @@ def tutorial():
 
     master.mainloop()
 
-from telas.Inicio import Inicio
 def tela_inicio():
     master = Tk()
 

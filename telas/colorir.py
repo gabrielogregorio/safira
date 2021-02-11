@@ -7,13 +7,10 @@ from time import time
 
 
 class Colorir():
-    def __init__(self, cor_do_comando, dic_comandos):
-        self.cor_do_comando = cor_do_comando
-        self.dic_comandos = dic_comandos
-        self.tx_editor_codigo = None
-        self.tela = None
-        self.historico_coloracao = []
-        self.lista_todos_coloracao = []
+    def __init__(self): 
+        self.__tx_editor_codigo = None
+        self.__historico_coloracao = []
+        self.__lista_todos_coloracao = []
 
     def alterar_cor_comando(self, novo_cor_do_comando):
         self.cor_do_comando = novo_cor_do_comando
@@ -22,8 +19,8 @@ class Colorir():
         linha1 = '{}.{}'.format(linha, valor1)
         linha2 = '{}.{}'.format(linha, valor2)
 
-        self.tx_editor_codigo.tag_add(palavra, linha1, linha2)
-        self.tx_editor_codigo.tag_config(palavra, foreground=cor)
+        self.__tx_editor_codigo.tag_add(palavra, linha1, linha2)
+        self.__tx_editor_codigo.tag_config(palavra, foreground=cor)
 
     def __marcar_coloracao(self, regex, lista, linha, palavra, cor):
 
@@ -34,11 +31,11 @@ class Colorir():
 
             usado = cor + str(palavra) + str(regex) + str(inici_regex) + str(final_regex) + str(linha+1)
 
-            self.historico_coloracao.append(usado)
+            self.__historico_coloracao.append(usado)
             Colorir.__realiza_coloracao(self, str(usado), str(linha + 1), inici_regex, final_regex, cor)
 
-            if usado not in self.lista_todos_coloracao:
-                self.lista_todos_coloracao.append(usado)
+            if usado not in self.__lista_todos_coloracao:
+                self.__lista_todos_coloracao.append(usado)
 
     def __filtrar_palavras(palavra):
         palavra_comando = palavra.replace('+', '\\+')
@@ -110,22 +107,22 @@ class Colorir():
 
 
     def coordena_coloracao(self, event, tx_editor_codigo):
-        self.tx_editor_codigo = tx_editor_codigo
+        self.__tx_editor_codigo = tx_editor_codigo
 
-        lista_linhas = self.tx_editor_codigo.get(1.0, END).lower().split('\n')
+        lista_linhas = self.__tx_editor_codigo.get(1.0, END).lower().split('\n')
 
-        self.historico_coloracao = []
+        self.__historico_coloracao = []
 
         Colorir.__colorir_comandos(self, lista_linhas)
         Colorir.__colorir_especial(self, lista_linhas)
 
-        for palavra_nao_colorida in self.lista_todos_coloracao:
-            if palavra_nao_colorida not in self.historico_coloracao:
-                self.tx_editor_codigo.tag_delete(palavra_nao_colorida)
-                self.lista_todos_coloracao.remove(palavra_nao_colorida)
+        for palavra_nao_colorida in self.__lista_todos_coloracao:
+            if palavra_nao_colorida not in self.__historico_coloracao:
+                self.__tx_editor_codigo.tag_delete(palavra_nao_colorida)
+                self.__lista_todos_coloracao.remove(palavra_nao_colorida)
 
-        if self.tela is not None:
-            self.tela.update()
+        if self.master is not None:
+            self.master.update()
 
         return 0
 

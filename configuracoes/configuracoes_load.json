@@ -1,36 +1,36 @@
 {
     "0": {
         "nome": "",
-        "foco": true,
-        "lst_breakpoints": [],
-        "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
-        },
-        "arquivoAtual": {
-            "texto": ""
-        },
-        "listaContextos": [],
-        "contexto": 0,
-        "ja_foi_marcado_nao_salvo": false,
-        "tipo": "editor",
-        "listaAbas": []
-    },
-    "1": {
-        "nome": "",
         "foco": false,
         "lst_breakpoints": [],
         "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
+            "link": "scripts/pt-br/09. Incremente-decremente.safira",
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "arquivoAtual": {
-            "texto": ""
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "listaContextos": [],
         "contexto": 0,
         "ja_foi_marcado_nao_salvo": false,
         "tipo": "inicio",
+        "listaAbas": []
+    },
+    "1": {
+        "nome": "",
+        "foco": true,
+        "lst_breakpoints": [],
+        "arquivoSalvo": {
+            "link": "scripts/pt-br/11. Arquivos.safira",
+            "texto": "# Voc\u00ea quer criar arquivos de texto\n# para salvar configura\u00e7\u00f5es, resultados, etc.\n# Voc\u00ea pode usar os comandos para manipula\u00e7\u00e3o de arquivos\n\n\n# Criar um arquivo qualquer sem nada dentro\ncrie o arquivo \"arquivo.txt\"\n\n\n# Escreve um texto na \u00faltima linha do arquivo criado\nadicione \"Texto qualquer\" no arquivo \"arquivo.txt\"\n\n\n# Apaga todo o texto do arquivo e coloca esse texto no lugar\nsobrescreva \"Iai, tudo bem amigo\" no arquivo \"arquivo.txt\"\n\n\n# Obter todo o texto do arquivo\nconteudo = leia o texto do arquivo \"arquivo.txt\"\n\n\n# O resultado \u00e9 uma String(Texto)\nmostre \"Conte\u00fado do arquivo: %\" inserindo conteudo\n\n\n# Verifica se o arquivo n\u00e3o existe\nse o arquivo \"arquivoQUeNaoExiste.txt\" nao existe\n{\n    mostre \"O arquivo % n\u00e3os existe\" inserindo \"'arquivoQUeNaoExiste.txt'\"\n}\n\n# Verifica se o arquivo existe\nse o arquivo \"arquivo.txt\" existe\n{\n    mostre \"O arquivo % existe e ser\u00e1 removido\" inserindo \"'arquivo.txt'\"\n    \n    \n    # Comando para excluir um arquivo\n    delete o arquivo \"arquivo.txt\"\n}\n\n"
+        },
+        "arquivoAtual": {
+            "texto": "# Voc\u00ea quer criar arquivos de texto\n# para salvar configura\u00e7\u00f5es, resultados, etc.\n# Voc\u00ea pode usar os comandos para manipula\u00e7\u00e3o de arquivos\n\n\n# Criar um arquivo qualquer sem nada dentro\ncrie o arquivo \"arquivo.txt\"\n\n\n# Escreve um texto na \u00faltima linha do arquivo criado\nadicione \"Texto qualquer\" no arquivo \"arquivo.txt\"\n\n\n# Apaga todo o texto do arquivo e coloca esse texto no lugar\nsobrescreva \"Iai, tudo bem amigo\" no arquivo \"arquivo.txt\"\n\n\n# Obter todo o texto do arquivo\nconteudo = leia o texto do arquivo \"arquivo.txt\"\n\n\n# O resultado \u00e9 uma String(Texto)\nmostre \"Conte\u00fado do arquivo: %\" inserindo conteudo\n\n\n# Verifica se o arquivo n\u00e3o existe\nse o arquivo \"arquivoQUeNaoExiste.txt\" nao existe\n{\n    mostre \"O arquivo % n\u00e3os existe\" inserindo \"'arquivoQUeNaoExiste.txt'\"\n}\n\n# Verifica se o arquivo existe\nse o arquivo \"arquivo.txt\" existe\n{\n    mostre \"O arquivo % existe e ser\u00e1 removido\" inserindo \"'arquivo.txt'\"\n    \n    \n    # Comando para excluir um arquivo\n    delete o arquivo \"arquivo.txt\"\n}\n\n"
+        },
+        "listaContextos": [],
+        "contexto": 0,
+        "ja_foi_marcado_nao_salvo": false,
+        "tipo": "editor",
         "listaAbas": []
     }
 }
