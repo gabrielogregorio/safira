@@ -41,7 +41,7 @@ class Tutorial():
         self.__botao_anterior = Button(self.tutorial_fr_botoes,  self.design.get("tutorial_botao_anterior"), text="{:^22}".format(""), command=lambda: self.tutorial_anterior())
         self.__botao_anterior.grid(row=1, column=1, stick=NSEW)
 
-        self.__botao_proximo = Button(self.tutorial_fr_botoes,  self.design.get("tutorial_botao_proximo"), text='{:^22}'.format("Proxima Aula"), command=lambda: self.proximo())
+        self.__botao_proximo = Button(self.tutorial_fr_botoes,  self.design.get("tutorial_botao_proximo"), text='{:^22}'.format("Proxima Aula"), command=lambda: self.tutorial_proximo())
         self.__botao_proximo.grid(row=1, column=2, stick=NSEW)
 
         self.tutorial_proximo()
@@ -70,7 +70,7 @@ class Tutorial():
 
         arquivo = path.join(self.__dir_file, self.__arquivos[self.__posicao])
 
-        self.escrever_tutorial(arquivo)
+        self.tutorial_escrever_tutorial(arquivo)
 
         if self.__posicao > 1:
             self.__botao_proximo['text'] = '{:^22}'.format("Proxima Aula")
