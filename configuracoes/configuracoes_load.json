@@ -1,7 +1,7 @@
 {
     "0": {
         "nome": "",
-        "foco": false,
+        "foco": true,
         "lst_breakpoints": [],
         "arquivoSalvo": {
             "link": "",
@@ -19,35 +19,20 @@
     "1": {
         "nome": "",
         "foco": true,
-        "lst_breakpoints": [],
+        "lst_breakpoints": [
+            0
+        ],
         "arquivoSalvo": {
-            "link": "scripts/pt-br/08. Sortear um n\u00famero aleatorio.safira",
-            "texto": "# Imagine que voc\u00ea queira fazer um sorteio,\n# podemos usar o comando aleat\u00f3rio\n\n\nmostre \"Vou pensar em um n\u00famero aleat\u00f3rio entre 10 e 15 e voc\u00ea vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um n\u00famero: \"\n\n\n\n# N\u00famero que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# N\u00famero que voc\u00ea vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Voc\u00ea acertou, incr\u00edvel!\"\n} senao {\n    mostre \"Eu pensei no n\u00famero % voc\u00ea errou!\" inserindo numero_aleatorio\n} \n"
+            "link": "",
+            "texto": "\n"
         },
         "arquivoAtual": {
-            "texto": "# Imagine que voc\u00ea queira fazer um sorteio,\n# podemos usar o comando aleat\u00f3rio\n\n\nmostre \"Vou pensar em um n\u00famero aleat\u00f3rio entre 10 e 15 e voc\u00ea vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um n\u00famero: \"\n\n\n\n# N\u00famero que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# N\u00famero que voc\u00ea vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Voc\u00ea acertou, incr\u00edvel!\"\n} senao {\n    mostre \"Eu pensei no n\u00famero % voc\u00ea errou!\" inserindo numero_aleatorio\n} \n"
+            "texto": ""
         },
         "listaContextos": [],
         "contexto": 0,
         "ja_foi_marcado_nao_salvo": false,
         "tipo": "tutorial",
-        "listaAbas": []
-    },
-    "2": {
-        "nome": "",
-        "foco": true,
-        "lst_breakpoints": [],
-        "arquivoSalvo": {
-            "link": "scripts/pt-br/08. Sortear um n\u00famero aleatorio.safira",
-            "texto": "# Imagine que voc\u00ea queira fazer um sorteio,\n# podemos usar o comando aleat\u00f3rio\n\n\nmostre \"Vou pensar em um n\u00famero aleat\u00f3rio entre 10 e 15 e voc\u00ea vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um n\u00famero: \"\n\n\n\n# N\u00famero que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# N\u00famero que voc\u00ea vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Voc\u00ea acertou, incr\u00edvel!\"\n} senao {\n    mostre \"Eu pensei no n\u00famero % voc\u00ea errou!\" inserindo numero_aleatorio\n} \n"
-        },
-        "arquivoAtual": {
-            "texto": "# Imagine que voc\u00ea queira fazer um sorteio,\n# podemos usar o comando aleat\u00f3rio\n\n\nmostre \"Vou pensar em um n\u00famero aleat\u00f3rio entre 10 e 15 e voc\u00ea vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um n\u00famero: \"\n\n\n\n# N\u00famero que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# N\u00famero que voc\u00ea vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Voc\u00ea acertou, incr\u00edvel!\"\n} senao {\n    mostre \"Eu pensei no n\u00famero % voc\u00ea errou!\" inserindo numero_aleatorio\n} \n"
-        },
-        "listaContextos": [],
-        "contexto": 0,
-        "ja_foi_marcado_nao_salvo": false,
-        "tipo": "editor",
         "listaAbas": []
     }
 }
