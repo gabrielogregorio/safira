@@ -192,7 +192,7 @@ class Atualizar():
                     self.__log(lb_versao_tex, "Atualizando Versão")
 
                     # Atualizar a versão
-                    sucesso_atualizar, msg_atualizar = self.up.atualizar_arquivos(versao)
+                    sucesso_atualizar, msg_atualizar = self.__up.atualizar_arquivos(versao)
                     if sucesso_atualizar:
                         self.__log(lb_versao_tex, msg_atualizar)
                         self.__log(lb_versao_tex, "Sucesso!")
@@ -204,7 +204,7 @@ class Atualizar():
                         self.__log(lb_versao_tex, msg_atualizar)
                         self.__log(lb_versao_tex, "\nRestaurando")
 
-                        sucesso_restaurar, msg_restaurar = self.up.restaurar_versao()
+                        sucesso_restaurar, msg_restaurar = self.__up.restaurar_versao()
 
                         self.__log(lb_versao_tex, sucesso_restaurar[1])
                         lb_versao_dev.configure(text='{:^30}'.format(sucesso_restaurar[1]), fg='orange')
