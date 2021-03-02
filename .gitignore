@@ -3,5 +3,8 @@ libs/__pycache__/
 ..gitignor.swp
 backups
 registros.json
+registros.json
 logs/registros.json
+logs\registros.json
 .vscode/
+.\logs\registros.json
