@@ -13,7 +13,7 @@ from os import path as os_path
 from os import getcwd as os_getcwd
 from upgrade import Upgrade
 
-VERSAO_ATUAL = {"versao": 0.3}
+VERSAO_ATUAL = {"versao": 0.35}
 
 
 class Atualizar():
@@ -192,7 +192,7 @@ class Atualizar():
                     self.__log(lb_versao_tex, "Atualizando Versão")
 
                     # Atualizar a versão
-                    sucesso_atualizar, msg_atualizar = self.atualizar_arquivos(versao)
+                    sucesso_atualizar, msg_atualizar = self.up.atualizar_arquivos(versao)
                     if sucesso_atualizar:
                         self.__log(lb_versao_tex, msg_atualizar)
                         self.__log(lb_versao_tex, "Sucesso!")
@@ -204,7 +204,7 @@ class Atualizar():
                         self.__log(lb_versao_tex, msg_atualizar)
                         self.__log(lb_versao_tex, "\nRestaurando")
 
-                        sucesso_restaurar, msg_restaurar = self.restaurar_versao()
+                        sucesso_restaurar, msg_restaurar = self.up.restaurar_versao()
 
                         self.__log(lb_versao_tex, sucesso_restaurar[1])
                         lb_versao_dev.configure(text='{:^30}'.format(sucesso_restaurar[1]), fg='orange')

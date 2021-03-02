@@ -171,7 +171,7 @@ class Upgrade:
                 arquivo = os_path.join(folder, f)
 
                 # Não atualizar o arquivo de atualização
-                if 'Upgrade' in arquivo or 'backups/' in arquivo or arquivo.startswith('safira'):
+                if 'Upgrade' in arquivo or 'backups/' in arquivo:
                     print("Arquivo update ignorado")
                     continue
 
