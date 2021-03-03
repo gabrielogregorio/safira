@@ -489,7 +489,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             self.inicio_fr_texto.grid_remove()
 
             self.tx_editor.grid(row=1, column=2, sticky=NSEW)
-            self.sb_codfc.grid(row=1, column=3, sticky=NSEW)
+            self.sb_codfc.grid(row=1, column=5, sticky=NSEW)
 
         elif troca == "inicio":
             self.inicio_barra_superior.grid_remove()
