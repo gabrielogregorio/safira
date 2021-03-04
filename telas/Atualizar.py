@@ -13,7 +13,7 @@ from os import path as os_path
 from os import getcwd as os_getcwd
 from upgrade import Upgrade
 
-VERSAO_ATUAL = {"versao": 0.35}
+VERSAO_ATUAL = {"versao": 0.36}
 
 
 class Atualizar():
