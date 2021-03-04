@@ -1,14 +1,14 @@
 {
     "0": {
         "nome": "",
-        "foco": true,
+        "foco": false,
         "lst_breakpoints": [],
         "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
+            "link": "scripts/pt-br/09. Incremente-decremente.safira",
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "arquivoAtual": {
-            "texto": ""
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "listaContextos": [],
         "contexto": 0,
@@ -19,20 +19,18 @@
     "1": {
         "nome": "",
         "foco": true,
-        "lst_breakpoints": [
-            0
-        ],
+        "lst_breakpoints": [],
         "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
+            "link": "scripts/pt-br/09. Incremente-decremente.safira",
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "arquivoAtual": {
-            "texto": ""
+            "texto": "# Voc\u00ea quer aumentar o valor de uma vari\u00e1vel num\u00e9rica\n# Voc\u00ea pode usar o comando incremente, ou somar a vari\u00e1vel + 1\n\nnumero = 1\nmostre \"N\u00famero      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"N\u00famero + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"N\u00famero - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, \u00e9 pegando o\n# n\u00famero e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"N\u00famero + 1  : %\" inserindo numero\n\n"
         },
         "listaContextos": [],
         "contexto": 0,
         "ja_foi_marcado_nao_salvo": false,
-        "tipo": "tutorial",
+        "tipo": "editor",
         "listaAbas": []
     }
 }

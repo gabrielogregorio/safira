@@ -474,7 +474,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             #self.cont_lin1.grid_remove()
             #self.cont_lin.grid_remove()
             self.sb_codfc.grid_remove()
-            self.inicio_barra_superior.grid_remove()
+            #self.inicio_barra_superior.grid_remove()
             self.inicio_fr_texto.grid_remove()
 
             self.tutorial_barra_superior.grid(row=0, column=1, sticky=NSEW)
@@ -485,21 +485,21 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             self.tutorial_fr_botoes.grid_remove()
             self.tutorial_barra_superior.grid_remove()
             self.tutorial_fr_texto.grid_remove()
-            self.inicio_barra_superior.grid_remove()
+            #self.inicio_barra_superior.grid_remove()
             self.inicio_fr_texto.grid_remove()
 
             self.tx_editor.grid(row=1, column=2, sticky=NSEW)
             self.sb_codfc.grid(row=1, column=5, sticky=NSEW)
 
         elif troca == "inicio":
-            self.inicio_barra_superior.grid_remove()
+            #self.inicio_barra_superior.grid_remove()
             self.inicio_fr_texto.grid_remove()
             self.tx_editor.grid_remove()
             self.sb_codfc.grid_remove()
-            self.inicio_barra_superior.grid_remove()
+            #self.inicio_barra_superior.grid_remove()
             self.inicio_fr_texto.grid_remove()
 
-            self.inicio_barra_superior.grid(row=0, column=1, sticky=NSEW)
+            #self.inicio_barra_superior.grid(row=0, column=1, sticky=NSEW)
             self.inicio_fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
 
     def abrir_aba_tutorial(self):
