@@ -6,11 +6,10 @@ from tkinter import GROOVE
 from tkinter import NSEW
 from tkinter import PhotoImage
 from tkinter import Tk
-import util.funcoes as funcoes 
-from telas.design import Design 
+import util.funcoes as funcoes
 
 
-class Idioma():
+class SetLanguage():
     def __init__(self):#, tela, design, idioma, interface_idioma, icon):
         self.__base = "imagens/" 
         self.__tp_interface_idioma = None
@@ -93,7 +92,7 @@ class Idioma():
                 self.__tp_interface_idioma.destroy()
                 del bandeira
 
-                self.selecionar_idioma(self.dic_imgs)
+                self.selecionar_idioma()
 
             else:
                 pass
@@ -117,7 +116,7 @@ if __name__ == '__main__':
 
     icon = PhotoImage(file='imagens/icone.png')
 
-    idioma = Idioma(master, design, idioma, interface_idioma, icon)
+    idioma = SetLanguage(master, design, idioma, interface_idioma, icon)
     Button(master, text="acao", command=lambda id=idioma: atualizar_sistema(id)).grid()
 
     master.mainloop()

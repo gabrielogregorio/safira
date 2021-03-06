@@ -4,7 +4,7 @@ from tkinter import Text
 """ Parte responsável pela exibição do contador de linhas """
 
 
-class ContadorLinhas(Canvas):
+class LineCounter(Canvas):
     def __init__(self, frame, design, bool_tem_linha):
         Canvas.__init__(self, frame)
 
@@ -80,7 +80,7 @@ class ContadorLinhas(Canvas):
             i = self.textwidget.index("{}+1line".format(i))
 
 
-class EditorDeCodigo(Text):
+class CodeEditor(Text):
     def __init__(self, *args, **kwargs):
         Text.__init__(self, *args, **kwargs)
 

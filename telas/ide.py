@@ -49,30 +49,27 @@ from util.arquivo import Arquivo
 import util.funcoes as funcoes
 
 from telas.Tutorial import Tutorial
-from telas.EscolherIdioma import Idioma
-from telas.visualizacao import ContadorLinhas
-from telas.visualizacao import EditorDeCodigo
-from telas.Atualizar import Atualizar
+from telas.SetLanguage import SetLanguage
+from telas.LineCounter import LineCounter
+from telas.LineCounter import CodeEditor
+from telas.CheckUpdates import CheckUpdates
 from telas.Colorir import Colorir
-from telas.Splash import Splash
-from telas.design import Design
-from telas.Bug import Bug
-from telas.Inicio import Inicio
+from telas.SplashScreen import SplashScreen
+from telas.Colors import Colors
+from telas.ReportBug import ReportBug
+from telas.Home import Home
+from pyglet import resource
+from pyglet import font
+from pyglet import window
 
 
 def carregar_fonte():
     erro = ""
     try:
-        # Carregamento da fonte
-        from pyglet import resource
-        from pyglet import font
-        from pyglet import window
-
-        # fonte_terminal = "fonte/Roboto_Mono/RobotoMono-Regular.ttf"
         fonte_sistema = "fonte/OpenSans/OpenSans-Regular.ttf"
-        fonte_terminal = "fonte/Consolas/ConsolaMono.ttf"
+        fonte_terminal = "fonte/FiraCode/ttf/FiraCodeRetina.ttf"
 
-        fontes =  ["Open Sans", "Consola Mono"]
+        fontes =  ["Fira Code Retina", "Open Sans"]
         _ = font.load(name = fontes, dpi=400.0, size=14)
 
         resource.add_font(fonte_terminal)
@@ -90,7 +87,7 @@ def carregar_fonte():
 carregar_fonte()
 
 
-class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
+class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Home, Tutorial):
     def __init__(self, master:object, icon:object):
         """ Classe da interface principal"""
 
@@ -102,7 +99,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.historico_coloracao = []
 
         # Design da interface
-        self.design = Design()
+        self.design = Colors()
         self.design.update_design_dic()
 
         # Splash Screen
@@ -144,6 +141,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
 
         # Dicionário de configurações da Safira
         self.arquivo_configuracoes = funcoes.carregar_json("configuracoes/configuracoes.json")
+        self.versao_safira = self.arquivo_configuracoes['versao']
 
         # Dicionário de Scripts de aprendizado
         self.arquivo_scripts = funcoes.carregar_json("configuracoes/scripts.json")
@@ -167,28 +165,16 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
                 com, cor = comando[0], self.cor_do_comando[self.dic_comando["cor"]]["foreground"]
                 if not com.strip() == "":
                     self.dic_coloracao[com] = cor
-        #print(self.dic_coloracao)
 
         # Classes
         # Registro de logs
         self.log = Log()
 
-        # Verificações de bugs
-        # self.bug = Bug(self.master, self.design, self.idioma, self.interface_idioma, self.icon)
         super().__init__()
-        Atualizar.__init__(self)
-        Splash.__init__(self)
-        Idioma.__init__(self)
+        CheckUpdates.__init__(self)
+        SplashScreen.__init__(self)
+        SetLanguage.__init__(self)
         Colorir.__init__(self)
-
-        # Verificações de versões diponíveis para atualizar
-        #self.atualizar = Atualizar(self.master, self.design, self.idioma, self.interface_idioma, self.icon)
-
-        # Coloração de código
-        #self.colorir_codigo = Colorir(self.cor_do_comando, self.dic_comandos)
-
-        # Escolha do idioma
-        #self.escolher_idioma = Idioma(self.master,  self.design, self.idioma, self.interface_idioma, self.icon)
 
         # Inserção de log
         self.log.adicionar_novo_acesso("logs/registros.json", "acessos")
@@ -364,7 +350,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
 
         self.fr_abas = Frame(self.fr_princ, height=20)
         self.fr_abas.rowconfigure(1, weight=1)
-        self.fr_abas.grid(row=0, column=0, columnspan=4, sticky=NSEW)
+        self.fr_abas.grid(row=0, column=0, columnspan=6, sticky=NSEW)
 
         self.fr_espaco = Label(self.fr_abas, width=11)
         self.fr_espaco.grid(row=1, column=0, sticky=NSEW)
@@ -372,7 +358,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.carregar_abas_inicio()
 
         # ************ Tela de desenvolvimento do código ****************** #
-        self.tx_editor = EditorDeCodigo(self.fr_princ, undo=True, autoseparators=True, maxundo=50, tabs=4)
+        self.tx_editor = CodeEditor(self.fr_princ, undo=True, autoseparators=True, maxundo=50, tabs=4)
         self.tx_editor.focus_force()
 
         self.tx_editor.bind("<Control-c>", lambda event=None: self.copiar_selecao())
@@ -394,12 +380,12 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
 
         self.tx_editor.bind("<Tab>", lambda event=None: self.txt_editor_tab())
 
-        self.cont_lin = ContadorLinhas(self.fr_princ, self.design, bool_tem_linha = True)
+        self.cont_lin = LineCounter(self.fr_princ, self.design, bool_tem_linha = True)
         self.cont_lin.aba_focada2 = self.num_aba_focada
         self.cont_lin.dic_abas2 = self.dic_abas
         self.cont_lin.atribuir(self.tx_editor)
 
-        self.cont_lin1 = ContadorLinhas(self.fr_princ, self.design, bool_tem_linha = False)
+        self.cont_lin1 = LineCounter(self.fr_princ, self.design, bool_tem_linha = False)
         self.cont_lin1.aba_focada2 = self.num_aba_focada
         self.cont_lin1.dic_abas2 = self.dic_abas
         self.cont_lin1.atribuir(self.tx_editor)
@@ -428,22 +414,18 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             self.num_aba_focada,
             self.tx_editor)
 
-        #self.buscar_atualização()
         self.splash_fim()
         self.master.withdraw() 
 
-        #self.tutorial = Tutorial(self.fr_princ, self.design, self.idioma, self.interface_idioma, self.icon )
         Tutorial.__init__(self, self.fr_princ)
         self.atualizar_design_interface()
 
-        #self.tela_inicio = Inicio(self.fr_princ, )
-        Inicio.__init__(self, self.fr_princ)
+        Home.__init__(self, self.fr_princ)
 
         self.trocar_interface(troca="codigo")
         self.lista_botoes_recentes = self.inicio_lista_botoes
         self.abrir_aba_inicio()
         for widget, arquivo in self.lista_botoes_recentes:
-            print(arquivo)
             widget["command"] = lambda link = arquivo: self.atualizar_temas_e_sintaxe(link)
 
         try:
@@ -454,8 +436,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
                 master.wm_attributes("-zoomed", 1)
             except Exception as erro2:
                 print(erro2)
-
-
         # Atualizar a interface graficaa
         master.deiconify()
         master.update()
@@ -508,13 +488,11 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.trocar_interface(troca="tutorial")
         self.atualizar_codigo_editor(self.num_aba_focada)
 
-
     def abrir_aba_inicio(self):
         #self.abrir_nova_aba(tutorial=True)
         self.dic_abas[self.num_aba_focada]["tipo"] = "inicio"
         self.trocar_interface(troca="inicio")
         self.atualizar_codigo_editor(self.num_aba_focada)
-
 
     def avisos(self):
         t_width  = int(self.master.winfo_screenwidth())
@@ -940,7 +918,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
     def buscar_atualização(self, primeira_vez=False):
         t = Thread(target=lambda primeira_vez=primeira_vez: self.verificar_atualizacoes(primeira_vez))
         t.start()
-        
 
     def carregar_cascata_temas(self):
         self.mn_interface_cascate_temas = Menu(self.mn_interface, tearoff=False)
@@ -976,12 +953,11 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
                 self.mn_exemplos.add_command(label="  " + file + "  ", command=funcao)
 
     def abrir_um_script(self, link:str):
-        if self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"].strip() != "":
+        if self.dic_abas[self.num_aba_focada]["arquivoAtual"]["texto"].strip() != "" or self.dic_abas[self.num_aba_focada]["tipo"] != "editor":
             self.abrir_nova_aba(None)
 
         self.manipular_arquivos(None, "abrirArquivo",
             "scripts/"+ self.idioma + "/" + str(link))
-
 
     def manipular_arquivos(self, event, comando:str, link=None, nova_aba=False):
         if self.controle_arquivos is None: return 0
@@ -1078,7 +1054,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         """
             Usado apenas no inicio do programa *****1 VEZ*****
         """
-
         print("carregar_abas_inicio")
         for num_aba, dados_aba in self.dic_abas.items():
             # Coloração da aba
@@ -1091,7 +1066,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
                 dic_cor_marcador = self.design.get("dic_cor_marcador_nao_focado")
                 dic_cor_finao = self.design.get("dic_cor_abas_nao_focada")
                 dic_cor_botao = self.design.get("abas_botao_fechar_desfocado")
-            
 
             fr_uma_aba = Frame(self.fr_abas)
             fr_uma_aba.rowconfigure(1, weight=1)
@@ -1127,7 +1101,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             lb_aba.bind("<ButtonPress>", lambda event=None, num_aba=num_aba: self.focar_aba(num_aba))
             bt_fechar.bind("<ButtonPress>", lambda event=None, bt_fechar=bt_fechar: self.fechar_uma_aba(bt_fechar))
 
-
             fr_uma_aba.grid(row=1, column=num_aba+2, sticky=N)
             fr_marcador.grid(row=0, column=1, columnspan=2, sticky=NSEW)
             lb_aba.grid(row=1, column=1, sticky=NSEW)
@@ -1142,9 +1115,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             self.dic_abas[num_aba]["listaAbas"].append(fr_marcador)
             self.dic_abas[num_aba]["listaAbas"].append(lb_aba)
             self.dic_abas[num_aba]["listaAbas"].append(bt_fechar)
-
-
-
 
     def abrir_nova_aba(self, event:object=None, tutorial:bool=False):
         sleep(0.1)
@@ -1275,7 +1245,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
 
         # Aba fechada era a aba que estava focada
         if bool_era_focado:
-            print("bool_era_focado", self.lst_historico_abas_focadas)
 
             # Obter a penultima aba focada
             chave = self.lst_historico_abas_focadas[-1]
@@ -1310,9 +1279,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
             self.trocar_interface(troca="inicio")
         else:
             self.trocar_interface(troca="codigo")
-
-
-
 
     def atualizar_cor_abas(self):
         print("atualizar_cor_abas")
@@ -1447,7 +1413,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.num_coloracao_acionados -= 0
 
         print("\n\ntempo processamento ", time()-inicio)
-
 
     def atualizar_codigo_editor(self, num_aba:int):
         if self.dic_abas[num_aba]["tipo"] == "tutorial": 
@@ -1633,16 +1598,6 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.arvores_grid.tag_configure("RED_TAG",
             foreground=self.design.get("cor_grid_treeview_red_tag")["foreground"],
             font=self.design.get("cor_grid_treeview_red_tag")["font"])
-
-        #vsroolb = Scrollbar(fr_grid_variaveis,
-        # self.design.get("cor_grid_variaveis_scrollbar"), relief=FLAT,
-        # orient="vertical", command=self.arvores_grid.yview)
-        #hsroolb = Scrollbar(fr_grid_variaveis,
-        # self.design.get("cor_grid_variaveis_scrollbar"), relief=FLAT,
-        # orient="horizontal", command=self.arvores_grid.xview)
-
-        #self.arvores_grid.configure(yscrollcommand=vsroolb.set, xscrollcommand=hsroolb.set)
-
 
         for coluna in coluna_identificadores:
             # parametro a se analisar = selectmode="#f1a533")
@@ -1867,7 +1822,7 @@ class Interface(Bug, Atualizar, Splash, Idioma, Colorir, Inicio, Tutorial):
         self.tx_editor.see(INSERT)
         return "break"
 
-    def atualizar_design_objeto(self, objeto, menu):
+    def atualizar_design_objeto(self, objeto:object, menu):
         try:
             objeto.configure(self.design.get(menu))
             objeto.update()

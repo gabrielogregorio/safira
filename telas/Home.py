@@ -3,11 +3,10 @@ from tkinter import Canvas
 import re
 from os import listdir
 from os import path
-
 import util.funcoes as funcoes
 
  
-class Inicio():
+class Home():
     def __init__(self, frame_referencia:object):
         self.inicio_lista_botoes = []
 
@@ -27,10 +26,6 @@ class Inicio():
         self.inicio_fr_texto = Frame(self.frame_referencia, width=LARGURA)
         self.inicio_fr_texto.grid_columnconfigure(1, weight=1)
         self.inicio_fr_texto.rowconfigure(2, weight=1)
-
-        # ESPAÇO
-        #self.inicio_barra_superior = Frame(self.inicio_fr_texto,  self.design.get("barra_superior"))
-        #self.inicio_barra_superior.grid(row=1, column=1, sticky=NSEW)
 
         self.__fr_principal = Frame(self.inicio_fr_texto, self.design.get("inicio_fr_principal"))
         self.__fr_principal.grid_columnconfigure(1, weight=1)

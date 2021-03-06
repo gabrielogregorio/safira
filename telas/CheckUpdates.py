@@ -13,10 +13,8 @@ from os import path as os_path
 from os import getcwd as os_getcwd
 from upgrade import Upgrade
 
-VERSAO_ATUAL = {"versao": 0.36}
 
-
-class Atualizar():
+class CheckUpdates():
     def __init__(self):
 
         # Destino dos Downloads e Backups
@@ -35,8 +33,6 @@ class Atualizar():
     def verificar_atualizacoes(self, primeira_vez=False):
         """Verifica se existe uma versão mais recente disponível """
         try:
-            baixada = VERSAO_ATUAL
-
             # Obter todas as versões
             dic_versoes = self.__up.obter_informacoes_versao()
 
@@ -47,22 +43,22 @@ class Atualizar():
             else:
                 # Obter ultima versão
                 recente = max(dic_versoes.keys())
-                if float(VERSAO_ATUAL["versao"]) < float(recente):
+                if float(self.versao_safira) < float(recente):
 
                     print('A versão {} disponível, deseja atualizar?'.format(recente))
-                    self.__aviso_versao(baixada, recente)
+                    self.__aviso_versao(recente)
 
                 else:
                     # Não é necessário avisar que está atualizado
                     # Se a interface estiver iniciando
                     if not primeira_vez:
-                        self.__aviso_versao_atualizada(baixada)
+                        self.__aviso_versao_atualizada()
 
         except Exception as erro:
             if not primeira_vez:
                 messagebox.showinfo("ops", self.interface_idioma["erro_generico"][self.idioma] + str(erro))
 
-    def __aviso_versao(self, baixada, recente):
+    def __aviso_versao(self, recente):
         """ Aviso, existe uma nova versão disponível """
 
         self.__tp_atualizacao = Toplevel(self.master, self.design.dic["aviso_versao_top_level"])
@@ -242,7 +238,7 @@ class Atualizar():
         th = Thread(target=lambda url=url: webbrowser_open(url))
         th.start()
 
-    def __aviso_versao_atualizada(self, baixada):
+    def __aviso_versao_atualizada(self):
         self.__tp_atualizacao = Toplevel(self.master, self.design.dic["aviso_versao_tp_atualizada"])
         self.__tp_atualizacao.withdraw()
         self.__tp_atualizacao.focus_force()
@@ -259,7 +255,7 @@ class Atualizar():
 
         fr_atualizaca = Frame(self.__tp_atualizacao)
         lb_versao_dev = Label(fr_atualizaca, text=self.interface_idioma["atualizado_versao_ultima"][self.idioma])
-        lb_versao_tex = Message(fr_atualizaca, text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(baixada["versao"]), relief=FLAT)
+        lb_versao_tex = Message(fr_atualizaca, text='{}'.format(self.interface_idioma["texto_atualizado"][self.idioma]).format(self.versao_safira), relief=FLAT)
         fr_botoes = Frame(fr_atualizaca)
         bt_cancela = Button(fr_botoes, text=self.interface_idioma["texto_nao_quero"][self.idioma], relief=FLAT)
         bt_facebook = Button(fr_botoes, self.design.dic["aviso_versao_bt_facebook_atualizada"], text=self.interface_idioma["atualizado_facebook"][self.idioma], relief=FLAT)

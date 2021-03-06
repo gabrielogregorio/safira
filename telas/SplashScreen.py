@@ -10,7 +10,7 @@ from platform import system as platform_system
 """ Tela inicial de Splash """
 
 
-class Splash:
+class SplashScreen:
     def __init__(self):
 
         self.__tela_splash = Tk()

@@ -9,7 +9,7 @@ from tkinter import PhotoImage
 from webbrowser import open as webbrowser_open
 
 
-class Bug(object):
+class ReportBug(object):
     def __init__(self):
         self.__bt_report = None
         self.__image_bug = None
@@ -29,7 +29,7 @@ class Bug(object):
         t = Thread(target=lambda event=None: webbrowser_open(website_forms))
         t.start()
 
-        Bug.__destruir_interface(self)
+        self.__destruir_interface()
 
     def __destruir_interface(self):
         self.__bt_report.destroy()
@@ -75,8 +75,8 @@ class Bug(object):
         self.__fr_botoes.grid_columnconfigure(1, weight=1)
         self.__fr_botoes.grid_columnconfigure(2, weight=1)
 
-        self.__bt_cancel.configure(command=lambda event=None: Bug.__destruir_interface(self))
-        self.__bt_report.configure(command=lambda event=None: Bug.__acessar_site_reporte(self))
+        self.__bt_cancel.configure(command=lambda event=None: self.__destruir_interface())
+        self.__bt_report.configure(command=lambda event=None: self.__acessar_site_reporte())
 
         self.__lb_label1.grid(row=1, column=1, sticky=NSEW)
         self.__lb_label2.grid(row=2, column=1, sticky=NSEW)

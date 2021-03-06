@@ -6,7 +6,7 @@ from platform import system as platform_system
 #if (platform_system() == 'Linux'):
 #    fonte = 'Ubuntu Mono'
 
-class Design():
+class Colors():
     def __init__(self):
         self.dic = {}
 
@@ -15,7 +15,7 @@ class Design():
 
     def update_design_dic(self):
         try:
-            texto_json = "temas/interface/{}".format(Design.__get_sett_file(self))
+            texto_json = "temas/interface/{}".format(self.__get_sett_file())
             self.dic = carregar_json(texto_json)
         except Exception as e:
             return [False, e]

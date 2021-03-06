@@ -148,7 +148,7 @@
       "selectbackground":"#333343",
       "selectforeground":"#ffffff",
       "font":[
-         "Consola Mono",
+         "Fira Code Retina",
          13
       ]
    },
@@ -303,7 +303,7 @@
       "highlightthickness":5,
       "insertbackground":"#ffffff",
       "font":[
-         "Consola Mono",
+         "Fira Code Retina",
          13
       ]
    },
@@ -324,7 +324,7 @@
       "highlightthickness":0,
       "bd":0,
       "font":[
-         "Consola Mono",
+         "Fira Code Retina",
          12
       ]
    },
@@ -665,7 +665,7 @@
    },
    "tutorial_tag_codigo":{
       "font":[
-         "Consola Mono",
+         "Fira Code Retina",
          13
       ],
       "foreground":"white",
