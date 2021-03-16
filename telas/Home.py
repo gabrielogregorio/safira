@@ -41,11 +41,13 @@ class Home():
         self.__frame_botoes.grid(row=1, column=1, sticky=NSEW)
 
         self.__bt_abrir_programa = Button(self.__frame_botoes, self.design.get("inicio_bt_abrir_programa"), text="Abrir Programa")
+        self.__bt_abrir_programa['command'] = lambda: self.manipular_arquivos(None, "abrir_arquivo_dialog", nova_aba=True)
         self.__bt_abrir_programa.grid(row=1, column=1)
 
         self.__lb_espaco = Label(self.__frame_botoes,self.design.get("inicio_lb_espaco"), text=" ", ).grid(row=1, column=2)
 
         self.__bt_nova_aba = Button(self.__frame_botoes, self.design.get("inicio_bt_abrir_programa"), text="Nova Aba")
+        self.__bt_nova_aba['command'] = lambda: self.abrir_nova_aba()
         self.__bt_nova_aba.grid(row=1, column=3)
 
         self.__frame_cor_tema = Frame(self.__fr_botoes_superiores, self.design.get("inicio_frame_cor_tema"))
@@ -97,7 +99,7 @@ class Home():
         self.__fr_recentes.grid_columnconfigure(1, weight=1)
         self.__fr_recentes.grid(row=1, column=2, sticky=NSEW)
 
-        self.__carregar_opcoes('Aprender', self.__fr_recentes, {
+        self.__carregar_opcoes_aprender('Aprender', self.__fr_recentes, {
             "tipo": "tutorial", # código
             "itens": [
                 #["texto", "link"]
@@ -128,6 +130,28 @@ class Home():
             bt_item.grid(row=pos, column=1, sticky='w')
             pos = pos + 1
 
+
+
+    def __carregar_opcoes_aprender(self, nome:str, pai:object, dados:list):
+
+        lb_aprender = Label(pai, self.design.get("inicio_lb_especial"), text=nome)
+        lb_aprender.grid(row=1, column=1, sticky='w')
+
+        fr_aprender = Frame(pai, self.design.get("inicio_fr_especial"))
+        fr_aprender.grid(row=2, column=1, sticky=NSEW)
+        fr_aprender.grid_columnconfigure(1, weight=1)
+
+        pos = 1
+        tipo = dados["tipo"]
+
+        for k, v in dados["itens"]:
+            if pos == 15:
+                break
+
+            bt_item = Button(fr_aprender, self.design.get("inicio_bt_especial"), text=v)
+            bt_item['command'] = lambda link = v: self.__abrir_script(link)
+            bt_item.grid(row=pos, column=1, sticky='w')
+            pos = pos + 1
 
     def __abrir_script(self, link:str):
         self.abrir_nova_aba(None)

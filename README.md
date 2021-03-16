@@ -24,7 +24,6 @@ A Safira é focada apenas na estrutura básica e em pequenos scripts, sendo que 
 É assim que fica a codificação de um programa maior na Safira.  
 
 ![Imagem](imagens/safira.png)
-
 --------------------------------
 
 # Caso você só quer experimentar a Safira
@@ -64,7 +63,7 @@ Está versão na Master é uma versão de desenvolvimento, com bugs e implementa
 3. Crie e ative um ambiente virtual   
 4. Instale as dependências
 ```shell
-python -m pip install requeriments.txt
+ python -m pip install -r .\requeriments.txt
 ```
 5. Instale novas bibliotecas.
 Instale as bibliotecas, dentro do ambiente virtual. Por favor, evite ao máximo bibliotecas não nativas do Python, elas podem causar problemas ao serem migradas para diferentes sistemas operacionais.

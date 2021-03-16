@@ -18,7 +18,7 @@
     },
     "1": {
         "nome": "",
-        "foco": false,
+        "foco": true,
         "lst_breakpoints": [],
         "arquivoSalvo": {
             "link": "",
@@ -31,6 +31,23 @@
         "contexto": 0,
         "ja_foi_marcado_nao_salvo": false,
         "tipo": "tutorial",
+        "listaAbas": []
+    },
+    "2": {
+        "nome": "",
+        "foco": true,
+        "lst_breakpoints": [],
+        "arquivoSalvo": {
+            "link": "",
+            "texto": "\n"
+        },
+        "arquivoAtual": {
+            "texto": "# Criando uma fun\u00e7\u00e3o\nfuncao mostraArvore\n{\n    mostre \"    *    \"\n    mostre \"   ***   \"\n    mostre \"  *****  \"\n    mostre \" ******* \"\n    mostre \"    *    \"\n}\n\n# Chamando a fun\u00e7\u00e3o\nmostraArvore()\n"
+        },
+        "listaContextos": [],
+        "contexto": 0,
+        "ja_foi_marcado_nao_salvo": true,
+        "tipo": "editor",
         "listaAbas": []
     }
 }

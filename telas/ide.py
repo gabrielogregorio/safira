@@ -63,33 +63,11 @@ from pyglet import font
 from pyglet import window
 
 
-def carregar_fonte():
-    erro = ""
-    try:
-        fonte_sistema = "fonte/OpenSans/OpenSans-Regular.ttf"
-        fonte_terminal = "fonte/FiraCode/ttf/FiraCodeRetina.ttf"
-
-        fontes =  ["Fira Code Retina", "Open Sans"]
-        _ = font.load(name = fontes, dpi=400.0, size=14)
-
-        resource.add_font(fonte_terminal)
-        resource.add_font(fonte_sistema)
-
-    except ModuleNotFoundError:
-        erro = "Você precisa instalar a biblioteca pyglet para que as fontes sejam carregadas"
-
-    except Exception as e:
-        erro = e
-
-    if erro != "":
-        print("Erro a carregar fonte"+str(erro))
-
-carregar_fonte()
-
-
 class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Home, Tutorial):
     def __init__(self, master:object, icon:object):
         """ Classe da interface principal"""
+
+        self.carregar_fonte()
 
         # Oculta a contrução da interface
         self.master = master
@@ -444,6 +422,27 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
 
         #self.manipular_arquivos(None, "abrirArquivo", "natal.safira")
 
+    def carregar_fonte(self):
+        erro = ""
+        try:
+            fonte_sistema = "fonte/OpenSans/OpenSans-Regular.ttf"
+            fonte_terminal = "fonte/FiraCode/ttf/FiraCodeRetina.ttf"
+
+            fontes =  ["Fira Code Retina", "Open Sans"]
+            _ = font.load(name = fontes, dpi=400.0, size=14)
+
+            resource.add_font(fonte_terminal)
+            resource.add_font(fonte_sistema)
+
+        except ModuleNotFoundError:
+            erro = "Você precisa instalar a biblioteca pyglet para que as fontes sejam carregadas"
+
+        except Exception as e:
+            erro = e
+
+        if erro != "":
+            print("Erro a carregar fonte"+str(erro))
+
     def atualizar_temas_e_sintaxe(self, arquivo:str):
         self.atualizar_tema_sintaxe_da_interface("tema", arquivo)
         self.atualizar_tema_sintaxe_da_interface("sintaxe", arquivo)
@@ -460,6 +459,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
             self.tutorial_barra_superior.grid(row=0, column=1, sticky=NSEW)
             self.tutorial_fr_texto.grid(row=1, column=2, columnspan=2, sticky= NSEW)
             self.tutorial_fr_botoes.grid(row=2, column=2, columnspan=2, sticky=NSEW)
+
             
         elif troca == "codigo":
             self.tutorial_fr_botoes.grid_remove()
@@ -960,14 +960,15 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
             "scripts/"+ self.idioma + "/" + str(link))
 
     def manipular_arquivos(self, event, comando:str, link=None, nova_aba=False):
+        if nova_aba:
+            self.abrir_nova_aba(None)
+
         if self.controle_arquivos is None: return 0
         retorno_salvar_como = None
 
         self.controle_arquivos.atualiza_infos(self.dic_abas, self.num_aba_focada, self.tx_editor)
 
         if comando == "abrirArquivo":
-            if nova_aba:
-                self.abrir_nova_aba(None)
             print("abrirArquivo")
             self.controle_arquivos.abrirArquivo(link)
 

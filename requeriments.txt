@@ -4,3 +4,4 @@ idna==2.10
 pyglet==1.5.13
 requests==2.25.0
 urllib3==1.26.2
+pillow==8.1.2
