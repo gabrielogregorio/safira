@@ -10,7 +10,7 @@ from webbrowser import open as webbrowser_open
 
 
 class ReportBug(object):
-    def __init__(self):
+    def __init__(self, interface_idioma, master, design, idioma, icon):
         self.__bt_report = None
         self.__image_bug = None
         self.__bt_cancel = None
@@ -19,6 +19,11 @@ class ReportBug(object):
         self.__lb_label2 = None
         self.__lb_label1 = None
         self.__tp_princi = None
+        self.interface_idioma = interface_idioma
+        self.master = master
+        self.design = design
+        self.idioma = idioma
+        self.icon = icon
 
     def __acessar_site_reporte(self):
         website_forms = "https://forms.gle/J4kE2Li8c58fz4hh6"

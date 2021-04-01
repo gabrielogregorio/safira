@@ -114,7 +114,10 @@
         "scripts/pt-br/01. Variaveis.safira",
         "scripts/pt-br/02. Exibir algo na tela.safira",
         "scripts/pt-br/04. Testar Condicoes.safira",
-        "scripts/pt-br/09. Incremente-decremente.safira"
+        "scripts/pt-br/09. Incremente-decremente.safira",
+        "scripts/pt-br/02. Exibir algo na tela.safira",
+        "scripts/pt-br/02. Exibir algo na tela.safira",
+        "scripts/pt-br/14. pare.safira"
     ],
     "idioma": "pt-br"
 }

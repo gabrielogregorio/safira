@@ -7,10 +7,14 @@ from time import time
 
 
 class Colorir():
-    def __init__(self): 
+    def __init__(self, master, dic_comandos): 
         self.__tx_editor_codigo = None
         self.__historico_coloracao = []
         self.__lista_todos_coloracao = []
+
+        self.master = master
+        self.dic_comandos = dic_comandos
+        self.cor_do_comando = None
 
     def alterar_cor_comando(self, novo_cor_do_comando):
         self.cor_do_comando = novo_cor_do_comando
@@ -86,7 +90,6 @@ class Colorir():
             regex_chave = "{|}"
             regex_cor = "na\\s*cor\\s*\"(.*?)\""
 
-
             cor_comentario = self.cor_do_comando["comentario"]["foreground"]
             cor_numerico = self.cor_do_comando["numerico"]["foreground"]
             cor_chave = self.cor_do_comando["logico"]["foreground"]
@@ -125,8 +128,3 @@ class Colorir():
             self.master.update()
 
         return 0
-
-
-
-
-

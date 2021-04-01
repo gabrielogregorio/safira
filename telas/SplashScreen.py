@@ -7,11 +7,10 @@ from time import sleep
 from platform import system as platform_system
 
 
-""" Tela inicial de Splash """
-
-
 class SplashScreen:
-    def __init__(self):
+    def __init__(self, design):
+
+        self.design = design
 
         self.__tela_splash = Tk()
         self.__tela_splash.withdraw()

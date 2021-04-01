@@ -10,11 +10,19 @@ import util.funcoes as funcoes
 
 
 class SetLanguage():
-    def __init__(self):#, tela, design, idioma, interface_idioma, icon):
+    def __init__(self, master, design, idioma, interface_idioma, icon, dic_imgs):
         self.__base = "imagens/" 
         self.__tp_interface_idioma = None
         self.__bt_idioma = None
         self.__lb1 = None
+
+
+        self.master = master
+        self.design = design
+        self.idioma = idioma
+        self.interface_idioma = interface_idioma
+        self.icon = icon
+        self.dic_imgs = dic_imgs
 
     def selecionar_idioma(self): 
 
@@ -85,10 +93,7 @@ class SetLanguage():
                 self.__ic_idioma = PhotoImage( file="imagens/{}".format(self.dic_imgs[self.idioma]) )
                 self.__ic_idioma = self.__ic_idioma.subsample(4, 4)
                 funcoes.arquivo_de_configuracoes_interface("idioma", self.idioma)
-
-
                 #self.__lb1.configure(text=self.interface_idioma["texto_atualizacao"][self.idioma])
-
                 self.__tp_interface_idioma.destroy()
                 del bandeira
 

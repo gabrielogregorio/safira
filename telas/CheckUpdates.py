@@ -15,7 +15,15 @@ from upgrade import Upgrade
 
 
 class CheckUpdates():
-    def __init__(self):
+    def __init__(self, versao_safira, interface_idioma, idioma, master, design, icon):
+
+        self.versao_safira = versao_safira
+        self.interface_idioma = interface_idioma
+        self.idioma = idioma
+        self.master = master
+        self.design = design
+        self.icon = icon
+
 
         # Destino dos Downloads e Backups
         self.__tp_atualizacao = None

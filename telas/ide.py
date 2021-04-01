@@ -63,7 +63,7 @@ from pyglet import font
 from pyglet import window
 
 
-class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Home, Tutorial):
+class Interface(Home, Tutorial):
     def __init__(self, master:object, icon:object):
         """ Classe da interface principal"""
 
@@ -148,11 +148,13 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
         # Registro de logs
         self.log = Log()
 
-        super().__init__()
-        CheckUpdates.__init__(self)
-        SplashScreen.__init__(self)
-        SetLanguage.__init__(self)
-        Colorir.__init__(self)
+        #super().__init__()
+        self.checkupdates = CheckUpdates(self.versao_safira, self.interface_idioma, self.idioma, self.master, self.design, self.icon)
+        self.set_language = SetLanguage(self.master, self.design, self.idioma, self.interface_idioma, self.icon, self.dic_imgs)
+        self.bug = ReportBug(self.interface_idioma, self.master, self.design, self.idioma, self.icon)
+        self.splashscreen = SplashScreen(self.design)
+        self.colorir = Colorir(self.master, self.dic_comandos)
+        self.colorir.alterar_cor_comando(self.cor_do_comando)
 
         # Inserção de log
         self.log.adicionar_novo_acesso("logs/registros.json", "acessos")
@@ -258,7 +260,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
 
         # MENU AJUDA
         self.mn_ajuda.add_command(label="  Tutorial", command=lambda event=None: self.abrir_aba_tutorial())
-        self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug_carregar_tela())
+        self.mn_ajuda.add_command(label=self.interface_idioma["label_reportar_bug"][self.idioma], command=lambda event=None: self.bug.bug_carregar_tela())
         self.mn_ajuda.add_command(label=self.interface_idioma["label_verificar_atualizacao"][self.idioma], command=lambda event=None: self.buscar_atualização())
 
         # MENU DESENVOLVIMENTO
@@ -392,7 +394,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
             self.num_aba_focada,
             self.tx_editor)
 
-        self.splash_fim()
+        self.splashscreen.splash_fim()
         self.master.withdraw() 
 
         Tutorial.__init__(self, self.fr_princ)
@@ -916,7 +918,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
         return "break"
 
     def buscar_atualização(self, primeira_vez=False):
-        t = Thread(target=lambda primeira_vez=primeira_vez: self.verificar_atualizacoes(primeira_vez))
+        t = Thread(target=lambda primeira_vez=primeira_vez: self.checkupdates.verificar_atualizacoes(primeira_vez))
         t.start()
 
     def carregar_cascata_temas(self):
@@ -1386,7 +1388,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
 
         if limpar:
             self.historico_coloracao = []
-        self.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
+        self.colorir.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
         self.num_coloracao_acionados = 0
 
@@ -1409,7 +1411,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
 
         if limpar:
             self.historico_coloracao = []
-        self.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
+        self.colorir.coordena_coloracao(None, tx_editor_codigo=self.tx_editor)
 
         self.num_coloracao_acionados -= 0
 
@@ -1765,7 +1767,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
         self.bool_logs = False if self.bool_logs else True
 
     def atualizar_idioma(self):
-        self.selecionar_idioma()
+        self.set_language.selecionar_idioma()
 
     def ativar_modo_debug_temas(self):
         """
@@ -1913,7 +1915,7 @@ class Interface(ReportBug, CheckUpdates, SplashScreen, SetLanguage, Colorir, Hom
             self.design.update_design_dic()
 
             try:
-                self.alterar_cor_comando(self.cor_do_comando)
+                self.colorir.alterar_cor_comando(self.cor_do_comando)
 
                 self.atualizar_design_interface()
                 self.cont_lin.aba_focada2 = self.num_aba_focada

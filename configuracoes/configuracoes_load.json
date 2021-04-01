@@ -18,35 +18,18 @@
     },
     "1": {
         "nome": "",
-        "foco": true,
+        "foco": false,
         "lst_breakpoints": [],
         "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
+            "link": "scripts/pt-br/02. Exibir algo na tela.safira",
+            "texto": "# Este comando exibe alguma coisa na tela\n# Uma mensagem por exemplo\n\n\nnome = \"Safira\" \n\nmostre \"Bom dia, \"\nmostre \"% tudo bem?\" inserindo nome\n\nmostre \"\"\nmostre \":--------------------------------------------:\"\nmostre \":  Voc\u00ea deve ter notado que o comando mostre :\"\nmostre \":  exibir cada coisa em uma linha diferente  :\"\nmostre \":  Se voc\u00ea quiser exibir tudo na mesma linha :\"\nmostre \":  precisa usar o comando mostre nessa linha :\"\nmostre \":--------------------------------------------:\"\nmostre \"\"\n\n\nmostre nessa linha \"Bom dia \"\nmostre nessa linha nome\n\nmostre \"\"\n\n# Voc\u00ea tamb\u00e9m pode dar uma cor aos textos exibidos\n# Basta informar um c\u00f3digo Hexadecimal ou o nome das cores,\n# por enquanto em ingl\u00eas. Pesquise por esse c\u00f3digo no Google por #88ffff\nmostre \"Texto colorido\" na cor \"#88ffff\"\n\n"
         },
         "arquivoAtual": {
-            "texto": ""
+            "texto": "# Este comando exibe alguma coisa na tela\n# Uma mensagem por exemplo\n\n\nnome = \"Safira\" \n\nmostre \"Bom dia, \"\nmostre \"% tudo bem?\" inserindo nome\n\nmostre \"\"\nmostre \":--------------------------------------------:\"\nmostre \":  Voc\u00ea deve ter notado que o comando mostre :\"\nmostre \":  exibir cada coisa em uma linha diferente  :\"\nmostre \":  Se voc\u00ea quiser exibir tudo na mesma linha :\"\nmostre \":  precisa usar o comando mostre nessa linha :\"\nmostre \":--------------------------------------------:\"\nmostre \"\"\n\n\nmostre nessa linha \"Bom dia \"\nmostre nessa linha nome\n\nmostre \"\"\n\n# Voc\u00ea tamb\u00e9m pode dar uma cor aos textos exibidos\n# Basta informar um c\u00f3digo Hexadecimal ou o nome das cores,\n# por enquanto em ingl\u00eas. Pesquise por esse c\u00f3digo no Google por #88ffff\nmostre \"Texto colorido\" na cor \"#88ffff\"\n\n"
         },
         "listaContextos": [],
         "contexto": 0,
         "ja_foi_marcado_nao_salvo": false,
-        "tipo": "tutorial",
-        "listaAbas": []
-    },
-    "2": {
-        "nome": "",
-        "foco": true,
-        "lst_breakpoints": [],
-        "arquivoSalvo": {
-            "link": "",
-            "texto": "\n"
-        },
-        "arquivoAtual": {
-            "texto": "# Criando uma fun\u00e7\u00e3o\nfuncao mostraArvore\n{\n    mostre \"    *    \"\n    mostre \"   ***   \"\n    mostre \"  *****  \"\n    mostre \" ******* \"\n    mostre \"    *    \"\n}\n\n# Chamando a fun\u00e7\u00e3o\nmostraArvore()\n"
-        },
-        "listaContextos": [],
-        "contexto": 0,
-        "ja_foi_marcado_nao_salvo": true,
         "tipo": "editor",
         "listaAbas": []
     }
