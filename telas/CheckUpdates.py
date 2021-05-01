@@ -170,7 +170,7 @@ class CheckUpdates():
     def __log(self, label, texto):
         label['text'] = label['text'] + '\n{}'.format(texto)
 
-    def __aplica_versao(self, versao, lb_versao_tex, bt_atualiza, lb_versao_dev):
+    def __aplica_versao(self, versao:str, lb_versao_tex:object, bt_atualiza:object(), lb_versao_dev):
         """Baixa, faz o download e atualiza a Safira"""
 
         self.__log(lb_versao_tex, "Baixando Versão {}".format(versao))
@@ -240,7 +240,7 @@ class CheckUpdates():
     def __fechar_tudo(self):
         self.master.destroy()
 
-    def __abrir_site(self, url):
+    def __abrir_site(self, url:str):
         self.__tp_atualizacao.destroy()
 
         th = Thread(target=lambda url=url: webbrowser_open(url))
