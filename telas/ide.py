@@ -79,7 +79,7 @@ class Interface(Home, Tutorial):
 
         self.lst_historico_abas_focadas = [0]
         self.lista_terminal_destruir = []
-        self.lista_breakponts = []
+        #self.lista_breakponts = []
 
         self.num_coloracao_acionados = 0
         self.num_aba_focada = 0
@@ -167,7 +167,7 @@ class Interface(Home, Tutorial):
         self.log.adicionar_novo_acesso("logs/registros.json", "acessos")
 
         # Caminho atual
-        self.path = abspath(getcwd())
+        #self.path = abspath(getcwd())
 
         # Instância do interpretador
         self.instancia = None
@@ -187,82 +187,84 @@ class Interface(Home, Tutorial):
         self.fr_tela.grid_columnconfigure(1, weight=1)
 
         # Comandos
-        def cm_abrir_arquivo(event=None):
+        def __cm_abrir_arquivo(event=None):
+            self.abrir_nova_aba(None)
             self.manipular_arquivos(None, "abrir_arquivo_dialog")
 
-        def cm_salvar_arquivo_como(event=None):
+        def __cm_salvar_arquivo_como(event=None):
             self.manipular_arquivos(None, "salvar_arquivo_como_dialog")
 
-        def cm_acao_salva_arquivo(event=None):
+        def __cm_salvar_arquivo(event=None):
             self.manipular_arquivos(None, "salvar_arquivo")
 
-        def cm_inserir_bkp(event=None):
+        def ____cm_inserir_bkp(event=None):
             self.adicionar_remover_breakpoint(event)
 
-        def cm_executar_bkp(event=None):
+        def __cm_executar_bkp(event=None):
             self.__liberar_breakpoint_ou_inicicar(tipo_execucao="debug")
 
-        def cm_parar_execucao(event=None):
+        def __cm_parar_execucao(event=None):
             self.__inicializar_interpretador(tipo_execucao="parar")
 
-        def cm_executar_programa(event=None):
+        def __cm_executar_script(event=None):
             self.__inicializar_interpretador(tipo_execucao="continua")
 
-        def cm_limpa_breakpoints(event=None):
+        def cm_limpar_breakpoints(event=None):
             self.limpar_breakpoints()
 
-        def cm_abrir_abrir_nova_aba(event=None):
+        def __cm_abrir_nova_aba(event=None):
             self.abrir_nova_aba(event)
 
-        def cm_ativar_fullscreen(event):
+        def __cm_ativar_fullscreen(event):
             self.ativar_desativar_full_screen(event)
 
-        def cm_abrir_comunida():
+        def __cm_abrir_comunidade():
             webbrowser_open("https://safiraide.blogspot.com/p/comunidade.html")
 
-        def cm_abrirl_projeto():
+        def __cm_abrir_blog():
             webbrowser_open("http://safiraide.blogspot.com/")
 
-        def cm_ativaropc_logs():
+        def __cm_ativar_logs():
             self.ativar_logs()
 
-        def cm_ativarop_debug():
+        def __cm_ativar_debug():
             self.ativar_modo_debug_temas()
 
-        def cm_atualizar_idioma():
+        def __cm_atualizar_idioma():
             self.atualizar_idioma()
 
-        def cm_aumentar_fonte():
+        def __cm_aumentar_fonte():
             self.alterar_fonte("+")
 
-        def cm_diminuir_fonte():
+        def __cm_diminuir_fonte():
             self.alterar_fonte("-")
 
-        def cm_copiar():
+        def __cm_copiar():
             self.copiar_selecao()
 
-        def cm_colar():
+        def __cm_colar():
             self.colar_selecao()
 
-        def cm_formatar():
+        def __cm_formatar():
             self.formatar_codigo()
 
         # Teclas de atalhos
-        self.master.bind("<Control-n>", cm_abrir_abrir_nova_aba)
-        self.master.bind("<Control-s>", cm_acao_salva_arquivo)
-        self.master.bind("<Control-o>", cm_abrir_arquivo)
-        self.master.bind("<Control-S>", cm_salvar_arquivo_como)
-        self.master.bind("<F5>", cm_executar_programa)
-        self.master.bind("<F7>", cm_executar_bkp)
-        self.master.bind("<F10>", cm_inserir_bkp)
-        self.master.bind("<F11>", cm_ativar_fullscreen)
+        self.master.bind("<Control-n>", __cm_abrir_nova_aba)
+        self.master.bind("<Control-s>", __cm_salvar_arquivo)
+        self.master.bind("<Control-o>", __cm_abrir_arquivo)
+        self.master.bind("<Control-S>", __cm_salvar_arquivo_como)
+        self.master.bind("<F5>", __cm_executar_script)
+        self.master.bind("<F7>", __cm_executar_bkp)
+        self.master.bind("<F10>", ____cm_inserir_bkp)
+        self.master.bind("<F11>", __cm_ativar_fullscreen)
 
         # Menu Superior
         self.mn_barra = Menu(self.fr_tela)
 
         master.config(menu=self.mn_barra)
 
-        # Menu de opções
+
+        # ** Menu de opções ** #
         self.mn_interface = Menu(self.mn_barra)
         self.mn_executar = Menu(self.mn_barra)
         self.mn_exemplos = Menu(self.mn_barra)
@@ -279,7 +281,6 @@ class Interface(Home, Tutorial):
         self.atualizar_design_objeto(self.mn_ajuda, "cor_menu")
         self.atualizar_design_objeto(self.mn_dev, "cor_menu")
 
-        # ADICAO DOS MENUS NA INTERFACE
         self.mn_barra.add_cascade(
             label=self.interface_idioma["label_arquivo"][self.idioma],
             menu=self.mn_arquivo)
@@ -308,61 +309,56 @@ class Interface(Home, Tutorial):
             label=self.interface_idioma["label_dev"][self.idioma],
             menu=self.mn_dev)
 
-        # MENU ARQUIVOS
         self.mn_arquivo.add_command(
             label=self.interface_idioma["label_abrir_arquivo"][self.idioma],
-            command=cm_abrir_arquivo)
+            command=__cm_abrir_arquivo)
 
         self.mn_arquivo.add_command(
             label=self.interface_idioma["label_nova_aba"][self.idioma],
-            command=cm_abrir_abrir_nova_aba)
+            command=__cm_abrir_nova_aba)
 
         self.mn_arquivo.add_command(
             label=self.interface_idioma["label_salvar"][self.idioma],
-            command=cm_acao_salva_arquivo)
+            command=__cm_salvar_arquivo)
 
         self.mn_arquivo.add_command(
             label=self.interface_idioma["label_salvar_como"][self.idioma],
-            command=cm_salvar_arquivo_como)
+            command=__cm_salvar_arquivo_como)
 
         self.mn_arquivo.bind("<Button-1>", lambda x: "break")
 
-        # MENU EXECUTAR
         self.mn_executar.add_command(
             label=self.interface_idioma["label_executar_tudo"][self.idioma],
-            command=cm_executar_programa)
+            command=__cm_executar_script)
 
         self.mn_executar.add_command(
             label=self.interface_idioma["label_ate_breakpoint"][self.idioma],
-            command=cm_executar_bkp)
+            command=__cm_executar_bkp)
 
         self.mn_executar.add_command(
             label=self.interface_idioma["label_parar_execucao"][self.idioma],
-            command=cm_parar_execucao)
+            command=__cm_parar_execucao)
 
         self.mn_executar.add_command(
             label=self.interface_idioma["label_inserir_breakpoint"][self.idioma],
-            command=cm_inserir_bkp)
+            command=____cm_inserir_bkp)
 
-        # MENU INTERFACE
         self.carregar_cascata_scripts()
         self.carregar_cascata_temas()
         self.carregar_cascata_sintaxe()
 
         self.mn_truques.add_command(
             label="Formatar Programa",
-            command=cm_formatar)
+            command=__cm_formatar)
 
-        # MENU DE AJUSTES
         self.mn_interface.add_command(
             label=self.interface_idioma["label_mais"][self.idioma],
-            command=cm_aumentar_fonte)
+            command=__cm_aumentar_fonte)
 
         self.mn_interface.add_command(
             label=self.interface_idioma["label_menos"][self.idioma],
-            command=cm_diminuir_fonte)
+            command=__cm_diminuir_fonte)
 
-        # MENU AJUDA
         self.mn_ajuda.add_command(
             label="  Tutorial",
             command=lambda event=None: self.__abrir_aba_tutorial())
@@ -375,17 +371,17 @@ class Interface(Home, Tutorial):
             label=self.interface_idioma["label_verificar_atualizacao"][self.idioma],
             command=lambda event=None: self.__buscar_atualização())
 
-        # MENU DESENVOLVIMENTO
         self.mn_dev.add_command(
             label=self.interface_idioma["label_logs"][self.idioma],
-            command=cm_ativaropc_logs)
+            command=__cm_ativar_logs)
 
         self.mn_dev.add_command(
             label="  Debug",
-            command=cm_ativarop_debug)
+            command=__cm_ativar_debug)
 
-        # IMAGENS PARA O MENU DE ACESSO RÁPIDO
-        self.ic_redesfazer = PhotoImage(file="imagens/left.png")
+
+        # ** Menu de acesso rápido com imagens **
+        self.ic_re_desfazer = PhotoImage(file="imagens/left.png")
         self.ic_desfazer = PhotoImage(file="imagens/right.png")
         self.ic_salvar = PhotoImage(file="imagens/ic_salvar.png")
         self.ic_iniciar_parar = PhotoImage(file="imagens/ic_play.png")
@@ -401,7 +397,6 @@ class Interface(Home, Tutorial):
         self.ic_aviso = PhotoImage(file="imagens/aviso.png")
         self.ic_formatar = PhotoImage(file="imagens/ic_formatar.png")
 
-        # AJUSTES NO TAMANHO
         self.ic_salvar = self.ic_salvar.subsample(4, 4)
         self.ic_iniciar_parar = self.ic_iniciar_parar.subsample(4, 4)
         self.ic_parar = self.ic_parar.subsample(4, 4)
@@ -412,30 +407,28 @@ class Interface(Home, Tutorial):
         self.ic_nao_salvo = self.ic_nao_salvo.subsample(2, 2)
         self.ic_marcar_bkp = self.ic_marcar_bkp.subsample(4, 4)
         self.ic_idioma = self.ic_idioma.subsample(4, 4)
-        self.ic_redesfazer = self.ic_redesfazer.subsample(4, 4)
+        self.ic_re_desfazer = self.ic_re_desfazer.subsample(4, 4)
         self.ic_desfazer = self.ic_desfazer.subsample(4, 4)
         self.ic_aviso = self.ic_aviso.subsample(1, 1)
         self.ic_formatar = self.ic_formatar.subsample(4, 4)
 
-        # CRIANDO AS OPÇÔES RÁPIDAS
         self.fr_opcoes = Frame(self.fr_tela)
         self.atualizar_design_objeto(self.fr_opcoes, "fr_opcoes_rapidas")
 
-        # CARREGANDO AS OPÇÔES
         self.bt_salvar = Button(
             self.fr_opcoes,
             image=self.ic_salvar,
-            command=cm_acao_salva_arquivo)
+            command=__cm_salvar_arquivo)
 
         self.bt_executar = Button(
             self.fr_opcoes,
             image=self.ic_iniciar_parar,
-            command=cm_executar_programa)
+            command=__cm_executar_script)
 
         self.bt_executar_bkp = Button(
             self.fr_opcoes,
             image=self.ic_exec_ate_bkp,
-            command=cm_executar_bkp)
+            command=__cm_executar_bkp)
 
         self.atualizar_design_objeto(self.bt_salvar, "dicBtnMenus")
         self.atualizar_design_objeto(self.bt_executar, "dicBtnMenus")
@@ -444,16 +437,15 @@ class Interface(Home, Tutorial):
         self.bt_inserir_bkp = Button(
             self.fr_opcoes,
             image=self.ic_inserir_bkp,
-            command=cm_inserir_bkp)
+            command=____cm_inserir_bkp)
 
         self.atualizar_design_objeto(self.bt_inserir_bkp, "dicBtnMenus")
         self.bt_limpar_bkp = Button(
             self.fr_opcoes,
             image=self.ic_marcar_bkp,
-            command=cm_limpa_breakpoints)
+            command=cm_limpar_breakpoints)
 
         self.atualizar_design_objeto(self.bt_limpar_bkp, "dicBtnMenus")
-
         self.bt_ajuda = Button(
             self.fr_opcoes,
             image=self.ic_ajuda,
@@ -463,27 +455,26 @@ class Interface(Home, Tutorial):
         self.bt_idioma = Button(
             self.fr_opcoes,
             image=self.ic_idioma,
-            command=cm_atualizar_idioma)
+            command=__cm_atualizar_idioma)
 
         self.atualizar_design_objeto(self.bt_idioma, "dicBtnMenus")
-        self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_redesfazer)
+        self.bt_redesfazer = Button(self.fr_opcoes, image=self.ic_re_desfazer)
         self.bt_desfazer = Button(self.fr_opcoes, image=self.ic_desfazer)
         self.bt_formatar = Button(
             self.fr_opcoes,
             image=self.ic_formatar,
-            command=cm_formatar)
+            command=__cm_formatar)
 
         self.atualizar_design_objeto(self.bt_formatar, "dicBtnMenus")
-
         self.bt_copiar = Button(
             self.fr_opcoes,
             text=self.interface_idioma["copiar"][self.idioma],
-            command=cm_copiar)
+            command=__cm_copiar)
 
         self.bt_colar = Button(
             self.fr_opcoes,
             text=self.interface_idioma["colar"][self.idioma],
-            command=cm_colar)
+            command=__cm_colar)
 
         self.atualizar_design_objeto(self.bt_copiar, "dicBtnCopiarColar")
         self.atualizar_design_objeto(self.bt_colar, "dicBtnCopiarColar")
@@ -500,6 +491,8 @@ class Interface(Home, Tutorial):
         self.lb_aviso.grid(row=1, column=1)
         self.bt_aviso.grid(row=1, column=2, sticky=NSEW)
 
+
+        # ** Tela principal **
         self.fr_princ = Frame(self.fr_tela)
         self.atualizar_design_objeto(self.fr_princ, "fr_princ")
         self.fr_princ.grid_columnconfigure(2, weight=1)
@@ -515,7 +508,7 @@ class Interface(Home, Tutorial):
 
         self.carregar_abas_inicio()
 
-        # Tela de desenvolvimento do código
+        # Editor de código
         self.tx_editor = CodeEditor(
             self.fr_princ,
             undo=True,
@@ -568,6 +561,7 @@ class Interface(Home, Tutorial):
             orient="vertical",
             command=self.tx_editor.yview,
             relief=FLAT)
+
         self.atualizar_design_objeto(self.sb_codfc, "scrollbar_text")
         self.tx_editor.configure(yscrollcommand=self.sb_codfc.set)
 
@@ -630,7 +624,7 @@ class Interface(Home, Tutorial):
         self.lista_botoes_recentes = self.inicio_lista_botoes
         self.__abrir_aba_inicio()
         for widget, arquivo in self.lista_botoes_recentes:
-            widget["command"] = lambda link = arquivo: self.atualizar_temas_e_sintaxe(link)
+            widget["command"] = lambda link = arquivo: self.__atualizar_temas_e_sintaxe(link)
 
         try:
             master.state("zoomed")
@@ -645,7 +639,7 @@ class Interface(Home, Tutorial):
         master.deiconify()
         master.update()
 
-        self.avisos()
+        self.__mensagem_aviso()
 
     def __carregar_fonte(self):
         erro = ""
@@ -669,10 +663,9 @@ class Interface(Home, Tutorial):
         if erro != "":
             print("Erro a carregar fonte"+str(erro))
 
-    def atualizar_temas_e_sintaxe(self, arquivo: str):
+    def __atualizar_temas_e_sintaxe(self, arquivo: str):
         self.atualizar_tema_sintaxe_da_interface("tema", arquivo)
         self.atualizar_tema_sintaxe_da_interface("sintaxe", arquivo)
-        pass
 
     def __trocar_interface(self, troca: str):
         if troca == "tutorial":
@@ -725,7 +718,7 @@ class Interface(Home, Tutorial):
         self.__trocar_interface(troca="inicio")
         self.atualizar_codigo_editor(self.num_aba_focada)
 
-    def avisos(self):
+    def __mensagem_aviso(self):
         t_width = int(self.master.winfo_screenwidth())
         t_heigth = int(self.master.winfo_screenheight())
 
@@ -747,7 +740,7 @@ class Interface(Home, Tutorial):
         else:
             self.libera_bkp = True
 
-    def __colocar_linhas_codigo(self, linhas: str) -> str:
+    def __colocar_num_linha(self, linhas: str) -> str:
         """Adiciona [[numero_linha] no inicio de todas as linhas]
         Args:
             linhas (str): [O código qualquer ]
@@ -806,15 +799,11 @@ class Interface(Home, Tutorial):
                 bool_ignorar_todos_breakpoints = False
             else:
                 Interface.iniciar_terminal_direto(self)
-
-                # A principio, ignore todos os breakpoint
                 bool_ignorar_todos_breakpoints = True
 
-            # Limpar o terminal
             self.tx_terminal.delete("1.0", END)
             self.tx_terminal.update()
 
-            # Atualizar os elementos da interface
             self.master.update()
             self.tx_editor.update()
             self.tx_terminal.update()
@@ -824,17 +813,11 @@ class Interface(Home, Tutorial):
 
             # Obter o código
             linhas = self.tx_editor.get("1.0", END)[0:-1]
+            linhas = self.__colocar_num_linha(linhas)
 
-            # Adicionar marcação do número da linha
-            linhas = self.__colocar_linhas_codigo(linhas)
-
-            # Obter o diretório base
             diretorio_base = self.dic_abas[self.num_aba_focada]["arquivoSalvo"]["link"]
-
-            # Obter apenas o diretório
             diretorio_base = re_sub("([^\\/]{1,})$", "", diretorio_base)
 
-            # Criar uma instância do interpretador
             self.instancia = Interpretador(
                 self.bool_logs,
                 self.dic_abas[self.num_aba_focada]["lst_breakpoints"],
@@ -845,13 +828,9 @@ class Interface(Home, Tutorial):
                 self.idioma,
                 dic_regex_compilado=None, re_comandos=self.re_comandos)
 
-            # Remover os comentárioos
             linhas = self.instancia.cortar_comentarios(linhas)
-
-            # Marcar o inicio do interpretador
             inicio = time()
 
-            # iniciar um thread do interpretador
             t = Thread(
                 target=lambda codigoPrograma=linhas: self.instancia.orquestrador_interpretador_(
                     codigoPrograma))
@@ -863,17 +842,15 @@ class Interface(Home, Tutorial):
             valor_antigo = 0
             p_cor_num = 0
 
-            # Enquanto o interpretador não iniciar
-            while self.instancia.numero_threads_ativos != 0 or not self.instancia.boo_orquestrador_iniciado:
+            while ((self.instancia.numero_threads_ativos != 0) or not (self.instancia.boo_orquestrador_iniciado)):
                 try:
-                    # Atualize a interface
                     self.master.update()
                     self.tx_editor.update()
                     self.tx_terminal.update()
                 except:
-                    # Se alguma coisa foi fechada, finalize o interpretador
                     self.instancia.aconteceu_erro = True
                     break
+
 
                 if tipo_execucao == "debug":
                     # Marca que chegou até a linha
@@ -884,210 +861,165 @@ class Interface(Home, Tutorial):
                     self.tx_editor.update()
                     self.master.update()
 
-                acao = ""
-                # Obtem uma instrução do interpretador
-                acao = self.instancia.controle_interpretador
+                instrucao = ""
+                instrucao = self.instancia.controle_interpretador
 
-                # Se existe uma ação
-                if acao != "":
-                    valores = None
-                    valores = re_search(self.regex_interpretador, acao)
+                if instrucao == "":
+                    continue
 
-                    # Se a instrução é de exibição na tela
-                    if valores is not None:
+                valores = re_search(self.regex_interpretador, instrucao)
 
-                        # Obter instrução
-                        # Numero da
+                if valores is not None:
+                    instrucao = valores.group(1)
+                    linha = valores.group(4)
+                    cor = valores.group(3)
 
-                        instrucao = valores.group(1)
-                        linha = valores.group(4)
-                        cor = valores.group(3)
+                if instrucao in ["nessaLinha", "mostreLinha"]:
+                    self.instancia.controle_interpretador = ""
 
-                        if instrucao == "nessaLinha":
-                            self.instancia.controle_interpretador = ""
+                    try:
+                        inicio_cor = float(
+                            self.tx_terminal.index("end-1line lineend"))
 
-                            try:
-                                # Insere o texto e libera o interpretador
-                                inicio_cor = float(self.tx_terminal.index(
-                                    "end-1line lineend"))
+                        if instrucao == 'mostreLinha':
+                            self.tx_terminal.insert(END, linha + "\n")
+                        else:
+                            self.tx_terminal.insert(END, linha)
 
-                                self.tx_terminal.insert(END, linha)
-
-                                # Se era para exibir com alguma cor especial
-                                if cor != "":
-                                    # Adiciona a cor
-                                    fim_cor = float(self.tx_terminal.index(
-                                        "end-1line lineend"))
-
-                                    self.tx_terminal.tag_add(
-                                        "palavra"+str(p_cor_num),
-                                        inicio_cor,
-                                        fim_cor)
-
-                                    self.tx_terminal.tag_config(
-                                        "palavra"+str(p_cor_num),
-                                        foreground=cor)
-
-                                    # Marca onde a cor foi inserida
-                                    p_cor_num += 1
-                                self.tx_terminal.see("end")
-
-                            except Exception as e:
-                                self.instancia.aconteceu_erro = True
-                                break
-                        elif instrucao == "mostreLinha":
-                            self.instancia.controle_interpretador = ""
-
-                            try:
-                                # Insere  texto
-                                inicio_cor = float(
-                                    self.tx_terminal.index(
-                                        "end-1line lineend"))
-
-                                self.tx_terminal.insert(END, linha + "\n")
-
-                                # Se era para exibir em uma cor
-                                if cor != "":
-
-                                    # Exibe nesta cor
-                                    fim_cor = float(
-                                        self.tx_terminal.index(
-                                            "end-1line lineend"))
-
-                                    self.tx_terminal.tag_add(
-                                        "palavra"+str(p_cor_num),
-                                        inicio_cor, fim_cor)
-
-                                    self.tx_terminal.tag_config(
-                                        "palavra"+str(p_cor_num),
-                                        foreground=cor)
-
-                                    p_cor_num += 1
-
-                                self.tx_terminal.see("end")
-
-                            except:
-                                self.instancia.aconteceu_erro = True
-                                break
-
-                    elif acao == ":input:":
-                        # Obtem como está o código agora
-                        textoOriginal = len(self.tx_terminal.get(1.0, END))
-
-                        # Espera o usuário pressionar enter
-                        self.esperar_pressionar_enter = True
-                        while self.esperar_pressionar_enter:
-
-                            try:
-                                self.master.update()
-                                self.tx_editor.update()
-                                self.tx_terminal.update()
-                                self.tx_terminal.get(1.0, END)
-                            except:
-                                self.instancia.aconteceu_erro = True
-                                break
-
-                        if self.instancia.aconteceu_erro:
+                        # Sem cor especial
+                        if cor == "":
+                            self.tx_terminal.see("end")
                             continue
 
-                        # Marca que já foi pressionado enter
-                        self.esperar_pressionar_enter = False
+                        fim_cor = float(self.tx_terminal.index(
+                            "end-1line lineend"))
 
-                        # Obtem o novo texto com o que o usuário digitou
-                        digitado = self.tx_terminal.get(1.0, END)
-                        digitado = digitado[textoOriginal - 1:-2]
+                        self.tx_terminal.tag_add(
+                            "palavra"+str(p_cor_num),
+                            inicio_cor,
+                            fim_cor)
 
-                        # Atribui o texto
-                        self.instancia.texto_digitado = digitado.replace(
-                            "\n",
-                            "")
+                        self.tx_terminal.tag_config(
+                            "palavra"+str(p_cor_num),
+                            foreground=cor)
 
-                        # Libera o interpretador
-                        self.instancia.controle_interpretador = ""
+                        # Marca onde a cor foi inserida
+                        p_cor_num += 1
+                        self.tx_terminal.see("end")
 
-                    elif acao == "limpar_tela":
+                    except Exception as e:
+                        self.instancia.aconteceu_erro = True
+                        break
 
-                        # Limpa o terminal
+                elif instrucao == ":input:":
+                    # Obtem como está o código agora
+                    textoOriginal = len(self.tx_terminal.get(1.0, END))
+
+                    # Espera o usuário pressionar enter
+                    self.esperar_pressionar_enter = True
+                    while self.esperar_pressionar_enter:
+
                         try:
-                            self.tx_terminal.delete("1.0", END)
-
-                            # Atualiza o interpretador para continuar
-                            self.instancia.controle_interpretador = ""
-                        except Exception as erro:
+                            self.master.update()
+                            self.tx_editor.update()
+                            self.tx_terminal.update()
+                            self.tx_terminal.get(1.0, END)
+                        except:
                             self.instancia.aconteceu_erro = True
                             break
 
+                    if self.instancia.aconteceu_erro:
+                        continue
+
+                    self.esperar_pressionar_enter = False
+
+                    # Obtem o novo texto com o que o usuário digitou
+                    digitado = self.tx_terminal.get(1.0, END)
+                    digitado = digitado[textoOriginal - 1:-2]
+
+                    # Atribui o texto
+                    self.instancia.texto_digitado = digitado.replace( "\n", "")
+                    self.instancia.controle_interpretador = ""
+
+                elif instrucao == "limpar_tela":
+
+                    try:
+                        self.tx_terminal.delete("1.0", END)
                         self.instancia.controle_interpretador = ""
+                    except Exception as erro:
+                        self.instancia.aconteceu_erro = True
+                        break
 
-                    elif acao == "aguardando_breakpoint":
-                            # Aguarda o breakpoint ser liberado
+                    self.instancia.controle_interpretador = ""
 
-                            try:
-                                # Marca que chegou até a linha
-                                linha_analise = int(self.instancia.num_linha)
+                elif instrucao == "aguardando_breakpoint":
+                    try:
+                        # Marca que chegou até a linha
+                        linha_analise = int(self.instancia.num_linha)
 
-                                self.cont_lin1.linha_analise = linha_analise
-                                self.cont_lin1.desenhar_linhas()
+                        self.cont_lin1.linha_analise = linha_analise
+                        self.cont_lin1.desenhar_linhas()
 
-                                self.tx_editor.update()
-                                self.master.update()
+                        self.tx_editor.update()
+                        self.master.update()
 
-                                # Enquanto o breakpoint estiver preso
-                                self.libera_bkp = False
+                        # Enquanto o breakpoint estiver preso
+                        self.libera_bkp = False
 
-                                # Enquanto o breakpoint não for liberado
-                                while not self.libera_bkp:
+                        # Enquanto o breakpoint não for liberado
+                        while not self.libera_bkp:
+                            self.tx_terminal.update()
+                            self.tx_editor.update()
+                            self.master.update()
 
-                                    # Atualiza a tela
-                                    self.tx_terminal.update()
-                                    self.tx_editor.update()
-                                    self.master.update()
+                            sleep(0.0001)
 
-                                    sleep(0.0001)
-
-                                    if self.instancia.aconteceu_erro:
-                                        break
-
-                                # Libera o interpretador
-                                self.instancia.controle_interpretador = ""
-
-                                # Deixa breakpoint liberado
-                                self.libera_bkp = False
-
-                            except Exception as erro:
-                                self.instancia.aconteceu_erro = True
+                            if self.instancia.aconteceu_erro:
                                 break
-                    else:
-                        print("Instrução do Interpretador não é reconhecida => '{}'".format(acao))
+    
+                        self.instancia.controle_interpretador = ""
+                        self.libera_bkp = False
+
+                    except Exception as erro:
+                        self.instancia.aconteceu_erro = True
+                        break
+                else:
+                    print("Instrução do Interpretador não é reconhecida => '{}'".format(instrucao))
+
+            # Finalização da execução com erro ou sucesso.
+            erros_ignorar = [
+                'Interrompido',
+                'Erro ao iniciar o Interpretador'
+                ]
+
             mensagem_erro = ""
-            if self.instancia.aconteceu_erro:
-                # Se o erro foi avisado
-                if self.instancia.erro_alertado is True:
+            aconteceu_erro = self.instancia.aconteceu_erro
+            erro_alertado = self.instancia.erro_alertado
+            mensagem_erro = self.instancia.mensagem_erro
+            colorir_linha_erro = False
 
-                    # Se não foi interrompido
-                    if self.instancia.mensagem_erro != "Interrompido":
-
-                        # Se não foi erro ao iniciar
-                        if self.instancia.mensagem_erro != "Erro ao iniciar o Interpretador":
-
-                            # Mostre uma mensagem complementar na tela
-                            mensagem_erro = self.instancia.mensagem_erro
-                            Interface.mostrar_mensagem_de_erro(
-                                self,
-                                self.instancia.mensagem_erro,
-                                self.instancia.dir_script_aju_erro,
-                                self.instancia.linha_que_deu_erro)
+            if aconteceu_erro and erro_alertado:
+                if mensagem_erro not in erros_ignorar:
+                    colorir_linha_erro = True
+                    Interface.mostrar_mensagem_de_erro(
+                        self,
+                        mensagem_erro,
+                        self.instancia.dir_script_aju_erro,
+                        self.instancia.linha_que_deu_erro)
 
             try:
-                if not mensagem_erro:
+                if not colorir_linha_erro:
+                    msg = self.interface_idioma["script_finalizado"][self.idioma]
+
                     self.tx_terminal.insert(
                         END,
-                        self.interface_idioma["script_finalizado"][self.idioma].format(
-                            round(time() - inicio, 4)))
+                        msg.format(round(time() - inicio, 4)))
 
                 else:
                     self.tx_terminal.tag_add("erro_terminal", END)
-                    self.tx_terminal.tag_configure("erro_terminal", foreground="#ff80a2")
+                    self.tx_terminal.tag_configure(
+                        "erro_terminal",
+                        foreground="#ff80a2")
 
                     self.tx_terminal.insert(
                         END,
@@ -1100,7 +1032,7 @@ class Interface(Home, Tutorial):
                 self.tx_terminal.see("end")
 
             except Exception as erro:
-                print("Impossível exibir mensagem de finalização, erro: "+str(erro))
+                print("Erro ao exibir mensagem " + str(erro))
 
             self.interpretador_finalizado = True
 
@@ -1193,7 +1125,6 @@ class Interface(Home, Tutorial):
     def __buscar_atualização(self, primeira_vez=False):
         t = Thread(
             target=lambda primeira_vez=primeira_vez: self.checkupdates.verificar_atualizacoes(primeira_vez))
-
         t.start()
 
     def carregar_cascata_temas(self):
@@ -1334,7 +1265,6 @@ class Interface(Home, Tutorial):
         self.fr_tela.update()
 
     def ativar_coordernar_coloracao(self, event=None):
-        """Coordena a atualização de uma aba"""
         self.fechar_mensagem_de_erro()
         self.atualizar_coloracao_codigo_aba(True, event)
 
@@ -1360,7 +1290,6 @@ class Interface(Home, Tutorial):
             self.obter_posicao_do_cursor(event)
 
     def configurar_cor_aba(self, dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador):
-        print("configurar_cor_aba", dic_cor_abas, bg_padrao, dic_cor_botao, dic_cor_marcador, self.num_aba_focada)
         self.dic_abas[self.num_aba_focada]["listaAbas"][3].configure(dic_cor_botao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][2].configure(dic_cor_abas, activebackground=bg_padrao)
         self.dic_abas[self.num_aba_focada]["listaAbas"][1].configure(dic_cor_marcador)
@@ -1520,14 +1449,12 @@ class Interface(Home, Tutorial):
             "<Leave>",
             lambda event=None, padrao=dic_cor_botao["foreground"], bt_fechar=bt_fechar: self.voltar_cor_botao_fechar_aba(padrao, bt_fechar))
 
-        # Layout
         fr_uma_aba.rowconfigure(1, weight=1)
         fr_uma_aba.grid(row=1, column=posicao_adicionar+2, sticky=N)
         fr_marcador.grid(row=0, column=1, columnspan=2, sticky=NSEW)
         lb_aba.grid(row=1, column=1, sticky=NSEW)
         bt_fechar.grid(row=1, column=2)
 
-        # Configuração de Aba
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_uma_aba)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(fr_marcador)
         self.dic_abas[posicao_adicionar]["listaAbas"].append(lb_aba)

@@ -134,8 +134,8 @@ class Interpretador():
             self.compilado = True
 
 
-    def analisa_inicio_codigo(self, linha:str) -> str:
-        """Obtem uma linha de código e retorna o número da linha
+    def __obter_num_linha(self, linha:str) -> str:
+        """retorna o número da linha
 
         Args:
             linha (str): linha de código
@@ -143,8 +143,7 @@ class Interpretador():
         Returns:
             str: Retorna a linha do código
         """
-        linha = linha.strip()
-        posicoes = finditer(r'^(\[\d*\])', linha)
+        posicoes = finditer(r'^(\[\d*\])', linha.strip())
 
         num_linha = 0
         for uma_posicao in posicoes:
@@ -162,37 +161,45 @@ class Interpretador():
         Returns:
             str: O código com todos os comentários removidos
         """
-        lista = codigo.split('\n')
+        linhas = codigo.split('\n')
 
-        string = ""
-        for linha in lista:
+        codigo_final = ""
+
+        # Percorrer por todas as linhas do código
+        for linha in linhas:
             linha = linha.strip()
+
+            ''' Ao iniciar a análise de uma String,
+             simbolos de comentários não deverão ser considerados
+            '''
             iniciou_string = False
+            parcial = ""
 
-            temp = ""
+            for letra in range(len(linha)):
 
-            for char in range(len(linha)):
+                tem_string = linha[letra] == '"'
 
-                if linha[char] == '"':
-                    if not iniciou_string:
-                        iniciou_string = True
-                    else:
-                        iniciou_string = False
-                    temp += linha[char]
+                if tem_string:
+                    if not iniciou_string: iniciou_string = True
+                    else: iniciou_string = False
+
+                    parcial += linha[letra]
                     continue
 
                 if not iniciou_string:
-                    if linha[char] == "#" or linha[char:char+2] == "//":
+                    if linha[letra] == "#" or linha[letra:letra+2] == "//":
                         break
 
-                temp += linha[char]
+                parcial += linha[letra]
 
-            temp = temp.strip()
+            parcial = parcial.strip()
 
-            if self.analisa_inicio_codigo(temp) != len(temp):
-                string += temp + "\n"
+            linha_nao_vazia = self.__obter_num_linha(parcial) != len(parcial)
 
-        return string
+            if linha_nao_vazia:
+                codigo_final += parcial + "\n"
+
+        return codigo_final
 
     def aguardar_liberacao_breakPoint(self) -> None:
         """Fica em um loop aguardando o Breakpoint ser liberado
@@ -1231,26 +1238,26 @@ class Interpretador():
 
             if caractere in self.dicLetras["funcoes"] or not self.compilado:
                 __resultado = self.analisa_instrucao('^(<funcoes>)(.*)(<recebeParametros_parentese_abre>)(.*)(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
+                if __resultado[0]: return [self.__funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(.*)(<recebeParametros>)(.*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
+                if __resultado[0]: return [self.__funcao_declarar_funcao(__resultado[1][2], __resultado[1][4]),self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(\\s*[\\w*\\_]*\\s*)(<recebeParametros_parentese_abre>)\\s*(<recebeParametros_parentese_fecha>)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
+                if __resultado[0]: return [self.__funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
 
                 __resultado = self.analisa_instrucao('^(<funcoes>)(\\s*[\\w*\\_]*\\s*)$', linha, self.compilado)
-                if __resultado[0]: return [self.funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
+                if __resultado[0]: return [self.__funcao_declarar_funcao(__resultado[1][2]), self.num_linha, "Funcoes"]
 
             __resultado = self.analisa_instrucao('^(.*)(<passandoParametros>)(.*)$', linha, self.compilado)
-            if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
+            if __resultado[0]: return [self.__funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
 
             __resultado = self.analisa_instrucao('^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', linha, self.compilado)
             if __resultado[0]:
-                return [self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
+                return [self.__funcao_executar_funcao(__resultado[1][1], __resultado[1][3]), self.num_linha, "Funcoes"]
 
             #__resultado = self.analisa_instrucao('^[A-Z0-9a-z_]*\\s*$', linha, self.compilado)
-            #if __resultado[0]: return [self.funcao_executar_funcao(__resultado[1][1]), self.num_linha, "Funcoes"]
+            #if __resultado[0]: return [self.__funcao_executar_funcao(__resultado[1][1]), self.num_linha, "Funcoes"]
 
             return [ [False, "{}'{}'".format(  self.msg('comando_desconhecido'), linha  ), 'fazerNada'], self.num_linha, ""]
 
@@ -1359,15 +1366,15 @@ class Interpretador():
         ##################################################################
 
         __resultado = self.analisa_instrucao('^(.*)(<passandoParametros>)(.*)$', possivel_variavel, self.compilado)
-        if __resultado[0]: return self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3])
+        if __resultado[0]: return self.__funcao_executar_funcao(__resultado[1][1], __resultado[1][3])
 
 
         __resultado = self.analisa_instrucao('^(.*)(<passando_parametros_abrir>)(.*)(<passando_parametros_fechar>)$', possivel_variavel, self.compilado)
-        if __resultado[0]: return self.funcao_executar_funcao(__resultado[1][1], __resultado[1][3])
+        if __resultado[0]: return self.__funcao_executar_funcao(__resultado[1][1], __resultado[1][3])
 
 
         #__resultado = self.analisa_instrucao('^[A-Z0-9a-z_]*\\s*$', possivel_variavel, self.compilado)
-        #if __resultado[0]: return self.funcao_executar_funcao(__resultado[1][1])
+        #if __resultado[0]: return self.__funcao_executar_funcao(__resultado[1][1])
 
 
         return [True, None]
@@ -2551,7 +2558,6 @@ class Interpretador():
         if self.verificar_tipo(resultado[1]) == 'string':
             resultado[1] = str(resultado[1]).replace("\\n", "\n")
 
-
         if len(resultado) == 3:
             if "exibirCor" in resultado[2]:
                 return [resultado[0], ':mostreLinha:{}'.format(resultado[2]) + str(resultado[1]), 'exibirNaTela']
@@ -2563,18 +2569,16 @@ class Interpretador():
 
         resultado = self.abstrair_mostre_valor(linha)
 
-
         if not resultado[0]:
             return resultado
-
 
         if self.verificar_tipo(resultado[1]) == 'string':
             resultado[1] = str(resultado[1]).replace("\\n", "\n")
 
-
-        if len(resultado) > 3:
+        if len(resultado) == 3:
             if "exibirCor" in resultado[2]:
                 return [resultado[0], ':nessaLinha:{}'.format(resultado[2]) + str(resultado[1]), 'exibirNaTela']
+
         return [resultado[0], ':nessaLinha:::' + str(resultado[1]), 'exibirNaTela']
 
     def funcao_na_cor(self, linha, cor):
@@ -2913,7 +2917,7 @@ class Interpretador():
                     lista_itens.append(itens[anterior: valor_item[0]])
 
                 anterior = valor_item[1]
-
+ 
             if len(itens[anterior:]) > 0:
                 lista_itens.append(itens[anterior:])
 
@@ -2944,8 +2948,8 @@ class Interpretador():
             return [True, None, 'fazerNada']
 
 
-    def funcao_declarar_funcao(self, nome_funcao:str, parametros=None, classe:bool=True):
-        #self.log("__funcao_declarar_funcao: nome_funcao = '{}', parametros = '{}'".format(nome_funcao, parametros))
+    def __funcao_declarar_funcao(self, nome_funcao:str, parametros=None, classe:bool=True):
+        #self.log("____funcao_declarar_funcao: nome_funcao = '{}', parametros = '{}'".format(nome_funcao, parametros))
 
         if parametros is not None:
             if parametros.strip() == "":
@@ -3003,8 +3007,8 @@ class Interpretador():
         funcao_em_analise = nome_funcao
         return [True, True, 'declararFuncao', funcao_em_analise]
 
-    def funcao_executar_funcao(self, nome_funcao, parametros=None):
-        #self.log("__funcao_executar_funcao: nome_funcao = '{}', parametros='{}'".format(nome_funcao, parametros))
+    def __funcao_executar_funcao(self, nome_funcao, parametros=None):
+        #self.log("____funcao_executar_funcao: nome_funcao = '{}', parametros='{}'".format(nome_funcao, parametros))
 
         if parametros is not None:
             if parametros.strip() == "":

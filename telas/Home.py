@@ -130,8 +130,6 @@ class Home():
             bt_item.grid(row=pos, column=1, sticky='w')
             pos = pos + 1
 
-
-
     def __carregar_opcoes_aprender(self, nome:str, pai:object, dados:list):
 
         lb_aprender = Label(pai, self.design.get("inicio_lb_especial"), text=nome)
