@@ -1,0 +1,25 @@
+# Uma variável é um nome associado a um valor.
+
+# Está é a variável chamada idade,
+# Ela tem o valor de 20
+# Na safira, todos os números são chamados de floats
+idade =  123
+
+# Esta é a variável chamada nome,
+# Ela tem o vaor do texto "CJ".
+# Textos ficam entre aspas.
+# Na maioria das linguagens de programação, textos são chamados de Strings
+nome =   "julia"
+
+# Essa é uma variável casado,
+# Ela tem o valor de verdadeiro
+# Na maioria das linguagens de programação, isso é chamado de booleano
+casado = falso
+
+# Vamos exibir o tipo de cada variável
+mostre ""
+mostre "Variável | % | % " inserindo "Valor", "Tipo"
+mostre "---------+-%-+-%-" inserindo "-----", "----"
+mostre "idade    | % | % " inserindo idade  , o tipo de idade
+mostre "nome     | % | % " inserindo nome   , o tipo de nome
+mostre "casado   | % | % " inserindo casado , o tipo de casado

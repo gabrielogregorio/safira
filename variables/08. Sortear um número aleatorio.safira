@@ -1,0 +1,23 @@
+# Imagine que você queira fazer um sorteio,
+# podemos usar o comando aleatório
+
+
+mostre "Vou pensar em um número aleatório entre 10 e 15 e você vai tentar descobrir, ok?"
+mostre ""
+mostre nessa linha "Digite um número: "
+
+
+
+# Número que o computador vai pensar
+numero_aleatorio = um numero aleatorio entre 10 e 15
+
+# Número que você vai digitar (Use o modo Debug para ler a mente do computador)
+numero_pensado = o numero que for digitado
+
+
+ 
+se o numero_aleatorio for igual a numero_pensado entao {
+    mostre "Você acertou, incrível!"
+} senao {
+    mostre "Eu pensei no número % você errou!" inserindo numero_aleatorio
+} 

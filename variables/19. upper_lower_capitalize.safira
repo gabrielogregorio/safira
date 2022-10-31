@@ -1,0 +1,15 @@
+# Você quer formatar um texto que está sem padrão
+# Você tem 3 opções básicas;
+# 1. colocar todo o texto em maiúscula
+# 2. colocar todo o texto em minúscula
+# 3. deixar a primeira letra em maisucula.
+
+nome = "sAfirA LINGUAGeM"
+
+nome_em_minusculo recebe nome em minusculo
+nome_em_maiusculo recebe nome em maiusculo
+nome_captalizado recebe nome captalizado
+
+println nome_em_minusculo
+println nome_em_maiusculo
+println nome_captalizado

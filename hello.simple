@@ -1,0 +1,22 @@
+print "hello worsssld"
+print "safira"
+
+
+// Comentários
+# Comentários
+
+var minhaVariavel = "Meu Valor"
+
+print minhaVariavel
+
+var minhaVariavel = "1234hh"
+
+var mmyVar222 = minhaVariavel
+
+print mmyVar222
+
+var booleanoItem = false
+
+var inteiroNumber = 12
+var inteiroNumberFloat = 12.53
+var inteiroNumberFloatNegativo = -12.53
