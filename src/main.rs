@@ -26,20 +26,19 @@ fn main() {
     for (_pos, a) in split.enumerate() {
         let variable: String = a.trim().to_string();
 
-        let re = Regex::new(r"^print (.*)$").unwrap();
-        let cap = re.captures(&variable);
+        let cap = Regex::new(r"^print (.*)$").unwrap().captures(&variable);
         if cap.is_some() {
             let items = cap.unwrap();
-            print_content(items[1].to_string().to_string(), &variables);
+            print_content(items[1].to_string(), &variables);
             continue;
         }
 
-        let re2 = Regex::new(r"^var (\w{1,}) = (.*)$").unwrap();
-        let cap2 = re2.captures(&variable);
+        let cap2 = Regex::new(r"^var (\w{1,}) = (.*)$")
+            .unwrap()
+            .captures(&variable);
         if cap2.is_some() {
             let items = cap2.unwrap();
             var_analyze(items[1].to_string(), items[2].to_string(), &mut variables);
-
             continue;
         }
     }
