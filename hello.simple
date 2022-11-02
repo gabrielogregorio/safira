@@ -1,22 +1,51 @@
-print "hello worsssld"
-print "safira"
-
-
 // Comentários
 # Comentários
 
-var minhaVariavel = "Meu Valor"
+var var_nome = "julia"
+var var_boolean = false
+var var_integer = 12
+var var_number = -12.53
 
-print minhaVariavel
+print "hello worsssld"
+print true
+print 123.32
+print 123
+print var_nome
+print var_boolean
+print var_integer
+print var_number
+var var_number = +12.53
+print var_number
 
-var minhaVariavel = "1234hh"
+var_nome = var_integer
+print var_nome
 
-var mmyVar222 = minhaVariavel
 
-print mmyVar222
+print "'%' your is insane %", 123, 456
+print "'%' your is insane", false
 
-var booleanoItem = false
 
-var inteiroNumber = 12
-var inteiroNumberFloat = 12.53
-var inteiroNumberFloatNegativo = -12.53
+
+
+-- nome = o que o usuario digitar
+-- nota1 = o numero que o usuario digitar
+
+-- media vale o numero que for digitado
+
+-- se media for igual a 10
+-- {
+--     mostre "Você foi excelente"
+-- }
+-- senao se media for maior que 9
+-- {
+--     mostre "Você foi muito bom"
+-- }
+-- senao se media for maior ou igual a 6
+-- {
+--     mostre "Você passou!"
+-- }
+-- senao 
+-- {
+--     mostre "Tente novamente"
+-- }
+
