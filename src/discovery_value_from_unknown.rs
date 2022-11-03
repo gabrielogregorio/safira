@@ -9,13 +9,6 @@ pub struct DiscoveryStruct {
     pub type_var: VariableTypesEnum,
 }
 
-pub fn discovery_variable(
-    content: String,
-    variables: &HashMap<String, VariableStruct>,
-) -> DiscoveryStruct {
-    return discovery_variable_item(content, variables);
-}
-
 fn value_is_boolean(content: &String) -> bool {
     return content.trim() == "true" || content.trim() == "false";
 }
@@ -28,7 +21,7 @@ fn value_is_only_string(content: &String) -> bool {
     return content.trim().starts_with("\"") && content.trim().ends_with("\"");
 }
 
-fn discovery_variable_item(
+fn discovery_value_from_unknown_item(
     content: String,
     variables: &HashMap<String, VariableStruct>,
 ) -> DiscoveryStruct {
@@ -59,6 +52,13 @@ fn discovery_variable_item(
     };
 }
 
+pub fn discovery_value_from_unknown(
+    content: String,
+    variables: &HashMap<String, VariableStruct>,
+) -> DiscoveryStruct {
+    return discovery_value_from_unknown_item(content, variables);
+}
+
 mod test {
     use super::*;
 
@@ -66,7 +66,7 @@ mod test {
     fn return_string_value() {
         let mut variables: HashMap<String, VariableStruct> = HashMap::new();
 
-        let return_print = discovery_variable("\"abc\"".to_string(), &variables);
+        let return_print = discovery_value_from_unknown("\"abc\"".to_string(), &variables);
 
         assert_eq!(return_print.value, "abc");
         assert_eq!(return_print.type_var, VariableTypesEnum::String);
@@ -76,7 +76,7 @@ mod test {
     fn return_number_value() {
         let variables: HashMap<String, VariableStruct> = HashMap::new();
 
-        let return_print = discovery_variable("123".to_string(), &variables);
+        let return_print = discovery_value_from_unknown("123".to_string(), &variables);
 
         assert_eq!(return_print.value, "123");
         assert_eq!(return_print.type_var, VariableTypesEnum::Number);
@@ -86,7 +86,7 @@ mod test {
     fn return_boolean_value() {
         let variables: HashMap<String, VariableStruct> = HashMap::new();
 
-        let return_print = discovery_variable("false".to_string(), &variables);
+        let return_print = discovery_value_from_unknown("false".to_string(), &variables);
 
         assert_eq!(return_print.value, "false");
         assert_eq!(return_print.type_var, VariableTypesEnum::Boolean);
@@ -105,7 +105,7 @@ mod test {
             },
         );
 
-        let return_print = discovery_variable("myVariable".to_string(), &variables);
+        let return_print = discovery_value_from_unknown("myVariable".to_string(), &variables);
 
         assert_eq!(return_print.value, "aq123fbc");
         assert_eq!(return_print.type_var, VariableTypesEnum::String);

@@ -21,8 +21,9 @@ var_nome = var_integer
 print var_nome
 
 
-print "'%' your is insane %", 123, 456
-print "'%' your is insane", false
+print "'{}' your is insane {}", 123, 456
+print "'{}' your is insane", false
+print "item here '{}' {} {}", "ABC", 123, false, true, 321
 
 
 

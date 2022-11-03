@@ -4,8 +4,8 @@ use std::collections::HashMap;
 use self::create_var::create_var;
 use self::print_content::print_content;
 
-#[path = "./discovery_variable.rs"]
-mod discovery_variable;
+#[path = "./discovery_value_from_unknown.rs"]
+mod discovery_value_from_unknown;
 
 #[path = "./create_var.rs"]
 mod create_var;
