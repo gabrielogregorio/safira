@@ -1,0 +1,20 @@
+# Imagine que você queira executar uma séria
+# de comandos enquanto uma condição for verdadeira.
+# Exemplo:
+
+opcao = 99
+enquanto opcao for diferente de 0
+{
+    # Esse comando limpa a tela do terminal
+    limpar a tela
+
+    mostre "+=============================+"
+    mostre "| Escolha uma opção:          |"
+    mostre "| 0 - Sair                    |"
+    mostre "| 1 - Consulta Saldo          |"
+    mostre "| 2 - Consulta CPF            |"
+    mostre "| 3 - Consulta Identidade     |"
+    mostre "+=============================+"
+
+    opcao recebe o numero que o usuario digitar
+}
