@@ -4,16 +4,10 @@ use std::collections::HashMap;
 use self::create_var::create_var;
 use self::print_content::print_content;
 
-#[path = "./discovery_value_from_unknown.rs"]
-mod discovery_value_from_unknown;
-
-#[path = "./create_var.rs"]
 mod create_var;
-
-#[path = "./print_content.rs"]
 mod print_content;
+mod process;
 
-#[warn(dead_code)]
 pub struct VariableStruct {
     pub name: String,
     pub type_var: VariableTypesEnum,

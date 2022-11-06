@@ -1,6 +1,4 @@
-use regex::Regex;
 use std::collections::HashMap;
-use std::fs;
 
 use super::{VariableStruct, VariableTypesEnum};
 
@@ -8,6 +6,8 @@ pub struct DiscoveryStruct {
     pub value: String,
     pub type_var: VariableTypesEnum,
 }
+
+// PRECISAMOS DE TRATADORES PARA LIDAR COM BLOCOS DIFERENTES
 
 fn value_is_boolean(content: &String) -> bool {
     return content.trim() == "true" || content.trim() == "false";

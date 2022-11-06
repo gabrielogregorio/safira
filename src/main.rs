@@ -1,8 +1,8 @@
-use crate::interpreter::interpreter;
 use std::env;
 use std::fs;
 
 mod interpreter;
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     let mut code_file: String = "".to_string();
@@ -13,5 +13,5 @@ fn main() {
         code_file =
             fs::read_to_string("./example.safira").expect("Should have been able to read the file");
     }
-    interpreter(code_file)
+    interpreter::interpreter(code_file)
 }

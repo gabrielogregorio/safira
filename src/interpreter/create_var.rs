@@ -1,12 +1,7 @@
 use regex::Regex;
 use std::collections::HashMap;
 
-use self::discovery_value_from_unknown::discovery_value_from_unknown;
-
-use super::{VariableStruct, VariableTypesEnum};
-
-#[path = "./discovery_value_from_unknown.rs"]
-mod discovery_value_from_unknown;
+use super::{process::discovery_value_from_unknown, VariableStruct, VariableTypesEnum};
 
 fn create_variable_struct(
     name: String,
