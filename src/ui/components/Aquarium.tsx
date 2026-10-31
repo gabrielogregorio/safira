@@ -12,6 +12,7 @@ import {
   pressPointer,
   releasePointer,
   resizeWorld,
+  scrollPointer,
   stepWorld,
 } from '@/ui/aquarium/aquariumWorld';
 import { useIdle } from '@/ui/hooks/useIdle';
@@ -180,6 +181,11 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
             className="aquarium-water"
             role="img"
             aria-label={t('Aquarium')}
+            onWheel={() => {
+              if (worldRef.current !== null) {
+                playEvents(scrollPointer(worldRef.current));
+              }
+            }}
             onContextMenu={(event) => {
               event.preventDefault();
             }}

@@ -538,6 +538,13 @@ export const movePointer = (world: World, x: number, y: number, buttons = 1): Wo
   return startedDragging ? [{ kind: 'swish' }] : [];
 };
 
+// Scrolling while holding a button drops one piece for each tick of the wheel.
+export const scrollPointer = (world: World): WorldEvent[] => {
+  const { pointer } = world;
+
+  return pointer === null ? [] : [dropFood(world, pointer.x, pointer.y, 1)];
+};
+
 export const releasePointer = (world: World): WorldEvent[] => {
   const { pointer } = world;
   world.pointer = null;

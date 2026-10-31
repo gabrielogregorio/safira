@@ -8,6 +8,7 @@ import {
   movePointer,
   pressPointer,
   releasePointer,
+  scrollPointer,
   stepWorld,
 } from './aquariumWorld';
 import type { StoredFish, World } from './aquariumWorld';
@@ -186,5 +187,17 @@ describe('aquariumWorld', () => {
     }
 
     expect(fat.fishes[0].vx).toBeGreaterThan(near.fishes[0].vx);
+  });
+
+  it('drops one piece per wheel tick, only while a button is held', () => {
+    const world = createWorld([], 800, 600, steady);
+
+    expect(scrollPointer(world)).toEqual([]);
+
+    pressPointer(world, 100, 100);
+    scrollPointer(world);
+    scrollPointer(world);
+
+    expect(world.food).toHaveLength(2);
   });
 });
