@@ -70,8 +70,7 @@ const describeProblem = async (
     ...(error === null ? [] : [`    error: ${error}`]),
   ];
 
-  return [details.join('
-')];
+  return [details.join('\n')];
 };
 
 const collect = async (checks: Promise<string[]>[]): Promise<string[]> => (await Promise.all(checks)).flat();

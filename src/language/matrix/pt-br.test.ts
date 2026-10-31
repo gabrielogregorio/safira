@@ -2,7 +2,7 @@ import { defineCommandMatrix } from './commandMatrix';
 import { PORTUGUESE } from './dialects';
 
 it('has a word for every command', () => {
-  expect(Object.keys(PORTUGUESE).sort()).toEqual(Object.keys(PORTUGUESE).sort());
+  expect(new Set(Object.keys(PORTUGUESE))).toEqual(new Set(Object.keys(PORTUGUESE)));
 });
 
 defineCommandMatrix('Portuguese', PORTUGUESE);
