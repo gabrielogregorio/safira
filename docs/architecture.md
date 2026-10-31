@@ -55,7 +55,7 @@ pure helpers such as highlighting and formatting.
 | Formatter | Formatting never changes what a program means |
 | Mixed | Words of different languages on one line and across lines |
 
-A new command goes in `scenarios.ts` and in all five dictionaries.
+A new command goes in `scenarios.ts` and in all five dictionaries. It runs with `pnpm run unit:matrix`, inside `check:all` and CI.
 
 ## Lessons
 

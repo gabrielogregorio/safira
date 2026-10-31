@@ -15,7 +15,7 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text-summary', 'html'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.test.{ts,tsx}', 'src/testSetup.ts', 'src/main.tsx', 'src/ui/fakeWorker.ts', 'src/language/testHarness.ts', 'src/runtime/runner.worker.ts'],
+      exclude: ['src/**/*.test.{ts,tsx}', 'src/testSetup.ts', 'src/main.tsx', 'src/ui/fakeWorker.ts', 'src/language/testHarness.ts', 'src/runtime/runner.worker.ts', 'src/lessons/lessonCheck.worker.ts', 'src/language/matrix/**'],
       thresholds: { statements: 90, branches: 83, functions: 87, lines: 90 },
     },
   },

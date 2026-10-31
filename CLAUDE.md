@@ -59,4 +59,5 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - `print`, `display` and `escreva` keep the line open, and `legacyGolden.json` records it. Teach `show` in English.
 - A phrase in `commands.json` starting with `in`, `en` or similar is checked against colors first: `isBeforeFileTarget` keeps `add "x" in the file` working.
 - Chinese and Japanese words must be separated by spaces. `normalizeWideSymbols` keeps text length, so positions stay right.
+- `src/language/matrix` runs in `unit:matrix`, apart from coverage: side by side, it starves the interface tests into timeouts.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

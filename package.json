@@ -13,7 +13,8 @@
     "build": "tsc -p . && vite build",
     "preview": "vite preview --port=5556",
     "unit": "vitest",
-    "unit:coverage": "vitest --coverage --watch=false",
+    "unit:coverage": "vitest --coverage --watch=false --exclude 'src/language/matrix/**'",
+    "unit:matrix": "vitest --watch=false src/language/matrix",
     "e2e": "playwright test",
     "e2e:resources": "node scripts/resource-usage.mts",
     "e2e:lighthouse": "node scripts/lighthouse.mts",
@@ -21,7 +22,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mts\" --write",
     "format:check": "prettier \"src/**/*.{ts,tsx,css}\" \"e2e/**/*.ts\" \"scripts/**/*.mts\" --check",
-    "check:all": "pnpm run format:check && pnpm run lint && pnpm run unit:coverage && pnpm run build && pnpm run e2e"
+    "check:all": "pnpm run format:check && pnpm run lint && pnpm run unit:coverage && pnpm run unit:matrix && pnpm run build && pnpm run e2e"
   },
   "dependencies": {
     "@codemirror/commands": "^6.8.0",
