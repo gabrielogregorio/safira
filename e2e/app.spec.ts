@@ -84,7 +84,6 @@ test('imports another virtual file and keeps projects after a reload', async ({ 
 
   await page.keyboard.press('Control+s');
   await page.reload();
-  await page.getByRole('button', { name: 'Open New project' }).click();
   await page.keyboard.press('Control+o');
 
   await expect(page.getByRole('dialog').getByRole('button', { name: 'lib.safira' })).toBeVisible();
@@ -259,6 +258,100 @@ test('deleting a project asks for confirmation', async ({ page }) => {
   await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
 
   await expect(page.getByText('You have no projects yet.')).toBeVisible();
+});
+
+test('the editor takes the focus when a project opens', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await waitForAnimations(page);
+  await page.keyboard.insertText('mostre "foco"');
+
+  await expect(page.getByLabel('Code editor')).toBeFocused();
+  await expect(page.getByLabel('Code editor')).toContainText('mostre "foco"');
+});
+
+test('the page does not scroll in the lessons and the sidebar stays in place', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 500 });
+  await page.goto('/#/lessons/aula-02-exibicao');
+  const sidebarTop = await page
+    .getByRole('link', { name: /^Apresentação/ })
+    .evaluate((link) => link.getBoundingClientRect().top);
+  await page.locator('.lesson').evaluate((lesson) => {
+    lesson.scrollTop = lesson.scrollHeight;
+  });
+
+  expect(await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)).toBe(0);
+  expect(
+    await page.getByRole('link', { name: /^Apresentação/ }).evaluate((link) => link.getBoundingClientRect().top),
+  ).toBe(sidebarTop);
+  expect(await page.locator('.lesson').evaluate((lesson) => lesson.scrollTop)).toBeGreaterThan(0);
+});
+
+test('a lesson example opens and runs in the IDE', async ({ page }) => {
+  await page.goto('/#/lessons/aula-02-exibicao');
+  await page.getByRole('button', { name: 'Open in the IDE' }).first().click();
+  await runCode(page);
+
+  await expect(page.getByRole('log')).toContainText('Script finished');
+});
+
+test('recovers unsaved work after the page dies', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "nao salvo"');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.drafts.v1'))).toContain('nao salvo');
+  await page.reload();
+
+  await expect(page.getByText('Your unsaved work was recovered.')).toBeVisible();
+  await expect(page.getByLabel('Code editor')).toContainText('mostre "nao salvo"');
+});
+
+test('imports from a virtual folder created in the sidebar', async ({ page }) => {
+  await createProjectWithCode(page, 'importe dados/lib\nmostre v');
+  await page.keyboard.press('Control+s');
+  await page.getByRole('button', { name: 'New folder' }).click();
+  await page.getByLabel('Folder name').fill('dados');
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'New file in dados' }).click();
+  await page.getByLabel('File name').fill('lib');
+  await page.keyboard.press('Enter');
+  await page.getByLabel('Code editor').click();
+  await page.keyboard.insertText('v = 9');
+  await page.keyboard.press('Control+s');
+  await page.getByRole('button', { name: 'main.safira' }).first().click();
+  await runCode(page);
+
+  await expect(page.getByRole('log')).toContainText('9');
+});
+
+test('exports a project and imports it back', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "zip"');
+  await page.keyboard.press('Control+s');
+  await page.getByRole('button', { name: 'Back to projects' }).click();
+  const downloadPromise = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Export New project' }).click();
+  const download = await downloadPromise;
+
+  expect(download.suggestedFilename()).toBe('New-project.zip');
+
+  await page.locator('.archive-input').setInputFiles(await download.path());
+  await expect(page.getByText('Imported 1 files.')).toBeVisible();
+  await page
+    .getByRole('link', { name: /^Open / })
+    .first()
+    .click();
+
+  await expect(page.getByLabel('Code editor')).toContainText('mostre "zip"');
+});
+
+test('the theme changes behind a passing wave', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await waitForAnimations(page);
+  await page.getByText('Dark', { exact: true }).click();
+
+  await expect(page.locator('.scene-sweep')).toBeAttached();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('.scene-sweep')).toBeHidden();
 });
 
 test('theme and language are available on every screen', async ({ page }) => {

@@ -133,6 +133,9 @@ const syntaxHighlight = ViewPlugin.fromClass(
   { decorations: (plugin) => plugin.decorations },
 );
 
+const isTouchScreen = (): boolean =>
+  typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+
 export const CodeEditor = ({
   value,
   label,
@@ -206,6 +209,10 @@ export const CodeEditor = ({
       }),
     });
     viewRef.current = view;
+
+    if (!isTouchScreen()) {
+      view.focus();
+    }
 
     return () => {
       view.destroy();

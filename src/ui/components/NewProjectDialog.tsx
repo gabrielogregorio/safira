@@ -4,14 +4,15 @@ import { useTranslation } from '@/i18n/i18n';
 import { Modal } from './Modal';
 
 interface NewProjectDialogProps {
+  initialExampleId: string | null;
   onCreate: (name: string, source?: string) => void;
   onClose: () => void;
 }
 
-export const NewProjectDialog = ({ onCreate, onClose }: NewProjectDialogProps) => {
+export const NewProjectDialog = ({ initialExampleId, onCreate, onClose }: NewProjectDialogProps) => {
   const t = useTranslation();
   const [name, setName] = useState('');
-  const [exampleId, setExampleId] = useState<string | null>(null);
+  const [exampleId, setExampleId] = useState<string | null>(initialExampleId);
   const selected = examples.find((example) => example.id === exampleId);
 
   return (

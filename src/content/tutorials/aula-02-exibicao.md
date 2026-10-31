@@ -14,7 +14,7 @@ mostre "Olá mundo"
 
 mostre 10
 
-mostre "O dobro de 10 é ", 10 * 2
+mostre "O dobro de 10 é %" inserindo 10 * 2
 
 mostre "Bem-vindo %, tudo bem?" inserindo "Gabriel"
 ```
@@ -32,7 +32,7 @@ mostre nessa linha "Tudo bem?"
 Você também pode dar uma cor aos textos exibidos, bastando informar um código Hexadecimal ou o nome das cores, por enquanto em inglês. Pesquise por esse código no Google '#88ffff'
 
 ```
-mostre "[ ]" inserindo vermelho na cor "#ff5588"  
-mostre "[X]" inserindo laranja na cor "#ff8822"  
-mostre "[ ]" inserindo verde na cor "#22bb22  
+mostre "[ ]" na cor "#ff5588"  
+mostre "[X]" na cor "#ff8822"  
+mostre "[ ]" na cor "#22bb22"  
 ```

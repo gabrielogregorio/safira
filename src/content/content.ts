@@ -15,8 +15,28 @@ const EXTENSION_OR_FOLDER = /^.*\/|\.[a-z]+$/g;
 
 const toId = (path: string): string => path.replace(EXTENSION_OR_FOLDER, '');
 
+const ACCENTED_WORDS: Record<string, string> = {
+  apresentacao: 'apresentação',
+  exibicao: 'exibição',
+  variaveis: 'variáveis',
+  condicoes: 'condições',
+  condicao: 'condição',
+  funcoes: 'funções',
+  numero: 'número',
+  numeros: 'números',
+  aleatorio: 'aleatório',
+  ordenacao: 'ordenação',
+  relatorio: 'relatório',
+  agua: 'água',
+  pascoa: 'páscoa',
+};
+
 const toTitle = (id: string): string => {
-  const words = id.replace(/^(aula-|programa-)?(\d+-)?/, '').replace(/[-_]/g, ' ');
+  const words = id
+    .replace(/^(aula-|programa-)?(\d+-)?/, '')
+    .split(/[-_]/)
+    .map((word) => ACCENTED_WORDS[word] ?? word)
+    .join(' ');
 
   return words.charAt(0).toUpperCase() + words.slice(1);
 };

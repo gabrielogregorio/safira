@@ -1,27 +1,51 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n';
+import { addScriptVersion } from '@/language/version';
+import { clearDrafts } from '@/projects/draftStore';
+import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
-import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
+import {
+  createProject,
+  loadProjects,
+  MAIN_FILE,
+  removeProject,
+  saveProjects,
+  upsertProject,
+} from '@/projects/projectStore';
+import { useRoute } from '@/routing/useRoute';
 import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
+import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
+import { describeArchiveResult } from '@/ui/archiveMessages';
 import { PreferencesDialog } from '@/ui/components/PreferencesDialog';
+import type { SweepKind } from '@/ui/components/SceneSweep';
+import { canAnimateScenes, SCENE_SWEEP_MIDPOINT_MILLISECONDS, SceneSweep } from '@/ui/components/SceneSweep';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 import { LessonsScreen } from '@/ui/screens/LessonsScreen';
 
-type Screen = { name: 'home' } | { name: 'lessons' } | { name: 'editor'; projectId: string };
-
 interface AppProps {
   createWorker?: WorkerFactory;
 }
 
+const sweepKindOf = (changes: Partial<Settings>): SweepKind | null => {
+  if (changes.locale !== undefined) {
+    return 'language';
+  }
+
+  return changes.theme === undefined ? null : 'theme';
+};
+
 export const App = ({ createWorker }: AppProps) => {
+  const { route, navigate } = useRoute();
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [projects, setProjects] = useState<Project[]>(loadProjects);
-  const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [saveFailed, setSaveFailed] = useState(false);
   const [isChoosingPreferences, setIsChoosingPreferences] = useState(false);
+  const [sweep, setSweep] = useState<SweepKind | null>(null);
+  const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
+  const sweepTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const locale = useMemo(
     () => detectLocale(window.location.search, settings.locale, navigator.language),
@@ -39,7 +63,16 @@ export const App = ({ createWorker }: AppProps) => {
     }
   }, [locale, settings.syntax, settings.theme]);
 
-  const changeSettings = useCallback((changes: Partial<Settings>) => {
+  useEffect(
+    () => () => {
+      if (sweepTimer.current !== null) {
+        clearTimeout(sweepTimer.current);
+      }
+    },
+    [],
+  );
+
+  const applySettings = useCallback((changes: Partial<Settings>) => {
     setSettings((current) => {
       const next = { ...current, ...changes };
       saveSettings(next);
@@ -47,6 +80,24 @@ export const App = ({ createWorker }: AppProps) => {
       return next;
     });
   }, []);
+
+  const changeSettings = useCallback(
+    (changes: Partial<Settings>) => {
+      const kind = sweepKindOf(changes);
+
+      if (kind === null || !canAnimateScenes()) {
+        applySettings(changes);
+
+        return;
+      }
+
+      setSweep(kind);
+      sweepTimer.current = setTimeout(() => {
+        applySettings(changes);
+      }, SCENE_SWEEP_MIDPOINT_MILLISECONDS);
+    },
+    [applySettings],
+  );
 
   const persist = useCallback((next: Project[]) => {
     setSaveFailed(!saveProjects(next));
@@ -57,9 +108,37 @@ export const App = ({ createWorker }: AppProps) => {
     (name: string, source?: string) => {
       const project = createProject(name, source);
       persist(upsertProject(projects, project));
-      setScreen({ name: 'editor', projectId: project.id });
+      navigate({ name: 'project', projectId: project.id, file: null });
     },
-    [persist, projects],
+    [navigate, persist, projects],
+  );
+
+  const handleImportProject = useCallback(
+    async (file: File) => {
+      const result = await readArchiveFile(file);
+
+      if (result.ok) {
+        const project = { ...createProject(toProjectName(file.name)), files: result.files };
+        persist(upsertProject(projects, project));
+      }
+
+      setArchiveNotice(describeArchiveResult(translate, result));
+    },
+    [persist, projects, translate],
+  );
+
+  const handleOpenLessonCode = useCallback(
+    (lessonTitle: string, code: string) => {
+      const source = addScriptVersion(code);
+      const existing = projects.find((project) => project.files[MAIN_FILE] === source);
+
+      if (existing === undefined) {
+        handleCreate(lessonTitle, source);
+      } else {
+        navigate({ name: 'project', projectId: existing.id, file: null });
+      }
+    },
+    [handleCreate, navigate, projects],
   );
 
   const handleSave = useCallback((project: Project) => {
@@ -75,12 +154,23 @@ export const App = ({ createWorker }: AppProps) => {
     setIsChoosingPreferences(true);
   }, []);
 
+  const goHome = useCallback(() => {
+    navigate({ name: 'home' });
+  }, [navigate]);
+
   const activeProject =
-    screen.name === 'editor' ? projects.find((project) => project.id === screen.projectId) : undefined;
+    route.name === 'project' ? projects.find((project) => project.id === route.projectId) : undefined;
+  const isHome = activeProject === undefined && route.name !== 'lessons';
 
   return (
     <TranslationContext.Provider value={translate}>
-      <a className="skip-link" href="#content">
+      <a
+        className="skip-link"
+        href="#content"
+        onClick={(event) => {
+          event.preventDefault();
+          document.getElementById('content')?.focus();
+        }}>
         {translate('Skip to content')}
       </a>
       {saveFailed ? (
@@ -88,50 +178,74 @@ export const App = ({ createWorker }: AppProps) => {
           {translate('The browser refused to save your projects.')}
         </div>
       ) : null}
+      {archiveNotice === null || !isHome ? null : (
+        <div className="alert" role="status">
+          <p>{archiveNotice}</p>
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              setArchiveNotice(null);
+            }}>
+            {translate('Close')}
+          </button>
+        </div>
+      )}
       {activeProject !== undefined ? (
         <EditorScreen
           key={activeProject.id}
           project={activeProject}
+          routeFile={route.name === 'project' ? route.file : null}
           settings={settings}
           locale={locale}
           createWorker={createWorker}
           onSaveProject={handleSave}
+          onSelectFile={(file) => {
+            navigate({ name: 'project', projectId: activeProject.id, file });
+          }}
           onChangeSettings={changeSettings}
           onOpenPreferences={openPreferences}
-          onBack={() => {
-            setScreen({ name: 'home' });
-          }}
+          onBack={goHome}
         />
       ) : null}
-      {screen.name === 'lessons' ? (
+      {route.name === 'lessons' ? (
         <LessonsScreen
+          lessonId={route.lessonId}
+          section={route.section}
           readLessons={settings.readLessons}
           onOpenPreferences={openPreferences}
+          onOpenCode={handleOpenLessonCode}
           onMarkRead={(id) => {
             if (!settings.readLessons.includes(id)) {
               changeSettings({ readLessons: [...settings.readLessons, id] });
             }
           }}
-          onBack={() => {
-            setScreen({ name: 'home' });
-          }}
+          onBack={goHome}
         />
       ) : null}
-      {screen.name === 'home' ? (
+      {isHome ? (
         <HomeScreen
           projects={projects}
-          onCreate={handleCreate}
-          onOpen={(projectId) => {
-            setScreen({ name: 'editor', projectId });
+          isCreating={route.name === 'new'}
+          initialExampleId={route.name === 'new' ? route.exampleId : null}
+          onStartCreating={() => {
+            navigate({ name: 'new', exampleId: null });
           }}
+          onCancelCreating={goHome}
+          onCreate={handleCreate}
+          onImportProject={(file) => {
+            void handleImportProject(file);
+          }}
+          onExportProject={downloadProject}
           onRename={(id, name) => {
             persist(projects.map((project) => (project.id === id ? { ...project, name } : project)));
           }}
           onDelete={(id) => {
             persist(removeProject(projects, id));
+            clearDrafts(id);
           }}
           onOpenLessons={() => {
-            setScreen({ name: 'lessons' });
+            navigate({ name: 'lessons', lessonId: null, section: null });
           }}
           onOpenPreferences={openPreferences}
         />
@@ -146,6 +260,14 @@ export const App = ({ createWorker }: AppProps) => {
           }}
         />
       ) : null}
+      {sweep === null ? null : (
+        <SceneSweep
+          kind={sweep}
+          onFinished={() => {
+            setSweep(null);
+          }}
+        />
+      )}
     </TranslationContext.Provider>
   );
 };

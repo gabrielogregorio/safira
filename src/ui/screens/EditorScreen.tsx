@@ -1,16 +1,23 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { findExampleByPrefix } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
 import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
 import { isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
+import { clearDrafts, loadDrafts, saveDrafts } from '@/projects/draftStore';
+import type { TreeNode } from '@/projects/fileTree';
+import { folderMarkerPath, isInsideFolder, joinPath, sanitizePath, visibleFiles } from '@/projects/fileTree';
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { RunMode } from '@/runtime/protocol';
 import type { Settings } from '@/settings/settings';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { VariableInspector } from '@/ui/components/VariableInspector';
+import { describeArchiveResult } from '@/ui/archiveMessages';
+import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
+import { ArchiveInput } from '@/ui/components/ArchiveInput';
+import { FileSidebar } from '@/ui/components/FileSidebar';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
 import { Terminal } from '@/ui/components/Terminal';
@@ -30,10 +37,12 @@ import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
 
 interface EditorScreenProps {
   project: Project;
+  routeFile: string | null;
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
   onSaveProject: (project: Project) => void;
+  onSelectFile: (file: string) => void;
   onChangeSettings: (changes: Partial<Settings>) => void;
   onOpenPreferences: () => void;
   onBack: () => void;
@@ -45,46 +54,99 @@ type Dialog =
   | { kind: 'commands' }
   | { kind: 'confirm-close'; file: string }
   | { kind: 'confirm-leave' }
+  | { kind: 'new-file'; folder: string | null }
+  | { kind: 'new-folder'; folder: string | null }
+  | { kind: 'delete-node'; node: TreeNode }
   | null;
 
 const TOOLBAR_LOGO_SIZE = 30;
-const MOBILE_PANELS: MobilePanel[] = ['code', 'output', 'variables'];
+const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
+const DRAFT_DELAY_MILLISECONDS = 300;
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
-type MobilePanel = 'code' | 'output' | 'variables';
+type MobilePanel = 'files' | 'code' | 'output' | 'variables';
+
+const restoreTabs = (project: Project, routeFile: string | null): EditorTab[] => {
+  const drafts = loadDrafts(project.id);
+  const routed = routeFile !== null && project.files[routeFile] !== undefined ? routeFile : null;
+  const firstFile = routed ?? initialFile(project);
+  const files = [...new Set([firstFile, ...Object.keys(drafts)])];
+
+  return files.map((file) => {
+    const tab = openTab(file, project.files[file] ?? '');
+    const draft = drafts[file];
+
+    return draft === undefined ? tab : { ...tab, text: draft };
+  });
+};
 
 const initialFile = (project: Project): string =>
   project.files[MAIN_FILE] === undefined ? (Object.keys(project.files)[0] ?? MAIN_FILE) : MAIN_FILE;
 
 export const EditorScreen = ({
   project,
+  routeFile,
   settings,
   locale,
   createWorker = createRunnerWorker,
   onSaveProject,
+  onSelectFile,
   onChangeSettings,
   onOpenPreferences,
   onBack,
 }: EditorScreenProps) => {
   const t = useTranslation();
-  const [tabs, setTabs] = useState<EditorTab[]>(() => {
-    const file = initialFile(project);
-
-    return [openTab(file, project.files[file] ?? '')];
-  });
-  const [activeFile, setActiveFile] = useState(tabs[0]?.file ?? MAIN_FILE);
+  const [tabs, setTabs] = useState<EditorTab[]>(() => restoreTabs(project, routeFile));
+  const [wasRecovered, setWasRecovered] = useState(() => Object.keys(loadDrafts(project.id)).length > 0);
   const [dialog, setDialog] = useState<Dialog>(null);
   const [cursor, setCursor] = useState({ line: 1, column: 1 });
   const [mobilePanel, setMobilePanel] = useState<MobilePanel>('code');
+  const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
+  const archiveInput = useRef<HTMLInputElement>(null);
 
+  const latestProject = useRef(project);
+  const latestTabs = useRef(tabs);
+  const activeFile = tabs.some((tab) => tab.file === routeFile) ? (routeFile as string) : (tabs[0]?.file ?? MAIN_FILE);
   const activeTab = tabs.find((tab) => tab.file === activeFile) ?? tabs[0];
+
+  if (routeFile !== null && project.files[routeFile] !== undefined && !tabs.some((tab) => tab.file === routeFile)) {
+    setTabs([...tabs, openTab(routeFile, project.files[routeFile])]);
+  }
+
+  useEffect(() => {
+    latestProject.current = project;
+    latestTabs.current = tabs;
+  }, [project, tabs]);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      saveDrafts(project.id, Object.fromEntries(tabs.filter(isDirty).map((tab) => [tab.file, tab.text])));
+    }, DRAFT_DELAY_MILLISECONDS);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [project.id, tabs]);
   const breakpoints = useMemo(() => project.breakpoints[activeFile] ?? [], [project.breakpoints, activeFile]);
 
   const handleProgramFiles = useCallback(
     (files: Record<string, string>) => {
-      onSaveProject({ ...project, files: { ...project.files, ...files } });
-      setTabs((current) => mergeProgramFiles(current, files));
+      const current = latestProject.current;
+      const next = { ...files };
+
+      for (const tab of latestTabs.current.filter(isDirty)) {
+        const stored = current.files[tab.file];
+
+        if (stored === undefined) {
+          Reflect.deleteProperty(next, tab.file);
+        } else {
+          next[tab.file] = stored;
+        }
+      }
+
+      onSaveProject({ ...current, files: next });
+      setTabs((openTabs) => mergeProgramFiles(openTabs, files));
     },
-    [onSaveProject, project],
+    [onSaveProject],
   );
 
   const runner = useRunner(handleProgramFiles, createWorker);
@@ -124,16 +186,19 @@ export const EditorScreen = ({
           candidate.file === tab.file ? { ...candidate, file, savedText: candidate.text } : candidate,
         ),
       );
-      setActiveFile(file);
+      onSelectFile(file);
     },
-    [onSaveProject, project],
+    [onSaveProject, onSelectFile, project],
   );
 
-  const openFile = useCallback((file: string, stored: string) => {
-    setTabs((current) => (current.some((tab) => tab.file === file) ? current : [...current, openTab(file, stored)]));
-    setActiveFile(file);
-    setDialog(null);
-  }, []);
+  const openFile = useCallback(
+    (file: string, stored: string) => {
+      setTabs((current) => (current.some((tab) => tab.file === file) ? current : [...current, openTab(file, stored)]));
+      onSelectFile(file);
+      setDialog(null);
+    },
+    [onSelectFile],
+  );
 
   const newTab = useCallback(() => {
     const file = nextUntitledName([...Object.keys(project.files), ...tabs.map((tab) => tab.file)]);
@@ -147,18 +212,83 @@ export const EditorScreen = ({
       if (remaining.length === 0) {
         const replacement = nextUntitledName([]);
         setTabs([openTab(replacement, '')]);
-        setActiveFile(replacement);
+        onSelectFile(replacement);
       } else {
         setTabs(remaining);
 
         if (activeFile === file) {
-          setActiveFile(remaining[0].file);
+          onSelectFile(remaining[0].file);
         }
       }
 
       setDialog(null);
     },
-    [activeFile, tabs],
+    [activeFile, onSelectFile, tabs],
+  );
+
+  const createFile = useCallback(
+    (folder: string | null, name: string) => {
+      const path = sanitizePath(joinPath(folder, withScriptExtension(name)));
+
+      if (path === null) {
+        return;
+      }
+
+      const stored = project.files[path] ?? toStoredText({ file: path, text: '' });
+      onSaveProject({ ...project, files: { ...project.files, [path]: stored } });
+      openFile(path, stored);
+    },
+    [onSaveProject, openFile, project],
+  );
+
+  const createFolder = useCallback(
+    (folder: string | null, name: string) => {
+      const path = sanitizePath(joinPath(folder, name));
+
+      if (path !== null) {
+        onSaveProject({ ...project, files: { ...project.files, [folderMarkerPath(path)]: '' } });
+      }
+
+      setDialog(null);
+    },
+    [onSaveProject, project],
+  );
+
+  const deleteNode = useCallback(
+    (node: TreeNode) => {
+      const isDeleted = (path: string): boolean => path === node.path || isInsideFolder(path, node.path);
+      const files = Object.fromEntries(Object.entries(project.files).filter(([path]) => !isDeleted(path)));
+      const remaining = tabs.filter((tab) => !isDeleted(tab.file));
+      onSaveProject({ ...project, files });
+      setDialog(null);
+
+      if (remaining.length === 0) {
+        const replacement = nextUntitledName(Object.keys(files));
+        setTabs([openTab(replacement, '')]);
+        onSelectFile(replacement);
+      } else {
+        setTabs(remaining);
+
+        if (isDeleted(activeFile)) {
+          onSelectFile(remaining[0].file);
+        }
+      }
+    },
+    [activeFile, onSaveProject, onSelectFile, project, tabs],
+  );
+
+  const importIntoProject = useCallback(
+    async (file: File) => {
+      const result = await readArchiveFile(file);
+
+      if (result.ok) {
+        onSaveProject({ ...latestProject.current, files: { ...latestProject.current.files, ...result.files } });
+        setTabs((current) => mergeProgramFiles(current, result.files));
+      }
+
+      setArchiveNotice(describeArchiveResult(t, result));
+    },
+    [onSaveProject, t],
   );
 
   const toggleBreakpoint = useCallback(
@@ -261,7 +391,12 @@ export const EditorScreen = ({
     failure?.example === null || failure === null ? undefined : findExampleByPrefix(failure.example);
   const isVersionSupported = !isScript(activeTab.file) || isSupportedVersion(activeTab.version);
 
-  const panelLabels: Record<MobilePanel, string> = { code: t('Code'), output: t('Output'), variables: t('Variables') };
+  const panelLabels: Record<MobilePanel, string> = {
+    files: t('Files'),
+    code: t('Code'),
+    output: t('Output'),
+    variables: t('Variables'),
+  };
 
   const terminalFooter = (): string | null => {
     if (runner.wasStopped) {
@@ -335,6 +470,12 @@ export const EditorScreen = ({
           onOpenExample={(id, text) => {
             openFile(`${id}.safira`, text);
           }}
+          onExportProject={() => {
+            downloadProject({ name: project.name, files: currentFiles() });
+          }}
+          onImportArchive={() => {
+            archiveInput.current?.click();
+          }}
           onChangeSettings={onChangeSettings}
           onToggleFullScreen={toggleFullScreen}
           onShowCommands={() => {
@@ -350,7 +491,7 @@ export const EditorScreen = ({
               type="button"
               aria-current={tab.file === activeFile ? 'page' : undefined}
               onClick={() => {
-                setActiveFile(tab.file);
+                onSelectFile(tab.file);
               }}>
               {tab.file}
               {isDirty(tab) ? <span title={t('Not saved')}> ●</span> : null}
@@ -372,6 +513,54 @@ export const EditorScreen = ({
         ))}
       </nav>
 
+      <ArchiveInput
+        ref={archiveInput}
+        label={t('Import .zip into this project')}
+        onSelect={(file) => {
+          void importIntoProject(file);
+        }}
+      />
+
+      {archiveNotice === null ? null : (
+        <div className="alert" role="status">
+          <p>{archiveNotice}</p>
+          <button
+            type="button"
+            className="button"
+            onClick={() => {
+              setArchiveNotice(null);
+            }}>
+            {t('Close')}
+          </button>
+        </div>
+      )}
+
+      {wasRecovered ? (
+        <div className="alert" role="status">
+          <p>{t('Your unsaved work was recovered.')}</p>
+          <div className="form-row">
+            <button
+              type="button"
+              className="button"
+              onClick={() => {
+                setWasRecovered(false);
+              }}>
+              {t('Keep')}
+            </button>
+            <button
+              type="button"
+              className="button"
+              onClick={() => {
+                clearDrafts(project.id);
+                setTabs((current) => current.map((tab) => ({ ...tab, text: tab.savedText })));
+                setWasRecovered(false);
+              }}>
+              {t('Discard')}
+            </button>
+          </div>
+        </div>
+      ) : null}
+
       {isVersionSupported ? null : (
         <div className="alert" role="alert">
           {t('This script declares Safira {version}, but this IDE supports: {supported}.', {
@@ -381,7 +570,24 @@ export const EditorScreen = ({
         </div>
       )}
 
-      <main id="content" className={`workspace workspace-${mobilePanel}`}>
+      <main id="content" tabIndex={-1} className={`workspace workspace-${mobilePanel}`}>
+        <FileSidebar
+          paths={Object.keys(project.files)}
+          activeFile={activeFile}
+          onOpen={(path) => {
+            openFile(path, project.files[path] ?? '');
+            setMobilePanel('code');
+          }}
+          onNewFile={(folder) => {
+            setDialog({ kind: 'new-file', folder });
+          }}
+          onNewFolder={(folder) => {
+            setDialog({ kind: 'new-folder', folder });
+          }}
+          onDelete={(node) => {
+            setDialog({ kind: 'delete-node', node });
+          }}
+        />
         <CodeEditor
           key={activeTab.file}
           value={activeTab.text}
@@ -474,7 +680,7 @@ export const EditorScreen = ({
             setDialog(null);
           }}>
           <ul className="file-list">
-            {Object.keys(currentFiles())
+            {visibleFiles(Object.keys(currentFiles()))
               .sort((first, second) => first.localeCompare(second))
               .map((file) => (
                 <li key={file}>
@@ -505,6 +711,63 @@ export const EditorScreen = ({
             setDialog(null);
           }}
         />
+      ) : null}
+
+      {dialog?.kind === 'new-file' ? (
+        <TextPrompt
+          title={t('New file')}
+          label={t('File name')}
+          initialValue=""
+          onClose={() => {
+            setDialog(null);
+          }}
+          onSubmit={(name) => {
+            createFile(dialog.folder, name);
+          }}
+        />
+      ) : null}
+
+      {dialog?.kind === 'new-folder' ? (
+        <TextPrompt
+          title={t('New folder')}
+          label={t('Folder name')}
+          initialValue=""
+          onClose={() => {
+            setDialog(null);
+          }}
+          onSubmit={(name) => {
+            createFolder(dialog.folder, name);
+          }}
+        />
+      ) : null}
+
+      {dialog?.kind === 'delete-node' ? (
+        <Modal
+          title={t('Delete this item?')}
+          onClose={() => {
+            setDialog(null);
+          }}>
+          <p>{t('"{name}" will be deleted. This cannot be undone.', { name: dialog.node.path })}</p>
+          <div className="form-row">
+            <button
+              type="button"
+              className="button"
+              data-autofocus
+              onClick={() => {
+                setDialog(null);
+              }}>
+              {t('Cancel')}
+            </button>
+            <button
+              type="button"
+              className="button button-stop"
+              onClick={() => {
+                deleteNode(dialog.node);
+              }}>
+              {t('Delete')}
+            </button>
+          </div>
+        </Modal>
       ) : null}
 
       {dialog?.kind === 'commands' ? (
@@ -557,6 +820,7 @@ export const EditorScreen = ({
                 if (dialog.kind === 'confirm-close') {
                   closeTab(dialog.file);
                 } else {
+                  clearDrafts(project.id);
                   onBack();
                 }
               }}>

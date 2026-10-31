@@ -14,6 +14,8 @@ interface IdeMenuBarProps {
   onSave: () => void;
   onSaveAs: () => void;
   onFormat: () => void;
+  onExportProject: () => void;
+  onImportArchive: () => void;
   onRun: (mode: RunMode) => void;
   onStop: () => void;
   onToggleBreakpoint: () => void;
@@ -108,6 +110,8 @@ export const IdeMenuBar = ({
   onSave,
   onSaveAs,
   onFormat,
+  onExportProject,
+  onImportArchive,
   onRun,
   onStop,
   onToggleBreakpoint,
@@ -129,6 +133,9 @@ export const IdeMenuBar = ({
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Save')} shortcut="Ctrl+S" onSelect={onSave} />
         <Action label={t('Save as')} shortcut="Ctrl+Shift+S" onSelect={onSaveAs} />
+        <Menubar.Separator className="menubar-separator" />
+        <Action label={t('Export project (.zip)')} onSelect={onExportProject} />
+        <Action label={t('Import .zip into this project')} onSelect={onImportArchive} />
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Format code')} onSelect={onFormat} />
       </Menu>

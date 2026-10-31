@@ -9,8 +9,8 @@ describe('bundled content', () => {
   });
 
   it('builds readable titles', () => {
-    expect(examples[0]).toMatchObject({ id: '01-variaveis', title: 'Variaveis' });
-    expect(tutorials[0]).toMatchObject({ id: 'aula-01-apresentacao', title: 'Apresentacao' });
+    expect(examples[0]).toMatchObject({ id: '01-variaveis', title: 'Variáveis' });
+    expect(tutorials[0]).toMatchObject({ id: 'aula-01-apresentacao', title: 'Apresentação' });
   });
 
   it.each(examples.map((example) => [example.id, example.text] as const))('%s declares its version', (_id, text) => {
@@ -22,6 +22,20 @@ describe('bundled content', () => {
   )('%s has no invalid line', (_id, text) => {
     expect(parse(readScriptVersion(text).body).map((statement) => statement.kind)).not.toContain('invalid');
   });
+
+  it.each(tutorials.map((tutorial) => [tutorial.id, tutorial.text] as const))(
+    '%s only teaches valid code',
+    (_id, text) => {
+      const snippets = text.split('```').filter((_part, index) => index % 2 === 1);
+      const invalid = snippets.flatMap((snippet) =>
+        parse(snippet)
+          .filter((statement) => statement.kind === 'invalid')
+          .map((statement) => (statement.kind === 'invalid' ? statement.detail : '')),
+      );
+
+      expect(invalid).toEqual([]);
+    },
+  );
 
   it('finds the example that explains a command', () => {
     expect(findExampleByPrefix('16')?.id).toBe('16-listas');

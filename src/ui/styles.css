@@ -1,4 +1,12 @@
 :root {
+  --cursor-arrow:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='.5' stop-color='%238fdcff'/%3E%3Cstop offset='1' stop-color='%231f8fe0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M3 2 L3 22 L8.5 17 L12.5 26 L16.5 24 L12.5 15.5 L20 15.5 Z' fill='url(%23g)' stroke='%2307307e' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+      3 2,
+    auto;
+  --cursor-pointer:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='28' height='28' viewBox='0 0 28 28'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0' stop-color='%23ffffff'/%3E%3Cstop offset='.5' stop-color='%23b4f58c'/%3E%3Cstop offset='1' stop-color='%234cc52a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M3 2 L3 22 L8.5 17 L12.5 26 L16.5 24 L12.5 15.5 L20 15.5 Z' fill='url(%23g)' stroke='%2307330b' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E")
+      3 2,
+    pointer;
   --page-sky: linear-gradient(180deg, #2f9fe8 0%, #7fd1f7 42%, #d6f4ff 72%, #eefcff 100%);
   --page-glow: rgb(255 255 255 / 85%);
   --hill-back: #9be86a;
@@ -78,6 +86,37 @@ html,
 body,
 #root {
   height: 100%;
+}
+
+html {
+  cursor: var(--cursor-arrow);
+  scrollbar-color: #4db8f2 transparent;
+  scrollbar-width: thin;
+}
+
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(255 255 255 / 18%);
+  border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(90deg, #d4f2ff 0%, #6cc9f7 48%, #2a9fe6 52%, #63c8f7 100%);
+  border: 1px solid rgb(255 255 255 / 80%);
+  border-radius: 999px;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 80%);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(90deg, #e4ffd0 0%, #a8f07a 48%, #6fdc45 52%, #b4f58c 100%);
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 body {
@@ -175,7 +214,7 @@ p {
     0 2px 5px rgb(6 50 100 / 28%),
     inset 0 1px 0 rgb(255 255 255 / 95%);
   color: #06263f;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   font: inherit;
   font-weight: 600;
   min-height: 38px;
@@ -212,8 +251,27 @@ p {
 }
 
 .button-back {
+  align-items: center;
   display: inline-flex;
   gap: 6px;
+  line-height: 1;
+}
+
+.archive-input {
+  display: none;
+}
+
+.button-small {
+  font-size: 0.82rem;
+  min-height: 30px;
+  padding: 2px 10px;
+}
+
+a.button {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  text-decoration: none;
 }
 
 input,
@@ -302,7 +360,7 @@ select {
     0 3px 10px rgb(6 50 100 / 18%),
     inset 0 1px 0 rgb(255 255 255 / 70%);
   color: var(--color-text);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   font: inherit;
   font-weight: 600;
   height: 100%;
@@ -393,7 +451,7 @@ select {
   border: none;
   border-radius: 10px;
   color: var(--color-text);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   font: inherit;
   font-weight: 600;
   min-height: 36px;
@@ -432,7 +490,7 @@ select {
 .menubar-item {
   align-items: center;
   border-radius: 9px;
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   display: flex;
   gap: 24px;
   justify-content: space-between;
@@ -502,7 +560,7 @@ select {
   background: none;
   border: none;
   color: var(--color-text);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   font: inherit;
   min-height: 34px;
   padding: 2px 8px;
@@ -518,8 +576,86 @@ select {
   display: grid;
   flex: 1;
   gap: 8px;
-  grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  grid-template-columns: 220px minmax(0, 3fr) minmax(0, 2fr);
   min-height: 0;
+  outline: none;
+}
+
+.file-sidebar {
+  backdrop-filter: blur(14px) saturate(150%);
+  background: var(--color-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  box-shadow: var(--shadow-panel);
+  min-height: 0;
+  overflow: auto;
+  padding: 8px;
+}
+
+.file-sidebar-header {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 6px;
+}
+
+.file-sidebar-header h2 {
+  flex-basis: 100%;
+  font-size: 1rem;
+  margin: 0;
+}
+
+.tree-list .tree-list {
+  border-left: 1px solid var(--color-line);
+  margin-left: 8px;
+  padding-left: 6px;
+}
+
+.tree-row {
+  align-items: center;
+  border-radius: 8px;
+  display: flex;
+}
+
+.tree-row:hover,
+.tree-row-active {
+  background: var(--color-hover);
+}
+
+.tree-name {
+  background: none;
+  border: none;
+  color: var(--color-text);
+  cursor: var(--cursor-pointer);
+  flex: 1;
+  font: inherit;
+  min-height: 30px;
+  min-width: 0;
+  overflow: hidden;
+  padding: 2px 4px;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-row-active .tree-name {
+  font-weight: 700;
+}
+
+.tree-action {
+  background: none;
+  border: none;
+  border-radius: 6px;
+  color: var(--color-text);
+  cursor: var(--cursor-pointer);
+  font: inherit;
+  min-height: 28px;
+  min-width: 24px;
+}
+
+.tree-action:hover {
+  background: var(--color-hover);
 }
 
 .code-editor {
@@ -559,7 +695,7 @@ select {
 }
 
 .editor-breakpoints {
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   min-width: 22px;
   touch-action: manipulation;
 }
@@ -979,7 +1115,7 @@ select {
   border: 2px solid var(--color-line);
   border-radius: 14px;
   box-shadow: 0 3px 10px rgb(6 50 100 / 22%);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   display: flex;
   flex: 1 0 150px;
   flex-direction: column;
@@ -1060,7 +1196,7 @@ select {
   border: none;
   border-radius: 9px;
   color: var(--color-text);
-  cursor: pointer;
+  cursor: var(--cursor-pointer);
   font: inherit;
   min-height: 38px;
   padding: 6px 12px;
@@ -1079,28 +1215,166 @@ select {
 
 .lessons {
   display: grid;
-  gap: 16px;
-  grid-template-columns: 270px minmax(0, 1fr);
-  margin: 0 auto;
-  max-width: 1100px;
-  padding: 16px 16px 64px;
+  gap: 12px;
+  grid-template-columns: 280px minmax(0, 1fr);
+  height: 100dvh;
+  padding: 10px;
 }
 
-.lessons-nav,
-.lesson {
-  padding: 16px;
+.lessons-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+  padding: 12px;
 }
 
-.lessons-nav [aria-current='page'] {
+.lessons-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lessons-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.lesson-link {
+  border-radius: 9px;
+  color: var(--color-text);
+  display: block;
+  padding: 7px 10px;
+  text-decoration: none;
+}
+
+.lesson-link:hover {
   background: var(--color-hover);
-  font-weight: 600;
 }
 
-.lesson pre {
+.lesson-link[aria-current='page'] {
+  background: var(--color-hover);
+  font-weight: 700;
+}
+
+.lesson-page {
+  min-height: 0;
+  min-width: 0;
+  outline: none;
+}
+
+.lesson {
+  height: 100%;
+  overflow-y: auto;
+  padding: 20px 24px;
+}
+
+.lesson a:not(.button) {
+  color: var(--color-accent);
+}
+
+.lesson h2 {
+  margin-top: 24px;
+  scroll-margin-top: 8px;
+}
+
+.heading-link {
+  margin-left: 8px;
+  opacity: 0.55;
+  text-decoration: none;
+}
+
+.heading-link:hover {
+  opacity: 1;
+}
+
+.lesson table {
+  border-collapse: collapse;
+  display: block;
+  overflow-x: auto;
+}
+
+.lesson th,
+.lesson td {
+  border: 1px solid var(--color-line);
+  padding: 4px 10px;
+}
+
+.lesson-code {
+  margin: 12px 0;
+}
+
+.lesson-code pre {
   background: var(--color-panel-strong);
-  border-radius: 10px;
+  border: 1px solid var(--color-line);
+  border-radius: 12px;
+  font-family: var(--font-code);
+  margin: 0 0 6px;
   overflow-x: auto;
   padding: 12px;
+}
+
+.lesson-pager {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  padding-top: 16px;
+}
+
+.scene-sweep {
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  position: fixed;
+  z-index: 60;
+}
+
+.scene-sweep-wave {
+  align-items: center;
+  animation: scene-sweep 900ms cubic-bezier(0.45, 0, 0.55, 1) both;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(143 227 255 / 92%) 8%,
+    #2f9fe8 26%,
+    #eefcff 50%,
+    #55c93b 74%,
+    rgb(155 232 106 / 92%) 92%,
+    transparent 100%
+  );
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  left: -240vw;
+  position: absolute;
+  width: 240vw;
+}
+
+.scene-sweep-language .scene-sweep-wave {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgb(190 255 240 / 92%) 8%,
+    #16b39a 26%,
+    #eefcff 50%,
+    #2f9fe8 74%,
+    rgb(143 227 255 / 92%) 92%,
+    transparent 100%
+  );
+}
+
+.scene-sweep-mark {
+  color: #0b2a4a;
+  font-size: clamp(4rem, 16vmin, 9rem);
+  font-weight: 300;
+  text-shadow: 0 2px 12px #ffffff;
+}
+
+@keyframes scene-sweep {
+  to {
+    transform: translateX(340vw);
+  }
 }
 
 @media (max-width: 768px) {
@@ -1177,6 +1451,11 @@ select {
     grid-template-columns: minmax(0, 1fr);
   }
 
+  .workspace-files .output-column,
+  .workspace-files .code-editor,
+  .workspace-code .file-sidebar,
+  .workspace-output .file-sidebar,
+  .workspace-variables .file-sidebar,
   .workspace-code .output-column,
   .workspace-output .code-editor,
   .workspace-variables .code-editor,
@@ -1219,7 +1498,7 @@ select {
     border: none;
     border-radius: 999px;
     color: var(--color-text);
-    cursor: pointer;
+    cursor: var(--cursor-pointer);
     flex: 1;
     font: inherit;
     font-weight: 600;
@@ -1232,7 +1511,47 @@ select {
   }
 
   .lessons {
+    gap: 6px;
     grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    padding: 6px;
+  }
+
+  .lessons-nav {
+    padding: 8px;
+  }
+
+  .lessons-list {
+    display: flex;
+    gap: 4px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x proximity;
+  }
+
+  .lessons-list li {
+    flex: none;
+    scroll-snap-align: start;
+  }
+
+  .lesson-link {
+    align-items: center;
+    display: flex;
+    min-height: 44px;
+  }
+
+  .lesson {
+    padding: 14px;
+  }
+
+  .tree-name,
+  .tree-action {
+    min-height: 44px;
+    min-width: 40px;
+  }
+
+  .button-small {
+    min-height: 44px;
   }
 
   .example-grid {
@@ -1268,7 +1587,8 @@ select {
   .modal,
   .modal::after,
   .modal-backdrop,
-  .modal-zoom span {
+  .modal-zoom span,
+  .scene-sweep-wave {
     animation: none;
     transition: none;
   }

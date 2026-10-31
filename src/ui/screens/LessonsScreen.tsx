@@ -1,89 +1,109 @@
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { tutorials } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
-import { parseMarkdown } from '@/ui/markdown';
+import { routeToHash } from '@/routing/routes';
+import { LessonMarkdown } from '@/ui/components/LessonMarkdown';
 
 interface LessonsScreenProps {
+  lessonId: string | null;
+  section: string | null;
   readLessons: string[];
   onMarkRead: (id: string) => void;
+  onOpenCode: (lessonTitle: string, code: string) => void;
   onBack: () => void;
   onOpenPreferences: () => void;
 }
 
-export const LessonsScreen = ({ readLessons, onMarkRead, onBack, onOpenPreferences }: LessonsScreenProps) => {
+const lessonHash = (lessonId: string): string => routeToHash({ name: 'lessons', lessonId, section: null });
+
+export const LessonsScreen = ({
+  lessonId,
+  section,
+  readLessons,
+  onMarkRead,
+  onOpenCode,
+  onBack,
+  onOpenPreferences,
+}: LessonsScreenProps) => {
   const t = useTranslation();
-  const [index, setIndex] = useState(0);
-  const lesson = tutorials[index] ?? tutorials[0];
+  const articleRef = useRef<HTMLElement>(null);
+  const foundIndex = tutorials.findIndex((tutorial) => tutorial.id === lessonId);
+  const index = Math.max(foundIndex, 0);
+  const lesson = tutorials[index];
+  const previous = tutorials[index - 1];
+  const next = tutorials[index + 1];
+
+  useEffect(() => {
+    const target = section === null ? null : document.getElementById(section);
+
+    if (target === null) {
+      articleRef.current?.scrollTo({ top: 0 });
+    } else {
+      target.scrollIntoView();
+    }
+  }, [index, section]);
 
   if (lesson === undefined) {
     return null;
   }
 
-  const goTo = (nextIndex: number): void => {
-    onMarkRead(lesson.id);
-    setIndex(nextIndex);
-  };
-
   return (
-    <main id="content" className="lessons">
+    <div className="lessons">
       <nav className="lessons-nav" aria-label={t('Lessons')}>
-        <button type="button" className="button" onClick={onBack}>
-          {t('Back to projects')}
-        </button>
-        <button type="button" className="button" onClick={onOpenPreferences}>
-          {t('Theme and language')}
-        </button>
-        <ul>
+        <div className="lessons-actions">
+          <button type="button" className="button" onClick={onBack}>
+            {t('Back to projects')}
+          </button>
+          <button type="button" className="button" onClick={onOpenPreferences}>
+            {t('Theme and language')}
+          </button>
+        </div>
+        <ul className="lessons-list">
           {tutorials.map((tutorial, tutorialIndex) => (
             <li key={tutorial.id}>
-              <button
-                type="button"
-                className="menu-item"
+              <a
+                className="lesson-link"
+                href={lessonHash(tutorial.id)}
                 aria-current={tutorialIndex === index ? 'page' : undefined}
                 onClick={() => {
-                  goTo(tutorialIndex);
+                  onMarkRead(lesson.id);
                 }}>
                 {tutorial.title}
                 {readLessons.includes(tutorial.id) ? ` (${t('Read')})` : ''}
-              </button>
+              </a>
             </li>
           ))}
         </ul>
       </nav>
-      <article className="lesson">
-        <h1>{lesson.title}</h1>
-        {parseMarkdown(lesson.text).map((block, blockIndex) => {
-          if (block.kind === 'code') {
-            return <pre key={blockIndex}>{block.text}</pre>;
-          }
-
-          return block.kind === 'heading' ? (
-            <h2 key={blockIndex}>{block.text}</h2>
-          ) : (
-            <p key={blockIndex}>{block.text}</p>
-          );
-        })}
-        <div className="form-row">
-          <button
-            type="button"
-            className="button"
-            disabled={index === 0}
-            onClick={() => {
-              goTo(index - 1);
-            }}>
-            {t('Previous')}
-          </button>
-          <button
-            type="button"
-            className="button button-primary"
-            disabled={index === tutorials.length - 1}
-            onClick={() => {
-              goTo(index + 1);
-            }}>
-            {t('Next')}
-          </button>
-        </div>
-      </article>
-    </main>
+      <main id="content" tabIndex={-1} className="lesson-page">
+        <article ref={articleRef} className="lesson" key={lesson.id}>
+          <h1>{lesson.title}</h1>
+          <LessonMarkdown
+            lessonId={lesson.id}
+            text={lesson.text}
+            onOpenCode={(code) => {
+              onOpenCode(lesson.title, code);
+            }}
+          />
+          <nav className="lesson-pager" aria-label={t('Lessons')}>
+            {previous === undefined ? null : (
+              <a className="button" href={lessonHash(previous.id)}>
+                {t('Previous')}
+              </a>
+            )}
+            {next === undefined ? null : (
+              <a
+                className="button button-primary"
+                href={lessonHash(next.id)}
+                onClick={() => {
+                  onMarkRead(lesson.id);
+                }}>
+                {t('Next')}
+              </a>
+            )}
+          </nav>
+        </article>
+      </main>
+    </div>
   );
 };
