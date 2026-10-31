@@ -16,6 +16,8 @@ setup and scripts.
 - Parser rule order in `parser.ts` is part of the language: a rule moved up changes what programs mean.
 - Full names, no magic numbers, blank line before `return`, `if` always with braces, `+= 1` instead of `++`.
 
+Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
+
 ## Paid traps
 
 - An unknown line must not fail at parse time, because `tente` must catch it. The parser emits an `invalid` statement.
