@@ -173,7 +173,7 @@ export class ExpressionParser extends TokenCursor {
       parts.push(this.parsePrimary());
     }
 
-    return parts.length === 1 ? (parts[0]) : { kind: 'concat', parts };
+    return parts.length === 1 ? parts[0] : { kind: 'concat', parts };
   }
 
   private parsePrimary(): Expression {
@@ -234,7 +234,7 @@ export class ExpressionParser extends TokenCursor {
     const words = this.expectPhrase('digitado');
     const numeric = words.some((word) => NUMERIC_INPUT_WORDS.includes(word));
 
-    return { kind: 'input', numeric, variableName: isSingleWord ? (words[0]) : null };
+    return { kind: 'input', numeric, variableName: isSingleWord ? words[0] : null };
   }
 
   private parseRandom(): Expression {
