@@ -11,20 +11,18 @@ permissions:
   issues: write
 
 jobs:
-  validate-version:
-    name: package.json version is new
+  # Only a release branch carries a version: every other PR merges without touching it.
+  validate-release-branch:
+    name: release branch is valid
+    if: startsWith(github.head_ref, 'release/')
     timeout-minutes: 2
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: the tag of the version must not exist yet
-        run: |
-          VERSION=$(node -p "require('./package.json').version")
-          if git ls-remote --exit-code --tags origin "refs/tags/v$VERSION" > /dev/null; then
-            echo "::error file=package.json::v$VERSION is already released. Bump the version in this PR."
-            exit 1
-          fi
-          echo "this PR releases v$VERSION when merged"
+      - name: the branch names a new version
+        env:
+          RELEASE_BRANCH: ${{ github.head_ref }}
+        run: echo "this PR releases v$(.github/scripts/release-version.sh "$RELEASE_BRANCH") when merged"
 
   assign-and-label:
     name: assign, label and fill the changelog
@@ -32,10 +30,6 @@ jobs:
     timeout-minutes: 2
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - name: read the version
-        run: echo "TAG_VERSION=v$(node -p "require('./package.json').version")" >> "$GITHUB_ENV"
-
       - name: assign author, add labels, list commits and set the title
         uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
         with:
@@ -86,9 +80,10 @@ jobs:
               if (fresh) body = body.replace(MARK, fresh + MARK);
             }
 
-            const tag = process.env.TAG_VERSION;
-            const title = /^Release v\S+ - /.test(pr.title)
-              ? pr.title.replace(/^Release v\S+ - /, `Release ${tag} - `)
-              : `Release ${tag} - ${pr.title}`;
+            // only a release branch gets the Release title
+            const plainTitle = pr.title.replace(/^Release v\S+ - /, '');
+            const title = pr.head.ref.startsWith('release/')
+              ? `Release v${pr.head.ref.slice('release/'.length)} - ${plainTitle}`
+              : plainTitle;
 
             await github.rest.pulls.update({ owner, repo, pull_number, body, title });

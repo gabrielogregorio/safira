@@ -76,8 +76,8 @@ between PCs.
 
 ## CI/CD
 
-GitHub Actions runs lint, audit, unit tests with a coverage gate, E2E, the memory gate and CodeQL. A merge into `master`
-creates the tag and the release. Actions are pinned by commit hash.
+GitHub Actions runs lint, audit, unit tests with a coverage gate, E2E, the memory gate and CodeQL. Merging a `release/X.Y.Z`
+branch into `master` creates the tag and the release; any other merge only deploys. Actions are pinned by commit hash.
 
 | Address | What it is | Workflow |
 |---|---|---|

@@ -19,6 +19,14 @@ Include the version, the steps and the impact.
 - Lesson markdown ignores raw HTML.
 - A recursion limit stops functions that never end, and the Stop button terminates the worker.
 
+## Pipeline
+
+- No workflow uses `pull_request_target`, and pull requests from forks get a read-only token and no secrets.
+- Actions are pinned to a commit hash, and event data reaches scripts through `env`.
+- Jobs that build keep the token away from the build with `persist-credentials: false`, so a compromised package cannot
+  write to the repository. `check-quality.yml` fails if a workflow breaks this rule.
+- A version only reaches `$GITHUB_ENV` after `.github/scripts/release-version.sh` validates it.
+
 ## Accepted risks
 
 Accepted by alert id, so a new alert on the same package still counts. Review date: 2027-01-31.

@@ -39,3 +39,11 @@ jobs:
             echo "$bad" | while IFS=: read -r f l _; do echo "::error file=$f,line=$l::pin this action to a full commit hash (# vX.Y.Z as comment)"; done
             exit 1
           fi
+
+      - name: Jobs that write to the repository do not leave the token to the build
+        run: |
+          bad=$(grep -lE 'contents: write' .github/workflows/*.yml | xargs -r grep -lE 'setup-environment|pnpm (install|run)' | xargs -r grep -LE 'persist-credentials: false' || true)
+          if [[ -n "$bad" ]]; then
+            echo "$bad" | while read -r f; do echo "::error file=$f::set persist-credentials: false on the checkout of this workflow"; done
+            exit 1
+          fi

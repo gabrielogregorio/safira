@@ -14,7 +14,11 @@ concurrency:
 
 jobs:
   create-release:
-    if: github.event.pull_request.merged == true
+    # A release comes only from a PR of a release/X.Y.Z branch of this repository.
+    if: >-
+      github.event.pull_request.merged == true
+      && startsWith(github.event.pull_request.head.ref, 'release/')
+      && github.event.pull_request.head.repo.full_name == github.repository
     timeout-minutes: 5
     runs-on: ubuntu-24.04
     steps:
@@ -27,14 +31,10 @@ jobs:
         env:
           PR_TITLE: ${{ github.event.pull_request.title }}
           PR_BODY: ${{ github.event.pull_request.body }}
+          RELEASE_BRANCH: ${{ github.event.pull_request.head.ref }}
         run: |
-          VERSION=$(node -p "require('./package.json').version")
+          VERSION=$(.github/scripts/release-version.sh "$RELEASE_BRANCH")
           TAG="v$VERSION"
-          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
-            echo "::warning::$TAG already exists: nothing to release (the version was not bumped)"
-            echo "SKIP=true" >> "$GITHUB_ENV"
-            exit 0
-          fi
           {
             echo "TAG_NAME=$TAG"
             echo "RELEASE_NAME=Safira $TAG"
@@ -44,7 +44,6 @@ jobs:
           printf '%s\n\n%s\n' "${PR_TITLE#Release $TAG - }" "${PR_BODY//\[...autoGenerate\]/}" > release-notes.md
 
       - name: create tag and release
-        if: env.SKIP != 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
