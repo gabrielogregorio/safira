@@ -33,7 +33,7 @@ interface AppProps {
   createWorker?: WorkerFactory;
 }
 
-const THEME_CHANGE_MILLISECONDS = 1000;
+const THEME_CHANGE_MILLISECONDS = 1700;
 
 export const App = ({ createWorker }: AppProps) => {
   const { route, navigate } = useRoute();
@@ -141,6 +141,10 @@ export const App = ({ createWorker }: AppProps) => {
       // Applied now, so that the click that turns the sound on is already heard and the one that turns it off is not.
       if (changes.sound !== undefined) {
         soundPlayer.setEnabled(changes.sound);
+      }
+
+      if (changes.locale !== undefined) {
+        void soundPlayer.play('language');
       }
 
       if (changes.theme !== undefined) {

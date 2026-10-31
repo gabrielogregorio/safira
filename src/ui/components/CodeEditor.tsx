@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react';
 import { highlightCode } from '@/language/highlight';
 import type { Locale } from '@/language/messages';
 import type { CodeFont } from '@/settings/settings';
+import { editorSounds } from './editorSounds';
 import { ghostText } from './ghostText';
 
 interface CodeEditorProps {
@@ -203,6 +204,7 @@ export const CodeEditor = ({
           lineNumbers(),
           syntaxHighlight,
           EditorView.lineWrapping,
+          editorSounds,
           EditorView.contentAttributes.of({ 'aria-label': label }),
           fontCompartment.current.of(EditorView.theme({ '&': { fontSize: `${fontSize}px` } })),
           EditorView.updateListener.of((update) => {

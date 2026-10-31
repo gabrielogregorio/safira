@@ -1,21 +1,29 @@
+import acceptUrl from './files/accept.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
 import clickUrl from './files/click.wav';
 import createUrl from './files/create.wav';
 import deleteUrl from './files/delete.wav';
+import fileCreateUrl from './files/file-create.wav';
+import folderCreateUrl from './files/folder-create.wav';
 import formatUrl from './files/format.wav';
 import homeOpenUrl from './files/home-open.wav';
 import hoverUrl from './files/hover.wav';
 import ideOpenUrl from './files/ide-open.wav';
+import importUrl from './files/import.wav';
+import languageUrl from './files/language.wav';
 import modalCloseUrl from './files/modal-close.wav';
 import modalOpenUrl from './files/modal-open.wav';
 import openUrl from './files/open.wav';
 import renameStartUrl from './files/rename-start.wav';
 import renameUrl from './files/rename.wav';
 import runUrl from './files/run.wav';
+import selectionUrl from './files/selection.wav';
 import stopUrl from './files/stop.wav';
+import suggestionsUrl from './files/suggestions.wav';
 import tabUrl from './files/tab.wav';
 import toggleUrl from './files/toggle.wav';
+import typingUrl from './files/typing.wav';
 import weatherUrl from './files/weather.wav';
 
 export type SoundName =
@@ -37,7 +45,15 @@ export type SoundName =
   | 'run'
   | 'stop'
   | 'format'
-  | 'weather';
+  | 'weather'
+  | 'fileCreate'
+  | 'folderCreate'
+  | 'suggestions'
+  | 'typing'
+  | 'accept'
+  | 'selection'
+  | 'import'
+  | 'language';
 
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
@@ -60,6 +76,14 @@ export const SOUND_FILES: Record<SoundName, string> = {
   stop: stopUrl,
   format: formatUrl,
   weather: weatherUrl,
+  fileCreate: fileCreateUrl,
+  folderCreate: folderCreateUrl,
+  suggestions: suggestionsUrl,
+  typing: typingUrl,
+  accept: acceptUrl,
+  selection: selectionUrl,
+  import: importUrl,
+  language: languageUrl,
 };
 
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
@@ -79,6 +103,11 @@ const wait = (milliseconds: number): Promise<void> =>
 
 const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
 const MASTER_GAIN = 0.5;
+const LOOP_GAIN = 0.35;
+const LOOP_FADE_IN_SECONDS = 0.04;
+const LOOP_FADE_SECONDS = 0.06;
+const LOOP_STOP_SECONDS = 0.3;
+const RATE_GLIDE_SECONDS = 0.05;
 
 const fetchSound = async (context: AudioContext, url: string): Promise<AudioBuffer> => {
   const response = await fetch(url);
@@ -92,7 +121,18 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let isEnabled = true;
   let lastSound: { name: SoundName; time: number } | null = null;
   let lastHover = -HOVER_GAP_MILLISECONDS;
+  let loop: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
+  let loopTimer: ReturnType<typeof setTimeout> | undefined;
+  let isLoopStarting = false;
   const buffers = new Map<SoundName, Promise<AudioBuffer>>();
+
+  const fadeLoop = (): void => {
+    if (context !== null && loop !== null) {
+      loop.gain.gain.setTargetAtTime(0, context.currentTime, LOOP_FADE_SECONDS);
+      loop.source.stop(context.currentTime + LOOP_STOP_SECONDS);
+      loop = null;
+    }
+  };
 
   const start = (): AudioContext | null => {
     context ??= createContext();
@@ -130,6 +170,10 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   return {
     setEnabled: (enabled: boolean): void => {
       isEnabled = enabled;
+
+      if (!enabled) {
+        fadeLoop();
+      }
     },
     // Runs on the first press, so that the files are decoded before the click that follows it.
     prepare: (): void => {
@@ -143,7 +187,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
         }
       }
     },
-    play: async (name: SoundName): Promise<void> => {
+    play: async (name: SoundName, rate = 1): Promise<void> => {
       await wait(WAIT_MILLISECONDS[name] ?? 0);
 
       if (NEEDS_EARLIER_PRESS.includes(name) && context === null) {
@@ -156,14 +200,14 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
         return;
       }
 
-      // A hover never counts as a gesture, or the click that follows it would step aside.
+      // Hovering and typing never count as a gesture, or the click that follows them would step aside.
       if (name === 'hover') {
         if (performance.now() - lastHover < HOVER_GAP_MILLISECONDS) {
           return;
         }
 
         lastHover = performance.now();
-      } else {
+      } else if (name !== 'typing') {
         lastSound = { name, time: performance.now() };
       }
 
@@ -174,12 +218,52 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       try {
         const source = audio.createBufferSource();
         source.buffer = await bufferOf(audio, name);
+        source.playbackRate.value = rate;
         source.connect(output);
         source.start();
       } catch {
         // A sound that fails to load must never get in the way of the interface.
         buffers.delete(name);
       }
+    },
+    // Keeps a looping sound alive for this long from now. Every call pushes the end further away.
+    sustain: async (name: SoundName, milliseconds: number, rate: number): Promise<void> => {
+      const audio = isEnabled ? start() : null;
+
+      if (audio === null || output === null) {
+        return;
+      }
+
+      if (loop === null) {
+        if (isLoopStarting) {
+          return;
+        }
+
+        isLoopStarting = true;
+
+        try {
+          const source = audio.createBufferSource();
+          const gain = audio.createGain();
+          source.buffer = await bufferOf(audio, name);
+          source.loop = true;
+          gain.gain.value = 0;
+          gain.gain.setTargetAtTime(LOOP_GAIN, audio.currentTime, LOOP_FADE_IN_SECONDS);
+          source.connect(gain);
+          gain.connect(output);
+          source.start();
+          loop = { source, gain };
+        } catch {
+          buffers.delete(name);
+
+          return;
+        } finally {
+          isLoopStarting = false;
+        }
+      }
+
+      loop.source.playbackRate.setTargetAtTime(rate, audio.currentTime, RATE_GLIDE_SECONDS);
+      clearTimeout(loopTimer);
+      loopTimer = setTimeout(fadeLoop, milliseconds);
     },
   };
 };
@@ -189,7 +273,7 @@ export const soundPlayer = createSoundPlayer(() =>
 );
 
 const MENU_ITEMS = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="menubaritem"]';
-const CLICKABLE = `button, a, summary, ${MENU_ITEMS}`;
+const CLICKABLE = `button, a, summary, input[type="checkbox"], ${MENU_ITEMS}`;
 
 export const menuItemAt = (target: EventTarget | null): Element | null =>
   target instanceof Element ? target.closest(MENU_ITEMS) : null;

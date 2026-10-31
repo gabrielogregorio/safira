@@ -209,12 +209,14 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
         items={[
           {
             label: t('New file'),
+            sound: 'fileCreate',
             onSelect: () => {
               actions.onStartDraft({ kind: 'file', folder: node.path });
             },
           },
           {
             label: t('New folder'),
+            sound: 'folderCreate',
             onSelect: () => {
               actions.onStartDraft({ kind: 'folder', folder: node.path });
             },
@@ -356,6 +358,7 @@ export const FileSidebar = ({
           <button
             type="button"
             className="aero-button"
+            data-sound="fileCreate"
             aria-label={t('New file')}
             title={t('New file')}
             onClick={() => {
@@ -366,6 +369,7 @@ export const FileSidebar = ({
           <button
             type="button"
             className="aero-button"
+            data-sound="folderCreate"
             aria-label={t('New folder')}
             title={t('New folder')}
             onClick={() => {

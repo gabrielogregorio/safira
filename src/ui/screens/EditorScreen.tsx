@@ -620,6 +620,7 @@ export const EditorScreen = ({
         <label className="suggestions-toggle" title={t('Press Tab to accept the gray text')}>
           <input
             type="checkbox"
+            data-sound="suggestions"
             checked={settings.suggestions}
             onChange={(event) => {
               onChangeSettings({ suggestions: event.target.checked });

@@ -69,6 +69,7 @@ export const HomeScreen = ({
       const file = event.dataTransfer?.files[0];
 
       if (file !== undefined) {
+        void soundPlayer.play('import');
         onImportProject(file);
       }
     };
@@ -106,6 +107,7 @@ export const HomeScreen = ({
           <button
             type="button"
             className="button"
+            data-sound="import"
             onClick={() => {
               archiveInput.current?.click();
             }}>
