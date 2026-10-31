@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { FolderNode, TreeNode } from '@/projects/fileTree';
 import { buildFileTree, extensionStart, isPathTaken, provisionalName, renameTarget } from '@/projects/fileTree';
-import { NewFileIcon, NewFolderIcon } from './AeroIcons';
+import { NewFileIcon, NewFolderIcon, ProjectBadge } from './AeroIcons';
 import { ProjectNameField } from './ProjectNameField';
 
 interface FileSidebarProps {
@@ -341,6 +341,7 @@ export const FileSidebar = ({
   return (
     <nav className="file-sidebar" aria-label={t('Files')}>
       <h1 className="file-sidebar-project" data-fixed-text>
+        <ProjectBadge />
         <ProjectNameField name={projectName} onRename={onRenameProject} />
       </h1>
       <header className="file-sidebar-header">

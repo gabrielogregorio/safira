@@ -509,7 +509,6 @@ export const EditorScreen = ({
           }}>
           <BackIcon />
         </button>
-        <span className="toolbar-separator" aria-hidden="true" />
         <div className="toolbar-actions">
           <button
             type="button"

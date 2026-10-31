@@ -26,6 +26,13 @@ export const NewFolderIcon = () => (
   </svg>
 );
 
+export const ProjectBadge = () => (
+  <svg className="project-badge" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M7 3h10l5 6.5L12 21 2 9.5Z" fill="#bfe9ff" />
+    <path d="M7 3 12 9.5 17 3ZM2 9.5h20L12 21Z" fill="#ffffff" fillOpacity="0.55" />
+  </svg>
+);
+
 export const PlayIcon = () => (
   <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
     <path
