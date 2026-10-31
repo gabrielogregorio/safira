@@ -26,6 +26,9 @@ import stopUrl from './files/stop.wav';
 import suggestionsOffUrl from './files/suggestions-off.wav';
 import suggestionsOnUrl from './files/suggestions-on.wav';
 import tabUrl from './files/tab.wav';
+import terminalFocusUrl from './files/terminal-focus.wav';
+import terminalSendUrl from './files/terminal-send.wav';
+import terminalTypingUrl from './files/terminal-typing.wav';
 import toggleUrl from './files/toggle.wav';
 import typingUrl from './files/typing.wav';
 import weatherUrl from './files/weather.wav';
@@ -61,7 +64,10 @@ export type SoundName =
   | 'selection'
   | 'import'
   | 'language'
-  | 'error';
+  | 'error'
+  | 'terminalFocus'
+  | 'terminalTyping'
+  | 'terminalSend';
 
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
@@ -96,6 +102,9 @@ export const SOUND_FILES: Record<SoundName, string> = {
   import: importUrl,
   language: languageUrl,
   error: errorUrl,
+  terminalFocus: terminalFocusUrl,
+  terminalTyping: terminalTypingUrl,
+  terminalSend: terminalSendUrl,
 };
 
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
@@ -105,7 +114,7 @@ const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
 const SAME_GESTURE_MILLISECONDS = 80;
 const HOVER_GAP_MILLISECONDS = 40;
 
-const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping'];
+const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping', 'terminalTyping'];
 
 // These happen without a press: on a reload or a passing mouse, the browser would hold them until the first click.
 const NEEDS_EARLIER_PRESS: SoundName[] = ['hover', 'ideOpen'];
