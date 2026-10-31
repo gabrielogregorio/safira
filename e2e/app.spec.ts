@@ -385,7 +385,7 @@ test('the language change scrambles the letters into the new text', async ({ pag
   await expect(title).toHaveText('Criar projeto');
   const seenTexts = await page.evaluate(() => (window as unknown as { seenTexts: string[] }).seenTexts);
 
-  expect(new Set(seenTexts).size).toBeGreaterThan(3);
+  expect(seenTexts.some((text) => text !== 'Criar projeto' && text !== 'Create project')).toBe(true);
   expect(seenTexts.at(-1)).toBe('Criar projeto');
 });
 
@@ -493,6 +493,7 @@ test('the IDE keeps theme, language and sound in the Interface menu', async ({ p
 
   await page.getByRole('menuitem', { name: 'Interfaz' }).click();
   await page.getByRole('menuitemcheckbox', { name: 'Sonido' }).click();
+  await expect(page.getByRole('menuitemcheckbox', { name: 'Sonido' })).toBeHidden();
   await page.getByRole('menuitem', { name: 'Interfaz' }).click();
   await expect(page.getByRole('menuitemcheckbox', { name: 'Sonido' })).toHaveAttribute('aria-checked', 'false');
   await page.keyboard.press('Escape');

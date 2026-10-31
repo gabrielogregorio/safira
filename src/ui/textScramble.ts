@@ -57,7 +57,7 @@ export const scrambleDocument = (root: Node): (() => void) => {
 
     return { node, finalText, drawnText: finalText };
   });
-  const startedAt = performance.now();
+  let startedAt: number | null = null;
   let frame = 0;
 
   // React may rewrite a node during the animation; that text is newer, so it is never overwritten.
@@ -75,6 +75,9 @@ export const scrambleDocument = (root: Node): (() => void) => {
   };
 
   const draw = (now: number): void => {
+    // Counted from the first frame: a slow page may take longer than the animation to paint it.
+    startedAt ??= now;
+
     const progress = (now - startedAt) / SCRAMBLE_MILLISECONDS;
 
     if (progress >= 1) {

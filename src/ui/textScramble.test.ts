@@ -63,6 +63,21 @@ describe('collectTextNodes with fixed text', () => {
 });
 
 describe('scrambleDocument', () => {
+  it('still plays when the first frame arrives after the time of the whole animation', () => {
+    const frames: FrameRequestCallback[] = [];
+    const request = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => frames.push(callback));
+    const root = document.createElement('div');
+    root.textContent = 'Criar projeto';
+    scrambleDocument(root);
+
+    frames.at(-1)?.(performance.now() + 5000);
+    expect(root.textContent).not.toBe('Criar projeto');
+
+    frames.at(-1)?.(performance.now() + 6000);
+    expect(root.textContent).toBe('Criar projeto');
+    request.mockRestore();
+  });
+
   it('keeps a text written after the animation ended when it is cancelled', () => {
     const root = document.createElement('div');
     root.textContent = 'Criar projeto';
@@ -89,7 +104,8 @@ describe('scrambleDocument', () => {
     const frames: FrameRequestCallback[] = [];
     vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) => frames.push(callback));
     scrambleDocument(document.body);
-    (frames.shift() as FrameRequestCallback)(performance.now() + 100_000);
+    (frames.shift() as FrameRequestCallback)(0);
+    (frames.shift() as FrameRequestCallback)(100_000);
 
     expect(document.body.textContent).toBe('abc');
     expect(frames).toHaveLength(0);
