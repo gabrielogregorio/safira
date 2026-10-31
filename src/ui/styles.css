@@ -382,7 +382,6 @@ select {
 }
 
 .home-corner {
-  align-self: flex-start;
   margin-left: auto;
 }
 
@@ -394,7 +393,7 @@ select {
 }
 
 .home-settings {
-  align-items: flex-end;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   gap: 12px;

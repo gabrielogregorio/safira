@@ -487,18 +487,25 @@ test('the IDE starts with the language icon and leaves the theme to the Interfac
   await expect(page.getByRole('button', { name: /^Theme: / })).toHaveCount(0);
 });
 
-test('the home screen keeps theme and language in the top right corner, also on a narrow phone', async ({ page }) => {
-  for (const width of [1280, 320]) {
-    await page.setViewportSize({ width, height: 700 });
-    await page.goto('/');
-    const hero = await page.locator('.home-hero').boundingBox();
-    const corner = await page.locator('.home-corner').boundingBox();
-    const brand = await page.locator('.home-brand').boundingBox();
+test('the home screen keeps theme and language at the right of the action buttons', async ({ page }) => {
+  await page.setViewportSize({ width: 1280, height: 700 });
+  await page.goto('/');
+  const hero = await page.locator('.home-hero').boundingBox();
+  const corner = await page.locator('.home-corner').boundingBox();
+  const lessons = await page.getByRole('button', { name: 'Lessons' }).boundingBox();
+  const middle = (box: typeof corner): number => (box?.y ?? 0) + (box?.height ?? 0) / 2;
 
-    expect(corner?.y).toBe(brand?.y);
-    expect((corner?.x ?? 0) + (corner?.width ?? 0)).toBeLessThanOrEqual((hero?.x ?? 0) + (hero?.width ?? 0));
-    expect((hero?.x ?? 0) + (hero?.width ?? 0) - (corner?.x ?? 0) - (corner?.width ?? 0)).toBeLessThan(40);
-  }
+  expect(Math.abs(middle(corner) - middle(lessons))).toBeLessThan(2);
+  expect((hero?.x ?? 0) + (hero?.width ?? 0) - (corner?.x ?? 0) - (corner?.width ?? 0)).toBeLessThan(40);
+});
+
+test('the home icons stay inside the panel on a narrow phone', async ({ page }) => {
+  await page.setViewportSize({ width: 320, height: 700 });
+  await page.goto('/');
+  const hero = await page.locator('.home-hero').boundingBox();
+  const corner = await page.locator('.home-corner').boundingBox();
+
+  expect((corner?.x ?? 0) + (corner?.width ?? 0)).toBeLessThanOrEqual((hero?.x ?? 0) + (hero?.width ?? 0));
 });
 
 test('the logo is a live 3D gem', async ({ page }) => {

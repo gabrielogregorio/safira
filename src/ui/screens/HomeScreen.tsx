@@ -51,7 +51,6 @@ export const HomeScreen = ({
         <div className="home-brand">
           <SafiraLogo size={HERO_LOGO_SIZE} />
           <h1 data-fixed-text>Safira</h1>
-          <div className="home-corner">{preferenceToggles}</div>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">
@@ -70,6 +69,7 @@ export const HomeScreen = ({
           <button type="button" className="button" onClick={onOpenLessons}>
             {t('Lessons')}
           </button>
+          <div className="home-corner">{preferenceToggles}</div>
         </div>
       </header>
 
