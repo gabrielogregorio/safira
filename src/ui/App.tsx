@@ -250,16 +250,16 @@ export const App = ({ createWorker }: AppProps) => {
           changeSettings({ theme });
         }}
       />
-      <VisionToggle
-        vision={settings.vision}
-        onChange={(vision) => {
-          changeSettings({ vision });
-        }}
-      />
       <LanguageToggle
         locale={locale}
         onChange={(nextLocale) => {
           changeSettings({ locale: nextLocale });
+        }}
+      />
+      <VisionToggle
+        vision={settings.vision}
+        onChange={(vision) => {
+          changeSettings({ vision });
         }}
       />
       <SoundToggle
