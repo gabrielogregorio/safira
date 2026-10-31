@@ -85,4 +85,5 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - A `.zip` does not carry the order chosen in the sidebar, and dragging has no keyboard or touch alternative.
 - `R` in a note list is a rest. That was a decision, not something asked for.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
+- The Brazilian language sound plays the opening of Asa Branca (1947), which is not in the public domain. Replace it if the rights become a problem.
 - The README needs a GIF, and no manual screen reader pass was done.

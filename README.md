@@ -99,4 +99,4 @@ Assets use relative paths and routes use the hash, so one build works at any add
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1, and the interface sounds are from Kenney's Interface Sounds pack, under CC0.
+MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1, and the interface sounds are from Kenney's Interface Sounds pack, under CC0. The Brazilian language sound plays the opening of Asa Branca, by Luiz Gonzaga and Humberto Teixeira (1947), which is not in the public domain and is not covered by the MIT license.
