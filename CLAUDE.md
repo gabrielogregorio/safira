@@ -44,4 +44,11 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Moving the focus to a button during an Enter `keydown` clicks that button: call `preventDefault` on the key.
 - The hidden `1.0` stays in `SUPPORTED_VERSIONS` for scripts saved before the version went back to `0.9`.
 - `typing` and `hover` must not set `lastSound` in `sounds.ts`, or the click that follows them is swallowed.
+- `#` after a glued note is a sharp only on lines starting with `toque`, `tocar`, `toca` or `play`. Elsewhere it stays a comment, and so does a `#` with a space before it.
+- Saving is automatic in `saveOpenTabs`. It updates `latestTabs` by hand, so the flush on unmount does not save the same tabs twice.
+- Radix mounts dialog content after the effects of the parent, so the aquarium keeps its canvas in state, not in a ref.
+- A click on a text field reaches `document` after React has rendered: a sound that depends on the new state is played in the handler, as the suggestions switch does.
+- Finishing a name in the tree moves rows. `NameInput` waits for the press to end, or the click on another item is lost.
+- The aquarium simulation in `aquariumWorld.ts` has no DOM and takes `random`, so it is tested without a canvas. Eaten or popped fish stay gone by design.
+- Language words like `toque` are also valid names: `parseTone` fails on a line that is not a note, and the next rules take it.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

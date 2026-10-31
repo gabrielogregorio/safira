@@ -62,6 +62,11 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Interface decisions
 
+- There is no saving by hand. Open tabs reach the project 300 ms after typing stops, on `pagehide` and when leaving. Ctrl+S only forces it.
+- `importe` looks beside the importing file first, then from the root, with or without `.safira`.
+- Notes travel from the worker as `tone` events, and `soundPlayer.tone` plays them. A rest only waits.
+- Each sound is named in `sounds.ts`. A click plays `data-sound`, text fields share a focus and a typing sound, and any clickable element has a hover sound.
+
 - The look is Frutiger Aero: glass panels, glossy buttons, sky, water and aurora, with no external images.
 - `SceneBackdrop` keeps the three scenes mounted and cross fades them, so a theme changes in the background.
 - A language change runs `scrambleDocument`, which rewrites the letters into the new text. Code, terminal and variables
@@ -71,10 +76,13 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Known gaps
 
+- The full test run is behind the code: unit and E2E were last complete before the autosave, aquarium and sound work.
 - Coverage is 92%, with thresholds at 90/83/87/90. The goal is 100%.
 - Lighthouse is not in `tests.yml`, and the deploy workflows have not run on GitHub yet.
 - The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
 - Examples and lessons exist only in Brazilian Portuguese, and suggestions in Chinese and Japanese use the English list.
 - Previews are not removed from `gh-pages` when a pull request closes.
+- A `.zip` does not carry the order chosen in the sidebar, and dragging has no keyboard or touch alternative.
+- `R` in a note list is a rest. That was a decision, not something asked for.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
 - The README needs a GIF, and no manual screen reader pass was done.
