@@ -3,11 +3,10 @@ import { Children, isValidElement } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useTranslation } from '@/i18n/i18n';
-import { routeToHash } from '@/routing/routes';
 import { SafiraCode } from './SafiraCode';
 
 interface LessonMarkdownProps {
-  lessonId: string;
+  sectionHref: (section: string) => string;
   text: string;
   onOpenCode: (code: string) => void;
 }
@@ -37,7 +36,7 @@ const readText = (node: ReactNode): string =>
 
 const trimFinalLineBreak = (text: string): string => text.replace(/\n$/, '');
 
-export const LessonMarkdown = ({ lessonId, text, onOpenCode }: LessonMarkdownProps) => {
+export const LessonMarkdown = ({ sectionHref, text, onOpenCode }: LessonMarkdownProps) => {
   const t = useTranslation();
 
   const Heading = ({ children }: ComponentProps<'h2'>) => {
@@ -48,7 +47,7 @@ export const LessonMarkdown = ({ lessonId, text, onOpenCode }: LessonMarkdownPro
         {children}
         <a
           className="heading-link"
-          href={routeToHash({ name: 'lessons', lessonId, section })}
+          href={sectionHref(section)}
           aria-label={`${t('Link to this section')}: ${readText(children)}`}>
           #
         </a>

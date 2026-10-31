@@ -32,21 +32,47 @@ export const joinPath = (folder: string | null, name: string): string => (folder
 
 export const isInsideFolder = (path: string, folder: string): boolean => path.startsWith(`${folder}/`);
 
-export const provisionalName = (base: string, extension: string, paths: string[], folder: string | null): string => {
-  const isTaken = (name: string): boolean => {
-    const path = joinPath(folder, name);
+export const isPathTaken = (paths: string[], path: string): boolean =>
+  paths.some((existing) => existing === path || isInsideFolder(existing, path));
 
-    return paths.some((existing) => existing === path || isInsideFolder(existing, path));
-  };
+export const provisionalName = (base: string, extension: string, paths: string[], folder: string | null): string => {
   let candidate = `${base}${extension}`;
   let copy = 2;
 
-  while (isTaken(candidate)) {
+  while (isPathTaken(paths, joinPath(folder, candidate))) {
     candidate = `${base}-${copy}${extension}`;
     copy += 1;
   }
 
   return candidate;
+};
+
+export const movePath = (path: string, from: string, to: string): string =>
+  path === from || isInsideFolder(path, from) ? `${to}${path.slice(from.length)}` : path;
+
+// The dot that starts the extension. A name like `.env` has none, so all of it is the stem.
+export const extensionStart = (name: string): number => {
+  const dot = name.lastIndexOf('.');
+
+  return dot > 0 ? dot : name.length;
+};
+
+const isSafeSegment = (name: string): boolean => name !== '.' && name !== '..' && !/[/\\]/.test(name);
+
+// A typed name without an extension keeps the one the file had, as a file manager does.
+export const renameTarget = (node: TreeNode, typedName: string): string | null => {
+  const typed = typedName.trim();
+
+  if (typed === '' || !isSafeSegment(typed)) {
+    return null;
+  }
+
+  const name =
+    node.kind === 'file' && extensionStart(typed) === typed.length
+      ? `${typed}${node.name.slice(extensionStart(node.name))}`
+      : typed;
+
+  return `${node.path.slice(0, node.path.length - node.name.length)}${name}`;
 };
 
 const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {

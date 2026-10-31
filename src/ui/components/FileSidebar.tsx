@@ -3,16 +3,21 @@ import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { FolderNode, TreeNode } from '@/projects/fileTree';
-import { buildFileTree, provisionalName } from '@/projects/fileTree';
+import { buildFileTree, extensionStart, isPathTaken, provisionalName, renameTarget } from '@/projects/fileTree';
 import { NewFileIcon, NewFolderIcon } from './AeroIcons';
+import { ProjectNameField } from './ProjectNameField';
 
 interface FileSidebarProps {
+  projectName: string;
   paths: string[];
   activeFile: string;
+  onRenameProject: (name: string) => void;
   onOpen: (path: string) => void;
   onCreateFile: (folder: string | null, name: string) => void;
   onCreateFolder: (folder: string | null, name: string) => void;
   onDelete: (node: TreeNode) => void;
+  onRename: (node: TreeNode, path: string) => void;
+  canRename: boolean;
 }
 
 interface Draft {
@@ -28,6 +33,10 @@ interface TreeActions {
   onStartDraft: (draft: Draft) => void;
   onFinishDraft: (draft: Draft, name: string | null) => void;
   onDelete: (node: TreeNode) => void;
+  renaming: string | null;
+  canRename: boolean;
+  onStartRename: (path: string) => void;
+  onFinishRename: (node: TreeNode, name: string | null) => void;
 }
 
 interface TreeListProps extends TreeActions {
@@ -42,8 +51,22 @@ interface DraftRowProps {
 }
 
 interface RowMenuProps {
-  items: { label: string; onSelect: () => void }[];
+  items: { label: string; onSelect: () => void; disabled?: boolean }[];
   children: ReactNode;
+}
+
+interface NameInputProps {
+  label: string;
+  value: string;
+  selectionEnd: number;
+  isAllowed?: (name: string) => boolean;
+  onFinish: (name: string | null) => void;
+}
+
+interface RenameRowProps {
+  node: TreeNode;
+  paths: string[];
+  onFinish: (node: TreeNode, name: string | null) => void;
 }
 
 const FILE_EXTENSION = '.safira';
@@ -59,7 +82,11 @@ const RowMenu = ({ items, children }: RowMenuProps) => (
           event.preventDefault();
         }}>
         {items.map((item) => (
-          <ContextMenu.Item key={item.label} className="menubar-item" onSelect={item.onSelect}>
+          <ContextMenu.Item
+            key={item.label}
+            className="menubar-item"
+            disabled={item.disabled}
+            onSelect={item.onSelect}>
             {item.label}
           </ContextMenu.Item>
         ))}
@@ -68,10 +95,64 @@ const RowMenu = ({ items, children }: RowMenuProps) => (
   </ContextMenu.Root>
 );
 
-const DraftRow = ({ draft, paths, onFinish }: DraftRowProps) => {
+const NameInput = ({ label, value, selectionEnd, isAllowed = () => true, onFinish }: NameInputProps) => {
   const t = useTranslation();
   const input = useRef<HTMLInputElement>(null);
   const isFinished = useRef(false);
+  const [isRejected, setIsRejected] = useState(false);
+
+  useEffect(() => {
+    input.current?.focus();
+    input.current?.setSelectionRange(0, selectionEnd);
+  }, [selectionEnd]);
+
+  const finish = (name: string | null): void => {
+    if (!isFinished.current) {
+      isFinished.current = true;
+      onFinish(name);
+    }
+  };
+
+  const typedName = (): string => input.current?.value.trim() || value;
+
+  return (
+    <div className="tree-name-field">
+      <div className="tree-row tree-row-active">
+        <input
+          ref={input}
+          className="tree-input"
+          aria-label={label}
+          aria-invalid={isRejected}
+          defaultValue={value}
+          spellCheck={false}
+          onChange={() => {
+            setIsRejected(false);
+          }}
+          onBlur={() => {
+            finish(isAllowed(typedName()) ? typedName() : null);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === 'Enter' && isAllowed(typedName())) {
+              finish(typedName());
+            } else if (event.key === 'Enter') {
+              setIsRejected(true);
+            } else if (event.key === 'Escape') {
+              finish(null);
+            }
+          }}
+        />
+      </div>
+      {isRejected ? (
+        <p className="tree-input-error" role="alert">
+          {t('This name is invalid or already in use')}
+        </p>
+      ) : null}
+    </div>
+  );
+};
+
+const DraftRow = ({ draft, paths, onFinish }: DraftRowProps) => {
+  const t = useTranslation();
   const isFile = draft.kind === 'file';
   const [provisional] = useState(() =>
     isFile
@@ -79,44 +160,38 @@ const DraftRow = ({ draft, paths, onFinish }: DraftRowProps) => {
       : provisionalName(t('new-folder'), '', paths, draft.folder),
   );
 
-  useEffect(() => {
-    input.current?.focus();
-    input.current?.select();
-  }, []);
-
-  const finish = (name: string | null): void => {
-    if (!isFinished.current) {
-      isFinished.current = true;
-      onFinish(draft, name);
-    }
-  };
-
-  const keepTypedName = (): void => {
-    finish(input.current?.value.trim() || provisional);
-  };
-
   return (
     <li>
-      <div className="tree-row tree-row-active">
-        <input
-          ref={input}
-          className="tree-input"
-          aria-label={isFile ? t('File name') : t('Folder name')}
-          defaultValue={provisional}
-          spellCheck={false}
-          onBlur={keepTypedName}
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              keepTypedName();
-            }
-
-            if (event.key === 'Escape') {
-              finish(null);
-            }
-          }}
-        />
-      </div>
+      <NameInput
+        label={isFile ? t('File name') : t('Folder name')}
+        value={provisional}
+        selectionEnd={provisional.length}
+        onFinish={(name) => {
+          onFinish(draft, name);
+        }}
+      />
     </li>
+  );
+};
+
+const RenameRow = ({ node, paths, onFinish }: RenameRowProps) => {
+  const t = useTranslation();
+  const isFile = node.kind === 'file';
+
+  return (
+    <NameInput
+      label={isFile ? t('File name') : t('Folder name')}
+      value={node.name}
+      selectionEnd={isFile ? extensionStart(node.name) : node.name.length}
+      isAllowed={(name) => {
+        const target = renameTarget(node, name);
+
+        return target !== null && (target === node.path || !isPathTaken(paths, target));
+      }}
+      onFinish={(name) => {
+        onFinish(node, name);
+      }}
+    />
   );
 };
 
@@ -142,24 +217,35 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
             },
           },
           {
+            label: t('Rename'),
+            disabled: !actions.canRename,
+            onSelect: () => {
+              actions.onStartRename(node.path);
+            },
+          },
+          {
             label: t('Delete'),
             onSelect: () => {
               actions.onDelete(node);
             },
           },
         ]}>
-        <div className="tree-row">
-          <button
-            type="button"
-            className="tree-name"
-            aria-expanded={isOpen}
-            onClick={() => {
-              setIsClosed(isOpen);
-            }}>
-            <span aria-hidden="true">{isOpen ? '▾' : '▸'} </span>
-            <span data-fixed-text>{node.name}</span>
-          </button>
-        </div>
+        {actions.renaming === node.path ? (
+          <RenameRow node={node} paths={actions.paths} onFinish={actions.onFinishRename} />
+        ) : (
+          <div className="tree-row">
+            <button
+              type="button"
+              className="tree-name"
+              aria-expanded={isOpen}
+              onClick={() => {
+                setIsClosed(isOpen);
+              }}>
+              <span aria-hidden="true">{isOpen ? '▾' : '▸'} </span>
+              <span data-fixed-text>{node.name}</span>
+            </button>
+          </div>
+        )}
       </RowMenu>
       {isOpen ? <TreeList nodes={node.children} folder={node.path} {...actions} /> : null}
     </li>
@@ -179,24 +265,35 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
             <RowMenu
               items={[
                 {
+                  label: t('Rename'),
+                  disabled: !actions.canRename,
+                  onSelect: () => {
+                    actions.onStartRename(node.path);
+                  },
+                },
+                {
                   label: t('Delete'),
                   onSelect: () => {
                     actions.onDelete(node);
                   },
                 },
               ]}>
-              <div className={node.path === actions.activeFile ? 'tree-row tree-row-active' : 'tree-row'}>
-                <button
-                  type="button"
-                  className="tree-name"
-                  data-sound="open"
-                  aria-current={node.path === actions.activeFile ? 'page' : undefined}
-                  onClick={() => {
-                    actions.onOpen(node.path);
-                  }}>
-                  <span data-fixed-text>{node.name}</span>
-                </button>
-              </div>
+              {actions.renaming === node.path ? (
+                <RenameRow node={node} paths={actions.paths} onFinish={actions.onFinishRename} />
+              ) : (
+                <div className={node.path === actions.activeFile ? 'tree-row tree-row-active' : 'tree-row'}>
+                  <button
+                    type="button"
+                    className="tree-name"
+                    data-sound="open"
+                    aria-current={node.path === actions.activeFile ? 'page' : undefined}
+                    onClick={() => {
+                      actions.onOpen(node.path);
+                    }}>
+                    <span data-fixed-text>{node.name}</span>
+                  </button>
+                </div>
+              )}
             </RowMenu>
           </li>
         ),
@@ -209,15 +306,29 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
 };
 
 export const FileSidebar = ({
+  projectName,
   paths,
   activeFile,
+  onRenameProject,
   onOpen,
   onCreateFile,
   onCreateFolder,
   onDelete,
+  onRename,
+  canRename,
 }: FileSidebarProps) => {
   const t = useTranslation();
   const [draft, setDraft] = useState<Draft | null>(null);
+  const [renaming, setRenaming] = useState<string | null>(null);
+
+  const finishRename = (node: TreeNode, name: string | null): void => {
+    setRenaming(null);
+    const target = name === null ? null : renameTarget(node, name);
+
+    if (target !== null && target !== node.path) {
+      onRename(node, target);
+    }
+  };
 
   const finishDraft = (finished: Draft, name: string | null): void => {
     setDraft(null);
@@ -229,6 +340,9 @@ export const FileSidebar = ({
 
   return (
     <nav className="file-sidebar" aria-label={t('Files')}>
+      <h1 className="file-sidebar-project" data-fixed-text>
+        <ProjectNameField name={projectName} onRename={onRenameProject} />
+      </h1>
       <header className="file-sidebar-header">
         <h2>{t('Files')}</h2>
         <div className="aero-group">
@@ -264,6 +378,10 @@ export const FileSidebar = ({
         onStartDraft={setDraft}
         onFinishDraft={finishDraft}
         onDelete={onDelete}
+        renaming={renaming}
+        canRename={canRename}
+        onStartRename={setRenaming}
+        onFinishRename={finishRename}
       />
     </nav>
   );

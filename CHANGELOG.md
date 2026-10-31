@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0
+## 0.9.0
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
@@ -20,11 +20,13 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Colors by name, `#331`, `#ff1122` or `0xff1122`, after or before the text, and `mostra` beside `mostre` and `mostrar`.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
+- Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.
+- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Unsaved work is kept while typing and recovered after a crash or a power cut.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.
 - Deploy to GitHub Pages on merge, and a preview environment for each pull request.
-- Lessons in real markdown, with colored code and a button to open each example in the IDE.
+- Lessons in real markdown, inside the IDE under Help, with colored code and a button that opens each example as a file of the project.
 - Resizable panels, by mouse and keyboard, kept between sessions.
 - Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.

@@ -26,6 +26,7 @@ interface IdeMenuBarProps {
   onChangeSettings: (changes: Partial<Settings>) => void;
   onToggleFullScreen: () => void;
   onShowCommands: () => void;
+  onOpenLessons: () => void;
 }
 
 interface MenuProps {
@@ -122,6 +123,7 @@ export const IdeMenuBar = ({
   onChangeSettings,
   onToggleFullScreen,
   onShowCommands,
+  onOpenLessons,
 }: IdeMenuBarProps) => {
   const t = useTranslation();
   const lessons = examples.filter((example) => !example.id.startsWith(PROGRAM_PREFIX));
@@ -253,6 +255,7 @@ export const IdeMenuBar = ({
         <Action label={t('Full screen')} shortcut="F11" onSelect={onToggleFullScreen} />
       </Menu>
       <Menu label={t('Help')}>
+        <Action label={t('Lessons')} onSelect={onOpenLessons} />
         <Action label={t('Available commands')} onSelect={onShowCommands} />
         <Action
           label={t('Report a bug')}

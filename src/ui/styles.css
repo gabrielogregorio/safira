@@ -693,7 +693,43 @@ select {
 .project-name {
   flex: 1 1 160px;
   font-weight: 600;
-  overflow-wrap: anywhere;
+  min-width: 0;
+}
+
+.project-name-button,
+.project-name-input {
+  border: 1px solid transparent;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: inherit;
+  display: block;
+  font: inherit;
+  height: 32px;
+  line-height: 30px;
+  margin: 0;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0 6px;
+  width: 100%;
+}
+
+.project-name-button {
+  background: none;
+  cursor: text;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-name-button:hover {
+  border-color: var(--color-line);
+}
+
+.project-name-input {
+  background: var(--color-field);
+  border-color: var(--color-accent);
+  min-height: 0;
 }
 
 .editor-screen {
@@ -734,13 +770,12 @@ select {
   padding: 6px 10px;
 }
 
-.toolbar-title {
-  font-size: 1.05rem;
-  font-weight: 600;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.toolbar-separator {
+  align-self: stretch;
+  background: linear-gradient(transparent, var(--color-line) 25%, var(--color-line) 75%, transparent);
+  flex: none;
+  margin: 2px 4px;
+  width: 1px;
 }
 
 .toolbar-actions {
@@ -1022,6 +1057,12 @@ select {
   padding: 8px;
 }
 
+.file-sidebar-project {
+  font-size: 1.05rem;
+  font-weight: 600;
+  margin: 0 0 0 -7px;
+}
+
 .file-sidebar-header {
   align-items: center;
   display: flex;
@@ -1085,6 +1126,12 @@ select {
   min-width: 0;
   padding: 2px 6px;
   width: 100%;
+}
+
+.tree-input-error {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  margin: 2px 6px;
 }
 
 .tree-input::selection {
@@ -1711,12 +1758,22 @@ select {
   padding: 4px 0;
 }
 
+.modal-wide {
+  height: 90dvh;
+  max-width: 1100px;
+}
+
+.modal-wide .modal-body {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
 .lessons {
   display: grid;
   gap: 12px;
-  grid-template-columns: 280px minmax(0, 1fr);
-  height: 100dvh;
-  padding: 10px;
+  grid-template-columns: 260px minmax(0, 1fr);
+  height: 100%;
 }
 
 .lessons-nav {
@@ -1725,12 +1782,6 @@ select {
   gap: 10px;
   min-height: 0;
   padding: 12px;
-}
-
-.lessons-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
 }
 
 .lessons-list {
@@ -1756,14 +1807,9 @@ select {
   font-weight: 700;
 }
 
-.lesson-page {
-  min-height: 0;
-  min-width: 0;
-  outline: none;
-}
-
 .lesson {
   height: 100%;
+  min-width: 0;
   overflow-y: auto;
   padding: 20px 24px;
 }
@@ -1835,9 +1881,14 @@ select {
     padding: 6px;
   }
 
-  .toolbar-title {
-    flex: 1 1 60px;
-    min-width: 0;
+  .toolbar-separator {
+    display: none;
+  }
+
+  .project-name-button,
+  .project-name-input {
+    height: 44px;
+    line-height: 42px;
   }
 
   .label-wide {
@@ -1864,7 +1915,6 @@ select {
   }
 
   .toolbar-actions {
-    margin-left: 0;
     order: 1;
   }
 
@@ -1961,7 +2011,6 @@ select {
     gap: 6px;
     grid-template-columns: minmax(0, 1fr);
     grid-template-rows: auto minmax(0, 1fr);
-    padding: 6px;
   }
 
   .lessons-nav {

@@ -1,3 +1,4 @@
+import type { TreeNode } from './fileTree';
 import {
   buildFileTree,
   folderMarkerPath,
@@ -6,7 +7,11 @@ import {
   joinPath,
   sanitizePath,
   visibleFiles,
+  extensionStart,
+  isPathTaken,
+  movePath,
   provisionalName,
+  renameTarget,
 } from './fileTree';
 
 describe('buildFileTree', () => {
@@ -95,5 +100,54 @@ describe('provisionalName', () => {
 
   it('sees folders as taken names', () => {
     expect(provisionalName('pasta', '', ['pasta/.keep'], null)).toBe('pasta-2');
+  });
+});
+
+describe('movePath', () => {
+  it('moves the item and what is inside it, and nothing else', () => {
+    expect(movePath('a.txt', 'a.txt', 'b.txt')).toBe('b.txt');
+    expect(movePath('dados/x/a.txt', 'dados', 'info')).toBe('info/x/a.txt');
+    expect(movePath('dados2/a.txt', 'dados', 'info')).toBe('dados2/a.txt');
+  });
+});
+
+describe('isPathTaken', () => {
+  it('sees files and folders', () => {
+    expect(isPathTaken(['a.txt', 'dados/.keep'], 'a.txt')).toBe(true);
+    expect(isPathTaken(['a.txt', 'dados/.keep'], 'dados')).toBe(true);
+    expect(isPathTaken(['a.txt', 'dados/.keep'], 'dad')).toBe(false);
+  });
+});
+
+describe('extensionStart', () => {
+  it.each([
+    ['main.safira', 4],
+    ['a.b.txt', 3],
+    ['leia', 4],
+    ['.env', 4],
+  ])('finds it in %s', (name, position) => {
+    expect(extensionStart(name)).toBe(position);
+  });
+});
+
+describe('renameTarget', () => {
+  const file = { kind: 'file', name: 'a.txt', path: 'dados/a.txt' } as const;
+  const folder: TreeNode = { kind: 'folder', name: 'dados', path: 'x/dados', children: [] };
+
+  it('stays in the same folder', () => {
+    expect(renameTarget(file, 'b.safira')).toBe('dados/b.safira');
+    expect(renameTarget(folder, 'info')).toBe('x/info');
+  });
+
+  it('keeps the extension when none is typed', () => {
+    expect(renameTarget(file, ' b ')).toBe('dados/b.txt');
+  });
+
+  it('does not give an extension to a folder', () => {
+    expect(renameTarget(folder, 'a.b')).toBe('x/a.b');
+  });
+
+  it.each(['', '  ', '.', '..', 'a/b', 'a\\b'])('refuses "%s"', (typed) => {
+    expect(renameTarget(file, typed)).toBeNull();
   });
 });

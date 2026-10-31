@@ -1,8 +1,14 @@
+export interface LessonPlace {
+  lessonId: string | null;
+  section: string | null;
+}
+
 export type Route =
   | { name: 'home' }
   | { name: 'new'; exampleId: string | null }
-  | { name: 'lessons'; lessonId: string | null; section: string | null }
-  | { name: 'project'; projectId: string; file: string | null };
+  | { name: 'project'; projectId: string; file: string | null; lesson?: LessonPlace };
+
+const LESSONS_SEGMENT = 'lessons';
 
 const decodeSegment = (segment: string): string | null => {
   try {
@@ -14,7 +20,7 @@ const decodeSegment = (segment: string): string | null => {
 
 export const parseRoute = (hash: string): Route => {
   const segments = hash.replace(/^#\/?/, '').split('/').filter(Boolean).map(decodeSegment);
-  const [screen, first = null, second = null] = segments;
+  const [screen, first = null, second = null, third = null, lessonId = null, section = null] = segments;
 
   if (segments.includes(null)) {
     return { name: 'home' };
@@ -24,12 +30,10 @@ export const parseRoute = (hash: string): Route => {
     return { name: 'new', exampleId: first };
   }
 
-  if (screen === 'lessons') {
-    return { name: 'lessons', lessonId: first, section: second };
-  }
-
   if (screen === 'projects' && first !== null) {
-    return { name: 'project', projectId: first, file: second };
+    const place = { name: 'project', projectId: first, file: second } as const;
+
+    return third === LESSONS_SEGMENT ? { ...place, lesson: { lessonId, section } } : place;
   }
 
   return { name: 'home' };
@@ -47,9 +51,12 @@ export const routeToHash = (route: Route): string => {
       return '#/';
     case 'new':
       return buildHash(['new', route.exampleId]);
-    case 'lessons':
-      return buildHash(['lessons', route.lessonId, route.section]);
     case 'project':
-      return buildHash(['projects', route.projectId, route.file]);
+      return buildHash([
+        'projects',
+        route.projectId,
+        route.file,
+        ...(route.lesson === undefined ? [] : [LESSONS_SEGMENT, route.lesson.lessonId, route.lesson.section]),
+      ]);
   }
 };

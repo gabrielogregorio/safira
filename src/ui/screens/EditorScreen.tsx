@@ -5,23 +5,33 @@ import { useTranslation } from '@/i18n/i18n';
 import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
-import { isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
+import { addScriptVersion, isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
 import { clearDrafts, loadDrafts, saveDrafts } from '@/projects/draftStore';
 import type { TreeNode } from '@/projects/fileTree';
-import { folderMarkerPath, isInsideFolder, joinPath, sanitizePath, visibleFiles } from '@/projects/fileTree';
+import {
+  folderMarkerPath,
+  isInsideFolder,
+  joinPath,
+  movePath,
+  provisionalName,
+  sanitizePath,
+  visibleFiles,
+} from '@/projects/fileTree';
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
+import type { LessonPlace } from '@/routing/routes';
+import { routeToHash } from '@/routing/routes';
 import type { RunMode } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
 import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
-import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { VariableInspector } from '@/ui/components/VariableInspector';
 import { describeArchiveResult } from '@/ui/archiveMessages';
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { FileSidebar } from '@/ui/components/FileSidebar';
+import { LessonsDialog } from '@/ui/components/LessonsDialog';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
 import { Terminal } from '@/ui/components/Terminal';
@@ -32,6 +42,7 @@ import {
   isDirty,
   isScript,
   mergeProgramFiles,
+  moveTab,
   nextUntitledName,
   openTab,
   toStoredText,
@@ -43,11 +54,13 @@ import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
 interface EditorScreenProps {
   project: Project;
   routeFile: string | null;
+  routeLesson?: LessonPlace;
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
+  onChangeLesson: (file: string, lesson: LessonPlace) => void;
   onChangeSettings: (changes: Partial<Settings>) => void;
   onBack: () => void;
 }
@@ -61,9 +74,9 @@ type Dialog =
   | { kind: 'delete-node'; node: TreeNode }
   | null;
 
-const TOOLBAR_LOGO_SIZE = 30;
 const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
 const DRAFT_DELAY_MILLISECONDS = 300;
+const SCRIPT_EXTENSION = '.safira';
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
 type MobilePanel = 'files' | 'code' | 'output' | 'variables';
 
@@ -87,11 +100,13 @@ const initialFile = (project: Project): string =>
 export const EditorScreen = ({
   project,
   routeFile,
+  routeLesson,
   settings,
   locale,
   createWorker = createRunnerWorker,
   onSaveProject,
   onSelectFile,
+  onChangeLesson,
   onChangeSettings,
   onBack,
 }: EditorScreenProps) => {
@@ -278,6 +293,39 @@ export const EditorScreen = ({
     [activeFile, onSaveProject, onSelectFile, project, tabs],
   );
 
+  const renameNode = useCallback(
+    (node: TreeNode, target: string) => {
+      const moved = (path: string): string => movePath(path, node.path, target);
+      const moveKeys = <Value,>(entries: Record<string, Value>): Record<string, Value> =>
+        Object.fromEntries(Object.entries(entries).map(([path, value]) => [moved(path), value]));
+
+      onSaveProject({ ...project, files: moveKeys(project.files), breakpoints: moveKeys(project.breakpoints) });
+      setTabs((current) => current.map((tab) => moveTab(tab, moved(tab.file))));
+
+      if (moved(activeFile) !== activeFile) {
+        onSelectFile(moved(activeFile));
+      }
+    },
+    [activeFile, onSaveProject, onSelectFile, project],
+  );
+
+  const openLessonCode = useCallback(
+    (lessonId: string, code: string) => {
+      const source = addScriptVersion(code);
+      const paths = Object.keys(project.files);
+      const existing = paths.find((path) => project.files[path] === source);
+      const path = existing ?? provisionalName(lessonId, SCRIPT_EXTENSION, paths, null);
+
+      if (existing === undefined) {
+        onSaveProject({ ...project, files: { ...project.files, [path]: source } });
+      }
+
+      openFile(path, source);
+      setMobilePanel('code');
+    },
+    [onSaveProject, openFile, project],
+  );
+
   const importIntoProject = useCallback(
     async (file: File) => {
       const result = await readArchiveFile(file);
@@ -424,8 +472,28 @@ export const EditorScreen = ({
 
   const runLabel = runner.status === 'paused' ? t('Continue') : t('Run');
 
+  const lessonHref = (lessonId: string, section: string | null): string =>
+    routeToHash({ name: 'project', projectId: project.id, file: activeFile, lesson: { lessonId, section } });
+
   return (
     <div className="editor-screen">
+      {routeLesson === undefined ? null : (
+        <LessonsDialog
+          lessonId={routeLesson.lessonId}
+          section={routeLesson.section}
+          readLessons={settings.readLessons}
+          lessonHref={lessonHref}
+          onMarkRead={(id) => {
+            if (!settings.readLessons.includes(id)) {
+              onChangeSettings({ readLessons: [...settings.readLessons, id] });
+            }
+          }}
+          onOpenCode={openLessonCode}
+          onClose={() => {
+            onSelectFile(activeFile);
+          }}
+        />
+      )}
       <header className="toolbar">
         <button
           type="button"
@@ -441,10 +509,7 @@ export const EditorScreen = ({
           }}>
           <BackIcon />
         </button>
-        <SafiraLogo size={TOOLBAR_LOGO_SIZE} />
-        <h1 className="toolbar-title" data-fixed-text>
-          {project.name}
-        </h1>
+        <span className="toolbar-separator" aria-hidden="true" />
         <div className="toolbar-actions">
           <button
             type="button"
@@ -503,6 +568,9 @@ export const EditorScreen = ({
           onToggleFullScreen={toggleFullScreen}
           onShowCommands={() => {
             setDialog({ kind: 'commands' });
+          }}
+          onOpenLessons={() => {
+            onChangeLesson(activeFile, { lessonId: null, section: null });
           }}
         />
       </header>
@@ -603,8 +671,12 @@ export const EditorScreen = ({
 
       <main id="content" tabIndex={-1} className={`workspace workspace-${mobilePanel}`} style={panelStyle}>
         <FileSidebar
+          projectName={project.name}
           paths={Object.keys(project.files)}
           activeFile={activeFile}
+          onRenameProject={(name) => {
+            onSaveProject({ ...project, name });
+          }}
           onOpen={(path) => {
             openFile(path, project.files[path] ?? '');
             setMobilePanel('code');
@@ -614,6 +686,8 @@ export const EditorScreen = ({
           onDelete={(node) => {
             setDialog({ kind: 'delete-node', node });
           }}
+          onRename={renameNode}
+          canRename={!isRunning}
         />
         <Splitter
           label={t('Resize the files panel')}

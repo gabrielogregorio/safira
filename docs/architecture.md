@@ -16,7 +16,7 @@ Safira runs only in the browser. There is no server, and programs never reach th
 | Sound | `src/ui/sound` | Player on Web Audio with short recorded files from Kenney (CC0). A click plays what `data-sound` names on the element, or the plain click |
 | Sky | `src/ui/sky` | The clock of the scenery. `settings.theme` is only the starting point: `useSkyClock` gives the phase, and the shown theme comes from it. Nothing about elapsed time is saved |
 | Suggestions | `src/language/completion.ts`, `src/ui/components/ghostText.ts` | Pure suggestion logic, and the CodeMirror ghost text that paints it without touching the document |
-| Gem | `src/ui/gem` | The 3D logo: mesh and aim math in `gemMath.ts`, plain WebGL 2 in `gemRenderer.ts`, no 3D library |
+| Gem | `src/ui/gem` | The 3D logo of the home screen, absent from the IDE: mesh and aim math in `gemMath.ts`, plain WebGL 2 in `gemRenderer.ts`, no 3D library |
 
 `src/language` has no dependency on React or the DOM. The interface only reaches it through `src/runtime`, except for
 pure helpers such as highlighting and formatting.
@@ -54,8 +54,8 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 |---|---|
 | `#/` | Home |
 | `#/new`, `#/new/<example>` | New project, with an example already chosen |
-| `#/lessons/<lesson>/<section>` | Lesson and section |
 | `#/projects/<id>/<file>` | Project and file, with the file URL encoded |
+| `#/projects/<id>/<file>/lessons/<lesson>/<section>` | Lessons open over that project, reached from Help |
 
 ## Interface decisions
 

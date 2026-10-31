@@ -9,6 +9,7 @@ interface ModalProps {
   title: string;
   children: ReactNode;
   onClose: () => void;
+  isWide?: boolean;
 }
 
 const ZOOM_RECTANGLES = [0, 1, 2, 3];
@@ -37,7 +38,7 @@ const playClosingAnimation = (overlay: HTMLElement): void => {
   }, CLOSING_MILLISECONDS);
 };
 
-export const Modal = ({ title, children, onClose }: ModalProps) => {
+export const Modal = ({ title, children, onClose, isWide = false }: ModalProps) => {
   const overlay = useRef<HTMLDivElement | null>(null);
   const keepOverlay = useCallback((node: HTMLDivElement | null) => {
     overlay.current = node ?? overlay.current;
@@ -70,7 +71,10 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
               <span key={rectangle} />
             ))}
           </div>
-          <Dialog.Content className="modal" aria-describedby={undefined} onOpenAutoFocus={focusMarkedElement}>
+          <Dialog.Content
+            className={isWide ? 'modal modal-wide' : 'modal'}
+            aria-describedby={undefined}
+            onOpenAutoFocus={focusMarkedElement}>
             <header className="modal-header">
               <Dialog.Title asChild>
                 <h2>{title}</h2>

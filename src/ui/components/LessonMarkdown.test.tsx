@@ -4,7 +4,7 @@ import { LessonMarkdown, toSlug } from './LessonMarkdown';
 
 const setup = (text: string) => {
   const onOpenCode = vi.fn();
-  render(<LessonMarkdown lessonId="aula-01" text={text} onOpenCode={onOpenCode} />);
+  render(<LessonMarkdown sectionHref={(section) => `#/aula-01/${section}`} text={text} onOpenCode={onOpenCode} />);
 
   return onOpenCode;
 };
@@ -29,7 +29,7 @@ describe('LessonMarkdown', () => {
 
     expect(screen.getByRole('link', { name: /Link to this section/ })).toHaveAttribute(
       'href',
-      '#/lessons/aula-01/comando-de-exibicao',
+      '#/aula-01/comando-de-exibicao',
     );
     expect(screen.getByRole('heading', { level: 2 })).toHaveAttribute('id', 'comando-de-exibicao');
   });

@@ -6,6 +6,7 @@ import { routeToHash } from '@/routing/routes';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
+import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { TextPrompt } from '@/ui/components/TextPrompt';
 
@@ -20,7 +21,6 @@ interface HomeScreenProps {
   onExportProject: (project: Project) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
-  onOpenLessons: () => void;
   preferenceToggles: ReactNode;
 }
 
@@ -37,7 +37,6 @@ export const HomeScreen = ({
   onExportProject,
   onRename,
   onDelete,
-  onOpenLessons,
   preferenceToggles,
 }: HomeScreenProps) => {
   const t = useTranslation();
@@ -112,9 +111,6 @@ export const HomeScreen = ({
             {t('Import project (.zip)')}
           </button>
           <ArchiveInput ref={archiveInput} label={t('Import project (.zip)')} onSelect={onImportProject} />
-          <button type="button" className="button" onClick={onOpenLessons}>
-            {t('Lessons')}
-          </button>
           <div className="home-corner">{preferenceToggles}</div>
         </div>
       </header>
@@ -126,7 +122,12 @@ export const HomeScreen = ({
           {projects.map((project) => (
             <li key={project.id} className="project-row">
               <span className="project-name" data-fixed-text>
-                {project.name}
+                <ProjectNameField
+                  name={project.name}
+                  onRename={(name) => {
+                    onRename(project.id, name);
+                  }}
+                />
               </span>
               <a
                 className="button button-primary"

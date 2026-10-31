@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n';
-import { addScriptVersion } from '@/language/version';
 import { clearDrafts } from '@/projects/draftStore';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
 import {
   createProject,
   loadProjects,
-  MAIN_FILE,
   removeProject,
   saveProjects,
   upsertProject,
@@ -30,7 +28,6 @@ import { soundForClick, soundPlayer } from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
-import { LessonsScreen } from '@/ui/screens/LessonsScreen';
 
 interface AppProps {
   createWorker?: WorkerFactory;
@@ -179,20 +176,6 @@ export const App = ({ createWorker }: AppProps) => {
     [handleImportProject],
   );
 
-  const handleOpenLessonCode = useCallback(
-    (lessonTitle: string, code: string) => {
-      const source = addScriptVersion(code);
-      const existing = projects.find((project) => project.files[MAIN_FILE] === source);
-
-      if (existing === undefined) {
-        handleCreate(lessonTitle, source);
-      } else {
-        navigate({ name: 'project', projectId: existing.id, file: null });
-      }
-    },
-    [handleCreate, navigate, projects],
-  );
-
   const handleSave = useCallback((project: Project) => {
     setProjects((current) => {
       const next = upsertProject(current, project);
@@ -208,7 +191,7 @@ export const App = ({ createWorker }: AppProps) => {
 
   const activeProject =
     route.name === 'project' ? projects.find((project) => project.id === route.projectId) : undefined;
-  const isHome = activeProject === undefined && route.name !== 'lessons';
+  const isHome = activeProject === undefined;
   const preferenceToggles = (
     <div className="orb-toggles">
       <ThemeToggle
@@ -268,25 +251,14 @@ export const App = ({ createWorker }: AppProps) => {
           locale={locale}
           createWorker={createWorker}
           onSaveProject={handleSave}
+          routeLesson={route.name === 'project' ? route.lesson : undefined}
           onSelectFile={(file) => {
             navigate({ name: 'project', projectId: activeProject.id, file });
           }}
-          onChangeSettings={changeSettings}
-          onBack={goHome}
-        />
-      ) : null}
-      {route.name === 'lessons' ? (
-        <LessonsScreen
-          lessonId={route.lessonId}
-          section={route.section}
-          readLessons={settings.readLessons}
-          preferenceToggles={preferenceToggles}
-          onOpenCode={handleOpenLessonCode}
-          onMarkRead={(id) => {
-            if (!settings.readLessons.includes(id)) {
-              changeSettings({ readLessons: [...settings.readLessons, id] });
-            }
+          onChangeLesson={(file, lesson) => {
+            navigate({ name: 'project', projectId: activeProject.id, file, lesson });
           }}
+          onChangeSettings={changeSettings}
           onBack={goHome}
         />
       ) : null}
@@ -308,9 +280,6 @@ export const App = ({ createWorker }: AppProps) => {
           onDelete={(id) => {
             persist(removeProject(projects, id));
             clearDrafts(id);
-          }}
-          onOpenLessons={() => {
-            navigate({ name: 'lessons', lessonId: null, section: null });
           }}
           preferenceToggles={preferenceToggles}
         />

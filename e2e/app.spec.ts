@@ -46,6 +46,15 @@ const createProjectWithCode = async (page: Page, code: string): Promise<void> =>
   await page.keyboard.insertText(code);
 };
 
+const openLessons = async (page: Page): Promise<void> => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.getByRole('menuitem', { name: 'Help' }).click();
+  await page.getByRole('menuitem', { name: 'Lessons' }).click();
+  await expect(page.getByRole('dialog', { name: 'Lessons' })).toBeVisible();
+};
+
 const breakpointDots = (page: Page): Locator =>
   page.locator('.editor-breakpoints .cm-gutterElement').filter({ visible: true });
 
@@ -216,8 +225,8 @@ test.describe('accessibility', () => {
   }
 
   test('lessons have no violations', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Lessons' }).click();
+    await openLessons(page);
+    await waitForAnimations(page);
     await expectNoViolations(page);
   });
 });
@@ -285,7 +294,9 @@ test('the editor takes the focus when a project opens', async ({ page }) => {
 
 test('the page does not scroll in the lessons and the sidebar stays in place', async ({ page }) => {
   await page.setViewportSize({ width: 1280, height: 500 });
-  await page.goto('/#/lessons/aula-02-exibicao');
+  await openLessons(page);
+  await page.getByRole('link', { name: 'Next' }).click();
+  await expect(page.getByRole('heading', { name: 'Exibição', exact: true })).toBeVisible();
   const sidebarTop = await page
     .getByRole('link', { name: /^Apresentação/ })
     .evaluate((link) => link.getBoundingClientRect().top);
@@ -300,9 +311,12 @@ test('the page does not scroll in the lessons and the sidebar stays in place', a
   expect(await page.locator('.lesson').evaluate((lesson) => lesson.scrollTop)).toBeGreaterThan(0);
 });
 
-test('a lesson example opens and runs in the IDE', async ({ page }) => {
-  await page.goto('/#/lessons/aula-02-exibicao');
+test('a lesson example opens and runs in the same project', async ({ page }) => {
+  await openLessons(page);
+  await page.getByRole('link', { name: 'Next' }).click();
   await page.getByRole('button', { name: 'Open in the IDE' }).first().click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect(page.locator('.tab-active')).toContainText('aula-02-exibicao.safira');
   await runCode(page);
 
   await expect(page.getByRole('log')).toContainText('Script finished');
@@ -533,6 +547,34 @@ test('a new file shows up in the tree, and moving away keeps its provisional nam
   await expect(page.getByLabel('File name')).toHaveCount(0);
 });
 
+test('the project name sits on top of the sidebar, edited in place, and the gem stays out', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await expect(page.locator('.toolbar .safira-logo')).toHaveCount(0);
+  const sidebar = await page.locator('.file-sidebar').boundingBox();
+  await page.locator('.project-name-button').click();
+  await page.keyboard.type('Um nome bem comprido que nao cabe na barra lateral do projeto');
+  await page.locator('.tab-bar').click({ position: { x: 300, y: 10 } });
+  await expect(page.locator('.project-name-button')).toContainText('Um nome bem comprido');
+
+  expect((await page.locator('.file-sidebar').boundingBox())?.width).toBe(sidebar?.width);
+});
+
+test('files and folders are renamed from the right click', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.locator('.file-sidebar').getByRole('button', { name: 'main.safira' }).click({ button: 'right' });
+  await page.getByRole('menuitem', { name: 'Rename' }).click();
+  await expect(page.getByLabel('File name')).toBeFocused();
+  await page.keyboard.type('inicio');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.file-sidebar').getByRole('button', { name: 'inicio.safira' })).toBeVisible();
+  await expect(page.locator('.tab-active')).toContainText('inicio.safira');
+  await expect(page).toHaveURL(/inicio\.safira/);
+});
+
 test('deleting is on the right click menu and asks for confirmation', async ({ page }) => {
   await createProjectWithCode(page, 'mostre 1');
   await page.getByRole('button', { name: 'New file' }).click();
@@ -614,10 +656,10 @@ test('the home screen keeps theme and language at the right of the action button
   await page.goto('/');
   const hero = await page.locator('.home-hero').boundingBox();
   const corner = await page.locator('.home-corner').boundingBox();
-  const lessons = await page.getByRole('button', { name: 'Lessons' }).boundingBox();
+  const create = await page.getByRole('button', { name: 'Create project' }).boundingBox();
   const middle = (box: typeof corner): number => (box?.y ?? 0) + (box?.height ?? 0) / 2;
 
-  expect(Math.abs(middle(corner) - middle(lessons))).toBeLessThan(2);
+  expect(Math.abs(middle(corner) - middle(create))).toBeLessThan(2);
   expect((hero?.x ?? 0) + (hero?.width ?? 0) - (corner?.x ?? 0) - (corner?.width ?? 0)).toBeLessThan(40);
 });
 
@@ -753,11 +795,9 @@ test('the logo is a live 3D gem', async ({ page }) => {
 
 test('language is available on every screen', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Lessons' }).click();
   await expect(page.getByRole('button', { name: /^Theme: / })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Language: / })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Back to projects' }).click();
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
   await page.getByRole('menuitem', { name: 'Interface' }).click();
