@@ -68,6 +68,7 @@ export const LessonMarkdown = ({ lessonId, text, onOpenCode }: LessonMarkdownPro
           type="button"
           className="button"
           data-translated
+          data-sound="open"
           onClick={() => {
             onOpenCode(code);
           }}>

@@ -1,8 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 import { useCallback, useLayoutEffect, useRef } from 'react';
-import { useTranslation } from '@/i18n/i18n';
 import { prefersMotion } from '@/ui/motion';
+import { CloseButton } from './CloseButton';
 
 interface ModalProps {
   title: string;
@@ -37,7 +37,6 @@ const playClosingAnimation = (overlay: HTMLElement): void => {
 };
 
 export const Modal = ({ title, children, onClose }: ModalProps) => {
-  const t = useTranslation();
   const overlay = useRef<HTMLDivElement | null>(null);
   const keepOverlay = useCallback((node: HTMLDivElement | null) => {
     overlay.current = node ?? overlay.current;
@@ -72,7 +71,9 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
               <Dialog.Title asChild>
                 <h2>{title}</h2>
               </Dialog.Title>
-              <Dialog.Close className="button">{t('Close')}</Dialog.Close>
+              <Dialog.Close asChild>
+                <CloseButton />
+              </Dialog.Close>
             </header>
             <div className="modal-body">{children}</div>
           </Dialog.Content>

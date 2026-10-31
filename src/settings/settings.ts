@@ -2,6 +2,7 @@ import type { SyntaxCategory } from '@/language/highlight';
 import type { Locale } from '@/language/messages';
 
 export type ThemeId = 'light' | 'dark' | 'simple';
+export type CodeFont = 'mono' | 'aero';
 
 export const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
 
@@ -10,6 +11,8 @@ export interface Settings {
   theme: ThemeId;
   syntax: ThemeId;
   fontSize: number;
+  sound: boolean;
+  codeFont: CodeFont;
   readLessons: string[];
   panels: PanelSizes;
 }
@@ -33,6 +36,8 @@ export const DEFAULT_SETTINGS: Settings = {
   theme: 'light',
   syntax: 'light',
   fontSize: DEFAULT_FONT_SIZE,
+  sound: true,
+  codeFont: 'mono',
   readLessons: [],
   panels: { sidebar: 220, output: 460, inspector: 240 },
 };

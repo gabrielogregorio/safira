@@ -17,11 +17,16 @@ import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
+import { CloseButton } from '@/ui/components/CloseButton';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
+import { SoundToggle } from '@/ui/components/SoundToggle';
+import { themeAtPhase } from '@/ui/sky/skyClock';
+import { useSkyClock } from '@/ui/sky/useSkyClock';
 import { ThemeToggle } from '@/ui/components/ThemeToggle';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
+import { soundForClick, soundPlayer } from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
@@ -40,6 +45,10 @@ export const App = ({ createWorker }: AppProps) => {
   const [saveFailed, setSaveFailed] = useState(false);
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
   const themeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const { phase, travelTo } = useSkyClock(settings.theme);
+  const skyTheme = themeAtPhase(phase);
+  const shownTheme = useRef(skyTheme);
+  const syntaxTheme = settings.syntax === settings.theme ? skyTheme : settings.syntax;
 
   const locale = useMemo(
     () => detectLocale(window.location.search, settings.locale, navigator.language),
@@ -51,12 +60,27 @@ export const App = ({ createWorker }: AppProps) => {
   useEffect(() => {
     const root = document.documentElement;
     root.lang = locale === 'en-us' ? 'en' : locale;
-    root.dataset['theme'] = settings.theme;
 
-    for (const [category, color] of Object.entries(SYNTAX_PALETTES[settings.syntax])) {
+    if (shownTheme.current !== skyTheme && prefersMotion()) {
+      root.dataset['themeChanging'] = 'true';
+
+      if (themeTimer.current !== null) {
+        clearTimeout(themeTimer.current);
+      }
+
+      themeTimer.current = setTimeout(() => {
+        delete root.dataset['themeChanging'];
+      }, THEME_CHANGE_MILLISECONDS);
+    }
+
+    shownTheme.current = skyTheme;
+    root.dataset['theme'] = skyTheme;
+    root.dataset['codeFont'] = settings.codeFont;
+
+    for (const [category, color] of Object.entries(SYNTAX_PALETTES[syntaxTheme])) {
       root.style.setProperty(`--syntax-${category}`, color);
     }
-  }, [locale, settings.syntax, settings.theme]);
+  }, [locale, settings.codeFont, skyTheme, syntaxTheme]);
 
   useEffect(() => {
     if (shownLocale.current === locale) {
@@ -77,27 +101,46 @@ export const App = ({ createWorker }: AppProps) => {
     [],
   );
 
-  const changeSettings = useCallback((changes: Partial<Settings>) => {
-    if (changes.theme !== undefined && prefersMotion()) {
-      const root = document.documentElement;
-      root.dataset['themeChanging'] = 'true';
+  useEffect(() => {
+    soundPlayer.setEnabled(settings.sound);
+  }, [settings.sound]);
 
-      if (themeTimer.current !== null) {
-        clearTimeout(themeTimer.current);
+  useEffect(() => {
+    const playClick = (event: MouseEvent): void => {
+      const sound = soundForClick(event.target);
+
+      if (sound !== null) {
+        soundPlayer.play(sound);
+      }
+    };
+
+    document.addEventListener('click', playClick);
+
+    return () => {
+      document.removeEventListener('click', playClick);
+    };
+  }, []);
+
+  const changeSettings = useCallback(
+    (changes: Partial<Settings>) => {
+      // Applied now, so that the click that turns the sound on is already heard and the one that turns it off is not.
+      if (changes.sound !== undefined) {
+        soundPlayer.setEnabled(changes.sound);
       }
 
-      themeTimer.current = setTimeout(() => {
-        delete root.dataset['themeChanging'];
-      }, THEME_CHANGE_MILLISECONDS);
-    }
+      if (changes.theme !== undefined) {
+        travelTo(changes.theme);
+      }
 
-    setSettings((current) => {
-      const next = { ...current, ...changes };
-      saveSettings(next);
+      setSettings((current) => {
+        const next = { ...current, ...changes };
+        saveSettings(next);
 
-      return next;
-    });
-  }, []);
+        return next;
+      });
+    },
+    [travelTo],
+  );
 
   const persist = useCallback((next: Project[]) => {
     setSaveFailed(!saveProjects(next));
@@ -125,6 +168,13 @@ export const App = ({ createWorker }: AppProps) => {
       setArchiveNotice(describeArchiveResult(translate, result));
     },
     [persist, projects, translate],
+  );
+
+  const importProject = useCallback(
+    (file: File) => {
+      void handleImportProject(file);
+    },
+    [handleImportProject],
   );
 
   const handleOpenLessonCode = useCallback(
@@ -157,29 +207,32 @@ export const App = ({ createWorker }: AppProps) => {
   const activeProject =
     route.name === 'project' ? projects.find((project) => project.id === route.projectId) : undefined;
   const isHome = activeProject === undefined && route.name !== 'lessons';
-  const languageToggle = (
-    <LanguageToggle
-      locale={locale}
-      onChange={(nextLocale) => {
-        changeSettings({ locale: nextLocale });
-      }}
-    />
-  );
   const preferenceToggles = (
     <div className="orb-toggles">
       <ThemeToggle
-        theme={settings.theme}
+        theme={skyTheme}
         onChange={(theme) => {
           changeSettings({ theme, syntax: theme });
         }}
       />
-      {languageToggle}
+      <LanguageToggle
+        locale={locale}
+        onChange={(nextLocale) => {
+          changeSettings({ locale: nextLocale });
+        }}
+      />
+      <SoundToggle
+        isOn={settings.sound}
+        onChange={(sound) => {
+          changeSettings({ sound });
+        }}
+      />
     </div>
   );
 
   return (
     <TranslationContext.Provider value={translate}>
-      <SceneBackdrop theme={settings.theme} />
+      <SceneBackdrop phase={phase} />
       <a
         className="skip-link"
         href="#content"
@@ -197,14 +250,11 @@ export const App = ({ createWorker }: AppProps) => {
       {archiveNotice === null || !isHome ? null : (
         <div className="alert" role="status">
           <p>{archiveNotice}</p>
-          <button
-            type="button"
-            className="button"
+          <CloseButton
             onClick={() => {
               setArchiveNotice(null);
-            }}>
-            {translate('Close')}
-          </button>
+            }}
+          />
         </div>
       )}
       {activeProject !== undefined ? (
@@ -212,7 +262,7 @@ export const App = ({ createWorker }: AppProps) => {
           key={activeProject.id}
           project={activeProject}
           routeFile={route.name === 'project' ? route.file : null}
-          settings={settings}
+          settings={{ ...settings, theme: skyTheme }}
           locale={locale}
           createWorker={createWorker}
           onSaveProject={handleSave}
@@ -220,7 +270,6 @@ export const App = ({ createWorker }: AppProps) => {
             navigate({ name: 'project', projectId: activeProject.id, file });
           }}
           onChangeSettings={changeSettings}
-          languageToggle={languageToggle}
           onBack={goHome}
         />
       ) : null}
@@ -249,9 +298,7 @@ export const App = ({ createWorker }: AppProps) => {
           }}
           onCancelCreating={goHome}
           onCreate={handleCreate}
-          onImportProject={(file) => {
-            void handleImportProject(file);
-          }}
+          onImportProject={importProject}
           onExportProject={downloadProject}
           onRename={(id, name) => {
             persist(projects.map((project) => (project.id === id ? { ...project, name } : project)));

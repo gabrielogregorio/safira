@@ -321,10 +321,13 @@ test('imports from a virtual folder created in the sidebar', async ({ page }) =>
   await createProjectWithCode(page, 'importe dados/lib\nmostre v');
   await page.keyboard.press('Control+s');
   await page.getByRole('button', { name: 'New folder' }).click();
-  await page.getByLabel('Folder name').fill('dados');
+  await expect(page.getByLabel('Folder name')).toBeFocused();
+  await page.keyboard.type('dados');
   await page.keyboard.press('Enter');
-  await page.getByRole('button', { name: 'New file in dados' }).click();
-  await page.getByLabel('File name').fill('lib');
+  await page.getByRole('button', { name: 'dados' }).click({ button: 'right' });
+  await page.getByRole('menuitem', { name: 'New file' }).click();
+  await expect(page.getByLabel('File name')).toBeFocused();
+  await page.keyboard.type('lib');
   await page.keyboard.press('Enter');
   await page.getByLabel('Code editor').click();
   await page.keyboard.insertText('v = 9');
@@ -388,7 +391,7 @@ test('the language change scrambles the letters into the new text', async ({ pag
 
 test('changing the language several times always ends on the text of the chosen language', async ({ page }) => {
   await page.goto('/');
-  const language = page.locator('.orb-toggles button').last();
+  const language = page.locator('.orb-toggles button').nth(1);
   const title = page.locator('.home-settings .button-primary');
 
   await language.click();
@@ -479,12 +482,130 @@ test('the icons cycle through every choice and come back to the first', async ({
   await expect(page.getByRole('dialog')).toHaveCount(0);
 });
 
-test('the IDE starts with the language icon and leaves the theme to the Interface menu', async ({ page }) => {
+test('the IDE keeps theme, language and sound in the Interface menu', async ({ page }) => {
   await createProjectWithCode(page, 'mostre 1');
-  const toolbar = page.locator('.toolbar');
+  await expect(page.locator('.toolbar .orb-toggle')).toHaveCount(0);
 
-  await expect(toolbar.locator('> :first-child')).toHaveAttribute('aria-label', 'Language: English');
-  await expect(page.getByRole('button', { name: /^Theme: / })).toHaveCount(0);
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Language' }).click();
+  await page.getByRole('menuitemradio', { name: 'Español' }).click();
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+
+  await page.getByRole('menuitem', { name: 'Interfaz' }).click();
+  await page.getByRole('menuitemcheckbox', { name: 'Sonido' }).click();
+  await page.getByRole('menuitem', { name: 'Interfaz' }).click();
+  await expect(page.getByRole('menuitemcheckbox', { name: 'Sonido' })).toHaveAttribute('aria-checked', 'false');
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('menuitemcheckbox', { name: 'Sonido' })).toBeHidden();
+
+  await page.getByRole('menuitem', { name: 'Interfaz' }).click();
+  await page.getByRole('menuitem', { name: 'Tema', exact: true }).click();
+  await page.getByRole('menuitemradio', { name: 'Oscuro' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  await expect(page.locator('html')).toHaveCSS('--syntax-string', '#ffff68');
+});
+
+test('the code font switches between mono and the Frutiger Aero font from the menu', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  const fontOfCode = (): Promise<string> =>
+    page.locator('.cm-content').evaluate((element) => getComputedStyle(element).fontFamily);
+
+  expect(await fontOfCode()).toContain('JetBrains Mono');
+
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Code font' }).click();
+  await page.getByRole('menuitemradio', { name: 'Istok Web' }).click();
+  await expect.poll(fontOfCode).toContain('Istok Web');
+
+  await page.reload();
+  await expect.poll(fontOfCode).toContain('Istok Web');
+  expect(await page.evaluate(() => document.fonts.check('16px "Istok Web"'))).toBe(true);
+});
+
+test('a new file shows up in the tree, and moving away keeps its provisional name', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await expect(page.getByLabel('File name')).toHaveValue('new-file.safira');
+  await page.getByLabel('Code editor').click();
+
+  await expect(page.locator('.tree-name', { hasText: 'new-file.safira' })).toBeVisible();
+  await expect(page.getByLabel('File name')).toHaveCount(0);
+});
+
+test('deleting is on the right click menu and asks for confirmation', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.keyboard.type('apagar');
+  await page.keyboard.press('Enter');
+  const row = page.locator('.tree-name', { hasText: 'apagar.safira' });
+  await row.click({ button: 'right' });
+  await page.getByRole('menuitem', { name: 'Delete' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
+
+  await expect(row).toHaveCount(0);
+  await page.getByLabel('Code editor').click();
+  await page.keyboard.insertText('x');
+});
+
+test('time passes on its own and a reload returns to the chosen theme', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/');
+  await chooseTheme(page, 'Light');
+  const html = page.locator('html');
+
+  await page.clock.fastForward('01:00:00');
+  await expect(html).toHaveAttribute('data-theme', 'light');
+
+  await page.clock.fastForward('03:00:00');
+  await expect(html).toHaveAttribute('data-theme', 'dark');
+  await expect(page.getByRole('button', { name: 'Theme: Dark' })).toBeVisible();
+  await expect(page.locator('.scenery-dark')).toHaveCSS('opacity', '1');
+
+  await page.clock.fastForward('04:00:00');
+  await expect(html).toHaveAttribute('data-theme', 'simple');
+
+  await page.reload();
+  await expect(html).toHaveAttribute('data-theme', 'light');
+});
+
+test('choosing a theme is a jump in time, from where the sky already is', async ({ page }) => {
+  await page.clock.install();
+  await page.goto('/');
+  await page.clock.fastForward('04:00:00');
+  await expect(page.getByRole('button', { name: 'Theme: Dark' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Theme: Dark' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'simple');
+
+  await page.clock.fastForward('01:00:00');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'simple');
+});
+
+test('the editor panel stays in place, with its line numbers, after typing and changing files', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "uma linha comprida o bastante para o cursor andar pela tela toda"');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.keyboard.press('Enter');
+  await page.getByLabel('Code editor').click();
+  await page.keyboard.insertText('x');
+  await waitForAnimations(page);
+
+  expect(await page.locator('.code-editor').evaluate((panel) => panel.scrollLeft)).toBe(0);
+  await expect(page.locator('.cm-gutters').first()).toBeInViewport();
+});
+
+test('opening a project and a file play their animations', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  const running = (): Promise<string[]> =>
+    page.evaluate(() => document.getAnimations().map((animation) => (animation as CSSAnimation).animationName));
+
+  expect(await running()).toEqual(expect.arrayContaining(['ide-crt-on', 'file-open']));
+
+  await waitForAnimations(page);
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.keyboard.press('Enter');
+  await expect.poll(running).toContain('file-open');
 });
 
 test('the home screen keeps theme and language at the right of the action buttons', async ({ page }) => {
@@ -508,6 +629,69 @@ test('the home icons stay inside the panel on a narrow phone', async ({ page }) 
   expect((corner?.x ?? 0) + (corner?.width ?? 0)).toBeLessThanOrEqual((hero?.x ?? 0) + (hero?.width ?? 0));
 });
 
+test('the sound can be turned off, and that is remembered', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Sound: On' }).click();
+  await expect(page.getByRole('button', { name: 'Sound: Off' })).toBeVisible();
+
+  await page.reload();
+  await expect(page.getByRole('button', { name: 'Sound: Off' })).toBeVisible();
+});
+
+test('clicking and deleting make sounds, and the sound switch silences them', async ({ page }) => {
+  await page.addInitScript(() => {
+    const started: string[] = [];
+    const startOscillator = OscillatorNode.prototype.start;
+    const startBuffer = AudioBufferSourceNode.prototype.start;
+    OscillatorNode.prototype.start = function start(...values) {
+      started.push('tone');
+      startOscillator.apply(this, values);
+    };
+    AudioBufferSourceNode.prototype.start = function start(...values) {
+      started.push('noise');
+      startBuffer.apply(this, values);
+    };
+    Object.assign(window, { startedSounds: started });
+  });
+  const sounds = (): Promise<string[]> =>
+    page.evaluate(() => (window as unknown as { startedSounds: string[] }).startedSounds);
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await expect.poll(sounds).toContain('tone');
+  expect(await sounds()).not.toContain('noise');
+
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.getByRole('button', { name: 'Back to projects' }).click();
+  await page.getByRole('button', { name: /^Delete / }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
+  await expect.poll(sounds).toContain('noise');
+
+  await page.getByRole('button', { name: 'Sound: On' }).click();
+  const before = (await sounds()).length;
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+
+  expect(await sounds()).toHaveLength(before);
+});
+
+test('dragging a .zip over the home screen highlights it and dropping imports it', async ({ page }) => {
+  await page.goto('/');
+  const dataTransfer = await page.evaluateHandle(() => {
+    const transfer = new DataTransfer();
+    transfer.items.add(new File(['not a zip'], 'solto.zip'));
+
+    return transfer;
+  });
+  await page.dispatchEvent('html', 'dragenter', { dataTransfer });
+  await expect(page.locator('.drop-target')).toBeVisible();
+  await expect(page.locator('.drop-target')).toHaveCSS('pointer-events', 'none');
+
+  await page.dispatchEvent('html', 'drop', { dataTransfer });
+  await expect(page.locator('.drop-target')).toHaveCount(0);
+  await expect(page.getByRole('status')).toContainText('This file is not a valid .zip.');
+});
+
 test('the logo is a live 3D gem', async ({ page }) => {
   await page.goto('/');
   await page.mouse.move(900, 300);
@@ -525,8 +709,9 @@ test('language is available on every screen', async ({ page }) => {
   await page.getByRole('button', { name: 'Back to projects' }).click();
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
-  await page.getByRole('button', { name: /^Language: / }).click();
-  await page.getByRole('button', { name: /^Idioma: / }).click();
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Language' }).click();
+  await page.getByRole('menuitemradio', { name: 'Español' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 });

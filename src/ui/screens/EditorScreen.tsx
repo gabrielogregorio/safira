@@ -1,4 +1,4 @@
-import type { CSSProperties, ReactNode } from 'react';
+import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { findExampleByPrefix } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
@@ -13,6 +13,8 @@ import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { RunMode } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
+import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
+import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { VariableInspector } from '@/ui/components/VariableInspector';
@@ -47,7 +49,6 @@ interface EditorScreenProps {
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
   onChangeSettings: (changes: Partial<Settings>) => void;
-  languageToggle: ReactNode;
   onBack: () => void;
 }
 
@@ -57,8 +58,6 @@ type Dialog =
   | { kind: 'commands' }
   | { kind: 'confirm-close'; file: string }
   | { kind: 'confirm-leave' }
-  | { kind: 'new-file'; folder: string | null }
-  | { kind: 'new-folder'; folder: string | null }
   | { kind: 'delete-node'; node: TreeNode }
   | null;
 
@@ -94,7 +93,6 @@ export const EditorScreen = ({
   onSaveProject,
   onSelectFile,
   onChangeSettings,
-  languageToggle,
   onBack,
 }: EditorScreenProps) => {
   const t = useTranslation();
@@ -424,14 +422,16 @@ export const EditorScreen = ({
       : t('Script finished in {seconds} seconds', { seconds: runner.duration.toFixed(3) });
   };
 
+  const runLabel = runner.status === 'paused' ? t('Continue') : t('Run');
+
   return (
     <div className="editor-screen">
       <header className="toolbar">
-        {languageToggle}
         <button
           type="button"
-          className="button button-back"
+          className="aero-button"
           aria-label={t('Back to projects')}
+          title={t('Back to projects')}
           onClick={() => {
             if (tabs.some(isDirty)) {
               setDialog({ kind: 'confirm-leave' });
@@ -439,8 +439,7 @@ export const EditorScreen = ({
               onBack();
             }
           }}>
-          <span aria-hidden="true">‹</span>
-          <span className="label-wide">{t('Back to projects')}</span>
+          <BackIcon />
         </button>
         <SafiraLogo size={TOOLBAR_LOGO_SIZE} />
         <h1 className="toolbar-title" data-fixed-text>
@@ -449,20 +448,28 @@ export const EditorScreen = ({
         <div className="toolbar-actions">
           <button
             type="button"
-            className="button button-primary"
-            title="Ctrl+Enter"
+            className="aero-button aero-button-run"
+            aria-label={runLabel}
+            title={`${runLabel} (Ctrl+Enter)`}
             disabled={isRunning && runner.status !== 'paused'}
             onClick={() => {
               runOrResume('run');
             }}>
-            {runner.status === 'paused' ? t('Continue') : t('Run')}
+            <PlayIcon />
           </button>
-          <button type="button" className="button button-stop" disabled={!isRunning} onClick={runner.stop}>
-            {t('Stop')}
+          <button
+            type="button"
+            className="aero-button aero-button-stop"
+            aria-label={t('Stop')}
+            title={t('Stop')}
+            disabled={!isRunning}
+            onClick={runner.stop}>
+            <StopIcon />
           </button>
         </div>
         <IdeMenuBar
           settings={settings}
+          locale={locale}
           isRunning={isRunning}
           onOpenFile={() => {
             setDialog({ kind: 'open' });
@@ -505,6 +512,7 @@ export const EditorScreen = ({
           <div key={tab.file} className={tab.file === activeFile ? 'tab tab-active' : 'tab'}>
             <button
               type="button"
+              data-sound="open"
               aria-current={tab.file === activeFile ? 'page' : undefined}
               onClick={() => {
                 onSelectFile(tab.file);
@@ -540,14 +548,11 @@ export const EditorScreen = ({
       {archiveNotice === null ? null : (
         <div className="alert" role="status">
           <p>{archiveNotice}</p>
-          <button
-            type="button"
-            className="button"
+          <CloseButton
             onClick={() => {
               setArchiveNotice(null);
-            }}>
-            {t('Close')}
-          </button>
+            }}
+          />
         </div>
       )}
 
@@ -594,12 +599,8 @@ export const EditorScreen = ({
             openFile(path, project.files[path] ?? '');
             setMobilePanel('code');
           }}
-          onNewFile={(folder) => {
-            setDialog({ kind: 'new-file', folder });
-          }}
-          onNewFolder={(folder) => {
-            setDialog({ kind: 'new-folder', folder });
-          }}
+          onCreateFile={createFile}
+          onCreateFolder={createFolder}
           onDelete={(node) => {
             setDialog({ kind: 'delete-node', node });
           }}
@@ -619,6 +620,7 @@ export const EditorScreen = ({
           value={activeTab.text}
           label={t('Code editor')}
           fontSize={settings.fontSize}
+          codeFont={settings.codeFont}
           breakpoints={breakpoints}
           debugLine={runner.pausedAt?.file === activeFile ? runner.pausedAt.line : null}
           errorLine={failure?.file === activeFile ? failure.line : null}
@@ -656,9 +658,7 @@ export const EditorScreen = ({
                     {t('See an example')}
                   </button>
                 )}
-                <button type="button" className="button" onClick={runner.dismissFailure}>
-                  {t('Close')}
-                </button>
+                <CloseButton onClick={runner.dismissFailure} />
               </div>
             </div>
           )}
@@ -762,34 +762,6 @@ export const EditorScreen = ({
         />
       ) : null}
 
-      {dialog?.kind === 'new-file' ? (
-        <TextPrompt
-          title={t('New file')}
-          label={t('File name')}
-          initialValue=""
-          onClose={() => {
-            setDialog(null);
-          }}
-          onSubmit={(name) => {
-            createFile(dialog.folder, name);
-          }}
-        />
-      ) : null}
-
-      {dialog?.kind === 'new-folder' ? (
-        <TextPrompt
-          title={t('New folder')}
-          label={t('Folder name')}
-          initialValue=""
-          onClose={() => {
-            setDialog(null);
-          }}
-          onSubmit={(name) => {
-            createFolder(dialog.folder, name);
-          }}
-        />
-      ) : null}
-
       {dialog?.kind === 'delete-node' ? (
         <Modal
           title={t('Delete this item?')}
@@ -808,6 +780,7 @@ export const EditorScreen = ({
               {t('Cancel')}
             </button>
             <button
+              data-sound="delete"
               type="button"
               className="button button-stop"
               onClick={() => {
@@ -864,7 +837,7 @@ export const EditorScreen = ({
             </button>
             <button
               type="button"
-              className="button"
+              className="button button-stop"
               onClick={() => {
                 if (dialog.kind === 'confirm-close') {
                   closeTab(dialog.file);

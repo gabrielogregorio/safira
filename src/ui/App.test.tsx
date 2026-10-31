@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { strToU8, zipSync } from 'fflate';
 import { loadProjects } from '@/projects/projectStore';
@@ -307,9 +307,10 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
     await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
     await userEvent.click(screen.getByRole('button', { name: 'New folder' }));
-    await userEvent.type(screen.getByLabelText('Folder name'), 'dados{Enter}');
-    await userEvent.click(screen.getByRole('button', { name: 'New file in dados' }));
-    await userEvent.type(screen.getByLabelText('File name'), 'lib{Enter}');
+    await userEvent.keyboard('dados{Enter}');
+    fireEvent.contextMenu(screen.getByRole('button', { name: 'dados', expanded: true }));
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'New file' }));
+    await userEvent.keyboard('lib{Enter}');
 
     expect(Object.keys(loadProjects()[0]?.files ?? {})).toEqual(
       expect.arrayContaining(['dados/.keep', 'dados/lib.safira']),
@@ -324,7 +325,8 @@ describe('App', () => {
     );
     renderApp();
     await userEvent.click(screen.getByRole('link', { name: 'Open P' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Delete b.txt' }));
+    fireEvent.contextMenu(screen.getByRole('button', { name: 'b.txt' }));
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Delete' }));
 
     expect(Object.keys(loadProjects()[0]?.files ?? {})).toContain('b.txt');
 
@@ -426,7 +428,7 @@ describe('App', () => {
     expect(document.documentElement.dataset['theme']).toBe('dark');
   });
 
-  it('offers both icons in the lessons and only the language icon in the editor', async () => {
+  it('offers the icons in the lessons and leaves them to the menu in the editor', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Lessons' }));
 
@@ -436,8 +438,43 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Back to projects' }));
     await openExample('Pare');
 
-    expect(screen.getByRole('button', { name: /^Language: / })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Language: / })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Sound: / })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^Theme: / })).not.toBeInTheDocument();
+  });
+
+  it('highlights the screen while a file is dragged and imports the dropped .zip', async () => {
+    renderApp();
+    const dataTransfer = {
+      types: ['Files'],
+      files: [new File([zipSync({ 'main.safira': strToU8('mostre 1') })], 'arrastado.zip')],
+    };
+
+    fireEvent.dragEnter(document, { dataTransfer });
+
+    expect(screen.getByText('Drop the .zip to create a project')).toBeInTheDocument();
+
+    fireEvent.drop(document, { dataTransfer });
+
+    expect(screen.queryByText('Drop the .zip to create a project')).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(loadProjects().map((project) => project.name)).toContain('arrastado');
+    });
+  });
+
+  it('ignores something dragged that is not a file', () => {
+    renderApp();
+    fireEvent.dragEnter(document, { dataTransfer: { types: ['text/plain'], files: [] } });
+
+    expect(screen.queryByText('Drop the .zip to create a project')).not.toBeInTheDocument();
+  });
+
+  it('removes the highlight when the file leaves the window', () => {
+    renderApp();
+    fireEvent.dragEnter(document, { dataTransfer: { types: ['Files'], files: [] } });
+    fireEvent(document, Object.assign(new Event('dragleave'), { relatedTarget: null }));
+
+    expect(screen.queryByText('Drop the .zip to create a project')).not.toBeInTheDocument();
   });
 
   it('opens the lessons and walks through them', async () => {

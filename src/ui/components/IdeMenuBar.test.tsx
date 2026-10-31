@@ -21,7 +21,7 @@ const setup = (isRunning = false) => {
     onToggleFullScreen: vi.fn(),
     onShowCommands: vi.fn(),
   };
-  render(<IdeMenuBar settings={DEFAULT_SETTINGS} isRunning={isRunning} {...actions} />);
+  render(<IdeMenuBar locale="en-us" settings={DEFAULT_SETTINGS} isRunning={isRunning} {...actions} />);
 
   return actions;
 };

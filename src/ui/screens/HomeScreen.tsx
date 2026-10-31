@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { Project } from '@/projects/projectStore';
 import { routeToHash } from '@/routing/routes';
@@ -44,9 +44,55 @@ export const HomeScreen = ({
   const [renaming, setRenaming] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState<Project | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
+  const [isDropping, setIsDropping] = useState(false);
+
+  useEffect(() => {
+    const carriesFiles = (event: DragEvent): boolean => event.dataTransfer?.types.includes('Files') === true;
+
+    const showDropTarget = (event: DragEvent): void => {
+      if (carriesFiles(event)) {
+        event.preventDefault();
+        setIsDropping(true);
+      }
+    };
+
+    const hideDropTarget = (event: DragEvent): void => {
+      if (event.relatedTarget === null) {
+        setIsDropping(false);
+      }
+    };
+
+    const importDroppedFile = (event: DragEvent): void => {
+      event.preventDefault();
+      setIsDropping(false);
+
+      const file = event.dataTransfer?.files[0];
+
+      if (file !== undefined) {
+        onImportProject(file);
+      }
+    };
+
+    document.addEventListener('dragenter', showDropTarget);
+    document.addEventListener('dragover', showDropTarget);
+    document.addEventListener('dragleave', hideDropTarget);
+    document.addEventListener('drop', importDroppedFile);
+
+    return () => {
+      document.removeEventListener('dragenter', showDropTarget);
+      document.removeEventListener('dragover', showDropTarget);
+      document.removeEventListener('dragleave', hideDropTarget);
+      document.removeEventListener('drop', importDroppedFile);
+    };
+  }, [onImportProject]);
 
   return (
     <main id="content" tabIndex={-1} className="home">
+      {isDropping ? (
+        <div className="drop-target" data-testid="drop-target">
+          <p>{t('Drop the .zip to create a project')}</p>
+        </div>
+      ) : null}
       <header className="home-hero">
         <div className="home-brand">
           <SafiraLogo size={HERO_LOGO_SIZE} />
@@ -84,6 +130,7 @@ export const HomeScreen = ({
               </span>
               <a
                 className="button button-primary"
+                data-sound="open"
                 href={routeToHash({ name: 'project', projectId: project.id, file: null })}
                 aria-label={`${t('Open')} ${project.name}`}>
                 {t('Open')}
@@ -142,6 +189,7 @@ export const HomeScreen = ({
               {t('Cancel')}
             </button>
             <button
+              data-sound="delete"
               type="button"
               className="button button-stop"
               onClick={() => {

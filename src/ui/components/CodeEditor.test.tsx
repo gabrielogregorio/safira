@@ -4,6 +4,7 @@ import { CodeEditor } from './CodeEditor';
 const baseProps = {
   label: 'Editor',
   fontSize: 15,
+  codeFont: 'mono' as const,
   breakpoints: [],
   debugLine: null,
   errorLine: null,

@@ -1,6 +1,6 @@
 # Changelog
 
-## 1.0.0-alpha.0
+## 1.0.0
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
@@ -15,16 +15,22 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Clickable breakpoint dots beside every line. A dot on a comment or an empty line stops at the next command.
 - Variables inspector, always visible, with search and types.
 - Top menu with Radix, navigable by keyboard and touch.
-- Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, the language icon opens the toolbar and the theme lives in the Interface menu.
+- Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, theme, language and sound live in the Interface menu.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
-- File sidebar with folders in each project.
+- File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Unsaved work is kept while typing and recovered after a crash or a power cut.
-- Import and export of projects as `.zip`, into a new project or the open one.
+- Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.
 - Lessons in real markdown, with colored code and a button to open each example in the IDE.
 - Resizable panels, by mouse and keyboard, kept between sessions.
+- Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.
+- The example programs were ported to the new language and now carry emojis, so their author line names Gabriel Gregorio, who ported them.
+- Nostalgic sounds for clicks, switches, opening, creating and deleting, generated with Web Audio, with a speaker switch beside theme and language.
+- Opening a project switches the IDE on like an old screen, and opening a file wipes the editor with a glass sheen.
+- Glossy icon buttons for new file, new folder, back, close, run and stop, following the theme.
+- Istok Web as the interface font and JetBrains Mono for code, both bundled, with a menu switch for the code font.
 - A 3D sapphire as the logo, written directly in WebGL 2. It spins and points at the mouse, stands still with the reduced motion preference and falls back to a flat logo without WebGL.
 - Modals with an overlay, a retro opening and a closing animation, closing when clicking outside.
 - Confirmation before deleting a project or a file.

@@ -13,6 +13,8 @@ Safira runs only in the browser. There is no server, and programs never reach th
 | Interface | `src/ui` | React screens and components |
 | Content | `src/content` | Examples (`.safira`) and lessons (`.md`) |
 | Settings and i18n | `src/settings`, `src/i18n` | Theme, font, panel sizes, dictionaries for en, pt-BR, es, zh-CN and ja |
+| Sound | `src/ui/sound` | Recipes and player on Web Audio, no audio files. A click plays what `data-sound` names on the element, or the plain click |
+| Sky | `src/ui/sky` | The clock of the scenery. `settings.theme` is only the starting point: `useSkyClock` gives the phase, and the shown theme comes from it. Nothing about elapsed time is saved |
 | Gem | `src/ui/gem` | The 3D logo: mesh and aim math in `gemMath.ts`, plain WebGL 2 in `gemRenderer.ts`, no 3D library |
 
 `src/language` has no dependency on React or the DOM. The interface only reaches it through `src/runtime`, except for

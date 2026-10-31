@@ -5,11 +5,13 @@ import type { DecorationSet, ViewUpdate } from '@codemirror/view';
 import { Decoration, EditorView, gutter, GutterMarker, keymap, lineNumbers, ViewPlugin } from '@codemirror/view';
 import { useEffect, useRef } from 'react';
 import { highlightCode } from '@/language/highlight';
+import type { CodeFont } from '@/settings/settings';
 
 interface CodeEditorProps {
   value: string;
   label: string;
   fontSize: number;
+  codeFont: CodeFont;
   breakpoints: number[];
   debugLine: number | null;
   errorLine: number | null;
@@ -140,6 +142,7 @@ export const CodeEditor = ({
   value,
   label,
   fontSize,
+  codeFont,
   breakpoints,
   debugLine,
   errorLine,
@@ -243,6 +246,10 @@ export const CodeEditor = ({
       effects: fontCompartment.current.reconfigure(EditorView.theme({ '&': { fontSize: `${fontSize}px` } })),
     });
   }, [fontSize]);
+
+  useEffect(() => {
+    viewRef.current?.requestMeasure();
+  }, [codeFont]);
 
   return <div ref={hostRef} className="code-editor" />;
 };

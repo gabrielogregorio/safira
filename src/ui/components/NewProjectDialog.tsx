@@ -52,7 +52,7 @@ export const NewProjectDialog = ({ initialExampleId, onCreate, onClose }: NewPro
           ))}
         </ul>
         <div className="new-project-footer">
-          <button type="submit" className="button button-primary">
+          <button data-sound="create" type="submit" className="button button-primary">
             {t('Go ahead')}
           </button>
         </div>

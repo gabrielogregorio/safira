@@ -1,13 +1,15 @@
 import * as Menubar from '@radix-ui/react-menubar';
 import type { ReactNode } from 'react';
 import { examples } from '@/content/content';
-import { useTranslation } from '@/i18n/i18n';
+import { LOCALES, useTranslation } from '@/i18n/i18n';
+import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
-import type { Settings, ThemeId } from '@/settings/settings';
+import type { CodeFont, Settings } from '@/settings/settings';
 import { clampFontSize, THEME_IDS } from '@/settings/settings';
 
 interface IdeMenuBarProps {
   settings: Settings;
+  locale: Locale;
   isRunning: boolean;
   onOpenFile: () => void;
   onNewTab: () => void;
@@ -38,15 +40,20 @@ interface ActionProps {
   onSelect: () => void;
 }
 
-interface ThemeSubmenuProps {
+interface RadioSubmenuProps<Value extends string> {
   label: string;
-  value: ThemeId;
-  onChange: (theme: ThemeId) => void;
+  value: Value;
+  options: { id: Value; label: string }[];
+  onChange: (value: Value) => void;
 }
 
 const BUG_REPORT_URL = 'https://github.com/safira-lang/safira-ide/issues';
 const BLOG_URL = 'https://safiralang.blogspot.com/';
 const FONT_STEP = 1;
+const CODE_FONTS: { id: CodeFont; label: string }[] = [
+  { id: 'mono', label: 'JetBrains Mono' },
+  { id: 'aero', label: 'Istok Web' },
+];
 const PROGRAM_PREFIX = 'programa-';
 const SUBMENU_OFFSET = 4;
 const MENU_OFFSET = 6;
@@ -69,40 +76,36 @@ const Action = ({ label, shortcut, disabled = false, onSelect }: ActionProps) =>
   </Menubar.Item>
 );
 
-const ThemeSubmenu = ({ label, value, onChange }: ThemeSubmenuProps) => {
-  const t = useTranslation();
-  const labels: Record<ThemeId, string> = { light: t('Light'), dark: t('Dark'), simple: t('Simple') };
-
-  return (
-    <Menubar.Sub>
-      <Menubar.SubTrigger className="menubar-item">
-        {label}
-        <span className="menubar-shortcut" aria-hidden="true">
-          ›
-        </span>
-      </Menubar.SubTrigger>
-      <Menubar.Portal>
-        <Menubar.SubContent className="menubar-content" sideOffset={SUBMENU_OFFSET} collisionPadding={8}>
-          <Menubar.RadioGroup
-            value={value}
-            onValueChange={(theme) => {
-              onChange(theme as ThemeId);
-            }}>
-            {THEME_IDS.map((theme) => (
-              <Menubar.RadioItem key={theme} className="menubar-item menubar-radio" value={theme}>
-                <Menubar.ItemIndicator className="menubar-indicator">●</Menubar.ItemIndicator>
-                {labels[theme]}
-              </Menubar.RadioItem>
-            ))}
-          </Menubar.RadioGroup>
-        </Menubar.SubContent>
-      </Menubar.Portal>
-    </Menubar.Sub>
-  );
-};
+const RadioSubmenu = <Value extends string>({ label, value, options, onChange }: RadioSubmenuProps<Value>) => (
+  <Menubar.Sub>
+    <Menubar.SubTrigger className="menubar-item">
+      {label}
+      <span className="menubar-shortcut" aria-hidden="true">
+        ›
+      </span>
+    </Menubar.SubTrigger>
+    <Menubar.Portal>
+      <Menubar.SubContent className="menubar-content" sideOffset={SUBMENU_OFFSET} collisionPadding={8}>
+        <Menubar.RadioGroup
+          value={value}
+          onValueChange={(next) => {
+            onChange(next as Value);
+          }}>
+          {options.map((option) => (
+            <Menubar.RadioItem key={option.id} className="menubar-item menubar-radio" value={option.id}>
+              <Menubar.ItemIndicator className="menubar-indicator">●</Menubar.ItemIndicator>
+              {option.label}
+            </Menubar.RadioItem>
+          ))}
+        </Menubar.RadioGroup>
+      </Menubar.SubContent>
+    </Menubar.Portal>
+  </Menubar.Sub>
+);
 
 export const IdeMenuBar = ({
   settings,
+  locale,
   isRunning,
   onOpenFile,
   onNewTab,
@@ -123,6 +126,10 @@ export const IdeMenuBar = ({
   const t = useTranslation();
   const lessons = examples.filter((example) => !example.id.startsWith(PROGRAM_PREFIX));
   const programs = examples.filter((example) => example.id.startsWith(PROGRAM_PREFIX));
+  const themeOptions = THEME_IDS.map((id) => ({
+    id,
+    label: { light: t('Light'), dark: t('Dark'), simple: t('Simple') }[id],
+  }));
 
   return (
     <Menubar.Root className="menubar" aria-label={t('Safira IDE')}>
@@ -189,20 +196,47 @@ export const IdeMenuBar = ({
         ))}
       </Menu>
       <Menu label={t('Interface')}>
-        <ThemeSubmenu
+        <RadioSubmenu
           label={t('Theme')}
           value={settings.theme}
+          options={themeOptions}
           onChange={(theme) => {
-            onChangeSettings({ theme });
+            onChangeSettings({ theme, syntax: theme });
           }}
         />
-        <ThemeSubmenu
+        <RadioSubmenu
           label={t('Syntax colors')}
           value={settings.syntax}
+          options={themeOptions}
           onChange={(syntax) => {
             onChangeSettings({ syntax });
           }}
         />
+        <RadioSubmenu
+          label={t('Language')}
+          value={locale}
+          options={LOCALES}
+          onChange={(nextLocale) => {
+            onChangeSettings({ locale: nextLocale });
+          }}
+        />
+        <RadioSubmenu
+          label={t('Code font')}
+          value={settings.codeFont}
+          options={CODE_FONTS}
+          onChange={(codeFont) => {
+            onChangeSettings({ codeFont });
+          }}
+        />
+        <Menubar.CheckboxItem
+          className="menubar-item menubar-radio"
+          checked={settings.sound}
+          onCheckedChange={(sound) => {
+            onChangeSettings({ sound });
+          }}>
+          <Menubar.ItemIndicator className="menubar-indicator">✓</Menubar.ItemIndicator>
+          {t('Sound')}
+        </Menubar.CheckboxItem>
         <Menubar.Separator className="menubar-separator" />
         <Action
           label={t('Increase font')}

@@ -36,7 +36,7 @@ export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbT
   const pivotY = pivotHeight(slots.length);
 
   return (
-    <button type="button" className="orb-toggle" aria-label={label} title={label} onClick={onClick}>
+    <button type="button" className="orb-toggle" aria-label={label} title={label} data-sound="toggle" onClick={onClick}>
       <svg viewBox="0 0 48 48" aria-hidden="true">
         <defs>
           <clipPath id={`${id}-orb`}>
