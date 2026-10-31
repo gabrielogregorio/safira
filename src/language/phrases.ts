@@ -64,6 +64,7 @@ const CONTINUATION_KEYS: CommandKey[] = [
   'para_cada_de',
   'para_cada_ate',
   'percorrer_lst_str_a_cada_subum',
+  'se_nao',
 ];
 
 const continuationWords = new Set(

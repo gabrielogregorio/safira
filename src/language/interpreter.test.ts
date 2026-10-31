@@ -100,3 +100,42 @@ describe('waiting', () => {
     expect((await runScript(source)).sleeps).toEqual([milliseconds]);
   });
 });
+
+describe('commands on the same line as a condition', () => {
+  const greet = 'nome = o que o usuario digitar\nse nome for igual a "gabriel" entao mostre na tela "obaaaaaa"';
+
+  it('runs the command when the condition is true', async () => {
+    expect((await runScript(greet, ['gabriel'])).texts).toEqual(['obaaaaaa']);
+  });
+
+  it('skips the command when the condition is false', async () => {
+    expect((await runScript(greet, ['ana'])).texts).toEqual([]);
+  });
+
+  it.each([
+    ['se 1 == 2 entao mostre "a" senao mostre "b"', ['b']],
+    ['se 1 == 1 entao mostre "a" senao mostre "b"', ['a']],
+    ['se 1 == 2 mostre "a"\nsenao mostre "b"', ['b']],
+    ['se 1 == 2 entao mostre "a"\nsenao se 2 == 2 entao mostre "b"\nsenao mostre "c"', ['b']],
+    ['se 1 == 1 entao se 2 == 3 entao mostre "a" senao mostre "b"', ['b']],
+    ['if 1 == 1 then show "a"', ['a']],
+    ['si 1 == 1 entonces muestra "a"', ['a']],
+    ['repita 2 vezes mostre "a"', ['a', 'a']],
+    ['para cada i de 1 ate 2 mostre i', ['1', '2']],
+    ['x = 0\nenquanto x < 2 entao x = x + 1\nmostre x', ['2']],
+  ])('%s', async (source, expected) => {
+    expect((await runScript(source)).texts).toEqual(expected);
+  });
+
+  it('keeps running the next line after the inline command', async () => {
+    expect((await runScript('se 1 == 1 entao mostre "a"\nmostre "b"')).texts).toEqual(['a', 'b']);
+  });
+
+  it('stops a loop from an inline break', async () => {
+    expect((await runScript('repita 5 vezes {\nmostre "a"\nse 1 == 1 entao pare\n}')).texts).toEqual(['a']);
+  });
+
+  it('reports an unknown inline command when it runs', async () => {
+    expect((await runScript('se 1 == 1 entao nada nada')).error?.message).toContain('Um comando desconhecido');
+  });
+});

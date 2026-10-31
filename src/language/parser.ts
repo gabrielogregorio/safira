@@ -10,6 +10,7 @@ type StatementRule = () => StatementBody;
 
 export class Parser extends ExpressionParser {
   private readonly sourceLines: string[];
+  private inlineDepth = 0;
 
   private readonly rules: StatementRule[] = [
     () => this.parseSimple('limpatela', { kind: 'clear' }),
@@ -84,7 +85,9 @@ export class Parser extends ExpressionParser {
       const body = this.attempt(() => {
         const statement = rule();
 
-        if (!this.isStatementEnd() && !this.endsWithBlock()) {
+        const isBeforeElse = this.inlineDepth > 0 && this.peekPhrase('se_nao') !== null;
+
+        if (!this.isStatementEnd() && !this.endsWithBlock() && !isBeforeElse) {
           this.fail();
         }
 
@@ -146,6 +149,22 @@ export class Parser extends ExpressionParser {
     }
   }
 
+  private parseBody(): Statement[] {
+    if (this.current.kind === 'newline' || this.isSymbol('{')) {
+      return this.parseBlock();
+    }
+
+    if (this.isStatementEnd()) {
+      this.fail();
+    }
+
+    this.inlineDepth += 1;
+    const statement = this.parseStatement();
+    this.inlineDepth -= 1;
+
+    return [statement];
+  }
+
   private peekAfterNewlines<Result>(action: () => Result | null): Result | null {
     const saved = this.position;
     this.skipNewlines();
@@ -181,7 +200,7 @@ export class Parser extends ExpressionParser {
     const condition = this.parseCondition();
     this.acceptPhrase('enquanto_final');
 
-    return { kind: 'while', condition, body: this.parseBlock() };
+    return { kind: 'while', condition, body: this.parseBody() };
   }
 
   private parseRepeat(): StatementBody {
@@ -189,7 +208,7 @@ export class Parser extends ExpressionParser {
     const count = this.parseAdditive();
     this.expectPhrase('repitaVezes');
 
-    return { kind: 'repeat', count, body: this.parseBlock() };
+    return { kind: 'repeat', count, body: this.parseBody() };
   }
 
   private parseForRange(): StatementBody {
@@ -200,7 +219,7 @@ export class Parser extends ExpressionParser {
     this.expectPhrase('para_cada_ate');
     const end = this.parseAdditive();
 
-    return { kind: 'forRange', name, start, end, body: this.parseBlock() };
+    return { kind: 'forRange', name, start, end, body: this.parseBody() };
   }
 
   private parseForEach(): StatementBody {
@@ -209,7 +228,7 @@ export class Parser extends ExpressionParser {
     this.expectPhrase('percorra_items_lista_sub');
     const name = this.expectName();
 
-    return { kind: 'forEach', iterable, name, body: this.parseBlock() };
+    return { kind: 'forEach', iterable, name, body: this.parseBody() };
   }
 
   private parseWait(): StatementBody {
@@ -255,7 +274,7 @@ export class Parser extends ExpressionParser {
       this.acceptPhrase('se_final');
     }
 
-    this.parseBlock();
+    this.parseBody();
 
     return { kind: 'invalid', messageKey: 'precisa_def_p_cond_senao', detail: '' };
   }
@@ -264,7 +283,7 @@ export class Parser extends ExpressionParser {
     return this.peekAfterNewlines(() => {
       this.expectPhrase(key);
 
-      return this.parseBlock();
+      return this.parseBody();
     });
   }
 
@@ -309,7 +328,7 @@ export class Parser extends ExpressionParser {
     const condition = this.parseCondition();
     this.acceptPhrase('se_final');
 
-    return { condition, body: this.parseBlock() };
+    return { condition, body: this.parseBody() };
   }
 
   private parseFileCreate(): StatementBody {
