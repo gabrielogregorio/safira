@@ -23,8 +23,8 @@ const LIGHT_DELAY_MILLISECONDS = 180;
 const HALF = 0.5;
 const MOST_DRIFT_X = 46;
 const MOST_DRIFT_Y = 36;
-const SHORTEST_TRIP_MILLISECONDS = 1000;
-const TRIP_VARIATION_MILLISECONDS = 500;
+const SHORTEST_TRIP_MILLISECONDS = 1500;
+const TRIP_VARIATION_MILLISECONDS = 750;
 
 /** 0 is the top of the code field and 1 the bottom. */
 const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 1, explain: 1, play: 0.3, result: 0.62 };
@@ -310,6 +310,19 @@ const placeOnScreen = (element: HTMLElement, scene: Scene, trip: Trip): void => 
   }
 };
 
+// He runs along the line from the stone to him, far enough to leave the screen.
+const fleeFrom = (element: HTMLElement, stone: DOMRect): void => {
+  const cat = element.getBoundingClientRect();
+  const distanceX = cat.left + CAT_SIZE / 2 - (stone.left + stone.width / 2);
+  const distanceY = cat.top + CAT_SIZE / 2 - (stone.top + stone.height / 2);
+  const length = Math.hypot(distanceX, distanceY) || 1;
+  const reach = Math.hypot(window.innerWidth, window.innerHeight);
+
+  element.dataset['facing'] = distanceX < 0 ? 'left' : 'right';
+  element.style.setProperty('--flee-x', `${String(cat.left + (distanceX / length) * reach)}px`);
+  element.style.setProperty('--flee-y', `${String(cat.top + (distanceY / length) * reach)}px`);
+};
+
 export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   const t = useTranslation();
   const root = useRef<HTMLDivElement>(null);
@@ -431,6 +444,10 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   }
 
   const pickUpStone = (): void => {
+    if (root.current !== null && stone.current !== null) {
+      fleeFrom(root.current, stone.current.getBoundingClientRect());
+    }
+
     void soundPlayer.play('catMeow', PANIC_RATE);
     setIsHoldingStone(true);
   };

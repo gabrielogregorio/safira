@@ -154,7 +154,7 @@ describe('ProfessorCat', () => {
 
 describe('planTrip', () => {
   it('varies a little between the shortest and the longest trip', () => {
-    expect(planTrip(() => 0)).toMatchObject({ milliseconds: 1000, driftX: -0 });
-    expect(planTrip(() => 1)).toMatchObject({ milliseconds: 1500, driftX: -46, driftY: 18 });
+    expect(planTrip(() => 0)).toMatchObject({ milliseconds: 1500, driftX: -0 });
+    expect(planTrip(() => 1)).toMatchObject({ milliseconds: 2250, driftX: -46, driftY: 18 });
   });
 });
