@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import { prefersMotion } from '@/ui/motion';
+import type { SoundName } from '@/ui/sound/sounds';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
 
@@ -10,6 +11,7 @@ interface ModalProps {
   children: ReactNode;
   onClose: () => void;
   isWide?: boolean;
+  openSound?: SoundName;
 }
 
 const ZOOM_RECTANGLES = [0, 1, 2, 3];
@@ -38,14 +40,14 @@ const playClosingAnimation = (overlay: HTMLElement): void => {
   }, CLOSING_MILLISECONDS);
 };
 
-export const Modal = ({ title, children, onClose, isWide = false }: ModalProps) => {
+export const Modal = ({ title, children, onClose, isWide = false, openSound = 'modalOpen' }: ModalProps) => {
   const overlay = useRef<HTMLDivElement | null>(null);
   const keepOverlay = useCallback((node: HTMLDivElement | null) => {
     overlay.current = node ?? overlay.current;
   }, []);
 
   useLayoutEffect(() => {
-    void soundPlayer.play('modalOpen');
+    void soundPlayer.play(openSound);
 
     return () => {
       void soundPlayer.play('modalClose');
@@ -54,7 +56,7 @@ export const Modal = ({ title, children, onClose, isWide = false }: ModalProps) 
         playClosingAnimation(overlay.current);
       }
     };
-  }, []);
+  }, [openSound]);
 
   return (
     <Dialog.Root

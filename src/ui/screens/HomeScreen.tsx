@@ -8,6 +8,7 @@ import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
+import { soundPlayer } from '@/ui/sound/sounds';
 import { TextPrompt } from '@/ui/components/TextPrompt';
 
 interface HomeScreenProps {
@@ -131,7 +132,7 @@ export const HomeScreen = ({
               </span>
               <a
                 className="button button-primary"
-                data-sound="open"
+                data-sound="homeOpen"
                 href={routeToHash({ name: 'project', projectId: project.id, file: null })}
                 aria-label={`${t('Open')} ${project.name}`}>
                 {t('Open')}
@@ -148,6 +149,7 @@ export const HomeScreen = ({
               <button
                 type="button"
                 className="button"
+                data-sound="renameStart"
                 aria-label={`${t('Rename')} ${project.name}`}
                 onClick={() => {
                   setRenaming(project);
@@ -175,6 +177,7 @@ export const HomeScreen = ({
       {deleting === null ? null : (
         <Modal
           title={t('Delete project?')}
+          openSound="alert"
           onClose={() => {
             setDeleting(null);
           }}>
@@ -212,6 +215,7 @@ export const HomeScreen = ({
             setRenaming(null);
           }}
           onSubmit={(value) => {
+            void soundPlayer.play('rename');
             onRename(renaming.id, value);
             setRenaming(null);
           }}

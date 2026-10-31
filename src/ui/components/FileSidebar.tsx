@@ -5,6 +5,8 @@ import { useTranslation } from '@/i18n/i18n';
 import type { FolderNode, TreeNode } from '@/projects/fileTree';
 import { buildFileTree, extensionStart, isPathTaken, provisionalName, renameTarget } from '@/projects/fileTree';
 import { NewFileIcon, NewFolderIcon, ProjectBadge } from './AeroIcons';
+import type { SoundName } from '@/ui/sound/sounds';
+import { soundPlayer } from '@/ui/sound/sounds';
 import { ProjectNameField } from './ProjectNameField';
 
 interface FileSidebarProps {
@@ -51,7 +53,7 @@ interface DraftRowProps {
 }
 
 interface RowMenuProps {
-  items: { label: string; onSelect: () => void; disabled?: boolean }[];
+  items: { label: string; onSelect: () => void; disabled?: boolean; sound?: SoundName }[];
   children: ReactNode;
 }
 
@@ -86,6 +88,7 @@ const RowMenu = ({ items, children }: RowMenuProps) => (
             key={item.label}
             className="menubar-item"
             disabled={item.disabled}
+            data-sound={item.sound}
             onSelect={item.onSelect}>
             {item.label}
           </ContextMenu.Item>
@@ -218,6 +221,7 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
           },
           {
             label: t('Rename'),
+            sound: 'renameStart',
             disabled: !actions.canRename,
             onSelect: () => {
               actions.onStartRename(node.path);
@@ -266,6 +270,7 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
               items={[
                 {
                   label: t('Rename'),
+                  sound: 'renameStart',
                   disabled: !actions.canRename,
                   onSelect: () => {
                     actions.onStartRename(node.path);
@@ -285,7 +290,7 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                   <button
                     type="button"
                     className="tree-name"
-                    data-sound="open"
+                    data-sound="tab"
                     aria-current={node.path === actions.activeFile ? 'page' : undefined}
                     onClick={() => {
                       actions.onOpen(node.path);
@@ -326,6 +331,7 @@ export const FileSidebar = ({
     const target = name === null ? null : renameTarget(node, name);
 
     if (target !== null && target !== node.path) {
+      void soundPlayer.play('rename');
       onRename(node, target);
     }
   };

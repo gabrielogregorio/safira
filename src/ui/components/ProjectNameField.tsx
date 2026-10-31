@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 interface ProjectNameFieldProps {
   name: string;
@@ -33,6 +34,7 @@ export const ProjectNameField = ({ name, onRename }: ProjectNameFieldProps) => {
     const trimmedName = typedName?.trim() ?? '';
 
     if (trimmedName !== '' && trimmedName !== name) {
+      void soundPlayer.play('rename');
       onRename(trimmedName);
     }
 
@@ -69,6 +71,7 @@ export const ProjectNameField = ({ name, onRename }: ProjectNameFieldProps) => {
       ref={opener}
       type="button"
       className="project-name-button"
+      data-sound="renameStart"
       title={`${name} - ${t('Rename')}`}
       onClick={() => {
         isFinished.current = false;

@@ -50,6 +50,7 @@ import {
 } from '@/ui/editorTabs';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 interface EditorScreenProps {
   project: Project;
@@ -129,6 +130,10 @@ export const EditorScreen = ({
   }
 
   useEffect(() => {
+    void soundPlayer.play('ideOpen');
+  }, []);
+
+  useEffect(() => {
     latestProject.current = project;
     latestTabs.current = tabs;
   }, [project, tabs]);
@@ -185,14 +190,21 @@ export const EditorScreen = ({
       const mode = requested === 'run' && hasBreakpoints ? 'debug' : requested;
 
       if (runner.status === 'paused') {
+        void soundPlayer.play('run');
         runner.resume(mode);
       } else if (!isRunning) {
+        void soundPlayer.play('run');
         setMobilePanel('output');
         runner.start({ file: activeFile, files: currentFiles(), locale, mode, breakpoints: project.breakpoints });
       }
     },
     [activeFile, currentFiles, hasBreakpoints, isRunning, locale, project.breakpoints, runner],
   );
+
+  const stopProgram = useCallback(() => {
+    void soundPlayer.play('stop');
+    runner.stop();
+  }, [runner]);
 
   const saveFile = useCallback(
     (file: string, tab: EditorTab) => {
@@ -349,6 +361,7 @@ export const EditorScreen = ({
 
   const toggleBreakpoint = useCallback(
     (line: number) => {
+      void soundPlayer.play('breakpoint');
       const lines = breakpoints.includes(line)
         ? breakpoints.filter((candidate) => candidate !== line)
         : [...breakpoints, line];
@@ -527,7 +540,7 @@ export const EditorScreen = ({
             aria-label={t('Stop')}
             title={t('Stop')}
             disabled={!isRunning}
-            onClick={runner.stop}>
+            onClick={stopProgram}>
             <StopIcon />
           </button>
         </div>
@@ -546,10 +559,11 @@ export const EditorScreen = ({
             setDialog({ kind: 'save-as' });
           }}
           onFormat={() => {
+            void soundPlayer.play('format');
             updateActiveText(formatCode(activeTab.text));
           }}
           onRun={runOrResume}
-          onStop={runner.stop}
+          onStop={stopProgram}
           onToggleBreakpoint={() => {
             toggleBreakpoint(cursor.line);
           }}
@@ -579,7 +593,7 @@ export const EditorScreen = ({
           <div key={tab.file} className={tab.file === activeFile ? 'tab tab-active' : 'tab'}>
             <button
               type="button"
-              data-sound="open"
+              data-sound="tab"
               aria-current={tab.file === activeFile ? 'page' : undefined}
               onClick={() => {
                 onSelectFile(tab.file);
@@ -590,6 +604,7 @@ export const EditorScreen = ({
             <button
               type="button"
               className="tab-close"
+              data-sound={isDirty(tab) ? undefined : 'modalClose'}
               aria-label={t('Close tab {name}', { name: tab.file })}
               onClick={() => {
                 if (isDirty(tab)) {
@@ -849,6 +864,7 @@ export const EditorScreen = ({
 
       {dialog?.kind === 'delete-node' ? (
         <Modal
+          openSound="alert"
           title={t('Delete this item?')}
           onClose={() => {
             setDialog(null);
