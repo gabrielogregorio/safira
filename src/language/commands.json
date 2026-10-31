@@ -106,13 +106,17 @@
   "para_cada_de": {
     "color": "lista",
     "phrases": [
+      "desde",
+      "from",
       "de"
     ]
   },
   "para_cada_ate": {
     "color": "condicionais",
     "phrases": [
-      "ate"
+      "hasta",
+      "ate",
+      "to"
     ]
   },
   "matematica_mod": {
@@ -451,6 +455,7 @@
       "in the file",
       "to the file",
       "no arquivo",
+      "al archivo",
       "in the"
     ]
   },
@@ -617,6 +622,8 @@
   "tamanho_da_lista": {
     "color": "lista",
     "phrases": [
+      "el tamano de la lista de",
+      "the size of the list of",
       "el tamano de la  lista",
       "o tamanho da lista de",
       "tamanho da lista de",
@@ -667,6 +674,7 @@
       "write on that line",
       "mostre nessa linha",
       "mostra nessa linha",
+      "print on this line",
       "show in that line",
       "show in this line",
       "show on that line",
@@ -879,7 +887,9 @@
     "phrases": [
       "decrecientemente",
       "decreasingly",
-      "decremente"
+      "decrementar",
+      "decremente",
+      "decrease"
     ]
   },
   "repitaVezes": {
@@ -997,6 +1007,8 @@
   "addItensListaInternoInicio": {
     "color": "lista",
     "phrases": [
+      "at the start of the list of",
+      "al inicio de la lista de",
       "no inicio da lista de",
       "no inicio a lista de",
       "no inicio na lista"
@@ -1005,6 +1017,8 @@
   "addItensListaInternoFinal": {
     "color": "lista",
     "phrases": [
+      "at the end of the list of",
+      "al final de la lista de",
       "no final da lista de",
       "no final a lista de",
       "no final na lista"
@@ -1013,6 +1027,8 @@
   "remover_itens_listas_interno": {
     "color": "lista",
     "phrases": [
+      "from the list of",
+      "de la lista de",
       "da lista de",
       "da lista"
     ]
@@ -1020,6 +1036,8 @@
   "tiver_interno_lista": {
     "color": "lista",
     "phrases": [
+      "in the list of",
+      "en la lista de",
       "na lista de",
       "na lista",
       "em"
@@ -1032,7 +1050,9 @@
       "na variavel",
       "em",
       "na",
-      "no"
+      "no",
+      "in",
+      "en"
     ]
   },
   "tente": {
