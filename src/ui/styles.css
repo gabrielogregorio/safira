@@ -565,9 +565,133 @@ select {
   gap: 8px;
 }
 
-.safira-logo {
-  filter: drop-shadow(0 3px 7px rgb(8 60 170 / 45%));
+.aero-orb {
+  filter: drop-shadow(0 6px 9px rgb(8 60 170 / 40%));
   flex: none;
+  overflow: visible;
+}
+
+.aero-orb-float {
+  animation: orb-float 5s ease-in-out infinite;
+}
+
+.aero-orb-sway {
+  animation: orb-sway 6s ease-in-out infinite;
+}
+
+.aero-orb-wave {
+  animation: orb-wave 6s linear infinite;
+}
+
+.aero-orb-wave-back {
+  animation-direction: reverse;
+  animation-duration: 9s;
+}
+
+.aero-orb-fish {
+  animation: orb-swim 11s linear infinite;
+}
+
+.aero-orb-bubble {
+  animation: orb-bubble 4.5s ease-in infinite;
+  fill: rgb(255 255 255 / 45%);
+  stroke: #ffffff;
+  stroke-width: 0.7;
+}
+
+.aero-orb-sparkle {
+  animation: orb-sparkle 3.5s ease-in-out infinite;
+  fill: #ffffff;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+@keyframes orb-float {
+  50% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes orb-sway {
+  0%,
+  100% {
+    transform: rotate(-4deg);
+  }
+
+  50% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes orb-wave {
+  to {
+    transform: translateX(60px);
+  }
+}
+
+@keyframes orb-swim {
+  from {
+    transform: translateX(-20px);
+  }
+
+  to {
+    transform: translateX(130px);
+  }
+}
+
+@keyframes orb-bubble {
+  from {
+    opacity: 0;
+    transform: translateY(0);
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    transform: translateY(-56px);
+  }
+}
+
+@keyframes orb-sparkle {
+  0%,
+  70%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+
+  85% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.devtools-invite {
+  backdrop-filter: blur(14px) saturate(150%);
+  background: var(--color-panel-strong);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-panel);
+  bottom: 16px;
+  box-shadow: 0 12px 34px rgb(4 30 70 / 45%);
+  display: flex;
+  gap: 10px;
+  max-width: min(360px, calc(100vw - 32px));
+  padding: 14px;
+  position: fixed;
+  right: 16px;
+  z-index: 40;
+}
+
+.devtools-invite h2 {
+  font-size: 1.05rem;
+  margin: 0 0 4px;
+}
+
+.devtools-invite p {
+  margin: 0 0 10px;
 }
 
 .home {
@@ -2171,7 +2295,7 @@ select {
     font-size: 2rem;
   }
 
-  .home-brand .safira-logo {
+  .home-brand .aero-orb {
     max-height: 56px;
     max-width: 56px;
   }
@@ -2189,6 +2313,7 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .aero-orb *,
   .button,
   .example-card,
   .breakpoint-dot,

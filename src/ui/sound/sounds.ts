@@ -1,3 +1,5 @@
+import type { Locale } from '@/language/messages';
+import type { ThemeId } from '@/settings/settings';
 import acceptUrl from './files/accept.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
@@ -13,7 +15,11 @@ import homeOpenUrl from './files/home-open.wav';
 import hoverUrl from './files/hover.wav';
 import ideOpenUrl from './files/ide-open.wav';
 import importUrl from './files/import.wav';
-import languageUrl from './files/language.wav';
+import languageEnUsUrl from './files/language-en-us.wav';
+import languageEsUrl from './files/language-es.wav';
+import languageJaUrl from './files/language-ja.wav';
+import languagePtBrUrl from './files/language-pt-br.wav';
+import languageZhCnUrl from './files/language-zh-cn.wav';
 import modalCloseUrl from './files/modal-close.wav';
 import modalOpenUrl from './files/modal-open.wav';
 import moveUrl from './files/move.wav';
@@ -33,7 +39,9 @@ import terminalSendUrl from './files/terminal-send.wav';
 import terminalTypingUrl from './files/terminal-typing.wav';
 import toggleUrl from './files/toggle.wav';
 import typingUrl from './files/typing.wav';
-import weatherUrl from './files/weather.wav';
+import weatherDarkUrl from './files/weather-dark.wav';
+import weatherLightUrl from './files/weather-light.wav';
+import weatherSimpleUrl from './files/weather-simple.wav';
 
 export type SoundName =
   | 'click'
@@ -54,7 +62,9 @@ export type SoundName =
   | 'run'
   | 'stop'
   | 'format'
-  | 'weather'
+  | 'weatherLight'
+  | 'weatherDark'
+  | 'weatherSimple'
   | 'fileCreate'
   | 'folderCreate'
   | 'suggestionsOn'
@@ -65,7 +75,11 @@ export type SoundName =
   | 'accept'
   | 'selection'
   | 'import'
-  | 'language'
+  | 'languagePtBr'
+  | 'languageEnUs'
+  | 'languageEs'
+  | 'languageZhCn'
+  | 'languageJa'
   | 'error'
   | 'export'
   | 'move'
@@ -93,7 +107,9 @@ export const SOUND_FILES: Record<SoundName, string> = {
   run: runUrl,
   stop: stopUrl,
   format: formatUrl,
-  weather: weatherUrl,
+  weatherLight: weatherLightUrl,
+  weatherDark: weatherDarkUrl,
+  weatherSimple: weatherSimpleUrl,
   fileCreate: fileCreateUrl,
   folderCreate: folderCreateUrl,
   suggestionsOn: suggestionsOnUrl,
@@ -104,13 +120,32 @@ export const SOUND_FILES: Record<SoundName, string> = {
   accept: acceptUrl,
   selection: selectionUrl,
   import: importUrl,
-  language: languageUrl,
+  languagePtBr: languagePtBrUrl,
+  languageEnUs: languageEnUsUrl,
+  languageEs: languageEsUrl,
+  languageZhCn: languageZhCnUrl,
+  languageJa: languageJaUrl,
   error: errorUrl,
   export: exportUrl,
   move: moveUrl,
   terminalFocus: terminalFocusUrl,
   terminalTyping: terminalTypingUrl,
   terminalSend: terminalSendUrl,
+};
+
+// Each language lands with something of its region, and each sky with its own weather.
+export const LANGUAGE_SOUNDS: Record<Locale, SoundName> = {
+  'pt-br': 'languagePtBr',
+  'en-us': 'languageEnUs',
+  es: 'languageEs',
+  'zh-cn': 'languageZhCn',
+  ja: 'languageJa',
+};
+
+export const WEATHER_SOUNDS: Record<ThemeId, SoundName> = {
+  light: 'weatherLight',
+  dark: 'weatherDark',
+  simple: 'weatherSimple',
 };
 
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
@@ -133,6 +168,7 @@ const wait = (milliseconds: number): Promise<void> =>
 const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
 const MASTER_GAIN = 0.5;
 const LOOP_GAIN = 0.35;
+const MUTE_SECONDS = 0.01;
 const LOOP_FADE_IN_SECONDS = 0.04;
 const LOOP_FADE_SECONDS = 0.02;
 const LOOP_STOP_SECONDS = 0.1;
@@ -200,6 +236,11 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
     setEnabled: (enabled: boolean): void => {
       isEnabled = enabled;
 
+      // Muting also cuts what is already playing, such as the long tail of the weather sounds.
+      if (context !== null && output !== null) {
+        output.gain.setTargetAtTime(enabled ? MASTER_GAIN : 0, context.currentTime, MUTE_SECONDS);
+      }
+
       if (!enabled) {
         fadeLoop();
       }
@@ -247,6 +288,11 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       try {
         const source = audio.createBufferSource();
         source.buffer = await bufferOf(audio, name);
+
+        if (!isEnabled) {
+          return;
+        }
+
         source.playbackRate.value = rate;
         source.connect(output);
         source.start();

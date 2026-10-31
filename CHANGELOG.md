@@ -30,6 +30,9 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Resizable panels, by mouse and keyboard, kept between sessions.
 - Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.
 - Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors, the program input field, exporting, moving items and dragging a selection, which plays while the mouse is pressed, with a switch to turn them off.
+- Each language lands with a sound of its region, and each sky with its own weather sound.
+- The home screen has an animated glass globe with water, a fish, bubbles and a sprout.
+- Opening the browser tools shows an invitation to the repository, on the page and in the console.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.
 - The example programs were ported to the new language and now carry emojis, so their author line names Gabriel Gregorio, who ported them.
@@ -37,7 +40,6 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Opening a project switches the IDE on like an old screen, and opening a file wipes the editor with a glass sheen.
 - Glossy icon buttons for new file, new folder, back, close, run and stop, following the theme.
 - Istok Web as the interface font and JetBrains Mono for code, both bundled, with a menu switch for the code font.
-- A 3D sapphire as the logo, written directly in WebGL 2. It spins and points at the mouse, draws at 15 to 30 frames per second, rests when the window loses focus, stands still with the reduced motion preference and falls back to a flat logo without WebGL.
 - Modals with an overlay, a retro opening and a closing animation, closing when clicking outside.
 - Confirmation before deleting a project or a file.
 - Styled mouse cursor and scrollbars.

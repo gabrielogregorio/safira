@@ -40,8 +40,6 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Every text that does not go through i18n needs `data-fixed-text`, or it scrambles when the language changes.
 - `settings.theme` is only where the sky starts. Show `skyTheme`, and never save elapsed time.
 - `.code-editor` uses `overflow: clip`: with `hidden`, the file sheen left a scrollable area and shifted the editor.
-- The gem must not draw at the full frame rate: it costs almost all the idle CPU. Compare with and without it, because
-  software rendering exaggerates the absolute number.
 - One click can ask for several sounds. `sounds.ts` lets the most meaningful one play, so do not fix overlaps elsewhere.
 - Moving the focus to a button during an Enter `keydown` clicks that button: call `preventDefault` on the key.
 - The hidden `1.0` stays in `SUPPORTED_VERSIONS` for scripts saved before the version went back to `0.9`.

@@ -18,7 +18,7 @@ The target is WCAG 2.1 AA.
 - The top menu follows the menu bar pattern: arrows move between and inside menus, Escape returns to the trigger.
 - Theme and language are buttons that cycle on each click, and each one says the current choice in its name.
 - Panel dividers are separators that work with the arrow keys.
-- Language, theme and gem animations are skipped with the reduced motion preference, and the rewritten letters are not announced.
+- Language, theme and globe animations are skipped with the reduced motion preference, and the rewritten letters are not announced.
 - On a phone, touch targets have at least 44 pixels.
 
 ## Known limits

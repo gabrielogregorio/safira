@@ -6,8 +6,8 @@ import { routeToHash } from '@/routing/routes';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
+import { AeroOrb } from '@/ui/components/AeroOrb';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
-import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { TextPrompt } from '@/ui/components/TextPrompt';
 
@@ -25,7 +25,7 @@ interface HomeScreenProps {
   preferenceToggles: ReactNode;
 }
 
-const HERO_LOGO_SIZE = 84;
+const HERO_ORB_SIZE = 96;
 
 export const HomeScreen = ({
   projects,
@@ -96,7 +96,7 @@ export const HomeScreen = ({
       ) : null}
       <header className="home-hero">
         <div className="home-brand">
-          <SafiraLogo size={HERO_LOGO_SIZE} />
+          <AeroOrb size={HERO_ORB_SIZE} />
           <h1 data-fixed-text>Safira</h1>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>

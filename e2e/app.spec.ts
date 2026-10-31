@@ -785,12 +785,11 @@ test('a suggestion can be accepted by touching it', async ({ page }) => {
   await expect(page.locator('.cm-content')).toContainText('show "Hello!"');
 });
 
-test('the logo is a live 3D gem', async ({ page }) => {
+test('the home screen shows the animated globe', async ({ page }) => {
   await page.goto('/');
-  await page.mouse.move(900, 300);
 
-  await expect(page.locator('canvas.safira-logo')).toBeVisible();
-  await expect(page.locator('svg.safira-logo')).toHaveCount(0);
+  await expect(page.locator('.home-brand .aero-orb')).toBeVisible();
+  await expect(page.locator('canvas')).toHaveCount(0);
 });
 
 test('language is available on every screen', async ({ page }) => {

@@ -16,6 +16,7 @@ import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
 import { CloseButton } from '@/ui/components/CloseButton';
+import { DevToolsInvite } from '@/ui/components/DevToolsInvite';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
 import { SoundToggle } from '@/ui/components/SoundToggle';
@@ -24,7 +25,7 @@ import { useSkyClock } from '@/ui/sky/useSkyClock';
 import { ThemeToggle } from '@/ui/components/ThemeToggle';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
-import { clickableAt, soundForClick, soundPlayer } from '@/ui/sound/sounds';
+import { clickableAt, LANGUAGE_SOUNDS, soundForClick, soundPlayer, WEATHER_SOUNDS } from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
@@ -143,12 +144,12 @@ export const App = ({ createWorker }: AppProps) => {
         soundPlayer.setEnabled(changes.sound);
       }
 
-      if (changes.locale !== undefined) {
-        void soundPlayer.play('language');
+      if (changes.locale !== undefined && changes.locale !== null) {
+        void soundPlayer.play(LANGUAGE_SOUNDS[changes.locale]);
       }
 
       if (changes.theme !== undefined) {
-        void soundPlayer.play('weather');
+        void soundPlayer.play(WEATHER_SOUNDS[changes.theme]);
         travelTo(changes.theme);
       }
 
@@ -239,6 +240,7 @@ export const App = ({ createWorker }: AppProps) => {
   return (
     <TranslationContext.Provider value={translate}>
       <SceneBackdrop phase={phase} />
+      <DevToolsInvite />
       <a
         className="skip-link"
         href="#content"
