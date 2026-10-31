@@ -7,9 +7,10 @@ interface LessonsScreenProps {
   readLessons: string[];
   onMarkRead: (id: string) => void;
   onBack: () => void;
+  onOpenPreferences: () => void;
 }
 
-export const LessonsScreen = ({ readLessons, onMarkRead, onBack }: LessonsScreenProps) => {
+export const LessonsScreen = ({ readLessons, onMarkRead, onBack, onOpenPreferences }: LessonsScreenProps) => {
   const t = useTranslation();
   const [index, setIndex] = useState(0);
   const lesson = tutorials[index] ?? tutorials[0];
@@ -28,6 +29,9 @@ export const LessonsScreen = ({ readLessons, onMarkRead, onBack }: LessonsScreen
       <nav className="lessons-nav" aria-label={t('Lessons')}>
         <button type="button" className="button" onClick={onBack}>
           {t('Back to projects')}
+        </button>
+        <button type="button" className="button" onClick={onOpenPreferences}>
+          {t('Theme and language')}
         </button>
         <ul>
           {tutorials.map((tutorial, tutorialIndex) => (

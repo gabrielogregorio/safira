@@ -26,13 +26,32 @@ interface LineMarks {
 const setBreakpoints = StateEffect.define<number[]>();
 const setLineMarks = StateEffect.define<LineMarks>();
 
-class BreakpointMarker extends GutterMarker {
-  public override toDOM(): Text {
-    return document.createTextNode('●');
+class BreakpointDot extends GutterMarker {
+  public constructor(private readonly isActive: boolean) {
+    super();
+  }
+
+  public override toDOM(): HTMLElement {
+    const dot = document.createElement('span');
+    dot.className = this.isActive ? 'breakpoint-dot breakpoint-dot-active' : 'breakpoint-dot';
+
+    return dot;
   }
 }
 
-const breakpointMarker = new BreakpointMarker();
+const breakpointMarker = new BreakpointDot(true);
+const emptyBreakpointMarker = new BreakpointDot(false);
+
+const hasBreakpointAt = (state: EditorState, position: number): boolean => {
+  let isFound = false;
+  state.field(breakpointField).between(position, position, () => {
+    isFound = true;
+
+    return false;
+  });
+
+  return isFound;
+};
 
 const lineFromDocument = (state: EditorState, line: number): number | null =>
   line >= 1 && line <= state.doc.lines ? state.doc.line(line).from : null;
@@ -152,7 +171,13 @@ export const CodeEditor = ({
           lineMarkField,
           gutter({
             class: 'editor-breakpoints',
-            markers: (editorView) => editorView.state.field(breakpointField),
+            lineMarker: (editorView, line) =>
+              hasBreakpointAt(editorView.state, line.from) ? breakpointMarker : emptyBreakpointMarker,
+            lineMarkerChange: (update) =>
+              update.transactions.some((transaction) =>
+                transaction.effects.some((effect) => effect.is(setBreakpoints)),
+              ),
+            initialSpacer: () => emptyBreakpointMarker,
             domEventHandlers: {
               mousedown: (editorView, block) => {
                 callbacks.current.onToggleBreakpoint(editorView.state.doc.lineAt(block.from).number);

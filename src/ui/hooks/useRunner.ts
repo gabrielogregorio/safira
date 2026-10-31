@@ -67,6 +67,7 @@ export const useRunner = (
           break;
         case 'input-request':
           setStatus('waiting-input');
+          setVariables(event.variables);
           break;
         case 'paused':
           setStatus('paused');

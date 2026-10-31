@@ -1,5 +1,5 @@
 import AxeBuilder from '@axe-core/playwright';
-import { expect, test, type Page } from '@playwright/test';
+import { devices, expect, test, type Locator, type Page } from '@playwright/test';
 
 const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const LAYOUT_WIDTHS = [320, 375, 768, 1280, 1440];
@@ -21,9 +21,13 @@ const expectNoHorizontalScroll = async (page: Page): Promise<void> => {
 const createProjectWithCode = async (page: Page, code: string): Promise<void> => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
   await page.getByLabel('Code editor').click();
   await page.keyboard.insertText(code);
 };
+
+const breakpointDots = (page: Page): Locator =>
+  page.locator('.editor-breakpoints .cm-gutterElement').filter({ visible: true });
 
 const runCode = async (page: Page): Promise<void> => {
   await page.getByRole('button', { name: 'Run', exact: true }).click();
@@ -49,7 +53,7 @@ test('stops an infinite loop and the page stays responsive', async ({ page }) =>
   await createProjectWithCode(page, 'enquanto 1 == 1 { mostre "x" }');
   await runCode(page);
   await page.getByRole('main').getByRole('log').waitFor();
-  await page.locator('.toolbar-actions').getByRole('button', { name: 'Stop execution' }).click();
+  await page.getByRole('button', { name: 'Stop', exact: true }).click();
 
   await expect(page.getByRole('log')).toContainText('Execution stopped');
   await expect(page.getByRole('button', { name: 'Run', exact: true })).toBeEnabled();
@@ -89,6 +93,77 @@ test('debugs line by line with the variables panel', async ({ page }) => {
   await expect(page.getByRole('cell', { name: 'x', exact: true })).toBeVisible();
 });
 
+test('runs with Ctrl+Enter from inside the editor without adding a line', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "atalho"');
+  await page.keyboard.press('Control+Enter');
+
+  await expect(page.getByRole('log')).toContainText('atalho');
+  await expect(page.locator('.cm-line')).toHaveCount(1);
+});
+
+test('stops at a breakpoint set by clicking its dot', async ({ page }) => {
+  await createProjectWithCode(page, 'x = 1\ny = 2\nmostre x + y');
+  await breakpointDots(page).nth(1).click();
+  await expect(page.locator('.breakpoint-dot-active')).toHaveCount(1);
+  await runCode(page);
+
+  await expect(page.getByText('Paused on line 2')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'x', exact: true })).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'y', exact: true })).toBeHidden();
+
+  await page.getByRole('button', { name: 'Continue' }).first().click();
+
+  await expect(page.getByRole('log')).toContainText('3');
+});
+
+test('a breakpoint on a comment stops at the next command', async ({ page }) => {
+  await createProjectWithCode(page, '# nota\nmostre 1');
+  await breakpointDots(page).first().click();
+  await runCode(page);
+
+  await expect(page.getByText('Paused on line 2')).toBeVisible();
+});
+
+test('removes a breakpoint with a second click', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  const dot = breakpointDots(page).first();
+  await dot.click();
+  await dot.click();
+
+  await expect(page.locator('.breakpoint-dot-active')).toHaveCount(0);
+});
+
+test('navigates the top menu with the keyboard', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('menuitem', { name: 'File' }).focus();
+  await page.keyboard.press('Enter');
+  await expect(page.getByRole('menuitem', { name: 'Open file' })).toBeFocused();
+  await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+
+  await page.keyboard.press('ArrowRight');
+  await expect(page.getByRole('menuitem', { name: 'Run all' })).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('menuitem', { name: 'Run all' })).toBeHidden();
+  await expect(page.getByRole('menuitem', { name: 'Run', exact: true })).toBeFocused();
+});
+
+test('changes the theme from the menu', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Theme' }).click();
+  await page.getByRole('menuitemradio', { name: 'Dark' }).click();
+
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+});
+
+test('asks before closing a tab with unsaved work', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('button', { name: 'Close tab main.safira' }).click();
+
+  await expect(page.getByRole('dialog', { name: 'Do you want to save your program?' })).toBeVisible();
+});
+
 test('colors the syntax of the code', async ({ page }) => {
   await createProjectWithCode(page, 'mostre "oi"');
 
@@ -97,13 +172,25 @@ test('colors the syntax of the code', async ({ page }) => {
 });
 
 test.describe('accessibility', () => {
+  test('an open menu has no violations', async ({ page }) => {
+    await createProjectWithCode(page, 'mostre 1');
+    await page.getByRole('menuitem', { name: 'Run', exact: true }).click();
+    await expect(page.getByRole('menuitem', { name: 'Run all' })).toBeVisible();
+    await expectNoViolations(page);
+  });
+
   for (const theme of ['Simple', 'Dark', 'Light']) {
     test(`home and editor have no violations in the ${theme} theme`, async ({ page }) => {
       await page.goto('/');
-      await page.getByLabel('Theme').selectOption({ label: theme });
+      await page.getByRole('button', { name: 'Theme and language' }).click();
+      await page.getByText(theme, { exact: true }).click();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Close' }).click();
       await expectNoViolations(page);
 
       await page.getByRole('button', { name: 'Create project' }).click();
+      await expectNoViolations(page);
+      await page.getByRole('button', { name: 'Go ahead' }).click();
       await page.getByLabel('Code editor').click();
       await page.keyboard.insertText('se 1 == 1 { mostre "oi" } # nota\nfuncao f { retorne 1 }');
       await runCode(page);
@@ -128,6 +215,68 @@ test.describe('layout', () => {
 
       await page.getByRole('button', { name: 'Create project' }).click();
       await expectNoHorizontalScroll(page);
+      await page.getByRole('button', { name: 'Go ahead' }).click();
+      await expectNoHorizontalScroll(page);
     });
   }
+});
+
+test('theme and language are available on every screen', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Lessons' }).click();
+  await expect(page.getByRole('button', { name: 'Theme and language' })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Back to projects' }).click();
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await page.getByText('Español').click();
+
+  await expect(page.locator('html')).toHaveAttribute('lang', 'es');
+});
+
+test.describe('phone', () => {
+  const { viewport, userAgent, deviceScaleFactor, isMobile, hasTouch } = devices['Pixel 7'];
+  test.use({ viewport, userAgent, deviceScaleFactor, isMobile, hasTouch, locale: 'en-US' });
+
+  test('runs a program, sets a breakpoint by touch and reads the variables', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Create project' }).tap();
+    await page.getByRole('button', { name: 'Go ahead' }).tap();
+    await page.getByLabel('Code editor').tap();
+    await page.keyboard.insertText('x = 1\nmostre x');
+    await breakpointDots(page).nth(1).tap();
+    await expect(page.locator('.breakpoint-dot-active')).toHaveCount(1);
+    await page.getByRole('button', { name: 'Run', exact: true }).tap();
+
+    await expect(page.getByText('Paused on line 2')).toBeVisible();
+
+    await page.getByRole('button', { name: 'Variables' }).tap();
+    await expect(page.getByRole('cell', { name: 'x', exact: true })).toBeVisible();
+
+    await page.getByRole('button', { name: 'Output' }).tap();
+    await page.getByRole('button', { name: 'Continue' }).first().tap();
+    await expect(page.getByRole('log')).toContainText('1');
+    await expectNoHorizontalScroll(page);
+  });
+
+  test('every touch target of the editor has at least 44 pixels', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Create project' }).tap();
+    await page.getByRole('button', { name: 'Go ahead' }).tap();
+    const heights = await page
+      .locator('.toolbar button, .mobile-panel-button')
+      .evaluateAll((buttons) => buttons.map((button) => button.getBoundingClientRect().height));
+
+    expect(Math.min(...heights)).toBeGreaterThanOrEqual(44);
+  });
+
+  test('opens the menu by touch inside the screen and has no violations', async ({ page }) => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Create project' }).tap();
+    await page.getByRole('button', { name: 'Go ahead' }).tap();
+    await page.getByRole('menuitem', { name: 'Examples' }).tap();
+    await expect(page.getByRole('menuitem', { name: 'Listas' })).toBeVisible();
+    await expectNoViolations(page);
+  });
 });

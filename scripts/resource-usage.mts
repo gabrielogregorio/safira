@@ -67,6 +67,7 @@ await page.goto(BASE_URL);
 
 for (let round = 0; round < ROUNDS; round += 1) {
   await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
   await page.getByLabel('Code editor').click();
   await page.keyboard.insertText('repita 300 vezes { mostre "linha" }');
   await page.getByRole('button', { name: 'Run', exact: true }).click();

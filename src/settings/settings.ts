@@ -19,8 +19,8 @@ const STORAGE_KEY = 'safira.settings.v1';
 
 export const DEFAULT_SETTINGS: Settings = {
   locale: null,
-  theme: 'simple',
-  syntax: 'simple',
+  theme: 'light',
+  syntax: 'light',
   fontSize: DEFAULT_FONT_SIZE,
   readLessons: [],
 };
@@ -81,12 +81,12 @@ export const SYNTAX_PALETTES: Record<ThemeId, Record<SyntaxCategory, string>> = 
     atribuicao: '#b8ff75',
     loops: '#f94fff',
     lista: '#91fdff',
-    logico: '#ff5473',
-    entrada: '#ff5473',
+    logico: '#ff7d93',
+    entrada: '#ff7d93',
     exibicao: '#78aeff',
     tempo: '#91fdff',
     condicionais: '#f94fff',
-    contas: '#ff5473',
+    contas: '#ff7d93',
     string: '#fff891',
     comentario: '#8cbd7d',
     pare: '#ff6b6b',

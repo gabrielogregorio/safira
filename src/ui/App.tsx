@@ -4,6 +4,7 @@ import type { Project } from '@/projects/projectStore';
 import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
 import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
+import { PreferencesDialog } from '@/ui/components/PreferencesDialog';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
@@ -20,6 +21,7 @@ export const App = ({ createWorker }: AppProps) => {
   const [projects, setProjects] = useState<Project[]>(loadProjects);
   const [screen, setScreen] = useState<Screen>({ name: 'home' });
   const [saveFailed, setSaveFailed] = useState(false);
+  const [isChoosingPreferences, setIsChoosingPreferences] = useState(false);
 
   const locale = useMemo(
     () => detectLocale(window.location.search, settings.locale, navigator.language),
@@ -69,6 +71,10 @@ export const App = ({ createWorker }: AppProps) => {
     });
   }, []);
 
+  const openPreferences = useCallback(() => {
+    setIsChoosingPreferences(true);
+  }, []);
+
   const activeProject =
     screen.name === 'editor' ? projects.find((project) => project.id === screen.projectId) : undefined;
 
@@ -91,6 +97,7 @@ export const App = ({ createWorker }: AppProps) => {
           createWorker={createWorker}
           onSaveProject={handleSave}
           onChangeSettings={changeSettings}
+          onOpenPreferences={openPreferences}
           onBack={() => {
             setScreen({ name: 'home' });
           }}
@@ -99,6 +106,7 @@ export const App = ({ createWorker }: AppProps) => {
       {screen.name === 'lessons' ? (
         <LessonsScreen
           readLessons={settings.readLessons}
+          onOpenPreferences={openPreferences}
           onMarkRead={(id) => {
             if (!settings.readLessons.includes(id)) {
               changeSettings({ readLessons: [...settings.readLessons, id] });
@@ -112,8 +120,6 @@ export const App = ({ createWorker }: AppProps) => {
       {screen.name === 'home' ? (
         <HomeScreen
           projects={projects}
-          settings={settings}
-          locale={locale}
           onCreate={handleCreate}
           onOpen={(projectId) => {
             setScreen({ name: 'editor', projectId });
@@ -127,7 +133,17 @@ export const App = ({ createWorker }: AppProps) => {
           onOpenLessons={() => {
             setScreen({ name: 'lessons' });
           }}
-          onChangeSettings={changeSettings}
+          onOpenPreferences={openPreferences}
+        />
+      ) : null}
+      {isChoosingPreferences ? (
+        <PreferencesDialog
+          settings={settings}
+          locale={locale}
+          onChange={changeSettings}
+          onClose={() => {
+            setIsChoosingPreferences(false);
+          }}
         />
       ) : null}
     </TranslationContext.Provider>

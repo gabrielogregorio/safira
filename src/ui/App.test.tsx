@@ -18,7 +18,9 @@ const renderApp = (): ReturnType<typeof render> =>
   );
 
 const openExample = async (name: string): Promise<void> => {
+  await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
   await userEvent.click(screen.getByRole('button', { name }));
+  await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
 };
 
 describe('App', () => {
@@ -31,21 +33,50 @@ describe('App', () => {
     document.documentElement.removeAttribute('data-theme');
   });
 
-  it('shows the home screen with the examples and no projects', () => {
+  it('shows the home screen without projects', () => {
     renderApp();
 
     expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Variaveis' })).not.toBeInTheDocument();
+  });
+
+  it('only shows the examples after pressing create', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+
     expect(screen.getByRole('button', { name: 'Variaveis' })).toBeInTheDocument();
   });
 
-  it('creates a blank project with the typed name and keeps it', async () => {
+  it('creates a project without choosing anything', async () => {
     renderApp();
-    await userEvent.type(screen.getByLabelText('Project name'), 'Meu jogo');
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
+
+    expect(screen.getByRole('heading', { name: 'New project' })).toBeInTheDocument();
+    expect(loadProjects().map((project) => project.files['main.safira'])).toEqual(['#safira 1.0\n']);
+  });
+
+  it('creates a project with the typed name', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+    await userEvent.type(screen.getByLabelText('Project name (optional)'), 'Meu jogo{Enter}');
 
     expect(screen.getByRole('heading', { name: 'Meu jogo' })).toBeInTheDocument();
     expect(loadProjects().map((project) => project.name)).toEqual(['Meu jogo']);
+  });
+
+  it('can undo the choice of an example', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+    const example = screen.getByRole('button', { name: 'Pare' });
+    await userEvent.click(example);
+
+    expect(example).toHaveAttribute('aria-pressed', 'true');
+
+    await userEvent.click(example);
+
+    expect(example).toHaveAttribute('aria-pressed', 'false');
   });
 
   it('runs an example and shows its output in the terminal', async () => {
@@ -151,7 +182,7 @@ describe('App', () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Open Loop' }));
     await userEvent.click(screen.getByRole('button', { name: 'Run' }));
-    await userEvent.click(screen.getAllByRole('button', { name: 'Stop execution' }).at(-1) as HTMLElement);
+    await userEvent.click(screen.getByRole('button', { name: 'Stop' }));
 
     expect(worker.terminated).toBe(true);
     expect(screen.getByRole('log')).toHaveTextContent('Execution stopped');
@@ -169,6 +200,49 @@ describe('App', () => {
     await waitFor(() => {
       expect(Object.keys(loadProjects()[0]?.files ?? {})).toContain('a.txt');
     });
+  });
+
+  it('runs with Ctrl+Enter', async () => {
+    renderApp();
+    await openExample('Pare');
+    await userEvent.keyboard('{Control>}{Enter}{/Control}');
+
+    await waitFor(() => {
+      expect(screen.getByRole('log')).toHaveTextContent('soma: 4');
+    });
+  });
+
+  it('stops at a breakpoint when running and shows the inspector', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([
+        { id: '1', name: 'Pausa', files: { 'main.safira': 'x = 1\nmostre x' }, breakpoints: { 'main.safira': [2] } },
+      ]),
+    );
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Open Pausa' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Run' }));
+
+    expect(await screen.findByText('Paused on line 2')).toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'x' })).toBeInTheDocument();
+  });
+
+  it('filters the variables in the inspector', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([{ id: '1', name: 'Vars', files: { 'main.safira': 'idade = 1\nnome = "a"' }, breakpoints: {} }]),
+    );
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Open Vars' }));
+
+    expect(screen.getByText('Run your program to see its variables here.')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Run' }));
+    await screen.findByRole('cell', { name: 'idade' });
+    await userEvent.type(screen.getByLabelText('Search variables'), 'no');
+
+    expect(screen.queryByRole('cell', { name: 'idade' })).not.toBeInTheDocument();
+    expect(screen.getByRole('cell', { name: 'nome' })).toBeInTheDocument();
   });
 
   it('renames and deletes a project', async () => {
@@ -189,16 +263,29 @@ describe('App', () => {
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
   });
 
-  it('changes the language and the theme', async () => {
+  it('changes the language and the theme from the home screen', async () => {
     renderApp();
-    await userEvent.selectOptions(screen.getByLabelText('Language'), 'pt-br');
+    await userEvent.click(screen.getByRole('button', { name: 'Theme and language' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Português (Brasil)' }));
 
-    expect(screen.getByRole('heading', { name: 'Novo projeto' })).toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Tema e idioma' })).toBeInTheDocument();
     expect(document.documentElement.lang).toBe('pt-br');
 
-    await userEvent.selectOptions(screen.getByLabelText('Tema'), 'light');
+    await userEvent.click(screen.getByRole('radio', { name: 'Escuro' }));
 
-    expect(document.documentElement.dataset['theme']).toBe('light');
+    expect(document.documentElement.dataset['theme']).toBe('dark');
+  });
+
+  it('offers theme and language in the editor and in the lessons', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Lessons' }));
+
+    expect(screen.getByRole('button', { name: 'Theme and language' })).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Back to projects' }));
+    await openExample('Pare');
+
+    expect(screen.getByRole('button', { name: 'Theme and language' })).toBeInTheDocument();
   });
 
   it('opens the lessons and walks through them', async () => {
@@ -208,14 +295,5 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: 'Exibicao', level: 1 })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Apresentacao (Read)' })).toBeInTheDocument();
-  });
-
-  it('asks before closing a tab with unsaved work', async () => {
-    renderApp();
-    await openExample('Pare');
-    await userEvent.click(screen.getByRole('button', { name: 'Format code' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Close tab main.safira' }));
-
-    expect(screen.getByRole('dialog', { name: 'Do you want to save your program?' })).toBeInTheDocument();
   });
 });
