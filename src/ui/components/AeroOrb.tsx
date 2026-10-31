@@ -77,7 +77,10 @@ export const AeroOrb = ({ size }: AeroOrbProps) => {
         </g>
         <circle cx="60" cy="60" r="50" fill={`url(#${id}-rim)`} />
         <ellipse cx="60" cy="31" rx="35" ry="19" fill={`url(#${id}-gloss)`} />
-        <path className="aero-orb-sparkle" d="M92 22 l2.4 6.6 6.6 2.4 -6.6 2.4 -2.4 6.6 -2.4 -6.6 -6.6 -2.4 6.6 -2.4 Z" />
+        <path
+          className="aero-orb-sparkle"
+          d="M92 22 l2.4 6.6 6.6 2.4 -6.6 2.4 -2.4 6.6 -2.4 -6.6 -6.6 -2.4 6.6 -2.4 Z"
+        />
       </g>
     </svg>
   );

@@ -47,7 +47,12 @@ export const TreeFileIcon = ({ isScript }: { isScript: boolean }) => (
 
 export const TreeFolderIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg className="tree-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M2 5.5a1.5 1.5 0 0 1 1.5-1.5h5.6l2.2 2.5h9.2A1.5 1.5 0 0 1 22 8v11H2Z" fill="#e0a324" stroke="#a8730f" strokeWidth="1" />
+    <path
+      d="M2 5.5a1.5 1.5 0 0 1 1.5-1.5h5.6l2.2 2.5h9.2A1.5 1.5 0 0 1 22 8v11H2Z"
+      fill="#e0a324"
+      stroke="#a8730f"
+      strokeWidth="1"
+    />
     {isOpen ? (
       <path d="M5.5 10H23l-3 9.5H2Z" fill="#ffe08a" stroke="#a8730f" strokeWidth="1" strokeLinejoin="round" />
     ) : (

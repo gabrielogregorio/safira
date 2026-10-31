@@ -30,7 +30,10 @@ describe('routes', () => {
     expect(parseRoute(routeToHash(route))).toEqual(route);
   });
 
-  it.each(['', '#', '#/nada', '#/projects', '#/%E0%A4%A', '#/lessons/aula-02'])('sends %s to the home screen', (hash) => {
-    expect(parseRoute(hash)).toEqual({ name: 'home' });
-  });
+  it.each(['', '#', '#/nada', '#/projects', '#/%E0%A4%A', '#/lessons/aula-02'])(
+    'sends %s to the home screen',
+    (hash) => {
+      expect(parseRoute(hash)).toEqual({ name: 'home' });
+    },
+  );
 });

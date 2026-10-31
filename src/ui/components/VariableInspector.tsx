@@ -62,7 +62,9 @@ export const VariableInspector = ({ variables }: VariableInspectorProps) => {
                   <td>{variable.name}</td>
                   <td className="inspector-value">{variable.value}</td>
                   <td>
-                    <span className={`type-badge type-${variable.type}`} title={t(TYPE_HINTS[variable.type as TypeName])}>
+                    <span
+                      className={`type-badge type-${variable.type}`}
+                      title={t(TYPE_HINTS[variable.type as TypeName])}>
                       {variable.type}
                     </span>
                   </td>
