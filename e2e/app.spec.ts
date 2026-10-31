@@ -73,11 +73,10 @@ const VISION_NAMES = [
 ];
 
 const chooseVision = async (page: Page, name: string): Promise<void> => {
-  const toggle = page.getByRole('button', { name: /^Accessibility: / });
-
-  while ((await toggle.getAttribute('aria-label')) !== `Accessibility: ${name}`) {
-    await toggle.click();
-  }
+  await page.getByRole('button', { name: 'Accessibility' }).click();
+  await page.getByRole('radio', { name }).check();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
 };
 
 for (const vision of VISION_NAMES) {

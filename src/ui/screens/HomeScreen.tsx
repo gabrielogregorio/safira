@@ -25,6 +25,7 @@ interface HomeScreenProps {
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
   preferenceToggles: ReactNode;
+  settingsButton: ReactNode;
 }
 
 const HERO_ORB_SIZE = 96;
@@ -42,6 +43,7 @@ export const HomeScreen = ({
   onRename,
   onDelete,
   preferenceToggles,
+  settingsButton,
 }: HomeScreenProps) => {
   const t = useTranslation();
   const [renaming, setRenaming] = useState<Project | null>(null);
@@ -112,6 +114,7 @@ export const HomeScreen = ({
             <AeroOrb size={HERO_ORB_SIZE} />
           </button>
           <h1 data-fixed-text>Safira</h1>
+          <div className="home-corner">{settingsButton}</div>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">

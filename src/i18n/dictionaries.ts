@@ -1,5 +1,20 @@
 export const dictionaries = {
   'pt-br': {
+    'The normal colors of the theme.': 'As cores normais do tema.',
+    'For those who see red as weak. Uses blue and orange instead of red and green.':
+      'Para quem enxerga pouco o vermelho. Usa azul e laranja no lugar de vermelho e verde.',
+    'For those who see green as weak. Uses blue and orange instead of red and green.':
+      'Para quem enxerga pouco o verde. Usa azul e laranja no lugar de vermelho e verde.',
+    'For those who confuse blue and yellow. Uses colors that do not depend on blue.':
+      'Para quem confunde azul e amarelo. Usa cores que não dependem do azul.',
+    'For those who do not see colors. Uses grays, with bold, italics and underlines to tell things apart.':
+      'Para quem não enxerga cores. Usa cinzas, com negrito, itálico e sublinhado para diferenciar.',
+    'For those who see little. Solid background, the strongest contrast and no scenery.':
+      'Para quem enxerga pouco. Fundo sólido, contraste máximo e sem cenário.',
+    'For those bothered by light. Dark surfaces and warm tones, in any theme.':
+      'Para quem se incomoda com luz. Telas escuras e tons quentes, em qualquer tema.',
+    'For those bothered by movement. Turns off the animations of the interface.':
+      'Para quem se incomoda com movimento. Desliga as animações da interface.',
     'Lesson mode': 'Modo aula',
     lessons: 'aulas',
     'Choose a lesson': 'Escolher aula',
@@ -162,6 +177,21 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   es: {
+    'The normal colors of the theme.': 'Los colores normales del tema.',
+    'For those who see red as weak. Uses blue and orange instead of red and green.':
+      'Para quien ve poco el rojo. Usa azul y naranja en lugar de rojo y verde.',
+    'For those who see green as weak. Uses blue and orange instead of red and green.':
+      'Para quien ve poco el verde. Usa azul y naranja en lugar de rojo y verde.',
+    'For those who confuse blue and yellow. Uses colors that do not depend on blue.':
+      'Para quien confunde azul y amarillo. Usa colores que no dependen del azul.',
+    'For those who do not see colors. Uses grays, with bold, italics and underlines to tell things apart.':
+      'Para quien no ve colores. Usa grises, con negrita, cursiva y subrayado para diferenciar.',
+    'For those who see little. Solid background, the strongest contrast and no scenery.':
+      'Para quien ve poco. Fondo sólido, máximo contraste y sin paisaje.',
+    'For those bothered by light. Dark surfaces and warm tones, in any theme.':
+      'Para quien le molesta la luz. Pantallas oscuras y tonos cálidos, en cualquier tema.',
+    'For those bothered by movement. Turns off the animations of the interface.':
+      'Para quien le molesta el movimiento. Apaga las animaciones de la interfaz.',
     'Lesson mode': 'Modo clase',
     lessons: 'clases',
     'Choose a lesson': 'Elegir clase',
@@ -325,6 +355,20 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   'zh-cn': {
+    'The normal colors of the theme.': '主题的正常颜色。',
+    'For those who see red as weak. Uses blue and orange instead of red and green.':
+      '适合难以看清红色的人。用蓝色和橙色代替红色和绿色。',
+    'For those who see green as weak. Uses blue and orange instead of red and green.':
+      '适合难以看清绿色的人。用蓝色和橙色代替红色和绿色。',
+    'For those who confuse blue and yellow. Uses colors that do not depend on blue.':
+      '适合分不清蓝色和黄色的人。使用不依赖蓝色的颜色。',
+    'For those who do not see colors. Uses grays, with bold, italics and underlines to tell things apart.':
+      '适合看不到颜色的人。使用灰色,并用粗体、斜体和下划线来区分。',
+    'For those who see little. Solid background, the strongest contrast and no scenery.':
+      '适合视力较弱的人。纯色背景、最强对比度、没有风景。',
+    'For those bothered by light. Dark surfaces and warm tones, in any theme.':
+      '适合对光敏感的人。任何主题下都使用深色表面和暖色调。',
+    'For those bothered by movement. Turns off the animations of the interface.': '适合对动态敏感的人。关闭界面动画。',
     'Lesson mode': '课程模式',
     lessons: '课程',
     'Choose a lesson': '选择课程',
@@ -483,6 +527,21 @@ export const dictionaries = {
     Programs: '程序',
   },
   ja: {
+    'The normal colors of the theme.': 'テーマの通常の色です。',
+    'For those who see red as weak. Uses blue and orange instead of red and green.':
+      '赤が見えにくい方向けです。赤と緑の代わりに青とオレンジを使います。',
+    'For those who see green as weak. Uses blue and orange instead of red and green.':
+      '緑が見えにくい方向けです。赤と緑の代わりに青とオレンジを使います。',
+    'For those who confuse blue and yellow. Uses colors that do not depend on blue.':
+      '青と黄色を見分けにくい方向けです。青に頼らない色を使います。',
+    'For those who do not see colors. Uses grays, with bold, italics and underlines to tell things apart.':
+      '色が見えない方向けです。灰色を使い、太字、斜体、下線で区別します。',
+    'For those who see little. Solid background, the strongest contrast and no scenery.':
+      '視力が弱い方向けです。無地の背景、最大のコントラストで、風景は表示しません。',
+    'For those bothered by light. Dark surfaces and warm tones, in any theme.':
+      '光がまぶしい方向けです。どのテーマでも暗い画面と暖かい色を使います。',
+    'For those bothered by movement. Turns off the animations of the interface.':
+      '動きが苦手な方向けです。画面のアニメーションを止めます。',
     'Lesson mode': 'レッスンモード',
     lessons: 'レッスン',
     'Choose a lesson': 'レッスンを選ぶ',

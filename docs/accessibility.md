@@ -12,7 +12,7 @@ The target is WCAG 2.1 AA.
 
 ## Vision modes
 
-Interface > Accessibility, or the eye on the home screen. The theme still chooses the colors: each mode has versions for the light and for the dark surfaces, and syntax colors cannot be picked by hand.
+Interface > Accessibility, or the gear beside the Safira name on the home screen, which opens a modal with the modes. The theme still chooses the colors: each mode has versions for the light and for the dark surfaces, and syntax colors cannot be picked by hand.
 
 | Mode | For | What changes |
 |---|---|---|

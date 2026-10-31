@@ -16,7 +16,7 @@ import { CloseButton } from '@/ui/components/CloseButton';
 import { GlobeWallpaper } from '@/ui/components/GlobeWallpaper';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
-import { VisionToggle } from '@/ui/components/VisionToggle';
+import { VisionSettings } from '@/ui/components/VisionSettings';
 import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
@@ -258,12 +258,6 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
           changeSettings({ locale: nextLocale });
         }}
       />
-      <VisionToggle
-        vision={settings.vision}
-        onChange={(vision) => {
-          changeSettings({ vision });
-        }}
-      />
       <SoundToggle
         isOn={settings.sound}
         onChange={(sound) => {
@@ -350,6 +344,14 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
               clearDrafts(id);
             }}
             preferenceToggles={preferenceToggles}
+            settingsButton={
+              <VisionSettings
+                vision={settings.vision}
+                onChange={(vision) => {
+                  changeSettings({ vision });
+                }}
+              />
+            }
           />
         ) : null}
       </TranslationContext.Provider>

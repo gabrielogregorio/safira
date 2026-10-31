@@ -7,6 +7,8 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 ### Added
 
 - Accessibility modes for protanopia, deuteranopia, tritanopia, achromatopsia, low vision, light sensitivity, and epilepsy and dizziness, tested with axe and with simulated color vision.
+- The gear beside the Safira name opens the accessibility modes, each with a short explanation.
+- The globe on the home screen loses its fish when the aquarium is empty.
 - Lesson mode inside the IDE: a switch beside Smart suggestions swaps the tabs for a lesson bar, each step opens as a script, a run gives the check, and challenges are tested with hidden answers, so the next step only opens after a correct run. Hints, the solution and a way to start over are one click away.
 - Examples and lessons in English, Portuguese, Spanish, Simplified Chinese and Japanese, rewritten for people who never programmed.
 - Commands for lists, files and counting in English and Spanish, such as `for each x from 1 to 5` and `add "x" at the end of the list of fruits`.
