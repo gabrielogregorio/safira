@@ -44,7 +44,7 @@ pure helpers such as highlighting and formatting.
 |---|---|
 | `safira.projects.v1` | Projects with files and breakpoints |
 | `safira.drafts.v1` | Unsaved text per project, written 300 ms after typing stops |
-| `safira.settings.v1` | Language, themes, font, panel sizes, read lessons |
+| `safira.settings.v1` | Language, chosen theme, fonts, sound, suggestions, panel sizes, read lessons |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
 
@@ -68,9 +68,11 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Known gaps
 
-- Coverage is 91%, with thresholds at 90/83/87/90. The goal is 100%.
-- CI has not run yet, because nothing was pushed, and Lighthouse is not in `tests.yml`.
-- The bundle has 876 kB. Loading the lessons on demand should remove the markdown packages from it.
-- Examples and lessons exist only in Brazilian Portuguese.
+- Coverage is 92%, with thresholds at 90/83/87/90. The goal is 100%.
+- Lighthouse is not in `tests.yml`, and the deploy workflows have not run on GitHub yet.
+- The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
+- Examples and lessons exist only in Brazilian Portuguese, and suggestions in Chinese and Japanese use the English list.
+- Previews are not removed from `gh-pages` when a pull request closes.
+- Idle CPU was only measured with software rendering, never on a real GPU.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
 - The README needs a GIF, and no manual screen reader pass was done.

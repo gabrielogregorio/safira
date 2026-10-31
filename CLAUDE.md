@@ -35,3 +35,12 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Empty folders are a `.keep` file in `Project.files`. Lists shown to the user go through `visibleFiles`.
 - Waiting for animations in Playwright needs `allSettled`: a removed element rejects `finished`.
 - A new language version must be added to `SUPPORTED_VERSIONS` while it can still run the older ones.
+- `#` is a comment except right after `cor` or `color`. The tokenizer decides this, so a new color form starts there.
+- Phrases in `commands.json` must stay sorted from longest to shortest: the first match wins.
+- Every text that does not go through i18n needs `data-fixed-text`, or it scrambles when the language changes.
+- `settings.theme` is only where the sky starts. Show `skyTheme`, and never save elapsed time.
+- `.code-editor` uses `overflow: clip`: with `hidden`, the file sheen left a scrollable area and shifted the editor.
+- The gem must not draw at the full frame rate: it costs almost all the idle CPU. Compare with and without it, because
+  software rendering exaggerates the absolute number.
+- One click can ask for several sounds. `sounds.ts` lets the most meaningful one play, so do not fix overlaps elsewhere.
+- Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.
