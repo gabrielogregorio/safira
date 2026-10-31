@@ -5,13 +5,17 @@ import type { DecorationSet, ViewUpdate } from '@codemirror/view';
 import { Decoration, EditorView, gutter, GutterMarker, keymap, lineNumbers, ViewPlugin } from '@codemirror/view';
 import { useEffect, useRef } from 'react';
 import { highlightCode } from '@/language/highlight';
+import type { Locale } from '@/language/messages';
 import type { CodeFont } from '@/settings/settings';
+import { ghostText } from './ghostText';
 
 interface CodeEditorProps {
   value: string;
   label: string;
   fontSize: number;
   codeFont: CodeFont;
+  suggestions: boolean;
+  locale: Locale;
   breakpoints: number[];
   debugLine: number | null;
   errorLine: number | null;
@@ -143,6 +147,8 @@ export const CodeEditor = ({
   label,
   fontSize,
   codeFont,
+  suggestions,
+  locale,
   breakpoints,
   debugLine,
   errorLine,
@@ -154,6 +160,7 @@ export const CodeEditor = ({
   const viewRef = useRef<EditorView | null>(null);
   const callbacks = useRef({ onChange, onToggleBreakpoint, onCursorChange });
   const fontCompartment = useRef(new Compartment());
+  const ghostCompartment = useRef(new Compartment());
 
   useEffect(() => {
     callbacks.current = { onChange, onToggleBreakpoint, onCursorChange };
@@ -171,6 +178,7 @@ export const CodeEditor = ({
       state: EditorState.create({
         doc: value,
         extensions: [
+          ghostCompartment.current.of(suggestions ? ghostText(locale) : []),
           history(),
           keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
           breakpointField,
@@ -250,6 +258,12 @@ export const CodeEditor = ({
   useEffect(() => {
     viewRef.current?.requestMeasure();
   }, [codeFont]);
+
+  useEffect(() => {
+    viewRef.current?.dispatch({
+      effects: ghostCompartment.current.reconfigure(suggestions ? ghostText(locale) : []),
+    });
+  }, [suggestions, locale]);
 
   return <div ref={hostRef} className="code-editor" />;
 };

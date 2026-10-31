@@ -13,6 +13,7 @@ export interface Settings {
   fontSize: number;
   sound: boolean;
   codeFont: CodeFont;
+  suggestions: boolean;
   readLessons: string[];
   panels: PanelSizes;
 }
@@ -38,6 +39,7 @@ export const DEFAULT_SETTINGS: Settings = {
   fontSize: DEFAULT_FONT_SIZE,
   sound: true,
   codeFont: 'mono',
+  suggestions: true,
   readLessons: [],
   panels: { sidebar: 220, output: 460, inspector: 240 },
 };

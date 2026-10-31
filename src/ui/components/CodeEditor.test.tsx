@@ -5,6 +5,8 @@ const baseProps = {
   label: 'Editor',
   fontSize: 15,
   codeFont: 'mono' as const,
+  suggestions: true,
+  locale: 'pt-br' as const,
   breakpoints: [],
   debugLine: null,
   errorLine: null,

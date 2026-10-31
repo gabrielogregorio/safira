@@ -13,6 +13,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Programs can be stopped at any time, including infinite loops.
 - `Ctrl+Enter` runs the program, and running stops at breakpoints.
 - Clickable breakpoint dots beside every line. A dot on a comment or an empty line stops at the next command.
+- Inline suggestions in gray, accepted with Tab or a touch, for commands, whole lines and names in the file, with a checkbox above the editor.
 - Variables inspector, always visible, with search and types.
 - Top menu with Radix, navigable by keyboard and touch.
 - Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, theme, language and sound live in the Interface menu.
@@ -22,6 +23,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Unsaved work is kept while typing and recovered after a crash or a power cut.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.
+- Deploy to GitHub Pages on merge, and a preview environment for each pull request.
 - Lessons in real markdown, with colored code and a button to open each example in the IDE.
 - Resizable panels, by mouse and keyboard, kept between sessions.
 - Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.

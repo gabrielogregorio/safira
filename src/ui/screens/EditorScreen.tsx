@@ -535,6 +535,16 @@ export const EditorScreen = ({
             </button>
           </div>
         ))}
+        <label className="suggestions-toggle" title={t('Press Tab to accept the gray text')}>
+          <input
+            type="checkbox"
+            checked={settings.suggestions}
+            onChange={(event) => {
+              onChangeSettings({ suggestions: event.target.checked });
+            }}
+          />
+          {t('Smart suggestions')}
+        </label>
       </nav>
 
       <ArchiveInput
@@ -621,6 +631,8 @@ export const EditorScreen = ({
           label={t('Code editor')}
           fontSize={settings.fontSize}
           codeFont={settings.codeFont}
+          suggestions={settings.suggestions}
+          locale={locale}
           breakpoints={breakpoints}
           debugLine={runner.pausedAt?.file === activeFile ? runner.pausedAt.line : null}
           errorLine={failure?.file === activeFile ? failure.line : null}

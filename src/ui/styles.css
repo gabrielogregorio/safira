@@ -1138,6 +1138,45 @@ select {
   }
 }
 
+.cm-ghost-text {
+  color: var(--color-muted);
+  cursor: var(--cursor-pointer);
+  font-style: italic;
+  opacity: 0.75;
+}
+
+.cm-ghost-text::after {
+  background: var(--aero-face);
+  border: 1px solid var(--aero-edge);
+  border-radius: 5px;
+  color: var(--aero-ink);
+  content: 'Tab';
+  font-size: 0.72em;
+  font-style: normal;
+  font-weight: 700;
+  margin-left: 8px;
+  padding: 0 5px;
+}
+
+.suggestions-toggle {
+  align-items: center;
+  cursor: var(--cursor-pointer);
+  display: inline-flex;
+  flex: none;
+  font-size: 0.9rem;
+  font-weight: 600;
+  gap: 6px;
+  margin-left: auto;
+  padding: 0 8px;
+}
+
+.suggestions-toggle input {
+  accent-color: var(--color-accent);
+  height: 18px;
+  min-height: 0;
+  width: 18px;
+}
+
 .code-editor .cm-editor {
   background: var(--color-panel-strong);
   color: var(--color-text);

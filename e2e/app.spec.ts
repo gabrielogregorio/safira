@@ -706,6 +706,42 @@ test('shows text in the colors written in every form', async ({ page }) => {
   await expect(terminal.getByText('c', { exact: true })).toHaveCSS('color', 'rgb(255, 122, 198)');
 });
 
+test('suggests the next words in gray, Tab accepts them and the checkbox turns them off', async ({ page }) => {
+  await createProjectWithCode(page, 'sh');
+  const ghost = page.locator('.cm-ghost-text');
+
+  await expect(ghost).toHaveText('ow "Hello!"');
+  await page.keyboard.press('Tab');
+  await expect(ghost).toHaveCount(0);
+  await expect(page.locator('.cm-content')).toContainText('show "Hello!"');
+  await page.keyboard.press('Control+Enter');
+  await expect(page.getByRole('log')).toContainText('Hello!');
+
+  await page.keyboard.press('Enter');
+  await page.keyboard.type('sh');
+  await expect(ghost).toBeVisible();
+  await page.keyboard.press('Escape');
+  await expect(ghost).toHaveCount(0);
+
+  await page.getByRole('checkbox', { name: 'Smart suggestions' }).uncheck();
+  await page.getByLabel('Code editor').click();
+  await page.keyboard.press('Control+End');
+  await page.keyboard.type('o');
+  await page.keyboard.press('Backspace');
+  await page.keyboard.type('o');
+  await expect(ghost).toHaveCount(0);
+
+  await page.reload();
+  await expect(page.getByRole('checkbox', { name: 'Smart suggestions' })).not.toBeChecked();
+});
+
+test('a suggestion can be accepted by touching it', async ({ page }) => {
+  await createProjectWithCode(page, 'sh');
+  await page.locator('.cm-ghost-text').click();
+
+  await expect(page.locator('.cm-content')).toContainText('show "Hello!"');
+});
+
 test('the logo is a live 3D gem', async ({ page }) => {
   await page.goto('/');
   await page.mouse.move(900, 300);
