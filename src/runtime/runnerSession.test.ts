@@ -57,10 +57,13 @@ describe('RunnerSession', () => {
 
   it('asks for input and continues with what was typed', async () => {
     const { session, events } = createSession();
-    const finished = session.handle(startRequest('n = o que o usuario digitar\nmostre n'));
+    const finished = session.handle(startRequest('x = 1\nn = o que o usuario digitar\nmostre n'));
     await flushMicrotasks();
 
-    expect(events.at(-1)).toEqual({ type: 'input-request' });
+    expect(events.at(-1)).toEqual({
+      type: 'input-request',
+      variables: [{ name: 'x', value: '1', type: 'float' }],
+    });
 
     await session.handle({ type: 'input', text: 'Ana' });
     await finished;
@@ -86,6 +89,17 @@ describe('RunnerSession', () => {
     await finished;
 
     expect(outputTexts(events)).toEqual(['1', '2']);
+  });
+
+  it('pauses on the next command when the breakpoint is on a comment', async () => {
+    const { session, events } = createSession();
+    const finished = session.handle(startRequest('# nota\nmostre 1', { mode: 'debug', breakpoints: { [MAIN]: [1] } }));
+    await flushMicrotasks();
+
+    expect(events.at(-1)).toMatchObject({ type: 'paused', line: 2 });
+
+    await session.handle({ type: 'resume', mode: 'run' });
+    await finished;
   });
 
   it('pauses on every line in step mode', async () => {

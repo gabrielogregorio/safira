@@ -36,7 +36,7 @@ export interface RunnerFailure {
 export type RunnerEvent =
   | { type: 'output'; items: OutputItem[] }
   | { type: 'clear' }
-  | { type: 'input-request' }
+  | { type: 'input-request'; variables: VariableSnapshot[] }
   | { type: 'paused'; file: string; line: number; variables: VariableSnapshot[] }
   | { type: 'files'; files: Record<string, string> }
   | { type: 'finished'; failure: RunnerFailure | null; files: Record<string, string>; variables: VariableSnapshot[] };

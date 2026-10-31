@@ -1,5 +1,6 @@
 import { driveExecution } from '@/language/driver';
 import { Interpreter, SafiraError } from '@/language/interpreter';
+import { snapBreakpoints } from '@/language/statementLines';
 import { VirtualFileSystem } from '@/language/virtualFileSystem';
 import type { Breakpoints, OutputItem, RunMode, RunnerEvent, RunnerRequest, StartRequest } from './protocol';
 
@@ -40,11 +41,17 @@ export class RunnerSession {
         this.resolvePause = null;
         break;
       case 'breakpoints':
-        this.breakpoints = request.breakpoints;
+        this.setBreakpoints(request.breakpoints);
         break;
     }
 
     return Promise.resolve();
+  }
+
+  private setBreakpoints(breakpoints: Breakpoints): void {
+    this.breakpoints = Object.fromEntries(
+      Object.entries(breakpoints).map(([file, lines]) => [file, snapBreakpoints(this.files.read(file) ?? '', lines)]),
+    );
   }
 
   private flush(): void {
@@ -88,8 +95,8 @@ export class RunnerSession {
 
   private async start(request: StartRequest): Promise<void> {
     this.mode = request.mode;
-    this.breakpoints = request.breakpoints;
     this.files = new VirtualFileSystem(request.files);
+    this.setBreakpoints(request.breakpoints);
     this.interpreter = new Interpreter({ files: this.files, locale: request.locale });
     const interpreter = this.interpreter;
     let failure = null;
@@ -106,7 +113,7 @@ export class RunnerSession {
         },
         onInput: () => {
           this.flush();
-          this.post({ type: 'input-request' });
+          this.post({ type: 'input-request', variables: interpreter.getVariables() });
 
           return new Promise((resolve) => {
             this.resolveInput = resolve;
