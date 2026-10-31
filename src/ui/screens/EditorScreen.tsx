@@ -21,7 +21,7 @@ import {
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { LessonPlace } from '@/routing/routes';
 import { routeToHash } from '@/routing/routes';
-import type { RunMode } from '@/runtime/protocol';
+import type { RunMode, RunnerFailure } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
 import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
@@ -32,6 +32,8 @@ import { describeArchiveResult } from '@/ui/archiveMessages';
 import { downloadFile, downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { FileSidebar } from '@/ui/components/FileSidebar';
+import { LessonBar } from '@/ui/components/LessonBar';
+import { LessonBrief } from '@/ui/components/LessonBrief';
 import { LessonsDialog } from '@/ui/components/LessonsDialog';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
@@ -50,6 +52,8 @@ import {
 } from '@/ui/editorTabs';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
+import type { CheckWorkerFactory, LessonRun } from '@/ui/hooks/useLessonMode';
+import { createCheckWorker, useLessonMode } from '@/ui/hooks/useLessonMode';
 import { soundPlayer } from '@/ui/sound/sounds';
 
 interface EditorScreenProps {
@@ -59,6 +63,7 @@ interface EditorScreenProps {
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
+  createLessonCheckWorker?: CheckWorkerFactory;
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
   onChangeLesson: (file: string, lesson: LessonPlace) => void;
@@ -98,6 +103,7 @@ export const EditorScreen = ({
   settings,
   locale,
   createWorker = createRunnerWorker,
+  createLessonCheckWorker = createCheckWorker,
   onSaveProject,
   onSelectFile,
   onChangeLesson,
@@ -111,6 +117,8 @@ export const EditorScreen = ({
   const [mobilePanel, setMobilePanel] = useState<MobilePanel>('code');
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
+  const pendingLessonRun = useRef<LessonRun | null>(null);
+  const runFinishListener = useRef<((failure: RunnerFailure | null) => void) | null>(null);
 
   const latestProject = useRef(project);
   const latestTabs = useRef(tabs);
@@ -153,7 +161,8 @@ export const EditorScreen = ({
     latestTabs.current = latestTabs.current.map(markSaved);
     setTabs((current) => current.map(markSaved));
     clearDrafts(latestProject.current.id);
-    onSaveProject({ ...latestProject.current, files });
+    latestProject.current = { ...latestProject.current, files };
+    onSaveProject(latestProject.current);
   }, [onSaveProject]);
 
   useEffect(() => {
@@ -200,7 +209,11 @@ export const EditorScreen = ({
     [onSaveProject],
   );
 
-  const runner = useRunner(handleProgramFiles, createWorker);
+  const handleRunFinished = useCallback((failure: RunnerFailure | null) => {
+    runFinishListener.current?.(failure);
+  }, []);
+
+  const runner = useRunner(handleProgramFiles, createWorker, handleRunFinished);
   const isRunning = runner.status !== 'idle';
 
   const currentFiles = useCallback(() => {
@@ -225,6 +238,7 @@ export const EditorScreen = ({
       } else if (!isRunning) {
         void soundPlayer.play('run');
         setMobilePanel('output');
+        pendingLessonRun.current = { file: activeFile, files: currentFiles() };
         runner.start({ file: activeFile, files: currentFiles(), locale, mode, breakpoints: project.breakpoints });
       }
     },
@@ -447,6 +461,38 @@ export const EditorScreen = ({
     [activeFile],
   );
 
+  const openLessonFile = useCallback(
+    (path: string, code: string) => {
+      saveOpenTabs();
+      const current = latestProject.current;
+      const stored = current.files[path] ?? addScriptVersion(code);
+
+      if (current.files[path] === undefined) {
+        latestProject.current = { ...current, files: { ...current.files, [path]: stored } };
+        onSaveProject(latestProject.current);
+      }
+
+      // Each step replaces the last one, so a course does not leave dozens of open tabs.
+      setTabs((openTabs) => openTabs.filter((tab) => !tab.file.startsWith(`${t('lessons')}/`) || tab.file === path));
+      openFile(path, stored);
+      setMobilePanel('code');
+    },
+    [onSaveProject, openFile, saveOpenTabs, t],
+  );
+
+  const lesson = useLessonMode({
+    settings,
+    locale,
+    folder: t('lessons'),
+    activeFile,
+    pendingRunRef: pendingLessonRun,
+    finishListenerRef: runFinishListener,
+    createWorker: createLessonCheckWorker,
+    onChangeSettings,
+    onOpenFile: openLessonFile,
+    onReplaceCode: updateActiveText,
+  });
+
   const toggleFullScreen = useCallback(() => {
     if (document.fullscreenElement === null) {
       void document.documentElement.requestFullscreen();
@@ -502,7 +548,7 @@ export const EditorScreen = ({
 
   const failure = runner.failure;
   const failureExample =
-    failure?.example === null || failure === null ? undefined : findExampleByPrefix(failure.example);
+    failure?.example === null || failure === null ? undefined : findExampleByPrefix(locale, failure.example);
   const isVersionSupported = !isScript(activeTab.file) || isSupportedVersion(activeTab.version);
 
   const panelLabels: Record<MobilePanel, string> = {
@@ -615,34 +661,51 @@ export const EditorScreen = ({
           onOpenLessons={() => {
             onChangeLesson(activeFile, { lessonId: null, section: null });
           }}
+          onToggleLessonMode={lesson.toggle}
         />
       </header>
 
-      <nav className="tab-bar" aria-label={t('Virtual files of this project')}>
-        {tabs.map((tab) => (
-          <div key={tab.file} className={tab.file === activeFile ? 'tab tab-active' : 'tab'}>
-            <button
-              type="button"
-              data-sound="tab"
-              aria-current={tab.file === activeFile ? 'page' : undefined}
-              onClick={() => {
-                onSelectFile(tab.file);
-              }}>
-              <span data-fixed-text>{tab.file}</span>
-            </button>
-            <button
-              type="button"
-              className="tab-close"
-              data-sound="modalClose"
-              aria-label={t('Close tab {name}', { name: tab.file })}
-              onClick={() => {
-                saveOpenTabs();
-                closeTab(tab.file);
-              }}>
-              ×
-            </button>
-          </div>
-        ))}
+      <nav
+        className={settings.lessonMode ? 'tab-bar tab-bar-lesson' : 'tab-bar'}
+        aria-label={t('Virtual files of this project')}>
+        {settings.lessonMode ? (
+          <LessonBar
+            lessons={lesson.lessons}
+            place={lesson.place}
+            progress={settings.lessonProgress}
+            onOpen={lesson.open}
+          />
+        ) : null}
+        {settings.lessonMode
+          ? null
+          : tabs.map((tab) => (
+              <div key={tab.file} className={tab.file === activeFile ? 'tab tab-active' : 'tab'}>
+                <button
+                  type="button"
+                  data-sound="tab"
+                  aria-current={tab.file === activeFile ? 'page' : undefined}
+                  onClick={() => {
+                    onSelectFile(tab.file);
+                  }}>
+                  <span data-fixed-text>{tab.file}</span>
+                </button>
+                <button
+                  type="button"
+                  className="tab-close"
+                  data-sound="modalClose"
+                  aria-label={t('Close tab {name}', { name: tab.file })}
+                  onClick={() => {
+                    saveOpenTabs();
+                    closeTab(tab.file);
+                  }}>
+                  ×
+                </button>
+              </div>
+            ))}
+        <label className="suggestions-toggle suggestions-toggle-first">
+          <input type="checkbox" checked={settings.lessonMode} onChange={lesson.toggle} />
+          {t('Lesson mode')}
+        </label>
         <label className="suggestions-toggle" title={t('Press Tab to accept the gray text')}>
           <input
             type="checkbox"
@@ -656,6 +719,20 @@ export const EditorScreen = ({
           {t('Smart suggestions')}
         </label>
       </nav>
+
+      {settings.lessonMode && lesson.step !== undefined ? (
+        <LessonBrief
+          step={lesson.step}
+          verdict={lesson.verdict}
+          isDone={lesson.isDone}
+          isLastStep={lesson.isLastStep}
+          isOnStepFile={lesson.isOnStepFile}
+          onNext={lesson.goToNext}
+          onBack={lesson.backToStep}
+          onStartOver={lesson.startOver}
+          onShowSolution={lesson.showSolution}
+        />
+      ) : null}
 
       <ArchiveInput
         ref={archiveInput}

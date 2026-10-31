@@ -37,14 +37,14 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Variáveis' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Variables' })).not.toBeInTheDocument();
   });
 
   it('only shows the examples after pressing create', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
 
-    expect(screen.getByRole('button', { name: 'Variáveis' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Variables' })).toBeInTheDocument();
   });
 
   it('creates a project without choosing anything', async () => {
@@ -68,7 +68,7 @@ describe('App', () => {
   it('can undo the choice of an example', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
-    const example = screen.getByRole('button', { name: 'Pare' });
+    const example = screen.getByRole('button', { name: 'Break' });
     await userEvent.click(example);
 
     expect(example).toHaveAttribute('aria-pressed', 'true');
@@ -80,19 +80,19 @@ describe('App', () => {
 
   it('runs an example and shows its output in the terminal', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
     await userEvent.click(screen.getByRole('button', { name: 'Run' }));
 
     const terminal = screen.getByRole('log');
     await waitFor(() => {
-      expect(terminal).toHaveTextContent('soma: 4');
+      expect(terminal).toHaveTextContent('1');
     });
     expect(worker.requests[0]).toMatchObject({ type: 'start', mode: 'run', file: 'main.safira' });
   });
 
   it('does not show the hidden version line in the editor', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
 
     expect(document.querySelector('.cm-content')).not.toHaveTextContent('#safira');
   });
@@ -203,11 +203,11 @@ describe('App', () => {
 
   it('runs with Ctrl+Enter', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
     await userEvent.keyboard('{Control>}{Enter}{/Control}');
 
     await waitFor(() => {
-      expect(screen.getByRole('log')).toHaveTextContent('soma: 4');
+      expect(screen.getByRole('log')).toHaveTextContent('1');
     });
   });
 
@@ -282,7 +282,7 @@ describe('App', () => {
     openProject('#/projects/1/main.safira/lessons/aula-03-variaveis');
 
     expect(screen.getByRole('dialog', { name: 'Lessons' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Variáveis', level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Variables', level: 2 })).toBeInTheDocument();
   });
 
   it('opens the lessons from Help, walks through them and closes back to the file', async () => {
@@ -291,8 +291,8 @@ describe('App', () => {
     await userEvent.click(await screen.findByRole('menuitem', { name: 'Lessons' }));
     await userEvent.click(await screen.findByRole('link', { name: 'Next' }));
 
-    expect(await screen.findByRole('heading', { name: 'Exibição', level: 2 })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Apresentação (Read)' })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: 'Show on screen', level: 2 })).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Welcome to Safira (Read)' })).toBeInTheDocument();
 
     await userEvent.keyboard('{Escape}');
 
@@ -307,7 +307,7 @@ describe('App', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(document.querySelector('.tab-active')).toHaveTextContent('aula-02-exibicao.safira');
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre');
+    expect(document.querySelector('.cm-content')).toHaveTextContent('print');
 
     window.location.hash = lessonHash;
     await userEvent.click((await screen.findAllByRole('button', { name: 'Open in the IDE' }))[0]);
@@ -420,7 +420,10 @@ describe('App', () => {
   });
 
   it('renames a project by clicking its name on the home screen', async () => {
-    localStorage.setItem('safira.projects.v1', JSON.stringify([{ id: '1', name: 'Velho', files: {}, breakpoints: {} }]));
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([{ id: '1', name: 'Velho', files: {}, breakpoints: {} }]),
+    );
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Velho' }));
     await userEvent.keyboard('Novo');
@@ -501,7 +504,7 @@ describe('App', () => {
     expect(screen.getByRole('button', { name: /^Theme: / })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Language: / })).toBeInTheDocument();
 
-    await openExample('Pare');
+    await openExample('Break');
 
     expect(screen.queryByRole('button', { name: /^Language: / })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^Sound: / })).not.toBeInTheDocument();

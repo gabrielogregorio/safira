@@ -245,11 +245,12 @@ test('changes the theme from the menu', async ({ page }) => {
 
 test('closing a tab keeps what was typed, without asking', async ({ page }) => {
   await createProjectWithCode(page, 'mostre "fica"');
-  await page.getByRole('button', { name: /^Close tab/ }).first().click();
+  await page
+    .getByRole('button', { name: /^Close tab/ })
+    .first()
+    .click();
   await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect
-    .poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1')))
-    .toContain('fica');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('fica');
 });
 
 test('colors the syntax of the code', async ({ page }) => {
@@ -358,7 +359,7 @@ test('the page does not scroll in the lessons and the sidebar stays in place', a
   await page.getByRole('link', { name: 'Next' }).click();
   await expect(page.getByRole('heading', { name: 'Exibição', exact: true })).toBeVisible();
   const sidebarTop = await page
-    .getByRole('link', { name: /^Apresentação/ })
+    .getByRole('link', { name: /^Welcome to Safira/ })
     .evaluate((link) => link.getBoundingClientRect().top);
   await page.locator('.lesson').evaluate((lesson) => {
     lesson.scrollTop = lesson.scrollHeight;
@@ -366,7 +367,7 @@ test('the page does not scroll in the lessons and the sidebar stays in place', a
 
   expect(await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)).toBe(0);
   expect(
-    await page.getByRole('link', { name: /^Apresentação/ }).evaluate((link) => link.getBoundingClientRect().top),
+    await page.getByRole('link', { name: /^Welcome to Safira/ }).evaluate((link) => link.getBoundingClientRect().top),
   ).toBe(sidebarTop);
   expect(await page.locator('.lesson').evaluate((lesson) => lesson.scrollTop)).toBeGreaterThan(0);
 });
@@ -906,7 +907,67 @@ test.describe('phone', () => {
     await page.getByRole('button', { name: 'Create project' }).tap();
     await page.getByRole('button', { name: 'Go ahead' }).tap();
     await page.getByRole('menuitem', { name: 'Examples' }).tap();
-    await expect(page.getByRole('menuitem', { name: 'Listas' })).toBeVisible();
+    await expect(page.getByRole('menuitem', { name: 'Lists' })).toBeVisible();
     await expectNoViolations(page);
   });
+});
+
+test.describe('lesson mode', () => {
+  const startLessonMode = async (page: Page): Promise<void> => {
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Create project' }).click();
+    await page.getByRole('button', { name: 'Go ahead' }).click();
+    await page.locator('label', { hasText: 'Lesson mode' }).click();
+    await expect(page.locator('.lesson-brief')).toBeVisible();
+  };
+
+  const runAndGoOn = async (page: Page): Promise<void> => {
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    const next = page.locator('.lesson-actions').getByRole('button', { name: 'Next' });
+    await expect(next).toBeEnabled();
+    await next.click();
+  };
+
+  test('goes through a lesson up to a checked challenge', async ({ page }) => {
+    await startLessonMode(page);
+    await runAndGoOn(page);
+    await runAndGoOn(page);
+    await runAndGoOn(page);
+
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await expect(page.locator('.lesson-status')).toContainText('Tip:');
+    await expect(page.locator('.lesson-actions').getByRole('button', { name: 'Next' })).toBeDisabled();
+
+    await page.getByRole('button', { name: 'Show the solution' }).click();
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await expect(page.locator('.lesson-status')).toContainText('Correct! Challenge complete.');
+
+    await page.locator('.lesson-actions').getByRole('button', { name: 'Next' }).click();
+    await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-exibicao');
+  });
+
+  test('keeps the page inside the phone screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await startLessonMode(page);
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
+  for (const theme of ['Light', 'Dark', 'Simple']) {
+    test(`has no accessibility problem in the ${theme} theme`, async ({ page }) => {
+      await startLessonMode(page);
+      await page.getByRole('menuitem', { name: 'Interface' }).click();
+      await page.getByRole('menuitem', { name: 'Theme' }).click();
+      await page.getByRole('menuitemradio', { name: theme }).click();
+      await page.keyboard.press('Escape');
+      await page.getByRole('button', { name: 'Run', exact: true }).click();
+      await expect(page.locator('.lesson-status')).toContainText('Well done');
+
+      const results = await new AxeBuilder({ page }).include('.tab-bar').include('.lesson-brief').analyze();
+
+      expect(results.violations).toEqual([]);
+    });
+  }
 });

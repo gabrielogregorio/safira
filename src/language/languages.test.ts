@@ -24,7 +24,9 @@ describe('the same commands in each language', () => {
   });
 
   it.each([
-    ['create the file "a.txt"\nadd "x" to the file "a.txt"\noverwrite "y" to the file "a.txt"\nprint read the file "a.txt"'],
+    [
+      'create the file "a.txt"\nadd "x" to the file "a.txt"\noverwrite "y" to the file "a.txt"\nprint read the file "a.txt"',
+    ],
     [
       'crea el archivo "a.txt"\nagregue "x" al archivo "a.txt"\nsobrescribir "y" al archivo "a.txt"\nmuestra lea el archivo "a.txt"',
     ],

@@ -11,7 +11,7 @@ setup and scripts.
 
 ## Conventions
 
-- Code, comments, docs and commits in English. Interface text goes through `t()`, with `pt-br` and `es` entries.
+- Code, comments, docs and commits in English. Interface text goes through `t()`, with entries for every language in `dictionaries.ts`.
 - Language words live in `src/language/commands.json`, never hardcoded in the parser.
 - Parser rule order in `parser.ts` is part of the language: a rule moved up changes what programs mean.
 - Full names, no magic numbers, blank line before `return`, `if` always with braces, `+= 1` instead of `++`.
@@ -52,4 +52,8 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - The aquarium simulation in `aquariumWorld.ts` has no DOM and takes `random`, so it is tested without a canvas. Eaten or popped fish stay gone by design.
 - Language words like `toque` are also valid names: `parseTone` fails on a line that is not a note, and the next rules take it.
 - A new color in `src/settings/vision.ts` must pass `vision.test.ts`, which simulates the vision it serves. Never lower the floors to make a palette pass.
+- `in` and `en` right after a text mean color, so `overwrite "x" in the file` fails. Use `to the file` and `al archivo`.
+- Examples and lessons live in one folder per language, with the same names. A new one goes in all five, or `content.test.ts` fails. Portuguese, English and Spanish code use their own commands; Chinese and Japanese use the English ones.
+- A lesson solution must pass its check and the starting code must fail it. `legacyExamples` keeps the old scripts as proof that they still parse, so never rewrite those.
+- The result of a run reaches lesson mode through `onFinished` in `useRunner`. A stopped run never calls it, on purpose.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

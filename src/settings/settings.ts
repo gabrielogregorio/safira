@@ -8,6 +8,11 @@ export type CodeFont = 'mono' | 'aero';
 
 export const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
 
+export interface LessonPlace {
+  lessonId: string;
+  step: number;
+}
+
 export interface Settings {
   locale: Locale | null;
   theme: ThemeId;
@@ -17,6 +22,10 @@ export interface Settings {
   codeFont: CodeFont;
   suggestions: boolean;
   readLessons: string[];
+  lessonMode: boolean;
+  lessonPlace: LessonPlace | null;
+  /** Steps done, as `lesson:step`. They survive a change of language. */
+  lessonProgress: string[];
   panels: PanelSizes;
 }
 
@@ -43,6 +52,9 @@ export const DEFAULT_SETTINGS: Settings = {
   codeFont: 'mono',
   suggestions: true,
   readLessons: [],
+  lessonMode: false,
+  lessonPlace: null,
+  lessonProgress: [],
   panels: { sidebar: 220, output: 460, inspector: 240 },
 };
 

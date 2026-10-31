@@ -1,6 +1,6 @@
 import * as Menubar from '@radix-ui/react-menubar';
 import type { ReactNode } from 'react';
-import { examples } from '@/content/content';
+import { examplesOf } from '@/content/content';
 import { LOCALES, useTranslation } from '@/i18n/i18n';
 import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
@@ -27,6 +27,7 @@ interface IdeMenuBarProps {
   onToggleFullScreen: () => void;
   onShowCommands: () => void;
   onOpenLessons: () => void;
+  onToggleLessonMode: () => void;
 }
 
 interface MenuProps {
@@ -138,8 +139,10 @@ export const IdeMenuBar = ({
   onToggleFullScreen,
   onShowCommands,
   onOpenLessons,
+  onToggleLessonMode,
 }: IdeMenuBarProps) => {
   const t = useTranslation();
+  const examples = examplesOf(locale);
   const lessons = examples.filter((example) => !example.id.startsWith(PROGRAM_PREFIX));
   const programs = examples.filter((example) => example.id.startsWith(PROGRAM_PREFIX));
   const themeOptions = THEME_IDS.map((id) => ({
@@ -266,6 +269,7 @@ export const IdeMenuBar = ({
         <Action label={t('Full screen')} shortcut="F11" onSelect={onToggleFullScreen} />
       </Menu>
       <Menu label={t('Help')}>
+        <Action label={t('Lesson mode')} onSelect={onToggleLessonMode} />
         <Action label={t('Lessons')} onSelect={onOpenLessons} />
         <Action label={t('Available commands')} onSelect={onShowCommands} />
         <Action

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n';
+import { createTranslator, detectLocale, LocaleContext, TranslationContext } from '@/i18n/i18n';
 import { clearDrafts } from '@/projects/draftStore';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
@@ -21,6 +21,7 @@ import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
 import { ThemeToggle } from '@/ui/components/ThemeToggle';
+import type { CheckWorkerFactory } from '@/ui/hooks/useLessonMode';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
 import {
@@ -38,11 +39,12 @@ import { printConsoleInvite } from '@/ui/consoleInvite';
 
 interface AppProps {
   createWorker?: WorkerFactory;
+  createLessonCheckWorker?: CheckWorkerFactory;
 }
 
 const THEME_CHANGE_MILLISECONDS = 1700;
 
-export const App = ({ createWorker }: AppProps) => {
+export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
   const { route, navigate } = useRoute();
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [projects, setProjects] = useState<Project[]>(loadProjects);
@@ -272,82 +274,85 @@ export const App = ({ createWorker }: AppProps) => {
   );
 
   return (
-    <TranslationContext.Provider value={translate}>
-      <SceneBackdrop phase={phase} />
-      <a
-        className="skip-link"
-        href="#content"
-        onClick={(event) => {
-          event.preventDefault();
-          document.getElementById('content')?.focus();
-        }}>
-        {translate('Skip to content')}
-      </a>
-      {saveFailed ? (
-        <div className="alert alert-error" role="alert">
-          {translate('The browser refused to save your projects.')}
-        </div>
-      ) : null}
-      {archiveNotice === null || !isHome ? null : (
-        <div className="alert" role="status">
-          <p>{archiveNotice}</p>
-          <CloseButton
-            onClick={() => {
-              setArchiveNotice(null);
+    <LocaleContext.Provider value={locale}>
+      <TranslationContext.Provider value={translate}>
+        <SceneBackdrop phase={phase} />
+        <a
+          className="skip-link"
+          href="#content"
+          onClick={(event) => {
+            event.preventDefault();
+            document.getElementById('content')?.focus();
+          }}>
+          {translate('Skip to content')}
+        </a>
+        {saveFailed ? (
+          <div className="alert alert-error" role="alert">
+            {translate('The browser refused to save your projects.')}
+          </div>
+        ) : null}
+        {archiveNotice === null || !isHome ? null : (
+          <div className="alert" role="status">
+            <p>{archiveNotice}</p>
+            <CloseButton
+              onClick={() => {
+                setArchiveNotice(null);
+              }}
+            />
+          </div>
+        )}
+        {activeProject !== undefined ? (
+          <EditorScreen
+            key={activeProject.id}
+            project={activeProject}
+            routeFile={route.name === 'project' ? route.file : null}
+            settings={{ ...settings, theme: skyTheme }}
+            locale={locale}
+            createWorker={createWorker}
+            createLessonCheckWorker={createLessonCheckWorker}
+            onSaveProject={handleSave}
+            routeLesson={route.name === 'project' ? route.lesson : undefined}
+            onSelectFile={(file) => {
+              navigate({ name: 'project', projectId: activeProject.id, file });
             }}
+            onChangeLesson={(file, lesson) => {
+              navigate({ name: 'project', projectId: activeProject.id, file, lesson });
+            }}
+            onChangeSettings={changeSettings}
+            onBack={goHome}
           />
-        </div>
-      )}
-      {activeProject !== undefined ? (
-        <EditorScreen
-          key={activeProject.id}
-          project={activeProject}
-          routeFile={route.name === 'project' ? route.file : null}
-          settings={{ ...settings, theme: skyTheme }}
-          locale={locale}
-          createWorker={createWorker}
-          onSaveProject={handleSave}
-          routeLesson={route.name === 'project' ? route.lesson : undefined}
-          onSelectFile={(file) => {
-            navigate({ name: 'project', projectId: activeProject.id, file });
-          }}
-          onChangeLesson={(file, lesson) => {
-            navigate({ name: 'project', projectId: activeProject.id, file, lesson });
-          }}
-          onChangeSettings={changeSettings}
-          onBack={goHome}
-        />
-      ) : null}
-      {route.name === 'aquarium' ? (
-        <Aquarium origin={aquariumOrigin} theme={skyTheme} isSoundOn={settings.sound} onClose={goHome} />
-      ) : null}
-      {route.name === 'globe' ? <GlobeWallpaper onClose={goHome} /> : null}
-      {isHome ? (
-        <HomeScreen
-          projects={projects}
-          isCreating={route.name === 'new'}
-          initialExampleId={route.name === 'new' ? route.exampleId : null}
-          onStartCreating={() => {
-            navigate({ name: 'new', exampleId: null });
-          }}
-          onCancelCreating={goHome}
-          onCreate={handleCreate}
-          onImportProject={importProject}
-          onOpenAquarium={(origin) => {
-            setAquariumOrigin(origin);
-            navigate({ name: 'aquarium' });
-          }}
-          onExportProject={downloadProject}
-          onRename={(id, name) => {
-            persist(projects.map((project) => (project.id === id ? { ...project, name } : project)));
-          }}
-          onDelete={(id) => {
-            persist(removeProject(projects, id));
-            clearDrafts(id);
-          }}
-          preferenceToggles={preferenceToggles}
-        />
-      ) : null}
-    </TranslationContext.Provider>
+        ) : null}
+        {route.name === 'aquarium' ? (
+          <Aquarium origin={aquariumOrigin} theme={skyTheme} isSoundOn={settings.sound} onClose={goHome} />
+        ) : null}
+        {route.name === 'globe' ? <GlobeWallpaper onClose={goHome} /> : null}
+        {isHome ? (
+          <HomeScreen
+            projects={projects}
+            isCreating={route.name === 'new'}
+            initialExampleId={route.name === 'new' ? route.exampleId : null}
+            onStartCreating={() => {
+              navigate({ name: 'new', exampleId: null });
+            }}
+            onCancelCreating={goHome}
+            onCreate={handleCreate}
+            onImportProject={importProject}
+            onOpenAquarium={(origin) => {
+              setAquariumOrigin(origin);
+              navigate({ name: 'aquarium' });
+            }}
+            onExportProject={downloadProject}
+            onRename={(id, name) => {
+              persist(projects.map((project) => (project.id === id ? { ...project, name } : project)));
+            }}
+            onDelete={(id) => {
+              persist(removeProject(projects, id));
+              clearDrafts(id);
+            }}
+            preferenceToggles={preferenceToggles}
+          />
+        ) : null}
+      </TranslationContext.Provider>
+    </LocaleContext.Provider>
   );
 };

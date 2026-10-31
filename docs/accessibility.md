@@ -4,7 +4,7 @@ The target is WCAG 2.1 AA.
 
 ## Tools
 
-- axe runs in E2E on the home screen, the editor and the lessons dialog, in the three themes, and on the home screen and the editor in every vision mode with each theme.
+- axe runs in E2E on the home screen, the editor, the lessons dialog and lesson mode, in the three themes, and on the home screen and the editor in every vision mode with each theme.
 - `src/settings/vision.test.ts` measures every palette: WCAG contrast against the editor background, and distance between code groups as each kind of color blindness sees them, simulated with the Machado 2009 matrices.
 - Lighthouse has a floor of 95 for accessibility.
 - `eslint-plugin-jsx-a11y` runs in lint, and every `button` declares its `type`.

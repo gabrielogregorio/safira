@@ -14,6 +14,7 @@ const setup = (isRunning = false) => {
     onToggleBreakpoint: vi.fn(),
     onClearBreakpoints: vi.fn(),
     onOpenExample: vi.fn(),
+    onToggleLessonMode: vi.fn(),
     onChangeSettings: vi.fn(),
     onToggleFullScreen: vi.fn(),
     onShowCommands: vi.fn(),
@@ -77,9 +78,9 @@ describe('IdeMenuBar', () => {
 
   it('opens an example', async () => {
     const { onOpenExample } = setup();
-    await choose('Examples', 'Listas');
+    await choose('Examples', 'Lists');
 
-    expect(onOpenExample).toHaveBeenCalledWith('16-listas', expect.stringContaining('lista de compras'));
+    expect(onOpenExample).toHaveBeenCalledWith('16-listas', expect.stringContaining('list of'));
   });
 
   it('changes the font size within the limits', async () => {

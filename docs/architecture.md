@@ -11,7 +11,8 @@ Safira runs only in the browser. There is no server, and programs never reach th
 | Projects | `src/projects` | Project storage, drafts, file tree, zip archives |
 | Routing | `src/routing` | Hash addresses for every screen |
 | Interface | `src/ui` | React screens and components |
-| Content | `src/content` | Examples (`.safira`) and lessons (`.md`) |
+| Content | `src/content/<locale>` | Examples (`.safira`) and lessons (`.md`), one folder per language, with the same file names |
+| Lessons | `src/lessons` | `lessonCheck.ts` tests a program with hidden answers, in its own Web Worker. `lessonPlace.ts` maps steps to files and progress |
 | Settings and i18n | `src/settings`, `src/i18n` | Theme, font, panel sizes, dictionaries for en, pt-BR, es, zh-CN and ja |
 | Sound | `src/ui/sound` | Player on Web Audio with short recorded files from Kenney (CC0). A click plays what `data-sound` names on the element, or the plain click. Run, stop, breakpoints and renames call the player directly, because they also come from the keyboard |
 | Sky | `src/ui/sky` | The clock of the scenery. `settings.theme` is only the starting point: `useSkyClock` gives the phase, and the shown theme comes from it. Nothing about elapsed time is saved |
@@ -39,6 +40,21 @@ pure helpers such as highlighting and formatting.
   the line counts as `0.38`. The alert only appears for an unsupported version.
 - `legacyGolden.json` holds outputs recorded from the Python interpreter, which is gone. Never regenerate it.
 
+## Lessons
+
+A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with its text and one `safira` fence. A step with `solution` and `check` fences is a challenge. The lessons dialog shows the file as a document, without those two fences, and lesson mode shows it step by step, so both read the same text.
+
+```json
+{ "uses": ["repeat|while"], "exact": false, "hint": "Shown after a failure", "cases": [{ "inputs": ["4"], "shows": ["8"], "hides": ["9"] }] }
+```
+
+- `uses` lists syntax kinds from `ast.ts`, and `a|b` accepts either.
+- `shows` must appear in order and `hides` must not appear. Case, accents and punctuation are forgiven unless `exact` is set.
+- A run that ends without an error gives the check on a plain step. On a challenge, `useLessonMode` runs `checkProgram` over the files of that run, and gives up on endless programs after 200,000 steps or 4 seconds.
+- Each step is a real file, `aulas/03-variaveis-1.safira`, so saving, breakpoints and the inspector work as usual. The folder name is translated, so each language keeps its own scripts. Progress lives in the settings as `lesson:step` and survives a change of language.
+- `Next` stays locked until the step is done, but the lesson list is free, so nobody gets stuck.
+- `content.test.ts` proves, for every language, that each solution passes its check, that the starting code fails it, and that every example runs.
+
 ## Browser storage
 
 | Key | Content |
@@ -46,7 +62,7 @@ pure helpers such as highlighting and formatting.
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
 | `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
 | `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
-| `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, read lessons |
+| `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, read lessons, lesson mode, place and progress |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
 
@@ -59,6 +75,7 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 | `#/aquarium`, `#/globe` | Aquarium and globe, full screen, meant to work as a wallpaper |
 | `#/projects/<id>/<file>` | Project and file, with the file URL encoded |
 | `#/projects/<id>/<file>/lessons/<lesson>/<section>` | Lessons open over that project, reached from Help |
+| `#/projects/<id>/aulas%2F03-variaveis-1.safira` | A step of lesson mode is a file, so it has an address like any other |
 
 ## Interface decisions
 
@@ -77,11 +94,10 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Known gaps
 
-- The full test run is behind the code: unit and E2E were last complete before the autosave, aquarium and sound work.
 - Coverage is 92%, with thresholds at 90/83/87/90. The goal is 100%.
 - Lighthouse is not in `tests.yml`, and the deploy workflows have not run on GitHub yet.
 - The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
-- Examples and lessons exist only in Brazilian Portuguese, and suggestions in Chinese and Japanese use the English list.
+- Safira has no Chinese or Japanese commands. Content in those languages explains in the language and codes with the English commands, and suggestions use the English list.
 - Previews are not removed from `gh-pages` when a pull request closes.
 - A `.zip` does not carry the order chosen in the sidebar, and dragging has no keyboard or touch alternative.
 - `R` in a note list is a rest. That was a decision, not something asked for.

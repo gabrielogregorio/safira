@@ -39,6 +39,7 @@ const MILLISECONDS_PER_SECOND = 1000;
 export const useRunner = (
   onFilesChanged: (files: Record<string, string>) => void,
   createWorker: WorkerFactory = createRunnerWorker,
+  onFinished?: (failure: RunnerFailure | null) => void,
 ): Runner => {
   const workerRef = useRef<RunnerWorker | null>(null);
   const startedAt = useRef(0);
@@ -89,10 +90,11 @@ export const useRunner = (
           setPausedAt(null);
           setDuration((performance.now() - startedAt.current) / MILLISECONDS_PER_SECOND);
           setStatus('idle');
+          onFinished?.(event.failure);
           break;
       }
     },
-    [closeWorker, onFilesChanged],
+    [closeWorker, onFilesChanged, onFinished],
   );
 
   const start = useCallback<Runner['start']>(
