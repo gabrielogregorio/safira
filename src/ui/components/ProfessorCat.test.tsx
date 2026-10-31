@@ -54,12 +54,27 @@ describe('ProfessorCat', () => {
     expect(screen.getByText('Press ▶ Run to see it work.')).toBeInTheDocument();
   });
 
+  it('lights the Run button only while asking for a run', async () => {
+    const { unmount } = render(<ProfessorCat lesson={lessonMode()} hasError={false} />);
+    await press('Continue');
+
+    expect(document.documentElement.dataset['spotlight']).toBeUndefined();
+
+    await press('Continue');
+
+    expect(document.documentElement.dataset['spotlight']).toBe('run');
+
+    unmount();
+
+    expect(document.documentElement.dataset['spotlight']).toBeUndefined();
+  });
+
   it('shows the result after a run, with the way forward', async () => {
     const lesson = lessonMode({ hasRun: true, isDone: true });
     sessionStorage.setItem('safira.cat.met', 'true');
     render(<ProfessorCat lesson={lesson} hasError={false} />);
 
-    expect(screen.getByText('Look at the result up there.')).toBeInTheDocument();
+    expect(screen.getByText('Look at the result over there.')).toBeInTheDocument();
 
     await press('Next');
 

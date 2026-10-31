@@ -22,6 +22,8 @@ const HALF_TURN = 180;
 
 type Scene = 'intro' | 'explain' | 'play' | 'result';
 
+const HOME_FIELD = '.code-editor';
+
 const TARGETS: Record<Scene, string> = {
   intro: '.cm-content',
   explain: '.cm-content',
@@ -43,23 +45,6 @@ const writeFlag = (key: string): void => {
   } catch {
     // Without storage he only comes back sooner, which hurts nobody.
   }
-};
-
-interface PlaceRule {
-  anchor: string;
-  x: (box: DOMRect) => number;
-  y: (box: DOMRect) => number;
-}
-
-const rightInside = (box: DOMRect): number => box.right - CAT_SIZE - EDGE_MARGIN;
-const bottomInside = (box: DOMRect): number => box.bottom - CAT_SIZE - EDGE_MARGIN;
-
-const PLACES: Record<Scene, PlaceRule> = {
-  intro: { anchor: '.code-editor', x: rightInside, y: bottomInside },
-  explain: { anchor: '.code-editor', x: rightInside, y: bottomInside },
-  // Below the bars, so he never covers the lesson switch, and the arm reaches up to the button.
-  play: { anchor: '.output-column', x: rightInside, y: (box) => box.top + EDGE_MARGIN },
-  result: { anchor: '.inspector', x: rightInside, y: bottomInside },
 };
 
 type Pose = 'wave' | 'point' | 'thumbs' | 'facepalm';
@@ -213,15 +198,22 @@ interface ProfessorCatProps {
   hasError: boolean;
 }
 
-const whereToStand = (scene: Scene): { x: number; y: number } | null => {
+// He lives inside the code field, so he never covers the output or an error, and only points at them.
+const whereToStand = (element: HTMLElement): { x: number; y: number } | null => {
   if (window.innerWidth <= PHONE_WIDTH) {
     return { x: window.innerWidth - CAT_SIZE - EDGE_MARGIN, y: window.innerHeight - CAT_SIZE - PHONE_BOTTOM_ROOM };
   }
 
-  const rule = PLACES[scene];
-  const box = document.querySelector(rule.anchor)?.getBoundingClientRect();
+  const box = document.querySelector(HOME_FIELD)?.getBoundingClientRect();
 
-  return box === undefined ? null : { x: rule.x(box), y: rule.y(box) };
+  if (box === undefined) {
+    return null;
+  }
+
+  element.style.setProperty('--cat-room-width', `${String(box.width - CAT_SIZE - EDGE_MARGIN * 2)}px`);
+  element.style.setProperty('--cat-room-height', `${String(box.height - EDGE_MARGIN * 2)}px`);
+
+  return { x: box.right - CAT_SIZE - EDGE_MARGIN, y: box.bottom - CAT_SIZE - EDGE_MARGIN };
 };
 
 // He turns to the target, and the arm goes to the angle that leaves the finger on it.
@@ -243,7 +235,7 @@ const lookAtTarget = (element: HTMLElement, scene: Scene, spot: { x: number; y: 
 };
 
 const placeOnScreen = (element: HTMLElement, scene: Scene): void => {
-  const spot = whereToStand(scene);
+  const spot = whereToStand(element);
 
   if (spot !== null) {
     element.style.transform = `translate(${String(spot.x)}px, ${String(spot.y)}px)`;
@@ -303,6 +295,21 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   }, [reposition]);
 
   const isHere = !isHoldingStone;
+
+  // The button lives in the toolbar, so the page carries the signal that lights it up.
+  const isAskingForRun = isHere && scene === 'play';
+
+  useEffect(() => {
+    if (!isAskingForRun) {
+      return undefined;
+    }
+
+    document.documentElement.dataset['spotlight'] = 'run';
+
+    return () => {
+      delete document.documentElement.dataset['spotlight'];
+    };
+  }, [isAskingForRun]);
 
   useEffect(() => {
     if (isHere) {
@@ -457,7 +464,7 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
           ) : null}
           {scene === 'result' ? (
             <>
-              {lesson.isOnStepFile ? <p>{t('Look at the result up there.')}</p> : null}
+              {lesson.isOnStepFile ? <p>{t('Look at the result over there.')}</p> : null}
               <LessonBrief
                 step={step}
                 verdict={lesson.verdict}

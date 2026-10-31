@@ -9,7 +9,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Accessibility modes for protanopia, deuteranopia, tritanopia, achromatopsia, low vision, light sensitivity, and epilepsy and dizziness, tested with axe and with simulated color vision.
 - The gear beside the Safira name opens the accessibility modes, each with a short explanation.
 - The globe on the home screen loses its fish when the aquarium is empty.
-- Professor Cat in lesson mode: he introduces himself, explains each step, walks to the Run button and then to the result, turns to what he explains and points at it with a large hand, gives a thumbs up on a right answer and a facepalm on a wrong one. His only sound is a meow. Dragging the stone on the floor makes him run, and letting it go brings him back to where he stopped.
+- Professor Cat in lesson mode: he stays inside the code field, introduces himself, explains each step, turns to the Run button and then to the result, and points at them with a large hand, gives a thumbs up on a right answer and a facepalm on a wrong one. His only sound is a meow. Dragging the stone on the floor makes him run, and letting it go brings him back to where he stopped.
 - Lesson progress at the bottom of the IDE, and in errors a hint for text without quotes and an example that opens in a modal.
 - Lesson mode inside the IDE: a switch beside Smart suggestions swaps the tabs for a lesson bar, each step opens as a script, a run gives the check, and challenges are tested with hidden answers, so the next step only opens after a correct run. Hints, the solution and a way to start over are one click away.
 - Examples and lessons in English, Portuguese, Spanish, Simplified Chinese and Japanese, rewritten for people who never programmed.

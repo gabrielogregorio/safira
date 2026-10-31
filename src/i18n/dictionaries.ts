@@ -9,7 +9,7 @@ export const dictionaries = {
     'Professor Cat': 'Professor Gato',
     'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
       'Miau! Eu sou o Professor Gato, e vou te ensinar a programar, um passo de cada vez. Se quiser que eu saia, arraste a pedra do chão. Quando você soltar, eu volto.',
-    'Look at the result up there.': 'Olha o resultado ali.',
+    'Look at the result over there.': 'Olha o resultado ali.',
     'Drag the stone': 'Arrastar a pedra',
     'The normal colors of the theme.': 'As cores normais do tema.',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
@@ -197,7 +197,7 @@ export const dictionaries = {
     'Professor Cat': 'Profesor Gato',
     'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
       '¡Miau! Soy el Profesor Gato y te enseñaré a programar, paso a paso. Si quieres que me vaya, arrastra la piedra del suelo. Cuando la sueltes, vuelvo.',
-    'Look at the result up there.': 'Mira el resultado ahí arriba.',
+    'Look at the result over there.': 'Mira el resultado ahí.',
     'Drag the stone': 'Arrastrar la piedra',
     'The normal colors of the theme.': 'Los colores normales del tema.',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
@@ -386,7 +386,7 @@ export const dictionaries = {
     'Professor Cat': '猫教授',
     'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
       '喵!我是猫教授,我会一步一步教你编程。如果想让我走开,就拖动地上的石头。松手后我就回来。',
-    'Look at the result up there.': '看,结果在那边。',
+    'Look at the result over there.': '看,结果在那边。',
     'Drag the stone': '拖动石头',
     'The normal colors of the theme.': '主题的正常颜色。',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
@@ -569,7 +569,7 @@ export const dictionaries = {
     'Professor Cat': 'ネコ先生',
     'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
       'ニャー!ネコ先生です。プログラミングを一歩ずつ教えます。離れてほしいときは、床の石をドラッグしてください。手を離すと戻ります。',
-    'Look at the result up there.': '結果はあそこです。',
+    'Look at the result over there.': '結果はあそこです。',
     'Drag the stone': '石をドラッグ',
     'The normal colors of the theme.': 'テーマの通常の色です。',
     'For those who see red as weak. Uses blue and orange instead of red and green.':

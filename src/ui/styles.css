@@ -2155,18 +2155,13 @@ select {
   color: var(--color-text);
   display: grid;
   gap: 8px;
-  max-height: 46vh;
+  max-height: min(46vh, var(--cat-room-height, 46vh));
   overflow-y: auto;
   padding: 12px 14px;
   pointer-events: auto;
   position: absolute;
   right: 104px;
-  width: min(360px, 40vw);
-}
-
-.cat-at-play .cat-bubble {
-  bottom: auto;
-  top: 8px;
+  width: min(360px, var(--cat-room-width, 40vw));
 }
 
 .cat-bubble p {
@@ -2207,6 +2202,24 @@ select {
 .cat-stone-held {
   cursor: grabbing;
   transition: none;
+}
+
+:root[data-spotlight='run'] .aero-button-run:not(:disabled) {
+  animation: run-spotlight 1100ms ease-in-out infinite;
+  box-shadow:
+    0 0 0 3px #ffffff,
+    0 0 0 6px var(--color-accent),
+    0 0 18px 8px var(--color-accent);
+}
+
+@keyframes run-spotlight {
+  50% {
+    box-shadow:
+      0 0 0 3px #ffffff,
+      0 0 0 6px var(--color-accent),
+      0 0 30px 14px var(--color-accent);
+    transform: scale(1.1);
+  }
 }
 
 .cat-bird svg {
@@ -2679,11 +2692,10 @@ select {
 }
 
 @media (max-width: 768px) {
-  .cat-bubble,
-  .cat-at-play .cat-bubble {
+  .cat-bubble {
     bottom: 104px;
+    max-height: 46vh;
     right: 0;
-    top: auto;
     width: calc(100vw - 24px);
   }
 
@@ -2915,6 +2927,7 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root[data-spotlight='run'] .aero-button-run,
   .cat,
   .cat-bird,
   .cat-fleeing,
@@ -2958,6 +2971,7 @@ select {
   }
 }
 
+:root[data-vision='calm'][data-spotlight='run'] .aero-button-run,
 :root[data-vision='calm'] .cat,
 :root[data-vision='calm'] .cat-bird,
 :root[data-vision='calm'] .cat-waving-arm,
