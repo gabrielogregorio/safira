@@ -669,6 +669,33 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
   expect(await sounds()).toHaveLength(before);
 });
 
+test('modals sound when they open and when they close', async ({ page }) => {
+  await page.addInitScript(() => {
+    const started: number[] = [];
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function startAndRecord(...values) {
+      started.push(this.buffer?.duration ?? 0);
+      start.apply(this, values);
+    };
+    Object.assign(window, { startedSounds: started });
+  });
+  const sounds = (): Promise<number[]> =>
+    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
+
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await expect.poll(sounds).toHaveLength(1);
+  const [opening] = await sounds();
+
+  await page.getByRole('button', { name: 'Close' }).click();
+  await expect.poll(sounds).toHaveLength(2);
+  const [, closing] = await sounds();
+
+  expect(opening).toBeGreaterThan(0.1);
+  expect(closing).toBeGreaterThan(0.1);
+  expect(closing).not.toBe(opening);
+});
+
 test('the logo is a live 3D gem', async ({ page }) => {
   await page.goto('/');
   await page.mouse.move(900, 300);

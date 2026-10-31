@@ -1,10 +1,12 @@
 import clickUrl from './files/click.wav';
 import createUrl from './files/create.wav';
 import deleteUrl from './files/delete.wav';
+import modalCloseUrl from './files/modal-close.wav';
+import modalOpenUrl from './files/modal-open.wav';
 import openUrl from './files/open.wav';
 import toggleUrl from './files/toggle.wav';
 
-export type SoundName = 'click' | 'toggle' | 'open' | 'create' | 'delete';
+export type SoundName = 'click' | 'toggle' | 'open' | 'create' | 'delete' | 'modalOpen' | 'modalClose';
 
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
@@ -13,7 +15,20 @@ export const SOUND_FILES: Record<SoundName, string> = {
   open: openUrl,
   create: createUrl,
   delete: deleteUrl,
+  modalOpen: modalOpenUrl,
+  modalClose: modalCloseUrl,
 };
+
+// One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
+// Waiting a little lets the most meaningful one play first, and the others step aside.
+const WAIT_MILLISECONDS: Partial<Record<SoundName, number>> = { modalClose: 10, click: 20 };
+const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
+const SAME_GESTURE_MILLISECONDS = 80;
+
+const wait = (milliseconds: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, milliseconds);
+  });
 
 const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
 const MASTER_GAIN = 0.5;
@@ -28,6 +43,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let context: AudioContext | null = null;
   let output: GainNode | null = null;
   let isEnabled = true;
+  let lastSound: { name: SoundName; time: number } | null = null;
   const buffers = new Map<SoundName, Promise<AudioBuffer>>();
 
   const start = (): AudioContext | null => {
@@ -40,6 +56,14 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
     }
 
     return context;
+  };
+
+  const isSameGesture = (name: SoundName): boolean => {
+    if (lastSound === null || performance.now() - lastSound.time > SAME_GESTURE_MILLISECONDS) {
+      return false;
+    }
+
+    return STEPS_ASIDE.includes(name) || lastSound.name === name;
   };
 
   const bufferOf = (audio: AudioContext, name: SoundName): Promise<AudioBuffer> => {
@@ -72,11 +96,15 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       }
     },
     play: async (name: SoundName): Promise<void> => {
+      await wait(WAIT_MILLISECONDS[name] ?? 0);
+
       const audio = isEnabled ? start() : null;
 
-      if (audio === null || output === null) {
+      if (audio === null || output === null || isSameGesture(name)) {
         return;
       }
+
+      lastSound = { name, time: performance.now() };
 
       if (audio.state === 'suspended') {
         void audio.resume();

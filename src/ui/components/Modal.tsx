@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import { prefersMotion } from '@/ui/motion';
+import { soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
 
 interface ModalProps {
@@ -42,14 +43,17 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
     overlay.current = node ?? overlay.current;
   }, []);
 
-  useLayoutEffect(
-    () => () => {
+  useLayoutEffect(() => {
+    void soundPlayer.play('modalOpen');
+
+    return () => {
+      void soundPlayer.play('modalClose');
+
       if (overlay.current !== null && prefersMotion()) {
         playClosingAnimation(overlay.current);
       }
-    },
-    [],
-  );
+    };
+  }, []);
 
   return (
     <Dialog.Root

@@ -103,13 +103,61 @@ describe('createSoundPlayer', () => {
     await expect(createSoundPlayer(() => null).play('create')).resolves.toBeUndefined();
   });
 
+  it('lets the click step aside for the modal that it opens', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await Promise.all([player.play('click'), player.play('modalOpen')]);
+
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.modalOpen);
+    expect(context.sources).toHaveLength(1);
+  });
+
+  it('plays the closing sound, not the click, on the button that closes a modal', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await Promise.all([player.play('click'), player.play('modalClose')]);
+
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.modalClose);
+  });
+
+  it('keeps only the delete sound when deleting also closes the modal', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await Promise.all([player.play('modalClose'), player.play('delete'), player.play('click')]);
+
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.delete);
+  });
+
+  it('plays the same sound once per gesture', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await Promise.all([player.play('modalOpen'), player.play('modalOpen')]);
+
+    expect(context.sources).toHaveLength(1);
+  });
+
+  it('plays again on the next gesture', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    const now = vi.spyOn(performance, 'now').mockReturnValue(1000);
+    await player.play('click');
+    now.mockReturnValue(2000);
+    await player.play('click');
+    now.mockRestore();
+
+    expect(context.sources).toHaveLength(2);
+  });
+
   it('survives a file that fails to load and tries again later', async () => {
     const context = fakeContext();
     const player = createSoundPlayer(() => asContext(context));
+    const now = vi.spyOn(performance, 'now').mockReturnValue(1000);
     vi.mocked(fetch).mockRejectedValueOnce(new Error('offline'));
 
     await expect(player.play('click')).resolves.toBeUndefined();
+    now.mockReturnValue(2000);
     await player.play('click');
+    now.mockRestore();
 
     expect(context.sources[1]?.start).toHaveBeenCalled();
   });
