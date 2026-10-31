@@ -35,7 +35,6 @@
     "@radix-ui/react-menubar": "^1.2.1",
     "devtools-detect": "^4.0.2",
     "fflate": "^0.8.3",
-    "localforage": "^1.10.0",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-markdown": "^10.1.0",

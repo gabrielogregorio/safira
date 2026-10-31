@@ -1076,22 +1076,6 @@ select {
   order: 3;
 }
 
-.history-controls {
-  align-items: center;
-}
-
-.history-label {
-  background: none;
-  border: none;
-  color: var(--color-text);
-  cursor: var(--cursor-pointer);
-  font: inherit;
-  font-size: 0.85rem;
-  font-weight: 600;
-  min-width: 46px;
-  padding: 0 2px;
-}
-
 .orb-toggles {
   display: flex;
   gap: 6px;

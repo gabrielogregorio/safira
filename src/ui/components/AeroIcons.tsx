@@ -57,25 +57,6 @@ export const TreeFolderIcon = ({ isOpen }: { isOpen: boolean }) => (
   </svg>
 );
 
-export const CameraIcon = () => (
-  <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M8.5 5 10 3h4l1.5 2H20a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" fill="currentColor" />
-    <circle cx="12" cy="12.5" r="4.6" fill="#9fd0ff" stroke="#ffffff" strokeWidth="1.6" />
-  </svg>
-);
-
-export const OlderIcon = () => (
-  <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M15 4.5 7 12l8 7.5" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
-export const NewerIcon = () => (
-  <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M9 4.5 17 12l-8 7.5" fill="none" stroke="currentColor" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
-  </svg>
-);
-
 export const PlayIcon = () => (
   <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
     <path

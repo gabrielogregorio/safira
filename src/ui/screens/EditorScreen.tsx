@@ -24,7 +24,7 @@ import { routeToHash } from '@/routing/routes';
 import type { RunMode } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
-import { BackIcon, CameraIcon, NewerIcon, OlderIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
+import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { VariableInspector } from '@/ui/components/VariableInspector';
@@ -48,7 +48,6 @@ import {
   toStoredText,
   withScriptExtension,
 } from '@/ui/editorTabs';
-import type { ProjectHistory } from '@/ui/hooks/useProjectHistory';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
 import { soundPlayer } from '@/ui/sound/sounds';
@@ -60,7 +59,6 @@ interface EditorScreenProps {
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
-  history: ProjectHistory;
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
   onChangeLesson: (file: string, lesson: LessonPlace) => void;
@@ -69,7 +67,6 @@ interface EditorScreenProps {
 }
 
 type Dialog =
-  | { kind: 'history' }
   | { kind: 'commands' }
   | { kind: 'delete-node'; node: TreeNode }
   | null;
@@ -104,7 +101,6 @@ export const EditorScreen = ({
   settings,
   locale,
   createWorker = createRunnerWorker,
-  history,
   onSaveProject,
   onSelectFile,
   onChangeLesson,
@@ -390,23 +386,6 @@ export const EditorScreen = ({
     [currentFiles],
   );
 
-  const { addSnapshot, show } = history;
-
-  const saveSnapshot = useCallback(() => {
-    saveOpenTabs();
-    void soundPlayer.play('snapshot');
-    addSnapshot();
-  }, [addSnapshot, saveOpenTabs]);
-
-  const jumpTo = useCallback(
-    (snapshotId: string | null) => {
-      saveOpenTabs();
-      setDialog(null);
-      show(snapshotId);
-    },
-    [saveOpenTabs, show],
-  );
-
   const openLessonCode = useCallback(
     (lessonId: string, code: string) => {
       const source = addScriptVersion(code);
@@ -506,7 +485,7 @@ export const EditorScreen = ({
       } else if (event.key === 'F11') {
         toggleFullScreen();
       } else if (isControl && key === 's') {
-        saveSnapshot();
+        saveOpenTabs();
       } else if (isControl && key === 'n') {
         newTab();
       }
@@ -517,7 +496,7 @@ export const EditorScreen = ({
     return () => {
       window.removeEventListener('keydown', handleKey, true);
     };
-  }, [cursor.line, newTab, runOrResume, saveSnapshot, toggleBreakpoint, toggleFullScreen]);
+  }, [cursor.line, newTab, runOrResume, saveOpenTabs, toggleBreakpoint, toggleFullScreen]);
 
   if (activeTab === undefined) {
     return null;
@@ -552,10 +531,6 @@ export const EditorScreen = ({
   };
 
   const runLabel = runner.status === 'paused' ? t('Continue') : t('Run');
-  const formatDate = (time: number): string => new Date(time).toLocaleString(locale);
-  const timeline = [...history.snapshots.map((snapshot) => snapshot.id), null];
-  const position = timeline.indexOf(history.viewed?.id ?? null);
-  const timelineLabel = history.viewed === null ? t('Current') : `${position + 1}/${history.snapshots.length}`;
 
   const lessonHref = (lessonId: string, section: string | null): string =>
     routeToHash({ name: 'project', projectId: project.id, file: activeFile, lesson: { lessonId, section } });
@@ -589,50 +564,6 @@ export const EditorScreen = ({
           <BackIcon />
         </button>
         <div className="toolbar-actions">
-          <div className="aero-group history-controls">
-            <button
-              type="button"
-              className="aero-button"
-              data-sound="snapshot"
-              aria-label={t('Save snapshot')}
-              title={`${t('Save snapshot')} (Ctrl+S)`}
-              onClick={saveSnapshot}>
-              <CameraIcon />
-            </button>
-            <button
-              type="button"
-              className="aero-button"
-              data-sound="tab"
-              aria-label={t('Older snapshot')}
-              title={t('Older snapshot')}
-              disabled={position === 0}
-              onClick={() => {
-                jumpTo(timeline[position - 1] ?? null);
-              }}>
-              <OlderIcon />
-            </button>
-            <button
-              type="button"
-              className="history-label"
-              title={t('History')}
-              onClick={() => {
-                setDialog({ kind: 'history' });
-              }}>
-              {timelineLabel}
-            </button>
-            <button
-              type="button"
-              className="aero-button"
-              data-sound="tab"
-              aria-label={t('Newer snapshot')}
-              title={t('Newer snapshot')}
-              disabled={history.viewed === null}
-              onClick={() => {
-                jumpTo(timeline[position + 1] ?? null);
-              }}>
-              <NewerIcon />
-            </button>
-          </div>
           <button
             type="button"
             className="aero-button aero-button-run"
@@ -659,10 +590,6 @@ export const EditorScreen = ({
           locale={locale}
           isRunning={isRunning}
           onNewTab={newTab}
-          onSaveSnapshot={saveSnapshot}
-          onShowHistory={() => {
-            setDialog({ kind: 'history' });
-          }}
           onFormat={() => {
             void soundPlayer.play('format');
             updateActiveText(formatCode(activeTab.text));
@@ -748,25 +675,6 @@ export const EditorScreen = ({
               setArchiveNotice(null);
             }}
           />
-        </div>
-      )}
-
-      {history.viewed === null ? null : (
-        <div className="alert" role="status">
-          <p>
-            {t('This is a snapshot from {date}. Editing it makes it the current content, and today goes to the history.', {
-              date: formatDate(history.viewed.createdAt),
-            })}
-          </p>
-          <button
-            type="button"
-            className="button"
-            data-sound="tab"
-            onClick={() => {
-              jumpTo(null);
-            }}>
-            {t('Back to current')}
-          </button>
         </div>
       )}
 
@@ -920,44 +828,6 @@ export const EditorScreen = ({
       </nav>
 
       <footer className="status-bar">{t('Line {line}, column {column}', cursor)}</footer>
-
-      {dialog?.kind === 'history' ? (
-        <Modal
-          title={t('History')}
-          onClose={() => {
-            setDialog(null);
-          }}>
-          {history.snapshots.length === 0 ? <p>{t('Save a snapshot to start the history of this project.')}</p> : null}
-          <ul className="file-list">
-            <li>
-              <button
-                type="button"
-                className="menu-item"
-                data-sound="tab"
-                aria-current={history.viewed === null ? 'true' : undefined}
-                onClick={() => {
-                  jumpTo(null);
-                }}>
-                {t('Current')}
-              </button>
-            </li>
-            {[...history.snapshots].reverse().map((snapshot) => (
-              <li key={snapshot.id}>
-                <button
-                  type="button"
-                  className="menu-item"
-                  data-sound="tab"
-                  aria-current={history.viewed?.id === snapshot.id ? 'true' : undefined}
-                  onClick={() => {
-                    jumpTo(snapshot.id);
-                  }}>
-                  {formatDate(snapshot.createdAt)}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </Modal>
-      ) : null}
 
       {dialog?.kind === 'delete-node' ? (
         <Modal

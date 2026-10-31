@@ -332,23 +332,6 @@ test('what was typed survives the page dying', async ({ page }) => {
   await expect(page.locator('.cm-content')).toContainText('fica salvo');
 });
 
-test('a snapshot brings the past back, and editing it keeps the present in the history', async ({ page }) => {
-  await createProjectWithCode(page, 'mostre "antes"');
-  await page.keyboard.press('Control+s');
-  await page.locator('.cm-content').click();
-  await page.keyboard.press('Control+a');
-  await page.keyboard.insertText('mostre "depois"');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('depois');
-  await page.getByRole('button', { name: 'Older snapshot' }).click();
-  await expect(page.locator('.cm-content')).toContainText('antes');
-  await page.locator('.cm-content').click();
-  await page.keyboard.press('Control+End');
-  await page.keyboard.insertText('\nmostre "novo"');
-  await expect(page.locator('.history-label')).toHaveText('Current');
-  await page.getByRole('button', { name: 'Older snapshot' }).click();
-  await expect(page.locator('.cm-content')).toContainText('depois');
-});
-
 test('imports from a virtual folder created in the sidebar', async ({ page }) => {
   await createProjectWithCode(page, 'importe dados/lib\nmostre v');
   await page.keyboard.press('Control+s');
