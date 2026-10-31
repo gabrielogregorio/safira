@@ -76,6 +76,5 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
 - Examples and lessons exist only in Brazilian Portuguese, and suggestions in Chinese and Japanese use the English list.
 - Previews are not removed from `gh-pages` when a pull request closes.
-- The DevTools invite only sees docked tools, by the size of the window. Undocked tools still get the message in the console.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
 - The README needs a GIF, and no manual screen reader pass was done.

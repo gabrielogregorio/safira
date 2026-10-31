@@ -3,13 +3,7 @@ import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n'
 import { clearDrafts } from '@/projects/draftStore';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
-import {
-  createProject,
-  loadProjects,
-  removeProject,
-  saveProjects,
-  upsertProject,
-} from '@/projects/projectStore';
+import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
 import { useRoute } from '@/routing/useRoute';
 import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
@@ -18,7 +12,6 @@ import { describeArchiveResult } from '@/ui/archiveMessages';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
 import { Aquarium } from '@/ui/components/Aquarium';
 import { CloseButton } from '@/ui/components/CloseButton';
-import { DevToolsInvite } from '@/ui/components/DevToolsInvite';
 import { GlobeWallpaper } from '@/ui/components/GlobeWallpaper';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
@@ -39,6 +32,7 @@ import {
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
+import { printConsoleInvite } from '@/ui/consoleInvite';
 
 interface AppProps {
   createWorker?: WorkerFactory;
@@ -116,6 +110,15 @@ export const App = ({ createWorker }: AppProps) => {
   useEffect(() => {
     soundPlayer.setEnabled(settings.sound);
   }, [settings.sound]);
+
+  useEffect(() => {
+    printConsoleInvite(
+      translate('Curious about what is inside?'),
+      translate('Safira is open source. Get the repository, run it on your computer and change whatever you want.'),
+    );
+    // Once per visit: changing the language must not print it again.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const playClick = (event: MouseEvent): void => {
@@ -266,7 +269,6 @@ export const App = ({ createWorker }: AppProps) => {
   return (
     <TranslationContext.Provider value={translate}>
       <SceneBackdrop phase={phase} />
-      <DevToolsInvite />
       <a
         className="skip-link"
         href="#content"
@@ -312,12 +314,7 @@ export const App = ({ createWorker }: AppProps) => {
         />
       ) : null}
       {route.name === 'aquarium' ? (
-        <Aquarium
-          origin={aquariumOrigin}
-          theme={skyTheme}
-          isSoundOn={settings.sound}
-          onClose={goHome}
-        />
+        <Aquarium origin={aquariumOrigin} theme={skyTheme} isSoundOn={settings.sound} onClose={goHome} />
       ) : null}
       {route.name === 'globe' ? <GlobeWallpaper onClose={goHome} /> : null}
       {isHome ? (

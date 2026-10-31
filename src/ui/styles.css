@@ -860,31 +860,6 @@ select {
   }
 }
 
-.devtools-invite {
-  backdrop-filter: blur(14px) saturate(150%);
-  background: var(--color-panel-strong);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-panel);
-  bottom: 16px;
-  box-shadow: 0 12px 34px rgb(4 30 70 / 45%);
-  display: flex;
-  gap: 10px;
-  max-width: min(360px, calc(100vw - 32px));
-  padding: 14px;
-  position: fixed;
-  right: 16px;
-  z-index: 40;
-}
-
-.devtools-invite h2 {
-  font-size: 1.05rem;
-  margin: 0 0 4px;
-}
-
-.devtools-invite p {
-  margin: 0 0 10px;
-}
-
 .home {
   display: flex;
   flex-direction: column;

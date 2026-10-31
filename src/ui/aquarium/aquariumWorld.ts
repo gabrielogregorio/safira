@@ -18,10 +18,10 @@ export const SPECIES: Species[] = [
 export const FISH_COUNT = 24;
 export const MINIMUM_MASS = 1;
 export const MASS_LOST_PER_SECOND = 0.0008;
-const MASS_PER_FOOD = 0.28;
+const MASS_PER_FOOD = 0.084;
 export const BURST_MASS = 16;
 const BUBBLES_FROM_BURST = 18;
-const PREY_MASS_SHARE = 0.3;
+const PREY_MASS_SHARE = 0.09;
 const PREDATOR_MASS = 3;
 const PREDATOR_ADVANTAGE = 1.8;
 const SECONDS_BETWEEN_PREY = 12;
@@ -365,7 +365,7 @@ const eatPrey = (world: World, fish: Fish, prey: Fish, events: WorldEvent[]): vo
       spawnBubble(world, prey.x + between(world.random, -24, 24), prey.y + between(world.random, -24, 24));
     }
 
-    fish.mass += Math.min(1, prey.mass * PREY_MASS_SHARE);
+    fish.mass += Math.min(0.3, prey.mass * PREY_MASS_SHARE);
     fish.preyAt = world.time + SECONDS_BETWEEN_PREY;
     events.push({ kind: 'chomp', voice: SPECIES[fish.species].voice });
   }

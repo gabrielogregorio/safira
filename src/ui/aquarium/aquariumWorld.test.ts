@@ -352,7 +352,7 @@ describe('aquariumWorld', () => {
   });
 
   it('lets a fish get fat until it pops like a bubble, for good', () => {
-    const world = createWorld(oneFish(BURST_MASS - 0.1), 800, 600, steady);
+    const world = createWorld(oneFish(BURST_MASS - 0.05), 800, 600, steady);
     const [fish] = world.fishes;
     world.food.push({ x: fish.x, y: fish.y, age: 0, sway: 0 });
 
