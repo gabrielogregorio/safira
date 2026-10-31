@@ -27,6 +27,9 @@ describe('i18n', () => {
     ['', 'pt-br', 'en-US', 'pt-br'],
     ['', null, 'pt-BR', 'pt-br'],
     ['', null, 'es-AR', 'es'],
+    ['', null, 'zh-TW', 'zh-cn'],
+    ['', null, 'ja-JP', 'ja'],
+    ['?lang=ja', 'es', 'pt-BR', 'ja'],
     ['', null, 'fr-FR', 'en-us'],
     ['?lang=xx', 'nada', 'en-US', 'en-us'],
   ])('detects the language for %s, saved %s, browser %s', (search, saved, browser, expected) => {
@@ -35,6 +38,8 @@ describe('i18n', () => {
 
   it('has the same keys in every dictionary', () => {
     expect(Object.keys(dictionaries.es).sort(byText)).toEqual(Object.keys(dictionaries['pt-br']).sort(byText));
+    expect(Object.keys(dictionaries['zh-cn']).sort(byText)).toEqual(Object.keys(dictionaries['pt-br']).sort(byText));
+    expect(Object.keys(dictionaries.ja).sort(byText)).toEqual(Object.keys(dictionaries['pt-br']).sort(byText));
   });
 
   it('translates every key used by the interface', () => {

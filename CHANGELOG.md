@@ -23,7 +23,9 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Import and export of projects as `.zip`, into a new project or the open one.
 - Lessons in real markdown, with colored code and a button to open each example in the IDE.
 - Resizable panels, by mouse and keyboard, kept between sessions.
-- Language changes rewrite the letters of the interface, and themes change in the scenery itself.
+- Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
+- Interface and error messages in Simplified Chinese and Japanese.
+- A 3D sapphire as the logo, written directly in WebGL 2. It spins and points at the mouse, stands still with the reduced motion preference and falls back to a flat logo without WebGL.
 - Modals with an overlay, a retro opening and a closing animation, closing when clicking outside.
 - Confirmation before deleting a project or a file.
 - Styled mouse cursor and scrollbars.

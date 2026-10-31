@@ -1,4 +1,10 @@
-import { collectTextNodes, randomCharacter, scrambleDocument, scrambleFrame } from './textScramble';
+import {
+  collectTextNodes,
+  randomCharacter,
+  randomCharacterLike,
+  scrambleDocument,
+  scrambleFrame,
+} from './textScramble';
 
 const pickX = (): string => 'x';
 
@@ -19,6 +25,11 @@ describe('scrambleFrame', () => {
     expect(scrambleFrame('a b c', 0, pickX)).toBe('x x x');
   });
 
+  it('scrambles ideographs among ideographs and Latin letters among Latin letters', () => {
+    expect(randomCharacterLike('语')).toMatch(/^[\u3040-\u30ff\u3400-\u9fff]$/);
+    expect(randomCharacterLike('a')).toMatch(/^[\x21-\x7e]$/);
+  });
+
   it('picks a single visible character', () => {
     expect(randomCharacter()).toMatch(/^\S$/);
   });
@@ -34,6 +45,20 @@ describe('collectTextNodes', () => {
     `;
 
     expect(collectTextNodes(document.body).map((node) => node.nodeValue)).toEqual(['interface', 'atras do modal']);
+  });
+});
+
+describe('collectTextNodes with fixed text', () => {
+  it('leaves names that are not translated alone', () => {
+    document.body.innerHTML = '<p>interface</p><span data-fixed-text>Meu projeto</span>';
+
+    expect(collectTextNodes(document.body).map((node) => node.nodeValue)).toEqual(['interface']);
+  });
+
+  it('still takes a translated control inside fixed content', () => {
+    document.body.innerHTML = '<div data-fixed-text><p>aula</p><button data-translated>Open</button></div>';
+
+    expect(collectTextNodes(document.body).map((node) => node.nodeValue)).toEqual(['Open']);
   });
 });
 

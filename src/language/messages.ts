@@ -1,6 +1,6 @@
 import messages from './messages.json';
 
-export type Locale = 'pt-br' | 'en-us' | 'es';
+export type Locale = 'pt-br' | 'en-us' | 'es' | 'zh-cn' | 'ja';
 export type MessageKey = keyof typeof messages;
 
 const FALLBACK_LOCALE: Locale = 'pt-br';

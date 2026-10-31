@@ -67,7 +67,7 @@ export const LessonsScreen = ({
                 onClick={() => {
                   onMarkRead(lesson.id);
                 }}>
-                {tutorial.title}
+                <span data-fixed-text>{tutorial.title}</span>
                 {readLessons.includes(tutorial.id) ? ` (${t('Read')})` : ''}
               </a>
             </li>
@@ -76,7 +76,7 @@ export const LessonsScreen = ({
       </nav>
       <main id="content" tabIndex={-1} className="lesson-page">
         <article ref={articleRef} className="lesson" key={lesson.id}>
-          <h1>{lesson.title}</h1>
+          <h1 data-fixed-text>{lesson.title}</h1>
           <LessonMarkdown
             lessonId={lesson.id}
             text={lesson.text}

@@ -31,6 +31,9 @@ project has its own virtual files, which is where `crie o arquivo`, `leia o arqu
 Click the dot beside a line to set a breakpoint: running stops there, and the variables inspector shows the values. On a
 phone the IDE splits into Code, Output and Variables panels.
 
+The interface comes in English, Portuguese, Spanish, Simplified Chinese and Japanese. Lessons and examples are in
+Portuguese. Text marked `data-fixed-text`, such as project names, stays out of the language animation.
+
 Every screen has an address: `#/new/16-listas`, `#/lessons/aula-02-exibicao/comando-de-exibicao`,
 `#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, and unsaved work is kept while typing
 so that it comes back after a crash or a power cut.

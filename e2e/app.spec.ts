@@ -396,12 +396,37 @@ test('changing the language several times always ends on the text of the chosen 
   await language.click();
   await expect(title).toHaveText('Crear proyecto');
   await language.click();
+  await expect(title).toHaveText('创建项目');
+  await language.click();
+  await expect(title).toHaveText('プロジェクトを作成');
+  await language.click();
   await expect(title).toHaveText('Create project');
 
-  await language.click();
-  await language.click();
-  await language.click();
+  for (let click = 0; click < 5; click += 1) {
+    await language.click();
+  }
+
   await expect(title).toHaveText('Create project');
+});
+
+test('names that are not translated stay still during the language change', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.getByRole('button', { name: 'Back to projects' }).click();
+  const name = await page.locator('.project-name').first().textContent();
+  await page.evaluate(() => {
+    const changes: string[] = [];
+    new MutationObserver(() => {
+      changes.push('changed');
+    }).observe(document.querySelector('.project-name') as Element, { characterData: true, subtree: true });
+    Object.assign(window, { nameChanges: changes });
+  });
+  await page.getByRole('button', { name: /^Language: / }).click();
+  await expect(page.locator('.home-settings .button-primary')).toHaveText('Criar projeto');
+
+  await expect(page.locator('.project-name').first()).toHaveText(name ?? '');
+  expect(await page.evaluate(() => (window as unknown as { nameChanges: string[] }).nameChanges)).toEqual([]);
 });
 
 test('closing a modal plays the closing animation and leaves nothing behind', async ({ page }) => {
@@ -460,6 +485,28 @@ test('the IDE starts with the language icon and leaves the theme to the Interfac
 
   await expect(toolbar.locator('> :first-child')).toHaveAttribute('aria-label', 'Language: English');
   await expect(page.getByRole('button', { name: /^Theme: / })).toHaveCount(0);
+});
+
+test('the home screen keeps theme and language in the top right corner, also on a narrow phone', async ({ page }) => {
+  for (const width of [1280, 320]) {
+    await page.setViewportSize({ width, height: 700 });
+    await page.goto('/');
+    const hero = await page.locator('.home-hero').boundingBox();
+    const corner = await page.locator('.home-corner').boundingBox();
+    const brand = await page.locator('.home-brand').boundingBox();
+
+    expect(corner?.y).toBe(brand?.y);
+    expect((corner?.x ?? 0) + (corner?.width ?? 0)).toBeLessThanOrEqual((hero?.x ?? 0) + (hero?.width ?? 0));
+    expect((hero?.x ?? 0) + (hero?.width ?? 0) - (corner?.x ?? 0) - (corner?.width ?? 0)).toBeLessThan(40);
+  }
+});
+
+test('the logo is a live 3D gem', async ({ page }) => {
+  await page.goto('/');
+  await page.mouse.move(900, 300);
+
+  await expect(page.locator('canvas.safira-logo')).toBeVisible();
+  await expect(page.locator('svg.safira-logo')).toHaveCount(0);
 });
 
 test('language is available on every screen', async ({ page }) => {

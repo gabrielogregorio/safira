@@ -21,7 +21,9 @@
   --color-debug-line: #c6e6ff;
   --color-error-line: #ffd6dc;
   --color-hover: rgb(58 170 240 / 28%);
-  --font-ui: 'Segoe UI', Frutiger, 'Myriad Pro', 'Trebuchet MS', system-ui, sans-serif;
+  --font-ui:
+    'Segoe UI', Frutiger, 'Myriad Pro', 'Trebuchet MS', system-ui, 'PingFang SC', 'Hiragino Sans', 'Microsoft YaHei',
+    'Yu Gothic', 'Noto Sans CJK SC', 'Noto Sans CJK JP', sans-serif;
   --font-code: 'Fira Code', ui-monospace, Consolas, monospace;
   --shadow-panel: 0 8px 28px rgb(6 50 100 / 28%), inset 0 1px 0 rgb(255 255 255 / 85%);
   --radius-panel: 16px;
@@ -354,7 +356,7 @@ select {
 }
 
 .safira-logo {
-  filter: drop-shadow(0 2px 4px rgb(6 50 100 / 40%));
+  filter: drop-shadow(0 3px 7px rgb(8 60 170 / 45%));
   flex: none;
 }
 
@@ -377,6 +379,11 @@ select {
   display: flex;
   gap: 12px;
   margin-bottom: 8px;
+}
+
+.home-corner {
+  align-self: flex-start;
+  margin-left: auto;
 }
 
 .home-brand h1 {
@@ -517,7 +524,6 @@ select {
 
 .orb-wheel {
   transform-box: view-box;
-  transform-origin: 24px 54px;
   transition: transform 700ms cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
@@ -1660,6 +1666,19 @@ select {
   .home-hero,
   .home-section {
     padding: 14px;
+  }
+
+  .home-brand {
+    gap: 8px;
+  }
+
+  .home-brand h1 {
+    font-size: 2rem;
+  }
+
+  .home-brand .safira-logo {
+    max-height: 56px;
+    max-width: 56px;
   }
 
   .modal-backdrop {

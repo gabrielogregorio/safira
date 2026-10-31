@@ -7,6 +7,8 @@ export const LOCALES: { id: Locale; label: string }[] = [
   { id: 'en-us', label: 'English' },
   { id: 'pt-br', label: 'Português (Brasil)' },
   { id: 'es', label: 'Español' },
+  { id: 'zh-cn', label: '简体中文' },
+  { id: 'ja', label: '日本語' },
 ];
 
 export type Translate = (key: TranslationKey, values?: Record<string, string | number>) => string;
@@ -24,14 +26,19 @@ export const createTranslator =
 
 const isLocale = (value: string | null): value is Locale => LOCALES.some((locale) => locale.id === value);
 
+const BROWSER_LANGUAGES: [string, Locale][] = [
+  ['pt', 'pt-br'],
+  ['es', 'es'],
+  ['zh', 'zh-cn'],
+  ['ja', 'ja'],
+];
+
 const fromBrowserLanguage = (language: string): Locale => {
   const lower = language.toLowerCase();
 
-  if (lower.startsWith('pt')) {
-    return 'pt-br';
-  }
+  const match = BROWSER_LANGUAGES.find(([prefix]) => lower.startsWith(prefix));
 
-  return lower.startsWith('es') ? 'es' : 'en-us';
+  return match === undefined ? 'en-us' : match[1];
 };
 
 export const detectLocale = (search: string, saved: string | null, browserLanguage: string): Locale => {

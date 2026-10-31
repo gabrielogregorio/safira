@@ -24,7 +24,7 @@ interface HomeScreenProps {
   preferenceToggles: ReactNode;
 }
 
-const HERO_LOGO_SIZE = 64;
+const HERO_LOGO_SIZE = 84;
 
 export const HomeScreen = ({
   projects,
@@ -50,7 +50,8 @@ export const HomeScreen = ({
       <header className="home-hero">
         <div className="home-brand">
           <SafiraLogo size={HERO_LOGO_SIZE} />
-          <h1>Safira</h1>
+          <h1 data-fixed-text>Safira</h1>
+          <div className="home-corner">{preferenceToggles}</div>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">
@@ -69,7 +70,6 @@ export const HomeScreen = ({
           <button type="button" className="button" onClick={onOpenLessons}>
             {t('Lessons')}
           </button>
-          {preferenceToggles}
         </div>
       </header>
 
@@ -79,7 +79,9 @@ export const HomeScreen = ({
         <ul className="project-list">
           {projects.map((project) => (
             <li key={project.id} className="project-row">
-              <span className="project-name">{project.name}</span>
+              <span className="project-name" data-fixed-text>
+                {project.name}
+              </span>
               <a
                 className="button button-primary"
                 href={routeToHash({ name: 'project', projectId: project.id, file: null })}

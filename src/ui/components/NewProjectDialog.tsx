@@ -41,6 +41,7 @@ export const NewProjectDialog = ({ initialExampleId, onCreate, onClose }: NewPro
               <button
                 type="button"
                 className="example-card"
+                data-fixed-text
                 aria-pressed={exampleId === example.id}
                 onClick={() => {
                   setExampleId(exampleId === example.id ? null : example.id);

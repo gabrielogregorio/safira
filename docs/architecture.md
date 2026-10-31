@@ -12,7 +12,8 @@ Safira runs only in the browser. There is no server, and programs never reach th
 | Routing | `src/routing` | Hash addresses for every screen |
 | Interface | `src/ui` | React screens and components |
 | Content | `src/content` | Examples (`.safira`) and lessons (`.md`) |
-| Settings and i18n | `src/settings`, `src/i18n` | Theme, font, panel sizes, language dictionaries |
+| Settings and i18n | `src/settings`, `src/i18n` | Theme, font, panel sizes, dictionaries for en, pt-BR, es, zh-CN and ja |
+| Gem | `src/ui/gem` | The 3D logo: mesh and aim math in `gemMath.ts`, plain WebGL 2 in `gemRenderer.ts`, no 3D library |
 
 `src/language` has no dependency on React or the DOM. The interface only reaches it through `src/runtime`, except for
 pure helpers such as highlighting and formatting.

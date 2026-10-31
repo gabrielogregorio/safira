@@ -15,8 +15,12 @@ interface OrbToggleProps {
 }
 
 const FULL_TURN = 360;
-const PIVOT_X = 24;
-const PIVOT_Y = 54;
+const ORB_CENTER = 24;
+const SLOT_SPACING = 52;
+
+// Slots sit on a circle wide enough to keep only one of them inside the orb, however many there are.
+const pivotHeight = (slotCount: number): number =>
+  Math.round(ORB_CENTER + SLOT_SPACING / (2 * Math.sin(Math.PI / slotCount)));
 
 export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbToggleProps) => {
   const id = useId();
@@ -29,6 +33,7 @@ export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbT
   }
 
   const slotAngle = FULL_TURN / slots.length;
+  const pivotY = pivotHeight(slots.length);
 
   return (
     <button type="button" className="orb-toggle" aria-label={label} title={label} onClick={onClick}>
@@ -44,13 +49,18 @@ export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbT
         </defs>
         <g clipPath={`url(#${id}-orb)`}>
           {backdrop}
-          <g className="orb-wheel" style={{ transform: `rotate(${-(turn + stepsAhead) * slotAngle}deg)` }}>
+          <g
+            className="orb-wheel"
+            style={{
+              transform: `rotate(${-(turn + stepsAhead) * slotAngle}deg)`,
+              transformOrigin: `${ORB_CENTER}px ${pivotY}px`,
+            }}>
             {slots.map((slot, index) => (
               <g
                 key={slot.id}
                 className="orb-slot"
                 data-active={index === activeIndex}
-                transform={`rotate(${index * slotAngle} ${PIVOT_X} ${PIVOT_Y})`}>
+                transform={`rotate(${index * slotAngle} ${ORB_CENTER} ${pivotY})`}>
                 {slot.art}
               </g>
             ))}

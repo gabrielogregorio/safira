@@ -67,6 +67,7 @@ export const LessonMarkdown = ({ lessonId, text, onOpenCode }: LessonMarkdownPro
         <button
           type="button"
           className="button"
+          data-translated
           onClick={() => {
             onOpenCode(code);
           }}>
@@ -83,8 +84,10 @@ export const LessonMarkdown = ({ lessonId, text, onOpenCode }: LessonMarkdownPro
   );
 
   return (
-    <Markdown remarkPlugins={REMARK_PLUGINS} components={{ h2: Heading, pre: CodeBlock, a: Link }}>
-      {text}
-    </Markdown>
+    <div data-fixed-text>
+      <Markdown remarkPlugins={REMARK_PLUGINS} components={{ h2: Heading, pre: CodeBlock, a: Link }}>
+        {text}
+      </Markdown>
+    </div>
   );
 };

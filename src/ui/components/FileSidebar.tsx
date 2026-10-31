@@ -31,7 +31,7 @@ const FolderRow = ({ node, ...actions }: Omit<TreeListProps, 'nodes'> & { node: 
             setIsOpen(!isOpen);
           }}>
           <span aria-hidden="true">{isOpen ? '▾' : '▸'} </span>
-          {node.name}
+          <span data-fixed-text>{node.name}</span>
         </button>
         <button
           type="button"
@@ -87,7 +87,7 @@ const TreeList = ({ nodes, ...actions }: TreeListProps) => {
                 onClick={() => {
                   actions.onOpen(node.path);
                 }}>
-                {node.name}
+                <span data-fixed-text>{node.name}</span>
               </button>
               <button
                 type="button"

@@ -443,7 +443,9 @@ export const EditorScreen = ({
           <span className="label-wide">{t('Back to projects')}</span>
         </button>
         <SafiraLogo size={TOOLBAR_LOGO_SIZE} />
-        <h1 className="toolbar-title">{project.name}</h1>
+        <h1 className="toolbar-title" data-fixed-text>
+          {project.name}
+        </h1>
         <div className="toolbar-actions">
           <button
             type="button"
@@ -507,7 +509,7 @@ export const EditorScreen = ({
               onClick={() => {
                 onSelectFile(tab.file);
               }}>
-              {tab.file}
+              <span data-fixed-text>{tab.file}</span>
               {isDirty(tab) ? <span title={t('Not saved')}> ●</span> : null}
             </button>
             <button
@@ -733,6 +735,7 @@ export const EditorScreen = ({
                   <button
                     type="button"
                     className="menu-item"
+                    data-fixed-text
                     onClick={() => {
                       openFile(file, currentFiles()[file] ?? '');
                     }}>

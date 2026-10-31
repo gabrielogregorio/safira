@@ -12,7 +12,9 @@ describe('LanguageToggle', () => {
   it.each([
     ['en-us', 'pt-br'],
     ['pt-br', 'es'],
-    ['es', 'en-us'],
+    ['es', 'zh-cn'],
+    ['zh-cn', 'ja'],
+    ['ja', 'en-us'],
   ] as const)('goes from %s to %s on click', async (current, next) => {
     const onChange = vi.fn();
     render(<LanguageToggle locale={current} onChange={onChange} />);
