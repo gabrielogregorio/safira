@@ -1,0 +1,11 @@
+#safira 0.9
+# 待つ
+# プログラムは、少し止まってから続けます。
+
+print "よーい..."
+wait 1 second
+
+print "ねらって..."
+wait 1 second
+
+print "スタート!"

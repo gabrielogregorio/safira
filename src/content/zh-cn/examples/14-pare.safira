@@ -1,0 +1,11 @@
+#safira 0.9
+# 停止
+# 立刻跳出重复。
+
+for each number from 1 to 5 {
+    if number is equal to 3 then {
+        break
+    }
+
+    print number
+}

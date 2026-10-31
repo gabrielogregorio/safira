@@ -54,3 +54,7 @@ export const detectLocale = (search: string, saved: string | null, browserLangua
 export const TranslationContext = createContext<Translate>(createTranslator('en-us'));
 
 export const useTranslation = (): Translate => useContext(TranslationContext);
+
+export const LocaleContext = createContext<Locale>('en-us');
+
+export const useLocale = (): Locale => useContext(LocaleContext);

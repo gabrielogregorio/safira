@@ -1,0 +1,11 @@
+#safira 0.9
+# 🎨 计算油漆
+
+print "📐 墙有多少平方米？"
+wall = the number that the user enters
+
+print "🪣 一桶漆能刷多少平方米？"
+can = the number that the user enters
+
+cans = wall / can
+print "🎨 你需要 " + cans + " 桶漆。"

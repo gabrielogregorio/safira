@@ -1,0 +1,10 @@
+#safira 0.9
+# 🎆 新年
+
+for each number from 3 to 1 {
+    print number
+    wait 1 second
+}
+
+print "🎆 🎇 ✨"
+print "🎉 新年快乐！"

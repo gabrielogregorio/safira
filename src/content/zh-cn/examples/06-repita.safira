@@ -1,0 +1,7 @@
+#safira 0.9
+# 重复
+# 你要它做几次，它就做几次。
+
+repeat 3 times {
+    print "你好！"
+}

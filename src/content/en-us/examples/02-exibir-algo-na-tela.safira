@@ -1,0 +1,18 @@
+#safira 0.9
+# Show on screen
+# Each print writes on a new line.
+
+print "Hello, world!"
+print 10 + 5
+
+# Use + to join text and a variable.
+name = "Ana"
+print "Hello, " + name
+
+# Use "on this line" to keep writing on the same line.
+print on this line "Good "
+print on this line "morning!"
+print ""
+
+# Pick a color.
+print "Blue text" in color blue

@@ -1,0 +1,12 @@
+#safira 0.9
+# 🧮 数字求和
+
+total = 0
+
+repeat 3 times {
+    print "请输入一个数字："
+    number = the number that the user enters
+    total = total + number
+}
+
+print "🧮 总和是 " + total

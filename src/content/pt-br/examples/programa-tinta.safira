@@ -1,0 +1,11 @@
+#safira 0.9
+# 🎨 Calcular tinta
+
+mostre "📐 Quantos metros quadrados tem a parede?"
+parede = o número que o usuário digitar
+
+mostre "🪣 Quantos metros pinta uma lata?"
+lata = o número que o usuário digitar
+
+latas = parede / lata
+mostre "🎨 Você precisa de " + latas + " latas."

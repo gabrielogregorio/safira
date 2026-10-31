@@ -1,0 +1,7 @@
+#safira 0.9
+# Repetir
+# Hace lo mismo tantas veces como pidas.
+
+repetir 3 veces {
+    muestra "¡Hola!"
+}

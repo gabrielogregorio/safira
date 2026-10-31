@@ -1,0 +1,12 @@
+#safira 0.9
+# 💧 喝水
+
+print "💧 你今天喝了几杯水？"
+cups = the number that the user enters
+
+if cups is greater than or equal to 8 then {
+    print "💧 太棒了！"
+} else {
+    missing = 8 - cups
+    print "🥤 还差 " + missing + " 杯。"
+}

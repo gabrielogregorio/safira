@@ -1,0 +1,10 @@
+#safira 0.9
+# ライブラリ
+# ライブラリは、ここで使える別のコードファイルです。
+
+create the file "library.safira"
+overwrite "age = 25" to the file "library.safira"
+
+import "library"
+
+print age

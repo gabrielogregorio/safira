@@ -12,7 +12,7 @@ interface LessonMarkdownProps {
 }
 
 const COMBINING_MARKS = /\p{M}/gu;
-const NOT_SLUG_CHARACTER = /[^a-z0-9]+/g;
+const NOT_SLUG_CHARACTER = /[^\p{L}\p{N}]+/gu;
 const REMARK_PLUGINS = [remarkGfm];
 
 export const toSlug = (text: string): string =>

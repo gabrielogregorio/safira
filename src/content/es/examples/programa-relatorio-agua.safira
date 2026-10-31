@@ -1,0 +1,12 @@
+#safira 0.9
+# 💧 Beber agua
+
+muestra "💧 ¿Cuántos vasos de agua bebiste hoy?"
+vasos = el número que ingresa el usuario
+
+si vasos es mayor o igual a 8 entonces {
+    muestra "💧 ¡Muy bien!"
+} si no {
+    faltan = 8 - vasos
+    muestra "🥤 Faltan " + faltan + " vasos."
+}

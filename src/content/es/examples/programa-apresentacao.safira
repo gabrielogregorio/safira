@@ -1,0 +1,8 @@
+#safira 0.9
+# 💎 Presentación
+
+muestra "¿Cómo te llamas?"
+nombre = lo que escribe el usuario
+
+muestra "Mucho gusto, " + nombre + "! 👋"
+muestra "Yo soy Safira 💎" en color azul

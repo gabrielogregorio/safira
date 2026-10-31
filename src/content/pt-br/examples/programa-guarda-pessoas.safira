@@ -1,0 +1,14 @@
+#safira 0.9
+# 👥 Lista de pessoas
+
+lista de pessoas recebe "Ana"
+
+repita 2 vezes {
+    mostre "👤 Digite um nome:"
+    nome = o que o usuário digitar
+    adicione nome no final da lista de pessoas
+}
+
+percorra a lista de pessoas atribuindo em pessoa {
+    mostre "👥 " + pessoa
+}

@@ -1,0 +1,11 @@
+#safira 0.9
+# 继续
+# 跳过这一圈剩下的部分，直接进入下一圈。
+
+for each number from 1 to 5 {
+    if number is equal to 3 then {
+        continue
+    }
+
+    print number
+}

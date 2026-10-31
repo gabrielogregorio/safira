@@ -1,0 +1,11 @@
+#safira 0.9
+# Wait
+# The program takes a pause before going on.
+
+print "Ready..."
+wait 1 second
+
+print "Aim..."
+wait 1 second
+
+print "Go!"

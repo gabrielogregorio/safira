@@ -1,0 +1,7 @@
+#safira 0.9
+# 数をランダムに選ぶ
+# 実行するたびに、違う数が出ます。
+
+dice = a random number between 1 and 6
+
+print "🎲 出た数は " + dice

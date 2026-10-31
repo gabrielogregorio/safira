@@ -1,0 +1,10 @@
+#safira 0.9
+# 函数
+# 函数是一段有名字的代码。需要的时候就可以使用它。
+
+function greet(name) {
+    print "你好，" + name + "！"
+}
+
+greet("小安")
+greet("小美")

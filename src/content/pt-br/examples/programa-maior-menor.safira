@@ -1,0 +1,14 @@
+#safira 0.9
+# 🔼 Maior número
+
+mostre "Digite um número:"
+primeiro = o número que o usuário digitar
+
+mostre "Digite outro número:"
+segundo = o número que o usuário digitar
+
+se primeiro for maior que segundo então {
+    mostre "🔼 O maior é " + primeiro
+} senão {
+    mostre "🔼 O maior é " + segundo
+}

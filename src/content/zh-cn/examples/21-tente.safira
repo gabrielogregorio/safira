@@ -1,0 +1,12 @@
+#safira 0.9
+# 处理错误
+# 如果 try 里面出错，程序也不会停下来。
+
+try {
+    print "我要试一件不可能的事。"
+    this does not exist in safira
+} except {
+    print "出错了，但没关系。"
+}
+
+print "程序继续运行。"

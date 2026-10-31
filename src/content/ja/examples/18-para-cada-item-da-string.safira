@@ -1,0 +1,9 @@
+#safira 0.9
+# 文字を順に見る
+# 文字列の1文字ずつを見ていきます。
+
+word = "Safira"
+
+scroll through word assigning in letter {
+    print letter
+}

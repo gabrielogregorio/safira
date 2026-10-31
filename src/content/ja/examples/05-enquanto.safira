@@ -1,0 +1,12 @@
+#safira 0.9
+# while
+# 条件が正しい間、くり返します。
+
+password = 1
+
+while password is different from 0 {
+    print "終わるには 0 を入力してください:"
+    password = the number that the user enters
+}
+
+print "またね!"

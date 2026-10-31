@@ -1,0 +1,11 @@
+#safira 0.9
+# 增加和减少
+# 改变数字变量的值。
+
+points = 10
+
+increase 5 in points
+print points
+
+decrease 2 in points
+print points

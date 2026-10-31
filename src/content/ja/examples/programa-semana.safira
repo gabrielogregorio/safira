@@ -1,0 +1,15 @@
+#safira 0.9
+# 📅 曜日
+
+print "📅 1から3の数を入力してください:"
+day = the number that the user enters
+
+if day is equal to 1 then {
+    print "日曜日 😴"
+} else if day is equal to 2 then {
+    print "月曜日 😩"
+} else if day is equal to 3 then {
+    print "火曜日 📚"
+} else {
+    print "その日はわかりません。"
+}

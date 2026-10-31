@@ -1,0 +1,7 @@
+#safira 0.9
+# 数数
+# 变量从一个数字走到另一个数字。
+
+for each number from 1 to 5 {
+    print number
+}

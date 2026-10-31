@@ -1,0 +1,16 @@
+#safira 0.9
+# 🚦 红绿灯
+
+repeat 2 times {
+    clear
+    print "🔴 停"
+    wait 2 seconds
+
+    clear
+    print "🟢 行"
+    wait 2 seconds
+
+    clear
+    print "🟠 注意"
+    wait 1 second
+}

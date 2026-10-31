@@ -1,0 +1,14 @@
+#safira 0.9
+# 👥 List of people
+
+list of people receive "Ana"
+
+repeat 2 times {
+    print "👤 Type a name:"
+    name = what the user types
+    add name at the end of the list of people
+}
+
+scroll through the list of people assigning in person {
+    print "👥 " + person
+}

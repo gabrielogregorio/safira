@@ -1,0 +1,9 @@
+#safira 0.9
+# 遍历文字
+# 走过文字里的每个字母。
+
+word = "Safira"
+
+scroll through word assigning in letter {
+    print letter
+}

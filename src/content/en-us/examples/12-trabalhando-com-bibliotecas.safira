@@ -1,0 +1,10 @@
+#safira 0.9
+# Libraries
+# A library is another code file that you can use here.
+
+create the file "library.safira"
+overwrite "age = 25" to the file "library.safira"
+
+import "library"
+
+print age

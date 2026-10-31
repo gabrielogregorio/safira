@@ -1,0 +1,9 @@
+#safira 0.9
+# 変数
+# 変数は、名前がついた小さな箱です。中に値を入れておけます。
+
+name = "Ana"
+age = 20
+
+print name
+print age

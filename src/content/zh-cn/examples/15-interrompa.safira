@@ -1,0 +1,9 @@
+#safira 0.9
+# 中断
+# 结束整个程序。
+
+print "这句会显示。"
+
+interrupt
+
+print "这句不会显示。"

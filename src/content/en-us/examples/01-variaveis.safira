@@ -1,0 +1,9 @@
+#safira 0.9
+# Variables
+# A variable is a little box with a name that holds a value.
+
+name = "Ana"
+age = 20
+
+print name
+print age

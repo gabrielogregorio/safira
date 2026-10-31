@@ -1,0 +1,12 @@
+#safira 0.9
+# 当
+# 条件为真的时候，一直重复。
+
+password = 1
+
+while password is different from 0 {
+    print "输入 0 退出："
+    password = the number that the user enters
+}
+
+print "再见！"

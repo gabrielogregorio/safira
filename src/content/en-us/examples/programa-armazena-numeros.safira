@@ -1,0 +1,12 @@
+#safira 0.9
+# 🧮 Add numbers
+
+total = 0
+
+repeat 3 times {
+    print "Type a number:"
+    number = the number that the user enters
+    total = total + number
+}
+
+print "🧮 The sum is " + total

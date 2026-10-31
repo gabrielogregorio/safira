@@ -1,0 +1,7 @@
+#safira 0.9
+# 随机数
+# 每次运行，都会出现不同的数字。
+
+dice = a random number between 1 and 6
+
+print "🎲 掷出的数字是 " + dice

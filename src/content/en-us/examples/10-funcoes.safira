@@ -1,0 +1,10 @@
+#safira 0.9
+# Functions
+# A function is a named block of code. Use it whenever you want.
+
+function greet(name) {
+    print "Hello, " + name + "!"
+}
+
+greet("Ana")
+greet("Bia")

@@ -1,0 +1,11 @@
+#safira 0.9
+# 等待
+# 程序先暂停一下，再继续。
+
+print "准备……"
+wait 1 second
+
+print "瞄准……"
+wait 1 second
+
+print "开始！"

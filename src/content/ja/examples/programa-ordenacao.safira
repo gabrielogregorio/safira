@@ -1,0 +1,16 @@
+#safira 0.9
+# 🔢 順番に並べる
+
+print "数を入力してください:"
+first = the number that the user enters
+
+print "もう1つ数を入力してください:"
+second = the number that the user enters
+
+if first is less than second then {
+    print first
+    print second
+} else {
+    print second
+    print first
+}

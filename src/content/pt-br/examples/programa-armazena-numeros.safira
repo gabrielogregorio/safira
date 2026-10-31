@@ -1,0 +1,12 @@
+#safira 0.9
+# 🧮 Somar números
+
+soma = 0
+
+repita 3 vezes {
+    mostre "Digite um número:"
+    numero = o número que o usuário digitar
+    soma = soma + numero
+}
+
+mostre "🧮 A soma é " + soma

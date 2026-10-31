@@ -1,0 +1,12 @@
+#safira 0.9
+# Tratar erros
+# Se der erro dentro do tente, o programa não para.
+
+tente {
+    mostre "Vou tentar uma coisa impossível."
+    isso nao existe na safira
+} se der erro {
+    mostre "Deu erro, mas está tudo bem."
+}
+
+mostre "O programa continua."

@@ -1,0 +1,9 @@
+#safira 0.9
+# Recorrer un texto
+# Pasa por cada letra de un texto.
+
+palabra = "Safira"
+
+desplazar palabra asignando en letra {
+    muestra letra
+}

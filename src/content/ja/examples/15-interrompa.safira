@@ -1,0 +1,9 @@
+#safira 0.9
+# interrupt
+# プログラム全体を終わらせます。
+
+print "これは表示されます。"
+
+interrupt
+
+print "これは表示されません。"

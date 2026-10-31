@@ -1,0 +1,13 @@
+#safira 0.9
+# ユーザーに質問する
+# プログラムは止まって、あなたが入力するのを待ちます。
+
+print "お名前は何ですか?"
+name = what the user types
+
+print "何歳ですか?"
+age = the number that the user enters
+
+future = age + 10
+print "こんにちは、" + name
+print "10年後は " + future + " 歳ですね。"

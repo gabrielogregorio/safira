@@ -1,0 +1,9 @@
+#safira 0.9
+# Interrompa
+# Termina o programa inteiro.
+
+mostre "Isto aparece."
+
+interrompa
+
+mostre "Isto não aparece."

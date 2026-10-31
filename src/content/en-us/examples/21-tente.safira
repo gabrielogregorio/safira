@@ -1,0 +1,12 @@
+#safira 0.9
+# Handle errors
+# If something fails inside try, the program does not stop.
+
+try {
+    print "I will try something impossible."
+    this does not exist in safira
+} except {
+    print "There was an error, but it is all fine."
+}
+
+print "The program goes on."

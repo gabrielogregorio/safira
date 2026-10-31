@@ -1,0 +1,16 @@
+#safira 0.9
+# 🚦 Traffic light
+
+repeat 2 times {
+    clear
+    print "🔴 Stop"
+    wait 2 seconds
+
+    clear
+    print "🟢 Go"
+    wait 2 seconds
+
+    clear
+    print "🟠 Careful"
+    wait 1 second
+}

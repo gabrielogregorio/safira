@@ -1,0 +1,9 @@
+#safira 0.9
+# 大文字と小文字
+# 文字の書き方を変えます。
+
+name = "ana maria"
+
+print name in upper case
+print name in lower case
+print name in capitalized

@@ -1,0 +1,18 @@
+#safira 0.9
+# 画面に表示する
+# print を書くたびに、新しい行に表示されます。
+
+print "こんにちは、世界!"
+print 10 + 5
+
+# + を使うと、文字と変数をつなげられます。
+name = "Ana"
+print "こんにちは、" + name
+
+# "on this line" を使うと、同じ行に続けて表示できます。
+print on this line "おは"
+print on this line "よう!"
+print ""
+
+# 色を選べます。
+print "青い文字" in color blue

@@ -1,0 +1,9 @@
+#safira 0.9
+# ファイル
+# 作ったファイルは、プロジェクトのファイルバーに表示されます。
+
+create the file "note.txt"
+add "パンを買う" to the file "note.txt"
+
+text = read the file "note.txt"
+print text

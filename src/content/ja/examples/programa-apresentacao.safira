@@ -1,0 +1,8 @@
+#safira 0.9
+# 💎 自己紹介
+
+print "お名前は何ですか?"
+name = what the user types
+
+print name + "さん、はじめまして! 👋"
+print "わたしはサフィラです 💎" in color blue

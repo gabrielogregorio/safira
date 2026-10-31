@@ -1,0 +1,13 @@
+#safira 0.9
+# 询问用户
+# 程序会停下来，等你输入。
+
+print "你叫什么名字？"
+name = what the user types
+
+print "你几岁了？"
+age = the number that the user enters
+
+future = age + 10
+print "你好，" + name
+print "10 年后你就是 " + future + " 岁了"

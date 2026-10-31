@@ -1,0 +1,9 @@
+#safira 0.9
+# Upper and lower case
+# Changes the way a text is written.
+
+name = "ana maria"
+
+print name in upper case
+print name in lower case
+print name in capitalized

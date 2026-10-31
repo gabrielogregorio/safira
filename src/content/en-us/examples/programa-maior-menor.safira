@@ -1,0 +1,14 @@
+#safira 0.9
+# 🔼 Biggest number
+
+print "Type a number:"
+first = the number that the user enters
+
+print "Type another number:"
+second = the number that the user enters
+
+if first is greater than second then {
+    print "🔼 The biggest is " + first
+} else {
+    print "🔼 The biggest is " + second
+}

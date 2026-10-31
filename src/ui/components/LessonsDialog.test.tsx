@@ -1,7 +1,9 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { tutorials } from '@/content/content';
+import { lessonsOf } from '@/content/content';
 import { LessonsDialog } from './LessonsDialog';
+
+const tutorials = lessonsOf('en-us');
 
 const setup = (lessonId: string | null = null, readLessons: string[] = []) => {
   const actions = { onMarkRead: vi.fn(), onOpenCode: vi.fn(), onClose: vi.fn() };
@@ -48,7 +50,7 @@ describe('LessonsDialog', () => {
     const { onOpenCode } = setup('aula-02-exibicao');
     await userEvent.click(screen.getAllByRole('button', { name: 'Open in the IDE' })[0]);
 
-    expect(onOpenCode).toHaveBeenCalledExactlyOnceWith('aula-02-exibicao', expect.stringContaining('mostre'));
+    expect(onOpenCode).toHaveBeenCalledExactlyOnceWith('aula-02-exibicao', expect.stringContaining('print'));
   });
 
   it('closes like any modal', async () => {

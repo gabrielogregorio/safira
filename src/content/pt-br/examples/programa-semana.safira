@@ -1,0 +1,15 @@
+#safira 0.9
+# 📅 Dia da semana
+
+mostre "📅 Digite um número de 1 a 3:"
+dia = o número que o usuário digitar
+
+se dia for igual a 1 então {
+    mostre "Domingo 😴"
+} senão se dia for igual a 2 então {
+    mostre "Segunda 😩"
+} senão se dia for igual a 3 então {
+    mostre "Terça 📚"
+} senão {
+    mostre "Esse dia eu não conheço."
+}

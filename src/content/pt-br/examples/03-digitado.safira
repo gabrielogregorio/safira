@@ -1,0 +1,13 @@
+#safira 0.9
+# Perguntar ao usuário
+# O programa para e espera você digitar.
+
+mostre "Qual é o seu nome?"
+nome = o que o usuário digitar
+
+mostre "Quantos anos você tem?"
+idade = o número que o usuário digitar
+
+futuro = idade + 10
+mostre "Olá, " + nome
+mostre "Daqui a 10 anos você terá " + futuro

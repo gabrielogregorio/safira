@@ -1,0 +1,9 @@
+#safira 0.9
+# 变量
+# 变量就像一个有名字的小盒子，里面装着一个值。
+
+name = "小安"
+age = 20
+
+print name
+print age

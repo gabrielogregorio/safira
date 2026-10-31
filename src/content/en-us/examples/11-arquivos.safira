@@ -1,0 +1,9 @@
+#safira 0.9
+# Files
+# The file you create shows up in the project's files bar.
+
+create the file "note.txt"
+add "Buy bread" to the file "note.txt"
+
+text = read the file "note.txt"
+print text

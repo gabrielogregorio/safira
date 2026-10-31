@@ -1,0 +1,10 @@
+#safira 0.9
+# 库
+# 库就是另一个代码文件，你可以在这里使用它。
+
+create the file "library.safira"
+overwrite "age = 25" to the file "library.safira"
+
+import "library"
+
+print age

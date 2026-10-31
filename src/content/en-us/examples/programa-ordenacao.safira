@@ -1,0 +1,16 @@
+#safira 0.9
+# 🔢 Put in order
+
+print "Type a number:"
+first = the number that the user enters
+
+print "Type another number:"
+second = the number that the user enters
+
+if first is less than second then {
+    print first
+    print second
+} else {
+    print second
+    print first
+}

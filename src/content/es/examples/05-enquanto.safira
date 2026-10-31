@@ -1,0 +1,12 @@
+#safira 0.9
+# Mientras
+# Repite mientras la condición sea verdadera.
+
+clave = 1
+
+mientras clave es diferente de 0 {
+    muestra "Escribe 0 para salir:"
+    clave = el número que ingresa el usuario
+}
+
+muestra "¡Hasta luego!"

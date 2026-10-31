@@ -1,0 +1,12 @@
+#safira 0.9
+# 💧 水を飲もう
+
+print "💧 今日は水を何杯飲みましたか?"
+cups = the number that the user enters
+
+if cups is greater than or equal to 8 then {
+    print "💧 よくできました!"
+} else {
+    missing = 8 - cups
+    print "🥤 あと " + missing + " 杯です。"
+}

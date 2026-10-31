@@ -1,0 +1,15 @@
+#safira 0.9
+# 📅 星期几
+
+print "📅 请输入 1 到 3 之间的数字："
+day = the number that the user enters
+
+if day is equal to 1 then {
+    print "星期日 😴"
+} else if day is equal to 2 then {
+    print "星期一 😩"
+} else if day is equal to 3 then {
+    print "星期二 📚"
+} else {
+    print "我不认识这一天。"
+}

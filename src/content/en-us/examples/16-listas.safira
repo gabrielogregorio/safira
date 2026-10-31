@@ -1,0 +1,12 @@
+#safira 0.9
+# Lists
+# A list holds many values in a single variable.
+
+list of groceries receive "apple", "bread"
+
+add "milk" at the end of the list of groceries
+remove "bread" from the list of groceries
+
+print groceries
+print list of groceries in position 1
+print the size of the list of groceries

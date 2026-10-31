@@ -1,0 +1,12 @@
+#safira 0.9
+# エラーに対処する
+# try の中でエラーが出ても、プログラムは止まりません。
+
+try {
+    print "ありえないことをやってみます。"
+    this does not exist in safira
+} except {
+    print "エラーになりましたが、大丈夫です。"
+}
+
+print "プログラムは続きます。"

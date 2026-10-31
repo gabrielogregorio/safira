@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-import { tutorials } from '@/content/content';
-import { useTranslation } from '@/i18n/i18n';
+import { lessonsOf } from '@/content/content';
+import { useLocale, useTranslation } from '@/i18n/i18n';
 import { LessonMarkdown } from './LessonMarkdown';
 import { Modal } from './Modal';
 
@@ -24,6 +24,7 @@ export const LessonsDialog = ({
   onClose,
 }: LessonsDialogProps) => {
   const t = useTranslation();
+  const tutorials = lessonsOf(useLocale());
   const articleRef = useRef<HTMLElement>(null);
   const index = Math.max(
     tutorials.findIndex((tutorial) => tutorial.id === lessonId),

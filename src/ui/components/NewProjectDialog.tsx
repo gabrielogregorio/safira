@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { examples } from '@/content/content';
-import { useTranslation } from '@/i18n/i18n';
+import { examplesOf } from '@/content/content';
+import { useLocale, useTranslation } from '@/i18n/i18n';
 import { Modal } from './Modal';
 
 interface NewProjectDialogProps {
@@ -11,6 +11,7 @@ interface NewProjectDialogProps {
 
 export const NewProjectDialog = ({ initialExampleId, onCreate, onClose }: NewProjectDialogProps) => {
   const t = useTranslation();
+  const examples = examplesOf(useLocale());
   const [name, setName] = useState('');
   const [exampleId, setExampleId] = useState<string | null>(initialExampleId);
   const selected = examples.find((example) => example.id === exampleId);

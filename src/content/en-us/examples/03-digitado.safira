@@ -1,0 +1,13 @@
+#safira 0.9
+# Ask the user
+# The program stops and waits for you to type.
+
+print "What is your name?"
+name = what the user types
+
+print "How old are you?"
+age = the number that the user enters
+
+future = age + 10
+print "Hello, " + name
+print "In 10 years you will be " + future

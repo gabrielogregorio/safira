@@ -1,0 +1,16 @@
+#safira 0.9
+# 🚦 信号
+
+repeat 2 times {
+    clear
+    print "🔴 止まれ"
+    wait 2 seconds
+
+    clear
+    print "🟢 進め"
+    wait 2 seconds
+
+    clear
+    print "🟠 注意"
+    wait 1 second
+}

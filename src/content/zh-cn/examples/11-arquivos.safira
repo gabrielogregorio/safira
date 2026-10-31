@@ -1,0 +1,9 @@
+#safira 0.9
+# 文件
+# 创建的文件会出现在项目的文件栏里。
+
+create the file "note.txt"
+add "买面包" to the file "note.txt"
+
+text = read the file "note.txt"
+print text

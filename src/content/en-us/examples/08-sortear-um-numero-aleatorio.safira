@@ -1,0 +1,7 @@
+#safira 0.9
+# Draw a number
+# Each time it runs, a different number comes out.
+
+die = a random number between 1 and 6
+
+print "🎲 The number was " + die

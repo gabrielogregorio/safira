@@ -1,0 +1,10 @@
+#safira 0.9
+# 🎆 New Year
+
+for each number from 3 to 1 {
+    print number
+    wait 1 second
+}
+
+print "🎆 🎇 ✨"
+print "🎉 Happy New Year!"

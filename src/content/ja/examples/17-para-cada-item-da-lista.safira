@@ -1,0 +1,9 @@
+#safira 0.9
+# リストを順に見る
+# 1つずつ、すべての項目を見ていきます。
+
+list of fruits receive "ぶどう", "りんご", "マンゴー"
+
+scroll through the list of fruits assigning in fruit {
+    print fruit
+}

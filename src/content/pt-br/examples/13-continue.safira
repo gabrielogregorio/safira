@@ -1,0 +1,11 @@
+#safira 0.9
+# Continue
+# Pula o resto da volta e vai para a próxima.
+
+para cada numero de 1 até 5 {
+    se numero for igual a 3 então {
+        continue
+    }
+
+    mostre numero
+}

@@ -1,0 +1,10 @@
+#safira 0.9
+# 🎄 Christmas
+
+print "    ⭐"
+print "   🎄🎄"
+print "  🎄🔴🎄"
+print " 🎄🟡🎄🔵"
+print "    🟫"
+print ""
+print "🎅 Merry Christmas!"

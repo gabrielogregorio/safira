@@ -1,0 +1,8 @@
+#safira 0.9
+# 💎 自我介绍
+
+print "你叫什么名字？"
+name = what the user types
+
+print "很高兴认识你，" + name + "！👋"
+print "我是 Safira 💎" in color blue

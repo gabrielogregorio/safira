@@ -1,0 +1,11 @@
+#safira 0.9
+# 🎨 ペンキの量を計算する
+
+print "📐 壁は何平方メートルですか?"
+wall = the number that the user enters
+
+print "🪣 1缶で何平方メートル塗れますか?"
+can = the number that the user enters
+
+cans = wall / can
+print "🎨 " + cans + " 缶必要です。"

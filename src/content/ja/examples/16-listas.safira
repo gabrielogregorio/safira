@@ -1,0 +1,12 @@
+#safira 0.9
+# リスト
+# リストは、たくさんの値を1つの変数に入れておけます。
+
+list of shopping receive "りんご", "パン"
+
+add "牛乳" at the end of the list of shopping
+remove "パン" from the list of shopping
+
+print shopping
+print list of shopping in position 1
+print the size of the list of shopping

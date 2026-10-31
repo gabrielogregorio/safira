@@ -1,0 +1,9 @@
+#safira 0.9
+# Interrupt
+# Ends the whole program.
+
+print "This shows up."
+
+interrupt
+
+print "This does not show up."

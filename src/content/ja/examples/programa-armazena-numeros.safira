@@ -1,0 +1,12 @@
+#safira 0.9
+# 🧮 数を足す
+
+total = 0
+
+repeat 3 times {
+    print "数を入力してください:"
+    number = the number that the user enters
+    total = total + number
+}
+
+print "🧮 合計は " + total
