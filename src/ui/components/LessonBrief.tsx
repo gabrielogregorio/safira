@@ -62,7 +62,7 @@ const describeStatus = (t: Translate, props: LessonBriefProps): string => {
     return isChallenge ? t('Correct! Challenge complete.') : t('Well done! You can move on.');
   }
 
-  return isChallenge ? t('Write your answer and press ▶ Run.') : t('Press ▶ Run to see it work.');
+  return isChallenge ? t('Write your answer and press ▶ Run.') : t('Press ▶');
 };
 
 export const LessonBrief = (props: LessonBriefProps) => {

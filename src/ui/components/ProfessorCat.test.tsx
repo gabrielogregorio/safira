@@ -51,7 +51,7 @@ describe('ProfessorCat', () => {
 
     await press('Continue');
 
-    expect(screen.getByText('Press ▶ Run to see it work.')).toBeInTheDocument();
+    expect(screen.getByText('Press ▶')).toBeInTheDocument();
   });
 
   it('lights the Run button only while asking for a run', async () => {

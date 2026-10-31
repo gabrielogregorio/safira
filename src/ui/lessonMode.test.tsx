@@ -70,7 +70,7 @@ describe('lesson mode', () => {
 
     await userEvent.click(continueButton());
 
-    expect(screen.getByText('Press ▶ Run to see it work.')).toBeInTheDocument();
+    expect(screen.getByText('Press ▶')).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument();
 
     await run();

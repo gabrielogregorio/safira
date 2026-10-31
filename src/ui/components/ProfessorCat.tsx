@@ -551,7 +551,7 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
             </>
           ) : null}
           {scene === 'play' ? (
-            <p>{step.check === null ? t('Press ▶ Run to see it work.') : t('Write your answer and press ▶ Run.')}</p>
+            <p>{step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.')}</p>
           ) : null}
           {scene === 'result' ? (
             <>
