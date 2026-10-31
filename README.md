@@ -63,7 +63,7 @@ between PCs.
 | `pnpm run lint` / `pnpm run format` | ESLint and TypeScript / Prettier |
 | `pnpm run unit` / `pnpm run unit:coverage` | Unit tests, with or without the coverage gate |
 | `pnpm run e2e` | Playwright with axe, against the build |
-| `pnpm run e2e:resources` | Memory in real use, with `pnpm run preview` running |
+| `pnpm run e2e:resources` | Memory and CPU in real use and idle, with `pnpm run preview` running. Memory fails the check, CPU is reported |
 | `pnpm run e2e:lighthouse` | Lighthouse floors, with `pnpm run preview` running |
 | `pnpm run check:all` | Format, lint, coverage, build and E2E |
 

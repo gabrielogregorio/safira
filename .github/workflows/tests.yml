@@ -43,12 +43,11 @@ jobs:
       - name: Run the production build against the E2E suite
         run: pnpm run e2e
 
-      - name: Measure memory in real use
+      - name: Measure memory and CPU in real use
         run: |
           pnpm run preview --host 127.0.0.1 &
           until curl -sf http://127.0.0.1:5556/ > /dev/null; do sleep 1; done
           pnpm run e2e:resources
-          jq -r '"Peak memory: \(.peak) MB (limit \(.limit) MB)"' resourceUsageReport.json >> "$GITHUB_STEP_SUMMARY"
 
       - name: Upload the failure report
         if: ${{ failure() }}
