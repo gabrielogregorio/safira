@@ -6,6 +6,7 @@ import {
   joinPath,
   sanitizePath,
   visibleFiles,
+  provisionalName,
 } from './fileTree';
 
 describe('buildFileTree', () => {
@@ -75,5 +76,24 @@ describe('paths', () => {
   it('hides folder markers from file lists', () => {
     expect(isFolderMarker('a/.keep')).toBe(true);
     expect(visibleFiles(['a/.keep', 'b.txt'])).toEqual(['b.txt']);
+  });
+});
+
+describe('provisionalName', () => {
+  it('uses the base when it is free', () => {
+    expect(provisionalName('novo', '.safira', ['main.safira'], null)).toBe('novo.safira');
+  });
+
+  it('numbers the name past the ones in use', () => {
+    expect(provisionalName('novo', '.safira', ['novo.safira', 'novo-2.safira'], null)).toBe('novo-3.safira');
+  });
+
+  it('only looks inside the target folder', () => {
+    expect(provisionalName('novo', '.safira', ['novo.safira'], 'dados')).toBe('novo.safira');
+    expect(provisionalName('novo', '.safira', ['dados/novo.safira'], 'dados')).toBe('novo-2.safira');
+  });
+
+  it('sees folders as taken names', () => {
+    expect(provisionalName('pasta', '', ['pasta/.keep'], null)).toBe('pasta-2');
   });
 });

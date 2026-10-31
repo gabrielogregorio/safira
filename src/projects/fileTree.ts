@@ -32,6 +32,23 @@ export const joinPath = (folder: string | null, name: string): string => (folder
 
 export const isInsideFolder = (path: string, folder: string): boolean => path.startsWith(`${folder}/`);
 
+export const provisionalName = (base: string, extension: string, paths: string[], folder: string | null): string => {
+  const isTaken = (name: string): boolean => {
+    const path = joinPath(folder, name);
+
+    return paths.some((existing) => existing === path || isInsideFolder(existing, path));
+  };
+  let candidate = `${base}${extension}`;
+  let copy = 2;
+
+  while (isTaken(candidate)) {
+    candidate = `${base}-${copy}${extension}`;
+    copy += 1;
+  }
+
+  return candidate;
+};
+
 const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
   if (first.kind !== second.kind) {
     return first.kind === 'folder' ? -1 : 1;

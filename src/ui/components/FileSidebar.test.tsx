@@ -1,12 +1,22 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FileSidebar } from './FileSidebar';
 
 const setup = () => {
-  const actions = { onOpen: vi.fn(), onNewFile: vi.fn(), onNewFolder: vi.fn(), onDelete: vi.fn() };
-  render(<FileSidebar paths={['main.safira', 'dados/a.txt', 'vazia/.keep']} activeFile="dados/a.txt" {...actions} />);
+  const actions = { onOpen: vi.fn(), onCreateFile: vi.fn(), onCreateFolder: vi.fn(), onDelete: vi.fn() };
+  render(
+    <FileSidebar
+      paths={['main.safira', 'dados/a.txt', 'vazia/.keep', 'new-file.safira']}
+      activeFile="dados/a.txt"
+      {...actions}
+    />,
+  );
 
   return actions;
+};
+
+const rightClick = (name: string): void => {
+  fireEvent.contextMenu(screen.getByRole('button', { name }));
 };
 
 describe('FileSidebar', () => {
@@ -26,29 +36,90 @@ describe('FileSidebar', () => {
     expect(onOpen).toHaveBeenCalledWith('dados/a.txt');
   });
 
-  it('creates at the root', async () => {
-    const { onNewFile, onNewFolder } = setup();
+  it('shows the new file in the tree with a free name, selected', async () => {
+    setup();
     await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+    const input = screen.getByLabelText<HTMLInputElement>('File name');
+
+    expect(input).toHaveValue('new-file-2.safira');
+    expect(input).toHaveFocus();
+    expect(input.selectionStart).toBe(0);
+    expect(input.selectionEnd).toBe(input.value.length);
+  });
+
+  it('replaces the selected name with what is typed', async () => {
+    const { onCreateFile } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+    await userEvent.keyboard('notas{Enter}');
+
+    expect(onCreateFile).toHaveBeenCalledExactlyOnceWith(null, 'notas');
+    expect(screen.queryByLabelText('File name')).not.toBeInTheDocument();
+  });
+
+  it('keeps the provisional name when the focus moves away', async () => {
+    const { onCreateFolder } = setup();
     await userEvent.click(screen.getByRole('button', { name: 'New folder' }));
+    await userEvent.click(document.body);
 
-    expect(onNewFile).toHaveBeenCalledWith(null);
-    expect(onNewFolder).toHaveBeenCalledWith(null);
+    expect(onCreateFolder).toHaveBeenCalledExactlyOnceWith(null, 'new-folder');
   });
 
-  it('creates inside a folder', async () => {
-    const { onNewFile, onNewFolder } = setup();
-    await userEvent.click(screen.getByRole('button', { name: 'New file in dados' }));
-    await userEvent.click(screen.getByRole('button', { name: 'New folder in dados' }));
+  it('falls back to the provisional name when the field is emptied', async () => {
+    const { onCreateFolder } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'New folder' }));
+    await userEvent.keyboard('{Backspace}{Enter}');
 
-    expect(onNewFile).toHaveBeenCalledWith('dados');
-    expect(onNewFolder).toHaveBeenCalledWith('dados');
+    expect(onCreateFolder).toHaveBeenCalledWith(null, 'new-folder');
   });
 
-  it('asks to delete files and folders', async () => {
+  it('cancels with Escape', async () => {
+    const { onCreateFile } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+    await userEvent.keyboard('{Escape}');
+
+    expect(onCreateFile).not.toHaveBeenCalled();
+    expect(screen.queryByLabelText('File name')).not.toBeInTheDocument();
+  });
+
+  it('has no delete button on the rows', () => {
+    setup();
+
+    expect(screen.queryByRole('button', { name: /Delete/ })).not.toBeInTheDocument();
+  });
+
+  it('deletes from the right click menu', async () => {
     const { onDelete } = setup();
-    await userEvent.click(screen.getByRole('button', { name: 'Delete dados' }));
+    rightClick('main.safira');
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Delete' }));
+
+    expect(onDelete).toHaveBeenCalledWith(expect.objectContaining({ kind: 'file', path: 'main.safira' }));
+  });
+
+  it('deletes a folder from the right click menu', async () => {
+    const { onDelete } = setup();
+    rightClick('dados');
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Delete' }));
 
     expect(onDelete).toHaveBeenCalledWith(expect.objectContaining({ kind: 'folder', path: 'dados' }));
+  });
+
+  it('creates inside a folder from the right click menu, opening it if closed', async () => {
+    const { onCreateFile } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'dados', expanded: true }));
+    rightClick('dados');
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'New file' }));
+    await userEvent.keyboard('lib{Enter}');
+
+    expect(onCreateFile).toHaveBeenCalledWith('dados', 'lib');
+  });
+
+  it('creates a folder inside a folder from the right click menu', async () => {
+    const { onCreateFolder } = setup();
+    rightClick('dados');
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'New folder' }));
+    await userEvent.keyboard('sub{Enter}');
+
+    expect(onCreateFolder).toHaveBeenCalledWith('dados', 'sub');
   });
 
   it('collapses a folder', async () => {
