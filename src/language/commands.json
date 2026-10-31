@@ -1,0 +1,1047 @@
+{
+  "percorrer_lst_str_a_cada": {
+    "color": "lista",
+    "phrases": [
+      "from",
+      "de"
+    ]
+  },
+  "percorrer_lst_str_a_cada_subum": {
+    "color": "lista",
+    "phrases": [
+      "ate",
+      "to",
+      "a"
+    ]
+  },
+  "percorrer_lst_str_a_cada_subdois": {
+    "color": "lista",
+    "phrases": [
+      "a cada",
+      "every",
+      "cada"
+    ]
+  },
+  "percorrer_lst_str_a_cada_final": {
+    "color": "lista",
+    "phrases": []
+  },
+  "percorrer_lst_str_ate": {
+    "color": "lista",
+    "phrases": [
+      "from",
+      "de"
+    ]
+  },
+  "percorrer_lst_str_ate_sub": {
+    "color": "lista",
+    "phrases": [
+      "ate",
+      "to",
+      "a"
+    ]
+  },
+  "percorrer_lst_str_ate_final": {
+    "color": "lista",
+    "phrases": []
+  },
+  "percorra_items": {
+    "color": "lista",
+    "phrases": [
+      "desplazarse por la lista de",
+      "scroll through the list of",
+      "percorra a lista de",
+      "desplazarse por los",
+      "desplacese por las",
+      "scroll through",
+      "desplazar el",
+      "caminar por",
+      "caminhe por",
+      "caminar en",
+      "ande por",
+      "walk for",
+      "ande em",
+      "walk in",
+      "desplazar",
+      "percorra",
+      "caminar",
+      "caminhe",
+      "browse",
+      "buscar",
+      "scroll",
+      "walk"
+    ]
+  },
+  "percorra_items_lista_sub": {
+    "color": "lista",
+    "phrases": [
+      "atribuindo cada valor na variavel",
+      "by assigning the variable",
+      "atribuindo cada valor em",
+      "atribuindo na variavel",
+      "asignando la variable",
+      "by assigning variable",
+      "atribuindo para cada",
+      "assigning for each",
+      "atribuindo em cada",
+      "assigning at each",
+      "asignando a cada",
+      "by assigning in",
+      "atribuindo em",
+      "asignando en",
+      "asignando un",
+      "assigning in",
+      "para cada",
+      "for each"
+    ]
+  },
+  "para_cada": {
+    "color": "condicionais",
+    "phrases": [
+      "para cada",
+      "for each",
+      "for"
+    ]
+  },
+  "para_cada_de": {
+    "color": "lista",
+    "phrases": [
+      "de"
+    ]
+  },
+  "para_cada_ate": {
+    "color": "condicionais",
+    "phrases": [
+      "ate"
+    ]
+  },
+  "matematica_mod": {
+    "color": "contas",
+    "phrases": []
+  },
+  "matematica_elev": {
+    "color": "contas",
+    "phrases": [
+      "elevado por",
+      "elevated by",
+      "elevado a"
+    ]
+  },
+  "matematica_mult": {
+    "color": "contas",
+    "phrases": [
+      "multiplicado por",
+      "multiplied by",
+      "multiplicar",
+      "multiplique",
+      "multiply"
+    ]
+  },
+  "matematica_div": {
+    "color": "contas",
+    "phrases": [
+      "dividido por",
+      "divided by",
+      "dividido"
+    ]
+  },
+  "matematica_sub": {
+    "color": "contas",
+    "phrases": [
+      "menos",
+      "minus"
+    ]
+  },
+  "matematica_add": {
+    "color": "contas",
+    "phrases": [
+      "mais",
+      "plus",
+      "mas"
+    ]
+  },
+  "logico_e": {
+    "color": "logico",
+    "phrases": [
+      "and",
+      "e",
+      "y"
+    ]
+  },
+  "logico_ou": {
+    "color": "logico",
+    "phrases": [
+      "or",
+      "ou",
+      "o"
+    ]
+  },
+  "logico_menor_igual": {
+    "color": "logico",
+    "phrases": [
+      "is less than or equal a",
+      "es menor o igual que",
+      "for menor ou igual a"
+    ]
+  },
+  "logico_maior_igual": {
+    "color": "logico",
+    "phrases": [
+      "is greater than or equal to",
+      "for maior ou igual a",
+      "es mayor o igual a"
+    ]
+  },
+  "logico_diferente": {
+    "color": "logico",
+    "phrases": [
+      "is not equal to",
+      "no es igual a",
+      "is different from",
+      "for diferente de",
+      "es diferente de",
+      "no es igual"
+    ]
+  },
+  "logico_igual": {
+    "color": "logico",
+    "phrases": [
+      "for igual a",
+      "is equal to",
+      "es igual a",
+      "equals"
+    ]
+  },
+  "logico_maior": {
+    "color": "logico",
+    "phrases": [
+      "is greater than",
+      "for maior que",
+      "es mayor que"
+    ]
+  },
+  "logico_menor": {
+    "color": "logico",
+    "phrases": [
+      "for menor que",
+      "es menor que",
+      "es menos que",
+      "is less than"
+    ]
+  },
+  "logico_true": {
+    "color": "logico",
+    "phrases": [
+      "verdadeira",
+      "verdadeiro",
+      "verdade",
+      "cierto",
+      "verdad",
+      "truth",
+      "true"
+    ]
+  },
+  "logico_false": {
+    "color": "logico",
+    "phrases": [
+      "mentira",
+      "false",
+      "falso"
+    ]
+  },
+  "na_cor": {
+    "color": "condicionais",
+    "phrases": [
+      "en color",
+      "in color",
+      "na cor",
+      "en",
+      "in"
+    ]
+  },
+  "substitua": {
+    "color": "lista",
+    "phrases": [
+      "reemplace",
+      "substitua",
+      "replace"
+    ]
+  },
+  "substitua_por": {
+    "color": "lista",
+    "phrases": [
+      "with",
+      "con",
+      "por"
+    ]
+  },
+  "substitua_na_variavel": {
+    "color": "lista",
+    "phrases": [
+      "in the variable",
+      "en la variable",
+      "na variavel"
+    ]
+  },
+  "to_lower": {
+    "color": "lista",
+    "phrases": [
+      "in lower case",
+      "para minusculo",
+      "en minusculas",
+      "em minusculo",
+      "to lower"
+    ]
+  },
+  "to_upper": {
+    "color": "lista",
+    "phrases": [
+      "in upper case",
+      "para maiusculo",
+      "en mayusculas",
+      "em maiusculo",
+      "en mayuscula",
+      "to upper"
+    ]
+  },
+  "to_captalize": {
+    "color": "lista",
+    "phrases": [
+      "para captalizado",
+      "in capitalized",
+      "captalizado",
+      "captalize"
+    ]
+  },
+  "limpatela": {
+    "color": "tempo",
+    "phrases": [
+      "limpiar la pantalla",
+      "limpar a tela",
+      "limpe a tela",
+      "limpatela",
+      "clear"
+    ]
+  },
+  "listaNaPosicao": {
+    "color": "lista",
+    "phrases": [
+      "en posicion",
+      "in position",
+      "na posicao"
+    ]
+  },
+  "se": {
+    "color": "condicionais",
+    "phrases": [
+      "if the",
+      "si el",
+      "si la",
+      "se o",
+      "whether",
+      "quando",
+      "caso",
+      "if",
+      "se",
+      "si"
+    ]
+  },
+  "pare": {
+    "color": "contas",
+    "phrases": [
+      "detener",
+      "break",
+      "pare"
+    ]
+  },
+  "retorne": {
+    "color": "contas",
+    "phrases": [
+      "retorne",
+      "return",
+      "volver"
+    ]
+  },
+  "interrompa": {
+    "color": "contas",
+    "phrases": [
+      "interromper",
+      "interrumpir",
+      "interrompa",
+      "interrupt"
+    ]
+  },
+  "continue": {
+    "color": "contas",
+    "phrases": [
+      "continuar",
+      "continues",
+      "continua",
+      "continue",
+      "seguir"
+    ]
+  },
+  "importe": {
+    "color": "condicionais",
+    "phrases": [
+      "importe a biblioteca",
+      "importar biblioteca",
+      "importe",
+      "incluir",
+      "import"
+    ]
+  },
+  "se_nao_se": {
+    "color": "condicionais",
+    "phrases": [
+      "si no si",
+      "senao se",
+      "else if"
+    ]
+  },
+  "se_nao": {
+    "color": "condicionais",
+    "phrases": [
+      "if no",
+      "si no",
+      "senao",
+      "else"
+    ]
+  },
+  "tipo_variavel": {
+    "color": "lista",
+    "phrases": [
+      "o tipo da variavel",
+      "tipo da variavel",
+      "type of variable",
+      "o tipo da",
+      "o tipo de",
+      "tipo da",
+      "tipo de",
+      "tipo",
+      "type"
+    ]
+  },
+  "leia_arquivo": {
+    "color": "lista",
+    "phrases": [
+      "read the text from the file",
+      "get the text from the file",
+      "read the text of the file",
+      "obtener el texto del archivo",
+      "obtenha o texto do arquivo",
+      "leer el texto del archivo",
+      "lea el texto del archivo",
+      "leia o texto do arquivo",
+      "lea el archivo",
+      "leia o arquivo",
+      "read the file"
+    ]
+  },
+  "sobrescreva_texto_arquivo_sub_sub": {
+    "color": "lista",
+    "phrases": [
+      "file"
+    ]
+  },
+  "sobrescreva_texto_arquivo_sub": {
+    "color": "lista",
+    "phrases": [
+      "en el archivo",
+      "in the file",
+      "to the file",
+      "no arquivo",
+      "in the"
+    ]
+  },
+  "sobrescreva_texto_arquivo": {
+    "color": "lista",
+    "phrases": [
+      "sobrescrever",
+      "sobrescribir",
+      "sobrescreva",
+      "sobrescriba",
+      "overwrite"
+    ]
+  },
+  "adicione_texto_arquivo_sub": {
+    "color": "lista",
+    "phrases": [
+      "en el archivo",
+      "in the file",
+      "to the file",
+      "al archivo",
+      "no arquivo",
+      "to the"
+    ]
+  },
+  "adicione_texto_arquivo": {
+    "color": "lista",
+    "phrases": [
+      "adicione",
+      "agregue",
+      "escreva",
+      "escriba",
+      "write",
+      "add"
+    ]
+  },
+  "arquivo_existe": {
+    "color": "lista",
+    "phrases": [
+      "el archivo",
+      "o arquivo",
+      "the file",
+      "archivo",
+      "arquivo",
+      "file"
+    ]
+  },
+  "arquivo_existe_completo": {
+    "color": "lista",
+    "phrases": [
+      "existe el archivo"
+    ]
+  },
+  "arquivo_existe_nao_sub_existe": {
+    "color": "lista",
+    "phrases": [
+      "does not exist",
+      "nao existe",
+      "not exists",
+      "no existe",
+      "not exist"
+    ]
+  },
+  "arquivo_existe_sub_existe": {
+    "color": "lista",
+    "phrases": [
+      "existe",
+      "exists"
+    ]
+  },
+  "delete_arquivo": {
+    "color": "lista",
+    "phrases": [
+      "eliminar el archivo",
+      "delete o arquivo",
+      "exclua o arquivo",
+      "remova o arquivo",
+      "delete the file"
+    ]
+  },
+  "crie_arquivo": {
+    "color": "lista",
+    "phrases": [
+      "crea el archivo",
+      "create the file",
+      "crie o arquivo"
+    ]
+  },
+  "se_final": {
+    "color": "condicionais",
+    "phrases": [
+      "entao faca isso",
+      "entonces cuchillo",
+      "entao faca",
+      "then knife",
+      "cuchillo",
+      "entonces",
+      "entao",
+      "knife",
+      "faca",
+      "then"
+    ]
+  },
+  "formatar_textos": {
+    "color": "tempo",
+    "phrases": [
+      "formateado por",
+      "formatting by",
+      "formatando",
+      "formatting",
+      "insertando",
+      "formatear",
+      "inserindo",
+      "inserting",
+      "formato",
+      "format"
+    ]
+  },
+  "declaraListas": {
+    "color": "lista",
+    "phrases": [
+      "lista de",
+      "list of",
+      "lista"
+    ]
+  },
+  "declaraListasObterPosicao": {
+    "color": "lista",
+    "phrases": [
+      "lista de",
+      "list of",
+      "lista"
+    ]
+  },
+  "adicionarItensListas": {
+    "color": "lista",
+    "phrases": [
+      "adicione",
+      "anadir",
+      "add"
+    ]
+  },
+  "listaPosicoesCom": {
+    "color": "lista",
+    "phrases": [
+      "posiciones",
+      "positions",
+      "posicoes"
+    ]
+  },
+  "remover_itens_listas": {
+    "color": "lista",
+    "phrases": [
+      "eliminarlo",
+      "remova",
+      "remove"
+    ]
+  },
+  "listaCom": {
+    "color": "lista",
+    "phrases": [
+      "com"
+    ]
+  },
+  "tamanho_da_lista": {
+    "color": "lista",
+    "phrases": [
+      "el tamano de la  lista",
+      "o tamanho da lista de",
+      "tamanho da lista de",
+      "o tamanho da lista",
+      "tamano de la lista",
+      "tamanho da lista",
+      "len"
+    ]
+  },
+  "tiver_lista": {
+    "color": "lista",
+    "phrases": [
+      "tener",
+      "tiver",
+      "have"
+    ]
+  },
+  "aleatorio": {
+    "color": "tempo",
+    "phrases": [
+      "pense em um numero aleatorio entre",
+      "um numero aleatorio entre",
+      "un numero aleatorio entre",
+      "a random number between",
+      "numero aleatorio entre",
+      "random number between"
+    ]
+  },
+  "aleatorioEntre": {
+    "color": "lista",
+    "phrases": [
+      "and",
+      "e",
+      "y"
+    ]
+  },
+  "mostreNessa": {
+    "color": "exibicao",
+    "phrases": [
+      "imprimir en esa linea",
+      "mostrar en esta linea",
+      "escribe en esa linea",
+      "mostrar en esa linea",
+      "print on that line",
+      "write on that line",
+      "show in that line",
+      "show in this line",
+      "show on that line",
+      "escreva nessa linha",
+      "imprima nessa linha",
+      "mostre nessa linha",
+      "exiba nessa linha",
+      "show that line",
+      "display",
+      "escreva",
+      "print"
+    ]
+  },
+  "mostre": {
+    "color": "exibicao",
+    "phrases": [
+      "imprimir en la pantalla",
+      "escribe en la pantalla",
+      "mostrar en la pantalla",
+      "display on the screen",
+      "print on the screen",
+      "write on the screen",
+      "show on the screen",
+      "escreva na tela",
+      "imprima na tela",
+      "mostre na tela",
+      "show on screen",
+      "exiba na tela",
+      "escreval",
+      "imprimir",
+      "escreva",
+      "escribe",
+      "imprima",
+      "mostrar",
+      "muestra",
+      "println",
+      "mostre",
+      "printf",
+      "exiba",
+      "write",
+      "show"
+    ]
+  },
+  "recebeParametros": {
+    "color": "condicionais",
+    "phrases": [
+      "receives parameters",
+      "recebe parametros",
+      "recibe parametros",
+      "recebera",
+      "received",
+      "receives",
+      "recibido",
+      "receive",
+      "recebe",
+      "recibe"
+    ]
+  },
+  "declara_variaveis": {
+    "color": "atribuicao",
+    "phrases": [
+      "has the value of",
+      "tem o valor de",
+      "tem o valor do",
+      "tiene el valor",
+      "tem o valor",
+      "recibe el",
+      "is worth",
+      "receives",
+      "obtiene",
+      "receive",
+      "equals",
+      "recebe",
+      "recibe",
+      "worth",
+      "vale"
+    ]
+  },
+  "funcoes": {
+    "color": "tempo",
+    "phrases": [
+      "function",
+      "funcion",
+      "funcao",
+      "def"
+    ]
+  },
+  "enquanto": {
+    "color": "condicionais",
+    "phrases": [
+      "mientras que",
+      "enquanto",
+      "mientras",
+      "while"
+    ]
+  },
+  "enquanto_final": {
+    "color": "condicionais",
+    "phrases": [
+      "entao faca isso",
+      "entonces cuchillo",
+      "entao faca",
+      "then knife",
+      "cuchillo",
+      "entonces",
+      "entao",
+      "knife",
+      "faca",
+      "then"
+    ]
+  },
+  "aguarde": {
+    "color": "tempo",
+    "phrases": [
+      "aguarde o",
+      "espere o",
+      "aguarde",
+      "esperar",
+      "espera",
+      "espere",
+      "delay",
+      "wait"
+    ]
+  },
+  "repita": {
+    "color": "condicionais",
+    "phrases": [
+      "repetir",
+      "repeat",
+      "repita"
+    ]
+  },
+  "digitado": {
+    "color": "tempo",
+    "phrases": [
+      "el numero que ingresa el usuario",
+      "the number that the user enters",
+      "o numero que o usuario digitar",
+      "lo que sea que esté escrito",
+      "numero que escribe el usuario",
+      "numero que o usuario digitar",
+      "number that the user types",
+      "the number that is entered",
+      "lo que escribe el usuario",
+      "o numero que for digitado",
+      "el numero que se ingresa",
+      "o que o usuario digitar",
+      "numero que está escrito",
+      "numero que for digitado",
+      "el usuario a escribir",
+      "que o usuario digitar",
+      "number that is typed",
+      "what the user types",
+      "o que for digitado",
+      "the user to type",
+      "uma entrada numerica",
+      "una entrada numerica",
+      "el usuario escribe",
+      "whatever is typed",
+      "eso está escrito",
+      "que for digitado",
+      "a numeric entry",
+      "lo que escribes",
+      "lo que escriba",
+      "that is typed",
+      "what you type",
+      "entrada numerica",
+      "numero digitado",
+      "numero escrito",
+      "numeric entry",
+      "typed number",
+      "user digits",
+      "mecanografiado",
+      "digitado",
+      "entrada",
+      "typing",
+      "input",
+      "typed"
+    ]
+  },
+  "incremente": {
+    "color": "tempo",
+    "phrases": [
+      "incrementar",
+      "incremente",
+      "increase"
+    ]
+  },
+  "decremente": {
+    "color": "logico",
+    "phrases": [
+      "decrecientemente",
+      "decreasingly",
+      "decremente"
+    ]
+  },
+  "repitaVezes": {
+    "color": "condicionais",
+    "phrases": [
+      "times",
+      "veces",
+      "vezes",
+      "vez"
+    ]
+  },
+  "esperaEmSegundos": {
+    "color": "tempo",
+    "phrases": [
+      "em segundos",
+      "in seconds",
+      "segundos",
+      "seconds",
+      "segundo",
+      "second",
+      "s"
+    ]
+  },
+  "esperaEmMs": {
+    "color": "tempo",
+    "phrases": [
+      "milissegundos",
+      "milisegundos",
+      "milissegundo",
+      "milisegundo",
+      "millisecond",
+      "ms"
+    ]
+  },
+  "esperaEm": {
+    "color": "tempo",
+    "phrases": [
+      "em segundos",
+      "in seconds",
+      "milissegundos",
+      "milisegundos",
+      "milissegundo",
+      "milisegundo",
+      "millisecond",
+      "segundos",
+      "seconds",
+      "segundo",
+      "second",
+      "ms",
+      "s"
+    ]
+  },
+  "passandoParametros": {
+    "color": "tempo",
+    "phrases": [
+      "parametros de paso",
+      "parametro de paso",
+      "passando parametros",
+      "passando parametro",
+      "passing parameters",
+      "passing parameter",
+      "pasando los",
+      "parameters",
+      "parametros",
+      "parameter",
+      "parametro",
+      "passando",
+      "passing"
+    ]
+  },
+  "passando_parametros_abrir": {
+    "color": "condicionais",
+    "phrases": []
+  },
+  "passando_parametros_fechar": {
+    "color": "condicionais",
+    "phrases": []
+  },
+  "recebeParametros_parentese_abre": {
+    "color": "condicionais",
+    "phrases": []
+  },
+  "recebeParametros_parentese_fecha": {
+    "color": "condicionais",
+    "phrases": []
+  },
+  "recebeDeclaraListas": {
+    "color": "lista",
+    "phrases": [
+      "recibe el",
+      "is worth",
+      "receive",
+      "recibir",
+      "recebe",
+      "com"
+    ]
+  },
+  "addItensListaInterno": {
+    "color": "lista",
+    "phrases": [
+      "da lista de",
+      "na lista de",
+      "a lista de",
+      "in list of",
+      "na lista",
+      "a lista"
+    ]
+  },
+  "addItensListaInternoPosicaoFinaliza": {
+    "color": "lista",
+    "phrases": [
+      "da lista de"
+    ]
+  },
+  "addItensListaInternoInicio": {
+    "color": "lista",
+    "phrases": [
+      "no inicio da lista de",
+      "no inicio a lista de",
+      "no inicio na lista"
+    ]
+  },
+  "addItensListaInternoFinal": {
+    "color": "lista",
+    "phrases": [
+      "no final da lista de",
+      "no final a lista de",
+      "no final na lista"
+    ]
+  },
+  "remover_itens_listas_interno": {
+    "color": "lista",
+    "phrases": [
+      "da lista de",
+      "da lista"
+    ]
+  },
+  "tiver_interno_lista": {
+    "color": "lista",
+    "phrases": [
+      "na lista de",
+      "na lista",
+      "em"
+    ]
+  },
+  "incremente_decremente": {
+    "color": "tempo",
+    "phrases": [
+      "da variavel",
+      "na variavel",
+      "em",
+      "na",
+      "no"
+    ]
+  },
+  "tente": {
+    "color": "condicionais",
+    "phrases": [
+      "tratar",
+      "tente",
+      "try"
+    ]
+  },
+  "se_der_erro": {
+    "color": "condicionais",
+    "phrases": [
+      "se der erro",
+      "si sale mal",
+      "except"
+    ]
+  },
+  "senao_der_erro": {
+    "color": "condicionais",
+    "phrases": [
+      "if it doesn't go wrong",
+      "si no sale mal",
+      "senao der erro"
+    ]
+  },
+  "em_qualquer_caso": {
+    "color": "condicionais",
+    "phrases": [
+      "em qualquer caso",
+      "in any case",
+      "finalmente",
+      "finally"
+    ]
+  }
+}

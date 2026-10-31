@@ -36,6 +36,7 @@ export default tseslint.config(
       '@typescript-eslint/no-non-null-assertion': 'error',
       '@typescript-eslint/no-floating-promises': 'error',
       'sonarjs/pseudo-random': 'off',
+      'sonarjs/function-return-type': 'off',
       'sonarjs/cognitive-complexity': ['error', 25],
     },
   },
