@@ -1,0 +1,81 @@
+export const FOLDER_MARKER = '.keep';
+
+export interface FileNode {
+  kind: 'file';
+  name: string;
+  path: string;
+}
+
+export interface FolderNode {
+  kind: 'folder';
+  name: string;
+  path: string;
+  children: TreeNode[];
+}
+
+export type TreeNode = FileNode | FolderNode;
+
+export const folderMarkerPath = (folder: string): string => `${folder}/${FOLDER_MARKER}`;
+
+export const isFolderMarker = (path: string): boolean => path.split('/').at(-1) === FOLDER_MARKER;
+
+export const visibleFiles = (paths: string[]): string[] => paths.filter((path) => !isFolderMarker(path));
+
+export const sanitizePath = (path: string): string | null => {
+  const segments = path.trim().replace(/\\/g, '/').split('/').filter(Boolean);
+  const isValid = segments.length > 0 && segments.every((segment) => segment !== '.' && segment !== '..');
+
+  return isValid ? segments.join('/') : null;
+};
+
+export const joinPath = (folder: string | null, name: string): string => (folder === null ? name : `${folder}/${name}`);
+
+export const isInsideFolder = (path: string, folder: string): boolean => path.startsWith(`${folder}/`);
+
+const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
+  if (first.kind !== second.kind) {
+    return first.kind === 'folder' ? -1 : 1;
+  }
+
+  return first.name.localeCompare(second.name);
+};
+
+const sortTree = (nodes: TreeNode[]): TreeNode[] =>
+  nodes
+    .map((node) => (node.kind === 'folder' ? { ...node, children: sortTree(node.children) } : node))
+    .sort(byFoldersThenName);
+
+const findOrCreateFolder = (siblings: TreeNode[], name: string, path: string): FolderNode => {
+  const existing = siblings.find((node): node is FolderNode => node.kind === 'folder' && node.name === name);
+
+  if (existing !== undefined) {
+    return existing;
+  }
+
+  const folder: FolderNode = { kind: 'folder', name, path, children: [] };
+  siblings.push(folder);
+
+  return folder;
+};
+
+export const buildFileTree = (paths: string[]): TreeNode[] => {
+  const root: TreeNode[] = [];
+
+  for (const path of paths) {
+    const segments = path.split('/');
+    const fileName = segments.pop() as string;
+    let siblings = root;
+    let currentPath = '';
+
+    for (const segment of segments) {
+      currentPath = currentPath === '' ? segment : `${currentPath}/${segment}`;
+      siblings = findOrCreateFolder(siblings, segment, currentPath).children;
+    }
+
+    if (fileName !== FOLDER_MARKER) {
+      siblings.push({ kind: 'file', name: fileName, path });
+    }
+  }
+
+  return sortTree(root);
+};
