@@ -10,6 +10,8 @@ import {
   extensionStart,
   isPathTaken,
   movePath,
+  parentFolder,
+  planMove,
   provisionalName,
   renameTarget,
 } from './fileTree';
@@ -149,5 +151,43 @@ describe('renameTarget', () => {
 
   it.each(['', '  ', '.', '..', 'a/b', 'a\\b'])('refuses "%s"', (typed) => {
     expect(renameTarget(file, typed)).toBeNull();
+  });
+});
+
+describe('planMove', () => {
+  const paths = ['a.txt', 'b.txt', 'dados/c.txt', 'vazia/.keep'];
+  const file = (path: string): TreeNode => ({ kind: 'file', name: path.split('/').at(-1) as string, path });
+  const folder = (path: string): TreeNode => ({ kind: 'folder', name: path, path, children: [] });
+  const namesAfter = (order: string[], moved: string[]): string[] =>
+    buildFileTree(moved, order).map((node) => node.path);
+
+  it('changes the order among siblings', () => {
+    const plan = planMove(paths, [], file('b.txt'), file('a.txt'), 'before');
+
+    expect(plan?.target).toBe('b.txt');
+    expect(namesAfter(plan?.order ?? [], paths)).toEqual(['dados', 'vazia', 'b.txt', 'a.txt']);
+  });
+
+  it('puts an item after another', () => {
+    const plan = planMove(paths, [], file('a.txt'), file('b.txt'), 'after');
+
+    expect(namesAfter(plan?.order ?? [], paths)).toEqual(['dados', 'vazia', 'b.txt', 'a.txt']);
+  });
+
+  it('moves into a folder and back to the root', () => {
+    expect(planMove(paths, [], file('a.txt'), folder('vazia'), 'inside')?.target).toBe('vazia/a.txt');
+    expect(planMove(paths, [], file('dados/c.txt'), null, 'inside')?.target).toBe('c.txt');
+  });
+
+  it('refuses moves that cannot happen', () => {
+    expect(planMove(paths, [], folder('dados'), folder('dados'), 'inside')).toBeNull();
+    expect(planMove(['a/b/c.txt'], [], folder('a'), folder('a/b'), 'inside')).toBeNull();
+    expect(planMove(['a.txt', 'x/a.txt'], [], file('a.txt'), folder('x'), 'inside')).toBeNull();
+    expect(planMove(paths, [], file('a.txt'), file('a.txt'), 'before')).toBeNull();
+  });
+
+  it('finds the parent of a path', () => {
+    expect(parentFolder('a/b/c.txt')).toBe('a/b');
+    expect(parentFolder('c.txt')).toBeNull();
   });
 });

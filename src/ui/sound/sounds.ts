@@ -5,6 +5,7 @@ import clickUrl from './files/click.wav';
 import createUrl from './files/create.wav';
 import deleteUrl from './files/delete.wav';
 import errorUrl from './files/error.wav';
+import exportUrl from './files/export.wav';
 import fileCreateUrl from './files/file-create.wav';
 import folderCreateUrl from './files/folder-create.wav';
 import formatUrl from './files/format.wav';
@@ -15,6 +16,7 @@ import importUrl from './files/import.wav';
 import languageUrl from './files/language.wav';
 import modalCloseUrl from './files/modal-close.wav';
 import modalOpenUrl from './files/modal-open.wav';
+import moveUrl from './files/move.wav';
 import openUrl from './files/open.wav';
 import renameStartUrl from './files/rename-start.wav';
 import renameUrl from './files/rename.wav';
@@ -65,6 +67,8 @@ export type SoundName =
   | 'import'
   | 'language'
   | 'error'
+  | 'export'
+  | 'move'
   | 'terminalFocus'
   | 'terminalTyping'
   | 'terminalSend';
@@ -102,6 +106,8 @@ export const SOUND_FILES: Record<SoundName, string> = {
   import: importUrl,
   language: languageUrl,
   error: errorUrl,
+  export: exportUrl,
+  move: moveUrl,
   terminalFocus: terminalFocusUrl,
   terminalTyping: terminalTypingUrl,
   terminalSend: terminalSendUrl,

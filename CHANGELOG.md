@@ -21,7 +21,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.
-- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused.
+- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Unsaved work is kept while typing and recovered after a crash or a power cut.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.
@@ -29,7 +29,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Lessons in real markdown, inside the IDE under Help, with colored code and a button that opens each example as a file of the project.
 - Resizable panels, by mouse and keyboard, kept between sessions.
 - Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.
-- Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors, the program input field and dragging a selection, which plays while the mouse is pressed, with a switch to turn them off.
+- Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors, the program input field, exporting, moving items and dragging a selection, which plays while the mouse is pressed, with a switch to turn them off.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.
 - The example programs were ported to the new language and now carry emojis, so their author line names Gabriel Gregorio, who ported them.

@@ -165,7 +165,7 @@ test('navigates the top menu with the keyboard', async ({ page }) => {
   await createProjectWithCode(page, 'mostre 1');
   await page.getByRole('menuitem', { name: 'File' }).focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('menuitem', { name: 'Open file' })).toBeFocused();
+  await expect(page.getByRole('menuitem', { name: 'New tab' })).toBeFocused();
   await waitForAnimations(page);
 
   await page.keyboard.press('ArrowRight');

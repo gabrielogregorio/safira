@@ -142,6 +142,7 @@ export const HomeScreen = ({
               <button
                 type="button"
                 className="button"
+                data-sound="export"
                 aria-label={`${t('Export')} ${project.name}`}
                 onClick={() => {
                   onExportProject(project);

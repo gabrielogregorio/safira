@@ -7,15 +7,15 @@ import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
 import { addScriptVersion, isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
 import { clearDrafts, loadDrafts, saveDrafts } from '@/projects/draftStore';
-import type { TreeNode } from '@/projects/fileTree';
+import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
   folderMarkerPath,
   isInsideFolder,
   joinPath,
   movePath,
+  parentFolder,
   provisionalName,
   sanitizePath,
-  visibleFiles,
 } from '@/projects/fileTree';
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { LessonPlace } from '@/routing/routes';
@@ -67,7 +67,6 @@ interface EditorScreenProps {
 }
 
 type Dialog =
-  | { kind: 'open' }
   | { kind: 'save-as' }
   | { kind: 'commands' }
   | { kind: 'confirm-close'; file: string }
@@ -311,13 +310,20 @@ export const EditorScreen = ({
     [activeFile, onSaveProject, onSelectFile, project, tabs],
   );
 
-  const renameNode = useCallback(
-    (node: TreeNode, target: string) => {
+  const relocateNode = useCallback(
+    (node: TreeNode, target: string, order: string[]) => {
       const moved = (path: string): string => movePath(path, node.path, target);
       const moveKeys = <Value,>(entries: Record<string, Value>): Record<string, Value> =>
         Object.fromEntries(Object.entries(entries).map(([path, value]) => [moved(path), value]));
+      const files = moveKeys(project.files);
+      const source = parentFolder(node.path);
 
-      onSaveProject({ ...project, files: moveKeys(project.files), breakpoints: moveKeys(project.breakpoints) });
+      // A folder only exists through what is inside it, so the one left empty needs its marker.
+      if (source !== null && !Object.keys(files).some((path) => isInsideFolder(path, source))) {
+        files[folderMarkerPath(source)] = '';
+      }
+
+      onSaveProject({ ...project, files, breakpoints: moveKeys(project.breakpoints), order });
       setTabs((current) => current.map((tab) => moveTab(tab, moved(tab.file))));
 
       if (moved(activeFile) !== activeFile) {
@@ -325,6 +331,25 @@ export const EditorScreen = ({
       }
     },
     [activeFile, onSaveProject, onSelectFile, project],
+  );
+
+  const renameNode = useCallback(
+    (node: TreeNode, target: string) => {
+      relocateNode(
+        node,
+        target,
+        (project.order ?? []).map((path) => movePath(path, node.path, target)),
+      );
+    },
+    [project.order, relocateNode],
+  );
+
+  const moveNode = useCallback(
+    (node: TreeNode, { target, order }: PlannedMove) => {
+      void soundPlayer.play('move');
+      relocateNode(node, target, order);
+    },
+    [relocateNode],
   );
 
   const openLessonCode = useCallback(
@@ -411,7 +436,7 @@ export const EditorScreen = ({
         return;
       }
 
-      if (FUNCTION_KEYS.includes(event.key) || (isControl && ['s', 'o', 'n'].includes(key))) {
+      if (FUNCTION_KEYS.includes(event.key) || (isControl && ['s', 'n'].includes(key))) {
         event.preventDefault();
       }
 
@@ -429,8 +454,6 @@ export const EditorScreen = ({
         setDialog({ kind: 'save-as' });
       } else if (isControl && key === 's' && activeTab !== undefined) {
         saveFile(activeTab.file, activeTab);
-      } else if (isControl && key === 'o') {
-        setDialog({ kind: 'open' });
       } else if (isControl && key === 'n') {
         newTab();
       }
@@ -554,9 +577,6 @@ export const EditorScreen = ({
           settings={settings}
           locale={locale}
           isRunning={isRunning}
-          onOpenFile={() => {
-            setDialog({ kind: 'open' });
-          }}
           onNewTab={newTab}
           onSave={() => {
             saveFile(activeTab.file, activeTab);
@@ -695,6 +715,7 @@ export const EditorScreen = ({
         <FileSidebar
           projectName={project.name}
           paths={Object.keys(project.files)}
+          order={project.order}
           activeFile={activeFile}
           onRenameProject={(name) => {
             onSaveProject({ ...project, name });
@@ -709,6 +730,7 @@ export const EditorScreen = ({
             setDialog({ kind: 'delete-node', node });
           }}
           onRename={renameNode}
+          onMove={moveNode}
           canRename={!isRunning}
         />
         <Splitter
@@ -828,32 +850,6 @@ export const EditorScreen = ({
       </nav>
 
       <footer className="status-bar">{t('Line {line}, column {column}', cursor)}</footer>
-
-      {dialog?.kind === 'open' ? (
-        <Modal
-          title={t('Virtual files of this project')}
-          onClose={() => {
-            setDialog(null);
-          }}>
-          <ul className="file-list">
-            {visibleFiles(Object.keys(currentFiles()))
-              .sort((first, second) => first.localeCompare(second))
-              .map((file) => (
-                <li key={file}>
-                  <button
-                    type="button"
-                    className="menu-item"
-                    data-fixed-text
-                    onClick={() => {
-                      openFile(file, currentFiles()[file] ?? '');
-                    }}>
-                    {file}
-                  </button>
-                </li>
-              ))}
-          </ul>
-        </Modal>
-      ) : null}
 
       {dialog?.kind === 'save-as' ? (
         <TextPrompt

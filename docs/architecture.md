@@ -42,7 +42,7 @@ pure helpers such as highlighting and formatting.
 
 | Key | Content |
 |---|---|
-| `safira.projects.v1` | Projects with files and breakpoints |
+| `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
 | `safira.drafts.v1` | Unsaved text per project, written 300 ms after typing stops |
 | `safira.settings.v1` | Language, chosen theme, fonts, sound, suggestions, panel sizes, read lessons |
 

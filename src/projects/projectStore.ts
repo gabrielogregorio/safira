@@ -9,6 +9,7 @@ export interface Project {
   name: string;
   files: Record<string, string>;
   breakpoints: Record<string, number[]>;
+  order?: string[];
   updatedAt: number;
 }
 

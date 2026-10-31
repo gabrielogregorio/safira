@@ -5,7 +5,6 @@ import { IdeMenuBar } from './IdeMenuBar';
 
 const setup = (isRunning = false) => {
   const actions = {
-    onOpenFile: vi.fn(),
     onNewTab: vi.fn(),
     onSave: vi.fn(),
     onSaveAs: vi.fn(),
@@ -53,7 +52,6 @@ describe('IdeMenuBar', () => {
   });
 
   it.each([
-    ['File', 'Open file', 'onOpenFile'],
     ['File', 'SaveCtrl+S', 'onSave'],
     ['File', 'Export project (.zip)', 'onExportProject'],
     ['File', 'Format code', 'onFormat'],

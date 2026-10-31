@@ -9,6 +9,7 @@ const setup = (canRename = true) => {
     onCreateFolder: vi.fn(),
     onDelete: vi.fn(),
     onRename: vi.fn(),
+    onMove: vi.fn(),
     onRenameProject: vi.fn(),
   };
   render(
@@ -231,5 +232,25 @@ describe('FileSidebar', () => {
 
     expect(onOpen).toHaveBeenCalledWith('main.safira');
     expect(onCreateFile).toHaveBeenCalledExactlyOnceWith(null, 'new-file-2.safira');
+  });
+
+  it('moves a file into a folder by dragging', () => {
+    const { onMove } = setup();
+    const row = (name: string): HTMLElement => screen.getByRole('button', { name }).parentElement as HTMLElement;
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    fireEvent.dragStart(row('main.safira'), { dataTransfer });
+    fireEvent.dragOver(row('vazia'), { dataTransfer, clientY: 0 });
+    fireEvent.drop(row('vazia'), { dataTransfer, clientY: 0 });
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'main.safira' }),
+      expect.objectContaining({ target: expect.any(String) as string }),
+    );
+  });
+
+  it('does not drag while a program runs', () => {
+    setup(false);
+
+    expect(screen.getByRole('button', { name: 'main.safira' }).parentElement).toHaveAttribute('draggable', 'false');
   });
 });

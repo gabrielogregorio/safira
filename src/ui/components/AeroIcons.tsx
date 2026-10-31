@@ -33,6 +33,30 @@ export const ProjectBadge = () => (
   </svg>
 );
 
+export const TreeFileIcon = ({ isScript }: { isScript: boolean }) => (
+  <svg className="tree-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M5 1.5h9.5L20 7v15.5H5Z" fill={isScript ? '#bfe6ff' : '#f7fbff'} stroke="#3f7fb8" strokeWidth="1" />
+    <path d="M14.5 1.5V7H20Z" fill="#7cc4f5" stroke="#3f7fb8" strokeWidth="1" strokeLinejoin="round" />
+    {isScript ? (
+      <path d="M9 11h7l2.5 3-6 6-6-6Z" fill="#1f7fe0" stroke="#0a5cab" strokeWidth="0.8" />
+    ) : (
+      <path d="M8 11.5h9M8 14.5h9M8 17.5h6" stroke="#7fa6c8" strokeWidth="1.4" strokeLinecap="round" />
+    )}
+  </svg>
+);
+
+export const TreeFolderIcon = ({ isOpen }: { isOpen: boolean }) => (
+  <svg className="tree-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M2 5.5a1.5 1.5 0 0 1 1.5-1.5h5.6l2.2 2.5h9.2A1.5 1.5 0 0 1 22 8v11H2Z" fill="#e0a324" stroke="#a8730f" strokeWidth="1" />
+    {isOpen ? (
+      <path d="M5.5 10H23l-3 9.5H2Z" fill="#ffe08a" stroke="#a8730f" strokeWidth="1" strokeLinejoin="round" />
+    ) : (
+      <path d="M2 9h20v10.5H2Z" fill="#ffd465" stroke="#a8730f" strokeWidth="1" />
+    )}
+    <path d={isOpen ? 'M6.5 11h15l-.6 2H5.6Z' : 'M3 10h18v3H3Z'} fill="#ffffff" fillOpacity="0.55" />
+  </svg>
+);
+
 export const PlayIcon = () => (
   <svg className="aero-icon" viewBox="0 0 24 24" aria-hidden="true">
     <path

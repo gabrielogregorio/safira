@@ -75,6 +75,12 @@ export const renameTarget = (node: TreeNode, typedName: string): string | null =
   return `${node.path.slice(0, node.path.length - node.name.length)}${name}`;
 };
 
+export const parentFolder = (path: string): string | null => {
+  const slash = path.lastIndexOf('/');
+
+  return slash === -1 ? null : path.slice(0, slash);
+};
+
 const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
   if (first.kind !== second.kind) {
     return first.kind === 'folder' ? -1 : 1;
@@ -83,10 +89,28 @@ const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
   return first.name.localeCompare(second.name);
 };
 
-const sortTree = (nodes: TreeNode[]): TreeNode[] =>
+// A place the person chose wins. What has no place yet goes after it, in the usual order.
+const byChosenOrder =
+  (ranks: Map<string, number>) =>
+  (first: TreeNode, second: TreeNode): number => {
+    const firstRank = ranks.get(first.path);
+    const secondRank = ranks.get(second.path);
+
+    if (firstRank !== undefined && secondRank !== undefined) {
+      return firstRank - secondRank;
+    }
+
+    if (firstRank === undefined && secondRank === undefined) {
+      return byFoldersThenName(first, second);
+    }
+
+    return firstRank === undefined ? 1 : -1;
+  };
+
+const sortTree = (nodes: TreeNode[], ranks: Map<string, number>): TreeNode[] =>
   nodes
-    .map((node) => (node.kind === 'folder' ? { ...node, children: sortTree(node.children) } : node))
-    .sort(byFoldersThenName);
+    .map((node) => (node.kind === 'folder' ? { ...node, children: sortTree(node.children, ranks) } : node))
+    .sort(byChosenOrder(ranks));
 
 const findOrCreateFolder = (siblings: TreeNode[], name: string, path: string): FolderNode => {
   const existing = siblings.find((node): node is FolderNode => node.kind === 'folder' && node.name === name);
@@ -101,7 +125,7 @@ const findOrCreateFolder = (siblings: TreeNode[], name: string, path: string): F
   return folder;
 };
 
-export const buildFileTree = (paths: string[]): TreeNode[] => {
+export const buildFileTree = (paths: string[], order: string[] = []): TreeNode[] => {
   const root: TreeNode[] = [];
 
   for (const path of paths) {
@@ -120,5 +144,44 @@ export const buildFileTree = (paths: string[]): TreeNode[] => {
     }
   }
 
-  return sortTree(root);
+  return sortTree(root, new Map(order.map((path, index) => [path, index])));
+};
+
+const flattenTree = (nodes: TreeNode[]): string[] =>
+  nodes.flatMap((node) => (node.kind === 'folder' ? [node.path, ...flattenTree(node.children)] : [node.path]));
+
+export type DropPlace = 'before' | 'after' | 'inside';
+
+export interface PlannedMove {
+  target: string;
+  order: string[];
+}
+
+// Without an anchor the item goes to the end of the root. Returns null for a move that cannot happen.
+export const planMove = (
+  paths: string[],
+  order: string[],
+  node: TreeNode,
+  anchor: TreeNode | null,
+  place: DropPlace,
+): PlannedMove | null => {
+  const anchorPath = anchor?.path ?? '';
+  const destination = place === 'inside' ? (anchor?.path ?? null) : parentFolder(anchorPath);
+  const target = joinPath(destination, node.name);
+  const isIntoItself = destination !== null && (destination === node.path || isInsideFolder(destination, node.path));
+
+  if (anchor?.path === node.path || isIntoItself || (target !== node.path && isPathTaken(paths, target))) {
+    return null;
+  }
+
+  const others = flattenTree(buildFileTree(paths, order))
+    .filter((path) => path !== node.path)
+    .map((path) => movePath(path, node.path, target));
+  const index = others.indexOf(anchorPath) + Number(place === 'after');
+
+  if (place === 'inside') {
+    return { target, order: [...others, target] };
+  }
+
+  return { target, order: [...others.slice(0, index), target, ...others.slice(index)] };
 };

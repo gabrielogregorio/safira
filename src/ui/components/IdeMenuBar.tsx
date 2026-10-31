@@ -6,12 +6,12 @@ import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
 import type { CodeFont, Settings } from '@/settings/settings';
 import { clampFontSize, THEME_IDS } from '@/settings/settings';
+import type { SoundName } from '@/ui/sound/sounds';
 
 interface IdeMenuBarProps {
   settings: Settings;
   locale: Locale;
   isRunning: boolean;
-  onOpenFile: () => void;
   onNewTab: () => void;
   onSave: () => void;
   onSaveAs: () => void;
@@ -38,6 +38,7 @@ interface ActionProps {
   label: string;
   shortcut?: string;
   disabled?: boolean;
+  sound?: SoundName;
   onSelect: () => void;
 }
 
@@ -70,8 +71,8 @@ const Menu = ({ label, children }: MenuProps) => (
   </Menubar.Menu>
 );
 
-const Action = ({ label, shortcut, disabled = false, onSelect }: ActionProps) => (
-  <Menubar.Item className="menubar-item" disabled={disabled} onSelect={onSelect}>
+const Action = ({ label, shortcut, disabled = false, sound, onSelect }: ActionProps) => (
+  <Menubar.Item className="menubar-item" disabled={disabled} data-sound={sound} onSelect={onSelect}>
     {label}
     {shortcut === undefined ? null : <span className="menubar-shortcut">{shortcut}</span>}
   </Menubar.Item>
@@ -108,7 +109,6 @@ export const IdeMenuBar = ({
   settings,
   locale,
   isRunning,
-  onOpenFile,
   onNewTab,
   onSave,
   onSaveAs,
@@ -136,14 +136,13 @@ export const IdeMenuBar = ({
   return (
     <Menubar.Root className="menubar" aria-label={t('Safira IDE')}>
       <Menu label={t('File')}>
-        <Action label={t('Open file')} shortcut="Ctrl+O" onSelect={onOpenFile} />
         <Action label={t('New tab')} shortcut="Ctrl+N" onSelect={onNewTab} />
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Save')} shortcut="Ctrl+S" onSelect={onSave} />
         <Action label={t('Save as')} shortcut="Ctrl+Shift+S" onSelect={onSaveAs} />
         <Menubar.Separator className="menubar-separator" />
-        <Action label={t('Export project (.zip)')} onSelect={onExportProject} />
-        <Action label={t('Import .zip into this project')} onSelect={onImportArchive} />
+        <Action label={t('Export project (.zip)')} sound="export" onSelect={onExportProject} />
+        <Action label={t('Import .zip into this project')} sound="import" onSelect={onImportArchive} />
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Format code')} onSelect={onFormat} />
       </Menu>

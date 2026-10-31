@@ -1,10 +1,17 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import type { ReactNode } from 'react';
+import type { DragEvent, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
-import type { FolderNode, TreeNode } from '@/projects/fileTree';
-import { buildFileTree, extensionStart, isPathTaken, provisionalName, renameTarget } from '@/projects/fileTree';
-import { NewFileIcon, NewFolderIcon, ProjectBadge } from './AeroIcons';
+import type { DropPlace, FolderNode, PlannedMove, TreeNode } from '@/projects/fileTree';
+import {
+  buildFileTree,
+  extensionStart,
+  isPathTaken,
+  planMove,
+  provisionalName,
+  renameTarget,
+} from '@/projects/fileTree';
+import { NewFileIcon, NewFolderIcon, ProjectBadge, TreeFileIcon, TreeFolderIcon } from './AeroIcons';
 import type { SoundName } from '@/ui/sound/sounds';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { ProjectNameField } from './ProjectNameField';
@@ -12,6 +19,7 @@ import { ProjectNameField } from './ProjectNameField';
 interface FileSidebarProps {
   projectName: string;
   paths: string[];
+  order?: string[];
   activeFile: string;
   onRenameProject: (name: string) => void;
   onOpen: (path: string) => void;
@@ -19,6 +27,7 @@ interface FileSidebarProps {
   onCreateFolder: (folder: string | null, name: string) => void;
   onDelete: (node: TreeNode) => void;
   onRename: (node: TreeNode, path: string) => void;
+  onMove: (node: TreeNode, plan: PlannedMove) => void;
   canRename: boolean;
 }
 
@@ -39,6 +48,16 @@ interface TreeActions {
   canRename: boolean;
   onStartRename: (path: string) => void;
   onFinishRename: (node: TreeNode, name: string | null) => void;
+  dragProps: (node: TreeNode) => DragProps;
+}
+
+interface DragProps {
+  draggable: boolean;
+  'data-drop'?: DropPlace;
+  onDragStart: (event: DragEvent) => void;
+  onDragEnd: () => void;
+  onDragOver: (event: DragEvent) => void;
+  onDrop: (event: DragEvent) => void;
 }
 
 interface TreeListProps extends TreeActions {
@@ -73,6 +92,20 @@ interface RenameRowProps {
 
 const FILE_EXTENSION = '.safira';
 const PRESS_SETTLE_MILLISECONDS = 30;
+const FOLDER_EDGE = 0.25;
+const FILE_MIDDLE = 0.5;
+
+const dropPlaceAt = (event: DragEvent, node: TreeNode): DropPlace => {
+  const { top, height } = event.currentTarget.getBoundingClientRect();
+  const position = (event.clientY - top) / height;
+  const edge = node.kind === 'folder' ? FOLDER_EDGE : FILE_MIDDLE;
+
+  if (position < edge) {
+    return 'before';
+  }
+
+  return position > 1 - edge ? 'after' : 'inside';
+};
 
 const RowMenu = ({ items, children }: RowMenuProps) => (
   <ContextMenu.Root modal={false}>
@@ -282,7 +315,7 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
         {actions.renaming === node.path ? (
           <RenameRow node={node} paths={actions.paths} onFinish={actions.onFinishRename} />
         ) : (
-          <div className="tree-row">
+          <div className="tree-row" {...actions.dragProps(node)}>
             <button
               type="button"
               className="tree-name"
@@ -290,8 +323,13 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
               onClick={() => {
                 setIsClosed(isOpen);
               }}>
-              <span aria-hidden="true">{isOpen ? '▾' : '▸'} </span>
-              <span data-fixed-text>{node.name}</span>
+              <span className="tree-arrow" aria-hidden="true">
+                {isOpen ? '▾' : '▸'}
+              </span>
+              <TreeFolderIcon isOpen={isOpen} />
+              <span className="tree-label" data-fixed-text>
+                {node.name}
+              </span>
             </button>
           </div>
         )}
@@ -331,7 +369,9 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
               {actions.renaming === node.path ? (
                 <RenameRow node={node} paths={actions.paths} onFinish={actions.onFinishRename} />
               ) : (
-                <div className={node.path === actions.activeFile ? 'tree-row tree-row-active' : 'tree-row'}>
+                <div
+                  className={node.path === actions.activeFile ? 'tree-row tree-row-active' : 'tree-row'}
+                  {...actions.dragProps(node)}>
                   <button
                     type="button"
                     className="tree-name"
@@ -340,7 +380,10 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                     onClick={() => {
                       actions.onOpen(node.path);
                     }}>
-                    <span data-fixed-text>{node.name}</span>
+                    <TreeFileIcon isScript={node.name.endsWith(FILE_EXTENSION)} />
+                    <span className="tree-label" data-fixed-text>
+                      {node.name}
+                    </span>
                   </button>
                 </div>
               )}
@@ -358,6 +401,7 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
 export const FileSidebar = ({
   projectName,
   paths,
+  order = [],
   activeFile,
   onRenameProject,
   onOpen,
@@ -365,11 +409,61 @@ export const FileSidebar = ({
   onCreateFolder,
   onDelete,
   onRename,
+  onMove,
   canRename,
 }: FileSidebarProps) => {
   const t = useTranslation();
   const [draft, setDraft] = useState<Draft | null>(null);
   const [renaming, setRenaming] = useState<string | null>(null);
+
+  const [dragged, setDragged] = useState<TreeNode | null>(null);
+  const [dropTarget, setDropTarget] = useState<{ path: string; place: DropPlace } | null>(null);
+
+  const endDrag = (): void => {
+    setDragged(null);
+    setDropTarget(null);
+  };
+
+  const finishDrop = (event: DragEvent, plan: PlannedMove | null): void => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (dragged !== null && plan !== null) {
+      onMove(dragged, plan);
+    }
+
+    endDrag();
+  };
+
+  const planDrop = (anchor: TreeNode | null, place: DropPlace): PlannedMove | null =>
+    dragged === null ? null : planMove(paths, order, dragged, anchor, place);
+
+  const dragProps = (node: TreeNode): DragProps => ({
+    draggable: canRename,
+    'data-drop': dropTarget?.path === node.path ? dropTarget.place : undefined,
+    onDragStart: (event) => {
+      event.stopPropagation();
+      event.dataTransfer.effectAllowed = 'move';
+      event.dataTransfer.setData('text/plain', node.path);
+      setDragged(node);
+    },
+    onDragEnd: endDrag,
+    onDragOver: (event) => {
+      const place = dropPlaceAt(event, node);
+
+      event.stopPropagation();
+
+      if (planDrop(node, place) === null) {
+        setDropTarget(null);
+      } else {
+        event.preventDefault();
+        setDropTarget({ path: node.path, place });
+      }
+    },
+    onDrop: (event) => {
+      finishDrop(event, planDrop(node, dropPlaceAt(event, node)));
+    },
+  });
 
   const finishRename = (node: TreeNode, name: string | null): void => {
     setRenaming(null);
@@ -390,7 +484,19 @@ export const FileSidebar = ({
   };
 
   return (
-    <nav className="file-sidebar" aria-label={t('Files')}>
+    <nav
+      className="file-sidebar"
+      aria-label={t('Files')}
+      onDragOver={(event) => {
+        setDropTarget(null);
+
+        if (planDrop(null, 'inside') !== null) {
+          event.preventDefault();
+        }
+      }}
+      onDrop={(event) => {
+        finishDrop(event, planDrop(null, 'inside'));
+      }}>
       <h1 className="file-sidebar-project" data-fixed-text>
         <ProjectBadge />
         <ProjectNameField name={projectName} onRename={onRenameProject} />
@@ -423,7 +529,7 @@ export const FileSidebar = ({
         </div>
       </header>
       <TreeList
-        nodes={buildFileTree(paths)}
+        nodes={buildFileTree(paths, order)}
         folder={null}
         paths={paths}
         activeFile={activeFile}
@@ -436,6 +542,7 @@ export const FileSidebar = ({
         canRename={canRename}
         onStartRename={setRenaming}
         onFinishRename={finishRename}
+        dragProps={dragProps}
       />
     </nav>
   );
