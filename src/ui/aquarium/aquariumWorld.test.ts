@@ -12,6 +12,7 @@ import {
   releasePointer,
   scrollPointer,
   stepWorld,
+  warmUpWorld,
 } from './aquariumWorld';
 import type { StoredFish, World } from './aquariumWorld';
 
@@ -353,7 +354,7 @@ describe('aquariumWorld', () => {
   });
 
   it('lets a fish get fat until it pops like a bubble, for good', () => {
-    const world = createWorld(oneFish(BURST_MASS - 0.05), 800, 600, steady);
+    const world = createWorld(oneFish(BURST_MASS - 0.01), 800, 600, steady);
     const [fish] = world.fishes;
     world.food.push({ x: fish.x, y: fish.y, age: 0, sway: 0 });
 
@@ -361,6 +362,12 @@ describe('aquariumWorld', () => {
     expect(world.fishes).toEqual([]);
     expect(world.pops).toHaveLength(1);
     expect(world.bubbles.length).toBeGreaterThan(5);
+  });
+
+  it('pops a fish only at 30% over the old largest size', () => {
+    const oldLimit = lengthOf({ species: 0, mass: 16 });
+
+    expect(lengthOf({ species: 0, mass: BURST_MASS }) / oldLimit).toBeCloseTo(1.3, 2);
   });
 
   it('keeps a fat fish alive below the limit', () => {
@@ -371,5 +378,14 @@ describe('aquariumWorld', () => {
 
     expect(world.fishes).toEqual([fish]);
     expect(fish.mass).toBeGreaterThan(BURST_MASS - 2);
+  });
+
+  it('opens with every fish already swimming and nobody eaten', () => {
+    const fishes = [...oneFish(10), { id: 1, species: 1, mass: MINIMUM_MASS }];
+    const world = createWorld(fishes, 800, 600);
+    warmUpWorld(world);
+
+    expect(world.fishes).toHaveLength(2);
+    expect(world.fishes.every((fish) => Math.hypot(fish.vx, fish.vy) > 0)).toBe(true);
   });
 });

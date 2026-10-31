@@ -18,11 +18,13 @@ export const SPECIES: Species[] = [
 export const FISH_COUNT = 24;
 export const MINIMUM_MASS = 1;
 export const MASS_LOST_PER_SECOND = 0.0008;
-const MASS_PER_FOOD = 0.084;
-export const BURST_MASS = 16;
+const MASS_PER_FOOD = 0.0252;
+export const BURST_MASS = 22.7;
 const BUBBLES_FROM_BURST = 18;
 const PREY_MASS_SHARE = 0.09;
 const PREDATOR_MASS = 3;
+const WARM_UP_SECONDS = 5;
+const WARM_UP_STEP_SECONDS = 1 / 15;
 const PREDATOR_ADVANTAGE = 1.8;
 const SECONDS_BETWEEN_PREY = 12;
 const FOOD_VISION = 230;
@@ -524,6 +526,17 @@ const separateFishes = (world: World, seconds: number): void => {
       }
     }
   });
+};
+
+// The tank was already alive before it opened, so nobody is caught standing still. Nobody hunts in this time.
+export const warmUpWorld = (world: World): void => {
+  for (const fish of world.fishes) {
+    fish.preyAt = WARM_UP_SECONDS;
+  }
+
+  for (let elapsed = 0; elapsed < WARM_UP_SECONDS; elapsed += WARM_UP_STEP_SECONDS) {
+    stepWorld(world, WARM_UP_STEP_SECONDS);
+  }
 };
 
 export const stepWorld = (world: World, seconds: number): WorldEvent[] => {

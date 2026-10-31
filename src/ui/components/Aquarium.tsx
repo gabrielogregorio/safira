@@ -14,6 +14,7 @@ import {
   resizeWorld,
   scrollPointer,
   stepWorld,
+  warmUpWorld,
 } from '@/ui/aquarium/aquariumWorld';
 import { useIdle } from '@/ui/hooks/useIdle';
 import { prefersMotion } from '@/ui/motion';
@@ -39,7 +40,7 @@ const FRAME_MILLISECONDS = 1000 / 30;
 const LONGEST_STEP_SECONDS = 0.1;
 const LARGEST_PIXEL_RATIO = 2;
 const MILLISECONDS_PER_SECOND = 1000;
-const SEA_GAIN = 0.8;
+const SEA_GAIN = 0.48;
 
 const EVENT_SOUNDS: Record<WorldEvent['kind'], SoundName> = {
   eat: 'fishEat',
@@ -110,6 +111,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
     };
 
     fit();
+    warmUpWorld(world);
     frame = requestAnimationFrame(draw);
     const saveTimer = setInterval(save, SAVE_MILLISECONDS);
     window.addEventListener('resize', fit);
