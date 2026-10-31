@@ -77,11 +77,11 @@ between PCs.
 ## CI/CD
 
 GitHub Actions runs lint, audit, unit tests with a coverage gate, E2E, the memory gate and CodeQL. Merging a `release/X.Y.Z`
-branch into `master` creates the tag and the release; any other merge only deploys. Actions are pinned by commit hash.
+branch into `main` creates the tag and the release; any other merge only deploys. Actions are pinned by commit hash.
 
 | Address | What it is | Workflow |
 |---|---|---|
-| `https://<owner>.github.io/<repository>/` | The site, published on each merge into `master` | `deploy.yml` |
+| `https://<owner>.github.io/<repository>/` | The site, published on each merge into `main` | `deploy.yml` |
 | `https://<owner>.github.io/<repository>/preview/<branch>/` | The site of a pull request, linked on it | `deploy-preview.yml` |
 
 Both publish to the `gh-pages` branch through `.github/actions/publish-pages`, which GitHub Pages must be set to serve.

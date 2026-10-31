@@ -3,7 +3,7 @@ name: create tag and release on merge pr
 on:
   pull_request:
     types: [closed]
-    branches: [master]
+    branches: [main]
 
 permissions:
   contents: write

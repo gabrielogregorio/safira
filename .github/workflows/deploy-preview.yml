@@ -2,7 +2,7 @@ name: preview deploy
 
 on:
   pull_request:
-    branches: [master, dev]
+    branches: [main, dev]
     types: [opened, synchronize, reopened]
 
 permissions:
