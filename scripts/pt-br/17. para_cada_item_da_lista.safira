@@ -1,0 +1,9 @@
+# Você quer uma forma simples de percorrer
+# toda a lista, obtendo o valor de cada item
+
+lista de compras recebe "uva", "maça", "manga", "laranja"
+
+percorra a lista de compras atribuindo em item_compra {
+    mostre item_compra
+}
+

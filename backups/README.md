@@ -1,0 +1,1 @@
+# Local onde os backups ficarão antes de uma atualização

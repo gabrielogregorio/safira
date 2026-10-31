@@ -1,0 +1,29 @@
+# Este comando exibe alguma coisa na tela
+# Uma mensagem por exemplo
+
+
+nome = "Safira" 
+
+mostre "Bom dia, "
+mostre "% tudo bem?" inserindo nome
+
+mostre ""
+mostre ":--------------------------------------------:"
+mostre ":  Você deve ter notado que o comando mostre :"
+mostre ":  exibir cada coisa em uma linha diferente  :"
+mostre ":  Se você quiser exibir tudo na mesma linha :"
+mostre ":  precisa usar o comando mostre nessa linha :"
+mostre ":--------------------------------------------:"
+mostre ""
+
+
+mostre nessa linha "Bom dia "
+mostre nessa linha nome
+
+mostre ""
+
+# Você também pode dar uma cor aos textos exibidos
+# Basta informar um código Hexadecimal ou o nome das cores,
+# por enquanto em inglês. Pesquise por esse código no Google por #88ffff
+mostre "Texto colorido" na cor "#88ffff"
+

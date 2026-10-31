@@ -1,0 +1,11 @@
+# Você quer finalizar o programa por completo ao chegar em um ponto
+# Como fazer isso? Vamos usar o interrompa!
+
+
+mostre "Iniciando sistema!"
+mostre "Carregando dados!"
+
+interrompa
+
+mostre "Enviando Mensagens!"
+

@@ -1,0 +1,49 @@
+# Você quer trabalhar com uma lista de itens
+# Como fazer isso? Vamos usar os comandos de listas
+
+
+# Cria uma lista 2 posições com valores já definidos
+lista de compras recebe "Maça", "Melancia"
+mostre compras
+
+
+# Altera o valor de uma posição com outro valor
+lista de compras na posicao 2 recebe "Manga"
+mostre compras
+
+
+# Insere um item em uma posição especifica,
+# mudando a posição do valor antigo desta posição
+adicione "Banana" na posicao 2 da lista de compras
+mostre compras
+
+
+# Adiciona um item no final da lista
+adicione "Uvas" no final da lista de compras
+
+# Adiciona um item no início da lista
+adicione "Melão" no inicio da lista de compras
+mostre compras
+
+
+# Verifica se tem um valor na lista
+se tiver "Melão" na lista de compras
+{
+    # Remover um item da lista
+    remova "Melão" da lista de compras
+    mostre compras
+}
+
+
+# Retornar um valor em uma posição
+mostre lista de compras na posicao 1
+
+
+# Cria uma lista chamada números com 100 posições de texto
+lista de numeros com 100 posicoes
+
+
+# Retorna a quantidade de itens de uma lista
+mostre "A lista de nomes tem    : % posições" inserindo o tamanho da lista de compras
+mostre "A lista de números tem  : % posições" inserindo o tamanho da lista de numeros
+

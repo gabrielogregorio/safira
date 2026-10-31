@@ -1,0 +1,107 @@
+{
+   "Variaveis":{
+     "pt-br":"pt-br/01. Variaveis.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Exibir":{
+     "pt-br":"pt-br/02. Exibir algo na tela.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Digitado":{
+     "pt-br":"pt-br/03. Digitado.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Condicoes":{
+     "pt-br":"pt-br/04. Testar Condicoes.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Enquanto":{
+     "pt-br":"pt-br/05. Enquanto.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Repita":{
+     "pt-br":"pt-br/06. Repita.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Espere":{
+     "pt-br":"pt-br/07. Espere.safira",
+     "en-us":"",
+     "es":""
+  },
+   "aleatorio":{
+     "pt-br":"pt-br/08. Sortear um número aleatorio.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Incremente-decremente":{
+     "pt-br":"pt-br/09. Incremente-decremente.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Funcoes":{
+     "pt-br":"pt-br/10. Funcoes.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Arquivos":{
+     "pt-br":"pt-br/11. Arquivos.safira",
+     "en-us":"",
+     "es":""
+  },
+   "bibliotecas":{
+     "pt-br":"pt-br/12. Trabalhando com bibliotecas.safira",
+     "en-us":"",
+     "es":""
+  },
+   "continue":{
+     "pt-br":"pt-br/13. continue.safira",
+     "en-us":"",
+     "es":""
+  },
+   "pare":{
+     "pt-br":"pt-br/14. pare.safira",
+     "en-us":"",
+     "es":""
+  },
+   "interrompa":{
+     "pt-br":"pt-br/15. interrompa.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Listas":{
+     "pt-br":"pt-br/16. Listas.safira",
+     "en-us":"",
+     "es":""
+  },
+   "para_cada_item_da_lista":{
+     "pt-br":"pt-br/17. para_cada_item_da_lista.safira",
+     "en-us":"",
+     "es":""
+  },
+   "para_cada_item_da_string":{
+     "pt-br":"pt-br/18. para_cada_item_da_string.safira",
+     "en-us":"",
+     "es":""
+  },
+   "upper_lower_capitalize":{
+     "pt-br":"pt-br/19. upper_lower_capitalize.safira",
+     "en-us":"",
+     "es":""
+  },
+   "para cada":{
+     "pt-br":"pt-br/20. para cada.safira",
+     "en-us":"",
+     "es":""
+  },
+   "Tente":{
+     "pt-br":"pt-br/21. Tente.safira",
+     "en-us":"",
+     "es":""
+  }
+}

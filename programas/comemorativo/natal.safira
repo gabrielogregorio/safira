@@ -1,0 +1,16 @@
+funcao a { retorne "@" na cor "#00ff00" } 
+funcao b { retorne "*" } # na cor "#ff5555" } 
+funcao c { retorne "%" } # na cor "#ffff00" } 
+funcao d { retorne "" } #  na cor "#ffffff" } 
+
+mostre "               *                      " 
+mostre "              / \                     " 
+mostre "             / % \                    " % a()
+mostre "            / % % \                   " % b(), b()
+mostre "           /%  %  %\                  " % b(), c(), b()
+mostre "          /  % % %  \                 " % c(), a(), c()
+mostre "   ___   /___________\    ___         " 
+mostre "__|___|____|___|____|____|___|________" 
+
+
+

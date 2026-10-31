@@ -1,0 +1,20 @@
+# Mudando só um pouquinho do cenário anterior
+#
+# E se você quisesse executar um loop, porém, quando 
+# chegar em uma condição, você quer para o loop.
+# Como fazer isso? Vamos usar o pare!
+
+
+soma = 1
+enquanto soma for menor que 10
+{
+    # Incrementando o valor da soma em +1
+    soma vale soma mais 1
+
+    # Se o valor for igual a 5, pare o loop!
+    se soma for igual a 5 { pare }
+
+    # Mostrando na tela
+    mostre "soma: %" inserindo soma
+}
+

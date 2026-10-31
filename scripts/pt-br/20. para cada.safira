@@ -1,0 +1,10 @@
+# Cria uma variável ou modifica o valor de uma
+# Atribuindo dinamicamente o valor de uma variável
+# Executando ao mesmo tempo um laço
+
+#****** Uso simples comando ******#
+para cada x de 0 ate 100
+{
+    mostre "X vale -> %" inserindo x
+}
+

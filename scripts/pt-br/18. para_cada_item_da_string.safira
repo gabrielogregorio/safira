@@ -1,0 +1,18 @@
+# Você quer percorrer todas as letras de um texto.
+# Você quer inverter um texto, percorrendo cada letra
+# e colocando ela na ordem inversa
+# Você pode o mesmo comando para percorrer listas
+
+
+codigo = "!01 é êcov ,aid mob ,álO"
+mostre "Código Secreto   : %" inserindo codigo
+
+invertido = ""
+
+percorra codigo atribuindo em letra {
+    # Atribuindo o valor da letra e do texto invertido
+    invertido = letra + invertido
+}
+
+mostre "Código Traduzido : %" inserindo invertido
+

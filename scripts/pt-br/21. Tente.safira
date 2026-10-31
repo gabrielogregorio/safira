@@ -1,0 +1,32 @@
+# Você tem um trecho de código que pode acontecer um erro
+# e você precisa tratar o erro e o programa continuar rodando mesmo com o erro.
+# Você pode usar o tente
+
+
+tente
+{
+    mostre "1. Isso não deve provocar um erro"
+    isso não faz sentido e deve provocar um erro
+}
+se der erro
+{
+    mostre "2. Aconteceu um erro!"
+}
+senao der erro
+{
+    mostre "3. Não aconteceu um erro!"
+}
+em qualquer caso
+{
+    mostre "4. Deu um erro ou não!"
+}
+
+mostre ""
+mostre "O programa continua executando, independente se deu erro ou não"
+
+# Os comandos
+# * senao der erro
+# * em qualquer caso
+# 
+# Você pode colocar eles ou não, é você que escolhe
+

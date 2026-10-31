@@ -1,0 +1,32 @@
+tela de novidades
+Arquivos Recentes:
+
+	ir para função
+	ir para linha
+	buscar e substituir
+
+	Deixar uma anotação
+	Tela Inteira
+	Subir no git
+	Reorganizar tela
+
+Ajuda
+Buscar atualizações
+Fazer perguntas
+tirar dúvidas
+Enviar um comentário
+Enviar uma critica
+Abrir pasta
+Fazer Login
+
+Barra inferior com informações:
+	Linha, qunatidade de linhas, status do programa
+
+
+Linter:
+
+Sugestão do que você quis dizer.
+	Um recurso para analisar semelhãças entre o comando digitado e o erro do usuário a fim tentar entender o que o usuário quis dizer e ofercer uma sugestão.
+
+
+Lista de Erros

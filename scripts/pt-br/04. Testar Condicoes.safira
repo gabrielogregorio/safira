@@ -1,0 +1,26 @@
+# Cenário:
+# Agora imagine que você queira saber
+# se você passou de ano ou não.
+
+# Para isso, você precisará fazer um teste, para isso
+# usamos o comando de condicionais, o se
+
+mostre "Digite sua média "
+media vale o numero que for digitado
+
+se media for igual a 10
+{
+    mostre "Você foi excelente"
+}
+senao se media for maior que 9
+{
+    mostre "Você foi muito bom"
+}
+senao se media for maior ou igual a 6
+{
+    mostre "Você passou!"
+}
+senao 
+{
+    mostre "Tente novamente"
+}

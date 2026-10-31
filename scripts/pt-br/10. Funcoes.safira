@@ -1,0 +1,41 @@
+# Imagine que você queira executar alguns comandos em várias
+# partes do código, para evitar muito código duplicado, você pode
+# usar as funções
+
+# Está é uma função com parâmetros
+# Parâmetros são valores que ela pode
+# Receber e trabalhar com eles
+funcao calculaMedia recebe parametros nome, nota1, nota2
+{
+
+    mostre "Nome %" inserindo nome
+    mostre "Nota 1 = %" inserindo nota1
+    mostre "Nota 2 = %" inserindo nota2
+    mostre "Média  = %" inserindo (nota1 + nota2) / 2
+
+    mostre ""
+}
+
+
+# Essa é uma função sem parâmetros
+funcao mostra_logo
+{
+    mostre "@========= MEDIA ALUNOS ===========@"
+    mostre ""
+}
+
+# Chamando funções sem parâmetros
+mostra_logo()
+
+# Chamando funções com parâmetros
+aluno3_nota1 = 6.5
+aluno3_nota2 = 7.5
+calculaMedia passando parametros "João da Silva", aluno3_nota1, aluno3_nota2
+
+aluno4_nota1 = 9.1
+aluno4_nota2 = 2.7
+calculaMedia passando parametros "Mile Santos", aluno4_nota1, aluno4_nota2
+
+# Chamando funções sem parâmetros
+mostra_logo()
+

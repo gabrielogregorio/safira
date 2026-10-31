@@ -1,0 +1,21 @@
+lista de numeros com 4 posicoes
+soma = 0
+i = 1
+ 
+# cadastrar
+enquanto i <= 4 faca {
+    mostre "Digite o % o. número..: " inserindo i+1
+    numeros na posicao i recebe input
+    pos = numeros na posicao i
+    soma = soma + pos
+    i = i + 1
+} 
+
+# imprimir => impressão
+i = 1
+enquanto i <= 4 faca {
+    mostre numeros na posicao i
+    i = i + 1
+} 
+
+mostre "A média dos números acima é %" inserindo soma/4
