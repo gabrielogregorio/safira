@@ -200,4 +200,40 @@ describe('aquariumWorld', () => {
 
     expect(world.food).toHaveLength(2);
   });
+
+  it('keeps fish apart, softly', () => {
+    const world = createWorld(
+      [
+        { id: 0, species: 0, mass: 1 },
+        { id: 1, species: 0, mass: 1 },
+      ],
+      800,
+      600,
+      steady,
+    );
+    const [first, second] = world.fishes;
+    first.x = 400;
+    second.x = 400;
+    first.y = 300;
+    second.y = 300;
+    first.targetUntil = 99;
+    second.targetUntil = 99;
+    first.targetX = 400;
+    second.targetX = 400;
+    first.targetY = 300;
+    second.targetY = 300;
+
+    for (let frame = 0; frame < 30; frame += 1) {
+      stepWorld(world, 1 / 30);
+    }
+
+    expect(Math.abs(first.y - second.y)).toBeGreaterThan(2);
+  });
+
+  it('pops a bubble from a little outside of it', () => {
+    const world = createWorld([], 800, 600, steady);
+    world.bubbles.push({ x: 50, y: 50, radius: 8, speed: 1, sway: 0 });
+
+    expect(click(world, 50 + 25, 50)).toEqual([expect.objectContaining({ kind: 'pop' })]);
+  });
 });

@@ -55,12 +55,17 @@ const HOLD_RADIUS = 280;
 const HOLD_PULL = 150;
 const HOLD_BUBBLES_PER_SECOND = 12;
 const DRAG_RADIUS = 170;
-const DRAG_PUSH = 1.4;
+const DRAG_PUSH = 0.7;
 const CLICK_DISTANCE = 12;
 const RIPPLE_SECONDS = 1.4;
 const RIPPLE_GAP = 26;
 const PLANT_SPACING = 130;
 const POP_SECONDS = 0.35;
+const BUBBLE_REACH = 1.5;
+const BUBBLE_MARGIN = 10;
+const PERSONAL_SPACE = 0.38;
+const SEPARATION_SPEED = 120;
+const FLAT_BODY = 2;
 
 export interface StoredFish {
   id: number;
@@ -426,6 +431,39 @@ const movePointerEffects = (world: World, seconds: number, events: WorldEvent[])
   }
 };
 
+const canEat = (hunter: Fish, prey: Fish): boolean =>
+  hunter.mass >= PREDATOR_MASS && hunter.mass >= prey.mass * PREDATOR_ADVANTAGE;
+
+// A soft push, stronger the more they overlap. They can swim close, but never pile up on the same spot.
+const separatePair = (first: Fish, second: Fish, seconds: number): void => {
+  const offsetX = second.x - first.x;
+  const offsetY = (second.y - first.y) * FLAT_BODY;
+  const away = Math.hypot(offsetX, offsetY);
+  const space = (lengthOf(first) + lengthOf(second)) * PERSONAL_SPACE;
+
+  if (away >= space) {
+    return;
+  }
+
+  const push = (SEPARATION_SPEED * seconds * (1 - away / space)) / 2;
+  const directionX = away === 0 ? 0 : offsetX / away;
+  const directionY = away === 0 ? 1 : offsetY / away;
+  first.x -= directionX * push;
+  first.y -= directionY * push;
+  second.x += directionX * push;
+  second.y += directionY * push;
+};
+
+const separateFishes = (world: World, seconds: number): void => {
+  world.fishes.forEach((first, index) => {
+    for (const second of world.fishes.slice(index + 1)) {
+      if (!canEat(first, second) && !canEat(second, first)) {
+        separatePair(first, second, seconds);
+      }
+    }
+  });
+};
+
 export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
   const events: WorldEvent[] = [];
   world.time += seconds;
@@ -436,6 +474,7 @@ export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
     }
   }
 
+  separateFishes(world, seconds);
   moveWater(world, seconds);
   movePointerEffects(world, seconds, events);
 
@@ -446,7 +485,7 @@ const pressedFish = (world: World, x: number, y: number): Fish | undefined =>
   world.fishes.find((fish) => distance(fish.x, fish.y, x, y) < Math.max(26, lengthOf(fish) * 0.6));
 
 const pressedBubble = (world: World, x: number, y: number): Bubble | undefined =>
-  world.bubbles.find((bubble) => distance(bubble.x, bubble.y, x, y) < bubble.radius + 10);
+  world.bubbles.find((bubble) => distance(bubble.x, bubble.y, x, y) < (bubble.radius + BUBBLE_MARGIN) * BUBBLE_REACH);
 
 const pressedPlant = (world: World, x: number, y: number): Plant | undefined =>
   world.plants.find(
