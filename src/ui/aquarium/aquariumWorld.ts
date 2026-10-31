@@ -531,7 +531,8 @@ const separateFishes = (world: World, seconds: number): void => {
 // The tank was already alive before it opened, so nobody is caught standing still. Nobody hunts in this time.
 export const warmUpWorld = (world: World): void => {
   for (const fish of world.fishes) {
-    fish.preyAt = WARM_UP_SECONDS;
+    // Past the end of the warm up, or the last step can already bite, and rounding decides when that is.
+    fish.preyAt = world.time + WARM_UP_SECONDS + WARM_UP_STEP_SECONDS;
   }
 
   for (let elapsed = 0; elapsed < WARM_UP_SECONDS; elapsed += WARM_UP_STEP_SECONDS) {

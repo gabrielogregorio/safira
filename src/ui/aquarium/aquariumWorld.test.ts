@@ -26,6 +26,9 @@ const click = (world: World, x: number, y: number) => {
   return releasePointer(world);
 };
 
+// Fish start at random places, so one run says little about who can reach whom.
+const WARM_UP_ATTEMPTS = 300;
+
 describe('aquariumWorld', () => {
   it('gives every fish a color of its own', () => {
     const colors = createPopulation().map((fish) => colorsOf(fish.id).body);
@@ -381,11 +384,13 @@ describe('aquariumWorld', () => {
   });
 
   it('opens with every fish already swimming and nobody eaten', () => {
-    const fishes = [...oneFish(10), { id: 1, species: 1, mass: MINIMUM_MASS }];
-    const world = createWorld(fishes, 800, 600);
-    warmUpWorld(world);
+    for (let attempt = 0; attempt < WARM_UP_ATTEMPTS; attempt += 1) {
+      const fishes = [...oneFish(10), { id: 1, species: 1, mass: MINIMUM_MASS }];
+      const world = createWorld(fishes, 240, 180);
+      warmUpWorld(world);
 
-    expect(world.fishes).toHaveLength(2);
-    expect(world.fishes.every((fish) => Math.hypot(fish.vx, fish.vy) > 0)).toBe(true);
+      expect(world.fishes).toHaveLength(2);
+      expect(world.fishes.every((fish) => Math.hypot(fish.vx, fish.vy) > 0)).toBe(true);
+    }
   });
 });
