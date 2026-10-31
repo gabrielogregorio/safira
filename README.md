@@ -79,6 +79,14 @@ between PCs.
 GitHub Actions runs lint, audit, unit tests with a coverage gate, E2E, the memory gate and CodeQL. A merge into `master`
 creates the tag and the release. Actions are pinned by commit hash.
 
+| Address | What it is | Workflow |
+|---|---|---|
+| `https://<owner>.github.io/<repository>/` | The site, published on each merge into `master` | `deploy.yml` |
+| `https://<owner>.github.io/<repository>/preview/<branch>/` | The site of a pull request, linked on it | `deploy-preview.yml` |
+
+Both publish to the `gh-pages` branch through `.github/actions/publish-pages`, which GitHub Pages must be set to serve.
+Assets use relative paths and routes use the hash, so one build works at any address.
+
 ## Language
 
 | Layer | Folder | Role |

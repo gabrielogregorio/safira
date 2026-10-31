@@ -1,0 +1,34 @@
+name: 'Publish to GitHub Pages'
+description: 'Adds a folder to the gh-pages branch and tries again when another workflow published at the same time'
+inputs:
+  directory:
+    description: 'Folder to publish'
+    required: true
+  destination:
+    description: 'Path inside the site'
+    default: '.'
+  token:
+    description: 'Token allowed to push to gh-pages'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    - name: Publish with retries
+      shell: bash
+      env:
+        DIRECTORY: ${{ inputs.directory }}
+        DESTINATION: ${{ inputs.destination }}
+        GITHUB_TOKEN: ${{ inputs.token }}
+      run: |
+        git remote set-url origin "https://git:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+
+        for attempt in 1 2 3 4 5; do
+          if pnpm exec gh-pages -d "$DIRECTORY" -e "$DESTINATION" --add -u "github-actions-bot <support+actions@github.com>"; then
+            exit 0
+          fi
+
+          echo "::warning::gh-pages moved during the publish, trying again ($attempt of 5)"
+          sleep $((attempt * 10))
+        done
+
+        exit 1
