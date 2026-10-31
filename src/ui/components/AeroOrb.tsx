@@ -1,4 +1,5 @@
 import { useId } from 'react';
+import { useIsAquariumEmpty } from '@/ui/aquarium/aquariumStore';
 
 interface AeroOrbProps {
   size: number;
@@ -16,6 +17,7 @@ const WAVE = 'M-120 0 q15 -7 30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 t30 0 V70 
 
 // A glass globe with an aquarium inside, the most Frutiger Aero object there is: water, bubbles, a fish and a sprout.
 export const AeroOrb = ({ size }: AeroOrbProps) => {
+  const isEmpty = useIsAquariumEmpty();
   const id = useId();
 
   return (
@@ -59,11 +61,13 @@ export const AeroOrb = ({ size }: AeroOrbProps) => {
             <path d={WAVE} className="aero-orb-wave aero-orb-wave-back orb-wave-back" fillOpacity="0.6" />
             <path className="aero-orb-wave" d={WAVE} fill={`url(#${id}-water)`} />
           </g>
-          <g className="aero-orb-fish">
-            <path d="M0 88 C8 80 20 80 26 88 C20 96 8 96 0 88 Z" fill="#ffb347" />
-            <path d="M0 88 L-9 81 L-7 88 L-9 95 Z" fill="#ff8a2a" />
-            <circle cx="20" cy="86.5" r="1.5" fill="#123" />
-          </g>
+          {isEmpty ? null : (
+            <g className="aero-orb-fish">
+              <path d="M0 88 C8 80 20 80 26 88 C20 96 8 96 0 88 Z" fill="#ffb347" />
+              <path d="M0 88 L-9 81 L-7 88 L-9 95 Z" fill="#ff8a2a" />
+              <circle cx="20" cy="86.5" r="1.5" fill="#123" />
+            </g>
+          )}
           {BUBBLES.map((bubble) => (
             <circle
               key={bubble.x}
