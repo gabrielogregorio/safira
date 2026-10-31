@@ -1,0 +1,58 @@
+name: create tag and release on merge pr
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [master]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  create-release:
+    if: github.event.pull_request.merged == true
+    timeout-minutes: 5
+    runs-on: ubuntu-24.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ github.event.pull_request.merge_commit_sha }}
+
+      - name: set config tag and release
+        env:
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          PR_BODY: ${{ github.event.pull_request.body }}
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          TAG="v$VERSION"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" > /dev/null; then
+            echo "::warning::$TAG already exists: nothing to release (the version was not bumped)"
+            echo "SKIP=true" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          {
+            echo "TAG_NAME=$TAG"
+            echo "RELEASE_NAME=Safira $TAG"
+            [[ "$VERSION" == *-* ]] && echo "PRERELEASE=true" || echo "PRERELEASE=false"
+          } >> "$GITHUB_ENV"
+          # PR text goes through env + a file, never straight into the script
+          printf '%s\n\n%s\n' "${PR_TITLE#Release $TAG - }" "${PR_BODY//\[...autoGenerate\]/}" > release-notes.md
+
+      - name: create tag and release
+        if: env.SKIP != 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          MERGE_SHA: ${{ github.event.pull_request.merge_commit_sha }}
+        run: |
+          gh release create "$TAG_NAME" \
+            --target "$MERGE_SHA" \
+            --title "$RELEASE_NAME" \
+            --notes-file release-notes.md \
+            --generate-notes \
+            --prerelease="$PRERELEASE" \
+            --latest="$([[ $PRERELEASE == true ]] && echo false || echo true)"
