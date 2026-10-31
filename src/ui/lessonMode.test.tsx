@@ -1,4 +1,4 @@
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lessonsOf } from '@/content/content';
 import { loadProjects } from '@/projects/projectStore';
@@ -30,18 +30,14 @@ const run = async (): Promise<void> => {
   await userEvent.click(screen.getByRole('button', { name: 'Run' }));
 };
 
-const nextButton = (): HTMLElement => {
-  const brief = document.querySelector<HTMLElement>('.lesson-brief');
+const nextButton = (): HTMLElement => screen.getByRole('button', { name: 'Next' });
 
-  return within(brief as HTMLElement).getByRole('button', { name: 'Next' });
-};
+const continueButton = (): HTMLElement =>
+  within(document.querySelector<HTMLElement>('.cat-bubble') as HTMLElement).getByRole('button', { name: 'Continue' });
 
 const finishStep = async (): Promise<void> => {
   await run();
-  await waitFor(() => {
-    expect(nextButton()).toBeEnabled();
-  });
-  await userEvent.click(nextButton());
+  await userEvent.click(await screen.findByRole('button', { name: 'Next' }));
 };
 
 const goToChallenge = async (): Promise<void> => {
@@ -55,6 +51,7 @@ const goToChallenge = async (): Promise<void> => {
 describe('lesson mode', () => {
   beforeEach(() => {
     localStorage.clear();
+    sessionStorage.setItem('safira.cat.met', 'true');
     window.history.replaceState(null, '', '#/');
   });
 
@@ -71,8 +68,10 @@ describe('lesson mode', () => {
   it('asks for a run before moving on, and gives the check after it', async () => {
     await enterLessonMode();
 
+    await userEvent.click(continueButton());
+
     expect(screen.getByText('Press ▶ Run to see it work.')).toBeInTheDocument();
-    expect(nextButton()).toBeDisabled();
+    expect(screen.queryByRole('button', { name: 'Next' })).not.toBeInTheDocument();
 
     await run();
 
@@ -82,18 +81,31 @@ describe('lesson mode', () => {
     expect(screen.getByRole('button', { name: /^Step 1: .* \(done\)$/ })).toHaveTextContent('✓');
   });
 
+  it('counts the steps done at the bottom', async () => {
+    await enterLessonMode();
+    const steps = lessons.reduce((total, lesson) => total + lesson.steps.length, 0);
+
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', `0 of ${String(steps)} steps`);
+
+    await run();
+    await screen.findByText('Well done! You can move on.');
+
+    expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', `1 of ${String(steps)} steps`);
+  });
+
   it('walks to the next step, which starts locked', async () => {
     await enterLessonMode();
     await finishStep();
 
     expect(screen.getByRole('heading', { name: firstLesson.steps[1].title })).toBeInTheDocument();
-    expect(nextButton()).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Next step' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Previous step' })).toBeEnabled();
   });
 
   it('refuses a wrong challenge, explains it, and accepts the solution', async () => {
     await goToChallenge();
+
+    await userEvent.click(continueButton());
 
     expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
 
@@ -141,7 +153,7 @@ describe('lesson mode', () => {
     await enterLessonMode();
     await userEvent.click(lessonSwitch());
 
-    expect(document.querySelector('.lesson-brief')).toBeNull();
+    expect(document.querySelector('.cat')).toBeNull();
     expect(document.querySelector('.tab')).not.toBeNull();
     expect(loadSettings().lessonMode).toBe(false);
   });

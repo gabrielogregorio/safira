@@ -111,7 +111,8 @@ describe('App', () => {
 
     await userEvent.click(within(alert).getByRole('button', { name: 'See an example' }));
 
-    expect(screen.getByRole('button', { name: '01-variaveis.safira' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('dialog', { name: 'Variables' })).toHaveTextContent('name');
+    expect(screen.queryByRole('button', { name: '01-variaveis.safira' })).not.toBeInTheDocument();
   });
 
   it('warns only when the script version is not supported', async () => {

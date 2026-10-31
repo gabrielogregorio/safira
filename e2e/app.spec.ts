@@ -913,12 +913,18 @@ test.describe('phone', () => {
 });
 
 test.describe('lesson mode', () => {
-  const startLessonMode = async (page: Page): Promise<void> => {
+  const startLessonMode = async (page: Page, isFirstTime = false): Promise<void> => {
+    if (!isFirstTime) {
+      await page.addInitScript(() => {
+        sessionStorage.setItem('safira.cat.met', 'true');
+      });
+    }
+
     await page.goto('/');
     await page.getByRole('button', { name: 'Create project' }).click();
     await page.getByRole('button', { name: 'Go ahead' }).click();
     await page.locator('label', { hasText: 'Lesson mode' }).click();
-    await expect(page.locator('.lesson-brief')).toBeVisible();
+    await expect(page.locator('.cat-bubble')).toBeVisible();
   };
 
   const runAndGoOn = async (page: Page): Promise<void> => {
@@ -946,6 +952,30 @@ test.describe('lesson mode', () => {
     await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-exibicao');
   });
 
+  test('the cat teaches a step, shows the result and runs from the stone', async ({ page }) => {
+    await startLessonMode(page, true);
+    await expect(page.locator('.cat-bubble')).toContainText('Professor Cat');
+    await page.locator('.cat-bubble').getByRole('button', { name: 'Continue' }).click();
+    await expect(page.locator('.cat-bubble')).toContainText('list of orders');
+    await expectNoViolations(page);
+
+    await page.locator('.cat-bubble').getByRole('button', { name: 'Continue' }).click();
+    await expect(page.locator('.cat-bubble')).toContainText('Run');
+    await expect(page.locator('.cat')).toHaveAttribute('data-pose', 'point');
+    await expect(page.locator('.cat')).toHaveAttribute('data-facing', 'right');
+
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await expect(page.locator('.cat-bubble .lesson-status')).toContainText('Well done');
+
+    const stone = await page.getByRole('button', { name: 'Drag the stone' }).boundingBox();
+    await page.mouse.move((stone?.x ?? 0) + 10, (stone?.y ?? 0) + 10);
+    await page.mouse.down();
+    await page.mouse.move(400, 300, { steps: 4 });
+    await expect(page.locator('.cat-bubble')).toBeHidden();
+    await page.mouse.up();
+    await expect(page.locator('.cat-bubble .lesson-status')).toContainText('Well done');
+  });
+
   test('keeps the page inside the phone screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await startLessonMode(page);
@@ -966,7 +996,7 @@ test.describe('lesson mode', () => {
       await expect(page.locator('.lesson-status')).toContainText('Well done');
       await waitForAnimations(page);
 
-      const results = await new AxeBuilder({ page }).include('.tab-bar').include('.lesson-brief').analyze();
+      const results = await new AxeBuilder({ page }).include('.tab-bar').include('.cat-bubble').analyze();
 
       expect(results.violations).toEqual([]);
     });

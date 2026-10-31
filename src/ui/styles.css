@@ -871,6 +871,10 @@ select {
   margin-left: auto;
 }
 
+.home-brand-settings {
+  margin-left: auto;
+}
+
 .settings-gear {
   transform-box: fill-box;
   transform-origin: center;
@@ -2052,23 +2056,6 @@ select {
   color: #ffffff;
 }
 
-.lesson-brief {
-  animation: lesson-brief-enter 260ms ease;
-  backdrop-filter: blur(14px) saturate(150%);
-  background: var(--color-panel);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-panel);
-  box-shadow: var(--shadow-panel);
-  color: var(--color-text);
-  display: flex;
-  flex: none;
-  gap: 16px;
-  justify-content: space-between;
-  max-height: 32vh;
-  overflow-y: auto;
-  padding: 8px 14px;
-}
-
 .lesson-brief-text {
   flex: 1 1 60%;
   min-width: 0;
@@ -2092,7 +2079,6 @@ select {
 
 .lesson-brief-side {
   display: flex;
-  flex: 1 1 36%;
   flex-direction: column;
   gap: 8px;
   justify-content: space-between;
@@ -2129,21 +2115,206 @@ select {
   animation: lesson-next-glow 1400ms ease-in-out infinite;
 }
 
-@keyframes lesson-brief-enter {
-  from {
-    opacity: 0;
-    transform: translateY(-6px);
-  }
-}
-
 @keyframes lesson-next-glow {
   50% {
     box-shadow: 0 0 14px 3px var(--color-accent);
   }
 }
 
-.status-bar {
+.cat {
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 0;
+  transition: transform 700ms cubic-bezier(0.3, 0.8, 0.3, 1);
+  z-index: 30;
+}
+
+.cat-bird {
+  animation:
+    cat-return 420ms cubic-bezier(0.3, 1.3, 0.5, 1),
+    cat-bob 1600ms ease-in-out 420ms infinite;
+  filter: drop-shadow(0 4px 6px rgb(6 40 90 / 40%));
+  height: 96px;
+  width: 96px;
+}
+
+.cat-head {
+  transform-box: fill-box;
+  transform-origin: 50% 90%;
+  transition: transform 300ms ease;
+}
+
+.cat-bubble {
+  backdrop-filter: blur(14px) saturate(150%);
+  background: var(--color-panel-strong);
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  bottom: 40px;
+  box-shadow: var(--shadow-panel);
   color: var(--color-text);
+  display: grid;
+  gap: 8px;
+  max-height: 46vh;
+  overflow-y: auto;
+  padding: 12px 14px;
+  pointer-events: auto;
+  position: absolute;
+  right: 104px;
+  width: min(360px, 40vw);
+}
+
+.cat-at-play .cat-bubble {
+  bottom: auto;
+  top: 8px;
+}
+
+.cat-bubble p {
+  margin: 0;
+}
+
+.lesson-brief-bubble {
+  display: grid;
+  gap: 8px;
+}
+
+.cat-fleeing {
+  animation: cat-flee 800ms cubic-bezier(0.5, 0, 1, 0.6) both;
+  transition: none;
+}
+
+.cat-stone {
+  background: none;
+  border: none;
+  bottom: 2px;
+  cursor: var(--cursor-pointer);
+  filter: drop-shadow(0 2px 3px rgb(6 40 90 / 45%));
+  height: 34px;
+  left: 50%;
+  min-height: 0;
+  padding: 0;
+  position: fixed;
+  touch-action: none;
+  transition: transform 320ms cubic-bezier(0.5, 0, 1, 0.6);
+  width: 48px;
+  z-index: 30;
+}
+
+.cat-stone:hover:not(.cat-stone-held) {
+  transform: translateY(-3px) rotate(-6deg);
+}
+
+.cat-stone-held {
+  cursor: grabbing;
+  transition: none;
+}
+
+.cat-bird svg {
+  height: 100%;
+  overflow: visible;
+  transition: transform 300ms ease;
+  width: 100%;
+}
+
+.cat[data-facing='left'] .cat-bird svg {
+  transform: scaleX(-1);
+}
+
+.cat-sleeve {
+  fill: none;
+  stroke: #2f8fdc;
+  stroke-linecap: round;
+  stroke-width: 11;
+}
+
+.cat-pointing-arm {
+  transform: rotate(var(--point-angle, 0deg));
+  transform-box: view-box;
+  transform-origin: 72px 80px;
+  transition: transform 500ms cubic-bezier(0.3, 1.3, 0.5, 1);
+}
+
+.cat-waving-arm {
+  animation: cat-wave 700ms ease-in-out infinite alternate;
+  transform-box: view-box;
+  transform-origin: 72px 80px;
+}
+
+.cat-thumbs-arm {
+  animation: cat-thumbs 420ms cubic-bezier(0.3, 1.6, 0.5, 1);
+  transform-box: view-box;
+  transform-origin: 72px 80px;
+}
+
+.cat[data-pose='facepalm'] .cat-head {
+  transform: rotate(6deg) translateY(3px);
+}
+
+@keyframes cat-wave {
+  to {
+    transform: rotate(-14deg);
+  }
+}
+
+@keyframes cat-thumbs {
+  from {
+    transform: rotate(30deg) scale(0.7);
+  }
+}
+
+@keyframes cat-return {
+  from {
+    opacity: 0;
+    transform: translateX(120px);
+  }
+}
+
+@keyframes cat-bob {
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes cat-flee {
+  to {
+    transform: translate(120vw, -60vh) rotate(-14deg) scale(0.6);
+  }
+}
+
+.example-code {
+  background: var(--color-field);
+  border-radius: 10px;
+  margin: 0;
+  overflow-x: auto;
+  padding: 10px 12px;
+}
+
+.lesson-progress {
+  align-items: center;
+  display: flex;
+  gap: 8px;
+}
+
+.lesson-progress-track {
+  background: linear-gradient(rgb(255 255 255 / 45%), transparent 60%), var(--color-panel-strong);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  height: 12px;
+  overflow: hidden;
+  width: clamp(90px, 18vw, 220px);
+}
+
+.lesson-progress-fill {
+  background: var(--aero-run-face);
+  height: 100%;
+  transition: width 500ms ease;
+}
+
+.status-bar {
+  align-items: center;
+  color: var(--color-text);
+  display: flex;
+  justify-content: space-between;
   font-size: 0.85rem;
   padding: 0 8px;
   text-shadow: 0 1px 2px var(--color-panel-strong);
@@ -2508,14 +2679,17 @@ select {
 }
 
 @media (max-width: 768px) {
-  .lesson-brief {
-    flex-direction: column;
-    gap: 8px;
-    max-height: 38vh;
+  .cat-bubble,
+  .cat-at-play .cat-bubble {
+    bottom: 104px;
+    right: 0;
+    top: auto;
+    width: calc(100vw - 24px);
   }
 
-  .lesson-brief-side {
-    flex: none;
+  .cat-stone {
+    bottom: 66px;
+    left: 12px;
   }
 
   .editor-screen {
@@ -2619,6 +2793,15 @@ select {
   }
 
   .status-bar {
+    display: none;
+  }
+
+  .status-bar:has(.lesson-progress) {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .status-bar > span {
     display: none;
   }
 
@@ -2732,8 +2915,12 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cat,
+  .cat-bird,
+  .cat-fleeing,
+  .cat-waving-arm,
+  .cat-thumbs-arm,
   .settings-gear,
-  .lesson-brief,
   .lesson-next-ready,
   .aquarium,
   .aero-orb *,
@@ -2771,8 +2958,12 @@ select {
   }
 }
 
+:root[data-vision='calm'] .cat,
+:root[data-vision='calm'] .cat-bird,
+:root[data-vision='calm'] .cat-waving-arm,
+:root[data-vision='calm'] .cat-thumbs-arm,
+:root[data-vision='calm'] .cat-fleeing,
 :root[data-vision='calm'] .settings-gear,
-:root[data-vision='calm'] .lesson-brief,
 :root[data-vision='calm'] .lesson-next-ready,
 :root[data-vision='calm'] .aquarium,
 :root[data-vision='calm'] .aero-orb *,

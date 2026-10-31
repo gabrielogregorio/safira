@@ -5,7 +5,7 @@ import { useTranslation } from '@/i18n/i18n';
 import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
-import { addScriptVersion, isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
+import { addScriptVersion, isSupportedVersion, readScriptVersion, SUPPORTED_VERSIONS } from '@/language/version';
 import { clearDrafts, loadDrafts } from '@/projects/draftStore';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
@@ -27,13 +27,15 @@ import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
 import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
+import { SafiraCode } from '@/ui/components/SafiraCode';
 import { VariableInspector } from '@/ui/components/VariableInspector';
 import { describeArchiveResult } from '@/ui/archiveMessages';
 import { downloadFile, downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { FileSidebar } from '@/ui/components/FileSidebar';
 import { LessonBar } from '@/ui/components/LessonBar';
-import { LessonBrief } from '@/ui/components/LessonBrief';
+import { LessonProgress } from '@/ui/components/LessonProgress';
+import { ProfessorCat } from '@/ui/components/ProfessorCat';
 import { LessonsDialog } from '@/ui/components/LessonsDialog';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
@@ -71,7 +73,11 @@ interface EditorScreenProps {
   onBack: () => void;
 }
 
-type Dialog = { kind: 'commands' } | { kind: 'delete-node'; node: TreeNode } | null;
+type Dialog =
+  | { kind: 'commands' }
+  | { kind: 'delete-node'; node: TreeNode }
+  | { kind: 'example'; title: string; code: string }
+  | null;
 
 const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
 const AUTOSAVE_MILLISECONDS = 300;
@@ -720,19 +726,7 @@ export const EditorScreen = ({
         </label>
       </nav>
 
-      {settings.lessonMode && lesson.step !== undefined ? (
-        <LessonBrief
-          step={lesson.step}
-          verdict={lesson.verdict}
-          isDone={lesson.isDone}
-          isLastStep={lesson.isLastStep}
-          isOnStepFile={lesson.isOnStepFile}
-          onNext={lesson.goToNext}
-          onBack={lesson.backToStep}
-          onStartOver={lesson.startOver}
-          onShowSolution={lesson.showSolution}
-        />
-      ) : null}
+      {settings.lessonMode ? <ProfessorCat lesson={lesson} hasError={failure !== null} /> : null}
 
       <ArchiveInput
         ref={archiveInput}
@@ -830,13 +824,24 @@ export const EditorScreen = ({
               <p>
                 {t('Line {line}', { line: failure.line })}: {failure.message}
               </p>
+              {failure.missingName === null ? null : (
+                <p>
+                  {t('Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".', {
+                    name: failure.missingName,
+                  })}
+                </p>
+              )}
               <div className="form-row">
                 {failureExample === undefined ? null : (
                   <button
                     type="button"
                     className="button"
                     onClick={() => {
-                      openFile(`${failureExample.id}.safira`, failureExample.text);
+                      setDialog({
+                        kind: 'example',
+                        title: failureExample.title,
+                        code: readScriptVersion(failureExample.text).body,
+                      });
                     }}>
                     {t('See an example')}
                   </button>
@@ -902,7 +907,10 @@ export const EditorScreen = ({
         ))}
       </nav>
 
-      <footer className="status-bar">{t('Line {line}, column {column}', cursor)}</footer>
+      <footer className="status-bar">
+        <span>{t('Line {line}, column {column}', cursor)}</span>
+        {settings.lessonMode ? <LessonProgress lessons={lesson.lessons} progress={settings.lessonProgress} /> : null}
+      </footer>
 
       {dialog?.kind === 'delete-node' ? (
         <Modal
@@ -932,6 +940,18 @@ export const EditorScreen = ({
               {t('Delete')}
             </button>
           </div>
+        </Modal>
+      ) : null}
+
+      {dialog?.kind === 'example' ? (
+        <Modal
+          title={dialog.title}
+          onClose={() => {
+            setDialog(null);
+          }}>
+          <pre className="example-code" data-fixed-text>
+            <SafiraCode code={dialog.code} />
+          </pre>
         </Modal>
       ) : null}
 

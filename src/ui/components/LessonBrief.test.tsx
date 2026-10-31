@@ -14,12 +14,6 @@ const actions = { onNext: vi.fn(), onBack: vi.fn(), onStartOver: vi.fn(), onShow
 const base = { step, isDone: false, isLastStep: false, isOnStepFile: true, ...actions };
 
 describe('LessonBrief', () => {
-  it('renders the explanation as markdown', () => {
-    render(<LessonBrief {...base} verdict={{ status: 'idle' }} />);
-
-    expect(screen.getByText('mostre').tagName).toBe('CODE');
-  });
-
   it('shows that it is checking', () => {
     render(<LessonBrief {...base} verdict={{ status: 'checking' }} />);
 
@@ -56,6 +50,10 @@ describe('describeFailure', () => {
   it.each([
     [{ ...failed, reason: 'missing', text: '8' }, 'Almost! "8" did not appear in the output.'],
     [{ ...failed, reason: 'missing', text: '8', inputs: ['4'] }, 'Almost! When the answer is 4, "8" should appear.'],
+    [
+      { ...failed, reason: 'spacing', text: 'a b' },
+      'Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable',
+    ],
     [{ ...failed, reason: 'unexpected', text: 'par' }, 'Almost! "par" should not appear here.'],
     [{ ...failed, reason: 'error', text: 'Falhou', line: 2 }, 'Line 2: Falhou'],
     [{ ...failed, reason: 'limit', text: '' }, 'Your program never ends. Check your repetition.'],

@@ -1,4 +1,3 @@
-import Markdown from 'react-markdown';
 import type { Translate } from '@/i18n/i18n';
 import { useTranslation } from '@/i18n/i18n';
 import type { LessonStep } from '@/content/lessons';
@@ -32,6 +31,8 @@ export const describeFailure = (t: Translate, result: CheckResult): string => {
             text: result.text,
             inputs: result.inputs.join(', '),
           });
+    case 'spacing':
+      return t('Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable');
     case 'unexpected':
       return t('Almost! "{text}" should not appear here.', { text: result.text });
     case 'error':
@@ -66,16 +67,13 @@ const describeStatus = (t: Translate, props: LessonBriefProps): string => {
 
 export const LessonBrief = (props: LessonBriefProps) => {
   const t = useTranslation();
-  const { step, verdict, isDone, isLastStep, isOnStepFile, onNext, onBack, onStartOver, onShowSolution } = props;
+  const { step, verdict, isDone, isLastStep, isOnStepFile } = props;
+  const { onNext, onBack, onStartOver, onShowSolution } = props;
   const hasFailed = verdict.status === 'failed';
   const hint = hasFailed ? (step.check?.hint ?? null) : null;
 
   return (
-    <section className="lesson-brief" aria-label={step.title}>
-      <div className="lesson-brief-text" data-fixed-text>
-        <h2>{step.title}</h2>
-        <Markdown>{step.text}</Markdown>
-      </div>
+    <div className="lesson-brief-bubble">
       <div className="lesson-brief-side">
         <p
           className={`lesson-status${isDone ? ' lesson-status-done' : ''}${hasFailed ? ' lesson-status-failed' : ''}`}
@@ -111,6 +109,6 @@ export const LessonBrief = (props: LessonBriefProps) => {
           )}
         </div>
       </div>
-    </section>
+    </div>
   );
 };

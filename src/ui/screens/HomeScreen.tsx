@@ -114,7 +114,7 @@ export const HomeScreen = ({
             <AeroOrb size={HERO_ORB_SIZE} />
           </button>
           <h1 data-fixed-text>Safira</h1>
-          <div className="home-corner">{settingsButton}</div>
+          <div className="home-brand-settings">{settingsButton}</div>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">

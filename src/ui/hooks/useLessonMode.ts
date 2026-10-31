@@ -78,6 +78,8 @@ export interface LessonMode {
   isDone: boolean;
   isLastStep: boolean;
   verdict: LessonVerdict;
+  /** This step already ran without an error since it was opened. */
+  hasRun: boolean;
   open: (place: LessonPlace) => void;
   toggle: () => void;
   goToNext: () => void;
@@ -100,6 +102,7 @@ export const useLessonMode = ({
 }: LessonModeOptions): LessonMode => {
   const lessons = lessonsOf(locale);
   const [verdict, setVerdict] = useState<LessonVerdict>(IDLE);
+  const [hasRun, setHasRun] = useState(false);
   const filePlace = useMemo(() => placeOfFile(lessons, folder, activeFile), [activeFile, folder, lessons]);
   const place = filePlace ?? resolvePlace(lessons, settings.lessonPlace);
   const step = stepAt(lessons, place);
@@ -110,6 +113,7 @@ export const useLessonMode = ({
 
       if (targetStep !== undefined) {
         setVerdict(IDLE);
+        setHasRun(false);
         onChangeSettings({ lessonPlace: target });
         onOpenFile(lessonFilePath(folder, target), targetStep.code);
       }
@@ -149,6 +153,7 @@ export const useLessonMode = ({
   const judge = useCallback(
     async (run: LessonRun, done: LessonPlace) => {
       const check = stepAt(lessons, done)?.check ?? null;
+      setHasRun(true);
 
       if (check === null) {
         complete(done);
@@ -192,6 +197,7 @@ export const useLessonMode = ({
     isDone,
     isLastStep: following === null,
     verdict,
+    hasRun,
     open,
     toggle,
     goToNext: () => {
@@ -204,6 +210,7 @@ export const useLessonMode = ({
     },
     startOver: () => {
       setVerdict(IDLE);
+      setHasRun(false);
       onReplaceCode(step?.code ?? '');
     },
     showSolution: () => {

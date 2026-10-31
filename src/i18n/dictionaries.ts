@@ -1,5 +1,16 @@
 export const dictionaries = {
   'pt-br': {
+    'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
+      'Sem aspas, a Safira procura uma variável chamada {name}. Se for um texto, escreva "{name}".',
+    'Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable':
+      'Quase! As palavras saíram grudadas. Deixe um espaço antes de fechar as aspas: "texto " + variável',
+    '{done} of {total} steps': '{done} de {total} passos',
+    'Progress in the lessons': 'Progresso nas aulas',
+    'Professor Cat': 'Professor Gato',
+    'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
+      'Miau! Eu sou o Professor Gato, e vou te ensinar a programar, um passo de cada vez. Se quiser que eu saia, arraste a pedra do chão. Quando você soltar, eu volto.',
+    'Look at the result up there.': 'Olha o resultado ali.',
+    'Drag the stone': 'Arrastar a pedra',
     'The normal colors of the theme.': 'As cores normais do tema.',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
       'Para quem enxerga pouco o vermelho. Usa azul e laranja no lugar de vermelho e verde.',
@@ -177,6 +188,17 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   es: {
+    'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
+      'Sin comillas, Safira busca una variable llamada {name}. Si es un texto, escribe "{name}".',
+    'Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable':
+      '¡Casi! Las palabras salieron pegadas. Deja un espacio antes de cerrar las comillas: "texto " + variable',
+    '{done} of {total} steps': '{done} de {total} pasos',
+    'Progress in the lessons': 'Progreso en las clases',
+    'Professor Cat': 'Profesor Gato',
+    'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
+      '¡Miau! Soy el Profesor Gato y te enseñaré a programar, paso a paso. Si quieres que me vaya, arrastra la piedra del suelo. Cuando la sueltes, vuelvo.',
+    'Look at the result up there.': 'Mira el resultado ahí arriba.',
+    'Drag the stone': 'Arrastrar la piedra',
     'The normal colors of the theme.': 'Los colores normales del tema.',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
       'Para quien ve poco el rojo. Usa azul y naranja en lugar de rojo y verde.',
@@ -355,6 +377,17 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   'zh-cn': {
+    'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
+      '没有引号时,Safira 会寻找名为 {name} 的变量。如果是文字,请写成 "{name}"。',
+    'Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable':
+      '差一点!文字粘在一起了。在结束引号前留一个空格:"文字 " + 变量',
+    '{done} of {total} steps': '{done} / {total} 步',
+    'Progress in the lessons': '课程进度',
+    'Professor Cat': '猫教授',
+    'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
+      '喵!我是猫教授,我会一步一步教你编程。如果想让我走开,就拖动地上的石头。松手后我就回来。',
+    'Look at the result up there.': '看,结果在那边。',
+    'Drag the stone': '拖动石头',
     'The normal colors of the theme.': '主题的正常颜色。',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
       '适合难以看清红色的人。用蓝色和橙色代替红色和绿色。',
@@ -527,6 +560,17 @@ export const dictionaries = {
     Programs: '程序',
   },
   ja: {
+    'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
+      '引用符がないと、Safira は {name} という変数を探します。文字なら "{name}" と書きましょう。',
+    'Almost! The words came out glued together. Leave a space before the closing quote: "text " + variable':
+      'おしい!言葉がくっついています。閉じる引用符の前に空白を入れましょう: "文字 " + 変数',
+    '{done} of {total} steps': '{done} / {total} ステップ',
+    'Progress in the lessons': 'レッスンの進み具合',
+    'Professor Cat': 'ネコ先生',
+    'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.':
+      'ニャー!ネコ先生です。プログラミングを一歩ずつ教えます。離れてほしいときは、床の石をドラッグしてください。手を離すと戻ります。',
+    'Look at the result up there.': '結果はあそこです。',
+    'Drag the stone': '石をドラッグ',
     'The normal colors of the theme.': 'テーマの通常の色です。',
     'For those who see red as weak. Uses blue and orange instead of red and green.':
       '赤が見えにくい方向けです。赤と緑の代わりに青とオレンジを使います。',
