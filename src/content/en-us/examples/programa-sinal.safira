@@ -3,14 +3,14 @@
 
 repeat 2 times {
     clear
-    print "🔴 Stop"
+    show "🔴 Stop"
     wait 2 seconds
 
     clear
-    print "🟢 Go"
+    show "🟢 Go"
     wait 2 seconds
 
     clear
-    print "🟠 Careful"
+    show "🟠 Careful"
     wait 1 second
 }

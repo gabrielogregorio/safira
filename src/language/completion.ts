@@ -13,7 +13,7 @@ const LONGEST_PHRASE_WORDS = 4;
 const INSIDE_WORD = /^[\p{L}\p{N}_]/u;
 
 // Whole lines that a beginner is likely to want, shown first and always valid Safira.
-export const STARTER_LINES: Record<'pt' | 'en' | 'es', string[]> = {
+export const STARTER_LINES: Record<'pt' | 'en' | 'es' | 'zh' | 'ja', string[]> = {
   pt: [
     'mostre "Olá!"',
     'mostre nessa linha "Olá!"',
@@ -38,18 +38,35 @@ export const STARTER_LINES: Record<'pt' | 'en' | 'es', string[]> = {
     'try {',
     'return 1',
   ],
-  es: ['muestra "¡Hola!"', 'repetir 3 veces {', 'mientras 1 sea menor que 10 {', 'volver 1'],
+  es: [
+    'muestra "¡Hola!"',
+    'repetir 3 veces {',
+    'mientras 1 es menor que 10 {',
+    'si 1 es igual a 1 entonces {',
+    'volver 1',
+  ],
+  zh: ['显示 "你好!"', '重复 3 次 {', '如果 1 等于 1 那么 {', '当 1 小于 10 {', '等待 1 秒', '返回 1'],
+  ja: [
+    '表示 「こんにちは」',
+    '繰り返す 3 回 {',
+    'もし 1 等しい 1 なら {',
+    '条件ループ 1 小なり 10 {',
+    '待つ 1 秒',
+    '返す 1',
+  ],
 };
 
 const normalize = (text: string): string => removeAccents(text).toLowerCase();
 
-const startersFor = (locale: Locale): string[] => {
-  if (locale === 'pt-br') {
-    return STARTER_LINES.pt;
-  }
-
-  return locale === 'es' ? STARTER_LINES.es : STARTER_LINES.en;
+const STARTERS_BY_LOCALE: Record<Locale, string[]> = {
+  'pt-br': STARTER_LINES.pt,
+  'en-us': STARTER_LINES.en,
+  es: STARTER_LINES.es,
+  'zh-cn': STARTER_LINES.zh,
+  ja: STARTER_LINES.ja,
 };
+
+const startersFor = (locale: Locale): string[] => STARTERS_BY_LOCALE[locale];
 
 const allPhrases = getAllCommands()
   .flatMap(([, definition]) => definition.phrases)

@@ -4,6 +4,6 @@
 
 name = "ana maria"
 
-print name in upper case
-print name in lower case
-print name in capitalized
+show name in upper case
+show name in lower case
+show name in capitalized

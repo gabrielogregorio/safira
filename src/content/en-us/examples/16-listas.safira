@@ -7,6 +7,6 @@ list of groceries receive "apple", "bread"
 add "milk" at the end of the list of groceries
 remove "bread" from the list of groceries
 
-print groceries
-print list of groceries in position 1
-print the size of the list of groceries
+show groceries
+show list of groceries in position 1
+show the size of the list of groceries

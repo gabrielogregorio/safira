@@ -1,10 +1,10 @@
 #safira 0.9
 # 🎄 Christmas
 
-print "    ⭐"
-print "   🎄🎄"
-print "  🎄🔴🎄"
-print " 🎄🟡🎄🔵"
-print "    🟫"
-print ""
-print "🎅 Merry Christmas!"
+show "    ⭐"
+show "   🎄🎄"
+show "  🎄🔴🎄"
+show " 🎄🟡🎄🔵"
+show "    🟫"
+show ""
+show "🎅 Merry Christmas!"

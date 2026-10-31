@@ -8,8 +8,8 @@ Creating the function does not run anything. It only runs when you call its name
 
 ```safira
 function hello {
-    print "Hello!"
-    print "How are you?"
+    show "Hello!"
+    show "How are you?"
 }
 
 hello()
@@ -22,7 +22,7 @@ A function can receive values to work with.
 
 ```safira
 function greet(name) {
-    print "Hello, " + name
+    show "Hello, " + name
 }
 
 greet("Ana")
@@ -38,7 +38,7 @@ function double(number) {
     return number * 2
 }
 
-print double(4)
+show double(4)
 ```
 
 ## Challenge: sum
@@ -57,7 +57,7 @@ function add_up(a, b) {
     return a + b
 }
 
-print add_up(2, 3)
+show add_up(2, 3)
 ```
 
 ```check

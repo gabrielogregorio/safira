@@ -7,9 +7,9 @@ A program can also wait and play notes.
 `wait` takes a pause before the next command.
 
 ```safira
-print "Ready..."
+show "Ready..."
 wait 1 second
-print "Go!"
+show "Go!"
 ```
 
 ## Play a note
@@ -34,13 +34,13 @@ Show 3, 2, 1, with a wait between the numbers, and then show `Fire!`.
 ```
 
 ```solution
-print 3
+show 3
 wait 1 second
-print 2
+show 2
 wait 1 second
-print 1
+show 1
 wait 1 second
-print "Fire!"
+show "Fire!"
 ```
 
 ```check

@@ -1,16 +1,16 @@
 #safira 0.9
 # 🔢 Put in order
 
-print "Type a number:"
+show "Type a number:"
 first = the number that the user enters
 
-print "Type another number:"
+show "Type another number:"
 second = the number that the user enters
 
 if first is less than second then {
-    print first
-    print second
+    show first
+    show second
 } else {
-    print second
-    print first
+    show second
+    show first
 }

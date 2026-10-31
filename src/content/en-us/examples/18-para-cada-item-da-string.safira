@@ -5,5 +5,5 @@
 word = "Safira"
 
 scroll through word assigning in letter {
-    print letter
+    show letter
 }

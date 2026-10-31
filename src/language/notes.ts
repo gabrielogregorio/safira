@@ -21,9 +21,27 @@ const SEMITONES: Record<string, number> = {
   la: 9,
   b: 11,
   si: 11,
+  ...Object.fromEntries(
+    [
+      ['ド', 0],
+      ['レ', 2],
+      ['ミ', 4],
+      ['ファ', 5],
+      ['ソ', 7],
+      ['ラ', 9],
+      ['シ', 11],
+      ['哆', 0],
+      ['来', 2],
+      ['咪', 4],
+      ['发', 5],
+      ['唆', 7],
+      ['拉', 9],
+      ['西', 11],
+    ].map(([name, semitones]) => [removeAccents(String(name)), semitones]),
+  ),
 };
 
-const NOTE_PATTERN = /^(do|re|mi|fa|sol|la|si|[a-g])([#b]?)(\d?)([#b]?)$/;
+const NOTE_PATTERN = /^(do|re|mi|fa|sol|la|si|[a-g]|ト|レ|ミ|ファ|ソ|ラ|シ|哆|来|咪|发|唆|拉|西)([#b]?)(\d?)([#b]?)$/;
 const REST = 'r';
 
 const accidentalOf = (mark: string): number => {

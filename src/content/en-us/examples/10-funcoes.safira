@@ -3,7 +3,7 @@
 # A function is a named block of code. Use it whenever you want.
 
 function greet(name) {
-    print "Hello, " + name + "!"
+    show "Hello, " + name + "!"
 }
 
 greet("Ana")

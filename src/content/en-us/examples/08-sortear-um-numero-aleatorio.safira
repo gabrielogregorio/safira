@@ -4,4 +4,4 @@
 
 die = a random number between 1 and 6
 
-print "🎲 The number was " + die
+show "🎲 The number was " + die

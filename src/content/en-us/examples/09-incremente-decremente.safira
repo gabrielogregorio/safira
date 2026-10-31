@@ -5,7 +5,7 @@
 points = 10
 
 increase 5 in points
-print points
+show points
 
 decrease 2 in points
-print points
+show points

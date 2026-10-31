@@ -9,9 +9,9 @@ Positions start at 1.
 ```safira
 list of fruits receive "grape", "apple", "mango"
 
-print fruits
-print list of fruits in position 1
-print the size of the list of fruits
+show fruits
+show list of fruits in position 1
+show the size of the list of fruits
 ```
 
 ## Add and remove
@@ -24,7 +24,7 @@ list of fruits receive "grape", "apple"
 add "mango" at the end of the list of fruits
 remove "grape" from the list of fruits
 
-print fruits
+show fruits
 ```
 
 ## Go through all the items
@@ -35,7 +35,7 @@ print fruits
 list of fruits receive "grape", "apple", "mango"
 
 scroll through the list of fruits assigning in fruit {
-    print "I like " + fruit
+    show "I like " + fruit
 }
 ```
 
@@ -58,7 +58,7 @@ list of groceries receive "rice", "beans"
 add "milk" at the end of the list of groceries
 
 scroll through the list of groceries assigning in item {
-    print item
+    show item
 }
 ```
 

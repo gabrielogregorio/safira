@@ -50,7 +50,7 @@ describe('LessonsDialog', () => {
     const { onOpenCode } = setup('aula-02-exibicao');
     await userEvent.click(screen.getAllByRole('button', { name: 'Open in the IDE' })[0]);
 
-    expect(onOpenCode).toHaveBeenCalledExactlyOnceWith('aula-02-exibicao', expect.stringContaining('print'));
+    expect(onOpenCode).toHaveBeenCalledExactlyOnceWith('aula-02-exibicao', expect.stringContaining('show'));
   });
 
   it('closes like any modal', async () => {

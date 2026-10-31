@@ -12,7 +12,8 @@ describe('suggestCompletion', () => {
   it('follows the language of the interface', () => {
     expect(suggestCompletion('sh', '', 'sh', 'en-us')).toBe('ow "Hello!"');
     expect(suggestCompletion('mu', '', 'mu', 'es')).toBe('estra "¡Hola!"');
-    expect(suggestCompletion('sh', '', 'sh', 'ja')).toBe('ow "Hello!"');
+    expect(suggestCompletion('显示', '', '显示', 'zh-cn')).toBe(' "你好!"');
+    expect(suggestCompletion('表示', '', '表示', 'ja')).toBe(' 「こんにちは」');
   });
 
   it('keeps working with indentation', () => {

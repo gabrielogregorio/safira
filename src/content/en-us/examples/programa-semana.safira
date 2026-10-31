@@ -1,15 +1,15 @@
 #safira 0.9
 # 📅 Day of the week
 
-print "📅 Type a number from 1 to 3:"
+show "📅 Type a number from 1 to 3:"
 day = the number that the user enters
 
 if day is equal to 1 then {
-    print "Sunday 😴"
+    show "Sunday 😴"
 } else if day is equal to 2 then {
-    print "Monday 😩"
+    show "Monday 😩"
 } else if day is equal to 3 then {
-    print "Tuesday 📚"
+    show "Tuesday 📚"
 } else {
-    print "I do not know that day."
+    show "I do not know that day."
 }

@@ -1,8 +1,8 @@
 #safira 0.9
 # 🐰 Easter
 
-print "    🐰"
-print "  🥚 🍫 🥚"
-print "🌷 🥚 🍫 🥚 🌷"
-print ""
-print "🐣 Happy Easter!"
+show "    🐰"
+show "  🥚 🍫 🥚"
+show "🌷 🥚 🍫 🥚 🌷"
+show ""
+show "🐣 Happy Easter!"

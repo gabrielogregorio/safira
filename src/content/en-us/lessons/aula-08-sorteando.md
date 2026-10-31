@@ -9,7 +9,7 @@ Run it several times: the number changes.
 ```safira
 die = a random number between 1 and 6
 
-print "It was " + die
+show "It was " + die
 ```
 
 ## Luck and conditions
@@ -20,9 +20,9 @@ Putting the draw together with `if`, the program decides by itself.
 coin = a random number between 1 and 2
 
 if coin is equal to 1 then {
-    print "Heads"
+    show "Heads"
 } else {
-    print "Tails"
+    show "Tails"
 }
 ```
 
@@ -33,7 +33,7 @@ Draw a number between 1 and 3 and keep it in `secret`. Ask for a number. If it i
 ```safira
 # Draw the secret here.
 
-print "Guess a number from 1 to 3:"
+show "Guess a number from 1 to 3:"
 guess = the number that the user enters
 
 # Compare the guess with the secret here.
@@ -43,13 +43,13 @@ guess = the number that the user enters
 ```solution
 secret = a random number between 1 and 3
 
-print "Guess a number from 1 to 3:"
+show "Guess a number from 1 to 3:"
 guess = the number that the user enters
 
 if guess is equal to secret then {
-    print "Correct"
+    show "Correct"
 } else {
-    print "Wrong"
+    show "Wrong"
 }
 ```
 

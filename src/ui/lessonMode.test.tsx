@@ -64,7 +64,7 @@ describe('lesson mode', () => {
     expect(screen.getByRole('heading', { name: firstLesson.steps[0].title })).toBeInTheDocument();
     expect(screen.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(firstLesson.id);
     expect(document.querySelector('.tab')).toBeNull();
-    expect(document.querySelector('.cm-content')).toHaveTextContent('print');
+    expect(document.querySelector('.cm-content')).toHaveTextContent('show');
     expect(Object.keys(loadProjects()[0].files)).toContain('lessons/01-apresentacao-1.safira');
   });
 
@@ -116,7 +116,7 @@ describe('lesson mode', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
     await userEvent.click(screen.getByRole('button', { name: 'Start over' }));
 
-    expect(document.querySelector('.cm-content')).not.toHaveTextContent('print');
+    expect(document.querySelector('.cm-content')).not.toHaveTextContent('show');
   });
 
   it('changes lessons in the bar', async () => {

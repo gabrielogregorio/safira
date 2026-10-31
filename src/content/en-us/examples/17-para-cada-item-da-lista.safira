@@ -5,5 +5,5 @@
 list of fruits receive "grape", "apple", "mango"
 
 scroll through the list of fruits assigning in fruit {
-    print fruit
+    show fruit
 }

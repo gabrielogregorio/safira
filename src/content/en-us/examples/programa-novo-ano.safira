@@ -2,9 +2,9 @@
 # 🎆 New Year
 
 for each number from 3 to 1 {
-    print number
+    show number
     wait 1 second
 }
 
-print "🎆 🎇 ✨"
-print "🎉 Happy New Year!"
+show "🎆 🎇 ✨"
+show "🎉 Happy New Year!"

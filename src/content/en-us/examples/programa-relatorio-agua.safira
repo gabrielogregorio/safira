@@ -1,12 +1,12 @@
 #safira 0.9
 # 💧 Drink water
 
-print "💧 How many glasses of water did you drink today?"
+show "💧 How many glasses of water did you drink today?"
 glasses = the number that the user enters
 
 if glasses is greater than or equal to 8 then {
-    print "💧 Well done!"
+    show "💧 Well done!"
 } else {
     missing = 8 - glasses
-    print "🥤 " + missing + " glasses to go."
+    show "🥤 " + missing + " glasses to go."
 }

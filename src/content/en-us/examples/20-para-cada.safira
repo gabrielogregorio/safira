@@ -3,5 +3,5 @@
 # The variable goes from one number to another.
 
 for each number from 1 to 5 {
-    print number
+    show number
 }

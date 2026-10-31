@@ -9,17 +9,17 @@ A program is a list of orders for the computer. This one has a single order: sho
 Press ▶ Run and see the result next to it.
 
 ```safira
-print "Hello, world!"
+show "Hello, world!"
 ```
 
 ## One order after another
 
-Safira reads from top to bottom, one line at a time. Each `print` writes on a new line.
+Safira reads from top to bottom, one line at a time. Each `show` writes on a new line.
 
 ```safira
-print "First"
-print "Second"
-print "Third"
+show "First"
+show "Second"
+show "Third"
 ```
 
 ## Comments
@@ -28,7 +28,7 @@ A line that starts with `#` is a comment. It is a note for whoever reads the cod
 
 ```safira
 # This line does not show on the screen.
-print "This one does!"
+show "This one does!"
 ```
 
 ## Challenge: talk to me
@@ -41,9 +41,9 @@ Make the program show the text `Hello, Safira!`.
 ```
 
 ```solution
-print "Hello, Safira!"
+show "Hello, Safira!"
 ```
 
 ```check
-{ "uses": ["print"], "hint": "Use the print command with the text between quotes.", "cases": [{ "shows": ["Hello, Safira!"] }] }
+{ "uses": ["print"], "hint": "Use the show command with the text between quotes.", "cases": [{ "shows": ["Hello, Safira!"] }] }
 ```

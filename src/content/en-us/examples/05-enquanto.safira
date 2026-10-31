@@ -5,8 +5,8 @@
 password = 1
 
 while password is different from 0 {
-    print "Type 0 to leave:"
+    show "Type 0 to leave:"
     password = the number that the user enters
 }
 
-print "See you later!"
+show "See you later!"

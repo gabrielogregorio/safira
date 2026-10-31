@@ -7,4 +7,4 @@ overwrite "age = 25" to the file "library.safira"
 
 import "library"
 
-print age
+show age

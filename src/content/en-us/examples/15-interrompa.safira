@@ -2,8 +2,8 @@
 # Interrupt
 # Ends the whole program.
 
-print "This shows up."
+show "This shows up."
 
 interrupt
 
-print "This does not show up."
+show "This does not show up."

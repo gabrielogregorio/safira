@@ -6,4 +6,4 @@ create the file "note.txt"
 add "Buy bread" to the file "note.txt"
 
 text = read the file "note.txt"
-print text
+show text

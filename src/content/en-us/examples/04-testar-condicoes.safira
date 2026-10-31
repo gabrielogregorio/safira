@@ -2,11 +2,11 @@
 # Conditions
 # The "if" chooses what to do.
 
-print "What was your grade?"
+show "What was your grade?"
 grade = the number that the user enters
 
 if grade is greater than or equal to 6 then {
-    print "You passed! 🎉"
+    show "You passed! 🎉"
 } else {
-    print "Try again."
+    show "Try again."
 }

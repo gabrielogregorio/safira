@@ -20,7 +20,7 @@ create the file "grade.txt"
 overwrite "Grade 10" to the file "grade.txt"
 
 text = read the file "grade.txt"
-print text
+show text
 ```
 
 ## Check and delete
@@ -32,7 +32,7 @@ create the file "old.txt"
 delete the file "old.txt"
 
 if the file "old.txt" does not exist then {
-    print "The file is gone"
+    show "The file is gone"
 }
 ```
 
@@ -50,7 +50,7 @@ create the file "diary.txt"
 overwrite "Today I learned Safira" to the file "diary.txt"
 
 text = read the file "diary.txt"
-print text
+show text
 ```
 
 ```check

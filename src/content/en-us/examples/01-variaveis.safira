@@ -5,5 +5,5 @@
 name = "Ana"
 age = 20
 
-print name
-print age
+show name
+show age

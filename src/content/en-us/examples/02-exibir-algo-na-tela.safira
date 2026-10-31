@@ -1,18 +1,18 @@
 #safira 0.9
 # Show on screen
-# Each print writes on a new line.
+# Each show writes on a new line.
 
-print "Hello, world!"
-print 10 + 5
+show "Hello, world!"
+show 10 + 5
 
 # Use + to join text and a variable.
 name = "Ana"
-print "Hello, " + name
+show "Hello, " + name
 
 # Use "on this line" to keep writing on the same line.
-print on this line "Good "
-print on this line "morning!"
-print ""
+show on this line "Good "
+show on this line "morning!"
+show ""
 
 # Pick a color.
-print "Blue text" in color blue
+show "Blue text" in color blue

@@ -48,4 +48,42 @@ describe('the same commands in each language', () => {
   it('keeps text in any alphabet', async () => {
     expect((await runScript('name = "世界"\nprint "你好," + name')).texts).toEqual(['你好,世界']);
   });
+
+  it.each([
+    ['显示 “你好”', ['你好']],
+    ['表示 「こんにちは」', ['こんにちは']],
+    ['等待 1秒\n显示 "a"', ['a']],
+    ['重复 2次 {\n  显示 "a"\n}', ['a', 'a']],
+    ['繰り返す 2回 {\n  表示 "a"\n}', ['a', 'a']],
+    ['函数 加一(数) {\n  返回 数 + 1\n}\n显示 加一(1)', ['2']],
+    ['列表 水果 包含 “苹果”,“梨”\n显示 列表长度 水果', ['2']],
+    ['显示 "a" 颜色 蓝色', ['a']],
+    ['表示 "a" 色 #ff1122', ['a']],
+  ])('reads Chinese and Japanese keyboards in %s', async (source, expected) => {
+    const { texts, error } = await runScript(source);
+
+    expect(error).toBeNull();
+    expect(texts).toEqual(expected);
+  });
+
+  it('keeps wide symbols inside text and comments', async () => {
+    expect((await runScript('显示 "a,b(“c”)" # 注释,(\n显示 1')).texts).toEqual(['a,b(“c”)', '1']);
+  });
+
+  it.each([
+    ['鳴らす ド 長さ 1秒', 261.63],
+    ['播放 哆 持续 1秒', 261.63],
+  ])('plays the notes of %s', async (source, frequency) => {
+    expect((await runScript(source)).tones[0].frequency).toBeCloseTo(frequency, 1);
+  });
+
+  it('points a text to a file, even after a word that also means color', async () => {
+    const source = 'crie o arquivo "a.txt"\nadicione "x" in the file "a.txt"\nmostre leia o arquivo "a.txt"';
+
+    expect((await runScript(source)).texts).toEqual(['x']);
+  });
+
+  it('takes a hex color after the short color words', async () => {
+    expect((await runScript('mostre "a" in #ff1122')).events[0]).toMatchObject({ text: 'a', color: '#ff1122' });
+  });
 });

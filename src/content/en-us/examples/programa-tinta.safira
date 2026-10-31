@@ -1,11 +1,11 @@
 #safira 0.9
 # 🎨 Paint calculator
 
-print "📐 How many square meters is the wall?"
+show "📐 How many square meters is the wall?"
 wall = the number that the user enters
 
-print "🪣 How many square meters does one can paint?"
+show "🪣 How many square meters does one can paint?"
 can = the number that the user enters
 
 cans = wall / can
-print "🎨 You need " + cans + " cans."
+show "🎨 You need " + cans + " cans."

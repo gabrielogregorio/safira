@@ -10,8 +10,8 @@ The `=` puts the value in the box. After that, just use the name.
 name = "Ana"
 age = 20
 
-print name
-print age
+show name
+show age
 ```
 
 ## See the variables
@@ -24,7 +24,7 @@ Want to see it step by step? Open the Run menu and choose Run line by line.
 points = 10
 points = points + 5
 
-print points
+show points
 ```
 
 ## Join text and a variable
@@ -35,8 +35,8 @@ The `+` joins texts and variables into a single sentence.
 name = "Ana"
 age = 20
 
-print "My name is " + name
-print "I am " + age + " years old"
+show "My name is " + name
+show "I am " + age + " years old"
 ```
 
 ## Challenge: your city
@@ -52,7 +52,7 @@ Create a variable called `city` with the value `Lima` and show the sentence `I l
 
 ```solution
 city = "Lima"
-print "I live in " + city
+show "I live in " + city
 ```
 
 ```check

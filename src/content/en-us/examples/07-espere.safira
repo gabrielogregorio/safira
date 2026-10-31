@@ -2,10 +2,10 @@
 # Wait
 # The program takes a pause before going on.
 
-print "Ready..."
+show "Ready..."
 wait 1 second
 
-print "Aim..."
+show "Aim..."
 wait 1 second
 
-print "Go!"
+show "Go!"

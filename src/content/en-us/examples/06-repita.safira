@@ -3,5 +3,5 @@
 # Does the same thing as many times as you ask.
 
 repeat 3 times {
-    print "Hello!"
+    show "Hello!"
 }

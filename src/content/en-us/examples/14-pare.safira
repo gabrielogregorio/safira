@@ -7,5 +7,5 @@ for each number from 1 to 5 {
         break
     }
 
-    print number
+    show number
 }

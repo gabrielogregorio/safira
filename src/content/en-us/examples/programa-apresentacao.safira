@@ -1,8 +1,8 @@
 #safira 0.9
 # 💎 Introduction
 
-print "What is your name?"
+show "What is your name?"
 name = what the user types
 
-print "Nice to meet you, " + name + "! 👋"
-print "I am Safira 💎" in color blue
+show "Nice to meet you, " + name + "! 👋"
+show "I am Safira 💎" in color blue

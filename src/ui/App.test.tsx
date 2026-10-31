@@ -307,7 +307,7 @@ describe('App', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(document.querySelector('.tab-active')).toHaveTextContent('aula-02-exibicao.safira');
-    expect(document.querySelector('.cm-content')).toHaveTextContent('print');
+    expect(document.querySelector('.cm-content')).toHaveTextContent('show');
 
     window.location.hash = lessonHash;
     await userEvent.click((await screen.findAllByRole('button', { name: 'Open in the IDE' }))[0]);
