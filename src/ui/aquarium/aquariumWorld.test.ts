@@ -1,4 +1,5 @@
 import {
+  colorsOf,
   createPopulation,
   createWorld,
   FISH_COUNT,
@@ -24,6 +25,12 @@ const click = (world: World, x: number, y: number) => {
 };
 
 describe('aquariumWorld', () => {
+  it('gives every fish a color of its own', () => {
+    const colors = createPopulation().map((fish) => colorsOf(fish.id).body);
+
+    expect(new Set(colors).size).toBe(FISH_COUNT);
+  });
+
   it('starts with a closed population', () => {
     expect(createPopulation()).toHaveLength(FISH_COUNT);
   });
@@ -315,5 +322,41 @@ describe('aquariumWorld', () => {
     const events = Array.from({ length: 300 }, () => stepWorld(world, 1 / 30)).flat();
 
     expect(events).not.toContainEqual(expect.objectContaining({ kind: 'chomp' }));
+  });
+
+  it('drops 1.5 times more food for each popped bubble, on top of the last value', () => {
+    const world = createWorld([], 800, 600, steady);
+
+    for (let popped = 0; popped < 2; popped += 1) {
+      world.bubbles.push({ x: 50, y: 50, radius: 8, speed: 1, sway: 0 });
+      click(world, 50, 50);
+    }
+
+    expect(world.foodGrowth).toBeCloseTo(2.25);
+
+    click(world, 400, 300);
+
+    expect(world.food).toHaveLength(7);
+  });
+
+  it('never fills the water past its limit', () => {
+    const world = createWorld([], 800, 600, steady);
+    world.foodGrowth = 1e12;
+
+    for (let drop = 0; drop < 10; drop += 1) {
+      click(world, 400, 300);
+    }
+
+    expect(world.food).toHaveLength(800);
+  });
+
+  it('lets a fish get fat without end', () => {
+    const world = createWorld(oneFish(50), 800, 600, steady);
+    const [fish] = world.fishes;
+    world.food.push({ x: fish.x, y: fish.y, age: 0, sway: 0 });
+    stepWorld(world, 1 / 30);
+
+    expect(fish.mass).toBeGreaterThan(50);
+    expect(fatnessOf(50)).toBeGreaterThan(fatnessOf(20));
   });
 });

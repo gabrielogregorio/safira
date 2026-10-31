@@ -1,25 +1,22 @@
 export interface Species {
-  body: string;
-  fin: string;
   length: number;
   speed: number;
   voice: number;
 }
 
 export const SPECIES: Species[] = [
-  { body: '#ffb347', fin: '#ff8a2a', length: 46, speed: 62, voice: 1 },
-  { body: '#ffe066', fin: '#f2b705', length: 34, speed: 78, voice: 1.25 },
-  { body: '#ff8fb1', fin: '#f0507f', length: 58, speed: 50, voice: 0.85 },
-  { body: '#7fe3ff', fin: '#1f9fe0', length: 40, speed: 70, voice: 1.12 },
-  { body: '#b6f27a', fin: '#56b92e', length: 50, speed: 56, voice: 0.95 },
-  { body: '#d3a6ff', fin: '#9a5ff0', length: 30, speed: 84, voice: 1.4 },
-  { body: '#ffffff', fin: '#ff7a3c', length: 44, speed: 60, voice: 1.05 },
-  { body: '#ff9d7a', fin: '#d9542b', length: 66, speed: 44, voice: 0.72 },
+  { length: 46, speed: 62, voice: 1 },
+  { length: 34, speed: 78, voice: 1.25 },
+  { length: 58, speed: 50, voice: 0.85 },
+  { length: 40, speed: 70, voice: 1.12 },
+  { length: 50, speed: 56, voice: 0.95 },
+  { length: 30, speed: 84, voice: 1.4 },
+  { length: 44, speed: 60, voice: 1.05 },
+  { length: 66, speed: 44, voice: 0.72 },
 ];
 
 export const FISH_COUNT = 24;
 export const MINIMUM_MASS = 1;
-const MAXIMUM_MASS = 8;
 export const MASS_LOST_PER_SECOND = 0.0008;
 const MASS_PER_FOOD = 0.28;
 const PREY_MASS_SHARE = 0.3;
@@ -37,6 +34,9 @@ const PREY_CHASE_SPEED = 3;
 const BUBBLES_FROM_PREY = 9;
 const TURN_RATE = 2.4;
 const FOOD_PER_CLICK = 3;
+const POP_FOOD_GROWTH = 1.5;
+const MOST_FOOD_PER_DROP = 200;
+const MOST_FOOD_IN_WATER = 800;
 const FOOD_PER_RIGHT_CLICK = 6;
 const FOOD_PER_BOTH_BUTTONS = 18;
 const FOOD_SPREAD = 18;
@@ -152,6 +152,7 @@ export interface World {
   pops: Pop[];
   plants: Plant[];
   pointer: Pointer | null;
+  foodGrowth: number;
   random: () => number;
 }
 
@@ -168,7 +169,18 @@ export type WorldEvent =
 export const createPopulation = (): StoredFish[] =>
   Array.from({ length: FISH_COUNT }, (_, id) => ({ id, species: id % SPECIES.length, mass: MINIMUM_MASS }));
 
-export const fatnessOf = (mass: number): number => Math.min(1.4, (mass - MINIMUM_MASS) * 0.16);
+const GOLDEN_ANGLE = 137.508;
+const FULL_TURN = 360;
+
+// The id gives each fish a color of its own for life. The golden angle keeps neighbors far apart on the wheel.
+export const colorsOf = (id: number): { body: string; fin: string } => {
+  const hue = Math.round(id * GOLDEN_ANGLE) % FULL_TURN;
+  const lightness = 62 + (id % 3) * 8;
+
+  return { body: `hsl(${hue} 88% ${lightness}%)`, fin: `hsl(${hue} 82% ${lightness - 22}%)` };
+};
+
+export const fatnessOf = (mass: number): number => (mass - MINIMUM_MASS) * 0.16;
 
 // Eating opens the appetite: the fatter the fish, the farther it sees food and the faster it goes after it.
 export const appetiteOf = (mass: number): number => mass - MINIMUM_MASS;
@@ -232,6 +244,7 @@ export const createWorld = (
   pops: [],
   plants: placePlants(width, height, random),
   pointer: null,
+  foodGrowth: 1,
   random,
 });
 
@@ -334,7 +347,7 @@ const eatFood = (world: World, fish: Fish, events: WorldEvent[]): void => {
 
   if (eaten !== -1) {
     world.food.splice(eaten, 1);
-    fish.mass = Math.min(MAXIMUM_MASS, fish.mass + MASS_PER_FOOD);
+    fish.mass += MASS_PER_FOOD;
     events.push({ kind: 'eat', voice: SPECIES[fish.species].voice });
   }
 };
@@ -348,7 +361,7 @@ const eatPrey = (world: World, fish: Fish, prey: Fish, events: WorldEvent[]): vo
       spawnBubble(world, prey.x + between(world.random, -24, 24), prey.y + between(world.random, -24, 24));
     }
 
-    fish.mass = Math.min(MAXIMUM_MASS, fish.mass + Math.min(1, prey.mass * PREY_MASS_SHARE));
+    fish.mass += Math.min(1, prey.mass * PREY_MASS_SHARE);
     fish.preyAt = world.time + SECONDS_BETWEEN_PREY;
     events.push({ kind: 'chomp', voice: SPECIES[fish.species].voice });
   }
@@ -532,7 +545,11 @@ const scareFish = (world: World, fish: Fish, x: number, y: number): WorldEvent =
 };
 
 const dropFood = (world: World, x: number, y: number, pieces = FOOD_PER_CLICK, spread = FOOD_SPREAD): WorldEvent => {
-  for (let piece = 0; piece < pieces; piece += 1) {
+  // The growth has no end, so the amount in the water is what keeps the page alive.
+  const room = MOST_FOOD_IN_WATER - world.food.length;
+  const grown = Math.min(Math.round(pieces * world.foodGrowth), MOST_FOOD_PER_DROP, room);
+
+  for (let piece = 0; piece < grown; piece += 1) {
     world.food.push({
       x: x + between(world.random, -spread, spread),
       y: y + between(world.random, -spread, spread),
@@ -553,6 +570,7 @@ const clickAt = (world: World, x: number, y: number): WorldEvent => {
   if (bubble !== undefined) {
     world.bubbles = world.bubbles.filter((other) => other !== bubble);
     world.pops.push({ x: bubble.x, y: bubble.y, radius: bubble.radius, age: 0 });
+    world.foodGrowth *= POP_FOOD_GROWTH;
 
     return { kind: 'pop', voice: 1.5 - bubble.radius / 16 };
   }

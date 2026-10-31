@@ -1,6 +1,6 @@
 import type { ThemeId } from '@/settings/settings';
 import type { Fish, World } from './aquariumWorld';
-import { fatnessOf, lengthOf, SPECIES } from './aquariumWorld';
+import { colorsOf, fatnessOf, lengthOf } from './aquariumWorld';
 
 interface Palette {
   surface: number[];
@@ -99,7 +99,7 @@ const drawPlants = (context: CanvasRenderingContext2D, world: World, palette: Li
 };
 
 const drawFish = (context: CanvasRenderingContext2D, fish: Fish): void => {
-  const { body, fin } = SPECIES[fish.species];
+  const { body, fin } = colorsOf(fish.id);
   const length = lengthOf(fish);
   const half = length / 2;
   const height = length * 0.24 * (1 + fatnessOf(fish.mass));
