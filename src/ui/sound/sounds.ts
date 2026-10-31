@@ -213,6 +213,9 @@ const wait = (milliseconds: number): Promise<void> =>
   });
 
 const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
+const LANGUAGE_SOUND_NAMES: SoundName[] = Object.values(LANGUAGE_SOUNDS);
+const LANGUAGE_FADE_SECONDS = 0.012;
+const LANGUAGE_STOP_SECONDS = 0.06;
 const MASTER_GAIN = 0.5;
 const LOOP_GAIN = 0.35;
 const MUTE_SECONDS = 0.01;
@@ -244,6 +247,8 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let lastSound: { name: SoundName; time: number } | null = null;
   let lastHover = -HOVER_GAP_MILLISECONDS;
   let loop: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
+  let languageVoice: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
+  let languageTurn = 0;
   let isLoopHeld = false;
   let isLoopStarting = false;
   const buffers = new Map<SoundName, Promise<AudioBuffer>>();
@@ -343,16 +348,40 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
         void audio.resume();
       }
 
+      // A new language cuts the one before it, even when that one is still loading its file.
+      const isLanguage = LANGUAGE_SOUND_NAMES.includes(name);
+
+      if (isLanguage) {
+        languageTurn += 1;
+      }
+
+      const turn = languageTurn;
+
       try {
         const source = audio.createBufferSource();
         source.buffer = await bufferOf(audio, name);
 
-        if (!isEnabled) {
+        if (!isEnabled || (isLanguage && turn !== languageTurn)) {
           return;
         }
 
         source.playbackRate.value = rate;
-        source.connect(output);
+
+        if (isLanguage) {
+          if (languageVoice !== null) {
+            languageVoice.gain.gain.setTargetAtTime(0, audio.currentTime, LANGUAGE_FADE_SECONDS);
+            languageVoice.source.stop(audio.currentTime + LANGUAGE_STOP_SECONDS);
+          }
+
+          const gain = audio.createGain();
+          gain.gain.value = 1;
+          source.connect(gain);
+          gain.connect(output);
+          languageVoice = { source, gain };
+        } else {
+          source.connect(output);
+        }
+
         source.start();
       } catch {
         // A sound that fails to load must never get in the way of the interface.

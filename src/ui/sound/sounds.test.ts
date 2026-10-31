@@ -3,8 +3,9 @@ import { createSoundPlayer, SOUND_FILES, soundForClick } from './sounds';
 const fakeNode = () => ({
   connect: vi.fn(),
   start: vi.fn(),
+  stop: vi.fn(),
   buffer: null as unknown,
-  gain: { value: 0 },
+  gain: { value: 0, setTargetAtTime: vi.fn() },
   playbackRate: { value: 1 },
 });
 
@@ -147,6 +148,41 @@ describe('createSoundPlayer', () => {
     now.mockRestore();
 
     expect(context.sources).toHaveLength(2);
+  });
+
+  it('cuts the previous language when the next one starts', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await player.play('languageEnUs');
+    await player.play('languagePtBr');
+
+    expect(context.sources[0]?.stop).toHaveBeenCalled();
+    expect(context.sources[1]?.start).toHaveBeenCalled();
+    expect(context.sources[1]?.stop).not.toHaveBeenCalled();
+  });
+
+  it('skips a language that is overtaken while its file loads', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    let finishFirstLoad = (): void => undefined;
+    vi.mocked(fetch).mockImplementationOnce(
+      () =>
+        new Promise((resolve) => {
+          finishFirstLoad = () => {
+            resolve({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)) } as Response);
+          };
+        }),
+    );
+    const first = player.play('languageEnUs');
+    await vi.waitFor(() => {
+      expect(fetch).toHaveBeenCalled();
+    });
+    await player.play('languagePtBr');
+    finishFirstLoad();
+    await first;
+
+    expect(context.sources[0]?.start).not.toHaveBeenCalled();
+    expect(context.sources[1]?.start).toHaveBeenCalled();
   });
 
   it('survives a file that fails to load and tries again later', async () => {
