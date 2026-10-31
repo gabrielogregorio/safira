@@ -36,6 +36,7 @@ export interface RunnerFailure {
 export type RunnerEvent =
   | { type: 'output'; items: OutputItem[] }
   | { type: 'clear' }
+  | { type: 'tone'; frequency: number; milliseconds: number }
   | { type: 'input-request'; variables: VariableSnapshot[] }
   | { type: 'paused'; file: string; line: number; variables: VariableSnapshot[] }
   | { type: 'files'; files: Record<string, string> }

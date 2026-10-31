@@ -6,6 +6,7 @@ export interface ExecutionHost {
   onClear: () => void;
   onInput: () => Promise<string>;
   onSleep: (milliseconds: number) => Promise<void>;
+  onTone: (frequency: number, milliseconds: number) => Promise<void>;
   onFilesChanged: () => void;
 }
 
@@ -43,6 +44,9 @@ export const driveExecution = async (execution: Execution<void>, host: Execution
         break;
       case 'sleep':
         await host.onSleep(effect.milliseconds);
+        break;
+      case 'tone':
+        await host.onTone(effect.frequency, effect.milliseconds);
         break;
       case 'files':
         host.onFilesChanged();

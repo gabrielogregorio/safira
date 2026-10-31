@@ -19,6 +19,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, theme, language and sound live in the Interface menu.
 - Colors by name, `#331`, `#ff1122` or `0xff1122`, after or before the text, and `mostra` beside `mostre` and `mostrar`.
 - `importe` takes quoted paths, with or without `.safira`, beside the file or from the root, with suggestions from the project files. Function calls are suggested with their parameters, also from imported files.
+- Notes, with `toque C por 1s`, `play D# by 0.1` or a list like `toque C2#, D2, Ré, R, Sol por 1s`, where `R` is a rest.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.

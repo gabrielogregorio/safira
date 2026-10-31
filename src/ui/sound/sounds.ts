@@ -12,6 +12,7 @@ import waterHoldUrl from './files/water-hold.wav';
 import seaLightUrl from './files/sea-light.wav';
 import seaDarkUrl from './files/sea-dark.wav';
 import seaSimpleUrl from './files/sea-simple.wav';
+import aquariumCloseUrl from './files/aquarium-close.wav';
 import aquariumUrl from './files/aquarium.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
@@ -24,6 +25,7 @@ import fileCreateUrl from './files/file-create.wav';
 import folderCreateUrl from './files/folder-create.wav';
 import formatUrl from './files/format.wav';
 import homeOpenUrl from './files/home-open.wav';
+import hoverSpecialUrl from './files/hover-special.wav';
 import hoverUrl from './files/hover.wav';
 import ideOpenUrl from './files/ide-open.wav';
 import importUrl from './files/import.wav';
@@ -59,6 +61,7 @@ import weatherSimpleUrl from './files/weather-simple.wav';
 export type SoundName =
   | 'click'
   | 'hover'
+  | 'hoverSpecial'
   | 'toggle'
   | 'open'
   | 'tab'
@@ -97,6 +100,7 @@ export type SoundName =
   | 'export'
   | 'lineDelete'
   | 'aquarium'
+  | 'aquariumClose'
   | 'pop'
   | 'fishFlee'
   | 'fishEat'
@@ -117,6 +121,7 @@ export type SoundName =
 export const SOUND_FILES: Record<SoundName, string> = {
   click: clickUrl,
   hover: hoverUrl,
+  hoverSpecial: hoverSpecialUrl,
   toggle: toggleUrl,
   open: openUrl,
   tab: tabUrl,
@@ -155,6 +160,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   export: exportUrl,
   lineDelete: lineDeleteUrl,
   aquarium: aquariumUrl,
+  aquariumClose: aquariumCloseUrl,
   pop: popUrl,
   fishFlee: fishFleeUrl,
   fishEat: fishEatUrl,
@@ -196,10 +202,10 @@ const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
 const SAME_GESTURE_MILLISECONDS = 80;
 const HOVER_GAP_MILLISECONDS = 40;
 
-const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping', 'terminalTyping', 'fishEat', 'pop'];
+const NOT_A_GESTURE: SoundName[] = ['hoverSpecial', 'typing', 'searchTyping', 'terminalTyping', 'fishEat', 'pop'];
 
 // These happen without a press: on a reload or a passing mouse, the browser would hold them until the first click.
-const NEEDS_EARLIER_PRESS: SoundName[] = ['hover', 'ideOpen'];
+const NEEDS_EARLIER_PRESS: SoundName[] = ['hover', 'hoverSpecial', 'ideOpen'];
 
 const wait = (milliseconds: number): Promise<void> =>
   new Promise((resolve) => {
@@ -210,6 +216,16 @@ const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
 const MASTER_GAIN = 0.5;
 const LOOP_GAIN = 0.35;
 const MUTE_SECONDS = 0.01;
+const MILLISECONDS_PER_SECOND = 1000;
+const TONE_GAIN = 0.5;
+const TONE_SUSTAIN = 0.45;
+const TONE_ATTACK_SECONDS = 0.008;
+const TONE_DECAY_SECONDS = 0.18;
+const TONE_RELEASE_SECONDS = 0.06;
+const TONE_WAVES: [OscillatorType, number][] = [
+  ['triangle', 1],
+  ['sine', 2],
+];
 const LOOP_FADE_IN_SECONDS = 0.04;
 const LOOP_FADE_SECONDS = 0.02;
 const LOOP_STOP_SECONDS = 0.1;
@@ -231,6 +247,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let isLoopHeld = false;
   let isLoopStarting = false;
   const buffers = new Map<SoundName, Promise<AudioBuffer>>();
+  const tones = new Set<OscillatorNode>();
 
   const fadeLoop = (): void => {
     if (context !== null && loop !== null) {
@@ -394,6 +411,41 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       isLoopHeld = false;
       fadeLoop();
     },
+    // A note of a Safira program: a soft bell made of two waves, so that it never sounds like a test tone.
+    tone: (frequency: number, milliseconds: number): void => {
+      const audio = isEnabled ? start() : null;
+
+      if (audio === null || output === null || frequency <= 0 || milliseconds <= 0) {
+        return;
+      }
+
+      const now = audio.currentTime;
+      const end = now + milliseconds / MILLISECONDS_PER_SECOND;
+      const envelope = audio.createGain();
+      envelope.gain.setValueAtTime(0, now);
+      envelope.gain.linearRampToValueAtTime(TONE_GAIN, now + TONE_ATTACK_SECONDS);
+      envelope.gain.setTargetAtTime(TONE_GAIN * TONE_SUSTAIN, now + TONE_ATTACK_SECONDS, TONE_DECAY_SECONDS);
+      envelope.gain.setTargetAtTime(0, Math.max(now, end - TONE_RELEASE_SECONDS), TONE_RELEASE_SECONDS / 3);
+      envelope.connect(output);
+
+      for (const [type, multiple] of TONE_WAVES) {
+        const wave = audio.createOscillator();
+        wave.type = type;
+        wave.frequency.value = frequency * multiple;
+        wave.connect(envelope);
+        wave.start(now);
+        wave.stop(end + TONE_RELEASE_SECONDS);
+        tones.add(wave);
+        wave.addEventListener('ended', () => {
+          tones.delete(wave);
+        });
+      }
+    },
+    stopTones: (): void => {
+      for (const wave of tones) {
+        wave.stop();
+      }
+    },
   };
 };
 
@@ -402,7 +454,12 @@ export const soundPlayer = createSoundPlayer(() =>
 );
 
 const MENU_ITEMS = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="menubaritem"]';
-const CLICKABLE = `button, a, summary, input[type="checkbox"], input[data-sound], ${MENU_ITEMS}`;
+const TEXT_FIELDS = 'input:not([type]), input[type="text"], input[type="search"]';
+const CLICKABLE = `button, a, summary, input[type="checkbox"], ${TEXT_FIELDS}, ${MENU_ITEMS}`;
+
+// Fields with their own typing sound name it, and every other text field shares this one.
+export const isPlainTextField = (target: EventTarget | null): boolean =>
+  target instanceof HTMLInputElement && target.matches(TEXT_FIELDS) && target.dataset['sound'] === undefined;
 
 export const clickableAt = (target: EventTarget | null): Element | null => {
   const clickable = target instanceof Element ? target.closest(CLICKABLE) : null;
@@ -426,5 +483,9 @@ export const soundForClick = (target: EventTarget | null): SoundName | null => {
 
   const named = clicked.dataset['sound'];
 
-  return isSoundName(named) ? named : 'click';
+  if (isSoundName(named)) {
+    return named;
+  }
+
+  return clicked.matches(TEXT_FIELDS) ? 'terminalFocus' : 'click';
 };

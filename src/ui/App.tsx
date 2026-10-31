@@ -28,7 +28,14 @@ import { useSkyClock } from '@/ui/sky/useSkyClock';
 import { ThemeToggle } from '@/ui/components/ThemeToggle';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
-import { clickableAt, LANGUAGE_SOUNDS, soundForClick, soundPlayer, WEATHER_SOUNDS } from '@/ui/sound/sounds';
+import {
+  clickableAt,
+  isPlainTextField,
+  LANGUAGE_SOUNDS,
+  soundForClick,
+  soundPlayer,
+  WEATHER_SOUNDS,
+} from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
@@ -121,13 +128,23 @@ export const App = ({ createWorker }: AppProps) => {
 
     let hoveredItem: Element | null = null;
 
+    const playTyping = (event: Event): void => {
+      if (isPlainTextField(event.target)) {
+        void soundPlayer.play('terminalTyping');
+      }
+    };
+
     const playHover = (event: PointerEvent): void => {
       const item = clickableAt(event.target);
 
       if (event.pointerType === 'mouse' && item !== hoveredItem) {
         hoveredItem = item;
 
-        if (item !== null) {
+        const note = item?.getAttribute('data-hover-rate');
+
+        if (note !== undefined && note !== null) {
+          void soundPlayer.play('hoverSpecial', Number(note));
+        } else if (item !== null) {
           void soundPlayer.play('hover');
         }
       }
@@ -136,11 +153,13 @@ export const App = ({ createWorker }: AppProps) => {
     document.addEventListener('pointerdown', soundPlayer.prepare, { once: true });
     document.addEventListener('click', playClick);
     document.addEventListener('pointerover', playHover);
+    document.addEventListener('input', playTyping);
 
     return () => {
       document.removeEventListener('pointerdown', soundPlayer.prepare);
       document.removeEventListener('click', playClick);
       document.removeEventListener('pointerover', playHover);
+      document.removeEventListener('input', playTyping);
     };
   }, []);
 

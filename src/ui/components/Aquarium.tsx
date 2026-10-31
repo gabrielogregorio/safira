@@ -145,7 +145,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
       return;
     }
 
-    void soundPlayer.play('modalClose');
+    void soundPlayer.play('aquariumClose');
 
     if (prefersMotion()) {
       setIsClosing(true);
@@ -180,13 +180,18 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
             className="aquarium-water"
             role="img"
             aria-label={t('Aquarium')}
+            onContextMenu={(event) => {
+              event.preventDefault();
+            }}
             onPointerDown={(event) => {
               event.currentTarget.setPointerCapture(event.pointerId);
-              handlePointer(event, pressPointer);
+              handlePointer(event, (world, x, y) => {
+                pressPointer(world, x, y, event.buttons);
+              });
             }}
             onPointerMove={(event) => {
               handlePointer(event, (world, x, y) => {
-                playEvents(movePointer(world, x, y));
+                playEvents(movePointer(world, x, y, event.buttons));
               });
             }}
             onPointerUp={(event) => {

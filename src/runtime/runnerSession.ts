@@ -124,6 +124,12 @@ export class RunnerSession {
 
           return this.clock.sleep(milliseconds);
         },
+        onTone: (frequency, milliseconds) => {
+          this.flush();
+          this.post({ type: 'tone', frequency, milliseconds });
+
+          return this.clock.sleep(milliseconds);
+        },
         onFilesChanged: () => {
           this.post({ type: 'files', files: this.files.snapshot() });
         },

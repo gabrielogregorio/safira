@@ -37,6 +37,7 @@ interface ActionProps {
   shortcut?: string;
   disabled?: boolean;
   sound?: SoundName;
+  hoverRate?: number;
   onSelect: () => void;
 }
 
@@ -56,6 +57,16 @@ const CODE_FONTS: { id: CodeFont; label: string }[] = [
 ];
 const PROGRAM_PREFIX = 'programa-';
 const SUBMENU_OFFSET = 4;
+const PENTATONIC_STEPS = [0, 2, 4, 7, 9];
+const SEMITONES_PER_OCTAVE = 12;
+
+// Passing over the programs walks up a little xylophone, a different note for each one.
+const scaleRate = (index: number): number => {
+  const octave = Math.floor(index / PENTATONIC_STEPS.length);
+  const step = PENTATONIC_STEPS[index % PENTATONIC_STEPS.length];
+
+  return 2 ** (octave + step / SEMITONES_PER_OCTAVE - 1);
+};
 const MENU_OFFSET = 6;
 
 const Menu = ({ label, children }: MenuProps) => (
@@ -69,8 +80,13 @@ const Menu = ({ label, children }: MenuProps) => (
   </Menubar.Menu>
 );
 
-const Action = ({ label, shortcut, disabled = false, sound, onSelect }: ActionProps) => (
-  <Menubar.Item className="menubar-item" disabled={disabled} data-sound={sound} onSelect={onSelect}>
+const Action = ({ label, shortcut, disabled = false, sound, hoverRate, onSelect }: ActionProps) => (
+  <Menubar.Item
+    className="menubar-item"
+    disabled={disabled}
+    data-sound={sound}
+    data-hover-rate={hoverRate}
+    onSelect={onSelect}>
     {label}
     {shortcut === undefined ? null : <span className="menubar-shortcut">{shortcut}</span>}
   </Menubar.Item>
@@ -179,10 +195,11 @@ export const IdeMenuBar = ({
         ))}
         <Menubar.Separator className="menubar-separator" />
         <Menubar.Label className="menubar-label">{t('Programs')}</Menubar.Label>
-        {programs.map((example) => (
+        {programs.map((example, index) => (
           <Action
             key={example.id}
             label={example.title}
+            hoverRate={scaleRate(index)}
             onSelect={() => {
               onOpenExample(example.id, example.text);
             }}

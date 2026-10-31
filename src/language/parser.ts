@@ -3,6 +3,7 @@ import { ExpressionParser } from './expressionParser';
 import type { CommandKey } from './phrases';
 import { ParseFailure } from './tokenCursor';
 import { tokenize } from './tokenizer';
+import { noteFrequency } from './notes';
 
 const ASSIGNMENT_SYMBOLS = ['=', ':=', '<-'];
 
@@ -24,6 +25,7 @@ export class Parser extends ExpressionParser {
     () => this.parseRepeat(),
     () => this.parseForRange(),
     () => this.parseWait(),
+    () => this.parseTone(),
     () => this.parseImport(),
     () => this.parseOrphanBlock('se_der_erro', 'precisa_def_tente_p_der_erro'),
     () => this.parseOrphanBlock('senao_der_erro', 'precisa_def_tente_p_n_der_erro'),
@@ -246,6 +248,46 @@ export class Parser extends ExpressionParser {
     this.expectPhrase('esperaEmSegundos');
 
     return { kind: 'wait', amount, unit: 'seconds' };
+  }
+
+  // The tokens of a note are glued together: C, 2 and # for C2#.
+  private parseNote(): number {
+    const first = this.advance();
+    let name = first.text;
+    let end = first.end;
+
+    while (this.current.start === end && this.current.kind !== 'end' && this.current.text !== ',') {
+      const part = this.advance();
+      name += part.text;
+      end = part.end;
+    }
+
+    const frequency = first.kind === 'word' ? noteFrequency(name) : null;
+
+    return frequency ?? this.fail();
+  }
+
+  private parseTone(): StatementBody {
+    this.expectPhrase('toque');
+    const frequencies = [this.parseNote()];
+
+    while (this.acceptSymbol(',')) {
+      frequencies.push(this.parseNote());
+    }
+
+    if (!this.acceptPhrase('toque_por')) {
+      return { kind: 'tone', frequencies, amount: null, unit: 'seconds' };
+    }
+
+    const amount = this.parseAdditive();
+
+    if (this.acceptPhrase('esperaEmMs')) {
+      return { kind: 'tone', frequencies, amount, unit: 'milliseconds' };
+    }
+
+    this.acceptPhrase('esperaEmSegundos');
+
+    return { kind: 'tone', frequencies, amount, unit: 'seconds' };
   }
 
   private parseImport(): StatementBody {

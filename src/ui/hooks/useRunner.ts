@@ -3,6 +3,7 @@ import type { VariableSnapshot } from '@/language/interpreter';
 import type { Breakpoints, RunMode, RunnerEvent, RunnerFailure, RunnerRequest, StartRequest } from '@/runtime/protocol';
 import type { TerminalBuffer } from '@/ui/terminalBuffer';
 import { appendOutput, EMPTY_TERMINAL } from '@/ui/terminalBuffer';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 export type RunnerStatus = 'idle' | 'running' | 'paused' | 'waiting-input';
 
@@ -64,6 +65,9 @@ export const useRunner = (
           break;
         case 'clear':
           setTerminal(EMPTY_TERMINAL);
+          break;
+        case 'tone':
+          soundPlayer.tone(event.frequency, event.milliseconds);
           break;
         case 'input-request':
           setStatus('waiting-input');

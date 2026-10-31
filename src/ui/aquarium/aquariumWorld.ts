@@ -21,7 +21,7 @@ export const FISH_COUNT = 24;
 export const MINIMUM_MASS = 1;
 const MAXIMUM_MASS = 8;
 export const MASS_LOST_PER_SECOND = 0.0008;
-const MASS_PER_FOOD = 0.14;
+const MASS_PER_FOOD = 0.28;
 const PREY_MASS_SHARE = 0.3;
 const PREDATOR_MASS = 4;
 const PREDATOR_ADVANTAGE = 2.2;
@@ -35,7 +35,14 @@ const FLEE_SPEED = 3.6;
 const HUNT_SPEED = 1.5;
 const TURN_RATE = 2.4;
 const FOOD_PER_CLICK = 3;
+const FOOD_PER_RIGHT_CLICK = 6;
+const FOOD_PER_BOTH_BUTTONS = 18;
 const FOOD_SPREAD = 18;
+const WIDE_FOOD_SPREAD = 60;
+const RIGHT_BUTTON = 2;
+const BOTH_BUTTONS = 3;
+const APPETITE_VISION = 0.35;
+const APPETITE_SPEED = 0.12;
 const SURFACE_MARGIN = 30;
 const BOTTOM_MARGIN = 50;
 const MAXIMUM_BUBBLES = 70;
@@ -120,6 +127,7 @@ export interface Pointer {
   startY: number;
   heldFor: number;
   hasMoved: boolean;
+  buttons: number;
 }
 
 export interface World {
@@ -149,7 +157,10 @@ export type WorldEvent =
 export const createPopulation = (): StoredFish[] =>
   Array.from({ length: FISH_COUNT }, (_, id) => ({ id, species: id % SPECIES.length, mass: MINIMUM_MASS }));
 
-export const fatnessOf = (mass: number): number => Math.min(0.9, (mass - MINIMUM_MASS) * 0.16);
+export const fatnessOf = (mass: number): number => Math.min(1.4, (mass - MINIMUM_MASS) * 0.16);
+
+// Eating opens the appetite: the fatter the fish, the farther it sees food and the faster it goes after it.
+export const appetiteOf = (mass: number): number => mass - MINIMUM_MASS;
 
 export const lengthOf = (fish: Pick<StoredFish, 'species' | 'mass'>): number =>
   SPECIES[fish.species].length * (1 + 0.32 * Math.sqrt(fish.mass - MINIMUM_MASS));
@@ -231,7 +242,7 @@ const spawnBubble = (world: World, x: number, y: number): void => {
 };
 
 const nearestFood = (world: World, fish: Fish): Food | null => {
-  const vision = FOOD_VISION + lengthOf(fish);
+  const vision = FOOD_VISION * (1 + appetiteOf(fish.mass) * APPETITE_VISION) + lengthOf(fish);
   let nearest: Food | null = null;
   let nearestDistance = vision;
 
@@ -334,7 +345,7 @@ const moveFish = (world: World, fish: Fish, seconds: number, events: WorldEvent[
 
     steerTo(fish, fish.targetX, fish.targetY, speed, seconds);
   } else {
-    steerTo(fish, food.x, food.y, speed * HUNT_SPEED, seconds);
+    steerTo(fish, food.x, food.y, speed * HUNT_SPEED * (1 + appetiteOf(fish.mass) * APPETITE_SPEED), seconds);
   }
 
   eatFood(world, fish, events);
@@ -451,11 +462,11 @@ const scareFish = (world: World, fish: Fish, x: number, y: number): WorldEvent =
   return { kind: 'flee', voice: SPECIES[fish.species].voice };
 };
 
-const dropFood = (world: World, x: number, y: number): WorldEvent => {
-  for (let piece = 0; piece < FOOD_PER_CLICK; piece += 1) {
+const dropFood = (world: World, x: number, y: number, pieces = FOOD_PER_CLICK, spread = FOOD_SPREAD): WorldEvent => {
+  for (let piece = 0; piece < pieces; piece += 1) {
     world.food.push({
-      x: x + between(world.random, -FOOD_SPREAD, FOOD_SPREAD),
-      y: y + between(world.random, -FOOD_SPREAD, FOOD_SPREAD),
+      x: x + between(world.random, -spread, spread),
+      y: y + between(world.random, -spread, spread),
       age: 0,
       sway: world.random() * Math.PI * 2,
     });
@@ -494,16 +505,19 @@ const clickAt = (world: World, x: number, y: number): WorldEvent => {
   return dropFood(world, x, y);
 };
 
-export const pressPointer = (world: World, x: number, y: number): void => {
-  world.pointer = { x, y, dragX: 0, dragY: 0, startX: x, startY: y, heldFor: 0, hasMoved: false };
+export const pressPointer = (world: World, x: number, y: number, buttons = 1): void => {
+  world.pointer = { x, y, dragX: 0, dragY: 0, startX: x, startY: y, heldFor: 0, hasMoved: false, buttons };
 };
 
-export const movePointer = (world: World, x: number, y: number): WorldEvent[] => {
+export const movePointer = (world: World, x: number, y: number, buttons = 1): WorldEvent[] => {
   const { pointer } = world;
 
   if (pointer === null) {
     return [];
   }
+
+  // The second button of a chord only shows up here, because a press of it fires no event of its own.
+  pointer.buttons |= buttons;
 
   const startedDragging = !pointer.hasMoved && distance(x, y, pointer.startX, pointer.startY) > CLICK_DISTANCE;
   pointer.hasMoved ||= startedDragging;
@@ -527,6 +541,14 @@ export const movePointer = (world: World, x: number, y: number): WorldEvent[] =>
 export const releasePointer = (world: World): WorldEvent[] => {
   const { pointer } = world;
   world.pointer = null;
+
+  if (pointer?.buttons === BOTH_BUTTONS) {
+    return [dropFood(world, pointer.x, pointer.y, FOOD_PER_BOTH_BUTTONS, WIDE_FOOD_SPREAD)];
+  }
+
+  if (pointer?.buttons === RIGHT_BUTTON) {
+    return [dropFood(world, pointer.x, pointer.y, FOOD_PER_RIGHT_CLICK)];
+  }
 
   return pointer === null || pointer.hasMoved || pointer.heldFor > HOLD_SECONDS
     ? []

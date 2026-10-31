@@ -26,6 +26,8 @@ const NUMBER_PATTERN = /\d+(?:\.\d+)?(?![\p{L}\p{N}_])/uy;
 const COMBINING_MARKS = /\p{M}/gu;
 const COLOR_PATTERN = /#(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})(?![\p{L}\p{N}_])/iuy;
 const COLOR_WORDS = new Set(['cor', 'color']);
+const TONE_WORDS = new Set(['toque', 'tocar', 'toca', 'play']);
+const TIME_BEFORE_UNIT_PATTERN = /\d+(?:\.\d+)?(?=m?s(?![\p{L}\p{N}_]))/uy;
 
 export const removeAccents = (text: string): string => text.normalize('NFD').replace(COMBINING_MARKS, '');
 
@@ -67,6 +69,20 @@ export const tokenize = (source: string): TokenizedSource => {
     return previous?.kind === 'word' && COLOR_WORDS.has(previous.normalized.toLowerCase());
   };
 
+  // On a line that plays notes, a # glued to a note is a sharp, and 1s is a number and its unit.
+  const isToneLine = (): boolean => {
+    const lastBreak = tokens.findLastIndex((token) => token.kind === 'newline');
+    const first = tokens[lastBreak + 1] as Token | undefined;
+
+    return first?.kind === 'word' && TONE_WORDS.has(first.normalized.toLowerCase());
+  };
+
+  const isSharp = (): boolean => {
+    const previous = tokens.at(-1);
+
+    return previous?.kind === 'word' && previous.end === position && isToneLine();
+  };
+
   while (position < source.length) {
     const character = source.charAt(position);
 
@@ -79,6 +95,8 @@ export const tokenize = (source: string): TokenizedSource => {
       position += 1;
     } else if (character === '#' && afterColorWord() && matchAt(COLOR_PATTERN, source, position) !== null) {
       push('color', position + (matchAt(COLOR_PATTERN, source, position) ?? '').length);
+    } else if (character === '#' && isSharp()) {
+      push('symbol', position + 1);
     } else if (character === '#' || source.startsWith('//', position)) {
       const end = findLineEnd(source, position);
       comments.push({ start: position, end });
@@ -88,7 +106,8 @@ export const tokenize = (source: string): TokenizedSource => {
       const terminated = end - position >= 2 && source.charAt(end - 1) === '"';
       push('string', end, terminated);
     } else {
-      const number = matchAt(NUMBER_PATTERN, source, position);
+      const timed = isToneLine() ? matchAt(TIME_BEFORE_UNIT_PATTERN, source, position) : null;
+      const number = timed ?? matchAt(NUMBER_PATTERN, source, position);
       const word = matchAt(WORD_PATTERN, source, position);
 
       if (number !== null) {

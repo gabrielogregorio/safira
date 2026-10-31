@@ -14,6 +14,7 @@ export interface RunResult {
   error: SafiraError | null;
   files: VirtualFileSystem;
   sleeps: number[];
+  tones: { frequency: number; milliseconds: number }[];
 }
 
 const MAIN_FILE = 'main.safira';
@@ -23,6 +24,7 @@ export const runScript = async (source: string, inputs: string[] = [], extraFile
   const interpreter = new Interpreter({ files, locale: 'pt-br', random: (minimum) => minimum });
   const events: RecordedEvent[] = [];
   const sleeps: number[] = [];
+  const tones: RunResult['tones'] = [];
   const queue = [...inputs];
   let error: SafiraError | null = null;
 
@@ -36,6 +38,11 @@ export const runScript = async (source: string, inputs: string[] = [], extraFile
 
         return Promise.resolve();
       },
+      onTone: (frequency, milliseconds) => {
+        tones.push({ frequency, milliseconds });
+
+        return Promise.resolve();
+      },
       onFilesChanged: () => undefined,
     });
   } catch (caught) {
@@ -46,5 +53,5 @@ export const runScript = async (source: string, inputs: string[] = [], extraFile
     error = caught;
   }
 
-  return { events, texts: events.map((event) => event.text ?? '<clear>'), error, files, sleeps };
+  return { events, texts: events.map((event) => event.text ?? '<clear>'), error, files, sleeps, tones };
 };

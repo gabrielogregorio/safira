@@ -151,4 +151,40 @@ describe('aquariumWorld', () => {
     expect(world.ripples.length).toBeGreaterThan(0);
     expect(releasePointer(world)).toEqual([]);
   });
+
+  it('gives more food with the right button, and much more with both', () => {
+    const world = createWorld([], 800, 600, steady);
+    pressPointer(world, 100, 100, 2);
+    releasePointer(world);
+    const afterRight = world.food.length;
+    pressPointer(world, 100, 100, 1);
+    movePointer(world, 100, 100, 3);
+    releasePointer(world);
+
+    expect(afterRight).toBeGreaterThan(3);
+    expect(world.food.length - afterRight).toBeGreaterThan(afterRight);
+  });
+
+  it('feeds with the right button even over a fish', () => {
+    const world = createWorld(oneFish(), 800, 600, steady);
+    const [fish] = world.fishes;
+    pressPointer(world, fish.x, fish.y, 2);
+
+    expect(releasePointer(world)).toEqual([{ kind: 'food' }]);
+  });
+
+  it('sees food from farther as it gets fatter', () => {
+    const near = createWorld(oneFish(), 3000, 600, steady);
+    const fat = createWorld(oneFish(5), 3000, 600, steady);
+
+    for (const world of [near, fat]) {
+      world.fishes[0].x = 100;
+      world.fishes[0].y = 300;
+      world.fishes[0].targetX = 100;
+      world.food.push({ x: 600, y: 300, age: 0, sway: 0 });
+      stepWorld(world, 1);
+    }
+
+    expect(fat.fishes[0].vx).toBeGreaterThan(near.fishes[0].vx);
+  });
 });

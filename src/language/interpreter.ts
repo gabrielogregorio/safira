@@ -17,12 +17,15 @@ import { readScriptVersion } from './version';
 import type { VirtualFileSystem } from './virtualFileSystem';
 import { importCandidates, withSafiraExtension } from './virtualFileSystem';
 
+const DEFAULT_TONE_SECONDS = 0.5;
+
 export type Effect =
   | { type: 'step'; file: string; line: number }
   | { type: 'output'; inline: boolean; text: string; color: string }
   | { type: 'clear' }
   | { type: 'input' }
   | { type: 'sleep'; milliseconds: number }
+  | { type: 'tone'; frequency: number; milliseconds: number }
   | { type: 'files' };
 
 export type Execution<Result> = Generator<Effect, Result, string | undefined>;
@@ -210,6 +213,10 @@ export class Interpreter {
         yield { type: 'clear' };
 
         return 'normal';
+      case 'tone':
+        yield* this.executeTone(statement);
+
+        return 'normal';
       case 'wait':
         yield* this.executeWait(statement.amount, statement.unit);
 
@@ -383,6 +390,20 @@ export class Interpreter {
     }
 
     yield { type: 'sleep', milliseconds: unit === 'seconds' ? value * MILLISECONDS_PER_SECOND : value };
+  }
+
+  private *executeTone(statement: Statement & { kind: 'tone' }): Execution<void> {
+    const value = statement.amount === null ? DEFAULT_TONE_SECONDS : yield* this.evaluate(statement.amount);
+
+    if (typeof value !== 'number') {
+      this.fail('wait_not_numeric');
+    }
+
+    const milliseconds = statement.unit === 'seconds' ? value * MILLISECONDS_PER_SECOND : value;
+
+    for (const frequency of statement.frequencies) {
+      yield { type: 'tone', frequency, milliseconds };
+    }
   }
 
   private *executeImport(name: string): Execution<Signal> {

@@ -25,11 +25,13 @@ export const STARTER_LINES: Record<'pt' | 'en' | 'es', string[]> = {
     'limpe a tela',
     'tente {',
     'importe biblioteca',
+    'toque C por 1s',
     'funcao nome {',
     'retorne 1',
   ],
   en: [
     'show "Hello!"',
+    'play C by 1s',
     'repeat 3 times {',
     'if 1 is equal to 1 then {',
     'while 1 is less than 10 {',

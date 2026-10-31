@@ -66,10 +66,7 @@ interface EditorScreenProps {
   onBack: () => void;
 }
 
-type Dialog =
-  | { kind: 'commands' }
-  | { kind: 'delete-node'; node: TreeNode }
-  | null;
+type Dialog = { kind: 'commands' } | { kind: 'delete-node'; node: TreeNode } | null;
 
 const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
 const AUTOSAVE_MILLISECONDS = 300;
@@ -242,6 +239,7 @@ export const EditorScreen = ({
 
   const stopProgram = useCallback(() => {
     void soundPlayer.play('stop');
+    soundPlayer.stopTones();
     runner.stop();
   }, [runner]);
 
@@ -875,7 +873,6 @@ export const EditorScreen = ({
           </ul>
         </Modal>
       ) : null}
-
     </div>
   );
 };

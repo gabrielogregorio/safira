@@ -778,6 +778,25 @@
       "then"
     ]
   },
+  "toque": {
+    "color": "tempo",
+    "phrases": [
+      "toque a nota",
+      "tocar",
+      "toque",
+      "toca",
+      "play"
+    ]
+  },
+  "toque_por": {
+    "color": "tempo",
+    "phrases": [
+      "durante",
+      "por",
+      "for",
+      "by"
+    ]
+  },
   "aguarde": {
     "color": "tempo",
     "phrases": [
