@@ -166,9 +166,8 @@ test('imports another virtual file and keeps projects after a reload', async ({ 
 
   await page.keyboard.press('Control+s');
   await page.reload();
-  await page.keyboard.press('Control+o');
 
-  await expect(page.getByRole('dialog').getByRole('button', { name: 'lib.safira' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^lib\.safira/ })).toBeVisible();
 });
 
 test('debugs line by line with the variables panel', async ({ page }) => {
@@ -357,7 +356,7 @@ test('the page does not scroll in the lessons and the sidebar stays in place', a
   await page.setViewportSize({ width: 1280, height: 500 });
   await openLessons(page);
   await page.getByRole('link', { name: 'Next' }).click();
-  await expect(page.getByRole('heading', { name: 'Exibição', exact: true })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'Show on screen', exact: true, level: 2 }).first()).toBeVisible();
   const sidebarTop = await page
     .getByRole('link', { name: /^Welcome to Safira/ })
     .evaluate((link) => link.getBoundingClientRect().top);
@@ -741,6 +740,9 @@ test('the sound can be turned off, and that is remembered', async ({ page }) => 
   await expect(page.getByRole('button', { name: 'Sound: Off' })).toBeVisible();
 });
 
+// The pointer passes over the button first, and that hover sound is shorter than this.
+const HOVER_SOUND_SECONDS = 0.1;
+
 test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
   await page.addInitScript(() => {
     const started: number[] = [];
@@ -752,7 +754,11 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
     Object.assign(window, { startedSounds: started });
   });
   const sounds = (): Promise<number[]> =>
-    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
+    page.evaluate(
+      (limit) =>
+        (window as unknown as { startedSounds: number[] }).startedSounds.filter((duration) => duration > limit),
+      HOVER_SOUND_SECONDS,
+    );
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
@@ -783,7 +789,11 @@ test('modals sound when they open and when they close', async ({ page }) => {
     Object.assign(window, { startedSounds: started });
   });
   const sounds = (): Promise<number[]> =>
-    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
+    page.evaluate(
+      (limit) =>
+        (window as unknown as { startedSounds: number[] }).startedSounds.filter((duration) => duration > limit),
+      HOVER_SOUND_SECONDS,
+    );
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
@@ -964,6 +974,7 @@ test.describe('lesson mode', () => {
       await page.keyboard.press('Escape');
       await page.getByRole('button', { name: 'Run', exact: true }).click();
       await expect(page.locator('.lesson-status')).toContainText('Well done');
+      await waitForAnimations(page);
 
       const results = await new AxeBuilder({ page }).include('.tab-bar').include('.lesson-brief').analyze();
 
