@@ -16,7 +16,18 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Variables inspector, always visible, with search and types.
 - Top menu with Radix, navigable by keyboard and touch.
 - Frutiger Aero look, with illustrated theme and language choices on every screen.
-- Phone layout with Code, Output and Variables panels and 44 pixel touch targets.
+- Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
+- Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
+- File sidebar with folders in each project.
+- Unsaved work is kept while typing and recovered after a crash or a power cut.
+- Import and export of projects as `.zip`, into a new project or the open one.
+- Lessons in real markdown, with colored code and a button to open each example in the IDE.
+- Resizable panels, by mouse and keyboard, kept between sessions.
+- Language changes rewrite the letters of the interface, and themes change in the scenery itself.
+- Modals with an overlay, a retro opening and a closing animation, closing when clicking outside.
+- Confirmation before deleting a project or a file.
+- Styled mouse cursor and scrollbars.
+- Phone layout with Files, Code, Output and Variables panels and 44 pixel touch targets.
 
 ### Changed
 

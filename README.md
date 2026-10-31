@@ -31,6 +31,10 @@ project has its own virtual files, which is where `crie o arquivo`, `leia o arqu
 Click the dot beside a line to set a breakpoint: running stops there, and the variables inspector shows the values. On a
 phone the IDE splits into Code, Output and Variables panels.
 
+Every screen has an address: `#/new/16-listas`, `#/lessons/aula-02-exibicao/comando-de-exibicao`,
+`#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, and unsaved work is kept while typing
+so that it comes back after a crash or a power cut.
+
 Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
 is not supported. A script without that line is treated as version 0.38, the last Python release.
 
@@ -42,7 +46,8 @@ is not supported. A script without that line is treated as version 0.38, the las
 4. Install the test browser: `pnpm exec playwright install --with-deps chromium`
 5. Check everything: `pnpm run check:all`
 
-Projects live in the browser `localStorage`, so they are not in the repository and do not move between PCs.
+Projects live in the browser `localStorage`, so they are not in the repository. Use the `.zip` export to move them
+between PCs.
 
 ## Available scripts
 

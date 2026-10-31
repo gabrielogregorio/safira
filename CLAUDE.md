@@ -27,4 +27,9 @@ setup and scripts.
 - `mostre` examples named `Continue` and `Pare` collide with button names in tests. Keep action labels distinct.
 - Breakpoints snap to the next command in `snapBreakpoints`, because comments never produce a step.
 - In Playwright, wait for the focus to enter a Radix menu before pressing arrows, or the key moves the trigger.
+- `textScramble.ts` writes in text nodes owned by React and must end with the exact final text.
+- Radix marks everything behind a modal as `aria-hidden`, so that attribute cannot be used to skip text.
+- `Modal` closes by unmounting, so the closing animation plays on a clone left in `document.body`.
+- Empty folders are a `.keep` file in `Project.files`. Lists shown to the user go through `visibleFiles`.
+- Waiting for animations in Playwright needs `allSettled`: a removed element rejects `finished`.
 - A new language version must be added to `SUPPORTED_VERSIONS` while it can still run the older ones.

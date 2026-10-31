@@ -15,6 +15,8 @@ Include the version, the steps and the impact.
 - The interpreter walks a syntax tree. There is no `eval` or `Function`, and no way to reach JavaScript from Safira.
 - Files are virtual, kept per project. The language has no access to disk, network or browser storage.
 - Output is rendered as text by React.
+- An imported `.zip` is limited to 500 files and 4 MB, paths that leave the project are refused and binary files are skipped.
+- Lesson markdown ignores raw HTML.
 - A recursion limit stops functions that never end, and the Stop button terminates the worker.
 
 ## Accepted risks
