@@ -1,0 +1,89 @@
+name: auto complete fields and validate pr
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, edited]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  # Only a release branch carries a version: every other PR merges without touching it.
+  validate-release-branch:
+    name: release branch is valid
+    if: startsWith(github.head_ref, 'release/')
+    timeout-minutes: 2
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: the branch names a new version
+        env:
+          RELEASE_BRANCH: ${{ github.head_ref }}
+        run: echo "this PR releases v$(.github/scripts/release-version.sh "$RELEASE_BRANCH") when merged"
+
+  assign-and-label:
+    name: assign, label and fill the changelog
+    if: github.event.action != 'edited'
+    timeout-minutes: 2
+    runs-on: ubuntu-24.04
+    steps:
+      - name: assign author, add labels, list commits and set the title
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9.0.0
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            const pull_number = context.issue.number;
+            const pr = context.payload.pull_request;
+
+            if (pr.user.type !== 'Bot') {
+              await github.rest.issues.addAssignees({ owner, repo, issue_number: pull_number, assignees: [pr.user.login] });
+            }
+
+            const commits = await github.paginate(github.rest.pulls.listCommits, { owner, repo, pull_number, per_page: 100 });
+            const messages = commits.map((c) => c.commit.message.split('\n')[0].trim());
+            const files = (await github.paginate(github.rest.pulls.listFiles, { owner, repo, pull_number, per_page: 100 }))
+              .map((f) => f.filename);
+
+            // labels by commit words and by touched files (commits are plain one-liners, no prefixes)
+            const labels = new Set();
+            const byWord = [
+              [/\b(fix|fixes|fixed|bug)\b/i, 'bug'],
+              [/\b(add|adds|added|new|support)\b/i, 'enhancement'],
+              [/\brefactor/i, 'refactor'],
+            ];
+            for (const message of messages) {
+              for (const [re, label] of byWord) if (re.test(message)) labels.add(label);
+            }
+            const byFile = [
+              [(f) => f.endsWith('.md'), 'documentation'],
+              [(f) => /\.(spec|test)\.tsx?$/.test(f) || f.startsWith('e2e/') || f.startsWith('tests/'), 'tests'],
+              [(f) => f.startsWith('.github/'), 'ci'],
+              [(f) => f.startsWith('src/core/i18n/'), 'i18n'],
+              [(f) => f.startsWith('src/'), 'frontend'],
+              [(f) => f === 'package.json' || f === 'pnpm-lock.yaml', 'dependencies'],
+            ];
+            for (const f of files) {
+              for (const [test, label] of byFile) if (test(f)) labels.add(label);
+            }
+            if (labels.size) {
+              await github.rest.issues.addLabels({ owner, repo, issue_number: pull_number, labels: [...labels] });
+            }
+
+            // commits go into the body where the template has [...autoGenerate]
+            const MARK = '[...autoGenerate]';
+            let body = (await github.rest.pulls.get({ owner, repo, pull_number })).data.body || '';
+            if (body.includes(MARK)) {
+              const fresh = messages.filter((m) => !body.includes(`- ${m}\n`)).map((m) => `- ${m}\n`).join('');
+              if (fresh) body = body.replace(MARK, fresh + MARK);
+            }
+
+            // only a release branch gets the Release title
+            const plainTitle = pr.title.replace(/^Release v\S+ - /, '');
+            const title = pr.head.ref.startsWith('release/')
+              ? `Release v${pr.head.ref.slice('release/'.length)} - ${plainTitle}`
+              : plainTitle;
+
+            await github.rest.pulls.update({ owner, repo, pull_number, body, title });

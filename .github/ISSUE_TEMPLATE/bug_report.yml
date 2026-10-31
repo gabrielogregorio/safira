@@ -1,0 +1,45 @@
+name: Bug report
+description: A screen looks wrong, a song does not open, reactions are lost or the page shows an error
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: Include the error shown on the screen or in the browser console.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Open the likes screen
+        2. Click on ...
+        3. ...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and device
+      placeholder: Chrome 140 on Android
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Interface language
+      options:
+        - English
+        - Português (Brasil)
+  - type: textarea
+    id: extra
+    attributes:
+      label: Anything else

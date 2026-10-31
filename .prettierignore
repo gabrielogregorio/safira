@@ -1,0 +1,6 @@
+*.md
+coverage
+node_modules
+build
+pnpm-lock.yaml
+trash

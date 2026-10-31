@@ -1,0 +1,390 @@
+{
+  "diretório_não_existe": {
+    "pt-br": "O diretório '{}' não existe!",
+    "en-us": "The '{}' directory does not exist!",
+    "es": "¡El directorio '{}' no existe!",
+    "zh-cn": "目录 '{}' 不存在！",
+    "ja": "ディレクトリ '{}' は存在しません！"
+  },
+  "precisa_nome_diretorio": {
+    "pt-br": "Você precisa informar o nome de um diretorio",
+    "en-us": "You need to provide the name of a directory",
+    "es": "Debe proporcionar el nombre de un directorio",
+    "zh-cn": "你需要提供目录名称",
+    "ja": "ディレクトリ名を指定してください"
+  },
+  "erro_copiar_arquivo": {
+    "pt-br": "Erro ao copiar o arquivo '{}' para o diretório '{}'. Erro : '{}'",
+    "en-us": "Error copying file '{}' to directory '{}'. Mistake : '{}'",
+    "es": "Error al copiar el archivo '{}' al directorio '{}'. Error : '{}'",
+    "zh-cn": "将文件 '{}' 复制到目录 '{}' 时出错。错误：'{}'",
+    "ja": "ファイル '{}' をディレクトリ '{}' にコピーできませんでした。エラー: '{}'"
+  },
+  "erro_mover_arquivo": {
+    "pt-br": "Erro ao mover o arquivo '{}' para o diretório '{}'. Erro : '{}'",
+    "en-us": "Error moving file '{}' to directory '{}'. Mistake : '{}'",
+    "es": "Error al mover el archivo '{}' al directorio '{}'. Error : '{}'",
+    "zh-cn": "将文件 '{}' 移动到目录 '{}' 时出错。错误：'{}'",
+    "ja": "ファイル '{}' をディレクトリ '{}' に移動できませんでした。エラー: '{}'"
+  },
+  "comando_desconhecido": {
+    "pt-br": "Um comando desconhecido foi localizado: ",
+    "en-us": "An unknown command was found: ",
+    "es": "Se encontró un comando desconocido:",
+    "zh-cn": "发现未知命令：",
+    "ja": "不明なコマンドが見つかりました: "
+  },
+  "add_lst_posicao_separador": {
+    "pt-br": "Comando não possui um separador, exemplo: lista de nomes na posicao 2 recebe \"Maria\"",
+    "en-us": "Command does not have a separator, example: list of names in position 2 receives \"Maria \"",
+    "es": "El comando no tiene separador, ejemplo: la lista de nombres en la posición 2 recibe \"Maria \"",
+    "zh-cn": "命令缺少分隔符，例如：list of names in position 2 receives \"Maria \"",
+    "ja": "コマンドに区切りがありません。例: list of names in position 2 receives \"Maria \""
+  },
+  "nao_e_lista": {
+    "pt-br": "{} não é uma lista",
+    "en-us": "{} it's not a list",
+    "es": "{} no es una lista",
+    "zh-cn": "{} 不是列表",
+    "ja": "{} はリストではありません"
+  },
+  "posicao_maior_limite_lista": {
+    "pt-br": "A posição está acima do tamanho da lista:",
+    "en-us": "The position is above the list size:",
+    "es": "La posición está por encima del tamaño de la lista:",
+    "zh-cn": "位置超出了列表大小：",
+    "ja": "位置がリストの大きさを超えています: "
+  },
+  "posicao_menor_limite_lista": {
+    "pt-br": "A posição está abaixo do tamanho da lista: ",
+    "en-us": "The position is below the list size: ",
+    "es": "La posición está debajo del tamaño de la lista:",
+    "zh-cn": "位置低于列表大小：",
+    "ja": "位置がリストの大きさを下回っています: "
+  },
+  "variavel_posicao_nao_informada": {
+    "pt-br": "Variável ou posição não foi informada.",
+    "en-us": "Variable or position was not informed.",
+    "es": "Variable o cargo no informado.",
+    "zh-cn": "未提供变量或位置。",
+    "ja": "変数または位置が指定されていません。"
+  },
+  "variavel_valor_nao_informado": {
+    "pt-br": "Variável ou valor não foi informada.",
+    "en-us": "Variable or value was not reported.",
+    "es": "No se informó la variable o el valor.",
+    "zh-cn": "未提供变量或值。",
+    "ja": "変数または値が指定されていません。"
+  },
+  "erro_obter_tamanho_lista": {
+    "pt-br": "Erro ao obter o tamanho da lista: ",
+    "en-us": "Error getting list size: ",
+    "es": "Error al obtener el tamaño de la lista:",
+    "zh-cn": "获取列表大小时出错：",
+    "ja": "リストの大きさを取得できませんでした: "
+  },
+  "nao_esta_na_lista": {
+    "pt-br": "não está na lista",
+    "en-us": "is not on the list",
+    "es": "no esta en la lista",
+    "zh-cn": "不在列表中",
+    "ja": "はリストにありません"
+  },
+  "digitou_caractere": {
+    "pt-br": "Você disse que queria digitar um número, mas digitou um texto: ",
+    "en-us": "You said you wanted to enter a number, but you entered text:",
+    "es": "Dijiste que querías ingresar un número, pero ingresaste texto:",
+    "zh-cn": "你说要输入数字，但输入的是文本：",
+    "ja": "数値を入力すると指定しましたが、文字が入力されました: "
+  },
+  "repetir_nao_informou_inteiro": {
+    "pt-br": "Para usar a função repetir, você precisa passar um número inteiro. Você informou ",
+    "en-us": "To use the repeat function, you need to pass an integer. You reported ",
+    "es": "Para utilizar la función de repetición, debe pasar un número entero. Tu reportaste",
+    "zh-cn": "使用重复功能时必须传入整数。你传入的是 ",
+    "ja": "繰り返しには整数が必要です。指定された値: "
+  },
+  "aleatorio_valor1_nao_numerico": {
+    "pt-br": "O valor 1 não é numérico",
+    "en-us": "The value 1 is not numeric",
+    "es": "El valor 1 no es numérico",
+    "zh-cn": "值 1 不是数字",
+    "ja": "値 1 は数値ではありません"
+  },
+  "aleatorio_valor2_nao_numerico": {
+    "pt-br": "O valor 2 não é numérico",
+    "en-us": "The value 2 is not numeric",
+    "es": "El valor 2 no es numérico",
+    "zh-cn": "值 2 不是数字",
+    "ja": "値 2 は数値ではありません"
+  },
+  "aleatorio_valor1_igual_valo2": {
+    "pt-br": "O valor 1 e o valor 2 da função aleatório tem que ser diferentes",
+    "en-us": "The value 1 and value 2 of the random function must be different",
+    "es": "El valor 1 y el valor 2 de la función aleatoria deben ser diferentes",
+    "zh-cn": "随机函数的值 1 和值 2 必须不同",
+    "ja": "乱数の値 1 と値 2 は異なる必要があります"
+  },
+  "aleatorio_valor1_maior_valo2": {
+    "pt-br": "O valor 1 é maior que o valor 2, o valor 1 tem que ser maior",
+    "en-us": "Value 1 is greater than value 2, value 1 must be greater",
+    "es": "El valor 1 es mayor que el valor 2, el valor 1 debe ser mayor",
+    "zh-cn": "值 1 大于值 2,值 1 必须更小",
+    "ja": "値 1 が値 2 より大きいです。値 1 は小さくしてください"
+  },
+  "funcao_nao_existe": {
+    "pt-br": "A função  '{}'não existe",
+    "en-us": "The function '{}' does not exist",
+    "es": "La función '{}' no existe",
+    "zh-cn": "函数 '{}' 不存在",
+    "ja": "関数 '{}' は存在しません"
+  },
+  "funcao_nao_passou_parametros": {
+    "pt-br": "A função '{}' possui '{}' parâmetros, você precisa informa-los!"
+  },
+  "funcao_tem_parametros_divergentes": {
+    "pt-br": "A função \"{}\" tem {} parametros, mas você passou {} parametros!",
+    "en-us": "The \"{}\" function has {} parameters, but you passed {} parameters!",
+    "es": "La función \"{}\" tiene {} parámetros, ¡pero pasaste {} parámetros!",
+    "zh-cn": "函数 \"{}\" 有 {} 个参数，但你传入了 {} 个参数！",
+    "ja": "関数 \"{}\" の引数は {} 個ですが、{} 個渡されました！"
+  },
+  "funcao_informou_mais_parametros": {
+    "pt-br": "A função '{}' não possui parâmetros, mas você informou parâmetros!",
+    "en-us": "The function '{}' has no parameters, but you have entered parameters!",
+    "es": "La función '{}' no tiene parámetros, ¡pero ha ingresado parámetros!",
+    "zh-cn": "函数 '{}' 没有参数，但你传入了参数！",
+    "ja": "関数 '{}' に引数はありませんが、引数が渡されました！"
+  },
+  "funcao_passou_um_parametros": {
+    "pt-br": "A função \"{}\" tem {} parametros, mas você passou 1 parametro",
+    "en-us": "The \"{}\" function has {} parameters, but you passed 1 parameter",
+    "es": "La función \"{}\" tiene {} parámetros, pero pasaste 1 parámetro",
+    "zh-cn": "函数 \"{}\" 有 {} 个参数，但你传入了 1 个参数",
+    "ja": "関数 \"{}\" の引数は {} 個ですが、1 個渡されました"
+  },
+  "nao_possivel_conta_string": {
+    "pt-br": "Não é possível fazer contas com strings: ",
+    "en-us": "It is not possible to do accounts with strings: ",
+    "es": "No es posible hacer cuentas con cadenas:",
+    "zh-cn": "无法用字符串进行计算：",
+    "ja": "文字列では計算できません: "
+  },
+  "nao_possivel_fazer_conta": {
+    "pt-br": "Não foi possivel realizar a conta ",
+    "en-us": "Unable to complete account ",
+    "es": "No se puede completar la cuenta",
+    "zh-cn": "无法完成计算 ",
+    "ja": "計算できませんでした "
+  },
+  "voce_precisa_definir_variavel": {
+    "pt-br": "Você precisa definir a variável ",
+    "en-us": "You need to define the variable ",
+    "es": "Necesitas definir la variable",
+    "zh-cn": "你需要定义变量 ",
+    "ja": "変数を定義してください: "
+  },
+  "variaveis_comecar_por_letra": {
+    "pt-br": "Variáveis devem começar por uma letra.",
+    "en-us": "Variables must start with a letter.",
+    "es": "Las variables deben comenzar con una letra.",
+    "zh-cn": "变量必须以字母开头。",
+    "ja": "変数は文字で始める必要があります。"
+  },
+  "variaveis_devem_conter": {
+    "pt-br": "Variáveis devem conter apenas letras, numeros ou underline \"_\".",
+    "en-us": "Variables must contain only letters, numbers or underline \"_\".",
+    "es": "Las variables deben contener solo letras, números o subrayado \"_\".",
+    "zh-cn": "变量只能包含字母、数字或下划线 \"_\"。",
+    "ja": "変数に使えるのは文字、数字、アンダースコア \"_\" だけです。"
+  },
+  "condicao_nao_possui_condicao": {
+    "pt-br": "A condição não possui nenhuma condição!.",
+    "en-us": "The condition has no condition!",
+    "es": "¡La condición no tiene condición!",
+    "zh-cn": "条件语句没有条件！",
+    "ja": "条件文に条件がありません！"
+  },
+  "nao_possivel_fazer_condicao": {
+    "pt-br": "Não foi possível realizar a condição: ",
+    "en-us": "The condition could not be fulfilled: ",
+    "es": "La condición no se pudo cumplir:",
+    "zh-cn": "无法判断条件：",
+    "ja": "条件を判定できませんでした: "
+  },
+  "necessario_informar_variavel_valor": {
+    "pt-br": "É necessário informar uma variável ou um valor",
+    "en-us": "You need to enter a variable or value",
+    "es": "Debes ingresar una variable o valor",
+    "zh-cn": "你需要输入变量或值",
+    "ja": "変数または値を入力してください"
+  },
+  "erro_criar_arquivo": {
+    "pt-br": "Erro ao criar o arquivo, erro '{}'",
+    "en-us": "Error creating the file, error '{}'",
+    "es": "Error al crear el archivo, error '{}'",
+    "zh-cn": "创建文件时出错，错误 '{}'",
+    "ja": "ファイルを作成できませんでした。エラー '{}'"
+  },
+  "erro_deletar_arquivo": {
+    "pt-br": "Erro ao deletar o arquivo, erro '{}'",
+    "en-us": "Error deleting the file, error '{}'",
+    "es": "Error al eliminar el archivo, error '{}'",
+    "zh-cn": "删除文件时出错，错误 '{}'",
+    "ja": "ファイルを削除できませんでした。エラー '{}'"
+  },
+  "erro_adicionar_texto_arquivo": {
+    "pt-br": "Erro ao adicionar o texto '{}' no arquivo '{}'. Erro '{}'",
+    "en-us": "Error adding the text '{}' in the file '{}'. Error '{}'",
+    "es": "Error al agregar el texto '{}' en el archivo '{}'. Error '{}'",
+    "zh-cn": "将文本 '{}' 添加到文件 '{}' 时出错。错误 '{}'",
+    "ja": "テキスト '{}' をファイル '{}' に追加できませんでした。エラー '{}'"
+  },
+  "arquivo_nao_existe": {
+    "pt-br": "O arquivo '{}' não existe!",
+    "en-us": "The file '{}' does not exist!",
+    "es": "¡El archivo no existe!",
+    "zh-cn": "文件 '{}' 不存在！",
+    "ja": "ファイル '{}' は存在しません！"
+  },
+  "erro_abrir_arquivo": {
+    "pt-br": "Erro ao abrir o arquivo '{}'', erro '{}'",
+    "en-us": "Error opening file '{}' ', error' {}'",
+    "es": "Error al abrir el archivo '{}' ', error' {} '",
+    "zh-cn": "打开文件 '{}' 时出错，错误 '{}'",
+    "ja": "ファイル '{}' を開けませんでした。エラー '{}'"
+  },
+  "precisa_nome_arquivo": {
+    "pt-br": "Você precisa informar o nome de um arquivo",
+    "en-us": "You need to enter a file name",
+    "es": "Debes ingresar un nombre de archivo",
+    "zh-cn": "你需要输入文件名",
+    "ja": "ファイル名を入力してください"
+  },
+  "erro_abrir_biblioteca": {
+    "pt-br": "Erro ao abrir a biblioteca '{}', erro '{}'",
+    "en-us": "Error opening the library '{}', error '{}'",
+    "es": "Error al abrir la biblioteca '{}', error '{}'",
+    "zh-cn": "打开库 '{}' 时出错，错误 '{}'",
+    "ja": "ライブラリ '{}' を開けませんでした。エラー '{}'"
+  },
+  "nao_possui_operacao_matematica": {
+    "pt-br": "Não foi possivel realizar a conta, porque não nenhuma operação matemática",
+    "en-us": "It was not possible to perform the account, because there is no mathematical operation",
+    "es": "No fue posible realizar la cuenta, porque no hay operación matemática",
+    "zh-cn": "无法完成计算，因为没有数学运算",
+    "ja": "数学の演算がないため、計算できませんでした"
+  },
+  "variavel_nao_numerica": {
+    "pt-br": "A variável '{}' não é numérica!",
+    "en-us": "The variable '{}' is not numeric!",
+    "es": "¡La variable '{}' no es numérica!",
+    "zh-cn": "变量 '{}' 不是数字！",
+    "ja": "変数 '{}' は数値ではありません！"
+  },
+  "p_maiusc_minusc_cap_texto": {
+    "pt-br": "Para usar o recurso de conversão para {}, é necessário informar uma string",
+    "en-us": "To use the {} conversion feature, you need to enter a string",
+    "es": "Para utilizar la función de conversión {}, debe ingresar una cadena",
+    "zh-cn": "要使用 {} 转换功能，你需要输入文本",
+    "ja": "{} 変換を使うには文字列を入力してください"
+  },
+  "p_substituir_texto_valor": {
+    "pt-br": "Para substituir um texto, o valor {} precisa ser uma string. O valor {} é do tipo '{}'",
+    "en-us": "To replace text, the value {} must be a string. The value {} is of type '{}'",
+    "es": "Para reemplazar el texto, el valor {} debe ser una cadena. El valor {} es de tipo '{}'",
+    "zh-cn": "要替换文本，值 {} 必须是文本。值 {} 的类型是 '{}'",
+    "ja": "文字列を置換するには、値 {} が文字列である必要があります。値 {} の型は '{}' です"
+  },
+  "p_usar_substituicao_variavel": {
+    "pt-br": "Para usar o recurso substituição, é necessário informar uma variável string",
+    "en-us": "To use the substitution feature, you must enter a string variable",
+    "es": "Para usar la función de sustitución, debe ingresar una variable de cadena",
+    "zh-cn": "要使用替换功能，你必须提供文本变量",
+    "ja": "置換を使うには文字列の変数を指定してください"
+  },
+  "nao_abriu_chave": {
+    "pt-br": "Você usou mais { do que o normal",
+    "en-us": "You used more {than usual",
+    "es": "Usaste más {de lo habitual",
+    "zh-cn": "你使用的 { 比需要的多",
+    "ja": "{ が必要な数より多く使われています"
+  },
+  "nao_fechou_chave": {
+    "pt-br": "Você precisa de fechar uma {",
+    "en-us": "You need to close a {",
+    "es": "Necesitas cerrar un {",
+    "zh-cn": "你需要闭合一个 {",
+    "ja": "{ を閉じてください"
+  },
+  "precisa_def_tente_p_n_der_erro": {
+    "pt-br": "Você precisa definir um tente, para testar o se não der erro",
+    "en-us": "You need to define a try, to test it if it doesn't go wrong",
+    "es": "Necesita definir un intento, para probarlo si no sale mal",
+    "zh-cn": "你需要先定义 try,才能测试没有出错的情况",
+    "ja": "エラーがない場合を調べるには try を定義してください"
+  },
+  "precisa_def_tente_p_der_erro": {
+    "pt-br": "Você precisa definir um tente, para testar o se der erro",
+    "en-us": "You need to define a try, to test the error",
+    "es": "Necesitas definir un intento, para probar el error.",
+    "zh-cn": "你需要先定义 try,才能测试错误",
+    "ja": "エラーを調べるには try を定義してください"
+  },
+  "precisa_def_p_cond_senao": {
+    "pt-br": "Você precisa definir uma condição, para testar o senão",
+    "en-us": "You need to define a condition, to test the snag",
+    "es": "Necesitas definir una condición para probar el problema",
+    "zh-cn": "你需要先定义条件，才能测试\"否则\"分支",
+    "ja": "「それ以外」を調べるには条件を定義してください"
+  },
+  "format_needs_text": {
+    "pt-br": "O comando inserindo precisa de um texto",
+    "en-us": "Formatting needs a text",
+    "es": "El formato necesita un texto",
+    "zh-cn": "格式化需要文本",
+    "ja": "整形には文字列が必要です"
+  },
+  "format_args_mismatch": {
+    "pt-br": "O texto tem {} marcadores %, mas foram informados {} valores",
+    "en-us": "The text has {} % markers, but {} values were given",
+    "es": "El texto tiene {} marcadores %, pero se informaron {} valores",
+    "zh-cn": "文本有 {} 个 % 标记，但提供了 {} 个值",
+    "ja": "文字列の % 記号は {} 個ですが、値は {} 個です"
+  },
+  "slice_only_text": {
+    "pt-br": "Só é possível fatiar um texto",
+    "en-us": "Only a text can be sliced",
+    "es": "Solo se puede cortar un texto",
+    "zh-cn": "只能截取文本",
+    "ja": "切り出せるのは文字列だけです"
+  },
+  "slice_out_of_range": {
+    "pt-br": "A posição {} está fora do texto, que tem {} letras",
+    "en-us": "Position {} is outside the text, which has {} letters",
+    "es": "La posición {} está fuera del texto, que tiene {} letras",
+    "zh-cn": "位置 {} 超出文本范围，文本有 {} 个字",
+    "ja": "位置 {} は文字列の範囲外です。文字列は {} 文字です"
+  },
+  "math_division_by_zero": {
+    "pt-br": "Não é possível dividir por zero",
+    "en-us": "It is not possible to divide by zero",
+    "es": "No es posible dividir por cero",
+    "zh-cn": "不能除以零",
+    "ja": "0 で割ることはできません"
+  },
+  "recursion_limit": {
+    "pt-br": "A função chamou a si mesma vezes demais",
+    "en-us": "The function called itself too many times",
+    "es": "La función se llamó a sí misma demasiadas veces",
+    "zh-cn": "函数调用自身的次数过多",
+    "ja": "関数が自分自身を呼び出した回数が多すぎます"
+  },
+  "wait_not_numeric": {
+    "pt-br": "O tempo de espera precisa ser um número",
+    "en-us": "The waiting time must be a number",
+    "es": "El tiempo de espera debe ser un número",
+    "zh-cn": "等待时间必须是数字",
+    "ja": "待ち時間は数値で指定してください"
+  }
+}

@@ -1,0 +1,49 @@
+name: check lint
+
+on:
+  push:
+    branches: [main, dev]
+  pull_request:
+    branches: [main, dev]
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    name: Lint (ESLint, TypeScript, Prettier, audit)
+    timeout-minutes: 8
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+      - uses: ./.github/actions/setup-environment
+
+      - name: ESLint and TypeScript
+        run: pnpm run lint
+
+      - name: Prettier (also parses the workflow files)
+        run: |
+          pnpm run format:check
+          pnpm exec prettier --check ".github/**/*.yml"
+
+      - name: No known vulnerability in what ships to the browser
+        run: pnpm audit --prod
+
+      - name: No high vulnerability in the tooling (accepted risks in docs/security.md)
+        run: pnpm audit --audit-level high
+
+      - name: Actions are pinned to a commit hash
+        run: |
+          bad=$(grep -rnE '^\s*(- )?uses:\s' .github | grep -vE 'uses:\s+\./' | grep -vE '@[0-9a-f]{40}( |$)' || true)
+          if [[ -n "$bad" ]]; then
+            echo "$bad" | while IFS=: read -r f l _; do echo "::error file=$f,line=$l::pin this action to a full commit hash (# vX.Y.Z as comment)"; done
+            exit 1
+          fi
+
+      - name: Jobs that write to the repository do not leave the token to the build
+        run: |
+          bad=$(grep -lE 'contents: write' .github/workflows/*.yml | xargs -r grep -lE 'setup-environment|pnpm (install|run)' | xargs -r grep -LE 'persist-credentials: false' || true)
+          if [[ -n "$bad" ]]; then
+            echo "$bad" | while read -r f; do echo "::error file=$f::set persist-credentials: false on the checkout of this workflow"; done
+            exit 1
+          fi

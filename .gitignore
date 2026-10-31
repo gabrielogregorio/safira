@@ -1,9 +1,25 @@
-__pycache__/
-libs/__pycache__/
-..gitignor.swp
-backups
-registros.json
-.vscode/
-.\logs\registros.json
-FULLTESTES.safira
-logs/registros.json
+# dependencies
+node_modules
+
+# builds and reports
+build
+coverage
+playwright-report
+test-results
+lighthouseReport.html
+resourceUsageReport.json
+tsconfig.tsbuildinfo
+
+# secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# editor and system
+.vscode
+.DS_Store
+
+# removed files wait here, outside of git
+trash
