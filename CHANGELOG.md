@@ -6,6 +6,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
 ### Added
 
+- Accessibility modes for protanopia, deuteranopia, tritanopia, achromatopsia, low vision, light sensitivity, and epilepsy and dizziness, tested with axe and with simulated color vision.
 - Home screen to create projects from a blank file or from 35 examples.
 - Virtual files per project, including `importe` and every file command.
 - Hidden language version on the first line of each script, with an alert only when it is not supported.

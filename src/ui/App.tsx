@@ -6,7 +6,8 @@ import type { Project } from '@/projects/projectStore';
 import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
 import { useRoute } from '@/routing/useRoute';
 import type { Settings } from '@/settings/settings';
-import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
+import { loadSettings, saveSettings } from '@/settings/settings';
+import { applyVision } from '@/settings/vision';
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
@@ -15,6 +16,7 @@ import { CloseButton } from '@/ui/components/CloseButton';
 import { GlobeWallpaper } from '@/ui/components/GlobeWallpaper';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
+import { VisionToggle } from '@/ui/components/VisionToggle';
 import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
@@ -82,10 +84,8 @@ export const App = ({ createWorker }: AppProps) => {
     root.dataset['theme'] = skyTheme;
     root.dataset['codeFont'] = settings.codeFont;
 
-    for (const [category, color] of Object.entries(SYNTAX_PALETTES[skyTheme])) {
-      root.style.setProperty(`--syntax-${category}`, color);
-    }
-  }, [locale, settings.codeFont, skyTheme]);
+    applyVision(root, settings.vision, skyTheme);
+  }, [locale, settings.codeFont, settings.vision, skyTheme]);
 
   useLayoutEffect(() => {
     if (shownLocale.current === locale) {
@@ -248,6 +248,12 @@ export const App = ({ createWorker }: AppProps) => {
         theme={skyTheme}
         onChange={(theme) => {
           changeSettings({ theme });
+        }}
+      />
+      <VisionToggle
+        vision={settings.vision}
+        onChange={(vision) => {
+          changeSettings({ vision });
         }}
       />
       <LanguageToggle

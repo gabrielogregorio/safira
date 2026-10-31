@@ -1691,54 +1691,93 @@ select {
 
 .syntax-numerico {
   color: var(--syntax-numerico);
+  font-style: var(--syntax-numerico-style, inherit);
+  font-weight: var(--syntax-numerico-weight, inherit);
+  text-decoration: var(--syntax-numerico-decoration, none);
 }
 
 .syntax-atribuicao {
   color: var(--syntax-atribuicao);
+  font-style: var(--syntax-atribuicao-style, inherit);
+  font-weight: var(--syntax-atribuicao-weight, inherit);
+  text-decoration: var(--syntax-atribuicao-decoration, none);
 }
 
 .syntax-loops {
   color: var(--syntax-loops);
+  font-style: var(--syntax-loops-style, inherit);
+  font-weight: var(--syntax-loops-weight, inherit);
+  text-decoration: var(--syntax-loops-decoration, none);
 }
 
 .syntax-lista {
   color: var(--syntax-lista);
+  font-style: var(--syntax-lista-style, inherit);
+  font-weight: var(--syntax-lista-weight, inherit);
+  text-decoration: var(--syntax-lista-decoration, none);
 }
 
 .syntax-logico {
   color: var(--syntax-logico);
+  font-style: var(--syntax-logico-style, inherit);
+  font-weight: var(--syntax-logico-weight, inherit);
+  text-decoration: var(--syntax-logico-decoration, none);
 }
 
 .syntax-entrada {
   color: var(--syntax-entrada);
+  font-style: var(--syntax-entrada-style, inherit);
+  font-weight: var(--syntax-entrada-weight, inherit);
+  text-decoration: var(--syntax-entrada-decoration, none);
 }
 
 .syntax-exibicao {
   color: var(--syntax-exibicao);
+  font-style: var(--syntax-exibicao-style, inherit);
+  font-weight: var(--syntax-exibicao-weight, inherit);
+  text-decoration: var(--syntax-exibicao-decoration, none);
 }
 
 .syntax-tempo {
   color: var(--syntax-tempo);
+  font-style: var(--syntax-tempo-style, inherit);
+  font-weight: var(--syntax-tempo-weight, inherit);
+  text-decoration: var(--syntax-tempo-decoration, none);
 }
 
 .syntax-condicionais {
   color: var(--syntax-condicionais);
+  font-style: var(--syntax-condicionais-style, inherit);
+  font-weight: var(--syntax-condicionais-weight, inherit);
+  text-decoration: var(--syntax-condicionais-decoration, none);
 }
 
 .syntax-contas {
   color: var(--syntax-contas);
+  font-style: var(--syntax-contas-style, inherit);
+  font-weight: var(--syntax-contas-weight, inherit);
+  text-decoration: var(--syntax-contas-decoration, none);
 }
 
 .syntax-string {
   color: var(--syntax-string);
+  font-style: var(--syntax-string-style, inherit);
+  font-weight: var(--syntax-string-weight, inherit);
+  text-decoration: var(--syntax-string-decoration, none);
 }
 
 .syntax-comentario {
   color: var(--syntax-comentario);
+  font-style: var(--syntax-comentario-style, inherit);
+  font-weight: var(--syntax-comentario-weight, inherit);
+  text-decoration: var(--syntax-comentario-decoration, none);
 }
 
 .syntax-pare {
   color: var(--syntax-pare);
+  font-style: var(--syntax-pare-style, inherit);
+  font-weight: var(--syntax-pare-weight, inherit);
+  text-decoration: var(--syntax-pare-decoration, none);
 }
 
 .output-column {
@@ -2514,3 +2553,55 @@ select {
     display: none;
   }
 }
+
+:root[data-vision='calm'] .aquarium,
+:root[data-vision='calm'] .aero-orb *,
+:root[data-vision='calm'] .button,
+:root[data-vision='calm'] .example-card,
+:root[data-vision='calm'] .breakpoint-dot,
+:root[data-vision='calm'] .menubar-content,
+:root[data-vision='calm'] .modal,
+:root[data-vision='calm'] .modal::after,
+:root[data-vision='calm'] .modal-backdrop,
+:root[data-vision='calm'] .modal-zoom span,
+:root[data-vision='calm'] .scenery-layer,
+:root[data-vision='calm'] .scenery-star,
+:root[data-vision='calm'] .orb-toggle,
+:root[data-vision='calm'] .orb-toggle * {
+  animation: none !important;
+  transition: none;
+}
+
+:root[data-vision='calm'] .editor-screen,
+:root[data-vision='calm'] .code-editor,
+:root[data-vision='calm'] .code-editor::after,
+:root[data-vision='calm'] .aero-button {
+  animation: none;
+  transition: none;
+}
+
+:root[data-vision='calm'] .scenery-twinkle,
+:root[data-vision='calm'] .drop-target {
+  animation: none;
+}
+
+:root[data-vision='calm'] .modal-zoom {
+  display: none;
+}
+
+:root[data-vision='lightSensitivity'] .scenery {
+  filter: brightness(0.35) saturate(0.5);
+}
+
+:root[data-vision='lightSensitivity'] {
+  color-scheme: dark;
+}
+
+:root[data-vision='lowVision'] .scenery {
+  display: none;
+}
+
+:root[data-vision='lowVision'] * {
+  text-shadow: none !important;
+}
+

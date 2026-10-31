@@ -51,4 +51,5 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Finishing a name in the tree moves rows. `NameInput` waits for the press to end, or the click on another item is lost.
 - The aquarium simulation in `aquariumWorld.ts` has no DOM and takes `random`, so it is tested without a canvas. Eaten or popped fish stay gone by design.
 - Language words like `toque` are also valid names: `parseTone` fails on a line that is not a note, and the next rules take it.
+- A new color in `src/settings/vision.ts` must pass `vision.test.ts`, which simulates the vision it serves. Never lower the floors to make a palette pass.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

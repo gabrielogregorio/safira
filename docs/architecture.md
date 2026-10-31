@@ -46,7 +46,7 @@ pure helpers such as highlighting and formatting.
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
 | `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
 | `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
-| `safira.settings.v1` | Language, chosen theme, fonts, sound, suggestions, panel sizes, read lessons |
+| `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, read lessons |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
 
@@ -62,6 +62,7 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Interface decisions
 
+- Syntax colors follow the theme and the vision mode only. `applyVision` in `src/settings/vision.ts` writes them, with the interface tokens of the mode, as inline variables on `html`, so they win over the theme rules and leave no trace when the mode ends.
 - There is no saving by hand. Open tabs reach the project 300 ms after typing stops, on `pagehide` and when leaving. Ctrl+S only forces it.
 - `importe` looks beside the importing file first, then from the root, with or without `.safira`.
 - Notes travel from the worker as `tone` events, and `soundPlayer.tone` plays them. A rest only waits.

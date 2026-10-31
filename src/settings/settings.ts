@@ -1,5 +1,7 @@
 import type { SyntaxCategory } from '@/language/highlight';
 import type { Locale } from '@/language/messages';
+import type { VisionMode } from './vision';
+import { isVisionMode } from './vision';
 
 export type ThemeId = 'light' | 'dark' | 'simple';
 export type CodeFont = 'mono' | 'aero';
@@ -9,6 +11,7 @@ export const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
 export interface Settings {
   locale: Locale | null;
   theme: ThemeId;
+  vision: VisionMode;
   fontSize: number;
   sound: boolean;
   codeFont: CodeFont;
@@ -34,6 +37,7 @@ const STORAGE_KEY = 'safira.settings.v1';
 export const DEFAULT_SETTINGS: Settings = {
   locale: null,
   theme: 'light',
+  vision: 'default',
   fontSize: DEFAULT_FONT_SIZE,
   sound: true,
   codeFont: 'mono',
@@ -58,7 +62,7 @@ export const loadSettings = (): Settings => {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') as Partial<Settings>;
 
-    return { ...DEFAULT_SETTINGS, ...parsed };
+    return { ...DEFAULT_SETTINGS, ...parsed, vision: isVisionMode(parsed.vision) ? parsed.vision : 'default' };
   } catch {
     return DEFAULT_SETTINGS;
   }

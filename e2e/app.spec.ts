@@ -62,6 +62,64 @@ const runCode = async (page: Page): Promise<void> => {
   await page.getByRole('button', { name: 'Run', exact: true }).click();
 };
 
+const VISION_NAMES = [
+  'Protanopia (weak red)',
+  'Deuteranopia (weak green)',
+  'Tritanopia (weak blue)',
+  'Achromatopsia (no colors)',
+  'Low vision (cataract, glaucoma)',
+  'Light sensitivity (migraine, photophobia)',
+  'Epilepsy and dizziness (no motion)',
+];
+
+const chooseVision = async (page: Page, name: string): Promise<void> => {
+  const toggle = page.getByRole('button', { name: /^Accessibility: / });
+
+  while ((await toggle.getAttribute('aria-label')) !== `Accessibility: ${name}`) {
+    await toggle.click();
+  }
+};
+
+for (const vision of VISION_NAMES) {
+  for (const theme of ['Light', 'Dark', 'Simple']) {
+    test(`has no violations with ${vision} in the ${theme} theme`, async ({ page }) => {
+      await page.goto('/');
+      await chooseTheme(page, theme);
+      await chooseVision(page, vision);
+      await expectNoViolations(page);
+
+      await createProjectWithCode(page, '# nota\nse 1 == 1 entao mostre "oi"\nx recebe 2 + 3');
+      await expectNoViolations(page);
+    });
+  }
+}
+
+test('keeps the mode after a reload and offers it in the menu', async ({ page }) => {
+  await page.goto('/');
+  await chooseVision(page, 'Tritanopia (weak blue)');
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'tritanopia');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'tritanopia');
+
+  await createProjectWithCode(page, 'mostre "oi"');
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Accessibility' }).click();
+  await expect(page.getByRole('menuitemradio', { name: 'Tritanopia (weak blue)' })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
+  await page.getByRole('menuitemradio', { name: 'Default' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'default');
+});
+
+test('marks code with more than color and stops the motion in the calm mode', async ({ page }) => {
+  await page.goto('/');
+  await chooseVision(page, 'Achromatopsia (no colors)');
+  await createProjectWithCode(page, '# nota\nmostre "oi"');
+  await expect(page.locator('.syntax-comentario').first()).toHaveCSS('font-style', 'italic');
+  await expect(page.locator('.syntax-string').first()).toHaveCSS('text-decoration-line', 'underline');
+});
+
 test('runs a program in the worker', async ({ page }) => {
   await createProjectWithCode(page, 'repita 2 vezes { mostre "oi" }\nmostre 1 + 2');
   await runCode(page);

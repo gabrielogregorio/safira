@@ -6,6 +6,8 @@ import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
 import type { CodeFont, Settings } from '@/settings/settings';
 import { clampFontSize, THEME_IDS } from '@/settings/settings';
+import { VISION_MODES } from '@/settings/vision';
+import { visionLabel } from '@/ui/visionLabels';
 import type { SoundName } from '@/ui/sound/sounds';
 
 interface IdeMenuBarProps {
@@ -213,6 +215,14 @@ export const IdeMenuBar = ({
           options={themeOptions}
           onChange={(theme) => {
             onChangeSettings({ theme });
+          }}
+        />
+        <RadioSubmenu
+          label={t('Accessibility')}
+          value={settings.vision}
+          options={VISION_MODES.map((id) => ({ id, label: visionLabel(t, id) }))}
+          onChange={(vision) => {
+            onChangeSettings({ vision });
           }}
         />
         <RadioSubmenu
