@@ -1,4 +1,4 @@
-#safira 1.0
+#safira 0.9
 # Você quer executar um loop, porém, quando
 # chegar em uma condição, você não quer executar
 # os comandos restantes. Como fazer isso?

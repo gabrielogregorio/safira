@@ -1,4 +1,4 @@
-#safira 1.0
+#safira 0.9
 # Você tem um trecho de código que pode acontecer um erro
 # e você precisa tratar o erro e o programa continuar rodando mesmo com o erro.
 # Você pode usar o tente

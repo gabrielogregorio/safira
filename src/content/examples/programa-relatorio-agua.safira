@@ -1,4 +1,4 @@
-#safira 1.0
+#safira 0.9
 // Função : Controlar a venda de água (Galão)
 Galao <- 20000
 Copo200 <- 0

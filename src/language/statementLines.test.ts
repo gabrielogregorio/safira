@@ -18,6 +18,6 @@ describe('snapBreakpoints', () => {
   });
 
   it('counts lines after the hidden version line', () => {
-    expect(snapBreakpoints('#safira 1.0\n# nota\nmostre 1', [1])).toEqual([2]);
+    expect(snapBreakpoints('#safira 0.9\n# nota\nmostre 1', [1])).toEqual([2]);
   });
 });

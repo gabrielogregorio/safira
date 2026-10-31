@@ -6,7 +6,7 @@ describe('projectStore', () => {
   });
 
   it('creates a project with a versioned main file', () => {
-    expect(createProject('Novo')).toMatchObject({ name: 'Novo', files: { [MAIN_FILE]: '#safira 1.0\n' } });
+    expect(createProject('Novo')).toMatchObject({ name: 'Novo', files: { [MAIN_FILE]: '#safira 0.9\n' } });
   });
 
   it('keeps the projects between sessions', () => {

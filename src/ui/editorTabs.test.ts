@@ -10,15 +10,15 @@ import {
 
 describe('editor tabs', () => {
   it('hides the version line of a script from the editor', () => {
-    expect(openTab('a.safira', '#safira 1.0\nmostre 1')).toMatchObject({ text: 'mostre 1', version: '1.0' });
+    expect(openTab('a.safira', '#safira 0.9\nmostre 1')).toMatchObject({ text: 'mostre 1', version: '0.9' });
   });
 
   it('writes the version line back when saving a script', () => {
-    expect(toStoredText({ file: 'a.safira', text: 'mostre 1' })).toBe('#safira 1.0\nmostre 1');
+    expect(toStoredText({ file: 'a.safira', text: 'mostre 1' })).toBe('#safira 0.9\nmostre 1');
   });
 
   it('keeps a text file exactly as it is', () => {
-    expect(openTab('a.txt', '#safira 1.0').text).toBe('#safira 1.0');
+    expect(openTab('a.txt', '#safira 0.9').text).toBe('#safira 0.9');
     expect(toStoredText({ file: 'a.txt', text: 'oi' })).toBe('oi');
     expect(isScript('a.txt')).toBe(false);
   });

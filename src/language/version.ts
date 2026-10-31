@@ -1,8 +1,11 @@
-export const LANGUAGE_VERSION = '1.0';
+export const LANGUAGE_VERSION = '0.9';
 
 export const LEGACY_VERSION = '0.38';
 
-export const SUPPORTED_VERSIONS = [LEGACY_VERSION, LANGUAGE_VERSION];
+// Scripts saved before the version went back to 0.9 say 1.0, and they must keep opening without the alert.
+const EARLY_BUILD_VERSION = '1.0';
+
+export const SUPPORTED_VERSIONS = [LEGACY_VERSION, LANGUAGE_VERSION, EARLY_BUILD_VERSION];
 
 const HEADER_PATTERN = /^#safira (\S+)[ \t]*(?:\n|$)/;
 

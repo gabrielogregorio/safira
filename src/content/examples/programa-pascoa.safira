@@ -1,4 +1,4 @@
-#safira 1.0
+#safira 0.9
 funcao a { retorne "🥚" }
 funcao b { retorne "🌷" }
 funcao c { retorne "🍫" }

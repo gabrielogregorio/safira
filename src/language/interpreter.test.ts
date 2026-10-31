@@ -87,7 +87,7 @@ describe('virtual files', () => {
   });
 
   it('ignores the hidden version line of an imported file', async () => {
-    expect((await runScript('importe lib\nmostre v', [], { 'lib.safira': '#safira 1.0\nv = 1' })).texts).toEqual(['1']);
+    expect((await runScript('importe lib\nmostre v', [], { 'lib.safira': '#safira 0.9\nv = 1' })).texts).toEqual(['1']);
   });
 });
 

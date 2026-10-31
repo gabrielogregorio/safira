@@ -1,7 +1,7 @@
 ### Documentação da Safira
 
 **Versão da documentação:** 16/03/2021
-**Versão da Safira:** 0.37
+**Versão da Safira:** 0.9.0
 **Idioma:** Português-Brasil
 
 ## Dicionário de palavras
