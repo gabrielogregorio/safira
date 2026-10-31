@@ -71,6 +71,9 @@ export const dictionaries = {
     Previous: 'Anterior',
     Next: 'Próxima',
     Read: 'Lida',
+    'Delete project?': 'Excluir projeto?',
+    '"{name}" and all its files will be deleted. This cannot be undone.':
+      '"{name}" e todos os seus arquivos serão excluídos. Isso não pode ser desfeito.',
     'Go ahead': 'Seguir em frente',
     'Theme and language': 'Tema e idioma',
     'Project name (optional)': 'Nome do projeto (opcional)',
@@ -158,6 +161,9 @@ export const dictionaries = {
     Previous: 'Anterior',
     Next: 'Siguiente',
     Read: 'Leída',
+    'Delete project?': '¿Eliminar proyecto?',
+    '"{name}" and all its files will be deleted. This cannot be undone.':
+      '"{name}" y todos sus archivos serán eliminados. Esto no se puede deshacer.',
     'Go ahead': 'Seguir adelante',
     'Theme and language': 'Tema e idioma',
     'Project name (optional)': 'Nombre del proyecto (opcional)',

@@ -4,7 +4,12 @@ import { devices, expect, test, type Locator, type Page } from '@playwright/test
 const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const LAYOUT_WIDTHS = [320, 375, 768, 1280, 1440];
 
+const waitForAnimations = async (page: Page): Promise<void> => {
+  await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+};
+
 const expectNoViolations = async (page: Page): Promise<void> => {
+  await waitForAnimations(page);
   const results = await new AxeBuilder({ page }).withTags(WCAG_AA_TAGS).analyze();
 
   expect(results.violations).toEqual([]);
@@ -138,7 +143,7 @@ test('navigates the top menu with the keyboard', async ({ page }) => {
   await page.getByRole('menuitem', { name: 'File' }).focus();
   await page.keyboard.press('Enter');
   await expect(page.getByRole('menuitem', { name: 'Open file' })).toBeFocused();
-  await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+  await waitForAnimations(page);
 
   await page.keyboard.press('ArrowRight');
   await expect(page.getByRole('menuitem', { name: 'Run all' })).toBeVisible();
@@ -219,6 +224,41 @@ test.describe('layout', () => {
       await expectNoHorizontalScroll(page);
     });
   }
+});
+
+test('a modal closes when clicking outside of it', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await waitForAnimations(page);
+  await page.mouse.click(5, 5);
+
+  await expect(page.getByRole('dialog')).toBeHidden();
+});
+
+test('a modal opens with the retro animation', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await expect(page.getByRole('dialog')).toBeVisible();
+  const animationNames = await page.evaluate(() =>
+    document.getAnimations().map((animation) => (animation as CSSAnimation).animationName),
+  );
+
+  expect(animationNames).toEqual(expect.arrayContaining(['retro-crt-on', 'retro-zoom-rectangle']));
+});
+
+test('deleting a project asks for confirmation', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.keyboard.press('Control+s');
+  await page.getByRole('button', { name: 'Back to projects' }).click();
+  await page.getByRole('button', { name: 'Delete New project' }).click();
+  await expectNoViolations(page);
+  await page.getByRole('dialog').getByRole('button', { name: 'Cancel' }).click();
+  await expect(page.getByText('New project', { exact: true })).toBeVisible();
+
+  await page.getByRole('button', { name: 'Delete New project' }).click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Delete', exact: true }).click();
+
+  await expect(page.getByText('You have no projects yet.')).toBeVisible();
 });
 
 test('theme and language are available on every screen', async ({ page }) => {

@@ -28,6 +28,7 @@ export const TextPrompt = ({ title, label, initialValue, onSubmit, onClose }: Te
         <label className="field">
           {label}
           <input
+            data-autofocus
             value={value}
             onChange={(event) => {
               setValue(event.target.value);

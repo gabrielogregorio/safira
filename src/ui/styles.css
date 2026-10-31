@@ -815,16 +815,71 @@ select {
 
 .modal-backdrop {
   align-items: center;
-  background: rgb(4 30 60 / 45%);
+  animation: retro-overlay 260ms steps(5) both;
+  background: repeating-linear-gradient(0deg, rgb(255 255 255 / 5%) 0 1px, transparent 1px 3px), rgb(4 30 60 / 58%);
   display: flex;
   inset: 0;
   justify-content: center;
+  overflow: hidden;
   padding: 16px;
   position: fixed;
   z-index: 40;
 }
 
+@keyframes retro-overlay {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal-zoom {
+  display: grid;
+  inset: 0;
+  place-items: center;
+  pointer-events: none;
+  position: absolute;
+}
+
+.modal-zoom span {
+  animation: retro-zoom-rectangle 340ms steps(7) both;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 8px rgb(143 227 255 / 90%);
+  grid-area: 1 / 1;
+  height: min(70vh, 520px);
+  opacity: 0;
+  width: min(92vw, 640px);
+}
+
+.modal-zoom span:nth-child(2) {
+  animation-delay: 45ms;
+}
+
+.modal-zoom span:nth-child(3) {
+  animation-delay: 90ms;
+}
+
+.modal-zoom span:nth-child(4) {
+  animation-delay: 135ms;
+}
+
+@keyframes retro-zoom-rectangle {
+  0% {
+    opacity: 1;
+    transform: scale(0.04);
+  }
+
+  90% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(1);
+  }
+}
+
 .modal {
+  animation: retro-crt-on 420ms 170ms steps(9) both;
   background: var(--color-panel-strong);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
@@ -834,7 +889,52 @@ select {
   max-height: 90dvh;
   max-width: 640px;
   outline: none;
+  overflow: hidden;
+  position: relative;
   width: 100%;
+}
+
+@keyframes retro-crt-on {
+  0% {
+    filter: brightness(4);
+    opacity: 0;
+    transform: scale(0.02, 0.006);
+  }
+
+  35% {
+    filter: brightness(3);
+    opacity: 1;
+    transform: scale(1, 0.012);
+  }
+
+  75% {
+    filter: brightness(1.6);
+    transform: scale(1, 1.04);
+  }
+
+  100% {
+    filter: none;
+    transform: scale(1);
+  }
+}
+
+.modal::after {
+  animation: retro-sheen 620ms 480ms ease-out both;
+  background: linear-gradient(105deg, transparent 35%, rgb(255 255 255 / 60%) 50%, transparent 65%);
+  content: '';
+  inset: 0;
+  pointer-events: none;
+  position: absolute;
+}
+
+@keyframes retro-sheen {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(110%);
+  }
 }
 
 .modal-header {
@@ -1164,8 +1264,16 @@ select {
   .button,
   .example-card,
   .breakpoint-dot,
-  .menubar-content {
+  .menubar-content,
+  .modal,
+  .modal::after,
+  .modal-backdrop,
+  .modal-zoom span {
     animation: none;
     transition: none;
+  }
+
+  .modal-zoom {
+    display: none;
   }
 }

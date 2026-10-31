@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { Project } from '@/projects/projectStore';
+import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { TextPrompt } from '@/ui/components/TextPrompt';
@@ -29,6 +30,7 @@ export const HomeScreen = ({
   const t = useTranslation();
   const [isCreating, setIsCreating] = useState(false);
   const [renaming, setRenaming] = useState<Project | null>(null);
+  const [deleting, setDeleting] = useState<Project | null>(null);
 
   return (
     <main id="content" className="home">
@@ -86,7 +88,7 @@ export const HomeScreen = ({
                 className="button"
                 aria-label={`${t('Delete')} ${project.name}`}
                 onClick={() => {
-                  onDelete(project.id);
+                  setDeleting(project);
                 }}>
                 {t('Delete')}
               </button>
@@ -103,6 +105,36 @@ export const HomeScreen = ({
           }}
         />
       ) : null}
+
+      {deleting === null ? null : (
+        <Modal
+          title={t('Delete project?')}
+          onClose={() => {
+            setDeleting(null);
+          }}>
+          <p>{t('"{name}" and all its files will be deleted. This cannot be undone.', { name: deleting.name })}</p>
+          <div className="form-row">
+            <button
+              type="button"
+              className="button"
+              data-autofocus
+              onClick={() => {
+                setDeleting(null);
+              }}>
+              {t('Cancel')}
+            </button>
+            <button
+              type="button"
+              className="button button-stop"
+              onClick={() => {
+                onDelete(deleting.id);
+                setDeleting(null);
+              }}>
+              {t('Delete')}
+            </button>
+          </div>
+        </Modal>
+      )}
 
       {renaming === null ? null : (
         <TextPrompt

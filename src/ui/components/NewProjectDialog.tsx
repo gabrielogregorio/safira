@@ -26,6 +26,7 @@ export const NewProjectDialog = ({ onCreate, onClose }: NewProjectDialogProps) =
         <label className="field">
           {t('Project name (optional)')}
           <input
+            data-autofocus
             value={name}
             onChange={(event) => {
               setName(event.target.value);

@@ -259,8 +259,34 @@ describe('App', () => {
     expect(screen.getByText('Novo')).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Delete Novo' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
+  });
+
+  it('keeps the project when the delete confirmation is cancelled', async () => {
+    localStorage.setItem('safira.projects.v1', JSON.stringify([{ id: '1', name: 'Fica', files: {}, breakpoints: {} }]));
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Delete Fica' }));
+
+    expect(screen.getByRole('dialog', { name: 'Delete project?' })).toHaveTextContent('"Fica" and all its files');
+    expect(screen.getByRole('button', { name: 'Cancel' })).toHaveFocus();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(loadProjects().map((project) => project.name)).toEqual(['Fica']);
+  });
+
+  it('closes a modal with Escape', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+
+    expect(screen.getByLabelText('Project name (optional)')).toHaveFocus();
+
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
   it('changes the language and the theme from the home screen', async () => {

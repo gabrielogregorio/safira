@@ -1,5 +1,5 @@
+import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
-import { useEffect, useRef } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 
 interface ModalProps {
@@ -8,37 +8,47 @@ interface ModalProps {
   onClose: () => void;
 }
 
+const ZOOM_RECTANGLES = [0, 1, 2, 3];
+
+const focusMarkedElement = (event: Event): void => {
+  const content = event.currentTarget as HTMLElement;
+  const target = content.querySelector<HTMLElement>('[data-autofocus]');
+
+  if (target !== null) {
+    event.preventDefault();
+    target.focus();
+  }
+};
+
 export const Modal = ({ title, children, onClose }: ModalProps) => {
   const t = useTranslation();
-  const panelRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    panelRef.current?.focus();
-
-    const closeOnEscape = (event: KeyboardEvent): void => {
-      if (event.key === 'Escape') {
-        onClose();
-      }
-    };
-
-    document.addEventListener('keydown', closeOnEscape);
-
-    return () => {
-      document.removeEventListener('keydown', closeOnEscape);
-    };
-  }, [onClose]);
 
   return (
-    <div className="modal-backdrop">
-      <div ref={panelRef} className="modal" role="dialog" aria-modal="true" aria-label={title} tabIndex={-1}>
-        <header className="modal-header">
-          <h2>{title}</h2>
-          <button type="button" className="button" onClick={onClose}>
-            {t('Close')}
-          </button>
-        </header>
-        <div className="modal-body">{children}</div>
-      </div>
-    </div>
+    <Dialog.Root
+      open
+      onOpenChange={(isOpen) => {
+        if (!isOpen) {
+          onClose();
+        }
+      }}>
+      <Dialog.Portal>
+        <Dialog.Overlay className="modal-backdrop">
+          <div className="modal-zoom" aria-hidden="true">
+            {ZOOM_RECTANGLES.map((rectangle) => (
+              <span key={rectangle} />
+            ))}
+          </div>
+          <Dialog.Content className="modal" aria-describedby={undefined} onOpenAutoFocus={focusMarkedElement}>
+            <header className="modal-header">
+              <Dialog.Title asChild>
+                <h2>{title}</h2>
+              </Dialog.Title>
+              <Dialog.Close className="button">{t('Close')}</Dialog.Close>
+            </header>
+            <div className="modal-body">{children}</div>
+          </Dialog.Content>
+        </Dialog.Overlay>
+      </Dialog.Portal>
+    </Dialog.Root>
   );
 };
