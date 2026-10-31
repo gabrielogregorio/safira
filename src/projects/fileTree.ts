@@ -32,6 +32,14 @@ export const joinPath = (folder: string | null, name: string): string => (folder
 
 export const isInsideFolder = (path: string, folder: string): boolean => path.startsWith(`${folder}/`);
 
+// What is inside a folder, with paths that start at that folder.
+export const filesOfFolder = (files: Record<string, string>, folder: string): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(files)
+      .filter(([path]) => isInsideFolder(path, folder))
+      .map(([path, text]) => [path.slice(folder.length + 1), text]),
+  );
+
 export const isPathTaken = (paths: string[], path: string): boolean =>
   paths.some((existing) => existing === path || isInsideFolder(existing, path));
 

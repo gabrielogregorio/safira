@@ -14,7 +14,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - `Ctrl+Enter` runs the program, and running stops at breakpoints.
 - Clickable breakpoint dots beside every line. A dot on a comment or an empty line stops at the next command.
 - Inline suggestions in gray, accepted with Tab or a touch, for commands, whole lines and names in the file, with a checkbox above the editor.
-- Variables inspector, always visible, with search and types.
+- Variables inspector, always visible, with search and types, each one explained on hover.
 - Top menu with Radix, navigable by keyboard and touch.
 - Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, theme, language and sound live in the Interface menu.
 - Colors by name, `#331`, `#ff1122` or `0xff1122`, after or before the text, and `mostra` beside `mostre` and `mostrar`.
@@ -22,7 +22,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.
-- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order.
+- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order. The right click also downloads a file as it is, or a folder as a `.zip`.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Unsaved work is kept while typing and recovered after a crash or a power cut.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.

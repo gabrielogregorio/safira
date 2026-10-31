@@ -13,6 +13,21 @@ const isTyping = (transaction: Transaction): boolean =>
   transaction.isUserEvent('delete.backward') ||
   transaction.isUserEvent('delete.forward');
 
+// A whole line at once, by shortcut, by cutting or with a selection. One character at a time is just typing.
+export const removesWholeLine = (transaction: Transaction): boolean => {
+  let removesLine = false;
+
+  transaction.changes.iterChanges((fromA, toA) => {
+    const removed = transaction.startState.sliceDoc(fromA, toA);
+    const line = transaction.startState.doc.lineAt(fromA);
+    const isWholeLine = fromA === line.from && toA === line.to;
+
+    removesLine ||= removed.trim() !== '' && (removed.includes('\n') || isWholeLine);
+  });
+
+  return transaction.isUserEvent('delete') && removesLine;
+};
+
 const selectedLines = (transaction: Transaction): number => {
   const { doc, selection } = transaction.state;
   const { anchor, head } = selection.main;
@@ -26,6 +41,8 @@ export const rateForLines = (lines: number): number => 1 + Math.min(lines, LINES
 const soundOf = (transaction: Transaction): void => {
   if (transaction.isUserEvent('input.complete')) {
     void soundPlayer.play('accept');
+  } else if (removesWholeLine(transaction)) {
+    void soundPlayer.play('lineDelete');
   } else if (isTyping(transaction)) {
     typingStep = (typingStep + 1) % TYPING_RATES.length;
     void soundPlayer.play('typing', TYPING_RATES[typingStep]);

@@ -27,6 +27,7 @@ interface FileSidebarProps {
   onCreateFolder: (folder: string | null, name: string) => void;
   onDelete: (node: TreeNode) => void;
   onRename: (node: TreeNode, path: string) => void;
+  onDownload: (node: TreeNode) => void;
   onMove: (node: TreeNode, plan: PlannedMove) => void;
   canRename: boolean;
 }
@@ -44,6 +45,7 @@ interface TreeActions {
   onStartDraft: (draft: Draft) => void;
   onFinishDraft: (draft: Draft, name: string | null) => void;
   onDelete: (node: TreeNode) => void;
+  onDownload: (node: TreeNode) => void;
   renaming: string | null;
   canRename: boolean;
   onStartRename: (path: string) => void;
@@ -306,6 +308,13 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
             },
           },
           {
+            label: t('Download'),
+            sound: 'export',
+            onSelect: () => {
+              actions.onDownload(node);
+            },
+          },
+          {
             label: t('Delete'),
             onSelect: () => {
               actions.onDelete(node);
@@ -360,6 +369,13 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                   },
                 },
                 {
+                  label: t('Download'),
+                  sound: 'export',
+                  onSelect: () => {
+                    actions.onDownload(node);
+                  },
+                },
+                {
                   label: t('Delete'),
                   onSelect: () => {
                     actions.onDelete(node);
@@ -409,6 +425,7 @@ export const FileSidebar = ({
   onCreateFolder,
   onDelete,
   onRename,
+  onDownload,
   onMove,
   canRename,
 }: FileSidebarProps) => {
@@ -538,6 +555,7 @@ export const FileSidebar = ({
         onStartDraft={setDraft}
         onFinishDraft={finishDraft}
         onDelete={onDelete}
+        onDownload={onDownload}
         renaming={renaming}
         canRename={canRename}
         onStartRename={setRenaming}

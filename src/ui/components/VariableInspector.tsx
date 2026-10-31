@@ -1,11 +1,20 @@
 import { useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { VariableSnapshot } from '@/language/interpreter';
+import type { TypeName } from '@/language/values';
 import { soundPlayer } from '@/ui/sound/sounds';
 
 interface VariableInspectorProps {
   variables: VariableSnapshot[];
 }
+
+const TYPE_HINTS = {
+  float: 'Real number: a number that can have decimal places, like 10 or 3.14',
+  string: 'Text: letters, words or any characters between quotes',
+  booleano: 'Boolean: a value that is only true or false',
+  lista: 'List: several values kept in order',
+  vazio: 'Empty: a variable without a value',
+} as const satisfies Record<TypeName, string>;
 
 const SEARCH_TYPING_RATES = [1, 1.12, 0.92, 1.2];
 
@@ -53,7 +62,9 @@ export const VariableInspector = ({ variables }: VariableInspectorProps) => {
                   <td>{variable.name}</td>
                   <td className="inspector-value">{variable.value}</td>
                   <td>
-                    <span className={`type-badge type-${variable.type}`}>{variable.type}</span>
+                    <span className={`type-badge type-${variable.type}`} title={t(TYPE_HINTS[variable.type as TypeName])}>
+                      {variable.type}
+                    </span>
                   </td>
                 </tr>
               ))}

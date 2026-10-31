@@ -10,6 +10,7 @@ const setup = (canRename = true) => {
     onDelete: vi.fn(),
     onRename: vi.fn(),
     onMove: vi.fn(),
+    onDownload: vi.fn(),
     onRenameProject: vi.fn(),
   };
   render(
@@ -252,5 +253,13 @@ describe('FileSidebar', () => {
     setup(false);
 
     expect(screen.getByRole('button', { name: 'main.safira' }).parentElement).toHaveAttribute('draggable', 'false');
+  });
+
+  it.each(['main.safira', 'vazia'])('offers to download %s from the right click', async (name) => {
+    const { onDownload } = setup();
+    rightClick(name);
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Download' }));
+
+    expect(onDownload).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ name }));
   });
 });

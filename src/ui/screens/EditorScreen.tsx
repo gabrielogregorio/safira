@@ -9,6 +9,7 @@ import { addScriptVersion, isSupportedVersion, SUPPORTED_VERSIONS } from '@/lang
 import { clearDrafts, loadDrafts, saveDrafts } from '@/projects/draftStore';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
+  filesOfFolder,
   folderMarkerPath,
   isInsideFolder,
   joinPath,
@@ -28,7 +29,7 @@ import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { VariableInspector } from '@/ui/components/VariableInspector';
 import { describeArchiveResult } from '@/ui/archiveMessages';
-import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
+import { downloadFile, downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { FileSidebar } from '@/ui/components/FileSidebar';
 import { LessonsDialog } from '@/ui/components/LessonsDialog';
@@ -354,6 +355,19 @@ export const EditorScreen = ({
       relocateNode(node, target, order);
     },
     [relocateNode],
+  );
+
+  const downloadNode = useCallback(
+    (node: TreeNode) => {
+      const files = currentFiles();
+
+      if (node.kind === 'file') {
+        downloadFile(node.name, files[node.path] ?? '');
+      } else {
+        downloadProject({ name: node.name, files: filesOfFolder(files, node.path) });
+      }
+    },
+    [currentFiles],
   );
 
   const openLessonCode = useCallback(
@@ -735,6 +749,7 @@ export const EditorScreen = ({
           }}
           onRename={renameNode}
           onMove={moveNode}
+          onDownload={downloadNode}
           canRename={!isRunning}
         />
         <Splitter

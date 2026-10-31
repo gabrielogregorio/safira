@@ -21,6 +21,7 @@ import languageEsUrl from './files/language-es.wav';
 import languageJaUrl from './files/language-ja.wav';
 import languagePtBrUrl from './files/language-pt-br.wav';
 import languageZhCnUrl from './files/language-zh-cn.wav';
+import lineDeleteUrl from './files/line-delete.wav';
 import modalCloseUrl from './files/modal-close.wav';
 import modalOpenUrl from './files/modal-open.wav';
 import moveUrl from './files/move.wav';
@@ -83,6 +84,7 @@ export type SoundName =
   | 'languageJa'
   | 'error'
   | 'export'
+  | 'lineDelete'
   | 'aquarium'
   | 'move'
   | 'terminalFocus'
@@ -129,6 +131,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   languageJa: languageJaUrl,
   error: errorUrl,
   export: exportUrl,
+  lineDelete: lineDeleteUrl,
   aquarium: aquariumUrl,
   move: moveUrl,
   terminalFocus: terminalFocusUrl,

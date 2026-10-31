@@ -8,6 +8,7 @@ import {
   sanitizePath,
   visibleFiles,
   extensionStart,
+  filesOfFolder,
   isPathTaken,
   movePath,
   parentFolder,
@@ -189,5 +190,13 @@ describe('planMove', () => {
   it('finds the parent of a path', () => {
     expect(parentFolder('a/b/c.txt')).toBe('a/b');
     expect(parentFolder('c.txt')).toBeNull();
+  });
+});
+
+describe('filesOfFolder', () => {
+  it('keeps only what is inside, relative to the folder', () => {
+    const files = { 'a/b/c.txt': '1', 'a/d.txt': '2', 'ab/e.txt': '3', 'f.txt': '4' };
+
+    expect(filesOfFolder(files, 'a')).toEqual({ 'b/c.txt': '1', 'd.txt': '2' });
   });
 });
