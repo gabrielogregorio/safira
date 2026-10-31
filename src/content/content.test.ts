@@ -4,7 +4,7 @@ import { examples, findExampleByPrefix, tutorials } from './content';
 
 describe('bundled content', () => {
   it('ships every example and tutorial', () => {
-    expect(examples).toHaveLength(22);
+    expect(examples).toHaveLength(35);
     expect(tutorials).toHaveLength(12);
   });
 

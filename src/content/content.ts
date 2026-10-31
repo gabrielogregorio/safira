@@ -16,7 +16,7 @@ const EXTENSION_OR_FOLDER = /^.*\/|\.[a-z]+$/g;
 const toId = (path: string): string => path.replace(EXTENSION_OR_FOLDER, '');
 
 const toTitle = (id: string): string => {
-  const words = id.replace(/^(aula-)?\d+-/, '').replace(/[-_]/g, ' ');
+  const words = id.replace(/^(aula-|programa-)?(\d+-)?/, '').replace(/[-_]/g, ' ');
 
   return words.charAt(0).toUpperCase() + words.slice(1);
 };

@@ -23,8 +23,3 @@ tsconfig.tsbuildinfo
 
 # removed files wait here, outside of git
 trash
-
-# legacy python app
-__pycache__/
-backups
-logs/registros.json
