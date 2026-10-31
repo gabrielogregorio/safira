@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lessonsOf } from '@/content/content';
 import type { LessonMode } from '@/ui/hooks/useLessonMode';
-import { ProfessorCat } from './ProfessorCat';
+import { planTrip, ProfessorCat } from './ProfessorCat';
 
 const lessons = lessonsOf('en-us');
 
@@ -149,5 +149,12 @@ describe('ProfessorCat', () => {
     await press('Continue');
 
     expect(container.querySelector('.cat')).toHaveAttribute('data-pose', 'point');
+  });
+});
+
+describe('planTrip', () => {
+  it('varies a little between the shortest and the longest trip', () => {
+    expect(planTrip(() => 0)).toMatchObject({ milliseconds: 1000, driftX: -0 });
+    expect(planTrip(() => 1)).toMatchObject({ milliseconds: 1500, driftX: -46, driftY: 18 });
   });
 });

@@ -20,6 +20,20 @@ const HAND_HEIGHT = 0.66;
 const POINT_REACH = 140;
 const HALF_TURN = 180;
 const LIGHT_DELAY_MILLISECONDS = 180;
+const HALF = 0.5;
+const MOST_DRIFT_X = 46;
+const MOST_DRIFT_Y = 36;
+const SHORTEST_TRIP_MILLISECONDS = 1000;
+const TRIP_VARIATION_MILLISECONDS = 500;
+
+/** 0 is the top of the code field and 1 the bottom. */
+const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 1, explain: 1, play: 0.3, result: 0.62 };
+
+export interface Trip {
+  driftX: number;
+  driftY: number;
+  milliseconds: number;
+}
 
 type Scene = 'intro' | 'explain' | 'play' | 'result';
 
@@ -117,8 +131,8 @@ const CatFace = ({ isUpset }: { isUpset: boolean }) => (
   <g className="cat-head">
     <path d="M36 28 L38 4 L54 18 Z" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
     <path d="M84 28 L82 4 L66 18 Z" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
-    <path d="M41 22 L41 11 L49 18 Z" fill="#ffb3c7" />
-    <path d="M79 22 L79 11 L71 18 Z" fill="#ffb3c7" />
+    <path d="M41 22 L41 11 L49 18 Z" fill="#2f7fc4" />
+    <path d="M79 22 L79 11 L71 18 Z" fill="#2f7fc4" />
     <ellipse cx="60" cy="38" rx="27" ry="23" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
     {isUpset ? (
       <g fill="none" stroke="#0e2a46" strokeWidth="2.4" strokeLinecap="round">
@@ -128,16 +142,17 @@ const CatFace = ({ isUpset }: { isUpset: boolean }) => (
       </g>
     ) : (
       <g>
-        <ellipse cx="49" cy="38" rx="6.4" ry="7.6" fill="#ffffff" />
-        <ellipse cx="73" cy="38" rx="6.4" ry="7.6" fill="#ffffff" />
-        <ellipse cx="51.5" cy="38" rx="3.4" ry="5.4" fill="#123b2c" />
-        <ellipse cx="75.5" cy="38" rx="3.4" ry="5.4" fill="#123b2c" />
-        <circle cx="53" cy="35" r="1.4" fill="#ffffff" />
-        <circle cx="77" cy="35" r="1.4" fill="#ffffff" />
-        <path d="M54 52 q6 5 12 0" fill="none" stroke="#0e2a46" strokeWidth="1.8" strokeLinecap="round" />
+        <ellipse cx="48" cy="38" rx="6" ry="4.6" fill="#f2ffd9" />
+        <ellipse cx="72" cy="38" rx="6" ry="4.6" fill="#f2ffd9" />
+        <ellipse cx="50" cy="38" rx="1.5" ry="4.2" fill="#10202e" />
+        <ellipse cx="74" cy="38" rx="1.5" ry="4.2" fill="#10202e" />
+        <path d="M41 36 L55 34 L55 32 L41 31 Z" fill="#3f93d8" />
+        <path d="M65 34 L79 36 L79 31 L65 32 Z" fill="#3f93d8" />
+        <path d="M41 33 L55 37M79 33 L65 37" stroke="#0e2a46" strokeWidth="2.2" strokeLinecap="round" />
+        <path d="M55 54 h10" fill="none" stroke="#0e2a46" strokeWidth="1.8" strokeLinecap="round" />
       </g>
     )}
-    <path d="M57 46 h6 l-3 3 Z" fill="#ff8fab" />
+    <path d="M57.5 47 h5 l-2.5 2.6 Z" fill="#20384f" />
     <g stroke="#0e2a46" strokeWidth="1" strokeLinecap="round" opacity="0.65">
       <path d="M36 46 L22 42M36 50 L22 52M84 46 L98 42M84 50 L98 52" />
     </g>
@@ -199,7 +214,7 @@ const CatArt = ({ pose }: { pose: Pose }) => {
         strokeLinecap="round"
       />
       <ellipse cx="58" cy="88" rx="28" ry="26" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
-      <ellipse cx="58" cy="94" rx="15" ry="15" fill="#e6f7ff" fillOpacity="0.8" />
+      <ellipse cx="58" cy="94" rx="13" ry="13" fill="#cfeaf9" fillOpacity="0.55" />
       <Saucer />
       <CatFace isUpset={pose === 'facepalm'} />
       <Hand />
@@ -231,8 +246,20 @@ interface ProfessorCatProps {
   hasError: boolean;
 }
 
+interface Spot {
+  x: number;
+  y: number;
+}
+
+/** A trip never repeats exactly: the arrival and the speed change a little each time. */
+export const planTrip = (random: () => number = Math.random): Trip => ({
+  driftX: -random() * MOST_DRIFT_X,
+  driftY: (random() - HALF) * MOST_DRIFT_Y,
+  milliseconds: SHORTEST_TRIP_MILLISECONDS + random() * TRIP_VARIATION_MILLISECONDS,
+});
+
 // He lives inside the code field, so he never covers the output or an error, and only points at them.
-const whereToStand = (element: HTMLElement): { x: number; y: number } | null => {
+const whereToStand = (element: HTMLElement, scene: Scene, trip: Trip): Spot | null => {
   if (window.innerWidth <= PHONE_WIDTH) {
     return { x: window.innerWidth - CAT_SIZE - EDGE_MARGIN, y: window.innerHeight - CAT_SIZE - PHONE_BOTTOM_ROOM };
   }
@@ -243,14 +270,20 @@ const whereToStand = (element: HTMLElement): { x: number; y: number } | null => 
     return null;
   }
 
-  element.style.setProperty('--cat-room-width', `${String(box.width - CAT_SIZE - EDGE_MARGIN * 2)}px`);
+  element.style.setProperty('--cat-room-width', `${String(box.width - CAT_SIZE - EDGE_MARGIN * 2 - MOST_DRIFT_X)}px`);
   element.style.setProperty('--cat-room-height', `${String(box.height - EDGE_MARGIN * 2)}px`);
+  const lowest = box.bottom - CAT_SIZE - EDGE_MARGIN;
+  const highest = box.top + EDGE_MARGIN;
+  const y = highest + (lowest - highest) * HEIGHT_IN_FIELD[scene] + trip.driftY;
 
-  return { x: box.right - CAT_SIZE - EDGE_MARGIN, y: box.bottom - CAT_SIZE - EDGE_MARGIN };
+  return {
+    x: box.right - CAT_SIZE - EDGE_MARGIN + trip.driftX,
+    y: Math.min(lowest, Math.max(highest, y)),
+  };
 };
 
 // He turns to the target, and the arm goes to the angle that leaves the finger on it.
-const lookAtTarget = (element: HTMLElement, scene: Scene, spot: { x: number; y: number }): void => {
+const lookAtTarget = (element: HTMLElement, scene: Scene, spot: Spot): void => {
   const target = document.querySelector(TARGETS[scene])?.getBoundingClientRect();
 
   if (target === undefined || target.width === 0) {
@@ -267,10 +300,11 @@ const lookAtTarget = (element: HTMLElement, scene: Scene, spot: { x: number; y: 
   element.style.setProperty('--point-angle', `${String(Math.round(angle))}deg`);
 };
 
-const placeOnScreen = (element: HTMLElement, scene: Scene): void => {
-  const spot = whereToStand(element);
+const placeOnScreen = (element: HTMLElement, scene: Scene, trip: Trip): void => {
+  const spot = whereToStand(element, scene, trip);
 
   if (spot !== null) {
+    element.style.setProperty('--cat-trip', `${String(Math.round(trip.milliseconds))}ms`);
     element.style.transform = `translate(${String(spot.x)}px, ${String(spot.y)}px)`;
     lookAtTarget(element, scene, spot);
   }
@@ -311,13 +345,37 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
     return scene === 'result' && lesson.isDone ? 'thumbs' : 'point';
   })();
 
+  const trip = useRef<Trip>(planTrip());
+  const tripScene = useRef(scene);
+
   const reposition = useCallback(() => {
     if (root.current !== null) {
-      placeOnScreen(root.current, scene);
+      if (tripScene.current !== scene) {
+        tripScene.current = scene;
+        trip.current = planTrip();
+      }
+
+      placeOnScreen(root.current, scene, trip.current);
     }
   }, [scene]);
 
-  useLayoutEffect(reposition);
+  // The first placement is not a trip: he appears there instead of flying in from the corner of the page.
+  const hasArrived = useRef(false);
+
+  useLayoutEffect(() => {
+    if (root.current === null) {
+      return;
+    }
+
+    root.current.classList.toggle('cat-just-arrived', !hasArrived.current);
+    reposition();
+
+    if (!hasArrived.current) {
+      hasArrived.current = true;
+      root.current.getBoundingClientRect();
+      root.current.classList.remove('cat-just-arrived');
+    }
+  });
 
   useEffect(() => {
     window.addEventListener('resize', reposition);

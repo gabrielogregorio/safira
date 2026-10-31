@@ -2126,8 +2126,12 @@ select {
   pointer-events: none;
   position: fixed;
   top: 0;
-  transition: transform 700ms cubic-bezier(0.3, 0.8, 0.3, 1);
+  transition: transform var(--cat-trip, 1200ms) cubic-bezier(0.5, 0.02, 0.18, 1);
   z-index: 30;
+}
+
+.cat-just-arrived {
+  transition: none;
 }
 
 .cat-bird {
@@ -2297,8 +2301,12 @@ select {
 }
 
 @keyframes cat-bob {
-  50% {
-    transform: translateY(-4px);
+  30% {
+    transform: translate(2px, -4px) rotate(-1deg);
+  }
+
+  70% {
+    transform: translate(-2px, -2px) rotate(1deg);
   }
 }
 
