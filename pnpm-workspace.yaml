@@ -1,0 +1,12 @@
+# Refuses versions published less than 3 days ago, including transitive ones.
+minimumReleaseAge: 4320
+minimumReleaseAgeExclude: []
+
+engineStrict: true
+
+# pnpm blocks install scripts by default and fails on CI for any package left out of this list.
+allowBuilds:
+  esbuild: true
+
+# Security overrides. Keep the reason next to each one and drop it once the parent updates.
+overrides: {}
