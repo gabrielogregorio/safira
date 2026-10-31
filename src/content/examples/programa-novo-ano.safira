@@ -1,17 +1,12 @@
 #safira 1.0
-funcao a { retorne "@" na cor "#00ff00" } 
-funcao b { retorne "*" } # na cor "#ff5555" } 
-funcao c { retorne "%" } # na cor "#ffff00" } 
-funcao d { retorne "" } #  na cor "#ffffff" } 
+funcao a { retorne "🎆" }
+funcao b { retorne "🎇" }
+funcao c { retorne "✨" }
 
-mostre "               *                      " 
-mostre "              / \                     " 
-mostre "             / % \                    " % a()
-mostre "            / % % \                   " % b(), b()
-mostre "           /%  %  %\                  " % b(), c(), b()
-mostre "          /  % % %  \                 " % c(), a(), c()
-mostre "   ___   /___________\    ___         " 
-mostre "__|___|____|___|____|____|___|________" 
-
-
-
+mostre "   % % % % %" % c(), a(), c(), b(), c()
+mostre "  % % % % % %" % b(), c(), a(), c(), b(), a()
+mostre "   % % % % %" % c(), b(), c(), a(), c()
+mostre ""
+mostre "   🥂  🍾  🥂"
+mostre ""
+mostre "🎉 Feliz Ano Novo! 🎊"

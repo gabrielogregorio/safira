@@ -37,6 +37,13 @@ describe('bundled content', () => {
     },
   );
 
+  it('marks the ready-made programs with an emoji', () => {
+    expect(examples.find((example) => example.id === 'programa-natal')?.title).toBe('🎄 Natal');
+    expect(examples.filter((example) => example.id.startsWith('programa-'))).toSatisfy(
+      (programs: { title: string }[]) => programs.every((program) => /^\P{ASCII}/u.test(program.title)),
+    );
+  });
+
   it('finds the example that explains a command', () => {
     expect(findExampleByPrefix('16')?.id).toBe('16-listas');
     expect(findExampleByPrefix('99')).toBeUndefined();

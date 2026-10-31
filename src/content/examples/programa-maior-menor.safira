@@ -27,6 +27,6 @@ enquanto i <= 4 faca {
 }
 
 # imprimir
-escreval "O maior número digitado foi %" inserindo maior
-escreval "O menor número digitado foi %" inserindo menor
+escreval "🔼 O maior número digitado foi %" inserindo maior
+escreval "🔽 O menor número digitado foi %" inserindo menor
 

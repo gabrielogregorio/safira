@@ -1,6 +1,5 @@
+## Conceito de Listas
 
-## Conceito de Listas  
 ## Usando Listas
+
 ## Variações da Listas
-
-

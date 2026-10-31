@@ -6,7 +6,7 @@ lista de Nomes com 4 posicoes
 # cadastro
 i <- 1
 enquanto i <= 4 faca {
-    escreva "Digite o nome da %° pessoa. " inserindo i
+    escreva "👤 Digite o nome da %° pessoa. " inserindo i
     lista de Nomes na posicao i recebe entrada
     i <- i + 1 
 }

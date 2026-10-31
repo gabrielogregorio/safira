@@ -1,4 +1,5 @@
 ## Comando para sortear um número
+
 Este comando sorteia um número aleatório, os valores informados podem ser numéricos ou variáveis.
 
 ```

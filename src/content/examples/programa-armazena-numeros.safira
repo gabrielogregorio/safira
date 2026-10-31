@@ -20,5 +20,5 @@ enquanto i <= 4 faca {
     escreval lista de numeros na posicao i
     i <- i + 1
 }
-escreval "A média dos números acima é %" inserindo soma / 5
+escreval "🧮 A média dos números acima é %" inserindo soma / 5
 

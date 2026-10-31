@@ -8,9 +8,9 @@ i = 1
 # cadastro
 i <- 1
 enquanto i <= 4 faca {
-    escreva "Qual é seu nome......: "
+    escreva "🙂 Qual é seu nome......: "
     lista de nome na posicao i = entrada
-    escreva "Qual é a sua altura..: "
+    escreva "📏 Qual é a sua altura..: "
     lista de altura na posicao i recebe entrada numerica
 
     i <- i + 1

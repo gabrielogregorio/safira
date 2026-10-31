@@ -1,5 +1,7 @@
-## Comando de condições  
+## Comando de condições
+
 Este comando testa se uma ou mais condições são verdadeiras, a primeira condição que for verdadeira, será executada, as demais serão ignoradas, mesmo que também sejam verdadeiras.
+
 ```
 # Variável texto com o valor de "cadastrar"
 escolha = "cadastrar"
@@ -12,7 +14,7 @@ senao se escolha for igual a "visualizar" ou escolha for igual a "editar" entao
 {
     mostre "Abrindo sistema de visualização e edição"
 }
-senao 
+senao
 {
     mostre "Por favor, escolha uma opção válida!"
 }

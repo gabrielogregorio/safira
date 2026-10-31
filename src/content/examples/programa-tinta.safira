@@ -1,7 +1,7 @@
 #safira 1.0
 #algoritmo "Tinta"
 # Função : Calcular o consumo de tinta para pintar uma parede
-# Autor :  Ronnie
+# Autor : Gabriel Gregorio
 # Data : 05/05/2020
 # Seção de Declarações
 
@@ -12,14 +12,14 @@ enquanto resp == "s" faca {
 
       mostre "O tamanho da área deve ser sem portas e janelas."
       mostre ""
-      mostre nessa linha "Informe o tamanho da área em m2...: "
+      mostre nessa linha "📐 Informe o tamanho da área em m2...: "
 
       tamParede recebe o numero que for digitado
       
-      mostre nessa linha "Qual é o rendimento da tinta...: "
+      mostre nessa linha "🪣 Qual é o rendimento da tinta...: "
       rendimento recebe o numero que for digitado
       
-      mostre "A quantidade de tinta será de..: %" inserindo tamParede / rendimento
+      mostre "🎨 A quantidade de tinta será de..: %" inserindo tamParede / rendimento
 
       mostre ""
 
