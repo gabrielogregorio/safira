@@ -23,16 +23,18 @@ const MAXIMUM_MASS = 8;
 export const MASS_LOST_PER_SECOND = 0.0008;
 const MASS_PER_FOOD = 0.28;
 const PREY_MASS_SHARE = 0.3;
-const PREDATOR_MASS = 4;
-const PREDATOR_ADVANTAGE = 2.2;
-const SECONDS_BETWEEN_PREY = 25;
+const PREDATOR_MASS = 3;
+const PREDATOR_ADVANTAGE = 1.8;
+const SECONDS_BETWEEN_PREY = 12;
 const FOOD_VISION = 230;
-const PREY_VISION = 280;
+const PREY_VISION = 420;
 const FOOD_LIFETIME_SECONDS = 45;
 const FOOD_SINK_SPEED = 7;
 const FLEE_SECONDS = 1.6;
 const FLEE_SPEED = 3.6;
 const HUNT_SPEED = 1.5;
+const PREY_CHASE_SPEED = 3;
+const BUBBLES_FROM_PREY = 9;
 const TURN_RATE = 2.4;
 const FOOD_PER_CLICK = 3;
 const FOOD_PER_RIGHT_CLICK = 6;
@@ -288,6 +290,17 @@ const nearestPrey = (world: World, fish: Fish): Fish | null => {
   return nearest;
 };
 
+// Food comes first, unless the prey is the closer of the two.
+const closerPrey = (world: World, fish: Fish, food: Food | null): Fish | null => {
+  const prey = nearestPrey(world, fish);
+
+  if (prey === null || food === null) {
+    return prey;
+  }
+
+  return distance(fish.x, fish.y, prey.x, prey.y) < distance(fish.x, fish.y, food.x, food.y) ? prey : null;
+};
+
 const steerTo = (fish: Fish, x: number, y: number, speed: number, seconds: number): void => {
   const away = distance(fish.x, fish.y, x, y) || 1;
   const blend = Math.min(1, TURN_RATE * seconds);
@@ -327,8 +340,14 @@ const eatFood = (world: World, fish: Fish, events: WorldEvent[]): void => {
 };
 
 const eatPrey = (world: World, fish: Fish, prey: Fish, events: WorldEvent[]): void => {
-  if (distance(fish.x, fish.y, prey.x, prey.y) < lengthOf(fish) * 0.45) {
+  if (distance(fish.x, fish.y, prey.x, prey.y) < lengthOf(fish) * 0.6) {
     world.fishes = world.fishes.filter((other) => other !== prey);
+    world.ripples.push({ x: prey.x, y: prey.y, age: 0 });
+
+    for (let bubble = 0; bubble < BUBBLES_FROM_PREY; bubble += 1) {
+      spawnBubble(world, prey.x + between(world.random, -24, 24), prey.y + between(world.random, -24, 24));
+    }
+
     fish.mass = Math.min(MAXIMUM_MASS, fish.mass + Math.min(1, prey.mass * PREY_MASS_SHARE));
     fish.preyAt = world.time + SECONDS_BETWEEN_PREY;
     events.push({ kind: 'chomp', voice: SPECIES[fish.species].voice });
@@ -339,14 +358,14 @@ const moveFish = (world: World, fish: Fish, seconds: number, events: WorldEvent[
   const species = SPECIES[fish.species];
   const speed = species.speed / (1 + fatnessOf(fish.mass) * 0.4);
   const food = nearestFood(world, fish);
-  // Food comes first: a fish that has a meal in front of it does not leave it to go hunting.
-  const prey = food === null ? nearestPrey(world, fish) : null;
-  fish.isFeeding = food !== null && world.time >= fish.fleeUntil;
+  const prey = closerPrey(world, fish, food);
+  fish.isFeeding = food !== null && prey === null && world.time >= fish.fleeUntil;
 
   if (world.time < fish.fleeUntil) {
     steerTo(fish, fish.x + fish.fleeX, fish.y + fish.fleeY, speed * FLEE_SPEED, seconds * 2);
   } else if (prey !== null) {
-    steerTo(fish, prey.x, prey.y, speed * HUNT_SPEED, seconds);
+    // Fat and slow must still catch what it wants, or big fish would never eat anyone.
+    steerTo(fish, prey.x, prey.y, speed * PREY_CHASE_SPEED, seconds);
     eatPrey(world, fish, prey, events);
   } else if (food === null) {
     if (world.time > fish.targetUntil || distance(fish.x, fish.y, fish.targetX, fish.targetY) < 20) {

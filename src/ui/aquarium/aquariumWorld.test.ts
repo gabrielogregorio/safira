@@ -257,7 +257,7 @@ describe('aquariumWorld', () => {
     expect(distance2(fish, 400, 300)).toBeLessThan(120);
   });
 
-  it('prefers food to hunting', () => {
+  it('prefers the nearer food to a far prey', () => {
     const world = createWorld(
       [
         { id: 0, species: 0, mass: 6 },
@@ -270,10 +270,50 @@ describe('aquariumWorld', () => {
     const [big, small] = world.fishes;
     big.x = 100;
     big.y = 300;
-    small.x = 110;
+    small.x = 300;
     small.y = 300;
     world.food.push({ x: 140, y: 300, age: 0, sway: 0 });
 
     expect(stepWorld(world, 1 / 30)).not.toContainEqual(expect.objectContaining({ kind: 'chomp' }));
+    expect(big.isFeeding).toBe(true);
+  });
+
+  it('makes a big fish catch a small one that swims away', () => {
+    const world = createWorld(
+      [
+        { id: 0, species: 7, mass: 8 },
+        { id: 1, species: 5, mass: 1 },
+      ],
+      1000,
+      600,
+      Math.random,
+    );
+    const [big, small] = world.fishes;
+    big.x = 200;
+    big.y = 300;
+    small.x = 500;
+    small.y = 300;
+
+    const events = Array.from({ length: 450 }, () => stepWorld(world, 1 / 30)).flat();
+
+    expect(events).toContainEqual(expect.objectContaining({ kind: 'chomp' }));
+    expect(world.fishes).toEqual([big]);
+    expect(world.bubbles.length).toBeGreaterThan(0);
+  });
+
+  it('does not hunt fish of a similar size', () => {
+    const world = createWorld(
+      [
+        { id: 0, species: 0, mass: 5 },
+        { id: 1, species: 0, mass: 4 },
+      ],
+      800,
+      600,
+      Math.random,
+    );
+
+    const events = Array.from({ length: 300 }, () => stepWorld(world, 1 / 30)).flat();
+
+    expect(events).not.toContainEqual(expect.objectContaining({ kind: 'chomp' }));
   });
 });
