@@ -2222,6 +2222,20 @@ select {
   }
 }
 
+.cat-saucer-light {
+  animation: cat-light 900ms ease-in-out infinite alternate;
+}
+
+.cat-beam {
+  animation: cat-light 1400ms ease-in-out infinite alternate;
+}
+
+@keyframes cat-light {
+  to {
+    opacity: 0.35;
+  }
+}
+
 .cat-bird svg {
   height: 100%;
   overflow: visible;
@@ -2927,6 +2941,8 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cat-saucer-light,
+  .cat-beam,
   :root[data-spotlight='run'] .aero-button-run,
   .cat,
   .cat-bird,
@@ -2972,6 +2988,8 @@ select {
 }
 
 :root[data-vision='calm'][data-spotlight='run'] .aero-button-run,
+:root[data-vision='calm'] .cat-saucer-light,
+:root[data-vision='calm'] .cat-beam,
 :root[data-vision='calm'] .cat,
 :root[data-vision='calm'] .cat-bird,
 :root[data-vision='calm'] .cat-waving-arm,

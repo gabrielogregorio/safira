@@ -19,6 +19,7 @@ const PHONE_BOTTOM_ROOM = 64;
 const HAND_HEIGHT = 0.66;
 const POINT_REACH = 140;
 const HALF_TURN = 180;
+const LIGHT_DELAY_MILLISECONDS = 180;
 
 type Scene = 'intro' | 'explain' | 'play' | 'result';
 
@@ -144,12 +145,45 @@ const CatFace = ({ isUpset }: { isUpset: boolean }) => (
   </g>
 );
 
+const SAUCER_LIGHTS = [22, 40, 58, 76, 94];
+
+// He has no feet: the body sits in an alien saucer that keeps him floating.
+const Saucer = () => (
+  <g>
+    <path className="cat-beam" d="M38 112 L22 134 H94 L78 112 Z" fill="url(#cat-beam)" />
+    <ellipse cx="58" cy="107" rx="46" ry="12" fill="url(#cat-saucer)" stroke="#24527e" strokeWidth="1.2" />
+    <ellipse cx="58" cy="102" rx="34" ry="6" fill="#ffffff" fillOpacity="0.55" />
+    {SAUCER_LIGHTS.map((x, index) => (
+      <circle
+        key={x}
+        className="cat-saucer-light"
+        cx={x}
+        cy={index === 0 || index === SAUCER_LIGHTS.length - 1 ? 108 : 112}
+        r="3"
+        fill="#7dff9b"
+        stroke="#1d8f55"
+        strokeWidth="0.8"
+        style={{ animationDelay: `${String(index * LIGHT_DELAY_MILLISECONDS)}ms` }}
+      />
+    ))}
+  </g>
+);
+
 const CatArt = ({ pose }: { pose: Pose }) => {
   const Hand = HANDS[pose];
 
   return (
     <svg viewBox="0 0 120 120" aria-hidden="true">
       <defs>
+        <linearGradient id="cat-saucer" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#f4fbff" />
+          <stop offset="50%" stopColor="#a9c6dc" />
+          <stop offset="100%" stopColor="#4f7696" />
+        </linearGradient>
+        <linearGradient id="cat-beam" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#7dff9b" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="#7dff9b" stopOpacity="0" />
+        </linearGradient>
         <linearGradient id="cat-fur" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#bfe9ff" />
           <stop offset="55%" stopColor="#5db7ee" />
@@ -166,8 +200,7 @@ const CatArt = ({ pose }: { pose: Pose }) => {
       />
       <ellipse cx="58" cy="88" rx="28" ry="26" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
       <ellipse cx="58" cy="94" rx="15" ry="15" fill="#e6f7ff" fillOpacity="0.8" />
-      <ellipse cx="44" cy="112" rx="10" ry="5.5" fill="#e6f7ff" stroke="#24527e" strokeWidth="1" />
-      <ellipse cx="72" cy="112" rx="10" ry="5.5" fill="#e6f7ff" stroke="#24527e" strokeWidth="1" />
+      <Saucer />
       <CatFace isUpset={pose === 'facepalm'} />
       <Hand />
     </svg>
