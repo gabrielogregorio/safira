@@ -78,7 +78,7 @@ const PointingHand = () => (
     <Arm toX={100} toY={80} />
     <g fill="#f5cda9" {...HAND_LINE}>
       <rect x="100" y="66" width="24" height="28" rx="10" />
-      <rect x="116" y="70" width="32" height="10" rx="5" />
+      <rect x="116" y="65" width="32" height="10" rx="5" />
       <path d="M102 68 q2 -11 11 -8 q4 3 -1 10 Z" />
     </g>
   </g>
