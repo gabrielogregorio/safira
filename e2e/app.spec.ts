@@ -5,7 +5,22 @@ const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const LAYOUT_WIDTHS = [320, 375, 768, 1280, 1440];
 
 const waitForAnimations = async (page: Page): Promise<void> => {
-  await page.evaluate(() => Promise.allSettled(document.getAnimations().map((animation) => animation.finished)));
+  await page.evaluate(() =>
+    Promise.allSettled(
+      document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getTiming().iterations !== Infinity)
+        .map((animation) => animation.finished),
+    ),
+  );
+};
+
+const chooseTheme = async (page: Page, name: string): Promise<void> => {
+  const toggle = page.getByRole('button', { name: /^Theme: / });
+
+  while ((await toggle.getAttribute('aria-label')) !== `Theme: ${name}`) {
+    await toggle.click();
+  }
 };
 
 const expectNoViolations = async (page: Page): Promise<void> => {
@@ -186,10 +201,7 @@ test.describe('accessibility', () => {
   for (const theme of ['Simple', 'Dark', 'Light']) {
     test(`home and editor have no violations in the ${theme} theme`, async ({ page }) => {
       await page.goto('/');
-      await page.getByRole('button', { name: 'Theme and language' }).click();
-      await page.getByText(theme, { exact: true }).click();
-      await expectNoViolations(page);
-      await page.getByRole('button', { name: 'Close' }).click();
+      await chooseTheme(page, theme);
       await expectNoViolations(page);
 
       await page.getByRole('button', { name: 'Create project' }).click();
@@ -236,7 +248,7 @@ test('a modal closes when clicking outside of it', async ({ page }) => {
 
 test('a modal opens with the retro animation', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await page.getByRole('button', { name: 'Create project' }).click();
   await expect(page.getByRole('dialog')).toBeVisible();
   const animationNames = await page.evaluate(() =>
     document.getAnimations().map((animation) => (animation as CSSAnimation).animationName),
@@ -345,9 +357,7 @@ test('exports a project and imports it back', async ({ page }) => {
 
 test('the theme changes in the background, with nothing in front of the screen', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Theme and language' }).click();
-  await waitForAnimations(page);
-  await page.getByText('Dark', { exact: true }).click();
+  await page.getByRole('button', { name: 'Theme: Light' }).click();
 
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
   await expect(page.locator('html')).toHaveAttribute('data-theme-changing', 'true');
@@ -358,8 +368,6 @@ test('the theme changes in the background, with nothing in front of the screen',
 
 test('the language change scrambles the letters into the new text', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Theme and language' }).click();
-  await waitForAnimations(page);
   const title = page.locator('.home-settings .button-primary');
   await page.evaluate(() => {
     const seen: string[] = [];
@@ -369,7 +377,7 @@ test('the language change scrambles the letters into the new text', async ({ pag
     }).observe(button as Element, { characterData: true, subtree: true, childList: true });
     Object.assign(window, { seenTexts: seen });
   });
-  await page.getByText('Português (Brasil)').click();
+  await page.getByRole('button', { name: 'Language: English' }).click();
 
   await expect(title).toHaveText('Criar projeto');
   const seenTexts = await page.evaluate(() => (window as unknown as { seenTexts: string[] }).seenTexts);
@@ -378,9 +386,27 @@ test('the language change scrambles the letters into the new text', async ({ pag
   expect(seenTexts.at(-1)).toBe('Criar projeto');
 });
 
+test('changing the language several times always ends on the text of the chosen language', async ({ page }) => {
+  await page.goto('/');
+  const language = page.locator('.orb-toggles button').last();
+  const title = page.locator('.home-settings .button-primary');
+
+  await language.click();
+  await expect(title).toHaveText('Criar projeto');
+  await language.click();
+  await expect(title).toHaveText('Crear proyecto');
+  await language.click();
+  await expect(title).toHaveText('Create project');
+
+  await language.click();
+  await language.click();
+  await language.click();
+  await expect(title).toHaveText('Create project');
+});
+
 test('closing a modal plays the closing animation and leaves nothing behind', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await page.getByRole('button', { name: 'Create project' }).click();
   await waitForAnimations(page);
   await page.keyboard.press('Escape');
 
@@ -416,16 +442,37 @@ test('panels can be resized with the keyboard', async ({ page }) => {
   await expect(divider).toHaveAttribute('aria-valuenow', '256');
 });
 
-test('theme and language are available on every screen', async ({ page }) => {
+test('the icons cycle through every choice and come back to the first', async ({ page }) => {
+  await page.goto('/');
+  const theme = page.getByRole('button', { name: /^Theme: / });
+
+  await theme.click();
+  await theme.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'simple');
+  await theme.click();
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+});
+
+test('the IDE starts with the language icon and leaves the theme to the Interface menu', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  const toolbar = page.locator('.toolbar');
+
+  await expect(toolbar.locator('> :first-child')).toHaveAttribute('aria-label', 'Language: English');
+  await expect(page.getByRole('button', { name: /^Theme: / })).toHaveCount(0);
+});
+
+test('language is available on every screen', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Lessons' }).click();
-  await expect(page.getByRole('button', { name: 'Theme and language' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Theme: / })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Language: / })).toBeVisible();
 
   await page.getByRole('button', { name: 'Back to projects' }).click();
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
-  await page.getByRole('button', { name: 'Theme and language' }).click();
-  await page.getByText('Español').click();
+  await page.getByRole('button', { name: /^Language: / }).click();
+  await page.getByRole('button', { name: /^Idioma: / }).click();
 
   await expect(page.locator('html')).toHaveAttribute('lang', 'es');
 });

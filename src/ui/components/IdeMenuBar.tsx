@@ -4,7 +4,7 @@ import { examples } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
 import type { RunMode } from '@/runtime/protocol';
 import type { Settings, ThemeId } from '@/settings/settings';
-import { clampFontSize } from '@/settings/settings';
+import { clampFontSize, THEME_IDS } from '@/settings/settings';
 
 interface IdeMenuBarProps {
   settings: Settings;
@@ -46,7 +46,6 @@ interface ThemeSubmenuProps {
 
 const BUG_REPORT_URL = 'https://github.com/safira-lang/safira-ide/issues';
 const BLOG_URL = 'https://safiralang.blogspot.com/';
-const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
 const FONT_STEP = 1;
 const PROGRAM_PREFIX = 'programa-';
 const SUBMENU_OFFSET = 4;

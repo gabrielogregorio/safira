@@ -15,7 +15,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Clickable breakpoint dots beside every line. A dot on a comment or an empty line stops at the next command.
 - Variables inspector, always visible, with search and types.
 - Top menu with Radix, navigable by keyboard and touch.
-- Frutiger Aero look, with illustrated theme and language choices on every screen.
+- Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, the language icon opens the toolbar and the theme lives in the Interface menu.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - File sidebar with folders in each project.

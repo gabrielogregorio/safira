@@ -1,4 +1,4 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { findExampleByPrefix } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
@@ -47,7 +47,7 @@ interface EditorScreenProps {
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
   onChangeSettings: (changes: Partial<Settings>) => void;
-  onOpenPreferences: () => void;
+  languageToggle: ReactNode;
   onBack: () => void;
 }
 
@@ -94,7 +94,7 @@ export const EditorScreen = ({
   onSaveProject,
   onSelectFile,
   onChangeSettings,
-  onOpenPreferences,
+  languageToggle,
   onBack,
 }: EditorScreenProps) => {
   const t = useTranslation();
@@ -427,6 +427,7 @@ export const EditorScreen = ({
   return (
     <div className="editor-screen">
       <header className="toolbar">
+        {languageToggle}
         <button
           type="button"
           className="button button-back"
@@ -458,9 +459,6 @@ export const EditorScreen = ({
             {t('Stop')}
           </button>
         </div>
-        <button type="button" className="button button-preferences" onClick={onOpenPreferences}>
-          {t('Theme and language')}
-        </button>
         <IdeMenuBar
           settings={settings}
           isRunning={isRunning}

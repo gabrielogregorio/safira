@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useEffect, useRef } from 'react';
 import { tutorials } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
@@ -11,7 +12,7 @@ interface LessonsScreenProps {
   onMarkRead: (id: string) => void;
   onOpenCode: (lessonTitle: string, code: string) => void;
   onBack: () => void;
-  onOpenPreferences: () => void;
+  preferenceToggles: ReactNode;
 }
 
 const lessonHash = (lessonId: string): string => routeToHash({ name: 'lessons', lessonId, section: null });
@@ -23,7 +24,7 @@ export const LessonsScreen = ({
   onMarkRead,
   onOpenCode,
   onBack,
-  onOpenPreferences,
+  preferenceToggles,
 }: LessonsScreenProps) => {
   const t = useTranslation();
   const articleRef = useRef<HTMLElement>(null);
@@ -54,9 +55,7 @@ export const LessonsScreen = ({
           <button type="button" className="button" onClick={onBack}>
             {t('Back to projects')}
           </button>
-          <button type="button" className="button" onClick={onOpenPreferences}>
-            {t('Theme and language')}
-          </button>
+          {preferenceToggles}
         </div>
         <ul className="lessons-list">
           {tutorials.map((tutorial, tutorialIndex) => (

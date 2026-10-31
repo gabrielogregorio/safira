@@ -3,6 +3,8 @@ import type { Locale } from '@/language/messages';
 
 export type ThemeId = 'light' | 'dark' | 'simple';
 
+export const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
+
 export interface Settings {
   locale: Locale | null;
   theme: ThemeId;

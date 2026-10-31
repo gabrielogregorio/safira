@@ -478,8 +478,105 @@ select {
   order: 3;
 }
 
-.button-preferences {
-  order: 2;
+.orb-toggles {
+  display: flex;
+  gap: 6px;
+}
+
+.orb-toggle {
+  background: none;
+  border: none;
+  border-radius: 50%;
+  box-shadow: 0 3px 8px rgb(6 50 100 / 35%);
+  cursor: var(--cursor-pointer);
+  flex: none;
+  height: 44px;
+  padding: 0;
+  transition: transform 160ms ease;
+  width: 44px;
+}
+
+.orb-toggle:hover {
+  transform: translateY(-1px) scale(1.06);
+}
+
+.orb-toggle:active {
+  transform: scale(0.9);
+}
+
+.orb-toggle:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.orb-toggle svg {
+  display: block;
+  height: 100%;
+  width: 100%;
+}
+
+.orb-wheel {
+  transform-box: view-box;
+  transform-origin: 24px 54px;
+  transition: transform 700ms cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.orb-sky {
+  opacity: 0;
+  transition: opacity 700ms ease;
+}
+
+.orb-sky[data-active='true'] {
+  opacity: 1;
+}
+
+.orb-sun-rays {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.orb-toggle:is(:hover, :focus-visible) .orb-slot[data-active='true'] .orb-sun-rays {
+  animation: orb-spin 8s linear infinite;
+}
+
+.orb-toggle:is(:hover, :focus-visible) .orb-slot[data-active='true'] .orb-star {
+  animation: orb-twinkle 1.6s ease-in-out infinite;
+}
+
+.orb-toggle:is(:hover, :focus-visible) .orb-slot[data-active='true'] .orb-star-late {
+  animation-delay: 400ms;
+}
+
+.orb-toggle:is(:hover, :focus-visible) .orb-slot[data-active='true'] .orb-star-later {
+  animation-delay: 800ms;
+}
+
+.orb-toggle:is(:hover, :focus-visible) .orb-slot[data-active='true'] .orb-rain {
+  animation: orb-rain 700ms linear infinite;
+}
+
+@keyframes orb-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orb-twinkle {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@keyframes orb-rain {
+  from {
+    opacity: 1;
+    transform: translateY(-3px);
+  }
+
+  to {
+    opacity: 0.2;
+    transform: translateY(6px);
+  }
 }
 
 .menubar {
@@ -1209,76 +1306,6 @@ select {
   padding: 0 12px 12px;
 }
 
-.choice-group {
-  border: none;
-  margin: 0 0 12px;
-  padding: 0;
-}
-
-.choice-group legend {
-  font-weight: 700;
-  padding: 0 0 6px;
-}
-
-.choice-row {
-  display: flex;
-  gap: 10px;
-  overflow-x: auto;
-  padding: 4px 2px 8px;
-  scroll-snap-type: x proximity;
-}
-
-.choice-card {
-  background: var(--color-field);
-  border: 2px solid var(--color-line);
-  border-radius: 14px;
-  box-shadow: 0 3px 10px rgb(6 50 100 / 22%);
-  cursor: var(--cursor-pointer);
-  display: flex;
-  flex: 1 0 150px;
-  flex-direction: column;
-  font-weight: 600;
-  overflow: hidden;
-  position: relative;
-  scroll-snap-align: start;
-  text-align: center;
-  transition: transform 140ms ease;
-}
-
-.choice-card:hover {
-  transform: translateY(-2px);
-}
-
-.choice-card input {
-  height: 1px;
-  min-height: 0;
-  opacity: 0;
-  position: absolute;
-  width: 1px;
-}
-
-.choice-card:has(input:checked) {
-  border-color: var(--color-accent);
-  box-shadow:
-    0 0 0 2px var(--color-accent),
-    0 4px 12px rgb(6 50 100 / 30%);
-}
-
-.choice-card:has(input:focus-visible) {
-  outline: 3px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-.choice-card span {
-  padding: 6px 8px;
-}
-
-.choice-art {
-  aspect-ratio: 5 / 3;
-  display: block;
-  width: 100%;
-}
-
 .new-project {
   display: flex;
   flex-direction: column;
@@ -1462,15 +1489,6 @@ select {
 
   .label-wide {
     display: none;
-  }
-
-  .toolbar .button-preferences {
-    flex: 1 1 100%;
-    order: 5;
-  }
-
-  .choice-card {
-    flex-basis: 132px;
   }
 
   .button-back {
@@ -1666,8 +1684,10 @@ select {
   .modal-backdrop,
   .modal-zoom span,
   .scenery-layer,
-  .scenery-star {
-    animation: none;
+  .scenery-star,
+  .orb-toggle,
+  .orb-toggle * {
+    animation: none !important;
     transition: none;
   }
 

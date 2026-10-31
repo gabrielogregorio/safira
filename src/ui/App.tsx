@@ -17,8 +17,9 @@ import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
-import { PreferencesDialog } from '@/ui/components/PreferencesDialog';
+import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
+import { ThemeToggle } from '@/ui/components/ThemeToggle';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
 import { scrambleDocument } from '@/ui/textScramble';
@@ -37,7 +38,6 @@ export const App = ({ createWorker }: AppProps) => {
   const [settings, setSettings] = useState<Settings>(loadSettings);
   const [projects, setProjects] = useState<Project[]>(loadProjects);
   const [saveFailed, setSaveFailed] = useState(false);
-  const [isChoosingPreferences, setIsChoosingPreferences] = useState(false);
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
   const themeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -150,10 +150,6 @@ export const App = ({ createWorker }: AppProps) => {
     });
   }, []);
 
-  const openPreferences = useCallback(() => {
-    setIsChoosingPreferences(true);
-  }, []);
-
   const goHome = useCallback(() => {
     navigate({ name: 'home' });
   }, [navigate]);
@@ -161,6 +157,25 @@ export const App = ({ createWorker }: AppProps) => {
   const activeProject =
     route.name === 'project' ? projects.find((project) => project.id === route.projectId) : undefined;
   const isHome = activeProject === undefined && route.name !== 'lessons';
+  const languageToggle = (
+    <LanguageToggle
+      locale={locale}
+      onChange={(nextLocale) => {
+        changeSettings({ locale: nextLocale });
+      }}
+    />
+  );
+  const preferenceToggles = (
+    <div className="orb-toggles">
+      <ThemeToggle
+        theme={settings.theme}
+        onChange={(theme) => {
+          changeSettings({ theme, syntax: theme });
+        }}
+      />
+      {languageToggle}
+    </div>
+  );
 
   return (
     <TranslationContext.Provider value={translate}>
@@ -205,7 +220,7 @@ export const App = ({ createWorker }: AppProps) => {
             navigate({ name: 'project', projectId: activeProject.id, file });
           }}
           onChangeSettings={changeSettings}
-          onOpenPreferences={openPreferences}
+          languageToggle={languageToggle}
           onBack={goHome}
         />
       ) : null}
@@ -214,7 +229,7 @@ export const App = ({ createWorker }: AppProps) => {
           lessonId={route.lessonId}
           section={route.section}
           readLessons={settings.readLessons}
-          onOpenPreferences={openPreferences}
+          preferenceToggles={preferenceToggles}
           onOpenCode={handleOpenLessonCode}
           onMarkRead={(id) => {
             if (!settings.readLessons.includes(id)) {
@@ -248,17 +263,7 @@ export const App = ({ createWorker }: AppProps) => {
           onOpenLessons={() => {
             navigate({ name: 'lessons', lessonId: null, section: null });
           }}
-          onOpenPreferences={openPreferences}
-        />
-      ) : null}
-      {isChoosingPreferences ? (
-        <PreferencesDialog
-          settings={settings}
-          locale={locale}
-          onChange={changeSettings}
-          onClose={() => {
-            setIsChoosingPreferences(false);
-          }}
+          preferenceToggles={preferenceToggles}
         />
       ) : null}
     </TranslationContext.Provider>

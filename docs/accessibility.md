@@ -16,7 +16,7 @@ The target is WCAG 2.1 AA.
 - The terminal is a live region, so a screen reader announces what programs print.
 - Modals take the focus and close with Escape.
 - The top menu follows the menu bar pattern: arrows move between and inside menus, Escape returns to the trigger.
-- Theme and language are radio buttons, even though they look like pictures.
+- Theme and language are buttons that cycle on each click, and each one says the current choice in its name.
 - Panel dividers are separators that work with the arrow keys.
 - Language and theme animations are skipped with the reduced motion preference, and the rewritten letters are not announced.
 - On a phone, touch targets have at least 44 pixels.

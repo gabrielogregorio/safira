@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import { useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { Project } from '@/projects/projectStore';
@@ -20,7 +21,7 @@ interface HomeScreenProps {
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
   onOpenLessons: () => void;
-  onOpenPreferences: () => void;
+  preferenceToggles: ReactNode;
 }
 
 const HERO_LOGO_SIZE = 64;
@@ -37,7 +38,7 @@ export const HomeScreen = ({
   onRename,
   onDelete,
   onOpenLessons,
-  onOpenPreferences,
+  preferenceToggles,
 }: HomeScreenProps) => {
   const t = useTranslation();
   const [renaming, setRenaming] = useState<Project | null>(null);
@@ -68,9 +69,7 @@ export const HomeScreen = ({
           <button type="button" className="button" onClick={onOpenLessons}>
             {t('Lessons')}
           </button>
-          <button type="button" className="button" onClick={onOpenPreferences}>
-            {t('Theme and language')}
-          </button>
+          {preferenceToggles}
         </div>
       </header>
 

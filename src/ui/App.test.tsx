@@ -414,29 +414,30 @@ describe('App', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
-  it('changes the language and the theme from the home screen', async () => {
+  it('changes the language and the theme by clicking the icons on the home screen', async () => {
     renderApp();
-    await userEvent.click(screen.getByRole('button', { name: 'Theme and language' }));
-    await userEvent.click(screen.getByRole('radio', { name: 'Português (Brasil)' }));
+    await userEvent.click(screen.getByRole('button', { name: /^Language: / }));
 
-    expect(screen.getByRole('dialog', { name: 'Tema e idioma' })).toBeInTheDocument();
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(document.documentElement.lang).toBe('pt-br');
 
-    await userEvent.click(screen.getByRole('radio', { name: 'Escuro' }));
+    await userEvent.click(screen.getByRole('button', { name: /^Tema: / }));
 
     expect(document.documentElement.dataset['theme']).toBe('dark');
   });
 
-  it('offers theme and language in the editor and in the lessons', async () => {
+  it('offers both icons in the lessons and only the language icon in the editor', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Lessons' }));
 
-    expect(screen.getByRole('button', { name: 'Theme and language' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Theme: / })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Language: / })).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Back to projects' }));
     await openExample('Pare');
 
-    expect(screen.getByRole('button', { name: 'Theme and language' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Language: / })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Theme: / })).not.toBeInTheDocument();
   });
 
   it('opens the lessons and walks through them', async () => {
