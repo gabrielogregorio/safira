@@ -72,6 +72,7 @@ interface RenameRowProps {
 }
 
 const FILE_EXTENSION = '.safira';
+const PRESS_SETTLE_MILLISECONDS = 30;
 
 const RowMenu = ({ items, children }: RowMenuProps) => (
   <ContextMenu.Root modal={false}>
@@ -102,17 +103,59 @@ const NameInput = ({ label, value, selectionEnd, isAllowed = () => true, onFinis
   const t = useTranslation();
   const input = useRef<HTMLInputElement>(null);
   const isFinished = useRef(false);
+  const isPressing = useRef(false);
+  const latestOnFinish = useRef(onFinish);
   const [isRejected, setIsRejected] = useState(false);
+
+  useEffect(() => {
+    latestOnFinish.current = onFinish;
+  }, [onFinish]);
 
   useEffect(() => {
     input.current?.focus();
     input.current?.setSelectionRange(0, selectionEnd);
+
+    const notePress = (): void => {
+      isPressing.current = true;
+    };
+
+    const noteRelease = (): void => {
+      isPressing.current = false;
+    };
+
+    document.addEventListener('pointerdown', notePress, true);
+    document.addEventListener('pointerup', noteRelease, true);
+
+    return () => {
+      document.removeEventListener('pointerdown', notePress, true);
+      document.removeEventListener('pointerup', noteRelease, true);
+    };
   }, [selectionEnd]);
 
   const finish = (name: string | null): void => {
     if (!isFinished.current) {
       isFinished.current = true;
-      onFinish(name);
+      latestOnFinish.current(name);
+    }
+  };
+
+  // Finishing moves the rows of the tree. In the middle of a press, that would take the click away from what was pressed.
+  const finishAfterPress = (name: string | null): void => {
+    const finishNow = (): void => {
+      finish(name);
+    };
+
+    if (isPressing.current) {
+      document.addEventListener('click', finishNow, { once: true });
+      document.addEventListener(
+        'pointerup',
+        () => {
+          setTimeout(finishNow, PRESS_SETTLE_MILLISECONDS);
+        },
+        { once: true },
+      );
+    } else {
+      finishNow();
     }
   };
 
@@ -132,7 +175,7 @@ const NameInput = ({ label, value, selectionEnd, isAllowed = () => true, onFinis
             setIsRejected(false);
           }}
           onBlur={() => {
-            finish(isAllowed(typedName()) ? typedName() : null);
+            finishAfterPress(isAllowed(typedName()) ? typedName() : null);
           }}
           onKeyDown={(event) => {
             if (event.key === 'Enter' && isAllowed(typedName())) {

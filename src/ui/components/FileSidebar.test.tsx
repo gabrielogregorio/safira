@@ -223,4 +223,13 @@ describe('FileSidebar', () => {
 
     expect(onRenameProject).toHaveBeenCalledWith('Outro');
   });
+
+  it('keeps the click on another item while a new name is open', async () => {
+    const { onOpen, onCreateFile } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+    await userEvent.click(screen.getByRole('button', { name: 'main.safira' }));
+
+    expect(onOpen).toHaveBeenCalledWith('main.safira');
+    expect(onCreateFile).toHaveBeenCalledExactlyOnceWith(null, 'new-file-2.safira');
+  });
 });

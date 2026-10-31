@@ -18,9 +18,12 @@ import openUrl from './files/open.wav';
 import renameStartUrl from './files/rename-start.wav';
 import renameUrl from './files/rename.wav';
 import runUrl from './files/run.wav';
+import searchTypingUrl from './files/search-typing.wav';
+import searchUrl from './files/search.wav';
 import selectionUrl from './files/selection.wav';
 import stopUrl from './files/stop.wav';
-import suggestionsUrl from './files/suggestions.wav';
+import suggestionsOffUrl from './files/suggestions-off.wav';
+import suggestionsOnUrl from './files/suggestions-on.wav';
 import tabUrl from './files/tab.wav';
 import toggleUrl from './files/toggle.wav';
 import typingUrl from './files/typing.wav';
@@ -48,7 +51,10 @@ export type SoundName =
   | 'weather'
   | 'fileCreate'
   | 'folderCreate'
-  | 'suggestions'
+  | 'suggestionsOn'
+  | 'suggestionsOff'
+  | 'search'
+  | 'searchTyping'
   | 'typing'
   | 'accept'
   | 'selection'
@@ -78,7 +84,10 @@ export const SOUND_FILES: Record<SoundName, string> = {
   weather: weatherUrl,
   fileCreate: fileCreateUrl,
   folderCreate: folderCreateUrl,
-  suggestions: suggestionsUrl,
+  suggestionsOn: suggestionsOnUrl,
+  suggestionsOff: suggestionsOffUrl,
+  search: searchUrl,
+  searchTyping: searchTypingUrl,
   typing: typingUrl,
   accept: acceptUrl,
   selection: selectionUrl,
@@ -92,6 +101,8 @@ const WAIT_MILLISECONDS: Partial<Record<SoundName, number>> = { modalClose: 10, 
 const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
 const SAME_GESTURE_MILLISECONDS = 80;
 const HOVER_GAP_MILLISECONDS = 40;
+
+const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping'];
 
 // These happen without a press: on a reload or a passing mouse, the browser would hold them until the first click.
 const NEEDS_EARLIER_PRESS: SoundName[] = ['hover', 'ideOpen'];
@@ -207,7 +218,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
         }
 
         lastHover = performance.now();
-      } else if (name !== 'typing') {
+      } else if (!NOT_A_GESTURE.includes(name)) {
         lastSound = { name, time: performance.now() };
       }
 
@@ -273,10 +284,13 @@ export const soundPlayer = createSoundPlayer(() =>
 );
 
 const MENU_ITEMS = '[role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="menubaritem"]';
-const CLICKABLE = `button, a, summary, input[type="checkbox"], ${MENU_ITEMS}`;
+const CLICKABLE = `button, a, summary, input[type="checkbox"], input[data-sound], ${MENU_ITEMS}`;
 
-export const menuItemAt = (target: EventTarget | null): Element | null =>
-  target instanceof Element ? target.closest(MENU_ITEMS) : null;
+export const clickableAt = (target: EventTarget | null): Element | null => {
+  const clickable = target instanceof Element ? target.closest(CLICKABLE) : null;
+
+  return clickable === null || clickable.matches(':disabled, [aria-disabled="true"]') ? null : clickable;
+};
 
 const isSoundName = (value: string | undefined): value is SoundName =>
   value !== undefined && (SOUND_NAMES as string[]).includes(value);

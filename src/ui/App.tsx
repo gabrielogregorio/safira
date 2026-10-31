@@ -24,7 +24,7 @@ import { useSkyClock } from '@/ui/sky/useSkyClock';
 import { ThemeToggle } from '@/ui/components/ThemeToggle';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
-import { menuItemAt, soundForClick, soundPlayer } from '@/ui/sound/sounds';
+import { clickableAt, soundForClick, soundPlayer } from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
@@ -114,12 +114,12 @@ export const App = ({ createWorker }: AppProps) => {
     let hoveredItem: Element | null = null;
 
     const playHover = (event: PointerEvent): void => {
-      const item = menuItemAt(event.target);
+      const item = clickableAt(event.target);
 
       if (event.pointerType === 'mouse' && item !== hoveredItem) {
         hoveredItem = item;
 
-        if (item !== null && item.getAttribute('aria-disabled') !== 'true') {
+        if (item !== null) {
           void soundPlayer.play('hover');
         }
       }

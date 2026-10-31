@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
 import type { VariableSnapshot } from '@/language/interpreter';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 interface VariableInspectorProps {
   variables: VariableSnapshot[];
 }
 
+const SEARCH_TYPING_RATES = [1, 1.12, 0.92, 1.2];
+
 export const VariableInspector = ({ variables }: VariableInspectorProps) => {
   const t = useTranslation();
   const [search, setSearch] = useState('');
+  const typingStep = useRef(0);
   const visible = variables.filter((variable) => variable.name.toLowerCase().includes(search.toLowerCase()));
 
   return (
@@ -17,10 +21,13 @@ export const VariableInspector = ({ variables }: VariableInspectorProps) => {
         <h2>{t('Variables')}</h2>
         <input
           type="search"
+          data-sound="search"
           aria-label={t('Search variables')}
           placeholder={t('Search variables')}
           value={search}
           onChange={(event) => {
+            typingStep.current = (typingStep.current + 1) % SEARCH_TYPING_RATES.length;
+            void soundPlayer.play('searchTyping', SEARCH_TYPING_RATES[typingStep.current]);
             setSearch(event.target.value);
           }}
         />
