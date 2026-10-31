@@ -34,14 +34,26 @@ export const collectTextNodes = (root: Node): Text[] => {
 };
 
 export const scrambleDocument = (root: Node): (() => void) => {
-  const targets = collectTextNodes(root).map((node) => ({ node, finalText: node.nodeValue ?? '' }));
+  const targets = collectTextNodes(root).map((node) => {
+    const finalText = node.nodeValue ?? '';
+
+    return { node, finalText, drawnText: finalText };
+  });
   const startedAt = performance.now();
   let frame = 0;
 
-  const restore = (): void => {
-    for (const { node, finalText } of targets) {
-      node.nodeValue = finalText;
+  // React may rewrite a node during the animation; that text is newer, so it is never overwritten.
+  const drawEach = (textOf: (finalText: string) => string): void => {
+    for (const target of targets) {
+      if (target.node.nodeValue === target.drawnText) {
+        target.drawnText = textOf(target.finalText);
+        target.node.nodeValue = target.drawnText;
+      }
     }
+  };
+
+  const restore = (): void => {
+    drawEach((finalText) => finalText);
   };
 
   const draw = (now: number): void => {
@@ -53,10 +65,7 @@ export const scrambleDocument = (root: Node): (() => void) => {
       return;
     }
 
-    for (const { node, finalText } of targets) {
-      node.nodeValue = scrambleFrame(finalText, progress);
-    }
-
+    drawEach((finalText) => scrambleFrame(finalText, progress));
     frame = requestAnimationFrame(draw);
   };
 

@@ -38,6 +38,16 @@ describe('collectTextNodes', () => {
 });
 
 describe('scrambleDocument', () => {
+  it('keeps a text written after the animation ended when it is cancelled', () => {
+    const root = document.createElement('div');
+    root.textContent = 'Criar projeto';
+    const cancel = scrambleDocument(root);
+    (root.firstChild as Text).nodeValue = 'Crear proyecto';
+    cancel();
+
+    expect(root.textContent).toBe('Crear proyecto');
+  });
+
   it('restores the exact text when cancelled', () => {
     document.body.innerHTML = '<p>Olá mundo</p>';
     vi.stubGlobal('requestAnimationFrame', () => 1);
