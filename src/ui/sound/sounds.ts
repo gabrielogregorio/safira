@@ -4,6 +4,7 @@ import breakpointUrl from './files/breakpoint.wav';
 import clickUrl from './files/click.wav';
 import createUrl from './files/create.wav';
 import deleteUrl from './files/delete.wav';
+import errorUrl from './files/error.wav';
 import fileCreateUrl from './files/file-create.wav';
 import folderCreateUrl from './files/folder-create.wav';
 import formatUrl from './files/format.wav';
@@ -59,7 +60,8 @@ export type SoundName =
   | 'accept'
   | 'selection'
   | 'import'
-  | 'language';
+  | 'language'
+  | 'error';
 
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
@@ -93,6 +95,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   selection: selectionUrl,
   import: importUrl,
   language: languageUrl,
+  error: errorUrl,
 };
 
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.

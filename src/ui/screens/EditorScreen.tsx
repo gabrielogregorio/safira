@@ -201,6 +201,12 @@ export const EditorScreen = ({
     [activeFile, currentFiles, hasBreakpoints, isRunning, locale, project.breakpoints, runner],
   );
 
+  useEffect(() => {
+    if (runner.failure !== null) {
+      void soundPlayer.play('error');
+    }
+  }, [runner.failure]);
+
   const stopProgram = useCallback(() => {
     void soundPlayer.play('stop');
     runner.stop();
