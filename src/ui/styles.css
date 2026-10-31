@@ -871,6 +871,16 @@ select {
   margin-left: auto;
 }
 
+.home,
+.vision-options,
+.modal-header {
+  user-select: none;
+}
+
+.home input {
+  user-select: text;
+}
+
 .home-brand-settings {
   margin-left: auto;
 }
@@ -2154,7 +2164,6 @@ select {
   background: var(--color-panel-strong);
   border: 1px solid var(--color-border);
   border-radius: 18px;
-  bottom: 40px;
   box-shadow: var(--shadow-panel);
   color: var(--color-text);
   display: grid;
@@ -2165,6 +2174,7 @@ select {
   pointer-events: auto;
   position: absolute;
   right: 104px;
+  top: 0;
   width: min(360px, var(--cat-room-width, 40vw));
 }
 
@@ -2238,6 +2248,16 @@ select {
   to {
     opacity: 0.35;
   }
+}
+
+.visually-hidden {
+  border: 0;
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
 }
 
 .cat-bird svg {
@@ -2718,6 +2738,7 @@ select {
     bottom: 104px;
     max-height: 46vh;
     right: 0;
+    top: auto;
     width: calc(100vw - 24px);
   }
 

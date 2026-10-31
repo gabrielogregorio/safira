@@ -3,6 +3,7 @@ import { useTranslation } from '@/i18n/i18n';
 import type { LessonStep } from '@/content/lessons';
 import type { CheckResult } from '@/lessons/lessonCheck';
 import type { LessonVerdict } from '@/ui/hooks/useLessonMode';
+import { TypedLine } from './TypedText';
 
 interface LessonBriefProps {
   step: LessonStep;
@@ -79,8 +80,12 @@ export const LessonBrief = (props: LessonBriefProps) => {
           className={`lesson-status${isDone ? ' lesson-status-done' : ''}${hasFailed ? ' lesson-status-failed' : ''}`}
           role="status">
           {isDone ? <span aria-hidden="true">✓ </span> : null}
-          {describeStatus(t, props)}
-          {hint === null ? null : <span className="lesson-hint">{t('Tip: {hint}', { hint })}</span>}
+          <TypedLine text={describeStatus(t, props)} />
+          {hint === null ? null : (
+            <span className="lesson-hint">
+              <TypedLine text={t('Tip: {hint}', { hint })} />
+            </span>
+          )}
         </p>
         <div className="lesson-actions">
           {isOnStepFile ? (

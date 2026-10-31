@@ -7,6 +7,7 @@ import type { LessonMode } from '@/ui/hooks/useLessonMode';
 import { prefersMotion } from '@/ui/motion';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { LessonBrief } from './LessonBrief';
+import { useTypedText } from './TypedText';
 
 const MET_KEY = 'safira.cat.met';
 const CAT_SIZE = 96;
@@ -27,7 +28,8 @@ const SHORTEST_TRIP_MILLISECONDS = 1500;
 const TRIP_VARIATION_MILLISECONDS = 750;
 
 /** 0 is the top of the code field and 1 the bottom. */
-const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 1, explain: 1, play: 0.3, result: 0.62 };
+// He stays in the upper part, with the balloon growing down, so the first lines of code stay in sight.
+const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 0.2, explain: 0.2, play: 0.08, result: 0.3 };
 
 export interface Trip {
   driftX: number;
@@ -44,6 +46,13 @@ const TARGETS: Record<Scene, string> = {
   explain: '.cm-content',
   play: '.aero-button-run',
   result: '[role="log"]',
+};
+
+// While typing, a lone backtick would show up as a stray mark until its pair arrives.
+const hideOpenCode = (text: string): string => {
+  const marks = text.split('`').length - 1;
+
+  return marks % 2 === 0 ? text : text.slice(0, text.lastIndexOf('`')) + text.slice(text.lastIndexOf('`') + 1);
 };
 
 const readFlag = (key: string): boolean => {
@@ -271,15 +280,12 @@ const whereToStand = (element: HTMLElement, scene: Scene, trip: Trip): Spot | nu
   }
 
   element.style.setProperty('--cat-room-width', `${String(box.width - CAT_SIZE - EDGE_MARGIN * 2 - MOST_DRIFT_X)}px`);
-  element.style.setProperty('--cat-room-height', `${String(box.height - EDGE_MARGIN * 2)}px`);
   const lowest = box.bottom - CAT_SIZE - EDGE_MARGIN;
   const highest = box.top + EDGE_MARGIN;
-  const y = highest + (lowest - highest) * HEIGHT_IN_FIELD[scene] + trip.driftY;
+  const y = Math.min(lowest, Math.max(highest, highest + (lowest - highest) * HEIGHT_IN_FIELD[scene] + trip.driftY));
+  element.style.setProperty('--cat-room-height', `${String(box.bottom - y - EDGE_MARGIN)}px`);
 
-  return {
-    x: box.right - CAT_SIZE - EDGE_MARGIN + trip.driftX,
-    y: Math.min(lowest, Math.max(highest, y)),
-  };
+  return { x: box.right - CAT_SIZE - EDGE_MARGIN + trip.driftX, y };
 };
 
 // He turns to the target, and the arm goes to the angle that leaves the finger on it.
@@ -415,11 +421,50 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
     };
   }, [isAskingForRun]);
 
+  // He talks only after the saucer stops. Before that the balloon does not exist.
+  const stage = `${key}:${scene}`;
+  const [settledStage, setSettledStage] = useState(stage);
+  const isSettled = settledStage === stage || !prefersMotion();
+
   useEffect(() => {
-    if (isHere) {
+    if (isSettled) {
+      return undefined;
+    }
+
+    const timer = setTimeout(() => {
+      setSettledStage(stage);
+    }, trip.current.milliseconds);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isSettled, stage]);
+
+  useEffect(() => {
+    if (isHere && isSettled) {
       void soundPlayer.play('catMeow');
     }
-  }, [isHere, key, scene]);
+  }, [isHere, isSettled, stage]);
+
+  const speech = ((): string => {
+    if (!isSettled || lesson.step === undefined) {
+      return '';
+    }
+
+    switch (scene) {
+      case 'intro':
+        return t(
+          'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.',
+        );
+      case 'explain':
+        return `## ${lesson.step.title}\n\n${lesson.step.text}`;
+      case 'play':
+        return lesson.step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.');
+      case 'result':
+        return lesson.isOnStepFile ? t('Look at the result over there.') : '';
+    }
+  })();
+  const typed = useTypedText(speech);
 
   useEffect(() => {
     if (!isHoldingStone) {
@@ -527,14 +572,24 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   return (
     <>
       <div ref={root} className={`cat cat-at-${scene}`} data-pose={pose}>
-        <section className="cat-bubble" aria-label={t('Professor Cat')} aria-live="polite">
-          {scene === 'intro' ? (
-            <>
-              <p>
-                {t(
-                  'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.',
-                )}
-              </p>
+        {isSettled ? (
+          <section className="cat-bubble" aria-label={t('Professor Cat')} aria-live="polite">
+            <div className="lesson-brief-text" data-fixed-text aria-hidden={typed.isDone ? undefined : true}>
+              <Markdown>{hideOpenCode(typed.shown)}</Markdown>
+            </div>
+            {typed.isDone ? null : (
+              <>
+                <div className="visually-hidden" data-fixed-text>
+                  <Markdown>{speech}</Markdown>
+                </div>
+                <div className="lesson-actions">
+                  <button type="button" className="button" onClick={typed.finish}>
+                    {t('Show it all')}
+                  </button>
+                </div>
+              </>
+            )}
+            {scene === 'intro' && typed.isDone ? (
               <div className="lesson-actions">
                 <button
                   type="button"
@@ -547,14 +602,8 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
                   {t('Continue')}
                 </button>
               </div>
-            </>
-          ) : null}
-          {scene === 'explain' ? (
-            <>
-              <div className="lesson-brief-text" data-fixed-text>
-                <h2>{step.title}</h2>
-                <Markdown>{step.text}</Markdown>
-              </div>
+            ) : null}
+            {scene === 'explain' && typed.isDone ? (
               <div className="lesson-actions">
                 <button
                   type="button"
@@ -565,14 +614,8 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
                   {t('Continue')}
                 </button>
               </div>
-            </>
-          ) : null}
-          {scene === 'play' ? (
-            <p>{step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.')}</p>
-          ) : null}
-          {scene === 'result' ? (
-            <>
-              {lesson.isOnStepFile ? <p>{t('Look at the result over there.')}</p> : null}
+            ) : null}
+            {scene === 'result' && typed.isDone ? (
               <LessonBrief
                 step={step}
                 verdict={lesson.verdict}
@@ -584,9 +627,9 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
                 onStartOver={lesson.startOver}
                 onShowSolution={lesson.showSolution}
               />
-            </>
-          ) : null}
-        </section>
+            ) : null}
+          </section>
+        ) : null}
         <div className="cat-bird">
           <CatArt pose={pose} />
         </div>
