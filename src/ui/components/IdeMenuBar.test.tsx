@@ -6,8 +6,8 @@ import { IdeMenuBar } from './IdeMenuBar';
 const setup = (isRunning = false) => {
   const actions = {
     onNewTab: vi.fn(),
-    onSave: vi.fn(),
-    onSaveAs: vi.fn(),
+    onSaveSnapshot: vi.fn(),
+    onShowHistory: vi.fn(),
     onFormat: vi.fn(),
     onExportProject: vi.fn(),
     onImportArchive: vi.fn(),
@@ -52,7 +52,7 @@ describe('IdeMenuBar', () => {
   });
 
   it.each([
-    ['File', 'SaveCtrl+S', 'onSave'],
+    ['File', 'Save snapshotCtrl+S', 'onSaveSnapshot'],
     ['File', 'Export project (.zip)', 'onExportProject'],
     ['File', 'Format code', 'onFormat'],
     ['Run', 'Clear breakpoints', 'onClearBreakpoints'],

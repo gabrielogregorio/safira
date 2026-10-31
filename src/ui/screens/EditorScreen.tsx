@@ -6,7 +6,7 @@ import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
 import { addScriptVersion, isSupportedVersion, SUPPORTED_VERSIONS } from '@/language/version';
-import { clearDrafts, loadDrafts, saveDrafts } from '@/projects/draftStore';
+import { clearDrafts, loadDrafts } from '@/projects/draftStore';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
   filesOfFolder,
@@ -24,7 +24,7 @@ import { routeToHash } from '@/routing/routes';
 import type { RunMode } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
-import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
+import { BackIcon, CameraIcon, NewerIcon, OlderIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { VariableInspector } from '@/ui/components/VariableInspector';
@@ -37,7 +37,6 @@ import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
 import { Terminal } from '@/ui/components/Terminal';
 import { Splitter } from '@/ui/components/Splitter';
-import { TextPrompt } from '@/ui/components/TextPrompt';
 import type { EditorTab } from '@/ui/editorTabs';
 import {
   isDirty,
@@ -49,6 +48,7 @@ import {
   toStoredText,
   withScriptExtension,
 } from '@/ui/editorTabs';
+import type { ProjectHistory } from '@/ui/hooks/useProjectHistory';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { createRunnerWorker, useRunner } from '@/ui/hooks/useRunner';
 import { soundPlayer } from '@/ui/sound/sounds';
@@ -60,6 +60,7 @@ interface EditorScreenProps {
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
+  history: ProjectHistory;
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
   onChangeLesson: (file: string, lesson: LessonPlace) => void;
@@ -68,15 +69,13 @@ interface EditorScreenProps {
 }
 
 type Dialog =
-  | { kind: 'save-as' }
+  | { kind: 'history' }
   | { kind: 'commands' }
-  | { kind: 'confirm-close'; file: string }
-  | { kind: 'confirm-leave' }
   | { kind: 'delete-node'; node: TreeNode }
   | null;
 
 const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
-const DRAFT_DELAY_MILLISECONDS = 300;
+const AUTOSAVE_MILLISECONDS = 300;
 const SCRIPT_EXTENSION = '.safira';
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
 type MobilePanel = 'files' | 'code' | 'output' | 'variables';
@@ -105,6 +104,7 @@ export const EditorScreen = ({
   settings,
   locale,
   createWorker = createRunnerWorker,
+  history,
   onSaveProject,
   onSelectFile,
   onChangeLesson,
@@ -113,7 +113,6 @@ export const EditorScreen = ({
 }: EditorScreenProps) => {
   const t = useTranslation();
   const [tabs, setTabs] = useState<EditorTab[]>(() => restoreTabs(project, routeFile));
-  const [wasRecovered, setWasRecovered] = useState(() => Object.keys(loadDrafts(project.id)).length > 0);
   const [dialog, setDialog] = useState<Dialog>(null);
   const [cursor, setCursor] = useState({ line: 1, column: 1 });
   const [mobilePanel, setMobilePanel] = useState<MobilePanel>('code');
@@ -138,15 +137,49 @@ export const EditorScreen = ({
     latestTabs.current = tabs;
   }, [project, tabs]);
 
+  // There is no saving by hand: what is typed reaches the project after a short pause, or when leaving.
+  const saveOpenTabs = useCallback(() => {
+    const dirtyTabs = latestTabs.current.filter(isDirty);
+
+    if (dirtyTabs.length === 0) {
+      return;
+    }
+
+    const storedTabs = new Map(dirtyTabs.map((tab) => [tab.file, tab.text]));
+    const markSaved = (tab: EditorTab): EditorTab => {
+      const text = storedTabs.get(tab.file);
+
+      return text === undefined ? tab : { ...tab, savedText: text };
+    };
+    const files = { ...latestProject.current.files };
+
+    for (const tab of dirtyTabs) {
+      files[tab.file] = toStoredText(tab);
+    }
+
+    latestTabs.current = latestTabs.current.map(markSaved);
+    setTabs((current) => current.map(markSaved));
+    clearDrafts(latestProject.current.id);
+    onSaveProject({ ...latestProject.current, files });
+  }, [onSaveProject]);
+
   useEffect(() => {
-    const timer = setTimeout(() => {
-      saveDrafts(project.id, Object.fromEntries(tabs.filter(isDirty).map((tab) => [tab.file, tab.text])));
-    }, DRAFT_DELAY_MILLISECONDS);
+    const timer = setTimeout(saveOpenTabs, AUTOSAVE_MILLISECONDS);
 
     return () => {
       clearTimeout(timer);
     };
-  }, [project.id, tabs]);
+  }, [saveOpenTabs, tabs]);
+
+  useEffect(() => {
+    window.addEventListener('pagehide', saveOpenTabs);
+
+    return () => {
+      window.removeEventListener('pagehide', saveOpenTabs);
+      saveOpenTabs();
+    };
+  }, [saveOpenTabs]);
+
   const importableScripts = useMemo(
     () => Object.fromEntries(Object.entries(project.files).filter(([path]) => isScript(path) && path !== activeFile)),
     [activeFile, project.files],
@@ -215,19 +248,6 @@ export const EditorScreen = ({
     void soundPlayer.play('stop');
     runner.stop();
   }, [runner]);
-
-  const saveFile = useCallback(
-    (file: string, tab: EditorTab) => {
-      onSaveProject({ ...project, files: { ...project.files, [file]: toStoredText({ file, text: tab.text }) } });
-      setTabs((current) =>
-        current.map((candidate) =>
-          candidate.file === tab.file ? { ...candidate, file, savedText: candidate.text } : candidate,
-        ),
-      );
-      onSelectFile(file);
-    },
-    [onSaveProject, onSelectFile, project],
-  );
 
   const openFile = useCallback(
     (file: string, stored: string) => {
@@ -370,6 +390,23 @@ export const EditorScreen = ({
     [currentFiles],
   );
 
+  const { addSnapshot, show } = history;
+
+  const saveSnapshot = useCallback(() => {
+    saveOpenTabs();
+    void soundPlayer.play('snapshot');
+    addSnapshot();
+  }, [addSnapshot, saveOpenTabs]);
+
+  const jumpTo = useCallback(
+    (snapshotId: string | null) => {
+      saveOpenTabs();
+      setDialog(null);
+      show(snapshotId);
+    },
+    [saveOpenTabs, show],
+  );
+
   const openLessonCode = useCallback(
     (lessonId: string, code: string) => {
       const source = addScriptVersion(code);
@@ -468,10 +505,8 @@ export const EditorScreen = ({
         toggleBreakpoint(cursor.line);
       } else if (event.key === 'F11') {
         toggleFullScreen();
-      } else if (isControl && key === 's' && event.shiftKey) {
-        setDialog({ kind: 'save-as' });
-      } else if (isControl && key === 's' && activeTab !== undefined) {
-        saveFile(activeTab.file, activeTab);
+      } else if (isControl && key === 's') {
+        saveSnapshot();
       } else if (isControl && key === 'n') {
         newTab();
       }
@@ -482,21 +517,7 @@ export const EditorScreen = ({
     return () => {
       window.removeEventListener('keydown', handleKey, true);
     };
-  }, [activeTab, cursor.line, newTab, runOrResume, saveFile, toggleBreakpoint, toggleFullScreen]);
-
-  useEffect(() => {
-    const warnBeforeLeaving = (event: BeforeUnloadEvent): void => {
-      if (tabs.some(isDirty)) {
-        event.preventDefault();
-      }
-    };
-
-    window.addEventListener('beforeunload', warnBeforeLeaving);
-
-    return () => {
-      window.removeEventListener('beforeunload', warnBeforeLeaving);
-    };
-  }, [tabs]);
+  }, [cursor.line, newTab, runOrResume, saveSnapshot, toggleBreakpoint, toggleFullScreen]);
 
   if (activeTab === undefined) {
     return null;
@@ -531,6 +552,10 @@ export const EditorScreen = ({
   };
 
   const runLabel = runner.status === 'paused' ? t('Continue') : t('Run');
+  const formatDate = (time: number): string => new Date(time).toLocaleString(locale);
+  const timeline = [...history.snapshots.map((snapshot) => snapshot.id), null];
+  const position = timeline.indexOf(history.viewed?.id ?? null);
+  const timelineLabel = history.viewed === null ? t('Current') : `${position + 1}/${history.snapshots.length}`;
 
   const lessonHref = (lessonId: string, section: string | null): string =>
     routeToHash({ name: 'project', projectId: project.id, file: activeFile, lesson: { lessonId, section } });
@@ -560,16 +585,54 @@ export const EditorScreen = ({
           className="aero-button"
           aria-label={t('Back to projects')}
           title={t('Back to projects')}
-          onClick={() => {
-            if (tabs.some(isDirty)) {
-              setDialog({ kind: 'confirm-leave' });
-            } else {
-              onBack();
-            }
-          }}>
+          onClick={onBack}>
           <BackIcon />
         </button>
         <div className="toolbar-actions">
+          <div className="aero-group history-controls">
+            <button
+              type="button"
+              className="aero-button"
+              data-sound="snapshot"
+              aria-label={t('Save snapshot')}
+              title={`${t('Save snapshot')} (Ctrl+S)`}
+              onClick={saveSnapshot}>
+              <CameraIcon />
+            </button>
+            <button
+              type="button"
+              className="aero-button"
+              data-sound="tab"
+              aria-label={t('Older snapshot')}
+              title={t('Older snapshot')}
+              disabled={position === 0}
+              onClick={() => {
+                jumpTo(timeline[position - 1] ?? null);
+              }}>
+              <OlderIcon />
+            </button>
+            <button
+              type="button"
+              className="history-label"
+              title={t('History')}
+              onClick={() => {
+                setDialog({ kind: 'history' });
+              }}>
+              {timelineLabel}
+            </button>
+            <button
+              type="button"
+              className="aero-button"
+              data-sound="tab"
+              aria-label={t('Newer snapshot')}
+              title={t('Newer snapshot')}
+              disabled={history.viewed === null}
+              onClick={() => {
+                jumpTo(timeline[position + 1] ?? null);
+              }}>
+              <NewerIcon />
+            </button>
+          </div>
           <button
             type="button"
             className="aero-button aero-button-run"
@@ -596,11 +659,9 @@ export const EditorScreen = ({
           locale={locale}
           isRunning={isRunning}
           onNewTab={newTab}
-          onSave={() => {
-            saveFile(activeTab.file, activeTab);
-          }}
-          onSaveAs={() => {
-            setDialog({ kind: 'save-as' });
+          onSaveSnapshot={saveSnapshot}
+          onShowHistory={() => {
+            setDialog({ kind: 'history' });
           }}
           onFormat={() => {
             void soundPlayer.play('format');
@@ -643,19 +704,15 @@ export const EditorScreen = ({
                 onSelectFile(tab.file);
               }}>
               <span data-fixed-text>{tab.file}</span>
-              {isDirty(tab) ? <span title={t('Not saved')}> ●</span> : null}
             </button>
             <button
               type="button"
               className="tab-close"
-              data-sound={isDirty(tab) ? undefined : 'modalClose'}
+              data-sound="modalClose"
               aria-label={t('Close tab {name}', { name: tab.file })}
               onClick={() => {
-                if (isDirty(tab)) {
-                  setDialog({ kind: 'confirm-close', file: tab.file });
-                } else {
-                  closeTab(tab.file);
-                }
+                saveOpenTabs();
+                closeTab(tab.file);
               }}>
               ×
             </button>
@@ -694,31 +751,24 @@ export const EditorScreen = ({
         </div>
       )}
 
-      {wasRecovered ? (
+      {history.viewed === null ? null : (
         <div className="alert" role="status">
-          <p>{t('Your unsaved work was recovered.')}</p>
-          <div className="form-row">
-            <button
-              type="button"
-              className="button"
-              onClick={() => {
-                setWasRecovered(false);
-              }}>
-              {t('Keep')}
-            </button>
-            <button
-              type="button"
-              className="button"
-              onClick={() => {
-                clearDrafts(project.id);
-                setTabs((current) => current.map((tab) => ({ ...tab, text: tab.savedText })));
-                setWasRecovered(false);
-              }}>
-              {t('Discard')}
-            </button>
-          </div>
+          <p>
+            {t('This is a snapshot from {date}. Editing it makes it the current content, and today goes to the history.', {
+              date: formatDate(history.viewed.createdAt),
+            })}
+          </p>
+          <button
+            type="button"
+            className="button"
+            data-sound="tab"
+            onClick={() => {
+              jumpTo(null);
+            }}>
+            {t('Back to current')}
+          </button>
         </div>
-      ) : null}
+      )}
 
       {isVersionSupported ? null : (
         <div className="alert" role="alert">
@@ -871,19 +921,42 @@ export const EditorScreen = ({
 
       <footer className="status-bar">{t('Line {line}, column {column}', cursor)}</footer>
 
-      {dialog?.kind === 'save-as' ? (
-        <TextPrompt
-          title={t('Save as')}
-          label={t('File name')}
-          initialValue={activeTab.file}
+      {dialog?.kind === 'history' ? (
+        <Modal
+          title={t('History')}
           onClose={() => {
             setDialog(null);
-          }}
-          onSubmit={(name) => {
-            saveFile(withScriptExtension(name), activeTab);
-            setDialog(null);
-          }}
-        />
+          }}>
+          {history.snapshots.length === 0 ? <p>{t('Save a snapshot to start the history of this project.')}</p> : null}
+          <ul className="file-list">
+            <li>
+              <button
+                type="button"
+                className="menu-item"
+                data-sound="tab"
+                aria-current={history.viewed === null ? 'true' : undefined}
+                onClick={() => {
+                  jumpTo(null);
+                }}>
+                {t('Current')}
+              </button>
+            </li>
+            {[...history.snapshots].reverse().map((snapshot) => (
+              <li key={snapshot.id}>
+                <button
+                  type="button"
+                  className="menu-item"
+                  data-sound="tab"
+                  aria-current={history.viewed?.id === snapshot.id ? 'true' : undefined}
+                  onClick={() => {
+                    jumpTo(snapshot.id);
+                  }}>
+                  {formatDate(snapshot.createdAt)}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </Modal>
       ) : null}
 
       {dialog?.kind === 'delete-node' ? (
@@ -933,57 +1006,6 @@ export const EditorScreen = ({
         </Modal>
       ) : null}
 
-      {dialog?.kind === 'confirm-close' || dialog?.kind === 'confirm-leave' ? (
-        <Modal
-          title={t('Do you want to save your program?')}
-          onClose={() => {
-            setDialog(null);
-          }}>
-          <div className="form-row">
-            <button
-              type="button"
-              className="button button-primary"
-              onClick={() => {
-                if (dialog.kind === 'confirm-close') {
-                  const tab = tabs.find((candidate) => candidate.file === dialog.file);
-
-                  if (tab !== undefined) {
-                    saveFile(tab.file, tab);
-                  }
-
-                  closeTab(dialog.file);
-                } else {
-                  const files = currentFiles();
-                  onSaveProject({ ...project, files });
-                  onBack();
-                }
-              }}>
-              {t('Save')}
-            </button>
-            <button
-              type="button"
-              className="button button-stop"
-              onClick={() => {
-                if (dialog.kind === 'confirm-close') {
-                  closeTab(dialog.file);
-                } else {
-                  clearDrafts(project.id);
-                  onBack();
-                }
-              }}>
-              {t("Don't save")}
-            </button>
-            <button
-              type="button"
-              className="button"
-              onClick={() => {
-                setDialog(null);
-              }}>
-              {t('Cancel')}
-            </button>
-          </div>
-        </Modal>
-      ) : null}
     </div>
   );
 };

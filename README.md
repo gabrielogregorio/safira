@@ -35,7 +35,7 @@ The interface comes in English, Portuguese, Spanish, Simplified Chinese and Japa
 Portuguese. Text marked `data-fixed-text`, such as project names, stays out of the language animation.
 
 Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`,
-`#/projects/<id>/main.safira/lessons/aula-02-exibicao/comando-de-exibicao`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and unsaved work is kept while typing
+`#/projects/<id>/main.safira/lessons/aula-02-exibicao/comando-de-exibicao`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
 so that it comes back after a crash or a power cut.
 
 Every script keeps its language version on a hidden first line (`#safira 0.9`). The IDE only mentions it when the version

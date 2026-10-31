@@ -32,6 +32,7 @@ import runUrl from './files/run.wav';
 import searchTypingUrl from './files/search-typing.wav';
 import searchUrl from './files/search.wav';
 import selectionUrl from './files/selection.wav';
+import snapshotUrl from './files/snapshot.wav';
 import stopUrl from './files/stop.wav';
 import suggestionsOffUrl from './files/suggestions-off.wav';
 import suggestionsOnUrl from './files/suggestions-on.wav';
@@ -84,6 +85,7 @@ export type SoundName =
   | 'languageJa'
   | 'error'
   | 'export'
+  | 'snapshot'
   | 'lineDelete'
   | 'aquarium'
   | 'move'
@@ -131,6 +133,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   languageJa: languageJaUrl,
   error: errorUrl,
   export: exportUrl,
+  snapshot: snapshotUrl,
   lineDelete: lineDeleteUrl,
   aquarium: aquariumUrl,
   move: moveUrl,

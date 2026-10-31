@@ -13,8 +13,8 @@ interface IdeMenuBarProps {
   locale: Locale;
   isRunning: boolean;
   onNewTab: () => void;
-  onSave: () => void;
-  onSaveAs: () => void;
+  onSaveSnapshot: () => void;
+  onShowHistory: () => void;
   onFormat: () => void;
   onExportProject: () => void;
   onImportArchive: () => void;
@@ -110,8 +110,8 @@ export const IdeMenuBar = ({
   locale,
   isRunning,
   onNewTab,
-  onSave,
-  onSaveAs,
+  onSaveSnapshot,
+  onShowHistory,
   onFormat,
   onExportProject,
   onImportArchive,
@@ -138,8 +138,8 @@ export const IdeMenuBar = ({
       <Menu label={t('File')}>
         <Action label={t('New tab')} shortcut="Ctrl+N" onSelect={onNewTab} />
         <Menubar.Separator className="menubar-separator" />
-        <Action label={t('Save')} shortcut="Ctrl+S" onSelect={onSave} />
-        <Action label={t('Save as')} shortcut="Ctrl+Shift+S" onSelect={onSaveAs} />
+        <Action label={t('Save snapshot')} shortcut="Ctrl+S" sound="snapshot" onSelect={onSaveSnapshot} />
+        <Action label={t('History')} onSelect={onShowHistory} />
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Export project (.zip)')} sound="export" onSelect={onExportProject} />
         <Action label={t('Import .zip into this project')} sound="import" onSelect={onImportArchive} />

@@ -24,7 +24,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.
 - Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order. The right click also downloads a file as it is, or a folder as a `.zip`.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
-- Unsaved work is kept while typing and recovered after a crash or a power cut.
+- Everything saves itself while typing. Snapshots of a project keep its past in IndexedDB: walk through them, open one, and editing it makes it the current content while the previous one joins the history.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.
 - Deploy to GitHub Pages on merge, and a preview environment for each pull request.
 - Lessons in real markdown, inside the IDE under Help, with colored code and a button that opens each example as a file of the project.

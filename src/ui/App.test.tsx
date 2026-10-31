@@ -244,24 +244,6 @@ describe('App', () => {
     expect(screen.getByRole('cell', { name: 'nome' })).toBeInTheDocument();
   });
 
-  it('recovers unsaved work after a crash', async () => {
-    localStorage.setItem(
-      'safira.projects.v1',
-      JSON.stringify([{ id: '1', name: 'Queda', files: { 'main.safira': '#safira 0.9\nmostre 1' }, breakpoints: {} }]),
-    );
-    localStorage.setItem('safira.drafts.v1', JSON.stringify({ 1: { 'main.safira': 'mostre 2' } }));
-    renderApp();
-    await userEvent.click(screen.getByRole('link', { name: 'Open Queda' }));
-
-    expect(screen.getByText('Your unsaved work was recovered.')).toBeInTheDocument();
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre 2');
-
-    await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
-
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre 1');
-    expect(localStorage.getItem('safira.drafts.v1')).toBe('{}');
-  });
-
   it('opens a project from its address', () => {
     localStorage.setItem(
       'safira.projects.v1',

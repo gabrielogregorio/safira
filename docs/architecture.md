@@ -43,7 +43,8 @@ pure helpers such as highlighting and formatting.
 | Key | Content |
 |---|---|
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
-| `safira.drafts.v1` | Unsaved text per project, written 300 ms after typing stops |
+| `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
+| IndexedDB `safira/snapshots` | Snapshots of each project, through localForage, at most 200 |
 | `safira.settings.v1` | Language, chosen theme, fonts, sound, suggestions, panel sizes, read lessons |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n';
 import { clearDrafts } from '@/projects/draftStore';
+import { removeSnapshots } from '@/projects/snapshotStore';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
 import {
@@ -27,7 +28,7 @@ import type { WorkerFactory } from '@/ui/hooks/useRunner';
 import { prefersMotion } from '@/ui/motion';
 import { clickableAt, LANGUAGE_SOUNDS, soundForClick, soundPlayer, WEATHER_SOUNDS } from '@/ui/sound/sounds';
 import { scrambleDocument } from '@/ui/textScramble';
-import { EditorScreen } from '@/ui/screens/EditorScreen';
+import { ProjectWorkspace } from '@/ui/screens/ProjectWorkspace';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 
 interface AppProps {
@@ -266,7 +267,7 @@ export const App = ({ createWorker }: AppProps) => {
         </div>
       )}
       {activeProject !== undefined ? (
-        <EditorScreen
+        <ProjectWorkspace
           key={activeProject.id}
           project={activeProject}
           routeFile={route.name === 'project' ? route.file : null}
@@ -303,6 +304,7 @@ export const App = ({ createWorker }: AppProps) => {
           onDelete={(id) => {
             persist(removeProject(projects, id));
             clearDrafts(id);
+            void removeSnapshots(id);
           }}
           preferenceToggles={preferenceToggles}
         />

@@ -185,11 +185,13 @@ test('changes the theme from the menu', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
 
-test('asks before closing a tab with unsaved work', async ({ page }) => {
-  await createProjectWithCode(page, 'mostre 1');
-  await page.getByRole('button', { name: 'Close tab main.safira' }).click();
-
-  await expect(page.getByRole('dialog', { name: 'Do you want to save your program?' })).toBeVisible();
+test('closing a tab keeps what was typed, without asking', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "fica"');
+  await page.getByRole('button', { name: /^Close tab/ }).first().click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect
+    .poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1')))
+    .toContain('fica');
 });
 
 test('colors the syntax of the code', async ({ page }) => {
@@ -322,13 +324,29 @@ test('a lesson example opens and runs in the same project', async ({ page }) => 
   await expect(page.getByRole('log')).toContainText('Script finished');
 });
 
-test('recovers unsaved work after the page dies', async ({ page }) => {
-  await createProjectWithCode(page, 'mostre "nao salvo"');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.drafts.v1'))).toContain('nao salvo');
+test('what was typed survives the page dying', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "fica salvo"');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('fica salvo');
   await page.reload();
 
-  await expect(page.getByText('Your unsaved work was recovered.')).toBeVisible();
-  await expect(page.getByLabel('Code editor')).toContainText('mostre "nao salvo"');
+  await expect(page.locator('.cm-content')).toContainText('fica salvo');
+});
+
+test('a snapshot brings the past back, and editing it keeps the present in the history', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "antes"');
+  await page.keyboard.press('Control+s');
+  await page.locator('.cm-content').click();
+  await page.keyboard.press('Control+a');
+  await page.keyboard.insertText('mostre "depois"');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('depois');
+  await page.getByRole('button', { name: 'Older snapshot' }).click();
+  await expect(page.locator('.cm-content')).toContainText('antes');
+  await page.locator('.cm-content').click();
+  await page.keyboard.press('Control+End');
+  await page.keyboard.insertText('\nmostre "novo"');
+  await expect(page.locator('.history-label')).toHaveText('Current');
+  await page.getByRole('button', { name: 'Older snapshot' }).click();
+  await expect(page.locator('.cm-content')).toContainText('depois');
 });
 
 test('imports from a virtual folder created in the sidebar', async ({ page }) => {
