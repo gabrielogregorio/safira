@@ -17,7 +17,6 @@ import {
   warmUpWorld,
 } from '@/ui/aquarium/aquariumWorld';
 import { useIdle } from '@/ui/hooks/useIdle';
-import { prefersMotion } from '@/ui/motion';
 import type { SoundName } from '@/ui/sound/sounds';
 import { SEA_SOUNDS, soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
@@ -34,7 +33,6 @@ interface AquariumProps {
   onClose: () => void;
 }
 
-const SHRINK_MILLISECONDS = 480;
 const SAVE_MILLISECONDS = 10000;
 const FRAME_MILLISECONDS = 1000 / 30;
 const LONGEST_STEP_SECONDS = 0.1;
@@ -61,13 +59,11 @@ const playEvents = (events: WorldEvent[]): void => {
 
 export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) => {
   const t = useTranslation();
-  const [isClosing, setIsClosing] = useState(false);
   const isIdle = useIdle();
   // A state and not a ref: the dialog mounts its content after this effect would run.
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const worldRef = useRef<World | null>(null);
   const latestTheme = useRef(theme);
-  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     latestTheme.current = theme;
@@ -134,28 +130,9 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
     return soundPlayer.release;
   }, [isSoundOn, theme]);
 
-  useEffect(
-    () => () => {
-      if (closeTimer.current !== null) {
-        clearTimeout(closeTimer.current);
-      }
-    },
-    [],
-  );
-
   const close = (): void => {
-    if (isClosing) {
-      return;
-    }
-
     void soundPlayer.play('aquariumClose');
-
-    if (prefersMotion()) {
-      setIsClosing(true);
-      closeTimer.current = setTimeout(onClose, SHRINK_MILLISECONDS);
-    } else {
-      onClose();
-    }
+    onClose();
   };
 
   const handlePointer = (event: PointerEvent, act: (world: World, x: number, y: number) => void): void => {
@@ -165,7 +142,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
   };
 
   const originStyle = { '--origin-x': `${origin.x}px`, '--origin-y': `${origin.y}px` } as CSSProperties;
-  const classes = ['aquarium', isClosing ? 'aquarium-closing' : '', isIdle ? 'is-idle' : ''].filter(Boolean).join(' ');
+  const classes = isIdle ? 'aquarium is-idle' : 'aquarium';
 
   return (
     <Dialog.Root

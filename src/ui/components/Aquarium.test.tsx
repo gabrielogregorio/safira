@@ -24,6 +24,14 @@ describe('Aquarium', () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
+  it('closes at once, without a closing animation', async () => {
+    const onClose = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(document.querySelector('.aquarium')?.className).toBe('aquarium');
+  });
+
   it('closes with Escape', async () => {
     const onClose = setup();
     await userEvent.keyboard('{Escape}');
