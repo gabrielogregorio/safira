@@ -9,7 +9,6 @@ export const THEME_IDS: ThemeId[] = ['light', 'dark', 'simple'];
 export interface Settings {
   locale: Locale | null;
   theme: ThemeId;
-  syntax: ThemeId;
   fontSize: number;
   sound: boolean;
   codeFont: CodeFont;
@@ -35,7 +34,6 @@ const STORAGE_KEY = 'safira.settings.v1';
 export const DEFAULT_SETTINGS: Settings = {
   locale: null,
   theme: 'light',
-  syntax: 'light',
   fontSize: DEFAULT_FONT_SIZE,
   sound: true,
   codeFont: 'mono',

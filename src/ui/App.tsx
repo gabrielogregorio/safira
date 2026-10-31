@@ -54,7 +54,6 @@ export const App = ({ createWorker }: AppProps) => {
   const { phase, travelTo } = useSkyClock(settings.theme);
   const skyTheme = themeAtPhase(phase);
   const shownTheme = useRef(skyTheme);
-  const syntaxTheme = settings.syntax === settings.theme ? skyTheme : settings.syntax;
 
   const locale = useMemo(
     () => detectLocale(window.location.search, settings.locale, navigator.language),
@@ -83,10 +82,10 @@ export const App = ({ createWorker }: AppProps) => {
     root.dataset['theme'] = skyTheme;
     root.dataset['codeFont'] = settings.codeFont;
 
-    for (const [category, color] of Object.entries(SYNTAX_PALETTES[syntaxTheme])) {
+    for (const [category, color] of Object.entries(SYNTAX_PALETTES[skyTheme])) {
       root.style.setProperty(`--syntax-${category}`, color);
     }
-  }, [locale, settings.codeFont, skyTheme, syntaxTheme]);
+  }, [locale, settings.codeFont, skyTheme]);
 
   useLayoutEffect(() => {
     if (shownLocale.current === locale) {
@@ -248,7 +247,7 @@ export const App = ({ createWorker }: AppProps) => {
       <ThemeToggle
         theme={skyTheme}
         onChange={(theme) => {
-          changeSettings({ theme, syntax: theme });
+          changeSettings({ theme });
         }}
       />
       <LanguageToggle

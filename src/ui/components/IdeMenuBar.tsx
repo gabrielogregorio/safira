@@ -212,15 +212,7 @@ export const IdeMenuBar = ({
           value={settings.theme}
           options={themeOptions}
           onChange={(theme) => {
-            onChangeSettings({ theme, syntax: theme });
-          }}
-        />
-        <RadioSubmenu
-          label={t('Syntax colors')}
-          value={settings.syntax}
-          options={themeOptions}
-          onChange={(syntax) => {
-            onChangeSettings({ syntax });
+            onChangeSettings({ theme });
           }}
         />
         <RadioSubmenu
