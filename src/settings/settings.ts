@@ -1,0 +1,94 @@
+import type { SyntaxCategory } from '@/language/highlight';
+import type { Locale } from '@/language/messages';
+
+export type ThemeId = 'light' | 'dark' | 'simple';
+
+export interface Settings {
+  locale: Locale | null;
+  theme: ThemeId;
+  syntax: ThemeId;
+  fontSize: number;
+  readLessons: string[];
+}
+
+export const DEFAULT_FONT_SIZE = 15;
+export const MINIMUM_FONT_SIZE = 10;
+export const MAXIMUM_FONT_SIZE = 32;
+
+const STORAGE_KEY = 'safira.settings.v1';
+
+export const DEFAULT_SETTINGS: Settings = {
+  locale: null,
+  theme: 'simple',
+  syntax: 'simple',
+  fontSize: DEFAULT_FONT_SIZE,
+  readLessons: [],
+};
+
+export const loadSettings = (): Settings => {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') as Partial<Settings>;
+
+    return { ...DEFAULT_SETTINGS, ...parsed };
+  } catch {
+    return DEFAULT_SETTINGS;
+  }
+};
+
+export const saveSettings = (settings: Settings): void => {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(settings));
+  } catch {
+    // The settings keep working for this session when the browser blocks storage.
+  }
+};
+
+export const clampFontSize = (size: number): number => Math.min(MAXIMUM_FONT_SIZE, Math.max(MINIMUM_FONT_SIZE, size));
+
+export const SYNTAX_PALETTES: Record<ThemeId, Record<SyntaxCategory, string>> = {
+  light: {
+    numerico: '#0c7a7a',
+    atribuicao: '#3f7a08',
+    loops: '#7a6108',
+    lista: '#1441b5',
+    logico: '#c4005e',
+    entrada: '#1441b5',
+    exibicao: '#1441b5',
+    tempo: '#1441b5',
+    condicionais: '#b84300',
+    contas: '#d00000',
+    string: '#c22f00',
+    comentario: '#127012',
+    pare: '#d00000',
+  },
+  dark: {
+    numerico: '#99ffcc',
+    atribuicao: '#aaff80',
+    loops: '#ffcc88',
+    lista: '#80d4ff',
+    logico: '#eb99ff',
+    entrada: '#eb99ff',
+    exibicao: '#00e68a',
+    tempo: '#80d4ff',
+    condicionais: '#ffcc88',
+    contas: '#eb99ff',
+    string: '#ffff68',
+    comentario: '#cfcfcf',
+    pare: '#fda0a0',
+  },
+  simple: {
+    numerico: '#c48aff',
+    atribuicao: '#b8ff75',
+    loops: '#f94fff',
+    lista: '#91fdff',
+    logico: '#ff5473',
+    entrada: '#ff5473',
+    exibicao: '#78aeff',
+    tempo: '#91fdff',
+    condicionais: '#f94fff',
+    contas: '#ff5473',
+    string: '#fff891',
+    comentario: '#8cbd7d',
+    pare: '#ff6b6b',
+  },
+};

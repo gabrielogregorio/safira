@@ -1,5 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { App } from '@/ui/App';
+import '@/ui/styles.css';
 
 const rootElement = document.getElementById('root');
 
@@ -9,6 +11,6 @@ if (rootElement === null) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <main>Safira</main>
+    <App />
   </StrictMode>,
 );

@@ -37,6 +37,8 @@ export default tseslint.config(
       '@typescript-eslint/no-floating-promises': 'error',
       'sonarjs/pseudo-random': 'off',
       'sonarjs/function-return-type': 'off',
+      'sonarjs/different-types-comparison': 'off',
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { tags: [], roles: ['log'] }],
       'sonarjs/cognitive-complexity': ['error', 25],
     },
   },
