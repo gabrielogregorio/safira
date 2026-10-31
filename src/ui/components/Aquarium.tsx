@@ -49,7 +49,6 @@ const EVENT_SOUNDS: Record<WorldEvent['kind'], SoundName> = {
   pop: 'pop',
   plant: 'plant',
   food: 'foodDrop',
-  hold: 'waterHold',
   swish: 'waterSwish',
 };
 
@@ -146,8 +145,6 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
     if (isClosing) {
       return;
     }
-
-    void soundPlayer.play('aquariumClose');
 
     if (prefersMotion()) {
       setIsClosing(true);

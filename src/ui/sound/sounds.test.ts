@@ -5,6 +5,7 @@ const fakeNode = () => ({
   start: vi.fn(),
   buffer: null as unknown,
   gain: { value: 0 },
+  playbackRate: { value: 1 },
 });
 
 const fakeContext = (state = 'running') => {

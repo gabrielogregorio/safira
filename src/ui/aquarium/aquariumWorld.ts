@@ -166,7 +166,6 @@ export type WorldEvent =
   | { kind: 'pop'; voice: number }
   | { kind: 'plant' }
   | { kind: 'food' }
-  | { kind: 'hold' }
   | { kind: 'swish' };
 
 export const createPopulation = (): StoredFish[] =>
@@ -447,7 +446,7 @@ const moveWater = (world: World, seconds: number): void => {
   }
 };
 
-const movePointerEffects = (world: World, seconds: number, events: WorldEvent[]): void => {
+const movePointerEffects = (world: World, seconds: number): void => {
   const { pointer } = world;
 
   if (pointer === null) {
@@ -462,7 +461,6 @@ const movePointerEffects = (world: World, seconds: number, events: WorldEvent[])
     pointer.dragY *= 0.8;
   } else if (pointer.heldFor > HOLD_SECONDS) {
     if (!wasHolding) {
-      events.push({ kind: 'hold' });
       world.ripples.push({ x: pointer.x, y: pointer.y, age: 0 });
     }
 
@@ -540,7 +538,7 @@ export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
   burstFish(world, events);
   separateFishes(world, seconds);
   moveWater(world, seconds);
-  movePointerEffects(world, seconds, events);
+  movePointerEffects(world, seconds);
 
   return events;
 };
