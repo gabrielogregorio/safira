@@ -2,6 +2,8 @@ import type { Locale } from './messages';
 import { getAllCommands } from './phrases';
 import { removeAccents, tokenize } from './tokenizer';
 
+const SCRIPT_EXTENSION = '.safira';
+const CURRENT_FOLDER = './';
 const MINIMUM_TYPED = 2;
 const MINIMUM_PHRASE = 4;
 const LONGEST_PHRASE_WORDS = 4;
@@ -111,7 +113,68 @@ const fromNames = (typedWord: string, document: string): string | null => {
   return names[0] === undefined ? null : names[0][0].slice(typedWord.length);
 };
 
-export const suggestCompletion = (before: string, after: string, document: string, locale: Locale): string | null => {
+const importPhrases = (getAllCommands().find(([key]) => key === 'importe')?.[1].phrases ?? [])
+  .slice()
+  .sort((first, second) => second.length - first.length);
+
+const importTextOf = (before: string): string | null => {
+  const line = before.trimStart();
+  const phrase = importPhrases.find((candidate) => normalize(line).startsWith(`${candidate} `));
+
+  return phrase === undefined ? null : line.slice(phrase.length).trimStart();
+};
+
+// The rest of a project file, without the extension until the person has typed the whole name before it.
+const restOfPath = (typedPath: string, scriptPaths: string[]): string | null => {
+  const typed = typedPath.startsWith(CURRENT_FOLDER) ? typedPath.slice(CURRENT_FOLDER.length) : typedPath;
+  const path = scriptPaths.find((candidate) => candidate.length > typed.length && candidate.startsWith(typed));
+
+  if (path === undefined) {
+    return null;
+  }
+
+  const name = path.slice(0, -SCRIPT_EXTENSION.length);
+
+  return typed.length < name.length ? name.slice(typed.length) : path.slice(typed.length);
+};
+
+const fromProjectFiles = (importText: string, after: string, scriptPaths: string[]): string | null => {
+  if (importText === '') {
+    const first = scriptPaths[0];
+
+    return first === undefined ? null : `"${CURRENT_FOLDER}${first.slice(0, -SCRIPT_EXTENSION.length)}"`;
+  }
+
+  const isQuoted = importText.startsWith('"');
+  const typedPath = isQuoted ? importText.slice(1) : importText;
+
+  if (typedPath.includes('"')) {
+    return null;
+  }
+
+  const rest = restOfPath(typedPath, scriptPaths);
+  const missesQuote = isQuoted && !after.startsWith('"');
+
+  return rest === null ? null : `${typedPath === '' ? CURRENT_FOLDER : ''}${rest}${missesQuote ? '"' : ''}`;
+};
+
+export const suggestCompletion = (
+  before: string,
+  after: string,
+  document: string,
+  locale: Locale,
+  scriptPaths: string[] = [],
+): string | null => {
+  const importText = importTextOf(before);
+
+  if (importText !== null && !INSIDE_WORD.test(after)) {
+    const path = fromProjectFiles(importText, after, scriptPaths);
+
+    if (path !== null) {
+      return path;
+    }
+  }
+
   const typedLine = normalize(before.trimStart());
   const typedWords = typedLine.split(/\s+/).filter(Boolean);
   const typedWord = /\s$/.test(before) ? '' : (typedWords.at(-1) ?? '');

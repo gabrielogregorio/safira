@@ -12,6 +12,7 @@ interface Ghost {
 
 const dismissGhost = StateEffect.define();
 const ghostLocale = Facet.define<Locale, Locale>({ combine: (locales) => locales[0] ?? 'en-us' });
+const ghostScripts = Facet.define<string[], string[]>({ combine: (lists) => lists[0] ?? [] });
 
 const acceptGhost = (view: EditorView): boolean => {
   const ghost = view.state.field(ghostField);
@@ -67,7 +68,13 @@ const ghostAfterTyping = (transaction: Transaction): Ghost | null => {
   const line = doc.lineAt(main.head);
   const before = line.text.slice(0, main.head - line.from);
   const after = line.text.slice(main.head - line.from);
-  const text = suggestCompletion(before, after, doc.toString(), transaction.state.facet(ghostLocale));
+  const text = suggestCompletion(
+    before,
+    after,
+    doc.toString(),
+    transaction.state.facet(ghostLocale),
+    transaction.state.facet(ghostScripts),
+  );
 
   return text === null ? null : { text, at: main.head };
 };
@@ -108,4 +115,9 @@ const ghostKeys = Prec.highest(
 );
 
 // The suggestion is only painted over the text: it enters the document when it is accepted.
-export const ghostText = (locale: Locale): Extension => [ghostLocale.of(locale), ghostField, ghostKeys];
+export const ghostText = (locale: Locale, scriptPaths: string[]): Extension => [
+  ghostLocale.of(locale),
+  ghostScripts.of(scriptPaths),
+  ghostField,
+  ghostKeys,
+];

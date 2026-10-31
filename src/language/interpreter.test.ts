@@ -80,6 +80,32 @@ describe('virtual files', () => {
     expect(result.files.read('a.txt')).toBe('oi');
   });
 
+  it.each(['here/main', 'here/main.safira', './here/main', './here/main.safira'])(
+    'imports "%s", with quotes',
+    async (path) => {
+      const result = await runScript(`importe "${path}"\nmostre v`, [], { 'here/main.safira': 'v = 7' });
+
+      expect(result.texts).toEqual(['7']);
+    },
+  );
+
+  it('imports beside the file that is importing, and from the root', async () => {
+    const files = {
+      'a/um.safira': 'importe "./dois"\nimporte "../raiz"',
+      'a/dois.safira': 'x = 2',
+      'raiz.safira': 'y = 3',
+    };
+
+    expect((await runScript('importe "a/um"\nmostre x + y', [], files)).texts).toEqual(['5']);
+  });
+
+  it('names the missing file with its extension once', async () => {
+    const { error } = await runScript('importe "./nada.safira"');
+
+    expect(error?.message).toContain('nada.safira');
+    expect(error?.message).not.toContain('.safira.safira');
+  });
+
   it('reports the line of the imported file', async () => {
     const result = await runScript('importe lib', [], { 'lib.safira': '\nmostre nada' });
 

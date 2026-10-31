@@ -146,6 +146,10 @@ export const EditorScreen = ({
       clearTimeout(timer);
     };
   }, [project.id, tabs]);
+  const importablePaths = useMemo(
+    () => Object.keys(project.files).filter((path) => isScript(path) && path !== activeFile),
+    [activeFile, project.files],
+  );
   const breakpoints = useMemo(() => project.breakpoints[activeFile] ?? [], [project.breakpoints, activeFile]);
 
   const handleProgramFiles = useCallback(
@@ -751,6 +755,7 @@ export const EditorScreen = ({
           codeFont={settings.codeFont}
           suggestions={settings.suggestions}
           locale={locale}
+          scriptPaths={importablePaths}
           breakpoints={breakpoints}
           debugLine={runner.pausedAt?.file === activeFile ? runner.pausedAt.line : null}
           errorLine={failure?.file === activeFile ? failure.line : null}

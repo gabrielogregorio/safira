@@ -67,3 +67,33 @@ describe('STARTER_LINES', () => {
     expect(parse(complete).map((statement) => statement.kind)).not.toContain('invalid');
   });
 });
+
+describe('suggestCompletion in imports', () => {
+  const paths = ['here/main.safira', 'lib.safira'];
+  const suggest = (before: string, after = ''): string | null => suggestCompletion(before, after, '', 'pt-br', paths);
+
+  it('offers a whole path right after the command', () => {
+    expect(suggest('importe ')).toBe('"./here/main"');
+  });
+
+  it.each([
+    ['importe "', './here/main"'],
+    ['importe "./he', 're/main"'],
+    ['importe "./here/ma', 'in"'],
+    ['importe "./here/main', '.safira"'],
+    ['importe "./here/main.saf', 'ira"'],
+    ['importe li', 'b'],
+    ['import "li', 'b"'],
+  ])('completes %s', (before, expected) => {
+    expect(suggest(before)).toBe(expected);
+  });
+
+  it('does not repeat a closing quote', () => {
+    expect(suggest('importe "./li', '"')).toBe('b');
+  });
+
+  it('stops after the path is closed or unknown', () => {
+    expect(suggest('importe "lib"')).toBeNull();
+    expect(suggest('importe "./nada')).toBeNull();
+  });
+});

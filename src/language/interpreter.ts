@@ -15,6 +15,7 @@ import {
 } from './values';
 import { readScriptVersion } from './version';
 import type { VirtualFileSystem } from './virtualFileSystem';
+import { importCandidates, withSafiraExtension } from './virtualFileSystem';
 
 export type Effect =
   | { type: 'step'; file: string; line: number }
@@ -48,7 +49,6 @@ export interface InterpreterOptions {
 
 const MAXIMUM_CALL_DEPTH = 400;
 const MILLISECONDS_PER_SECOND = 1000;
-const SAFIRA_EXTENSION = '.safira';
 const ESCAPED_NEWLINE = /\\n/g;
 
 const EXAMPLE_BY_STATEMENT: Partial<Record<StatementKind, string>> = {
@@ -386,14 +386,15 @@ export class Interpreter {
   }
 
   private *executeImport(name: string): Execution<Signal> {
-    const file = name + SAFIRA_EXTENSION;
-    const source = this.files.read(file);
+    const found = importCandidates(this.currentFile, name).find((path) => this.files.exists(path));
+    const source = found === undefined ? null : this.files.read(found);
 
-    if (source === null) {
+    if (found === undefined || source === null) {
+      const file = withSafiraExtension(name);
       this.fail('erro_abrir_biblioteca', file, translateMessage(this.locale, 'arquivo_nao_existe', file));
     }
 
-    const signal = yield* this.runSource(file, source);
+    const signal = yield* this.runSource(found, source);
 
     return signal === 'halt' ? 'halt' : 'normal';
   }
