@@ -1,10 +1,12 @@
-import { useId } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
+import { startGem } from '@/ui/gem/gemRenderer';
+import { prefersMotion } from '@/ui/motion';
 
 interface SafiraLogoProps {
   size: number;
 }
 
-export const SafiraLogo = ({ size }: SafiraLogoProps) => {
+const FlatLogo = ({ size }: SafiraLogoProps) => {
   const id = useId();
 
   return (
@@ -26,4 +28,37 @@ export const SafiraLogo = ({ size }: SafiraLogoProps) => {
       <ellipse cx="32" cy="16" rx="21" ry="11.5" fill={`url(#${id}-gloss)`} />
     </svg>
   );
+};
+
+export const SafiraLogo = ({ size }: SafiraLogoProps) => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [hasGem, setHasGem] = useState(true);
+
+  useEffect(() => {
+    if (canvasRef.current === null) {
+      return undefined;
+    }
+
+    const stop = startGem(canvasRef.current, {
+      size,
+      animate: prefersMotion(),
+      onLost: () => {
+        setHasGem(false);
+      },
+    });
+
+    if (stop === null) {
+      setHasGem(false);
+
+      return undefined;
+    }
+
+    return stop;
+  }, [size]);
+
+  if (!hasGem) {
+    return <FlatLogo size={size} />;
+  }
+
+  return <canvas ref={canvasRef} className="safira-logo" style={{ height: size, width: size }} aria-hidden="true" />;
 };
