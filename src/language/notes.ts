@@ -41,7 +41,10 @@ const SEMITONES: Record<string, number> = {
   ),
 };
 
-const NOTE_PATTERN = /^(do|re|mi|fa|sol|la|si|[a-g]|ト|レ|ミ|ファ|ソ|ラ|シ|哆|来|咪|发|唆|拉|西)([#b]?)(\d?)([#b]?)$/;
+const NOTE_NAMES = Object.keys(SEMITONES)
+  .sort((first, second) => second.length - first.length)
+  .join('|');
+const NOTE_PATTERN = new RegExp(`^(${NOTE_NAMES})([#b]?)(\d?)([#b]?)$`);
 const REST = 'r';
 
 const accidentalOf = (mark: string): number => {

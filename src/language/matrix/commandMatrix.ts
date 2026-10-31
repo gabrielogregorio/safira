@@ -62,9 +62,16 @@ const describeProblem = async (
     return [];
   }
 
-  return [
-    `${label}\n    code: ${JSON.stringify(source)}\n    want: ${JSON.stringify(expected)}\n    got:  ${JSON.stringify(lines)}${error === null ? '' : `\n    error: ${error}`}`,
+  const details = [
+    label,
+    `    code: ${JSON.stringify(source)}`,
+    `    want: ${JSON.stringify(expected)}`,
+    `    got:  ${JSON.stringify(lines)}`,
+    ...(error === null ? [] : [`    error: ${error}`]),
   ];
+
+  return [details.join('
+')];
 };
 
 const collect = async (checks: Promise<string[]>[]): Promise<string[]> => (await Promise.all(checks)).flat();
@@ -364,7 +371,7 @@ export const defineCommandMatrix = (languageName: string, dictionary: Dictionary
   });
 };
 
-const LANGUAGES = [PORTUGUESE, ENGLISH, SPANISH, CHINESE, JAPANESE];
+export const LANGUAGES = [PORTUGUESE, ENGLISH, SPANISH, CHINESE, JAPANESE];
 
 export const defineLanguageMixture = (): void => {
   describe('languages mixed in one script', () => {

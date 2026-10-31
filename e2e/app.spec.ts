@@ -743,7 +743,7 @@ test('the sound can be turned off, and that is remembered', async ({ page }) => 
 // The pointer passes over the button first, and that hover sound is shorter than this.
 const HOVER_SOUND_SECONDS = 0.1;
 
-test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
+const recordSounds = async (page: Page): Promise<() => Promise<number[]>> => {
   await page.addInitScript(() => {
     const started: number[] = [];
     const start = AudioBufferSourceNode.prototype.start;
@@ -753,12 +753,17 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
     };
     Object.assign(window, { startedSounds: started });
   });
-  const sounds = (): Promise<number[]> =>
+
+  return () =>
     page.evaluate(
       (limit) =>
         (window as unknown as { startedSounds: number[] }).startedSounds.filter((duration) => duration > limit),
       HOVER_SOUND_SECONDS,
     );
+};
+
+test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
+  const sounds = await recordSounds(page);
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
@@ -779,21 +784,7 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
 });
 
 test('modals sound when they open and when they close', async ({ page }) => {
-  await page.addInitScript(() => {
-    const started: number[] = [];
-    const start = AudioBufferSourceNode.prototype.start;
-    AudioBufferSourceNode.prototype.start = function startAndRecord(...values) {
-      started.push(this.buffer?.duration ?? 0);
-      start.apply(this, values);
-    };
-    Object.assign(window, { startedSounds: started });
-  });
-  const sounds = (): Promise<number[]> =>
-    page.evaluate(
-      (limit) =>
-        (window as unknown as { startedSounds: number[] }).startedSounds.filter((duration) => duration > limit),
-      HOVER_SOUND_SECONDS,
-    );
+  const sounds = await recordSounds(page);
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
