@@ -1,4 +1,4 @@
-#safira 1.0
+#safira 0.9
 # Você quer criar arquivos de texto
 # para salvar configurações, resultados, etc.
 # Você pode usar os comandos para manipulação de arquivos
@@ -40,3 +40,7 @@ se o arquivo "arquivo.txt" existe
     delete o arquivo "arquivo.txt"
 }
 
+
+# Tudo o que o programa cria fica na barra de arquivos do projeto
+crie o arquivo "arquivo.txt"
+sobrescreva "Este arquivo ficou no projeto" no arquivo "arquivo.txt"

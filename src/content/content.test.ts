@@ -1,4 +1,5 @@
 import { parse } from '@/language/parser';
+import { runScript } from '@/language/testHarness';
 import { readScriptVersion } from '@/language/version';
 import { examples, findExampleByPrefix, tutorials } from './content';
 
@@ -14,7 +15,7 @@ describe('bundled content', () => {
   });
 
   it.each(examples.map((example) => [example.id, example.text] as const))('%s declares its version', (_id, text) => {
-    expect(readScriptVersion(text)).toMatchObject({ version: '1.0', isDeclared: true });
+    expect(readScriptVersion(text)).toMatchObject({ version: '0.9', isDeclared: true });
   });
 
   it.each(
@@ -47,5 +48,12 @@ describe('bundled content', () => {
   it('finds the example that explains a command', () => {
     expect(findExampleByPrefix('16')?.id).toBe('16-listas');
     expect(findExampleByPrefix('99')).toBeUndefined();
+  });
+
+  it('leaves the file of the files example in the project', async () => {
+    const { error, files } = await runScript(findExampleByPrefix('11')?.text ?? '');
+
+    expect(error).toBeNull();
+    expect(files.read('arquivo.txt')).toBe('Este arquivo ficou no projeto');
   });
 });
