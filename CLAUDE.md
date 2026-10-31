@@ -53,7 +53,10 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Language words like `toque` are also valid names: `parseTone` fails on a line that is not a note, and the next rules take it.
 - A new color in `src/settings/vision.ts` must pass `vision.test.ts`, which simulates the vision it serves. Never lower the floors to make a palette pass.
 - `in` and `en` right after a text mean color, so `overwrite "x" in the file` fails. Use `to the file` and `al archivo`.
-- Examples and lessons live in one folder per language, with the same names. A new one goes in all five, or `content.test.ts` fails. Portuguese, English and Spanish code use their own commands; Chinese and Japanese use the English ones.
+- Examples and lessons live in one folder per language, with the same names. A new one goes in all five, or `content.test.ts` fails. Each language uses its own commands.
 - A lesson solution must pass its check and the starting code must fail it. `legacyExamples` keeps the old scripts as proof that they still parse, so never rewrite those.
 - The result of a run reaches lesson mode through `onFinished` in `useRunner`. A stopped run never calls it, on purpose.
+- `print`, `display` and `escreva` keep the line open, and `legacyGolden.json` records it. Teach `show` in English.
+- A phrase in `commands.json` starting with `in`, `en` or similar is checked against colors first: `isBeforeFileTarget` keeps `add "x" in the file` working.
+- Chinese and Japanese words must be separated by spaces. `normalizeWideSymbols` keeps text length, so positions stay right.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

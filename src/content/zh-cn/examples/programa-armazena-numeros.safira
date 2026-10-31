@@ -1,12 +1,12 @@
 #safira 0.9
 # 🧮 数字求和
 
-total = 0
+总和 = 0
 
-repeat 3 times {
-    print "请输入一个数字："
-    number = the number that the user enters
-    total = total + number
+重复 3 次 {
+    显示 "请输入一个数字："
+    数值 = 输入数字
+    总和 = 总和 + 数值
 }
 
-print "🧮 总和是 " + total
+显示 "🧮 总和是 " + 总和

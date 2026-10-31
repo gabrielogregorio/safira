@@ -4,13 +4,13 @@
 
 ## 文字を読み取る
 
-`what the user types` で、プログラムは止まって待ちます。出力パネルの入力欄に書いて、Enter を押しましょう。
+`入力` で、プログラムは止まって待ちます。出力パネルの入力欄に書いて、Enter を押しましょう。
 
 ```safira
-print "お名前は何ですか?"
-name = what the user types
+表示 "お名前は何ですか?"
+名前 = 入力
 
-print "こんにちは、" + name
+表示 "こんにちは、" + 名前
 ```
 
 ## 数を読み取る
@@ -18,11 +18,11 @@ print "こんにちは、" + name
 入力されたもので計算したいときは、数を頼みます。
 
 ```safira
-print "数を入力してください:"
-number = the number that the user enters
+表示 "数を入力してください:"
+数 = 数字入力
 
-double = number * 2
-print "2倍は " + double
+倍 = 数 * 2
+表示 "2倍は " + 倍
 ```
 
 ## チャレンジ: 3倍
@@ -37,12 +37,12 @@ print "2倍は " + double
 ```
 
 ```solution
-print "数を入力してください:"
-number = the number that the user enters
+表示 "数を入力してください:"
+数 = 数字入力
 
-print number * 3
+表示 数 * 3
 ```
 
 ```check
-{ "uses": ["input"], "hint": "number = the number that the user enters と書いてから、print number * 3 としましょう。", "cases": [{ "inputs": ["4"], "shows": ["12"] }, { "inputs": ["10"], "shows": ["30"] }] }
+{ "uses": ["input"], "hint": "数 = 数字入力 と書いてから、表示 数 * 3 としましょう。", "cases": [{ "inputs": ["4"], "shows": ["12"] }, { "inputs": ["10"], "shows": ["30"] }] }
 ```

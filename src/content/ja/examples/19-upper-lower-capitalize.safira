@@ -2,8 +2,8 @@
 # 大文字と小文字
 # 文字の書き方を変えます。
 
-name = "ana maria"
+名前 = "ana maria"
 
-print name in upper case
-print name in lower case
-print name in capitalized
+表示 名前 大文字
+表示 名前 小文字
+表示 名前 先頭大文字

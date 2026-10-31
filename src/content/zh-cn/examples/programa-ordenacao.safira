@@ -1,16 +1,16 @@
 #safira 0.9
 # 🔢 排顺序
 
-print "请输入一个数字："
-first = the number that the user enters
+显示 "请输入一个数字："
+甲 = 输入数字
 
-print "请再输入一个数字："
-second = the number that the user enters
+显示 "请再输入一个数字："
+乙 = 输入数字
 
-if first is less than second then {
-    print first
-    print second
-} else {
-    print second
-    print first
+如果 甲 小于 乙 那么 {
+    显示 甲
+    显示 乙
+} 否则 {
+    显示 乙
+    显示 甲
 }

@@ -1,10 +1,10 @@
 #safira 0.9
 # 🎆 新年
 
-for each number from 3 to 1 {
-    print number
-    wait 1 second
+对于 数值 从 3 到 1 {
+    显示 数值
+    等待 1 秒
 }
 
-print "🎆 🎇 ✨"
-print "🎉 新年快乐！"
+显示 "🎆 🎇 ✨"
+显示 "🎉 新年快乐！"

@@ -1,42 +1,42 @@
 # 条件
 
-`if` を使うと、プログラムが何をするか選べます。
+`もし` を使うと、プログラムが何をするか選べます。
 
-## if
+## もし
 
 `{` と `}` の間のブロックは、条件が正しいときだけ動きます。20を10に変えて、もう一度実行してみましょう。
 
 ```safira
-age = 20
+年齢 = 20
 
-if age is greater than 17 then {
-    print "運転できます"
+もし 年齢 大なり 17 なら {
+    表示 "運転できます"
 }
 ```
 
-## else
+## そうでなければ
 
-`else` は反対の道です。条件が正しくないときに動きます。
+`そうでなければ` は反対の道です。条件が正しくないときに動きます。
 
 ```safira
-score = 4
+点数 = 4
 
-if score is greater than or equal to 6 then {
-    print "合格"
-} else {
-    print "不合格"
+もし 点数 以上 6 なら {
+    表示 "合格"
+} そうでなければ {
+    表示 "不合格"
 }
 ```
 
 ## 比べる
 
-`is equal to`、`is different from`、`is greater than`、`is less than` が使えます。
+`等しい`、`等しくない`、`大なり`、`小なり` が使えます。
 
 ```safira
-password = "safira"
+パスワード = "safira"
 
-if password is equal to "safira" then {
-    print "入ってください"
+もし パスワード 等しい "safira" なら {
+    表示 "入ってください"
 }
 ```
 
@@ -47,24 +47,24 @@ if password is equal to "safira" then {
 `%` は割り算の余りです。`7 % 2` は1になります。
 
 ```safira
-print "数を入力してください:"
-number = the number that the user enters
+表示 "数を入力してください:"
+数 = 数字入力
 
-# ここに if を書いてください。
+# ここに もし を書いてください。
 
 ```
 
 ```solution
-print "数を入力してください:"
-number = the number that the user enters
+表示 "数を入力してください:"
+数 = 数字入力
 
-if number % 2 is equal to 0 then {
-    print "偶数"
-} else {
-    print "奇数"
+もし 数 % 2 等しい 0 なら {
+    表示 "偶数"
+} そうでなければ {
+    表示 "奇数"
 }
 ```
 
 ```check
-{ "uses": ["if"], "hint": "if number % 2 is equal to 0 then { ... } else { ... } で比べましょう。", "cases": [{ "inputs": ["4"], "shows": ["偶数"], "hides": ["奇数"] }, { "inputs": ["7"], "shows": ["奇数"], "hides": ["偶数"] }] }
+{ "uses": ["if"], "hint": "もし 数 % 2 等しい 0 なら { ... } そうでなければ { ... } で比べましょう。", "cases": [{ "inputs": ["4"], "shows": ["偶数"], "hides": ["奇数"] }, { "inputs": ["7"], "shows": ["奇数"], "hides": ["偶数"] }] }
 ```

@@ -7,41 +7,41 @@
 位置は1から始まります。
 
 ```safira
-list of fruits receive "ぶどう", "りんご", "マンゴー"
+リスト 果物 は "ぶどう", "りんご", "マンゴー"
 
-print fruits
-print list of fruits in position 1
-print the size of the list of fruits
+表示 果物
+表示 リスト 果物 位置 1
+表示 リストの長さ 果物
 ```
 
 ## 追加と削除
 
-`add` で最後に追加し、`remove` で取り除きます。
+`追加` で最後に追加し、`削除` で取り除きます。
 
 ```safira
-list of fruits receive "ぶどう", "りんご"
+リスト 果物 は "ぶどう", "りんご"
 
-add "マンゴー" at the end of the list of fruits
-remove "ぶどう" from the list of fruits
+追加 "マンゴー" リスト末尾 果物
+削除 "ぶどう" リストから 果物
 
-print fruits
+表示 果物
 ```
 
 ## すべての項目を見る
 
-`scroll through` で、1つずつ順番に見ていきます。
+`順番に` で、1つずつ順番に見ていきます。
 
 ```safira
-list of fruits receive "ぶどう", "りんご", "マンゴー"
+リスト 果物 は "ぶどう", "りんご", "マンゴー"
 
-scroll through the list of fruits assigning in fruit {
-    print fruit + "が好きです"
+順番に 果物 取り出す 果 {
+    表示 果 + "が好きです"
 }
 ```
 
 ## チャレンジ: 買い物リスト
 
-`shopping` というリストに `お米` と `豆` を入れます。最後に `牛乳` を追加して、項目を1行ずつ表示しましょう。
+`買い物` というリストに `お米` と `豆` を入れます。最後に `牛乳` を追加して、項目を1行ずつ表示しましょう。
 
 ```safira
 # ここでリストを作ってください。
@@ -53,15 +53,15 @@ scroll through the list of fruits assigning in fruit {
 ```
 
 ```solution
-list of shopping receive "お米", "豆"
+リスト 買い物 は "お米", "豆"
 
-add "牛乳" at the end of the list of shopping
+追加 "牛乳" リスト末尾 買い物
 
-scroll through the list of shopping assigning in item {
-    print item
+順番に 買い物 取り出す 品 {
+    表示 品
 }
 ```
 
 ```check
-{ "uses": ["listDeclare", "listInsert", "forEach"], "hint": "list of ... receive、add ... at the end of the list of ...、scroll through the list of ... を使いましょう。", "cases": [{ "shows": ["お米", "豆", "牛乳"] }] }
+{ "uses": ["listDeclare", "listInsert", "forEach"], "hint": "リスト、追加、順番に を使いましょう。", "cases": [{ "shows": ["お米", "豆", "牛乳"] }] }
 ```

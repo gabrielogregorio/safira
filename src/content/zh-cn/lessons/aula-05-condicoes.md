@@ -1,42 +1,42 @@
 # 条件
 
-用 `if`，程序就能选择做什么。
+用 `如果`，程序就能选择做什么。
 
 ## 如果
 
 只有当条件为真时，`{` 和 `}` 之间的代码才会运行。把 20 改成 10，再运行一次。
 
 ```safira
-age = 20
+年龄 = 20
 
-if age is greater than 17 then {
-    print "可以开车"
+如果 年龄 大于 17 那么 {
+    显示 "可以开车"
 }
 ```
 
 ## 否则
 
-`else` 是相反的路：条件为假时运行。
+`否则` 是相反的路：条件为假时运行。
 
 ```safira
-grade = 4
+成绩 = 4
 
-if grade is greater than or equal to 6 then {
-    print "及格"
-} else {
-    print "不及格"
+如果 成绩 大于等于 6 那么 {
+    显示 "及格"
+} 否则 {
+    显示 "不及格"
 }
 ```
 
 ## 比较
 
-你可以用 `is equal to`、`is different from`、`is greater than` 和 `is less than`。
+你可以用 `等于`、`不等于`、`大于` 和 `小于`。
 
 ```safira
-password = "safira"
+密码 = "safira"
 
-if password is equal to "safira" then {
-    print "请进"
+如果 密码 等于 "safira" 那么 {
+    显示 "请进"
 }
 ```
 
@@ -47,24 +47,24 @@ if password is equal to "safira" then {
 符号 `%` 得到除法的余数：`7 % 2` 是 1。
 
 ```safira
-print "请输入一个数字："
-number = the number that the user enters
+显示 "请输入一个数字："
+数值 = 输入数字
 
-# 在这里写 if。
+# 在这里写 如果。
 
 ```
 
 ```solution
-print "请输入一个数字："
-number = the number that the user enters
+显示 "请输入一个数字："
+数值 = 输入数字
 
-if number % 2 is equal to 0 then {
-    print "偶数"
-} else {
-    print "奇数"
+如果 数值 % 2 等于 0 那么 {
+    显示 "偶数"
+} 否则 {
+    显示 "奇数"
 }
 ```
 
 ```check
-{ "uses": ["if"], "hint": "这样比较：if number % 2 is equal to 0 then { ... } else { ... }", "cases": [{ "inputs": ["4"], "shows": ["偶数"], "hides": ["奇数"] }, { "inputs": ["7"], "shows": ["奇数"], "hides": ["偶数"] }] }
+{ "uses": ["if"], "hint": "这样比较：如果 数值 % 2 等于 0 那么 { ... } 否则 { ... }", "cases": [{ "inputs": ["4"], "shows": ["偶数"], "hides": ["奇数"] }, { "inputs": ["7"], "shows": ["奇数"], "hides": ["偶数"] }] }
 ```

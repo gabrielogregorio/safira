@@ -7,11 +7,11 @@
 `=` で箱に値を入れます。あとは名前を書くだけで使えます。
 
 ```safira
-name = "Ana"
-age = 20
+名前 = "Ana"
+年齢 = 20
 
-print name
-print age
+表示 名前
+表示 年齢
 ```
 
 ## 変数を見る
@@ -21,10 +21,10 @@ print age
 1歩ずつ見たいときは、実行メニューを開いて「1行ずつ実行」を選びます。
 
 ```safira
-points = 10
-points = points + 5
+点 = 10
+点 = 点 + 5
 
-print points
+表示 点
 ```
 
 ## 文字と変数をつなぐ
@@ -32,16 +32,16 @@ print points
 `+` で、文字と変数をつないで1つの文にできます。
 
 ```safira
-name = "Ana"
-age = 20
+名前 = "Ana"
+年齢 = 20
 
-print "わたしの名前は" + name + "です"
-print "年は" + age + "歳です"
+表示 "わたしの名前は" + 名前 + "です"
+表示 "年は" + 年齢 + "歳です"
 ```
 
 ## チャレンジ: あなたの町
 
-`city` という変数に `Lima` を入れて、文字と変数をつなげて `Limaに住んでいます` と表示しましょう。
+`都市` という変数に `Lima` を入れて、文字と変数をつなげて `Limaに住んでいます` と表示しましょう。
 
 ```safira
 # ここで変数を作ってください。
@@ -51,10 +51,10 @@ print "年は" + age + "歳です"
 ```
 
 ```solution
-city = "Lima"
-print city + "に住んでいます"
+都市 = "Lima"
+表示 都市 + "に住んでいます"
 ```
 
 ```check
-{ "uses": ["assign", "variable"], "hint": "city = \"Lima\" で変数を作り、+ でつなぎましょう。", "cases": [{ "shows": ["Limaに住んでいます"] }] }
+{ "uses": ["assign", "variable"], "hint": "都市 = \"Lima\" で変数を作り、+ でつなぎましょう。", "cases": [{ "shows": ["Limaに住んでいます"] }] }
 ```

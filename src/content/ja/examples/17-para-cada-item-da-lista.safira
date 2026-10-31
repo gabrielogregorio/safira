@@ -2,8 +2,8 @@
 # リストを順に見る
 # 1つずつ、すべての項目を見ていきます。
 
-list of fruits receive "ぶどう", "りんご", "マンゴー"
+リスト 果物 は "ぶどう", "りんご", "マンゴー"
 
-scroll through the list of fruits assigning in fruit {
-    print fruit
+順番に 果物 取り出す 果 {
+    表示 果
 }

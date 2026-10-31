@@ -7,32 +7,32 @@
 运行之后，看一下文件栏。
 
 ```safira
-create the file "note.txt"
-add "买面包" to the file "note.txt"
+创建文件 "笔记.txt"
+写入 "买面包" 到文件 "笔记.txt"
 ```
 
 ## 读取
 
-用 `read the file` 把文件里的内容读出来。
+用 `读取文件` 把文件里的内容读出来。
 
 ```safira
-create the file "grade.txt"
-overwrite "成绩 10" to the file "grade.txt"
+创建文件 "成绩.txt"
+覆盖 "成绩 10" 到文件 "成绩.txt"
 
-text = read the file "grade.txt"
-print text
+内容 = 读取文件 "成绩.txt"
+显示 内容
 ```
 
 ## 检查和删除
 
-用 `delete the file` 删除文件，再检查它是否还存在。
+用 `删除文件` 删除文件，再检查它是否还存在。
 
 ```safira
-create the file "old.txt"
-delete the file "old.txt"
+创建文件 "old.txt"
+删除文件 "old.txt"
 
-if the file "old.txt" does not exist then {
-    print "文件不见了"
+如果 文件 "old.txt" 不存在 那么 {
+    显示 "文件不见了"
 }
 ```
 
@@ -46,13 +46,13 @@ if the file "old.txt" does not exist then {
 ```
 
 ```solution
-create the file "diary.txt"
-overwrite "今天我学了Safira" to the file "diary.txt"
+创建文件 "diary.txt"
+覆盖 "今天我学了Safira" 到文件 "diary.txt"
 
-text = read the file "diary.txt"
-print text
+内容 = 读取文件 "diary.txt"
+显示 内容
 ```
 
 ```check
-{ "uses": ["fileCreate", "fileAppend|fileOverwrite", "fileRead"], "hint": "用 create the file、overwrite ... to the file 和 read the file。", "cases": [{ "shows": ["今天我学了Safira"] }] }
+{ "uses": ["fileCreate", "fileAppend|fileOverwrite", "fileRead"], "hint": "用 创建文件、overwrite ... to the file 和 读取文件。", "cases": [{ "shows": ["今天我学了Safira"] }] }
 ```

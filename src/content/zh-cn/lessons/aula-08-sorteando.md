@@ -7,52 +7,52 @@
 多运行几次：数字会变。
 
 ```safira
-dice = a random number between 1 and 6
+骰子 = 随机数 1 到 6
 
-print "掷出了 " + dice
+显示 "掷出了 " + 骰子
 ```
 
 ## 运气和条件
 
-把随机数和 `if` 结合起来，程序就能自己做决定。
+把随机数和 `如果` 结合起来，程序就能自己做决定。
 
 ```safira
-coin = a random number between 1 and 2
+硬币 = 随机数 1 到 2
 
-if coin is equal to 1 then {
-    print "正面"
-} else {
-    print "反面"
+如果 硬币 等于 1 那么 {
+    显示 "正面"
+} 否则 {
+    显示 "反面"
 }
 ```
 
 ## 挑战：猜一猜
 
-随机抽一个 1 到 3 之间的数字，保存在 `secret` 里。请用户输入一个数字。如果相等，就显示 `猜对了`。否则显示 `猜错了`。
+随机抽一个 1 到 3 之间的数字，保存在 `答案` 里。请用户输入一个数字。如果相等，就显示 `猜对了`。否则显示 `猜错了`。
 
 ```safira
 # 在这里随机抽出 secret。
 
-print "猜一个 1 到 3 的数字："
-guess = the number that the user enters
+显示 "猜一个 1 到 3 的数字："
+猜测 = 输入数字
 
 # 在这里比较 guess 和 secret。
 
 ```
 
 ```solution
-secret = a random number between 1 and 3
+答案 = 随机数 1 到 3
 
-print "猜一个 1 到 3 的数字："
-guess = the number that the user enters
+显示 "猜一个 1 到 3 的数字："
+猜测 = 输入数字
 
-if guess is equal to secret then {
-    print "猜对了"
-} else {
-    print "猜错了"
+如果 猜测 等于 答案 那么 {
+    显示 "猜对了"
+} 否则 {
+    显示 "猜错了"
 }
 ```
 
 ```check
-{ "uses": ["random", "if"], "hint": "用 secret = a random number between 1 and 3，再用 if 比较。", "cases": [{ "inputs": ["9"], "shows": ["猜错了"], "hides": ["猜对了"] }] }
+{ "uses": ["random", "if"], "hint": "用 答案 = 随机数 1 到 3，再用 如果 比较。", "cases": [{ "inputs": ["9"], "shows": ["猜错了"], "hides": ["猜对了"] }] }
 ```

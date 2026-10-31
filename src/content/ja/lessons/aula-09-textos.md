@@ -7,22 +7,22 @@
 文字は、すべて大文字、すべて小文字、最初だけ大文字にできます。
 
 ```safira
-name = "ana maria"
+名前 = "ana maria"
 
-print name in upper case
-print name in lower case
-print name in capitalized
+表示 名前 大文字
+表示 名前 小文字
+表示 名前 先頭大文字
 ```
 
 ## 1文字ずつ
 
-`scroll through` は、1文字ずつ順番に見ていきます。
+`順番に` は、1文字ずつ順番に見ていきます。
 
 ```safira
-word = "Sun"
+単語 = "Sun"
 
-scroll through word assigning in letter {
-    print letter
+順番に 単語 取り出す 文字 {
+    表示 文字
 }
 ```
 
@@ -31,20 +31,20 @@ scroll through word assigning in letter {
 文字を1つ聞いて、その文字をすべて大文字で表示しましょう。
 
 ```safira
-print "英語の単語を入力してください:"
-word = what the user types
+表示 "英語の単語を入力してください:"
+単語 = 入力
 
 # ここで word を大文字で表示してください。
 
 ```
 
 ```solution
-print "英語の単語を入力してください:"
-word = what the user types
+表示 "英語の単語を入力してください:"
+単語 = 入力
 
-print word in upper case
+表示 単語 大文字
 ```
 
 ```check
-{ "uses": ["case"], "exact": true, "hint": "print word in upper case と書きましょう。", "cases": [{ "inputs": ["safira"], "shows": ["SAFIRA"] }] }
+{ "uses": ["case"], "exact": true, "hint": "表示 単語 大文字 と書きましょう。", "cases": [{ "inputs": ["safira"], "shows": ["SAFIRA"] }] }
 ```

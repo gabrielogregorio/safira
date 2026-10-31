@@ -40,6 +40,23 @@ pure helpers such as highlighting and formatting.
   the line counts as `0.38`. The alert only appears for an unsupported version.
 - `legacyGolden.json` holds outputs recorded from the Python interpreter, which is gone. Never regenerate it.
 
+## Command matrix
+
+`src/language/matrix` runs the language by combination, with one test file per language. `scenarios.ts` holds each program once, with markers like `[mostre]`, and `dialects.ts` fills them. The expected output is written by hand, and every language must also produce the same syntax tree as Portuguese.
+
+| Block | What runs |
+|---|---|
+| Commands | Every statement alone |
+| Phrases | Every statement with every phrase of each of its commands, from any language |
+| Pairs | Every statement after every other |
+| Nesting | Every statement in every block, and blocks two and three levels deep |
+| Values | Every kind of value in every place that takes one |
+| Comparisons | Every operator, word and symbol, with lower, equal and greater values |
+| Formatter | Formatting never changes what a program means |
+| Mixed | Words of different languages on one line and across lines |
+
+A new command goes in `scenarios.ts` and in all five dictionaries.
+
 ## Lessons
 
 A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with its text and one `safira` fence. A step with `solution` and `check` fences is a challenge. The lessons dialog shows the file as a document, without those two fences, and lesson mode shows it step by step, so both read the same text.
@@ -97,7 +114,9 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - Coverage is 92%, with thresholds at 90/83/87/90. The goal is 100%.
 - Lighthouse is not in `tests.yml`, and the deploy workflows have not run on GitHub yet.
 - The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
-- Safira has no Chinese or Japanese commands. Content in those languages explains in the language and codes with the English commands, and suggestions use the English list.
+- Chinese and Japanese commands need spaces between words, because nothing segments those languages. The whole-line and phrase suggestions there are short.
+- Japanese commands come before their values, as in `もし n 大なり 5 なら`, because the grammar has one order for every language.
+- `print` and `display` keep the line open, because `legacyGolden.json` records that. English content uses `show`, which ends the line.
 - Previews are not removed from `gh-pages` when a pull request closes.
 - A `.zip` does not carry the order chosen in the sidebar, and dragging has no keyboard or touch alternative.
 - `R` in a note list is a rest. That was a decision, not something asked for.

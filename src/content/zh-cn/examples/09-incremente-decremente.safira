@@ -2,10 +2,10 @@
 # 增加和减少
 # 改变数字变量的值。
 
-points = 10
+分数 = 10
 
-increase 5 in points
-print points
+增加 5 给 分数
+显示 分数
 
-decrease 2 in points
-print points
+减少 2 给 分数
+显示 分数

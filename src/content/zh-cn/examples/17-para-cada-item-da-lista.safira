@@ -2,8 +2,8 @@
 # 遍历列表
 # 一个一个地走过每个项目。
 
-list of fruits receive "葡萄", "苹果", "芒果"
+列表 水果 包含 "葡萄", "苹果", "芒果"
 
-scroll through the list of fruits assigning in fruit {
-    print fruit
+遍历 水果 放入 水果项 {
+    显示 水果项
 }

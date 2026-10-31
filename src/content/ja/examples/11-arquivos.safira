@@ -2,8 +2,8 @@
 # ファイル
 # 作ったファイルは、プロジェクトのファイルバーに表示されます。
 
-create the file "note.txt"
-add "パンを買う" to the file "note.txt"
+ファイル作成 "メモ.txt"
+書き込む "パンを買う" ファイルへ "メモ.txt"
 
-text = read the file "note.txt"
-print text
+文章 = ファイル読み込み "メモ.txt"
+表示 文章

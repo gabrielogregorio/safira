@@ -7,22 +7,22 @@
 一段文字可以全部大写、全部小写，或者只有第一个字母大写。
 
 ```safira
-name = "ana maria"
+名字 = "ana maria"
 
-print name in upper case
-print name in lower case
-print name in capitalized
+显示 名字 转大写
+显示 名字 转小写
+显示 名字 首字母大写
 ```
 
 ## 一个字母一个字母
 
-`scroll through` 会一个一个地走过每个字母。
+`遍历` 会一个一个地走过每个字母。
 
 ```safira
-word = "Sol"
+单词 = "Sol"
 
-scroll through word assigning in letter {
-    print letter
+遍历 单词 放入 字母 {
+    显示 字母
 }
 ```
 
@@ -31,20 +31,20 @@ scroll through word assigning in letter {
 请用户输入一段文字，然后把它全部用大写显示出来。
 
 ```safira
-print "请输入一个单词："
-word = what the user types
+显示 "请输入一个单词："
+单词 = 输入
 
 # 在这里把单词用大写显示出来。
 
 ```
 
 ```solution
-print "请输入一个单词："
-word = what the user types
+显示 "请输入一个单词："
+单词 = 输入
 
-print word in upper case
+显示 单词 转大写
 ```
 
 ```check
-{ "uses": ["case"], "exact": true, "hint": "这样写：print word in upper case", "cases": [{ "inputs": ["safira"], "shows": ["SAFIRA"] }] }
+{ "uses": ["case"], "exact": true, "hint": "这样写：显示 单词 转大写", "cases": [{ "inputs": ["safira"], "shows": ["SAFIRA"] }] }
 ```

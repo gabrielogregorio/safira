@@ -1,12 +1,12 @@
 #safira 0.9
 # 条件
-# "if" で、何をするか選びます。
+# 「もし」で、何をするか選びます。
 
-print "テストは何点でしたか?"
-score = the number that the user enters
+表示 "テストは何点でしたか?"
+点数 = 数字入力
 
-if score is greater than or equal to 6 then {
-    print "合格です! 🎉"
-} else {
-    print "もう一度がんばりましょう。"
+もし 点数 以上 6 なら {
+    表示 "合格です! 🎉"
+} そうでなければ {
+    表示 "もう一度がんばりましょう。"
 }

@@ -7,38 +7,38 @@
 実行したあと、ファイルバーを見てみましょう。
 
 ```safira
-create the file "note.txt"
-add "パンを買う" to the file "note.txt"
+ファイル作成 "メモ.txt"
+書き込む "パンを買う" ファイルへ "メモ.txt"
 ```
 
 ## 読む
 
-`read the file` で、ファイルの中の文字を読めます。
+`ファイル読み込み` で、ファイルの中の文字を読めます。
 
 ```safira
-create the file "grade.txt"
-overwrite "100点" to the file "grade.txt"
+ファイル作成 "成績.txt"
+上書き "100点" ファイルへ "成績.txt"
 
-text = read the file "grade.txt"
-print text
+文章 = ファイル読み込み "成績.txt"
+表示 文章
 ```
 
 ## 確認して消す
 
-`delete the file` で消して、`does not exist` で、なくなったことを確かめます。
+`ファイル削除` で消して、`存在しない` で、なくなったことを確かめます。
 
 ```safira
-create the file "old.txt"
-delete the file "old.txt"
+ファイル作成 "古い.txt"
+ファイル削除 "古い.txt"
 
-if the file "old.txt" does not exist then {
-    print "ファイルが消えました"
+もし ファイル "古い.txt" 存在しない なら {
+    表示 "ファイルが消えました"
 }
 ```
 
 ## チャレンジ: 日記
 
-`diary.txt` というファイルを作り、`今日はサフィラを学びました` と書き込みます。そのファイルを読んで、文字を表示しましょう。
+`日記.txt` というファイルを作り、`今日はサフィラを学びました` と書き込みます。そのファイルを読んで、文字を表示しましょう。
 
 ```safira
 # ファイルを作って、書いて、読んで、表示してください。
@@ -46,13 +46,13 @@ if the file "old.txt" does not exist then {
 ```
 
 ```solution
-create the file "diary.txt"
-overwrite "今日はサフィラを学びました" to the file "diary.txt"
+ファイル作成 "日記.txt"
+上書き "今日はサフィラを学びました" ファイルへ "日記.txt"
 
-text = read the file "diary.txt"
-print text
+文章 = ファイル読み込み "日記.txt"
+表示 文章
 ```
 
 ```check
-{ "uses": ["fileCreate", "fileAppend|fileOverwrite", "fileRead"], "hint": "create the file、overwrite ... to the file、read the file を使いましょう。", "cases": [{ "shows": ["今日はサフィラを学びました"] }] }
+{ "uses": ["fileCreate", "fileAppend|fileOverwrite", "fileRead"], "hint": "ファイル作成、上書き、ファイル読み込み を使いましょう。", "cases": [{ "shows": ["今日はサフィラを学びました"] }] }
 ```

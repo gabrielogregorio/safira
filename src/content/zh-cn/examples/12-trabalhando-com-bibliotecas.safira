@@ -2,9 +2,9 @@
 # 库
 # 库就是另一个代码文件，你可以在这里使用它。
 
-create the file "library.safira"
-overwrite "age = 25" to the file "library.safira"
+创建文件 "库.safira"
+覆盖 "年龄 = 25" 到文件 "库.safira"
 
-import "library"
+导入 "库"
 
-print age
+显示 年龄

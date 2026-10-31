@@ -1,14 +1,14 @@
 #safira 0.9
 # 👥 人のリスト
 
-list of people receive "Ana"
+リスト 人々 は "Ana"
 
-repeat 2 times {
-    print "👤 名前を入力してください:"
-    name = what the user types
-    add name at the end of the list of people
+繰り返す 2 回 {
+    表示 "👤 名前を入力してください:"
+    名前 = 入力
+    追加 名前 リスト末尾 人々
 }
 
-scroll through the list of people assigning in person {
-    print "👥 " + person
+順番に 人々 取り出す 人 {
+    表示 "👥 " + 人
 }

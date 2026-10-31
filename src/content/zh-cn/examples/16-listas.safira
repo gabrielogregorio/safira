@@ -2,11 +2,11 @@
 # 列表
 # 列表可以在一个变量里装很多个值。
 
-list of groceries receive "苹果", "面包"
+列表 清单 包含 "苹果", "面包"
 
-add "牛奶" at the end of the list of groceries
-remove "面包" from the list of groceries
+添加 "牛奶" 到列表末尾 清单
+移除 "面包" 从列表 清单
 
-print groceries
-print list of groceries in position 1
-print the size of the list of groceries
+显示 清单
+显示 列表 清单 位置 1
+显示 列表长度 清单

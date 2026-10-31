@@ -1,12 +1,12 @@
 #safira 0.9
 # 条件
-# "if" 帮你选择做什么。
+# "如果" 帮你选择做什么。
 
-print "你的成绩是多少？"
-grade = the number that the user enters
+显示 "你的成绩是多少？"
+成绩 = 输入数字
 
-if grade is greater than or equal to 6 then {
-    print "你及格了！🎉"
-} else {
-    print "再试一次。"
+如果 成绩 大于等于 6 那么 {
+    显示 "你及格了！🎉"
+} 否则 {
+    显示 "再试一次。"
 }

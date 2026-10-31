@@ -1,11 +1,11 @@
 #safira 0.9
-# break
+# 抜ける
 # すぐにくり返しから抜けます。
 
-for each number from 1 to 5 {
-    if number is equal to 3 then {
-        break
+数える 数 を 1 から 5 {
+    もし 数 等しい 3 なら {
+        抜ける
     }
 
-    print number
+    表示 数
 }

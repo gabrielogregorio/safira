@@ -2,6 +2,6 @@
 # 数をランダムに選ぶ
 # 実行するたびに、違う数が出ます。
 
-dice = a random number between 1 and 6
+さいころ = 乱数 1 から 6
 
-print "🎲 出た数は " + dice
+表示 "🎲 出た数は " + さいころ

@@ -1,14 +1,14 @@
 #safira 0.9
 # 🔼 较大的数
 
-print "请输入一个数字："
-first = the number that the user enters
+显示 "请输入一个数字："
+甲 = 输入数字
 
-print "请再输入一个数字："
-second = the number that the user enters
+显示 "请再输入一个数字："
+乙 = 输入数字
 
-if first is greater than second then {
-    print "🔼 较大的是 " + first
-} else {
-    print "🔼 较大的是 " + second
+如果 甲 大于 乙 那么 {
+    显示 "🔼 较大的是 " + 甲
+} 否则 {
+    显示 "🔼 较大的是 " + 乙
 }

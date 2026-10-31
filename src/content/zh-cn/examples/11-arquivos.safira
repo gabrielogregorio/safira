@@ -2,8 +2,8 @@
 # 文件
 # 创建的文件会出现在项目的文件栏里。
 
-create the file "note.txt"
-add "买面包" to the file "note.txt"
+创建文件 "笔记.txt"
+写入 "买面包" 到文件 "笔记.txt"
 
-text = read the file "note.txt"
-print text
+内容 = 读取文件 "笔记.txt"
+显示 内容

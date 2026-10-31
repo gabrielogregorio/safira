@@ -2,8 +2,8 @@
 # 文字を順に見る
 # 文字列の1文字ずつを見ていきます。
 
-word = "Safira"
+単語 = "Safira"
 
-scroll through word assigning in letter {
-    print letter
+順番に 単語 取り出す 文字 {
+    表示 文字
 }

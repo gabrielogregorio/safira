@@ -2,39 +2,39 @@
 
 コンピューターはくり返しに疲れません。何回かだけ伝えましょう。
 
-## repeat
+## 繰り返す
 
-`repeat` は、頼んだ回数だけブロックを動かします。
+`繰り返す` は、頼んだ回数だけブロックを動かします。
 
 ```safira
-repeat 3 times {
-    print "こんにちは!"
+繰り返す 3 回 {
+    表示 "こんにちは!"
 }
 ```
 
 ## 数える
 
-`for each` が数えてくれて、変数は1回ごとに変わります。
+`数える` が数えてくれて、変数は1回ごとに変わります。
 
 ```safira
-for each number from 1 to 5 {
-    print number
+数える 数 を 1 から 5 {
+    表示 数
 }
 ```
 
-## while
+## 条件ループ
 
-`while` は、条件が正しくなくなるまでくり返します。終わるには 0 を入力します。
+`条件ループ` は、条件が正しくなくなるまでくり返します。終わるには 0 を入力します。
 
 ```safira
-number = 1
+数 = 1
 
-while number is different from 0 {
-    print "終わるには 0 を入力してください:"
-    number = the number that the user enters
+条件ループ 数 等しくない 0 {
+    表示 "終わるには 0 を入力してください:"
+    数 = 数字入力
 }
 
-print "おしまい!"
+表示 "おしまい!"
 ```
 
 ## チャレンジ: 2のだん
@@ -47,11 +47,11 @@ print "おしまい!"
 ```
 
 ```solution
-for each number from 1 to 10 {
-    print number * 2
+数える 数 を 1 から 10 {
+    表示 数 * 2
 }
 ```
 
 ```check
-{ "uses": ["repeat|while|forRange"], "hint": "for each number from 1 to 10 { ... } を使って、print number * 2 としましょう。", "cases": [{ "shows": ["2", "4", "6", "8", "10", "12", "14", "16", "18", "20"] }] }
+{ "uses": ["repeat|while|forRange"], "hint": "数える 数 を 1 から 10 { ... } を使って、表示 数 * 2 としましょう。", "cases": [{ "shows": ["2", "4", "6", "8", "10", "12", "14", "16", "18", "20"] }] }
 ```

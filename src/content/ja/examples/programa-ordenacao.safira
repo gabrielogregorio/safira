@@ -1,16 +1,16 @@
 #safira 0.9
 # 🔢 順番に並べる
 
-print "数を入力してください:"
-first = the number that the user enters
+表示 "数を入力してください:"
+一つ目 = 数字入力
 
-print "もう1つ数を入力してください:"
-second = the number that the user enters
+表示 "もう1つ数を入力してください:"
+二つ目 = 数字入力
 
-if first is less than second then {
-    print first
-    print second
-} else {
-    print second
-    print first
+もし 一つ目 小なり 二つ目 なら {
+    表示 一つ目
+    表示 二つ目
+} そうでなければ {
+    表示 二つ目
+    表示 一つ目
 }

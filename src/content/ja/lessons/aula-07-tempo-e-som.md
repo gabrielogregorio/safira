@@ -4,22 +4,22 @@
 
 ## 待つ
 
-`wait` は、次のコマンドの前に少し止まります。
+`待つ` は、次のコマンドの前に少し止まります。
 
 ```safira
-print "よーい..."
-wait 1 second
-print "スタート!"
+表示 "よーい..."
+待つ 1 秒
+表示 "スタート!"
 ```
 
 ## 音を鳴らす
 
-`play` は音を鳴らします。`C`、`D`、`E` や `Do`、`Re`、`Mi` が使えます。
+`鳴らす` は音を鳴らします。`C`、`D`、`E` や `ド`、`レ`、`ミ` が使えます。
 
 ```safira
-play Do for 0.5s
-play Mi for 0.5s
-play Sol for 1s
+鳴らす ド 長さ 0.5 秒
+鳴らす ミ 長さ 0.5 秒
+鳴らす ソ 長さ 1 秒
 ```
 
 ## チャレンジ: カウントダウン
@@ -34,15 +34,15 @@ play Sol for 1s
 ```
 
 ```solution
-print 3
-wait 1 second
-print 2
-wait 1 second
-print 1
-wait 1 second
-print "発射!"
+表示 3
+待つ 1 秒
+表示 2
+待つ 1 秒
+表示 1
+待つ 1 秒
+表示 "発射!"
 ```
 
 ```check
-{ "uses": ["wait"], "hint": "print の間に wait 1 second を入れましょう。", "cases": [{ "shows": ["3", "2", "1", "発射"] }] }
+{ "uses": ["wait"], "hint": "表示 の間に 待つ 1 秒 を入れましょう。", "cases": [{ "shows": ["3", "2", "1", "発射"] }] }
 ```

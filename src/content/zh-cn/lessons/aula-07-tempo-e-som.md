@@ -4,22 +4,22 @@
 
 ## 等待
 
-`wait` 会在下一条命令之前暂停一下。
+`等待` 会在下一条命令之前暂停一下。
 
 ```safira
-print "准备……"
-wait 1 second
-print "开始！"
+显示 "准备……"
+等待 1 秒
+显示 "开始！"
 ```
 
 ## 演奏一个音符
 
-`play` 演奏一个音符。可以用 `C`、`D`、`E`，也可以用 `Do`、`Re`、`Mi`。
+`播放` 演奏一个音符。可以用 `C`、`D`、`E`，也可以用 `Do`、`Re`、`Mi`。
 
 ```safira
-play Do for 0.5s
-play Mi for 0.5s
-play Sol for 1s
+播放 Do 持续 0.5 秒
+播放 Mi 持续 0.5 秒
+播放 Sol 持续 1 秒
 ```
 
 ## 挑战：倒计时
@@ -34,15 +34,15 @@ play Sol for 1s
 ```
 
 ```solution
-print 3
-wait 1 second
-print 2
-wait 1 second
-print 1
-wait 1 second
-print "开火！"
+显示 3
+等待 1 秒
+显示 2
+等待 1 秒
+显示 1
+等待 1 秒
+显示 "开火！"
 ```
 
 ```check
-{ "uses": ["wait"], "hint": "在每个 print 之间加上 wait 1 second。", "cases": [{ "shows": ["3", "2", "1", "开火"] }] }
+{ "uses": ["wait"], "hint": "在每个 显示 之间加上 等待 1 秒。", "cases": [{ "shows": ["3", "2", "1", "开火"] }] }
 ```

@@ -2,6 +2,6 @@
 # 数える
 # 変数が、ある数から別の数まで変わっていきます。
 
-for each number from 1 to 5 {
-    print number
+数える 数 を 1 から 5 {
+    表示 数
 }

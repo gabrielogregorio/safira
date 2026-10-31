@@ -2,9 +2,9 @@
 # ライブラリ
 # ライブラリは、ここで使える別のコードファイルです。
 
-create the file "library.safira"
-overwrite "age = 25" to the file "library.safira"
+ファイル作成 "ライブラリ.safira"
+上書き "年齢 = 25" ファイルへ "ライブラリ.safira"
 
-import "library"
+読み込む "ライブラリ"
 
-print age
+表示 年齢

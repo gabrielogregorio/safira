@@ -2,12 +2,12 @@
 # ユーザーに質問する
 # プログラムは止まって、あなたが入力するのを待ちます。
 
-print "お名前は何ですか?"
-name = what the user types
+表示 "お名前は何ですか?"
+名前 = 入力
 
-print "何歳ですか?"
-age = the number that the user enters
+表示 "何歳ですか?"
+年齢 = 数字入力
 
-future = age + 10
-print "こんにちは、" + name
-print "10年後は " + future + " 歳ですね。"
+未来 = 年齢 + 10
+表示 "こんにちは、" + 名前
+表示 "10年後は " + 未来 + " 歳ですね。"

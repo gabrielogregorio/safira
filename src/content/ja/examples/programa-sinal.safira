@@ -1,16 +1,16 @@
 #safira 0.9
 # 🚦 信号
 
-repeat 2 times {
-    clear
-    print "🔴 止まれ"
-    wait 2 seconds
+繰り返す 2 回 {
+    画面消去
+    表示 "🔴 止まれ"
+    待つ 2 秒
 
-    clear
-    print "🟢 進め"
-    wait 2 seconds
+    画面消去
+    表示 "🟢 進め"
+    待つ 2 秒
 
-    clear
-    print "🟠 注意"
-    wait 1 second
+    画面消去
+    表示 "🟠 注意"
+    待つ 1 秒
 }

@@ -1,11 +1,11 @@
 #safira 0.9
 # 🎨 ペンキの量を計算する
 
-print "📐 壁は何平方メートルですか?"
-wall = the number that the user enters
+表示 "📐 壁は何平方メートルですか?"
+壁 = 数字入力
 
-print "🪣 1缶で何平方メートル塗れますか?"
-can = the number that the user enters
+表示 "🪣 1缶で何平方メートル塗れますか?"
+缶 = 数字入力
 
-cans = wall / can
-print "🎨 " + cans + " 缶必要です。"
+缶数 = 壁 / 缶
+表示 "🎨 " + 缶数 + " 缶必要です。"

@@ -7,11 +7,11 @@
 `=` 把值放进小盒子里。之后只要用它的名字就行了。
 
 ```safira
-name = "小安"
-age = 20
+名字 = "小安"
+年龄 = 20
 
-print name
-print age
+显示 名字
+显示 年龄
 ```
 
 ## 看看变量
@@ -21,10 +21,10 @@ print age
 想一步一步地看吗？打开“运行”菜单，选择“逐行运行”。
 
 ```safira
-points = 10
-points = points + 5
+分数 = 10
+分数 = 分数 + 5
 
-print points
+显示 分数
 ```
 
 ## 把文字和变量连起来
@@ -32,16 +32,16 @@ print points
 `+` 可以把文字和变量连成一句话。
 
 ```safira
-name = "小安"
-age = 20
+名字 = "小安"
+年龄 = 20
 
-print "我的名字是" + name
-print "我今年" + age + "岁"
+显示 "我的名字是" + 名字
+显示 "我今年" + 年龄 + "岁"
 ```
 
 ## 挑战：你的城市
 
-创建一个叫 `city` 的变量，值为 `Lima`，然后显示这句话 `我住在Lima`，用 `+` 把文字和变量连起来。
+创建一个叫 `城市` 的变量，值为 `Lima`，然后显示这句话 `我住在Lima`，用 `+` 把文字和变量连起来。
 
 ```safira
 # 在这里创建变量。
@@ -51,10 +51,10 @@ print "我今年" + age + "岁"
 ```
 
 ```solution
-city = "Lima"
-print "我住在" + city
+城市 = "Lima"
+显示 "我住在" + 城市
 ```
 
 ```check
-{ "uses": ["assign", "variable"], "hint": "用 city = \"Lima\" 创建变量，再用 + 连起来。", "cases": [{ "shows": ["我住在Lima"] }] }
+{ "uses": ["assign", "variable"], "hint": "用 城市 = \"Lima\" 创建变量，再用 + 连起来。", "cases": [{ "shows": ["我住在Lima"] }] }
 ```

@@ -1,12 +1,12 @@
 #safira 0.9
-# while
+# 条件ループ
 # 条件が正しい間、くり返します。
 
-password = 1
+パスワード = 1
 
-while password is different from 0 {
-    print "終わるには 0 を入力してください:"
-    password = the number that the user enters
+条件ループ パスワード 等しくない 0 {
+    表示 "終わるには 0 を入力してください:"
+    パスワード = 数字入力
 }
 
-print "またね!"
+表示 "またね!"

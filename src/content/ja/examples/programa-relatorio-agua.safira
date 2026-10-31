@@ -1,12 +1,12 @@
 #safira 0.9
 # 💧 水を飲もう
 
-print "💧 今日は水を何杯飲みましたか?"
-cups = the number that the user enters
+表示 "💧 今日は水を何杯飲みましたか?"
+杯 = 数字入力
 
-if cups is greater than or equal to 8 then {
-    print "💧 よくできました!"
-} else {
-    missing = 8 - cups
-    print "🥤 あと " + missing + " 杯です。"
+もし 杯 以上 8 なら {
+    表示 "💧 よくできました!"
+} そうでなければ {
+    不足 = 8 - 杯
+    表示 "🥤 あと " + 不足 + " 杯です。"
 }

@@ -7,13 +7,13 @@
 関数を作っただけでは何も動きません。名前を呼んだときに動きます。
 
 ```safira
-function hello {
-    print "こんにちは!"
-    print "お元気ですか?"
+関数 こんにちは {
+    表示 "こんにちは!"
+    表示 "お元気ですか?"
 }
 
-hello()
-hello()
+こんにちは()
+こんにちは()
 ```
 
 ## 値を渡す
@@ -21,45 +21,45 @@ hello()
 関数は、値を受け取ってそれを使えます。
 
 ```safira
-function greet(name) {
-    print "こんにちは、" + name
+関数 あいさつ(名前) {
+    表示 "こんにちは、" + 名前
 }
 
-greet("Ana")
-greet("Bia")
+あいさつ("Ana")
+あいさつ("Bia")
 ```
 
 ## 結果を返す
 
-`return` は、呼んだ場所に結果を渡します。
+`返す` は、呼んだ場所に結果を渡します。
 
 ```safira
-function double(number) {
-    return number * 2
+関数 倍(数) {
+    返す 数 * 2
 }
 
-print double(4)
+表示 倍(4)
 ```
 
 ## チャレンジ: 足し算
 
-2つの数を受け取って、その合計を返す `add` という関数を作りましょう。そのあと `add(2, 3)` を表示します。
+2つの数を受け取って、その合計を返す `足し算` という関数を作りましょう。そのあと `足し算(2, 3)` を表示します。
 
 ```safira
 # ここで関数を作ってください。
 
-# ここで add(2, 3) を表示してください。
+# ここで 足し算(2, 3) を表示してください。
 
 ```
 
 ```solution
-function add(a, b) {
-    return a + b
+関数 足し算(a, b) {
+    返す a + b
 }
 
-print add(2, 3)
+表示 足し算(2, 3)
 ```
 
 ```check
-{ "uses": ["functionDeclaration", "return", "call"], "hint": "function add(a, b) { で始めて、return a + b を使いましょう。", "cases": [{ "shows": ["5"] }] }
+{ "uses": ["functionDeclaration", "return", "call"], "hint": "関数 足し算(a, b) { で始めて、返す a + b を使いましょう。", "cases": [{ "shows": ["5"] }] }
 ```

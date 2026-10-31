@@ -2,10 +2,10 @@
 # 停止
 # 立刻跳出重复。
 
-for each number from 1 to 5 {
-    if number is equal to 3 then {
-        break
+对于 数值 从 1 到 5 {
+    如果 数值 等于 3 那么 {
+        跳出
     }
 
-    print number
+    显示 数值
 }

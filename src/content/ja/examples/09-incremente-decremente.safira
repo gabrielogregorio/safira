@@ -2,10 +2,10 @@
 # 増やす・減らす
 # 数の変数の値を変えます。
 
-points = 10
+点 = 10
 
-increase 5 in points
-print points
+増やす 5 を 点
+表示 点
 
-decrease 2 in points
-print points
+減らす 2 を 点
+表示 点

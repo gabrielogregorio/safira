@@ -7,52 +7,52 @@
 何回か実行してみましょう。数が変わります。
 
 ```safira
-dice = a random number between 1 and 6
+さいころ = 乱数 1 から 6
 
-print "出た数は " + dice
+表示 "出た数は " + さいころ
 ```
 
 ## 運と条件
 
-ランダムな数と `if` を組み合わせると、プログラムが自分で決めます。
+ランダムな数と `もし` を組み合わせると、プログラムが自分で決めます。
 
 ```safira
-coin = a random number between 1 and 2
+コイン = 乱数 1 から 2
 
-if coin is equal to 1 then {
-    print "表"
-} else {
-    print "裏"
+もし コイン 等しい 1 なら {
+    表示 "表"
+} そうでなければ {
+    表示 "裏"
 }
 ```
 
 ## チャレンジ: 当てよう
 
-1から3の数をランダムに選んで、`secret` に入れます。数を1つ聞いて、同じなら `当たり`、違うなら `はずれ` と表示しましょう。
+1から3の数をランダムに選んで、`答え` に入れます。数を1つ聞いて、同じなら `当たり`、違うなら `はずれ` と表示しましょう。
 
 ```safira
-# ここで secret を選んでください。
+# ここで 答え を選んでください。
 
-print "1から3の数を当ててください:"
-guess = the number that the user enters
+表示 "1から3の数を当ててください:"
+予想 = 数字入力
 
-# ここで guess と secret を比べてください。
+# ここで 予想 と 答え を比べてください。
 
 ```
 
 ```solution
-secret = a random number between 1 and 3
+答え = 乱数 1 から 3
 
-print "1から3の数を当ててください:"
-guess = the number that the user enters
+表示 "1から3の数を当ててください:"
+予想 = 数字入力
 
-if guess is equal to secret then {
-    print "当たり"
-} else {
-    print "はずれ"
+もし 予想 等しい 答え なら {
+    表示 "当たり"
+} そうでなければ {
+    表示 "はずれ"
 }
 ```
 
 ```check
-{ "uses": ["random", "if"], "hint": "secret = a random number between 1 and 3 と書いて、if で比べましょう。", "cases": [{ "inputs": ["9"], "shows": ["はずれ"], "hides": ["当たり"] }] }
+{ "uses": ["random", "if"], "hint": "答え = 乱数 1 から 3 と書いて、もし で比べましょう。", "cases": [{ "inputs": ["9"], "shows": ["はずれ"], "hides": ["当たり"] }] }
 ```

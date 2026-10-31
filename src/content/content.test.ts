@@ -10,6 +10,12 @@ const LESSON_COUNT = 12;
 const MAIN_FILE = 'main.safira';
 const PROGRAM_INPUTS = ['2', '2', '2', ...Array.from({ length: 20 }, () => '0')];
 const LONG_CODE_LINES = 16;
+const LATIN_COMMAND =
+  /^\s*(show|print|if|else|repeat|while|for|wait|play|function|return|try|list|add|remove|create|read|mostre|se|repita)\b/;
+const LATIN_COMMAND_LINE: Partial<Record<(typeof LOCALES)[number]['id'], RegExp>> = {
+  'zh-cn': LATIN_COMMAND,
+  ja: LATIN_COMMAND,
+};
 
 const invalidLines = (source: string): string[] =>
   parse(readScriptVersion(source).body).flatMap((statement) =>
@@ -98,6 +104,18 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
       await expect(run(step.code)).resolves.toMatchObject({ passed: false });
     },
   );
+
+  it('teaches with the commands of its language', () => {
+    const scripts = [
+      ...examples.map((example) => example.text),
+      ...lessons.flatMap((lesson) => lesson.steps.flatMap((step) => [step.code, step.solution ?? ''])),
+    ];
+    const foreign = LATIN_COMMAND_LINE[locale];
+
+    expect(
+      foreign === undefined ? [] : scripts.flatMap((script) => script.split('\n')).filter((line) => foreign.test(line)),
+    ).toEqual([]);
+  });
 
   it('finds the example that explains a command', () => {
     expect(findExampleByPrefix(locale, '16')?.id).toBe('16-listas');

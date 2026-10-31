@@ -1,8 +1,8 @@
 #safira 0.9
 # 💎 自己紹介
 
-print "お名前は何ですか?"
-name = what the user types
+表示 "お名前は何ですか?"
+名前 = 入力
 
-print name + "さん、はじめまして! 👋"
-print "わたしはサフィラです 💎" in color blue
+表示 名前 + "さん、はじめまして! 👋"
+表示 "わたしはサフィラです 💎" 色 青

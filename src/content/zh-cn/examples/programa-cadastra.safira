@@ -1,10 +1,10 @@
 #safira 0.9
 # 📝 登记
 
-print "🙂 你叫什么名字？"
-name = what the user types
+显示 "🙂 你叫什么名字？"
+名字 = 输入
 
-print "📏 你有多高？"
-height = the number that the user enters
+显示 "📏 你有多高？"
+身高 = 输入数字
 
-print "📝 " + name + " 的身高是 " + height
+显示 "📝 " + 名字 + " 的身高是 " + 身高

@@ -2,8 +2,8 @@
 # 遍历文字
 # 走过文字里的每个字母。
 
-word = "Safira"
+单词 = "Safira"
 
-scroll through word assigning in letter {
-    print letter
+遍历 单词 放入 字母 {
+    显示 字母
 }

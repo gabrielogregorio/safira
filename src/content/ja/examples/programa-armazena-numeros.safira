@@ -1,12 +1,12 @@
 #safira 0.9
 # 🧮 数を足す
 
-total = 0
+合計 = 0
 
-repeat 3 times {
-    print "数を入力してください:"
-    number = the number that the user enters
-    total = total + number
+繰り返す 3 回 {
+    表示 "数を入力してください:"
+    数 = 数字入力
+    合計 = 合計 + 数
 }
 
-print "🧮 合計は " + total
+表示 "🧮 合計は " + 合計

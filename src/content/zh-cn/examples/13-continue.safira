@@ -2,10 +2,10 @@
 # 继续
 # 跳过这一圈剩下的部分，直接进入下一圈。
 
-for each number from 1 to 5 {
-    if number is equal to 3 then {
-        continue
+对于 数值 从 1 到 5 {
+    如果 数值 等于 3 那么 {
+        继续
     }
 
-    print number
+    显示 数值
 }

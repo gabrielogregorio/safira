@@ -2,39 +2,39 @@
 
 电脑重复做事从不觉得累。你只要告诉它做几次。
 
-## repeat
+## 重复
 
-`repeat` 会把代码块运行你指定的次数。
+`重复` 会把代码块运行你指定的次数。
 
 ```safira
-repeat 3 times {
-    print "你好！"
+重复 3 次 {
+    显示 "你好！"
 }
 ```
 
 ## 数数
 
-`for each` 帮你数数，变量每一圈都会变化。
+`对于` 帮你数数，变量每一圈都会变化。
 
 ```safira
-for each number from 1 to 5 {
-    print number
+对于 数值 从 1 到 5 {
+    显示 数值
 }
 ```
 
-## while
+## 当
 
-`while` 会一直重复，直到条件变为假。输入 0 就退出。
+`当` 会一直重复，直到条件变为假。输入 0 就退出。
 
 ```safira
-number = 1
+数值 = 1
 
-while number is different from 0 {
-    print "输入 0 退出："
-    number = the number that the user enters
+当 数值 不等于 0 {
+    显示 "输入 0 退出："
+    数值 = 输入数字
 }
 
-print "结束！"
+显示 "结束！"
 ```
 
 ## 挑战：2 的乘法表
@@ -47,11 +47,11 @@ print "结束！"
 ```
 
 ```solution
-for each number from 1 to 10 {
-    print number * 2
+对于 数值 从 1 到 10 {
+    显示 数值 * 2
 }
 ```
 
 ```check
-{ "uses": ["repeat|while|forRange"], "hint": "用 for each number from 1 to 10 { ... }，然后 print number * 2。", "cases": [{ "shows": ["2", "4", "6", "8", "10", "12", "14", "16", "18", "20"] }] }
+{ "uses": ["repeat|while|forRange"], "hint": "用 对于 数值 从 1 到 10 { ... }，然后 显示 数值 * 2。", "cases": [{ "shows": ["2", "4", "6", "8", "10", "12", "14", "16", "18", "20"] }] }
 ```

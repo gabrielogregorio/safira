@@ -1,14 +1,14 @@
 #safira 0.9
 # 👥 人员名单
 
-list of people receive "小安"
+列表 人们 包含 "小安"
 
-repeat 2 times {
-    print "👤 请输入一个名字："
-    name = what the user types
-    add name at the end of the list of people
+重复 2 次 {
+    显示 "👤 请输入一个名字："
+    名字 = 输入
+    添加 名字 到列表末尾 人们
 }
 
-scroll through the list of people assigning in person {
-    print "👥 " + person
+遍历 人们 放入 人 {
+    显示 "👥 " + 人
 }

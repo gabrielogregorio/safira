@@ -7,41 +7,41 @@
 位置从 1 开始数。
 
 ```safira
-list of fruits receive "葡萄", "苹果", "芒果"
+列表 水果 包含 "葡萄", "苹果", "芒果"
 
-print fruits
-print list of fruits in position 1
-print the size of the list of fruits
+显示 水果
+显示 列表 水果 位置 1
+显示 列表长度 水果
 ```
 
 ## 添加和删除
 
-用 `add` 在末尾加一个项目，用 `remove` 删掉一个项目。
+用 `添加` 在末尾加一个项目，用 `移除` 删掉一个项目。
 
 ```safira
-list of fruits receive "葡萄", "苹果"
+列表 水果 包含 "葡萄", "苹果"
 
-add "芒果" at the end of the list of fruits
-remove "葡萄" from the list of fruits
+添加 "芒果" 到列表末尾 水果
+移除 "葡萄" 从列表 水果
 
-print fruits
+显示 水果
 ```
 
 ## 走过所有项目
 
-`scroll through` 会一个一个地走过列表里的每个项目。
+`遍历` 会一个一个地走过列表里的每个项目。
 
 ```safira
-list of fruits receive "葡萄", "苹果", "芒果"
+列表 水果 包含 "葡萄", "苹果", "芒果"
 
-scroll through the list of fruits assigning in fruit {
-    print "我喜欢" + fruit
+遍历 水果 放入 水果项 {
+    显示 "我喜欢" + 水果项
 }
 ```
 
 ## 挑战：购物清单
 
-创建列表 `groceries`，里面有 `米饭` 和 `豆子`。在末尾添加 `牛奶`，然后每个项目显示一行。
+创建列表 `清单`，里面有 `米饭` 和 `豆子`。在末尾添加 `牛奶`，然后每个项目显示一行。
 
 ```safira
 # 在这里创建列表。
@@ -53,12 +53,12 @@ scroll through the list of fruits assigning in fruit {
 ```
 
 ```solution
-list of groceries receive "米饭", "豆子"
+列表 清单 包含 "米饭", "豆子"
 
-add "牛奶" at the end of the list of groceries
+添加 "牛奶" 到列表末尾 清单
 
-scroll through the list of groceries assigning in item {
-    print item
+遍历 清单 放入 项 {
+    显示 项
 }
 ```
 

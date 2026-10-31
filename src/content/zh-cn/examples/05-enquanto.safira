@@ -2,11 +2,11 @@
 # 当
 # 条件为真的时候，一直重复。
 
-password = 1
+密码 = 1
 
-while password is different from 0 {
-    print "输入 0 退出："
-    password = the number that the user enters
+当 密码 不等于 0 {
+    显示 "输入 0 退出："
+    密码 = 输入数字
 }
 
-print "再见！"
+显示 "再见！"

@@ -4,13 +4,13 @@
 
 ## 读取文字
 
-`what the user types` 会让程序停下来等待。在输出面板的输入框里打字，然后按回车。
+`输入` 会让程序停下来等待。在输出面板的输入框里打字，然后按回车。
 
 ```safira
-print "你叫什么名字？"
-name = what the user types
+显示 "你叫什么名字？"
+名字 = 输入
 
-print "你好，" + name
+显示 "你好，" + 名字
 ```
 
 ## 读取数字
@@ -18,11 +18,11 @@ print "你好，" + name
 想用输入的内容做计算，就要请用户输入数字。
 
 ```safira
-print "请输入一个数字："
-number = the number that the user enters
+显示 "请输入一个数字："
+数值 = 输入数字
 
-double = number * 2
-print "它的两倍是 " + double
+两倍 = 数值 * 2
+显示 "它的两倍是 " + 两倍
 ```
 
 ## 挑战：三倍
@@ -37,12 +37,12 @@ print "它的两倍是 " + double
 ```
 
 ```solution
-print "请输入一个数字："
-number = the number that the user enters
+显示 "请输入一个数字："
+数值 = 输入数字
 
-print number * 3
+显示 数值 * 3
 ```
 
 ```check
-{ "uses": ["input"], "hint": "用 number = the number that the user enters，然后 print number * 3。", "cases": [{ "inputs": ["4"], "shows": ["12"] }, { "inputs": ["10"], "shows": ["30"] }] }
+{ "uses": ["input"], "hint": "用 数值 = 输入数字，然后 显示 数值 * 3。", "cases": [{ "inputs": ["4"], "shows": ["12"] }, { "inputs": ["10"], "shows": ["30"] }] }
 ```

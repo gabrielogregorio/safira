@@ -1,34 +1,34 @@
 # 显示在屏幕上
 
-`print` 不只是显示文字，它还能做计算、用颜色。
+`显示` 不只是显示文字，它还能做计算、用颜色。
 
 ## 文字和数字
 
 文字要放在引号里。数字不加引号，电脑会替你算。
 
 ```safira
-print "二加二等于："
-print 2 + 2
-print 10 * 3
+显示 "二加二等于："
+显示 2 + 2
+显示 10 * 3
 ```
 
 ## 全部写在同一行
 
-用 `print on this line`，下一个内容会接着同一行写。
+用 `同行显示`，下一个内容会接着同一行写。
 
 ```safira
-print on this line "早"
-print on this line "上好！"
+同行显示 "早"
+同行显示 "上好！"
 ```
 
 ## 颜色
 
-在文字后面加上 `in color`。可以用颜色名，也可以用像 `#ff1122` 这样的代码。
+在文字后面加上 `颜色`。可以用颜色名，也可以用像 `#ff1122` 这样的代码。
 
 ```safira
-print "蓝色" in color blue
-print "紫色" in color purple
-print "红色" in color #ff1122
+显示 "蓝色" 颜色 蓝色
+显示 "紫色" 颜色 紫色
+显示 "红色" 颜色 #ff1122
 ```
 
 ## 挑战：算一算
@@ -41,9 +41,9 @@ print "红色" in color #ff1122
 ```
 
 ```solution
-print 25 * 4
+显示 25 * 4
 ```
 
 ```check
-{ "uses": ["print"], "hint": "不加引号，电脑就会计算：print 25 * 4", "cases": [{ "shows": ["100"] }] }
+{ "uses": ["print"], "hint": "不加引号，电脑就会计算：显示 25 * 4", "cases": [{ "shows": ["100"] }] }
 ```

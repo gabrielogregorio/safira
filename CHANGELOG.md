@@ -10,6 +10,8 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Lesson mode inside the IDE: a switch beside Smart suggestions swaps the tabs for a lesson bar, each step opens as a script, a run gives the check, and challenges are tested with hidden answers, so the next step only opens after a correct run. Hints, the solution and a way to start over are one click away.
 - Examples and lessons in English, Portuguese, Spanish, Simplified Chinese and Japanese, rewritten for people who never programmed.
 - Commands for lists, files and counting in English and Spanish, such as `for each x from 1 to 5` and `add "x" at the end of the list of fruits`.
+- Commands in Simplified Chinese and Japanese, such as `如果 n 大于 5 那么 {` and `もし n 大なり 5 なら {`. Words are separated by spaces. A number can touch its unit, as in `1秒`, and the punctuation of those keyboards works.
+- A command matrix in `src/language/matrix`: every statement, phrase, ordered pair, nesting, value and comparison runs in each language, about 60 thousand programs.
 - Home screen to create projects from a blank file or from 34 examples.
 - Virtual files per project, including `importe` and every file command.
 - Hidden language version on the first line of each script, with an alert only when it is not supported.
