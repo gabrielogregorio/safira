@@ -1,161 +1,96 @@
+import clickUrl from './files/click.wav';
+import createUrl from './files/create.wav';
+import deleteUrl from './files/delete.wav';
+import openUrl from './files/open.wav';
+import toggleUrl from './files/toggle.wav';
+
 export type SoundName = 'click' | 'toggle' | 'open' | 'create' | 'delete';
 
-interface Tone {
-  wave: OscillatorType;
-  fromHertz: number;
-  toHertz: number;
-  startSeconds: number;
-  seconds: number;
-  gain: number;
-}
-
-interface NoiseBurst {
-  bandHertz: number;
-  startSeconds: number;
-  seconds: number;
-  gain: number;
-}
-
-interface SoundRecipe {
-  tones: Tone[];
-  noise: NoiseBurst[];
-}
-
-const MASTER_GAIN = 0.2;
-const SILENCE = 0.0001;
-const NOISE_SECONDS = 0.3;
-
-const note = (hertz: number, startSeconds: number, seconds: number, gain: number): Tone => ({
-  wave: 'sine',
-  fromHertz: hertz,
-  toHertz: hertz,
-  startSeconds,
-  seconds,
-  gain,
-});
-
-// Short glassy notes, in the spirit of the desktop sounds from the Frutiger Aero years.
-export const SOUND_RECIPES: Record<SoundName, SoundRecipe> = {
-  click: {
-    tones: [
-      { wave: 'sine', fromHertz: 1900, toHertz: 1200, startSeconds: 0, seconds: 0.035, gain: 0.5 },
-      { wave: 'triangle', fromHertz: 3800, toHertz: 3000, startSeconds: 0, seconds: 0.02, gain: 0.12 },
-    ],
-    noise: [],
-  },
-  toggle: {
-    tones: [note(660, 0, 0.09, 0.5), note(990, 0.065, 0.13, 0.5)],
-    noise: [],
-  },
-  // A soft glass swoosh rising into one clear note.
-  open: {
-    tones: [
-      { wave: 'triangle', fromHertz: 380, toHertz: 1500, startSeconds: 0, seconds: 0.16, gain: 0.3 },
-      note(1319, 0.11, 0.22, 0.4),
-      note(1976, 0.15, 0.2, 0.18),
-    ],
-    noise: [],
-  },
-  create: {
-    tones: [note(523, 0, 0.3, 0.4), note(659, 0.07, 0.3, 0.4), note(784, 0.14, 0.3, 0.4), note(1047, 0.21, 0.45, 0.4)],
-    noise: [],
-  },
-  // Paper crumpling, then falling into the recycle bin.
-  delete: {
-    tones: [{ wave: 'triangle', fromHertz: 320, toHertz: 80, startSeconds: 0.14, seconds: 0.2, gain: 0.7 }],
-    noise: [
-      { bandHertz: 3200, startSeconds: 0, seconds: 0.05, gain: 0.7 },
-      { bandHertz: 2400, startSeconds: 0.05, seconds: 0.045, gain: 0.6 },
-      { bandHertz: 3600, startSeconds: 0.095, seconds: 0.05, gain: 0.5 },
-      { bandHertz: 1800, startSeconds: 0.15, seconds: 0.09, gain: 0.45 },
-    ],
-  },
+// Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
+export const SOUND_FILES: Record<SoundName, string> = {
+  click: clickUrl,
+  toggle: toggleUrl,
+  open: openUrl,
+  create: createUrl,
+  delete: deleteUrl,
 };
 
-const noiseBuffer = (context: BaseAudioContext): AudioBuffer => {
-  const buffer = context.createBuffer(1, Math.ceil(context.sampleRate * NOISE_SECONDS), context.sampleRate);
-  const samples = buffer.getChannelData(0);
+const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
+const MASTER_GAIN = 0.5;
 
-  for (let index = 0; index < samples.length; index += 1) {
-    samples[index] = Math.random() * 2 - 1;
-  }
+const fetchSound = async (context: AudioContext, url: string): Promise<AudioBuffer> => {
+  const response = await fetch(url);
 
-  return buffer;
-};
-
-const envelope = (context: BaseAudioContext, start: number, seconds: number, gain: number): GainNode => {
-  const node = context.createGain();
-  node.gain.setValueAtTime(SILENCE, start);
-  node.gain.exponentialRampToValueAtTime(gain, start + Math.min(0.006, seconds / 3));
-  node.gain.exponentialRampToValueAtTime(SILENCE, start + seconds);
-
-  return node;
-};
-
-export const scheduleSound = (context: BaseAudioContext, output: AudioNode, name: SoundName, when: number): void => {
-  const { tones, noise } = SOUND_RECIPES[name];
-
-  for (const tone of tones) {
-    const start = when + tone.startSeconds;
-    const oscillator = context.createOscillator();
-    oscillator.type = tone.wave;
-    oscillator.frequency.setValueAtTime(tone.fromHertz, start);
-    oscillator.frequency.exponentialRampToValueAtTime(tone.toHertz, start + tone.seconds);
-    oscillator.connect(envelope(context, start, tone.seconds, tone.gain)).connect(output);
-    oscillator.start(start);
-    oscillator.stop(start + tone.seconds);
-  }
-
-  for (const burst of noise) {
-    const start = when + burst.startSeconds;
-    const source = context.createBufferSource();
-    const filter = context.createBiquadFilter();
-    source.buffer = noiseBuffer(context);
-    filter.type = 'bandpass';
-    filter.frequency.value = burst.bandHertz;
-    source
-      .connect(filter)
-      .connect(envelope(context, start, burst.seconds, burst.gain))
-      .connect(output);
-    source.start(start);
-    source.stop(start + burst.seconds);
-  }
+  return context.decodeAudioData(await response.arrayBuffer());
 };
 
 export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let context: AudioContext | null = null;
   let output: GainNode | null = null;
   let isEnabled = true;
+  const buffers = new Map<SoundName, Promise<AudioBuffer>>();
+
+  const start = (): AudioContext | null => {
+    context ??= createContext();
+
+    if (context !== null && output === null) {
+      output = context.createGain();
+      output.gain.value = MASTER_GAIN;
+      output.connect(context.destination);
+    }
+
+    return context;
+  };
+
+  const bufferOf = (audio: AudioContext, name: SoundName): Promise<AudioBuffer> => {
+    const known = buffers.get(name);
+
+    if (known !== undefined) {
+      return known;
+    }
+
+    const loading = fetchSound(audio, SOUND_FILES[name]);
+    buffers.set(name, loading);
+
+    return loading;
+  };
 
   return {
     setEnabled: (enabled: boolean): void => {
       isEnabled = enabled;
     },
-    // The context only starts on the first sound, which always comes from a click, as browsers demand.
-    play: (name: SoundName): void => {
-      if (!isEnabled) {
+    // Runs on the first press, so that the files are decoded before the click that follows it.
+    prepare: (): void => {
+      const audio = isEnabled ? start() : null;
+
+      if (audio !== null) {
+        for (const name of SOUND_NAMES) {
+          bufferOf(audio, name).catch(() => {
+            buffers.delete(name);
+          });
+        }
+      }
+    },
+    play: async (name: SoundName): Promise<void> => {
+      const audio = isEnabled ? start() : null;
+
+      if (audio === null || output === null) {
         return;
       }
 
-      if (context === null) {
-        context = createContext();
+      if (audio.state === 'suspended') {
+        void audio.resume();
       }
 
-      if (context === null) {
-        return;
+      try {
+        const source = audio.createBufferSource();
+        source.buffer = await bufferOf(audio, name);
+        source.connect(output);
+        source.start();
+      } catch {
+        // A sound that fails to load must never get in the way of the interface.
+        buffers.delete(name);
       }
-
-      if (output === null) {
-        output = context.createGain();
-        output.gain.value = MASTER_GAIN;
-        output.connect(context.destination);
-      }
-
-      if (context.state === 'suspended') {
-        void context.resume();
-      }
-
-      scheduleSound(context, output, name, context.currentTime);
     },
   };
 };
@@ -166,10 +101,9 @@ export const soundPlayer = createSoundPlayer(() =>
 
 const CLICKABLE =
   'button, a, summary, [role="menuitem"], [role="menuitemradio"], [role="menuitemcheckbox"], [role="menubaritem"], .breakpoint-dot';
-const SOUND_NAMES = Object.keys(SOUND_RECIPES);
 
 const isSoundName = (value: string | undefined): value is SoundName =>
-  value !== undefined && SOUND_NAMES.includes(value);
+  value !== undefined && (SOUND_NAMES as string[]).includes(value);
 
 export const soundForClick = (target: EventTarget | null): SoundName | null => {
   if (!(target instanceof Element)) {

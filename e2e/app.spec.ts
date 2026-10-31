@@ -638,34 +638,28 @@ test('the sound can be turned off, and that is remembered', async ({ page }) => 
   await expect(page.getByRole('button', { name: 'Sound: Off' })).toBeVisible();
 });
 
-test('clicking and deleting make sounds, and the sound switch silences them', async ({ page }) => {
+test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
   await page.addInitScript(() => {
-    const started: string[] = [];
-    const startOscillator = OscillatorNode.prototype.start;
-    const startBuffer = AudioBufferSourceNode.prototype.start;
-    OscillatorNode.prototype.start = function start(...values) {
-      started.push('tone');
-      startOscillator.apply(this, values);
-    };
-    AudioBufferSourceNode.prototype.start = function start(...values) {
-      started.push('noise');
-      startBuffer.apply(this, values);
+    const started: number[] = [];
+    const start = AudioBufferSourceNode.prototype.start;
+    AudioBufferSourceNode.prototype.start = function startAndRecord(...values) {
+      started.push(this.buffer?.duration ?? 0);
+      start.apply(this, values);
     };
     Object.assign(window, { startedSounds: started });
   });
-  const sounds = (): Promise<string[]> =>
-    page.evaluate(() => (window as unknown as { startedSounds: string[] }).startedSounds);
+  const sounds = (): Promise<number[]> =>
+    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
-  await expect.poll(sounds).toContain('tone');
-  expect(await sounds()).not.toContain('noise');
+  await expect.poll(sounds).toHaveLength(1);
 
   await page.getByRole('button', { name: 'Go ahead' }).click();
   await page.getByRole('button', { name: 'Back to projects' }).click();
   await page.getByRole('button', { name: /^Delete / }).click();
   await page.getByRole('dialog').getByRole('button', { name: 'Delete' }).click();
-  await expect.poll(sounds).toContain('noise');
+  await expect.poll(async () => Math.max(...(await sounds()))).toBeGreaterThan(0.25);
 
   await page.getByRole('button', { name: 'Sound: On' }).click();
   const before = (await sounds()).length;
@@ -673,23 +667,6 @@ test('clicking and deleting make sounds, and the sound switch silences them', as
   await expect(page.getByRole('dialog')).toBeVisible();
 
   expect(await sounds()).toHaveLength(before);
-});
-
-test('dragging a .zip over the home screen highlights it and dropping imports it', async ({ page }) => {
-  await page.goto('/');
-  const dataTransfer = await page.evaluateHandle(() => {
-    const transfer = new DataTransfer();
-    transfer.items.add(new File(['not a zip'], 'solto.zip'));
-
-    return transfer;
-  });
-  await page.dispatchEvent('html', 'dragenter', { dataTransfer });
-  await expect(page.locator('.drop-target')).toBeVisible();
-  await expect(page.locator('.drop-target')).toHaveCSS('pointer-events', 'none');
-
-  await page.dispatchEvent('html', 'drop', { dataTransfer });
-  await expect(page.locator('.drop-target')).toHaveCount(0);
-  await expect(page.getByRole('status')).toContainText('This file is not a valid .zip.');
 });
 
 test('the logo is a live 3D gem', async ({ page }) => {

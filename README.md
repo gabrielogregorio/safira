@@ -91,4 +91,4 @@ creates the tag and the release. Actions are pinned by commit hash.
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1.
+MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1, and the interface sounds are from Kenney's Interface Sounds pack, under CC0.

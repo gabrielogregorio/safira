@@ -27,7 +27,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.
 - The example programs were ported to the new language and now carry emojis, so their author line names Gabriel Gregorio, who ported them.
-- Nostalgic sounds for clicks, switches, opening, creating and deleting, generated with Web Audio, with a speaker switch beside theme and language.
+- Recorded interface sounds for clicks, switches, opening, creating and deleting, from Kenney's CC0 Interface Sounds pack, with a speaker switch beside theme and language.
 - Opening a project switches the IDE on like an old screen, and opening a file wipes the editor with a glass sheen.
 - Glossy icon buttons for new file, new folder, back, close, run and stop, following the theme.
 - Istok Web as the interface font and JetBrains Mono for code, both bundled, with a menu switch for the code font.

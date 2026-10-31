@@ -110,13 +110,15 @@ export const App = ({ createWorker }: AppProps) => {
       const sound = soundForClick(event.target);
 
       if (sound !== null) {
-        soundPlayer.play(sound);
+        void soundPlayer.play(sound);
       }
     };
 
+    document.addEventListener('pointerdown', soundPlayer.prepare, { once: true });
     document.addEventListener('click', playClick);
 
     return () => {
+      document.removeEventListener('pointerdown', soundPlayer.prepare);
       document.removeEventListener('click', playClick);
     };
   }, []);

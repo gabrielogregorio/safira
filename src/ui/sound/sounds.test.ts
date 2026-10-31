@@ -1,82 +1,117 @@
-import { createSoundPlayer, SOUND_RECIPES, soundForClick } from './sounds';
-
-const fakeParam = () => ({
-  value: 0,
-  setValueAtTime: vi.fn(),
-  exponentialRampToValueAtTime: vi.fn(),
-});
+import { createSoundPlayer, SOUND_FILES, soundForClick } from './sounds';
 
 const fakeNode = () => ({
-  connect: vi.fn((next: unknown) => next),
+  connect: vi.fn(),
   start: vi.fn(),
-  stop: vi.fn(),
-  type: '',
-  buffer: null,
-  frequency: fakeParam(),
-  gain: fakeParam(),
+  buffer: null as unknown,
+  gain: { value: 0 },
 });
 
-const fakeContext = (state = 'running') => ({
-  state,
-  currentTime: 2,
-  sampleRate: 100,
-  destination: fakeNode(),
-  resume: vi.fn(() => Promise.resolve()),
-  createGain: vi.fn(fakeNode),
-  createOscillator: vi.fn(fakeNode),
-  createBufferSource: vi.fn(fakeNode),
-  createBiquadFilter: vi.fn(fakeNode),
-  createBuffer: vi.fn(() => ({ getChannelData: () => new Float32Array(30) })),
-});
+const fakeContext = (state = 'running') => {
+  const sources: ReturnType<typeof fakeNode>[] = [];
+
+  return {
+    state,
+    sources,
+    destination: {},
+    resume: vi.fn(() => Promise.resolve()),
+    createGain: vi.fn(fakeNode),
+    createBufferSource: vi.fn(() => {
+      const source = fakeNode();
+      sources.push(source);
+
+      return source;
+    }),
+    decodeAudioData: vi.fn((data: ArrayBuffer) => Promise.resolve({ decoded: data })),
+  };
+};
 
 const asContext = (context: ReturnType<typeof fakeContext>): AudioContext => context as unknown as AudioContext;
 
 describe('createSoundPlayer', () => {
-  it('plays every tone and noise burst of a sound', () => {
-    const context = fakeContext();
-    createSoundPlayer(() => asContext(context)).play('delete');
-
-    expect(context.createOscillator).toHaveBeenCalledTimes(SOUND_RECIPES.delete.tones.length);
-    expect(context.createBufferSource).toHaveBeenCalledTimes(SOUND_RECIPES.delete.noise.length);
+  beforeEach(() => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.resolve({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(1)) })),
+    );
   });
 
-  it('does not create the audio context until the first sound', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('plays the recorded file of the sound', async () => {
+    const context = fakeContext();
+    await createSoundPlayer(() => asContext(context)).play('delete');
+
+    expect(fetch).toHaveBeenCalledWith(SOUND_FILES.delete);
+    expect(context.sources[0]?.start).toHaveBeenCalled();
+    expect(context.sources[0]?.buffer).toBeTruthy();
+  });
+
+  it('downloads each file only once', async () => {
+    const player = createSoundPlayer(() => asContext(fakeContext()));
+    await player.play('click');
+    await player.play('click');
+
+    expect(fetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('prepares every file on the first press', () => {
+    createSoundPlayer(() => asContext(fakeContext())).prepare();
+
+    expect(fetch).toHaveBeenCalledTimes(Object.keys(SOUND_FILES).length);
+  });
+
+  it('prepares nothing when disabled', () => {
+    const player = createSoundPlayer(() => asContext(fakeContext()));
+    player.setEnabled(false);
+    player.prepare();
+
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it('does not create the audio context until it is needed', () => {
     const create = vi.fn(() => asContext(fakeContext()));
-    const player = createSoundPlayer(create);
+    createSoundPlayer(create);
 
     expect(create).not.toHaveBeenCalled();
-
-    player.play('click');
-    player.play('click');
-
-    expect(create).toHaveBeenCalledTimes(1);
   });
 
-  it('stays silent when disabled and speaks again when enabled', () => {
+  it('stays silent when disabled and speaks again when enabled', async () => {
     const context = fakeContext();
     const player = createSoundPlayer(() => asContext(context));
     player.setEnabled(false);
-    player.play('click');
+    await player.play('click');
 
-    expect(context.createOscillator).not.toHaveBeenCalled();
+    expect(context.sources).toHaveLength(0);
 
     player.setEnabled(true);
-    player.play('click');
+    await player.play('click');
 
-    expect(context.createOscillator).toHaveBeenCalled();
+    expect(context.sources).toHaveLength(1);
   });
 
-  it('wakes a suspended context', () => {
+  it('wakes a suspended context', async () => {
     const context = fakeContext('suspended');
-    createSoundPlayer(() => asContext(context)).play('toggle');
+    await createSoundPlayer(() => asContext(context)).play('toggle');
 
     expect(context.resume).toHaveBeenCalled();
   });
 
-  it('does nothing in a browser without audio', () => {
-    expect(() => {
-      createSoundPlayer(() => null).play('create');
-    }).not.toThrow();
+  it('does nothing in a browser without audio', async () => {
+    await expect(createSoundPlayer(() => null).play('create')).resolves.toBeUndefined();
+  });
+
+  it('survives a file that fails to load and tries again later', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    vi.mocked(fetch).mockRejectedValueOnce(new Error('offline'));
+
+    await expect(player.play('click')).resolves.toBeUndefined();
+    await player.play('click');
+
+    expect(context.sources[1]?.start).toHaveBeenCalled();
   });
 });
 
