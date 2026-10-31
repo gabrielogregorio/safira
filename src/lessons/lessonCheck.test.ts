@@ -1,3 +1,4 @@
+import { runScript } from '@/language/testHarness';
 import type { CheckRequest, LessonCheck } from './lessonCheck';
 import { checkProgram, normalizeOutput } from './lessonCheck';
 
@@ -25,6 +26,12 @@ describe('checkProgram', () => {
     await expect(check('mostre "ola mundo"', { cases: [{ shows: ['Olá, Mundo!'] }] })).resolves.toEqual({
       passed: true,
     });
+  });
+
+  it('tells apart words glued together from a wrong text', async () => {
+    await expect(
+      check('c = "Lima"\nmostre "Eu moro em" + c', { cases: [{ shows: ['Eu moro em Lima'] }] }),
+    ).resolves.toMatchObject({ reason: 'spacing' });
   });
 
   it('can demand exact capitals', async () => {
@@ -112,5 +119,13 @@ describe('normalizeOutput', () => {
   it('leaves only plain letters and numbers', () => {
     expect(normalizeOutput('  Olá,   MUNDO! 10 ')).toBe('ola mundo 10');
     expect(normalizeOutput('Olá!', true)).toBe('Ola');
+  });
+});
+
+describe('a name without quotes', () => {
+  it('reports which name has no value', async () => {
+    const { error } = await runScript('cidade = lima');
+
+    expect(error?.missingName).toBe('lima');
   });
 });

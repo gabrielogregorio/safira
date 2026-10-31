@@ -12,15 +12,6 @@ mostre 2 + 2
 mostre 10 * 3
 ```
 
-## Tudo na mesma linha
-
-Com `mostre nessa linha`, a próxima coisa continua na mesma linha.
-
-```safira
-mostre nessa linha "Bom "
-mostre nessa linha "dia!"
-```
-
 ## Cores
 
 Coloque `na cor` depois do texto. Vale o nome da cor ou um código como `#ff1122`.

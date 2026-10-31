@@ -41,7 +41,7 @@ mostre "Tenho " + idade + " anos"
 
 ## Desafio: sua cidade
 
-Crie uma variável chamada `cidade` com o valor `Lima` e mostre a frase `Eu moro em Lima`, juntando o texto com a variável.
+Crie uma variável chamada `cidade` com o valor `"Lima"` e mostre a frase `Eu moro em Lima`, juntando o texto com a variável.
 
 ```safira
 # Crie a variável aqui.

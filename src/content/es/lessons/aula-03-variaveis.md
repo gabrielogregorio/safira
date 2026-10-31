@@ -41,7 +41,7 @@ muestra "Tengo " + edad + " años"
 
 ## Desafío: tu ciudad
 
-Crea una variable llamada `ciudad` con el valor `Lima` y muestra la frase `Vivo en Lima`, uniendo el texto con la variable.
+Crea una variable llamada `ciudad` con el valor `"Lima"` y muestra la frase `Vivo en Lima`, uniendo el texto con la variable.
 
 ```safira
 # Crea la variable aquí.

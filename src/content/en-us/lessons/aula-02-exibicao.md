@@ -12,15 +12,6 @@ show 2 + 2
 show 10 * 3
 ```
 
-## All on the same line
-
-With `show on this line`, the next thing keeps going on the same line.
-
-```safira
-show on this line "Good "
-show on this line "morning!"
-```
-
 ## Colors
 
 Put `in color` after the text. You can use a color name or a code like `#ff1122`.

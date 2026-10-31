@@ -31,6 +31,7 @@ export interface RunnerFailure {
   file: string;
   line: number;
   example: string | null;
+  missingName: string | null;
 }
 
 export type RunnerEvent =

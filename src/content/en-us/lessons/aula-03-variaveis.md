@@ -41,7 +41,7 @@ show "I am " + age + " years old"
 
 ## Challenge: your city
 
-Create a variable called `city` with the value `Lima` and show the sentence `I live in Lima`, joining the text with the variable.
+Create a variable called `city` with the value `"Lima"` and show the sentence `I live in Lima`, joining the text with the variable.
 
 ```safira
 # Create the variable here.

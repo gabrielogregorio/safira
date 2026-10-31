@@ -85,6 +85,8 @@ export class SafiraError extends Error {
   public file = '';
   public line = 0;
   public example: string | null = null;
+  /** The name that has no value, which is often a text without quotes. */
+  public missingName: string | null = null;
 }
 
 const randomInteger = (minimum: number, maximum: number): number =>
@@ -528,7 +530,10 @@ export class Interpreter {
     const value = this.variables.get(name);
 
     if (value === undefined) {
-      return this.failWithDetail('voce_precisa_definir_variavel', `'${name}'`);
+      const error = new SafiraError(`${translateMessage(this.locale, 'voce_precisa_definir_variavel')} '${name}'`);
+      error.missingName = name;
+
+      throw error;
     }
 
     return value;

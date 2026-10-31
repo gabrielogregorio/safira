@@ -20,7 +20,7 @@ export interface LessonCheck {
   cases: CheckCase[];
 }
 
-export type CheckFailureReason = 'command' | 'missing' | 'unexpected' | 'error' | 'limit';
+export type CheckFailureReason = 'command' | 'missing' | 'spacing' | 'unexpected' | 'error' | 'limit';
 
 export type CheckResult =
   { passed: true } | { passed: false; reason: CheckFailureReason; text: string; inputs: string[]; line?: number };
@@ -141,6 +141,8 @@ const findPhraseInsideText = (output: string, phrase: string, from: number, isLa
   return index === -1 ? -1 : index + phrase.length;
 };
 
+const withoutSpaces = (text: string): string => text.replaceAll(' ', '');
+
 const isLatinText = (text: string): boolean => !/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}]/u.test(text);
 
 const checkCase = async (request: CheckRequest, testCase: CheckCase): Promise<CheckResult> => {
@@ -164,7 +166,9 @@ const checkCase = async (request: CheckRequest, testCase: CheckCase): Promise<Ch
     const found = findPhraseInsideText(normalized, phrase, position, isLatinText(phrase));
 
     if (found === -1) {
-      return { passed: false, reason: 'missing', text, inputs };
+      const isOnlyMissingSpaces = phrase.includes(' ') && withoutSpaces(normalized).includes(withoutSpaces(phrase));
+
+      return { passed: false, reason: isOnlyMissingSpaces ? 'spacing' : 'missing', text, inputs };
     }
 
     position = found;

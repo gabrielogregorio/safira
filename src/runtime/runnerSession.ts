@@ -139,7 +139,13 @@ export class RunnerSession {
         throw error;
       }
 
-      failure = { message: error.message, file: error.file, line: error.line, example: error.example };
+      failure = {
+        message: error.message,
+        file: error.file,
+        line: error.line,
+        example: error.example,
+        missingName: error.missingName,
+      };
     }
 
     this.flush();
