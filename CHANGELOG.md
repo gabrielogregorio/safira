@@ -34,7 +34,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Opening a project switches the IDE on like an old screen, and opening a file wipes the editor with a glass sheen.
 - Glossy icon buttons for new file, new folder, back, close, run and stop, following the theme.
 - Istok Web as the interface font and JetBrains Mono for code, both bundled, with a menu switch for the code font.
-- A 3D sapphire as the logo, written directly in WebGL 2. It spins and points at the mouse, stands still with the reduced motion preference and falls back to a flat logo without WebGL.
+- A 3D sapphire as the logo, written directly in WebGL 2. It spins and points at the mouse, draws at 15 to 30 frames per second, rests when the window loses focus, stands still with the reduced motion preference and falls back to a flat logo without WebGL.
 - Modals with an overlay, a retro opening and a closing animation, closing when clicking outside.
 - Confirmation before deleting a project or a file.
 - Styled mouse cursor and scrollbars.

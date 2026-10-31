@@ -66,16 +66,57 @@ describe('startGem', () => {
     expect(remove).toHaveBeenCalledWith('pointermove', expect.any(Function));
   });
 
-  it('keeps drawing on each frame', () => {
-    const drawArrays = vi.fn();
-    const frames: FrameRequestCallback[] = [];
-    vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => frames.push(callback));
-    const stop = startGem(canvasWith(fakeContext({ drawArrays })), { size: 40, animate: true, onLost: vi.fn() });
-    frames[0]?.(performance.now() + 16);
+  describe('frame rate', () => {
+    const NOW = 1_000_000;
+    let frames: FrameRequestCallback[];
+    let drawArrays: ReturnType<typeof vi.fn>;
+    let stop: (() => void) | null;
 
-    expect(drawArrays).toHaveBeenCalledTimes(2);
+    const passes = (): number => drawArrays.mock.calls.length / 2;
 
-    stop?.();
+    beforeEach(() => {
+      frames = [];
+      drawArrays = vi.fn();
+      vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => frames.push(callback));
+      vi.spyOn(performance, 'now').mockReturnValue(NOW);
+      vi.spyOn(document, 'hasFocus').mockReturnValue(true);
+      stop = startGem(canvasWith(fakeContext({ drawArrays })), { size: 40, animate: true, onLost: vi.fn() });
+    });
+
+    afterEach(() => {
+      stop?.();
+    });
+
+    it('draws at about 15 frames per second when nobody moves the mouse', () => {
+      frames.at(-1)?.(NOW + 16);
+      frames.at(-1)?.(NOW + 50);
+
+      expect(passes()).toBe(0);
+
+      frames.at(-1)?.(NOW + 70);
+
+      expect(passes()).toBe(1);
+    });
+
+    it('draws at about 30 frames per second while following the mouse', () => {
+      window.dispatchEvent(new MouseEvent('pointermove', { clientX: 10, clientY: 10 }));
+      frames.at(-1)?.(NOW + 16);
+
+      expect(passes()).toBe(0);
+
+      frames.at(-1)?.(NOW + 34);
+
+      expect(passes()).toBe(1);
+    });
+
+    it('rests when the window loses the focus, and keeps checking', () => {
+      vi.mocked(document.hasFocus).mockReturnValue(false);
+      const waiting = frames.length;
+      frames.at(-1)?.(NOW + 1000);
+
+      expect(passes()).toBe(0);
+      expect(frames).toHaveLength(waiting + 1);
+    });
   });
 
   it('reports a lost context', () => {

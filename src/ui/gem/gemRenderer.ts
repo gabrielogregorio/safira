@@ -9,6 +9,9 @@ interface GemOptions {
 const MAXIMUM_PIXEL_RATIO = 2;
 const SPIN_PER_SECOND = 0.9;
 const MILLISECONDS_PER_SECOND = 1000;
+const FOLLOWING_FRAME_MILLISECONDS = 33;
+const RESTING_FRAME_MILLISECONDS = 66;
+const FOLLOWING_MILLISECONDS = 1500;
 
 const VERTEX_SHADER = `#version 300 es
 in vec3 position;
@@ -131,6 +134,7 @@ export const startGem = (canvas: HTMLCanvasElement, { size, animate, onLost }: G
   let target = RESTING_AXIS;
   let spin = 0;
   let previousTime = performance.now();
+  let lastPointerMove = -FOLLOWING_MILLISECONDS;
   let frame = 0;
 
   gl.useProgram(program);
@@ -154,16 +158,28 @@ export const startGem = (canvas: HTMLCanvasElement, { size, animate, onLost }: G
     gl.drawArrays(gl.TRIANGLES, 0, vertexCount);
   };
 
+  // Drawing at the full rate of the screen took 160% of a core with software rendering, for a logo.
+  const isTimeToDraw = (now: number): boolean => {
+    const isFollowing = now - lastPointerMove < FOLLOWING_MILLISECONDS;
+    const interval = isFollowing ? FOLLOWING_FRAME_MILLISECONDS : RESTING_FRAME_MILLISECONDS;
+
+    return document.hasFocus() && now - previousTime >= interval;
+  };
+
   const advance = (now: number): void => {
-    const seconds = (now - previousTime) / MILLISECONDS_PER_SECOND;
-    previousTime = now;
-    axis = easeAxis(axis, target, seconds);
-    spin += seconds * SPIN_PER_SECOND;
-    draw();
+    if (isTimeToDraw(now)) {
+      const seconds = (now - previousTime) / MILLISECONDS_PER_SECOND;
+      previousTime = now;
+      axis = easeAxis(axis, target, seconds);
+      spin += seconds * SPIN_PER_SECOND;
+      draw();
+    }
+
     frame = requestAnimationFrame(advance);
   };
 
   const followPointer = (event: PointerEvent): void => {
+    lastPointerMove = performance.now();
     const box = canvas.getBoundingClientRect();
     target = aimAxis(event.clientX - box.left - box.width / 2, event.clientY - box.top - box.height / 2);
   };

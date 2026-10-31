@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, TranslationContext } from '@/i18n/i18n';
 import { addScriptVersion } from '@/language/version';
 import { clearDrafts } from '@/projects/draftStore';
@@ -82,7 +82,7 @@ export const App = ({ createWorker }: AppProps) => {
     }
   }, [locale, settings.codeFont, skyTheme, syntaxTheme]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (shownLocale.current === locale) {
       return undefined;
     }

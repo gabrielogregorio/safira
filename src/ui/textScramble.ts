@@ -90,6 +90,8 @@ export const scrambleDocument = (root: Node): (() => void) => {
     frame = requestAnimationFrame(draw);
   };
 
+  // Scrambled right away, so that the new text never flashes before the animation.
+  drawEach((finalText) => scrambleFrame(finalText, 0));
   frame = requestAnimationFrame(draw);
 
   return () => {

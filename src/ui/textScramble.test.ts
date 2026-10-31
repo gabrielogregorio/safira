@@ -63,6 +63,16 @@ describe('collectTextNodes with fixed text', () => {
 });
 
 describe('scrambleDocument', () => {
+  it('scrambles at once, so that the new text never flashes before the animation', () => {
+    const root = document.createElement('div');
+    root.textContent = 'Criar projeto';
+    const cancel = scrambleDocument(root);
+
+    expect(root.textContent).not.toBe('Criar projeto');
+
+    cancel();
+  });
+
   it('still plays when the first frame arrives after the time of the whole animation', () => {
     const frames: FrameRequestCallback[] = [];
     const request = vi.spyOn(window, 'requestAnimationFrame').mockImplementation((callback) => frames.push(callback));
