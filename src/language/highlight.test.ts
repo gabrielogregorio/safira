@@ -15,6 +15,10 @@ describe('highlightCode', () => {
     ]);
   });
 
+  it('colors a color code as a value, not as a comment', () => {
+    expect(categories('mostre "a" na cor #331')).toContainEqual(['#331', 'string']);
+  });
+
   it('colors a phrase of several words as a single range', () => {
     expect(categories('idade for maior que 3')).toEqual([
       ['for maior que', 'logico'],

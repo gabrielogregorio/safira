@@ -16,6 +16,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Variables inspector, always visible, with search and types.
 - Top menu with Radix, navigable by keyboard and touch.
 - Frutiger Aero look, with animated theme and language icons that cycle on each click. In the IDE, theme, language and sound live in the Interface menu.
+- Colors by name, `#331`, `#ff1122` or `0xff1122`, after or before the text, and `mostra` beside `mostre` and `mostrar`.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.

@@ -78,8 +78,8 @@ export const highlightCode = (code: string): HighlightRange[] => {
     const token = tokens[index];
     index += 1;
 
-    if (token.kind === 'string' || token.kind === 'number') {
-      const category = token.kind === 'string' ? 'string' : 'numerico';
+    if (token.kind === 'string' || token.kind === 'number' || token.kind === 'color') {
+      const category = token.kind === 'number' ? 'numerico' : 'string';
       ranges.push({ start: token.start, end: token.end, category });
     } else if (token.kind === 'symbol' && SYMBOL_CATEGORIES[token.text] !== undefined) {
       ranges.push({ start: token.start, end: token.end, category: SYMBOL_CATEGORIES[token.text] });

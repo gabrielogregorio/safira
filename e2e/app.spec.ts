@@ -696,6 +696,16 @@ test('modals sound when they open and when they close', async ({ page }) => {
   expect(closing).not.toBe(opening);
 });
 
+test('shows text in the colors written in every form', async ({ page }) => {
+  await createProjectWithCode(page, 'mostrar "a" na cor #ff1122\nmostra na cor 0x00ff00 "b"\nmostre "c" na cor pink');
+  await runCode(page);
+  const terminal = page.getByRole('log');
+
+  await expect(terminal.getByText('a', { exact: true })).toHaveCSS('color', 'rgb(255, 17, 34)');
+  await expect(terminal.getByText('b', { exact: true })).toHaveCSS('color', 'rgb(0, 255, 0)');
+  await expect(terminal.getByText('c', { exact: true })).toHaveCSS('color', 'rgb(255, 122, 198)');
+});
+
 test('the logo is a live 3D gem', async ({ page }) => {
   await page.goto('/');
   await page.mouse.move(900, 300);

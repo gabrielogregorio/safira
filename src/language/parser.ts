@@ -192,7 +192,11 @@ export class Parser extends ExpressionParser {
   private parsePrint(key: CommandKey, inline: boolean): StatementBody {
     this.expectPhrase(key);
 
-    return { kind: 'print', inline, value: this.isStatementEnd() ? null : this.parseValue() };
+    if (this.isStatementEnd()) {
+      return { kind: 'print', inline, value: null };
+    }
+
+    return { kind: 'print', inline, value: this.attempt(() => this.parseColorFirst()) ?? this.parseValue() };
   }
 
   private parseWhile(): StatementBody {

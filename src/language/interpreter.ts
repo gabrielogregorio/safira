@@ -1,3 +1,4 @@
+import { resolveColor } from './colors';
 import type { Expression, Statement, StatementKind, Value } from './ast';
 import type { Locale } from './messages';
 import { translateMessage } from './messages';
@@ -752,9 +753,21 @@ export class Interpreter {
 
   private *evaluateColored(value: Expression, color: Expression): Execution<Value> {
     const result = yield* this.evaluate(value);
-    this.lastColor = formatValue(yield* this.evaluate(color));
+    this.lastColor = yield* this.evaluateColor(color);
 
     return result;
+  }
+
+  private *evaluateColor(color: Expression): Execution<string> {
+    const namedColor = color.kind === 'variable' && !this.variables.has(color.name) ? resolveColor(color.name) : null;
+
+    if (namedColor !== null) {
+      return namedColor;
+    }
+
+    const text = formatValue(yield* this.evaluate(color));
+
+    return resolveColor(text) ?? text;
   }
 
   private *evaluateCase(expression: Expression & { kind: 'case' }): Execution<Value> {

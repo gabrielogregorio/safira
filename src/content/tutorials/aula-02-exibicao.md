@@ -31,10 +31,15 @@ mostre nessa linha "Tudo bem?"
 
 ## Comando de exibindo em linhas coloridas
 
-Você também pode dar uma cor aos textos exibidos, bastando informar um código Hexadecimal ou o nome das cores, por enquanto em inglês. Pesquise por esse código no Google '#88ffff'
+Você também pode dar uma cor aos textos exibidos, bastando informar um código Hexadecimal ou o nome da cor, em português, inglês ou espanhol. A cor pode vir depois ou antes do texto.
 
 ```
 mostre "[ ]" na cor "#ff5588"
 mostre "[X]" na cor "#ff8822"
 mostre "[ ]" na cor "#22bb22"
+mostre "Olá" na cor #ff1122
+mostre "Olá" na cor 0xff1122
+mostre "Olá" na cor roxo
+mostre "Olá" na cor pink
+mostre na cor #331 "Olá"
 ```

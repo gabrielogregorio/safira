@@ -69,6 +69,14 @@ export class ExpressionParser extends TokenCursor {
     }
   }
 
+  // mostre na cor #331 "texto"
+  protected parseColorFirst(): Expression {
+    this.expectPhrase('na_cor');
+    const color = this.parsePrimary();
+
+    return { kind: 'colored', value: this.parseValue(), color };
+  }
+
   private parseCaseSuffix(value: Expression): Expression | null {
     const rule = CASE_RULES.find(([, key]) => this.acceptPhrase(key));
 
@@ -187,6 +195,12 @@ export class ExpressionParser extends TokenCursor {
 
     if (token.kind === 'string') {
       return this.parseString();
+    }
+
+    if (token.kind === 'color') {
+      this.advance();
+
+      return { kind: 'literal', value: token.text };
     }
 
     if (this.acceptSymbol('(')) {
