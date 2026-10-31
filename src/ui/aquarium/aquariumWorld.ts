@@ -166,7 +166,7 @@ export type WorldEvent =
   | { kind: 'pop'; voice: number }
   | { kind: 'plant' }
   | { kind: 'food' }
-  | { kind: 'swish' };
+  | { kind: 'hold' };
 
 export const createPopulation = (): StoredFish[] =>
   Array.from({ length: FISH_COUNT }, (_, id) => ({ id, species: id % SPECIES.length, mass: MINIMUM_MASS }));
@@ -446,7 +446,7 @@ const moveWater = (world: World, seconds: number): void => {
   }
 };
 
-const movePointerEffects = (world: World, seconds: number): void => {
+const movePointerEffects = (world: World, seconds: number, events: WorldEvent[]): void => {
   const { pointer } = world;
 
   if (pointer === null) {
@@ -461,6 +461,7 @@ const movePointerEffects = (world: World, seconds: number): void => {
     pointer.dragY *= 0.8;
   } else if (pointer.heldFor > HOLD_SECONDS) {
     if (!wasHolding) {
+      events.push({ kind: 'hold' });
       world.ripples.push({ x: pointer.x, y: pointer.y, age: 0 });
     }
 
@@ -538,7 +539,7 @@ export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
   burstFish(world, events);
   separateFishes(world, seconds);
   moveWater(world, seconds);
-  movePointerEffects(world, seconds);
+  movePointerEffects(world, seconds, events);
 
   return events;
 };
@@ -615,11 +616,11 @@ export const pressPointer = (world: World, x: number, y: number, buttons = 1): v
   world.pointer = { x, y, dragX: 0, dragY: 0, startX: x, startY: y, heldFor: 0, hasMoved: false, buttons };
 };
 
-export const movePointer = (world: World, x: number, y: number, buttons = 1): WorldEvent[] => {
+export const movePointer = (world: World, x: number, y: number, buttons = 1): void => {
   const { pointer } = world;
 
   if (pointer === null) {
-    return [];
+    return;
   }
 
   // The second button of a chord only shows up here, because a press of it fires no event of its own.
@@ -640,8 +641,6 @@ export const movePointer = (world: World, x: number, y: number, buttons = 1): Wo
 
   pointer.x = x;
   pointer.y = y;
-
-  return startedDragging ? [{ kind: 'swish' }] : [];
 };
 
 // Scrolling while holding a button drops one piece for each tick of the wheel.

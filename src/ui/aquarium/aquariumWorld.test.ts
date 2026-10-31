@@ -147,9 +147,9 @@ describe('aquariumWorld', () => {
     const world = createWorld([], 800, 300, steady);
     pressPointer(world, 100, 100);
 
-    Array.from({ length: 30 }, () => stepWorld(world, 1 / 30));
+    const events = Array.from({ length: 30 }, () => stepWorld(world, 1 / 30)).flat();
 
-    expect(world.ripples).toHaveLength(1);
+    expect(events).toContainEqual({ kind: 'hold' });
     expect(releasePointer(world)).toEqual([]);
     expect(world.food).toEqual([]);
   });
@@ -158,7 +158,8 @@ describe('aquariumWorld', () => {
     const world = createWorld([], 800, 300, steady);
     pressPointer(world, 100, 100);
 
-    expect(movePointer(world, 200, 100)).toEqual([{ kind: 'swish' }]);
+    movePointer(world, 200, 100);
+
     expect(world.ripples.length).toBeGreaterThan(0);
     expect(releasePointer(world)).toEqual([]);
   });

@@ -8,10 +8,11 @@ import fishBurstUrl from './files/fish-burst.wav';
 import fishChompUrl from './files/fish-chomp.wav';
 import foodDropUrl from './files/food-drop.wav';
 import plantUrl from './files/plant.wav';
-import waterSwishUrl from './files/water-swish.wav';
+import waterHoldUrl from './files/water-hold.wav';
 import seaLightUrl from './files/sea-light.wav';
 import seaDarkUrl from './files/sea-dark.wav';
 import seaSimpleUrl from './files/sea-simple.wav';
+import aquariumCloseUrl from './files/aquarium-close.wav';
 import aquariumUrl from './files/aquarium.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
@@ -99,6 +100,7 @@ export type SoundName =
   | 'export'
   | 'lineDelete'
   | 'aquarium'
+  | 'aquariumClose'
   | 'pop'
   | 'fishFlee'
   | 'fishEat'
@@ -106,7 +108,7 @@ export type SoundName =
   | 'fishBurst'
   | 'foodDrop'
   | 'plant'
-  | 'waterSwish'
+  | 'waterHold'
   | 'seaLight'
   | 'seaDark'
   | 'seaSimple'
@@ -158,6 +160,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   export: exportUrl,
   lineDelete: lineDeleteUrl,
   aquarium: aquariumUrl,
+  aquariumClose: aquariumCloseUrl,
   pop: popUrl,
   fishFlee: fishFleeUrl,
   fishEat: fishEatUrl,
@@ -165,7 +168,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   fishBurst: fishBurstUrl,
   foodDrop: foodDropUrl,
   plant: plantUrl,
-  waterSwish: waterSwishUrl,
+  waterHold: waterHoldUrl,
   seaLight: seaLightUrl,
   seaDark: seaDarkUrl,
   seaSimple: seaSimpleUrl,

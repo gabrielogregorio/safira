@@ -49,7 +49,7 @@ const EVENT_SOUNDS: Record<WorldEvent['kind'], SoundName> = {
   pop: 'pop',
   plant: 'plant',
   food: 'foodDrop',
-  swish: 'waterSwish',
+  hold: 'waterHold',
 };
 
 const playEvents = (events: WorldEvent[]): void => {
@@ -146,6 +146,8 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
       return;
     }
 
+    void soundPlayer.play('aquariumClose');
+
     if (prefersMotion()) {
       setIsClosing(true);
       closeTimer.current = setTimeout(onClose, SHRINK_MILLISECONDS);
@@ -195,7 +197,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
             }}
             onPointerMove={(event) => {
               handlePointer(event, (world, x, y) => {
-                playEvents(movePointer(world, x, y, event.buttons));
+                movePointer(world, x, y, event.buttons);
               });
             }}
             onPointerUp={(event) => {
