@@ -185,8 +185,9 @@ export const fatnessOf = (mass: number): number => (mass - MINIMUM_MASS) * 0.16;
 // Eating opens the appetite: the fatter the fish, the farther it sees food and the faster it goes after it.
 export const appetiteOf = (mass: number): number => mass - MINIMUM_MASS;
 
+// The body grows forward and backward as well as up and down, so a fat fish stays a fish and not a ball.
 export const lengthOf = (fish: Pick<StoredFish, 'species' | 'mass'>): number =>
-  SPECIES[fish.species].length * (1 + 0.32 * Math.sqrt(fish.mass - MINIMUM_MASS));
+  SPECIES[fish.species].length * (1 + fatnessOf(fish.mass) * 0.85);
 
 const distance = (firstX: number, firstY: number, secondX: number, secondY: number): number =>
   Math.hypot(firstX - secondX, firstY - secondY);

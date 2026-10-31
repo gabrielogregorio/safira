@@ -102,7 +102,7 @@ const drawFish = (context: CanvasRenderingContext2D, fish: Fish): void => {
   const { body, fin } = colorsOf(fish.id);
   const length = lengthOf(fish);
   const half = length / 2;
-  const height = length * 0.24 * (1 + fatnessOf(fish.mass));
+  const height = length * 0.24 * (1 + fatnessOf(fish.mass) * 0.45);
   const tail = Math.sin(fish.swim) * length * 0.09;
 
   context.save();
