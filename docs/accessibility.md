@@ -15,9 +15,12 @@ The target is WCAG 2.1 AA.
 - Landmarks, a skip link and a visible focus ring.
 - The terminal is a live region, so a screen reader announces what programs print.
 - Modals take the focus and close with Escape.
+- The top menu follows the menu bar pattern: arrows move between and inside menus, Escape returns to the trigger.
+- Theme and language are radio buttons, even though they look like pictures.
+- On a phone, touch targets have at least 44 pixels.
 
 ## Known limits
 
 - In the editor, Tab indents, so leaving it needs Shift+Tab or the skip link.
-- Clicking the gutter sets a breakpoint with the mouse. By keyboard, use F10 on the line.
+- The breakpoint dots work by mouse and touch. By keyboard, use F10 on the line.
 - Neither NVDA nor Orca were tested by hand yet.

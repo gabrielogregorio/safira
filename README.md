@@ -28,6 +28,9 @@ repeat 2 vezes { show "Oi" }
 Everything runs in the browser, in a Web Worker. There is no server, and programs have no access to the disk: each
 project has its own virtual files, which is where `crie o arquivo`, `leia o arquivo`, `importe` and saving work.
 
+Click the dot beside a line to set a breakpoint: running stops there, and the variables inspector shows the values. On a
+phone the IDE splits into Code, Output and Variables panels.
+
 Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
 is not supported. A script without that line is treated as version 0.38, the last Python release.
 
@@ -46,6 +49,7 @@ Projects live in the browser `localStorage`, so they are not in the repository a
 | Script | What it does |
 |---|---|
 | `pnpm run dev` | Development server |
+| `Ctrl+Enter` in the IDE | Runs the program, stopping at the red dots |
 | `pnpm run build` | Type check and production build in `build/` |
 | `pnpm run preview` | Serves the build on port 5556 |
 | `pnpm run lint` / `pnpm run format` | ESLint and TypeScript / Prettier |

@@ -24,4 +24,7 @@ setup and scripts.
 - Variables are global, functions included. Parameters overwrite globals. This is existing behavior that scripts rely on.
 - `a`, `e`, `o` are both phrases and valid names. `isAdjacentText` in `expressionParser.ts` handles the conflict.
 - Scripts that drive the browser must fix the locale to `en-US`: the interface follows the browser language.
+- `mostre` examples named `Continue` and `Pare` collide with button names in tests. Keep action labels distinct.
+- Breakpoints snap to the next command in `snapBreakpoints`, because comments never produce a step.
+- In Playwright, wait for the focus to enter a Radix menu before pressing arrows, or the key moves the trigger.
 - A new language version must be added to `SUPPORTED_VERSIONS` while it can still run the older ones.

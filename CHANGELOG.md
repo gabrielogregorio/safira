@@ -11,6 +11,12 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Hidden language version on the first line of each script, with an alert only when it is not supported.
 - Variables panel, line by line execution and breakpoints in a Web Worker.
 - Programs can be stopped at any time, including infinite loops.
+- `Ctrl+Enter` runs the program, and running stops at breakpoints.
+- Clickable breakpoint dots beside every line. A dot on a comment or an empty line stops at the next command.
+- Variables inspector, always visible, with search and types.
+- Top menu with Radix, navigable by keyboard and touch.
+- Frutiger Aero look, with illustrated theme and language choices on every screen.
+- Phone layout with Code, Output and Variables panels and 44 pixel touch targets.
 
 ### Changed
 
