@@ -8,7 +8,6 @@ import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
 import { AeroOrb } from '@/ui/components/AeroOrb';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
-import { Aquarium } from '@/ui/components/Aquarium';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { TextPrompt } from '@/ui/components/TextPrompt';
@@ -21,6 +20,7 @@ interface HomeScreenProps {
   onCancelCreating: () => void;
   onCreate: (name: string, source?: string) => void;
   onImportProject: (file: File) => void;
+  onOpenAquarium: (origin: ScreenPoint) => void;
   onExportProject: (project: Project) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
@@ -37,6 +37,7 @@ export const HomeScreen = ({
   onCancelCreating,
   onCreate,
   onImportProject,
+  onOpenAquarium,
   onExportProject,
   onRename,
   onDelete,
@@ -45,7 +46,6 @@ export const HomeScreen = ({
   const t = useTranslation();
   const [renaming, setRenaming] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState<Project | null>(null);
-  const [aquariumOrigin, setAquariumOrigin] = useState<ScreenPoint | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const [isDropping, setIsDropping] = useState(false);
 
@@ -107,7 +107,7 @@ export const HomeScreen = ({
             title={t('Open the aquarium')}
             onClick={(event) => {
               const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
-              setAquariumOrigin({ x: left + width / 2, y: top + height / 2 });
+              onOpenAquarium({ x: left + width / 2, y: top + height / 2 });
             }}>
             <AeroOrb size={HERO_ORB_SIZE} />
           </button>
@@ -221,15 +221,6 @@ export const HomeScreen = ({
             </button>
           </div>
         </Modal>
-      )}
-
-      {aquariumOrigin === null ? null : (
-        <Aquarium
-          origin={aquariumOrigin}
-          onClose={() => {
-            setAquariumOrigin(null);
-          }}
-        />
       )}
 
       {renaming === null ? null : (

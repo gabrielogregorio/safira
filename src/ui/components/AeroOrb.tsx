@@ -22,13 +22,13 @@ export const AeroOrb = ({ size }: AeroOrbProps) => {
     <svg className="aero-orb" width={size} height={size} viewBox="0 0 120 120" aria-hidden="true">
       <defs>
         <radialGradient id={`${id}-sky`} cx="42%" cy="28%" r="80%">
-          <stop offset="0%" stopColor="#f2fdff" />
-          <stop offset="55%" stopColor="#8fdcfa" />
-          <stop offset="100%" stopColor="#2a93dc" />
+          <stop offset="0%" className="orb-sky-top" />
+          <stop offset="55%" className="orb-sky-middle" />
+          <stop offset="100%" className="orb-sky-bottom" />
         </radialGradient>
         <linearGradient id={`${id}-water`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stopColor="#35c6f0" stopOpacity="0.9" />
-          <stop offset="100%" stopColor="#0a4fa8" />
+          <stop offset="0%" className="orb-water-top" stopOpacity="0.9" />
+          <stop offset="100%" className="orb-water-bottom" />
         </linearGradient>
         <linearGradient id={`${id}-gloss`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
@@ -56,7 +56,7 @@ export const AeroOrb = ({ size }: AeroOrbProps) => {
             <path d="M60 50 C50 38 36 40 32 44 C38 54 52 58 60 50 Z" fill={`url(#${id}-leaf)`} />
           </g>
           <g transform="translate(0 64)">
-            <path className="aero-orb-wave aero-orb-wave-back" d={WAVE} fill="#7fe0f7" fillOpacity="0.6" />
+            <path d={WAVE} className="aero-orb-wave aero-orb-wave-back orb-wave-back" fillOpacity="0.6" />
             <path className="aero-orb-wave" d={WAVE} fill={`url(#${id}-water)`} />
           </g>
           <g className="aero-orb-fish">

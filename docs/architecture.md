@@ -16,6 +16,7 @@ Safira runs only in the browser. There is no server, and programs never reach th
 | Sound | `src/ui/sound` | Player on Web Audio with short recorded files from Kenney (CC0). A click plays what `data-sound` names on the element, or the plain click. Run, stop, breakpoints and renames call the player directly, because they also come from the keyboard |
 | Sky | `src/ui/sky` | The clock of the scenery. `settings.theme` is only the starting point: `useSkyClock` gives the phase, and the shown theme comes from it. Nothing about elapsed time is saved |
 | Suggestions | `src/language/completion.ts`, `src/ui/components/ghostText.ts` | Pure suggestion logic, and the CodeMirror ghost text that paints it without touching the document |
+| Aquarium | `src/ui/aquarium` | Pure simulation in `aquariumWorld.ts`, canvas drawing in `aquariumRenderer.ts`, fish kept in `aquariumStore.ts` |
 | Globe | `src/ui/components/AeroOrb.tsx` | The animated picture of the home screen, in SVG and CSS, so it costs almost nothing |
 
 `src/language` has no dependency on React or the DOM. The interface only reaches it through `src/runtime`, except for
@@ -44,6 +45,7 @@ pure helpers such as highlighting and formatting.
 |---|---|
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
 | `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
+| `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
 | `safira.settings.v1` | Language, chosen theme, fonts, sound, suggestions, panel sizes, read lessons |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
@@ -54,6 +56,7 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 |---|---|
 | `#/` | Home |
 | `#/new`, `#/new/<example>` | New project, with an example already chosen |
+| `#/aquarium`, `#/globe` | Aquarium and globe, full screen, meant to work as a wallpaper |
 | `#/projects/<id>/<file>` | Project and file, with the file URL encoded |
 | `#/projects/<id>/<file>/lessons/<lesson>/<section>` | Lessons open over that project, reached from Help |
 

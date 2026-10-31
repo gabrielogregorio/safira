@@ -1,6 +1,17 @@
 import type { Locale } from '@/language/messages';
 import type { ThemeId } from '@/settings/settings';
 import acceptUrl from './files/accept.wav';
+import popUrl from './files/pop.wav';
+import fishFleeUrl from './files/fish-flee.wav';
+import fishEatUrl from './files/fish-eat.wav';
+import fishChompUrl from './files/fish-chomp.wav';
+import foodDropUrl from './files/food-drop.wav';
+import plantUrl from './files/plant.wav';
+import waterSwishUrl from './files/water-swish.wav';
+import waterHoldUrl from './files/water-hold.wav';
+import seaLightUrl from './files/sea-light.wav';
+import seaDarkUrl from './files/sea-dark.wav';
+import seaSimpleUrl from './files/sea-simple.wav';
 import aquariumUrl from './files/aquarium.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
@@ -86,6 +97,17 @@ export type SoundName =
   | 'export'
   | 'lineDelete'
   | 'aquarium'
+  | 'pop'
+  | 'fishFlee'
+  | 'fishEat'
+  | 'fishChomp'
+  | 'foodDrop'
+  | 'plant'
+  | 'waterSwish'
+  | 'waterHold'
+  | 'seaLight'
+  | 'seaDark'
+  | 'seaSimple'
   | 'move'
   | 'terminalFocus'
   | 'terminalTyping'
@@ -133,6 +155,17 @@ export const SOUND_FILES: Record<SoundName, string> = {
   export: exportUrl,
   lineDelete: lineDeleteUrl,
   aquarium: aquariumUrl,
+  pop: popUrl,
+  fishFlee: fishFleeUrl,
+  fishEat: fishEatUrl,
+  fishChomp: fishChompUrl,
+  foodDrop: foodDropUrl,
+  plant: plantUrl,
+  waterSwish: waterSwishUrl,
+  waterHold: waterHoldUrl,
+  seaLight: seaLightUrl,
+  seaDark: seaDarkUrl,
+  seaSimple: seaSimpleUrl,
   move: moveUrl,
   terminalFocus: terminalFocusUrl,
   terminalTyping: terminalTypingUrl,
@@ -154,6 +187,8 @@ export const WEATHER_SOUNDS: Record<ThemeId, SoundName> = {
   simple: 'weatherSimple',
 };
 
+export const SEA_SOUNDS: Record<ThemeId, SoundName> = { light: 'seaLight', dark: 'seaDark', simple: 'seaSimple' };
+
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
 // Waiting a little lets the most meaningful one play first, and the others step aside.
 const WAIT_MILLISECONDS: Partial<Record<SoundName, number>> = { modalClose: 10, click: 20 };
@@ -161,7 +196,7 @@ const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
 const SAME_GESTURE_MILLISECONDS = 80;
 const HOVER_GAP_MILLISECONDS = 40;
 
-const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping', 'terminalTyping'];
+const NOT_A_GESTURE: SoundName[] = ['typing', 'searchTyping', 'terminalTyping', 'fishEat', 'pop'];
 
 // These happen without a press: on a reload or a passing mouse, the browser would hold them until the first click.
 const NEEDS_EARLIER_PRESS: SoundName[] = ['hover', 'ideOpen'];
@@ -308,7 +343,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       }
     },
     // Starts a looping sound, or moves the one that is playing to this rate. It lasts until `release`.
-    hold: async (name: SoundName, rate: number): Promise<void> => {
+    hold: async (name: SoundName, rate: number, volume = LOOP_GAIN): Promise<void> => {
       const audio = isEnabled ? start() : null;
 
       if (audio === null || output === null) {
@@ -316,6 +351,10 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       }
 
       isLoopHeld = true;
+
+      if (audio.state === 'suspended') {
+        void audio.resume();
+      }
 
       if (loop === null) {
         if (isLoopStarting) {
@@ -330,7 +369,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
           source.buffer = await bufferOf(audio, name);
           source.loop = true;
           gain.gain.value = 0;
-          gain.gain.setTargetAtTime(LOOP_GAIN, audio.currentTime, LOOP_FADE_IN_SECONDS);
+          gain.gain.setTargetAtTime(volume, audio.currentTime, LOOP_FADE_IN_SECONDS);
           source.connect(gain);
           gain.connect(output);
           source.start();

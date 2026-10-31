@@ -4,17 +4,16 @@ import { Aquarium } from './Aquarium';
 
 const setup = () => {
   const onClose = vi.fn();
-  render(<Aquarium origin={{ x: 10, y: 20 }} onClose={onClose} />);
+  render(<Aquarium origin={{ x: 10, y: 20 }} theme="light" isSoundOn={false} onClose={onClose} />);
 
   return onClose;
 };
 
 describe('Aquarium', () => {
-  it('fills the screen with fish and grows from the given point', () => {
+  it('fills the screen and grows from the given point', () => {
     setup();
     const dialog = screen.getByRole('dialog', { name: 'Aquarium' });
 
-    expect(dialog.querySelectorAll('.aquarium-fish').length).toBeGreaterThan(1);
     expect(dialog.style.getPropertyValue('--origin-x')).toBe('10px');
   });
 

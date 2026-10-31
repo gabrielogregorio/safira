@@ -15,8 +15,11 @@ import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings';
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
+import type { ScreenPoint } from '@/ui/components/Aquarium';
+import { Aquarium } from '@/ui/components/Aquarium';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { DevToolsInvite } from '@/ui/components/DevToolsInvite';
+import { GlobeWallpaper } from '@/ui/components/GlobeWallpaper';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
 import { SoundToggle } from '@/ui/components/SoundToggle';
@@ -43,6 +46,10 @@ export const App = ({ createWorker }: AppProps) => {
   const [saveFailed, setSaveFailed] = useState(false);
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
   const themeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [aquariumOrigin, setAquariumOrigin] = useState<ScreenPoint>(() => ({
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2,
+  }));
   const { phase, travelTo } = useSkyClock(settings.theme);
   const skyTheme = themeAtPhase(phase);
   const shownTheme = useRef(skyTheme);
@@ -213,7 +220,7 @@ export const App = ({ createWorker }: AppProps) => {
 
   const activeProject =
     route.name === 'project' ? projects.find((project) => project.id === route.projectId) : undefined;
-  const isHome = activeProject === undefined;
+  const isHome = activeProject === undefined && route.name !== 'globe';
   const preferenceToggles = (
     <div className="orb-toggles">
       <ThemeToggle
@@ -285,6 +292,15 @@ export const App = ({ createWorker }: AppProps) => {
           onBack={goHome}
         />
       ) : null}
+      {route.name === 'aquarium' ? (
+        <Aquarium
+          origin={aquariumOrigin}
+          theme={skyTheme}
+          isSoundOn={settings.sound}
+          onClose={goHome}
+        />
+      ) : null}
+      {route.name === 'globe' ? <GlobeWallpaper onClose={goHome} /> : null}
       {isHome ? (
         <HomeScreen
           projects={projects}
@@ -296,6 +312,10 @@ export const App = ({ createWorker }: AppProps) => {
           onCancelCreating={goHome}
           onCreate={handleCreate}
           onImportProject={importProject}
+          onOpenAquarium={(origin) => {
+            setAquariumOrigin(origin);
+            navigate({ name: 'aquarium' });
+          }}
           onExportProject={downloadProject}
           onRename={(id, name) => {
             persist(projects.map((project) => (project.id === id ? { ...project, name } : project)));

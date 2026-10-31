@@ -715,62 +715,129 @@ select {
   width: 1px;
 }
 
-.aquarium-light {
-  animation: aquarium-light 9s ease-in-out infinite;
-  background:
-    linear-gradient(105deg, transparent 18%, rgb(255 255 255 / 22%) 24%, transparent 32%),
-    linear-gradient(100deg, transparent 48%, rgb(255 255 255 / 16%) 54%, transparent 62%),
-    linear-gradient(112deg, transparent 70%, rgb(255 255 255 / 20%) 76%, transparent 84%);
-  inset: -10% -20%;
-  position: absolute;
-}
-
-.aquarium-fish {
-  animation: aquarium-swim linear infinite;
-  left: -140px;
-  position: absolute;
-  z-index: 2;
-}
-
-.aquarium-fish svg {
-  animation: aquarium-bob 2.6s ease-in-out infinite;
+.aquarium-water {
+  cursor: var(--cursor-pointer);
   display: block;
-  filter: drop-shadow(0 4px 5px rgb(3 30 80 / 40%));
-  overflow: visible;
+  height: 100%;
+  touch-action: none;
+  width: 100%;
 }
 
-.aquarium-fish-left {
-  animation-direction: reverse;
+.is-idle,
+.is-idle .aquarium-water {
+  cursor: none;
 }
 
-.aquarium-fish-left svg {
-  scale: -1 1;
+.aquarium .aero-button-close,
+.wallpaper .aero-button-close {
+  transition: opacity 400ms ease;
 }
 
-.aquarium-tail {
-  animation: aquarium-tail 0.7s ease-in-out infinite;
-  transform-box: fill-box;
-  transform-origin: right center;
+.is-idle .aero-button-close:not(:focus-visible) {
+  opacity: 0;
 }
 
-.aquarium-bubble {
-  animation: aquarium-rise linear infinite;
-  background: radial-gradient(circle at 32% 28%, #ffffff 0 18%, rgb(255 255 255 / 25%) 45%, rgb(255 255 255 / 10%) 100%);
-  border: 1px solid rgb(255 255 255 / 70%);
-  border-radius: 50%;
-  bottom: -30px;
+.wallpaper {
+  align-items: center;
+  display: flex;
+  inset: 0;
+  justify-content: center;
+  position: fixed;
+  z-index: 60;
+}
+
+.wallpaper .aero-orb {
+  height: min(70vw, 70vh);
+  width: min(70vw, 70vh);
+}
+
+.wallpaper .aero-button-close {
   position: absolute;
+  right: 16px;
+  top: 16px;
 }
 
-.aquarium-weed {
-  animation: aquarium-sway 5s ease-in-out infinite;
-  background: linear-gradient(#a8ee6a, #2c8f3a);
-  border-radius: 60% 60% 0 0 / 100% 100% 0 0;
-  bottom: -6px;
-  position: absolute;
-  transform-origin: bottom center;
-  width: 26px;
-  z-index: 1;
+.orb-sky-top,
+.orb-sky-middle,
+.orb-sky-bottom,
+.orb-water-top,
+.orb-water-bottom,
+.orb-wave-back {
+  transition:
+    stop-color 1.6s ease,
+    fill 1.6s ease;
+}
+
+.orb-sky-top {
+  stop-color: #f2fdff;
+}
+
+.orb-sky-middle {
+  stop-color: #8fdcfa;
+}
+
+.orb-sky-bottom {
+  stop-color: #2a93dc;
+}
+
+.orb-water-top {
+  stop-color: #35c6f0;
+}
+
+.orb-water-bottom {
+  stop-color: #0a4fa8;
+}
+
+.orb-wave-back {
+  fill: #7fe0f7;
+}
+
+:root[data-theme='dark'] .orb-sky-top {
+  stop-color: #5a7fc4;
+}
+
+:root[data-theme='dark'] .orb-sky-middle {
+  stop-color: #17306e;
+}
+
+:root[data-theme='dark'] .orb-sky-bottom {
+  stop-color: #060f33;
+}
+
+:root[data-theme='dark'] .orb-water-top {
+  stop-color: #123f86;
+}
+
+:root[data-theme='dark'] .orb-water-bottom {
+  stop-color: #03102e;
+}
+
+:root[data-theme='dark'] .orb-wave-back {
+  fill: #2a5aa8;
+}
+
+:root[data-theme='simple'] .orb-sky-top {
+  stop-color: #ecfff6;
+}
+
+:root[data-theme='simple'] .orb-sky-middle {
+  stop-color: #a4e3df;
+}
+
+:root[data-theme='simple'] .orb-sky-bottom {
+  stop-color: #2f9c9c;
+}
+
+:root[data-theme='simple'] .orb-water-top {
+  stop-color: #4fd0bb;
+}
+
+:root[data-theme='simple'] .orb-water-bottom {
+  stop-color: #0d6470;
+}
+
+:root[data-theme='simple'] .orb-wave-back {
+  fill: #93ecd5;
 }
 
 @keyframes aquarium-grow {
@@ -790,57 +857,6 @@ select {
 
   to {
     clip-path: circle(40px at var(--origin-x) var(--origin-y));
-  }
-}
-
-@keyframes aquarium-swim {
-  to {
-    transform: translateX(calc(100vw + 280px));
-  }
-}
-
-@keyframes aquarium-bob {
-  50% {
-    transform: translateY(-12px);
-  }
-}
-
-@keyframes aquarium-tail {
-  50% {
-    transform: scaleX(0.72);
-  }
-}
-
-@keyframes aquarium-rise {
-  from {
-    opacity: 0;
-    transform: translateY(0);
-  }
-
-  10% {
-    opacity: 1;
-  }
-
-  to {
-    opacity: 0.2;
-    transform: translateY(-110vh);
-  }
-}
-
-@keyframes aquarium-sway {
-  0%,
-  100% {
-    transform: rotate(-6deg);
-  }
-
-  50% {
-    transform: rotate(6deg);
-  }
-}
-
-@keyframes aquarium-light {
-  50% {
-    transform: translateX(6%);
   }
 }
 
@@ -2488,12 +2504,7 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .aquarium-fish {
-    left: var(--start);
-  }
-
   .aquarium,
-  .aquarium *,
   .aero-orb *,
   .button,
   .example-card,

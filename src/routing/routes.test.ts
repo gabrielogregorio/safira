@@ -5,6 +5,8 @@ describe('routes', () => {
   it.each<[string, Route]>([
     ['#/', { name: 'home' }],
     ['#/new', { name: 'new', exampleId: null }],
+    ['#/aquarium', { name: 'aquarium' }],
+    ['#/globe', { name: 'globe' }],
     ['#/new/16-listas', { name: 'new', exampleId: '16-listas' }],
     [
       '#/projects/abc/main.safira/lessons',

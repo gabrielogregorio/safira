@@ -6,6 +6,8 @@ export interface LessonPlace {
 export type Route =
   | { name: 'home' }
   | { name: 'new'; exampleId: string | null }
+  | { name: 'aquarium' }
+  | { name: 'globe' }
   | { name: 'project'; projectId: string; file: string | null; lesson?: LessonPlace };
 
 const LESSONS_SEGMENT = 'lessons';
@@ -30,6 +32,10 @@ export const parseRoute = (hash: string): Route => {
     return { name: 'new', exampleId: first };
   }
 
+  if (screen === 'aquarium' || screen === 'globe') {
+    return { name: screen };
+  }
+
   if (screen === 'projects' && first !== null) {
     const place = { name: 'project', projectId: first, file: second } as const;
 
@@ -51,6 +57,9 @@ export const routeToHash = (route: Route): string => {
       return '#/';
     case 'new':
       return buildHash(['new', route.exampleId]);
+    case 'aquarium':
+    case 'globe':
+      return buildHash([route.name]);
     case 'project':
       return buildHash([
         'projects',

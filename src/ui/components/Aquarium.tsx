@@ -1,9 +1,23 @@
 import * as Dialog from '@radix-ui/react-dialog';
-import type { CSSProperties } from 'react';
+import type { CSSProperties, PointerEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from '@/i18n/i18n';
+import type { ThemeId } from '@/settings/settings';
+import { loadFishes, saveFishes } from '@/ui/aquarium/aquariumStore';
+import { drawWorld, easePalette, startingPalette } from '@/ui/aquarium/aquariumRenderer';
+import type { World, WorldEvent } from '@/ui/aquarium/aquariumWorld';
+import {
+  createWorld,
+  movePointer,
+  pressPointer,
+  releasePointer,
+  resizeWorld,
+  stepWorld,
+} from '@/ui/aquarium/aquariumWorld';
+import { useIdle } from '@/ui/hooks/useIdle';
 import { prefersMotion } from '@/ui/motion';
-import { soundPlayer } from '@/ui/sound/sounds';
+import type { SoundName } from '@/ui/sound/sounds';
+import { SEA_SOUNDS, soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
 
 export interface ScreenPoint {
@@ -13,41 +27,109 @@ export interface ScreenPoint {
 
 interface AquariumProps {
   origin: ScreenPoint;
+  theme: ThemeId;
+  isSoundOn: boolean;
   onClose: () => void;
 }
 
 const SHRINK_MILLISECONDS = 480;
+const SAVE_MILLISECONDS = 10000;
+const FRAME_MILLISECONDS = 1000 / 30;
+const LONGEST_STEP_SECONDS = 0.1;
+const LARGEST_PIXEL_RATIO = 2;
+const MILLISECONDS_PER_SECOND = 1000;
+const SEA_GAIN = 0.8;
 
-const FISHES = [
-  { body: '#ffb347', fin: '#ff8a2a', top: 16, size: 74, seconds: 19, start: 12, goesLeft: false },
-  { body: '#ffe066', fin: '#f2b705', top: 30, size: 48, seconds: 13, start: 64, goesLeft: true },
-  { body: '#ff8fb1', fin: '#f0507f', top: 44, size: 92, seconds: 24, start: 36, goesLeft: false },
-  { body: '#7fe3ff', fin: '#1f9fe0', top: 56, size: 56, seconds: 16, start: 82, goesLeft: true },
-  { body: '#b6f27a', fin: '#56b92e', top: 68, size: 64, seconds: 21, start: 22, goesLeft: false },
-  { body: '#ffb347', fin: '#ff8a2a', top: 24, size: 38, seconds: 11, start: 48, goesLeft: false },
-  { body: '#d3a6ff', fin: '#9a5ff0', top: 76, size: 44, seconds: 15, start: 70, goesLeft: true },
-  { body: '#ffffff', fin: '#ff7a3c', top: 38, size: 60, seconds: 27, start: 90, goesLeft: true },
-];
+const EVENT_SOUNDS: Record<WorldEvent['kind'], SoundName> = {
+  eat: 'fishEat',
+  chomp: 'fishChomp',
+  flee: 'fishFlee',
+  pop: 'pop',
+  plant: 'plant',
+  food: 'foodDrop',
+  hold: 'waterHold',
+  swish: 'waterSwish',
+};
 
-const BUBBLES = [8, 17, 26, 38, 47, 59, 68, 77, 86, 94];
-const WEEDS = [6, 13, 30, 52, 71, 84, 93];
+const playEvents = (events: WorldEvent[]): void => {
+  for (const event of events) {
+    void soundPlayer.play(EVENT_SOUNDS[event.kind], 'voice' in event ? event.voice : 1);
+  }
+};
 
-const FishArt = ({ body, fin }: { body: string; fin: string }) => (
-  <svg viewBox="0 0 64 36" aria-hidden="true">
-    <path className="aquarium-tail" d="M16 18 L1 6 L5 18 L1 30 Z" fill={fin} />
-    <path d="M12 18 C22 3 46 3 60 18 C46 33 22 33 12 18 Z" fill={body} />
-    <path d="M30 7 C34 1 42 1 46 8 Z" fill={fin} />
-    <path d="M32 19 C36 26 42 26 44 21 Z" fill={fin} fillOpacity="0.8" />
-    <path d="M14 15 C26 5 44 6 54 13 C42 10 26 11 14 15 Z" fill="#ffffff" fillOpacity="0.6" />
-    <circle cx="50" cy="15" r="3.4" fill="#ffffff" />
-    <circle cx="51" cy="15" r="1.8" fill="#102a43" />
-  </svg>
-);
-
-export const Aquarium = ({ origin, onClose }: AquariumProps) => {
+export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) => {
   const t = useTranslation();
   const [isClosing, setIsClosing] = useState(false);
+  const isIdle = useIdle();
+  // A state and not a ref: the dialog mounts its content after this effect would run.
+  const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
+  const worldRef = useRef<World | null>(null);
+  const latestTheme = useRef(theme);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    latestTheme.current = theme;
+  }, [theme]);
+
+  useEffect(() => {
+    const context = canvas?.getContext('2d') ?? null;
+
+    if (canvas === null || context === null) {
+      return undefined;
+    }
+
+    const world = createWorld(loadFishes(), window.innerWidth, window.innerHeight);
+    const palette = startingPalette(latestTheme.current);
+    worldRef.current = world;
+    let frame = 0;
+    let lastTime = performance.now();
+
+    const fit = (): void => {
+      const ratio = Math.min(window.devicePixelRatio, LARGEST_PIXEL_RATIO);
+      canvas.setAttribute('width', String(window.innerWidth * ratio));
+      canvas.setAttribute('height', String(window.innerHeight * ratio));
+      context.setTransform(ratio, 0, 0, ratio, 0, 0);
+      resizeWorld(world, window.innerWidth, window.innerHeight);
+    };
+
+    const save = (): void => {
+      saveFishes(world.fishes);
+    };
+
+    const draw = (time: number): void => {
+      frame = requestAnimationFrame(draw);
+
+      if (time - lastTime >= FRAME_MILLISECONDS) {
+        const seconds = Math.min(LONGEST_STEP_SECONDS, (time - lastTime) / MILLISECONDS_PER_SECOND);
+        lastTime = time;
+        playEvents(stepWorld(world, seconds));
+        easePalette(palette, latestTheme.current, seconds);
+        drawWorld(context, world, palette);
+      }
+    };
+
+    fit();
+    frame = requestAnimationFrame(draw);
+    const saveTimer = setInterval(save, SAVE_MILLISECONDS);
+    window.addEventListener('resize', fit);
+    window.addEventListener('pagehide', save);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      clearInterval(saveTimer);
+      window.removeEventListener('resize', fit);
+      window.removeEventListener('pagehide', save);
+      save();
+    };
+  }, [canvas]);
+
+  useEffect(() => {
+    if (isSoundOn) {
+      void soundPlayer.hold(SEA_SOUNDS[theme], 1, SEA_GAIN);
+    }
+
+    return soundPlayer.release;
+  }, [isSoundOn, theme]);
 
   useEffect(
     () => () => {
@@ -73,7 +155,14 @@ export const Aquarium = ({ origin, onClose }: AquariumProps) => {
     }
   };
 
+  const handlePointer = (event: PointerEvent, act: (world: World, x: number, y: number) => void): void => {
+    if (worldRef.current !== null) {
+      act(worldRef.current, event.clientX, event.clientY);
+    }
+  };
+
   const originStyle = { '--origin-x': `${origin.x}px`, '--origin-y': `${origin.y}px` } as CSSProperties;
+  const classes = ['aquarium', isClosing ? 'aquarium-closing' : '', isIdle ? 'is-idle' : ''].filter(Boolean).join(' ');
 
   return (
     <Dialog.Root
@@ -84,51 +173,33 @@ export const Aquarium = ({ origin, onClose }: AquariumProps) => {
         }
       }}>
       <Dialog.Portal>
-        <Dialog.Content
-          className={isClosing ? 'aquarium aquarium-closing' : 'aquarium'}
-          style={originStyle}
-          aria-describedby={undefined}>
+        <Dialog.Content className={classes} style={originStyle} aria-describedby={undefined}>
           <Dialog.Title className="aquarium-title">{t('Aquarium')}</Dialog.Title>
-          <div className="aquarium-light" aria-hidden="true" />
-          {WEEDS.map((left, index) => (
-            <span
-              key={left}
-              className="aquarium-weed"
-              aria-hidden="true"
-              style={{ left: `${left}%`, height: `${90 + (index % 3) * 50}px`, animationDelay: `-${index * 0.7}s` }}
-            />
-          ))}
-          {FISHES.map((fish) => (
-            <div
-              key={`${fish.body}-${fish.top}`}
-              className={fish.goesLeft ? 'aquarium-fish aquarium-fish-left' : 'aquarium-fish'}
-              aria-hidden="true"
-              style={
-                {
-                  '--start': `${fish.start}%`,
-                  top: `${fish.top}%`,
-                  width: `${fish.size}px`,
-                  animationDuration: `${fish.seconds}s`,
-                  animationDelay: `-${(fish.start / 100) * fish.seconds}s`,
-                } as CSSProperties
-              }>
-              <FishArt body={fish.body} fin={fish.fin} />
-            </div>
-          ))}
-          {BUBBLES.map((left, index) => (
-            <span
-              key={left}
-              className="aquarium-bubble"
-              aria-hidden="true"
-              style={{
-                left: `${left}%`,
-                width: `${8 + (index % 4) * 6}px`,
-                height: `${8 + (index % 4) * 6}px`,
-                animationDuration: `${6 + (index % 5)}s`,
-                animationDelay: `-${index * 1.1}s`,
-              }}
-            />
-          ))}
+          <canvas
+            ref={setCanvas}
+            className="aquarium-water"
+            role="img"
+            aria-label={t('Aquarium')}
+            onPointerDown={(event) => {
+              event.currentTarget.setPointerCapture(event.pointerId);
+              handlePointer(event, pressPointer);
+            }}
+            onPointerMove={(event) => {
+              handlePointer(event, (world, x, y) => {
+                playEvents(movePointer(world, x, y));
+              });
+            }}
+            onPointerUp={(event) => {
+              handlePointer(event, (world) => {
+                playEvents(releasePointer(world));
+              });
+            }}
+            onPointerCancel={(event) => {
+              handlePointer(event, (world) => {
+                world.pointer = null;
+              });
+            }}
+          />
           <Dialog.Close asChild>
             <CloseButton />
           </Dialog.Close>
