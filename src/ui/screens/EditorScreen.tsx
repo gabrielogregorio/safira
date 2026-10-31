@@ -1,3 +1,4 @@
+import type { CSSProperties } from 'react';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { findExampleByPrefix } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
@@ -10,7 +11,8 @@ import type { TreeNode } from '@/projects/fileTree';
 import { folderMarkerPath, isInsideFolder, joinPath, sanitizePath, visibleFiles } from '@/projects/fileTree';
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { RunMode } from '@/runtime/protocol';
-import type { Settings } from '@/settings/settings';
+import type { PanelName, Settings } from '@/settings/settings';
+import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
 import { CodeEditor } from '@/ui/components/CodeEditor';
 import { SafiraLogo } from '@/ui/components/SafiraLogo';
 import { VariableInspector } from '@/ui/components/VariableInspector';
@@ -21,6 +23,7 @@ import { FileSidebar } from '@/ui/components/FileSidebar';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
 import { Terminal } from '@/ui/components/Terminal';
+import { Splitter } from '@/ui/components/Splitter';
 import { TextPrompt } from '@/ui/components/TextPrompt';
 import type { EditorTab } from '@/ui/editorTabs';
 import {
@@ -291,6 +294,13 @@ export const EditorScreen = ({
     [onSaveProject, t],
   );
 
+  const resizePanel = useCallback(
+    (panel: PanelName, size: number) => {
+      onChangeSettings({ panels: { ...settings.panels, [panel]: clampPanelSize(panel, size) } });
+    },
+    [onChangeSettings, settings.panels],
+  );
+
   const toggleBreakpoint = useCallback(
     (line: number) => {
       const lines = breakpoints.includes(line)
@@ -397,6 +407,12 @@ export const EditorScreen = ({
     output: t('Output'),
     variables: t('Variables'),
   };
+
+  const panelStyle = {
+    '--sidebar-width': `${settings.panels.sidebar}px`,
+    '--output-width': `${settings.panels.output}px`,
+    '--inspector-height': `${settings.panels.inspector}px`,
+  } as CSSProperties;
 
   const terminalFooter = (): string | null => {
     if (runner.wasStopped) {
@@ -570,7 +586,7 @@ export const EditorScreen = ({
         </div>
       )}
 
-      <main id="content" tabIndex={-1} className={`workspace workspace-${mobilePanel}`}>
+      <main id="content" tabIndex={-1} className={`workspace workspace-${mobilePanel}`} style={panelStyle}>
         <FileSidebar
           paths={Object.keys(project.files)}
           activeFile={activeFile}
@@ -588,6 +604,16 @@ export const EditorScreen = ({
             setDialog({ kind: 'delete-node', node });
           }}
         />
+        <Splitter
+          label={t('Resize the files panel')}
+          orientation="vertical"
+          value={settings.panels.sidebar}
+          minimum={PANEL_LIMITS.sidebar.minimum}
+          maximum={PANEL_LIMITS.sidebar.maximum}
+          onChange={(size) => {
+            resizePanel('sidebar', size);
+          }}
+        />
         <CodeEditor
           key={activeTab.file}
           value={activeTab.text}
@@ -600,6 +626,17 @@ export const EditorScreen = ({
           onToggleBreakpoint={toggleBreakpoint}
           onCursorChange={(line, column) => {
             setCursor({ line, column });
+          }}
+        />
+        <Splitter
+          label={t('Resize the output panel')}
+          orientation="vertical"
+          value={settings.panels.output}
+          minimum={PANEL_LIMITS.output.minimum}
+          maximum={PANEL_LIMITS.output.maximum}
+          growsTowardStart
+          onChange={(size) => {
+            resizePanel('output', size);
           }}
         />
         <div className="output-column">
@@ -651,6 +688,17 @@ export const EditorScreen = ({
             footer={terminalFooter()}
             isWaitingInput={runner.status === 'waiting-input'}
             onSubmitInput={runner.submitInput}
+          />
+          <Splitter
+            label={t('Resize the variables panel')}
+            orientation="horizontal"
+            value={settings.panels.inspector}
+            minimum={PANEL_LIMITS.inspector.minimum}
+            maximum={PANEL_LIMITS.inspector.maximum}
+            growsTowardStart
+            onChange={(size) => {
+              resizePanel('inspector', size);
+            }}
           />
           <VariableInspector variables={runner.variables} />
         </div>

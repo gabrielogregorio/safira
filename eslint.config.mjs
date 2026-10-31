@@ -38,7 +38,7 @@ export default tseslint.config(
       'sonarjs/pseudo-random': 'off',
       'sonarjs/function-return-type': 'off',
       'sonarjs/different-types-comparison': 'off',
-      'jsx-a11y/no-noninteractive-tabindex': ['error', { tags: [], roles: ['log', 'region'] }],
+      'jsx-a11y/no-noninteractive-tabindex': ['error', { tags: [], roles: ['log', 'region', 'separator'] }],
       'sonarjs/cognitive-complexity': ['error', 25],
     },
   },

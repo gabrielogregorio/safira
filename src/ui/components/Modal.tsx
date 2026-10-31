@@ -1,6 +1,8 @@
 import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
+import { useCallback, useLayoutEffect, useRef } from 'react';
 import { useTranslation } from '@/i18n/i18n';
+import { prefersMotion } from '@/ui/motion';
 
 interface ModalProps {
   title: string;
@@ -20,8 +22,35 @@ const focusMarkedElement = (event: Event): void => {
   }
 };
 
+const CLOSING_MILLISECONDS = 420;
+
+const playClosingAnimation = (overlay: HTMLElement): void => {
+  const ghost = overlay.cloneNode(true) as HTMLElement;
+  ghost.classList.add('modal-closing');
+  ghost.setAttribute('aria-hidden', 'true');
+  ghost.removeAttribute('data-state');
+  ghost.querySelector('[role="dialog"]')?.removeAttribute('role');
+  document.body.append(ghost);
+  setTimeout(() => {
+    ghost.remove();
+  }, CLOSING_MILLISECONDS);
+};
+
 export const Modal = ({ title, children, onClose }: ModalProps) => {
   const t = useTranslation();
+  const overlay = useRef<HTMLDivElement | null>(null);
+  const keepOverlay = useCallback((node: HTMLDivElement | null) => {
+    overlay.current = node ?? overlay.current;
+  }, []);
+
+  useLayoutEffect(
+    () => () => {
+      if (overlay.current !== null && prefersMotion()) {
+        playClosingAnimation(overlay.current);
+      }
+    },
+    [],
+  );
 
   return (
     <Dialog.Root
@@ -32,7 +61,7 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
         }
       }}>
       <Dialog.Portal>
-        <Dialog.Overlay className="modal-backdrop">
+        <Dialog.Overlay ref={keepOverlay} className="modal-backdrop">
           <div className="modal-zoom" aria-hidden="true">
             {ZOOM_RECTANGLES.map((rectangle) => (
               <span key={rectangle} />

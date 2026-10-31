@@ -9,7 +9,16 @@ export interface Settings {
   syntax: ThemeId;
   fontSize: number;
   readLessons: string[];
+  panels: PanelSizes;
 }
+
+export interface PanelSizes {
+  sidebar: number;
+  output: number;
+  inspector: number;
+}
+
+export type PanelName = keyof PanelSizes;
 
 export const DEFAULT_FONT_SIZE = 15;
 export const MINIMUM_FONT_SIZE = 10;
@@ -23,6 +32,19 @@ export const DEFAULT_SETTINGS: Settings = {
   syntax: 'light',
   fontSize: DEFAULT_FONT_SIZE,
   readLessons: [],
+  panels: { sidebar: 220, output: 460, inspector: 240 },
+};
+
+export const PANEL_LIMITS: Record<PanelName, { minimum: number; maximum: number }> = {
+  sidebar: { minimum: 140, maximum: 480 },
+  output: { minimum: 240, maximum: 900 },
+  inspector: { minimum: 100, maximum: 600 },
+};
+
+export const clampPanelSize = (panel: PanelName, size: number): number => {
+  const { minimum, maximum } = PANEL_LIMITS[panel];
+
+  return Math.round(Math.min(maximum, Math.max(minimum, size)));
 };
 
 export const loadSettings = (): Settings => {

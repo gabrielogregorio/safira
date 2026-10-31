@@ -18,9 +18,10 @@ import { loadSettings, saveSettings, SYNTAX_PALETTES } from '@/settings/settings
 import { downloadProject, readArchiveFile } from '@/ui/archiveFiles';
 import { describeArchiveResult } from '@/ui/archiveMessages';
 import { PreferencesDialog } from '@/ui/components/PreferencesDialog';
-import type { SweepKind } from '@/ui/components/SceneSweep';
-import { canAnimateScenes, SCENE_SWEEP_MIDPOINT_MILLISECONDS, SceneSweep } from '@/ui/components/SceneSweep';
+import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
 import type { WorkerFactory } from '@/ui/hooks/useRunner';
+import { prefersMotion } from '@/ui/motion';
+import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 import { LessonsScreen } from '@/ui/screens/LessonsScreen';
@@ -29,13 +30,7 @@ interface AppProps {
   createWorker?: WorkerFactory;
 }
 
-const sweepKindOf = (changes: Partial<Settings>): SweepKind | null => {
-  if (changes.locale !== undefined) {
-    return 'language';
-  }
-
-  return changes.theme === undefined ? null : 'theme';
-};
+const THEME_CHANGE_MILLISECONDS = 1000;
 
 export const App = ({ createWorker }: AppProps) => {
   const { route, navigate } = useRoute();
@@ -43,15 +38,15 @@ export const App = ({ createWorker }: AppProps) => {
   const [projects, setProjects] = useState<Project[]>(loadProjects);
   const [saveFailed, setSaveFailed] = useState(false);
   const [isChoosingPreferences, setIsChoosingPreferences] = useState(false);
-  const [sweep, setSweep] = useState<SweepKind | null>(null);
   const [archiveNotice, setArchiveNotice] = useState<string | null>(null);
-  const sweepTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const themeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const locale = useMemo(
     () => detectLocale(window.location.search, settings.locale, navigator.language),
     [settings.locale],
   );
   const translate = useMemo(() => createTranslator(locale), [locale]);
+  const shownLocale = useRef(locale);
 
   useEffect(() => {
     const root = document.documentElement;
@@ -63,16 +58,39 @@ export const App = ({ createWorker }: AppProps) => {
     }
   }, [locale, settings.syntax, settings.theme]);
 
+  useEffect(() => {
+    if (shownLocale.current === locale) {
+      return undefined;
+    }
+
+    shownLocale.current = locale;
+
+    return prefersMotion() ? scrambleDocument(document.body) : undefined;
+  }, [locale]);
+
   useEffect(
     () => () => {
-      if (sweepTimer.current !== null) {
-        clearTimeout(sweepTimer.current);
+      if (themeTimer.current !== null) {
+        clearTimeout(themeTimer.current);
       }
     },
     [],
   );
 
-  const applySettings = useCallback((changes: Partial<Settings>) => {
+  const changeSettings = useCallback((changes: Partial<Settings>) => {
+    if (changes.theme !== undefined && prefersMotion()) {
+      const root = document.documentElement;
+      root.dataset['themeChanging'] = 'true';
+
+      if (themeTimer.current !== null) {
+        clearTimeout(themeTimer.current);
+      }
+
+      themeTimer.current = setTimeout(() => {
+        delete root.dataset['themeChanging'];
+      }, THEME_CHANGE_MILLISECONDS);
+    }
+
     setSettings((current) => {
       const next = { ...current, ...changes };
       saveSettings(next);
@@ -80,24 +98,6 @@ export const App = ({ createWorker }: AppProps) => {
       return next;
     });
   }, []);
-
-  const changeSettings = useCallback(
-    (changes: Partial<Settings>) => {
-      const kind = sweepKindOf(changes);
-
-      if (kind === null || !canAnimateScenes()) {
-        applySettings(changes);
-
-        return;
-      }
-
-      setSweep(kind);
-      sweepTimer.current = setTimeout(() => {
-        applySettings(changes);
-      }, SCENE_SWEEP_MIDPOINT_MILLISECONDS);
-    },
-    [applySettings],
-  );
 
   const persist = useCallback((next: Project[]) => {
     setSaveFailed(!saveProjects(next));
@@ -164,6 +164,7 @@ export const App = ({ createWorker }: AppProps) => {
 
   return (
     <TranslationContext.Provider value={translate}>
+      <SceneBackdrop theme={settings.theme} />
       <a
         className="skip-link"
         href="#content"
@@ -260,14 +261,6 @@ export const App = ({ createWorker }: AppProps) => {
           }}
         />
       ) : null}
-      {sweep === null ? null : (
-        <SceneSweep
-          kind={sweep}
-          onFinished={() => {
-            setSweep(null);
-          }}
-        />
-      )}
     </TranslationContext.Provider>
   );
 };

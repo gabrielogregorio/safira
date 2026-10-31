@@ -1,5 +1,7 @@
 import {
   clampFontSize,
+  clampPanelSize,
+  PANEL_LIMITS,
   DEFAULT_SETTINGS,
   loadSettings,
   MAXIMUM_FONT_SIZE,
@@ -10,6 +12,19 @@ import {
 describe('settings', () => {
   beforeEach(() => {
     localStorage.clear();
+  });
+
+  it.each([
+    [PANEL_LIMITS.sidebar.minimum - 1, PANEL_LIMITS.sidebar.minimum],
+    [PANEL_LIMITS.sidebar.minimum, PANEL_LIMITS.sidebar.minimum],
+    [PANEL_LIMITS.sidebar.maximum, PANEL_LIMITS.sidebar.maximum],
+    [PANEL_LIMITS.sidebar.maximum + 1, PANEL_LIMITS.sidebar.maximum],
+  ])('limits the sidebar %i to %i', (size, expected) => {
+    expect(clampPanelSize('sidebar', size)).toBe(expected);
+  });
+
+  it('keeps panel sizes in whole pixels', () => {
+    expect(clampPanelSize('output', 300.6)).toBe(301);
   });
 
   it('starts with the defaults', () => {

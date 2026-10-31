@@ -5,7 +5,7 @@ const WCAG_AA_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 const LAYOUT_WIDTHS = [320, 375, 768, 1280, 1440];
 
 const waitForAnimations = async (page: Page): Promise<void> => {
-  await page.evaluate(() => Promise.all(document.getAnimations().map((animation) => animation.finished)));
+  await page.evaluate(() => Promise.allSettled(document.getAnimations().map((animation) => animation.finished)));
 };
 
 const expectNoViolations = async (page: Page): Promise<void> => {
@@ -343,15 +343,77 @@ test('exports a project and imports it back', async ({ page }) => {
   await expect(page.getByLabel('Code editor')).toContainText('mostre "zip"');
 });
 
-test('the theme changes behind a passing wave', async ({ page }) => {
+test('the theme changes in the background, with nothing in front of the screen', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Theme and language' }).click();
   await waitForAnimations(page);
   await page.getByText('Dark', { exact: true }).click();
 
-  await expect(page.locator('.scene-sweep')).toBeAttached();
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
-  await expect(page.locator('.scene-sweep')).toBeHidden();
+  await expect(page.locator('html')).toHaveAttribute('data-theme-changing', 'true');
+  await expect(page.locator('.scenery-dark')).toHaveCSS('opacity', '1');
+  await expect(page.locator('.scenery-light')).toHaveCSS('opacity', '0');
+  await expect(page.locator('html')).not.toHaveAttribute('data-theme-changing', 'true');
+});
+
+test('the language change scrambles the letters into the new text', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await waitForAnimations(page);
+  const title = page.locator('.home-settings .button-primary');
+  await page.evaluate(() => {
+    const seen: string[] = [];
+    const button = document.querySelector('.home-settings .button-primary');
+    new MutationObserver(() => {
+      seen.push(button?.textContent ?? '');
+    }).observe(button as Element, { characterData: true, subtree: true, childList: true });
+    Object.assign(window, { seenTexts: seen });
+  });
+  await page.getByText('Português (Brasil)').click();
+
+  await expect(title).toHaveText('Criar projeto');
+  const seenTexts = await page.evaluate(() => (window as unknown as { seenTexts: string[] }).seenTexts);
+
+  expect(new Set(seenTexts).size).toBeGreaterThan(3);
+  expect(seenTexts.at(-1)).toBe('Criar projeto');
+});
+
+test('closing a modal plays the closing animation and leaves nothing behind', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Theme and language' }).click();
+  await waitForAnimations(page);
+  await page.keyboard.press('Escape');
+
+  await expect(page.getByRole('dialog')).toBeHidden();
+  await expect(page.locator('.modal-closing')).toBeAttached();
+  await expect(page.locator('.modal-closing')).toHaveCount(0);
+});
+
+test('panels can be resized by dragging and the size is kept', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  const divider = page.getByRole('separator', { name: 'Resize the files panel' });
+  const sidebar = page.locator('.file-sidebar');
+  const before = (await sidebar.boundingBox())?.width ?? 0;
+  const box = await divider.boundingBox();
+  await page.mouse.move((box?.x ?? 0) + 2, (box?.y ?? 0) + 40);
+  await page.mouse.down();
+  await page.mouse.move((box?.x ?? 0) + 102, (box?.y ?? 0) + 40);
+  await page.mouse.up();
+
+  await expect.poll(async () => (await sidebar.boundingBox())?.width).toBe(before + 100);
+
+  await page.reload();
+
+  await expect.poll(async () => (await page.locator('.file-sidebar').boundingBox())?.width).toBe(before + 100);
+});
+
+test('panels can be resized with the keyboard', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  const divider = page.getByRole('separator', { name: 'Resize the variables panel' });
+  await divider.focus();
+  await page.keyboard.press('ArrowUp');
+
+  await expect(divider).toHaveAttribute('aria-valuenow', '256');
 });
 
 test('theme and language are available on every screen', async ({ page }) => {
