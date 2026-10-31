@@ -69,8 +69,8 @@ describe('STARTER_LINES', () => {
 });
 
 describe('suggestCompletion in imports', () => {
-  const paths = ['here/main.safira', 'lib.safira'];
-  const suggest = (before: string, after = ''): string | null => suggestCompletion(before, after, '', 'pt-br', paths);
+  const scripts = { 'here/main.safira': '', 'lib.safira': '' };
+  const suggest = (before: string, after = ''): string | null => suggestCompletion(before, after, '', 'pt-br', scripts);
 
   it('offers a whole path right after the command', () => {
     expect(suggest('importe ')).toBe('"./here/main"');
@@ -95,5 +95,42 @@ describe('suggestCompletion in imports', () => {
   it('stops after the path is closed or unknown', () => {
     expect(suggest('importe "lib"')).toBeNull();
     expect(suggest('importe "./nada')).toBeNull();
+  });
+});
+
+describe('suggestCompletion of functions', () => {
+  const document = 'funcao soma recebe parametros a, b {\n}\nfuncao logo {\n}\n';
+  const suggest = (before: string, after = '', source = document, scripts = {}): string | null =>
+    suggestCompletion(before, after, source, 'pt-br', scripts);
+
+  it('completes the name and shows the parameters', () => {
+    expect(suggest('so')).toBe('ma(a, b)');
+  });
+
+  it('shows the parameters when the whole name is typed', () => {
+    expect(suggest('soma')).toBe('(a, b)');
+  });
+
+  it('closes the call of a function without parameters', () => {
+    expect(suggest('lo')).toBe('go()');
+  });
+
+  it('works inside an expression', () => {
+    expect(suggest('x = so')).toBe('ma(a, b)');
+  });
+
+  it('adds nothing when the parentheses are already there', () => {
+    expect(suggest('soma', '(1, 2)')).toBeNull();
+  });
+
+  it('does not suggest a call while declaring', () => {
+    expect(suggest('funcao so')).not.toContain('(');
+  });
+
+  it('knows the functions of imported files, and only those', () => {
+    const scripts = { 'here/lib.safira': 'funcao dobra recebe parametros n {\n}' };
+
+    expect(suggest('do', '', 'importe "./here/lib"\n', scripts)).toBe('bra(n)');
+    expect(suggest('do', '', '', scripts)).not.toContain('(');
   });
 });

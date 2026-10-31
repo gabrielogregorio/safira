@@ -17,7 +17,7 @@ interface CodeEditorProps {
   codeFont: CodeFont;
   suggestions: boolean;
   locale: Locale;
-  scriptPaths: string[];
+  scripts: Record<string, string>;
   breakpoints: number[];
   debugLine: number | null;
   errorLine: number | null;
@@ -151,7 +151,7 @@ export const CodeEditor = ({
   codeFont,
   suggestions,
   locale,
-  scriptPaths,
+  scripts,
   breakpoints,
   debugLine,
   errorLine,
@@ -181,7 +181,7 @@ export const CodeEditor = ({
       state: EditorState.create({
         doc: value,
         extensions: [
-          ghostCompartment.current.of(suggestions ? ghostText(locale, scriptPaths) : []),
+          ghostCompartment.current.of(suggestions ? ghostText(locale, scripts) : []),
           history(),
           keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
           breakpointField,
@@ -265,9 +265,9 @@ export const CodeEditor = ({
 
   useEffect(() => {
     viewRef.current?.dispatch({
-      effects: ghostCompartment.current.reconfigure(suggestions ? ghostText(locale, scriptPaths) : []),
+      effects: ghostCompartment.current.reconfigure(suggestions ? ghostText(locale, scripts) : []),
     });
-  }, [suggestions, locale, scriptPaths]);
+  }, [suggestions, locale, scripts]);
 
   return <div ref={hostRef} className="code-editor" />;
 };

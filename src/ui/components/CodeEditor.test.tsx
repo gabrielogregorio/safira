@@ -7,6 +7,7 @@ const baseProps = {
   codeFont: 'mono' as const,
   suggestions: true,
   locale: 'pt-br' as const,
+  scripts: {},
   breakpoints: [],
   debugLine: null,
   errorLine: null,

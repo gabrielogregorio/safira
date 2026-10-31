@@ -1,6 +1,9 @@
+import type { Statement } from './ast';
 import type { Locale } from './messages';
+import { parse } from './parser';
 import { getAllCommands } from './phrases';
 import { removeAccents, tokenize } from './tokenizer';
+import { importCandidates } from './virtualFileSystem';
 
 const SCRIPT_EXTENSION = '.safira';
 const CURRENT_FOLDER = './';
@@ -113,6 +116,8 @@ const fromNames = (typedWord: string, document: string): string | null => {
   return names[0] === undefined ? null : names[0][0].slice(typedWord.length);
 };
 
+const functionPhrases = getAllCommands().find(([key]) => key === 'funcoes')?.[1].phrases ?? [];
+
 const importPhrases = (getAllCommands().find(([key]) => key === 'importe')?.[1].phrases ?? [])
   .slice()
   .sort((first, second) => second.length - first.length);
@@ -153,9 +158,66 @@ const fromProjectFiles = (importText: string, after: string, scriptPaths: string
   }
 
   const rest = restOfPath(typedPath, scriptPaths);
-  const missesQuote = isQuoted && !after.startsWith('"');
 
-  return rest === null ? null : `${typedPath === '' ? CURRENT_FOLDER : ''}${rest}${missesQuote ? '"' : ''}`;
+  if (rest === null) {
+    return null;
+  }
+
+  const folder = typedPath === '' ? CURRENT_FOLDER : '';
+  const closingQuote = isQuoted && !after.startsWith('"') ? '"' : '';
+
+  return `${folder}${rest}${closingQuote}`;
+};
+
+interface FunctionSignature {
+  name: string;
+  parameters: string[];
+}
+
+const declaredIn = (source: string): Statement[] => {
+  try {
+    return parse(source);
+  } catch {
+    return [];
+  }
+};
+
+const signaturesIn = (statements: Statement[]): FunctionSignature[] =>
+  statements.flatMap((statement) =>
+    statement.kind === 'functionDeclaration' ? [{ name: statement.name, parameters: statement.parameters ?? [] }] : [],
+  );
+
+// Functions of this file and of the files it imports, because only those exist when it runs.
+const reachableFunctions = (document: string, scripts: Record<string, string>): FunctionSignature[] => {
+  const statements = declaredIn(document);
+  const imported = statements.flatMap((statement) => {
+    const path = statement.kind === 'import' ? importCandidates('', statement.name).at(-1) : undefined;
+    const source = path === undefined ? undefined : scripts[path];
+
+    return source === undefined ? [] : signaturesIn(declaredIn(source));
+  });
+
+  return [...signaturesIn(statements), ...imported];
+};
+
+const isDeclaringFunction = (typedWords: string[]): boolean =>
+  functionPhrases.includes(typedWords[0] ?? '') && typedWords.length > 1;
+
+const fromFunctions = (
+  typedWord: string,
+  after: string,
+  document: string,
+  scripts: Record<string, string>,
+): string | null => {
+  if (after.startsWith('(')) {
+    return null;
+  }
+
+  const found = reachableFunctions(document, scripts)
+    .filter(({ name }) => normalize(name).startsWith(typedWord))
+    .sort((first, second) => first.name.length - second.name.length)[0];
+
+  return found === undefined ? null : `${found.name.slice(typedWord.length)}(${found.parameters.join(', ')})`;
 };
 
 export const suggestCompletion = (
@@ -163,12 +225,12 @@ export const suggestCompletion = (
   after: string,
   document: string,
   locale: Locale,
-  scriptPaths: string[] = [],
+  scripts: Record<string, string> = {},
 ): string | null => {
   const importText = importTextOf(before);
 
   if (importText !== null && !INSIDE_WORD.test(after)) {
-    const path = fromProjectFiles(importText, after, scriptPaths);
+    const path = fromProjectFiles(importText, after, Object.keys(scripts));
 
     if (path !== null) {
       return path;
@@ -187,7 +249,13 @@ export const suggestCompletion = (
     return null;
   }
 
+  const call =
+    typedWord.length < MINIMUM_TYPED || isDeclaringFunction(typedWords)
+      ? null
+      : fromFunctions(typedWord, after, document, scripts);
+
   return (
+    call ??
     fromStarters(typedLine, locale) ??
     fromPhrases(typedWords) ??
     (typedWord.length < MINIMUM_TYPED ? null : fromNames(typedWord, document))

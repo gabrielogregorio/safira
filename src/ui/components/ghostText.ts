@@ -12,7 +12,9 @@ interface Ghost {
 
 const dismissGhost = StateEffect.define();
 const ghostLocale = Facet.define<Locale, Locale>({ combine: (locales) => locales[0] ?? 'en-us' });
-const ghostScripts = Facet.define<string[], string[]>({ combine: (lists) => lists[0] ?? [] });
+const ghostScripts = Facet.define<Record<string, string>, Record<string, string>>({
+  combine: (lists) => lists[0] ?? {},
+});
 
 const acceptGhost = (view: EditorView): boolean => {
   const ghost = view.state.field(ghostField);
@@ -115,9 +117,9 @@ const ghostKeys = Prec.highest(
 );
 
 // The suggestion is only painted over the text: it enters the document when it is accepted.
-export const ghostText = (locale: Locale, scriptPaths: string[]): Extension => [
+export const ghostText = (locale: Locale, scripts: Record<string, string>): Extension => [
   ghostLocale.of(locale),
-  ghostScripts.of(scriptPaths),
+  ghostScripts.of(scripts),
   ghostField,
   ghostKeys,
 ];
