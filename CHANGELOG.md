@@ -32,6 +32,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors, the program input field, exporting, moving items and dragging a selection, which plays while the mouse is pressed, with a switch to turn them off.
 - Each language lands with a sound of its region, and each sky with its own weather sound.
 - The home screen has an animated glass globe with water, a fish, bubbles and a sprout.
+- Clicking the globe grows it into a full screen aquarium with fish swimming in a loop.
 - Opening the browser tools shows an invitation to the repository, on the page and in the console.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.

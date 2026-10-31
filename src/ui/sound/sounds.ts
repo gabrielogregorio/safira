@@ -1,6 +1,7 @@
 import type { Locale } from '@/language/messages';
 import type { ThemeId } from '@/settings/settings';
 import acceptUrl from './files/accept.wav';
+import aquariumUrl from './files/aquarium.wav';
 import alertUrl from './files/alert.wav';
 import breakpointUrl from './files/breakpoint.wav';
 import clickUrl from './files/click.wav';
@@ -82,6 +83,7 @@ export type SoundName =
   | 'languageJa'
   | 'error'
   | 'export'
+  | 'aquarium'
   | 'move'
   | 'terminalFocus'
   | 'terminalTyping'
@@ -127,6 +129,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   languageJa: languageJaUrl,
   error: errorUrl,
   export: exportUrl,
+  aquarium: aquariumUrl,
   move: moveUrl,
   terminalFocus: terminalFocusUrl,
   terminalTyping: terminalTypingUrl,

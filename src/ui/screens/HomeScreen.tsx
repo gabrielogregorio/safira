@@ -7,6 +7,8 @@ import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
 import { AeroOrb } from '@/ui/components/AeroOrb';
+import type { ScreenPoint } from '@/ui/components/Aquarium';
+import { Aquarium } from '@/ui/components/Aquarium';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { TextPrompt } from '@/ui/components/TextPrompt';
@@ -43,6 +45,7 @@ export const HomeScreen = ({
   const t = useTranslation();
   const [renaming, setRenaming] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState<Project | null>(null);
+  const [aquariumOrigin, setAquariumOrigin] = useState<ScreenPoint | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const [isDropping, setIsDropping] = useState(false);
 
@@ -96,7 +99,18 @@ export const HomeScreen = ({
       ) : null}
       <header className="home-hero">
         <div className="home-brand">
-          <AeroOrb size={HERO_ORB_SIZE} />
+          <button
+            type="button"
+            className="aero-orb-button"
+            data-sound="aquarium"
+            aria-label={t('Open the aquarium')}
+            title={t('Open the aquarium')}
+            onClick={(event) => {
+              const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+              setAquariumOrigin({ x: left + width / 2, y: top + height / 2 });
+            }}>
+            <AeroOrb size={HERO_ORB_SIZE} />
+          </button>
           <h1 data-fixed-text>Safira</h1>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
@@ -207,6 +221,15 @@ export const HomeScreen = ({
             </button>
           </div>
         </Modal>
+      )}
+
+      {aquariumOrigin === null ? null : (
+        <Aquarium
+          origin={aquariumOrigin}
+          onClose={() => {
+            setAquariumOrigin(null);
+          }}
+        />
       )}
 
       {renaming === null ? null : (
