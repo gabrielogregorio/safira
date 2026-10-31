@@ -66,6 +66,9 @@ const BUBBLE_MARGIN = 10;
 const PERSONAL_SPACE = 0.38;
 const SEPARATION_SPEED = 120;
 const FLAT_BODY = 2;
+const FEEDING_SPACE = 0.2;
+const ARRIVAL_DISTANCE = 70;
+const SLOWEST_ARRIVAL = 0.35;
 
 export interface StoredFish {
   id: number;
@@ -86,6 +89,7 @@ export interface Fish extends StoredFish {
   fleeY: number;
   preyAt: number;
   swim: number;
+  isFeeding: boolean;
 }
 
 export interface Food {
@@ -195,6 +199,7 @@ const placeFish = (stored: StoredFish, world: Pick<World, 'width' | 'height' | '
     fleeY: 0,
     preyAt: 0,
     swim: random() * Math.PI * 2,
+    isFeeding: false,
   };
 };
 
@@ -333,8 +338,10 @@ const eatPrey = (world: World, fish: Fish, prey: Fish, events: WorldEvent[]): vo
 const moveFish = (world: World, fish: Fish, seconds: number, events: WorldEvent[]): void => {
   const species = SPECIES[fish.species];
   const speed = species.speed / (1 + fatnessOf(fish.mass) * 0.4);
-  const prey = nearestPrey(world, fish);
   const food = nearestFood(world, fish);
+  // Food comes first: a fish that has a meal in front of it does not leave it to go hunting.
+  const prey = food === null ? nearestPrey(world, fish) : null;
+  fish.isFeeding = food !== null && world.time >= fish.fleeUntil;
 
   if (world.time < fish.fleeUntil) {
     steerTo(fish, fish.x + fish.fleeX, fish.y + fish.fleeY, speed * FLEE_SPEED, seconds * 2);
@@ -350,7 +357,9 @@ const moveFish = (world: World, fish: Fish, seconds: number, events: WorldEvent[
 
     steerTo(fish, fish.targetX, fish.targetY, speed, seconds);
   } else {
-    steerTo(fish, food.x, food.y, speed * HUNT_SPEED * (1 + appetiteOf(fish.mass) * APPETITE_SPEED), seconds);
+    // It slows down as it arrives, so it stays over the food instead of shooting past it and turning back.
+    const arrival = Math.max(SLOWEST_ARRIVAL, Math.min(1, distance(fish.x, fish.y, food.x, food.y) / ARRIVAL_DISTANCE));
+    steerTo(fish, food.x, food.y, speed * HUNT_SPEED * arrival * (1 + appetiteOf(fish.mass) * APPETITE_SPEED), seconds);
   }
 
   eatFood(world, fish, events);
@@ -448,10 +457,12 @@ const separatePair = (first: Fish, second: Fish, seconds: number): void => {
   const push = (SEPARATION_SPEED * seconds * (1 - away / space)) / 2;
   const directionX = away === 0 ? 0 : offsetX / away;
   const directionY = away === 0 ? 1 : offsetY / away;
-  first.x -= directionX * push;
-  first.y -= directionY * push;
-  second.x += directionX * push;
-  second.y += directionY * push;
+  const firstPush = first.isFeeding ? push * FEEDING_SPACE : push;
+  const secondPush = second.isFeeding ? push * FEEDING_SPACE : push;
+  first.x -= directionX * firstPush;
+  first.y -= directionY * firstPush;
+  second.x += directionX * secondPush;
+  second.y += directionY * secondPush;
 };
 
 const separateFishes = (world: World, seconds: number): void => {

@@ -14,6 +14,8 @@ import {
 import type { StoredFish, World } from './aquariumWorld';
 
 const steady = (): number => 0.5;
+const distance2 = (point: { x: number; y: number }, x: number, y: number): number =>
+  Math.hypot(point.x - x, point.y - y);
 const oneFish = (mass = MINIMUM_MASS): StoredFish[] => [{ id: 0, species: 0, mass }];
 const click = (world: World, x: number, y: number) => {
   pressPointer(world, x, y);
@@ -235,5 +237,43 @@ describe('aquariumWorld', () => {
     world.bubbles.push({ x: 50, y: 50, radius: 8, speed: 1, sway: 0 });
 
     expect(click(world, 50 + 25, 50)).toEqual([expect.objectContaining({ kind: 'pop' })]);
+  });
+
+  it('keeps eating while there is food around it', () => {
+    const world = createWorld(oneFish(), 800, 600, steady);
+    const [fish] = world.fishes;
+    fish.x = 400;
+    fish.y = 300;
+
+    for (let piece = 0; piece < 8; piece += 1) {
+      world.food.push({ x: 360 + piece * 12, y: 290 + (piece % 3) * 10, age: 0, sway: 0 });
+    }
+
+    for (let frame = 0; frame < 150; frame += 1) {
+      stepWorld(world, 1 / 30);
+    }
+
+    expect(world.food).toEqual([]);
+    expect(distance2(fish, 400, 300)).toBeLessThan(120);
+  });
+
+  it('prefers food to hunting', () => {
+    const world = createWorld(
+      [
+        { id: 0, species: 0, mass: 6 },
+        { id: 1, species: 1, mass: 1 },
+      ],
+      800,
+      600,
+      steady,
+    );
+    const [big, small] = world.fishes;
+    big.x = 100;
+    big.y = 300;
+    small.x = 110;
+    small.y = 300;
+    world.food.push({ x: 140, y: 300, age: 0, sway: 0 });
+
+    expect(stepWorld(world, 1 / 30)).not.toContainEqual(expect.objectContaining({ kind: 'chomp' }));
   });
 });
