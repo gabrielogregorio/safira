@@ -1,4 +1,5 @@
 import {
+  BURST_MASS,
   colorsOf,
   createPopulation,
   createWorld,
@@ -350,13 +351,24 @@ describe('aquariumWorld', () => {
     expect(world.food).toHaveLength(800);
   });
 
-  it('lets a fish get fat without end', () => {
-    const world = createWorld(oneFish(50), 800, 600, steady);
+  it('lets a fish get fat until it pops like a bubble, for good', () => {
+    const world = createWorld(oneFish(BURST_MASS - 0.1), 800, 600, steady);
+    const [fish] = world.fishes;
+    world.food.push({ x: fish.x, y: fish.y, age: 0, sway: 0 });
+
+    expect(stepWorld(world, 1 / 30)).toContainEqual(expect.objectContaining({ kind: 'burst' }));
+    expect(world.fishes).toEqual([]);
+    expect(world.pops).toHaveLength(1);
+    expect(world.bubbles.length).toBeGreaterThan(5);
+  });
+
+  it('keeps a fat fish alive below the limit', () => {
+    const world = createWorld(oneFish(BURST_MASS - 2), 800, 600, steady);
     const [fish] = world.fishes;
     world.food.push({ x: fish.x, y: fish.y, age: 0, sway: 0 });
     stepWorld(world, 1 / 30);
 
-    expect(fish.mass).toBeGreaterThan(50);
-    expect(fatnessOf(50)).toBeGreaterThan(fatnessOf(20));
+    expect(world.fishes).toEqual([fish]);
+    expect(fish.mass).toBeGreaterThan(BURST_MASS - 2);
   });
 });

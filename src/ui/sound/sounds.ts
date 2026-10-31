@@ -4,6 +4,7 @@ import acceptUrl from './files/accept.wav';
 import popUrl from './files/pop.wav';
 import fishFleeUrl from './files/fish-flee.wav';
 import fishEatUrl from './files/fish-eat.wav';
+import fishBurstUrl from './files/fish-burst.wav';
 import fishChompUrl from './files/fish-chomp.wav';
 import foodDropUrl from './files/food-drop.wav';
 import plantUrl from './files/plant.wav';
@@ -105,6 +106,7 @@ export type SoundName =
   | 'fishFlee'
   | 'fishEat'
   | 'fishChomp'
+  | 'fishBurst'
   | 'foodDrop'
   | 'plant'
   | 'waterSwish'
@@ -165,6 +167,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   fishFlee: fishFleeUrl,
   fishEat: fishEatUrl,
   fishChomp: fishChompUrl,
+  fishBurst: fishBurstUrl,
   foodDrop: foodDropUrl,
   plant: plantUrl,
   waterSwish: waterSwishUrl,

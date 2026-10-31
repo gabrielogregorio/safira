@@ -44,6 +44,7 @@ const SEA_GAIN = 0.8;
 const EVENT_SOUNDS: Record<WorldEvent['kind'], SoundName> = {
   eat: 'fishEat',
   chomp: 'fishChomp',
+  burst: 'fishBurst',
   flee: 'fishFlee',
   pop: 'pop',
   plant: 'plant',

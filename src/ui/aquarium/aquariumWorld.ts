@@ -19,6 +19,8 @@ export const FISH_COUNT = 24;
 export const MINIMUM_MASS = 1;
 export const MASS_LOST_PER_SECOND = 0.0008;
 const MASS_PER_FOOD = 0.28;
+export const BURST_MASS = 16;
+const BUBBLES_FROM_BURST = 18;
 const PREY_MASS_SHARE = 0.3;
 const PREDATOR_MASS = 3;
 const PREDATOR_ADVANTAGE = 1.8;
@@ -159,6 +161,7 @@ export interface World {
 export type WorldEvent =
   | { kind: 'eat'; voice: number }
   | { kind: 'chomp'; voice: number }
+  | { kind: 'burst'; voice: number }
   | { kind: 'flee'; voice: number }
   | { kind: 'pop'; voice: number }
   | { kind: 'plant' }
@@ -473,6 +476,22 @@ const movePointerEffects = (world: World, seconds: number, events: WorldEvent[])
   }
 };
 
+// Too much food and a fish pops like a bubble. Like an eaten one, it does not come back.
+const burstFish = (world: World, events: WorldEvent[]): void => {
+  for (const fish of world.fishes.filter(({ mass }) => mass >= BURST_MASS)) {
+    const radius = lengthOf(fish) / 2;
+    world.fishes = world.fishes.filter((other) => other !== fish);
+    world.pops.push({ x: fish.x, y: fish.y, radius, age: 0 });
+    world.ripples.push({ x: fish.x, y: fish.y, age: 0 });
+    events.push({ kind: 'burst', voice: SPECIES[fish.species].voice });
+
+    for (let bubble = 0; bubble < BUBBLES_FROM_BURST; bubble += 1) {
+      const angle = (bubble / BUBBLES_FROM_BURST) * Math.PI * 2;
+      spawnBubble(world, fish.x + Math.cos(angle) * radius, fish.y + Math.sin(angle) * radius * 0.7);
+    }
+  }
+};
+
 const canEat = (hunter: Fish, prey: Fish): boolean =>
   hunter.mass >= PREDATOR_MASS && hunter.mass >= prey.mass * PREDATOR_ADVANTAGE;
 
@@ -518,6 +537,7 @@ export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
     }
   }
 
+  burstFish(world, events);
   separateFishes(world, seconds);
   moveWater(world, seconds);
   movePointerEffects(world, seconds, events);
