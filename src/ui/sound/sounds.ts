@@ -119,8 +119,8 @@ const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
 const MASTER_GAIN = 0.5;
 const LOOP_GAIN = 0.35;
 const LOOP_FADE_IN_SECONDS = 0.04;
-const LOOP_FADE_SECONDS = 0.06;
-const LOOP_STOP_SECONDS = 0.3;
+const LOOP_FADE_SECONDS = 0.02;
+const LOOP_STOP_SECONDS = 0.1;
 const RATE_GLIDE_SECONDS = 0.05;
 
 const fetchSound = async (context: AudioContext, url: string): Promise<AudioBuffer> => {
@@ -136,7 +136,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let lastSound: { name: SoundName; time: number } | null = null;
   let lastHover = -HOVER_GAP_MILLISECONDS;
   let loop: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
-  let loopTimer: ReturnType<typeof setTimeout> | undefined;
+  let isLoopHeld = false;
   let isLoopStarting = false;
   const buffers = new Map<SoundName, Promise<AudioBuffer>>();
 
@@ -240,13 +240,15 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
         buffers.delete(name);
       }
     },
-    // Keeps a looping sound alive for this long from now. Every call pushes the end further away.
-    sustain: async (name: SoundName, milliseconds: number, rate: number): Promise<void> => {
+    // Starts a looping sound, or moves the one that is playing to this rate. It lasts until `release`.
+    hold: async (name: SoundName, rate: number): Promise<void> => {
       const audio = isEnabled ? start() : null;
 
       if (audio === null || output === null) {
         return;
       }
+
+      isLoopHeld = true;
 
       if (loop === null) {
         if (isLoopStarting) {
@@ -276,8 +278,15 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       }
 
       loop.source.playbackRate.setTargetAtTime(rate, audio.currentTime, RATE_GLIDE_SECONDS);
-      clearTimeout(loopTimer);
-      loopTimer = setTimeout(fadeLoop, milliseconds);
+
+      // The press can end while the file is still loading.
+      if (!isLoopHeld) {
+        fadeLoop();
+      }
+    },
+    release: (): void => {
+      isLoopHeld = false;
+      fadeLoop();
     },
   };
 };

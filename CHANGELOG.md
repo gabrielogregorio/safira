@@ -29,7 +29,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Lessons in real markdown, inside the IDE under Help, with colored code and a button that opens each example as a file of the project.
 - Resizable panels, by mouse and keyboard, kept between sessions.
 - Time passes in the scenery while the page is open: the climates complete a cycle in 12 hours, with the sun, the moon and the stars moving, and choosing a theme is a jump in time. A reload returns to the chosen theme.
-- Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors and dragging a selection, which lasts longer the more lines it covers, with a switch to turn them off.
+- Recorded sounds for clicks, passing over menus, changing tabs, opening a project and the IDE, renaming, the delete alert, closing, breakpoints, run and stop, formatting, weather changes, new files and folders, the suggestions switch, typing, accepting a suggestion, importing, changing language, passing over any button, searching variables, program errors and dragging a selection, which plays while the mouse is pressed, with a switch to turn them off.
 - Language changes rewrite the letters of the interface, and themes change in the scenery itself. Names people chose and the Safira name stay still.
 - Interface and error messages in Simplified Chinese and Japanese.
 - The example programs were ported to the new language and now carry emojis, so their author line names Gabriel Gregorio, who ported them.
