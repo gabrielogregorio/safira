@@ -420,20 +420,22 @@ test('changing the language several times always ends on the text of the chosen 
   await page.goto('/');
   const language = page.locator('.orb-toggles button').nth(1);
   const title = page.locator('.home-settings .button-primary');
+  // The flag dances while its sound plays, and Playwright only clicks what stands still.
+  const nextLanguage = (): Promise<void> => language.evaluate((button) => (button as HTMLButtonElement).click());
 
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Criar projeto');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Crear proyecto');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('创建项目');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('プロジェクトを作成');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Create project');
 
   for (let click = 0; click < 5; click += 1) {
-    await language.click();
+    await nextLanguage();
   }
 
   await expect(title).toHaveText('Create project');
