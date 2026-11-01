@@ -33,6 +33,7 @@ const TRIP_VARIATION_MILLISECONDS = 750;
 // He stays in the upper part, with the balloon growing down, so the first lines of code stay in sight.
 const HEIGHT_IN_FIELD: Record<Scene, number> = {
   intro: 0.2,
+  read: 0.2,
   write: 0.2,
 
   play: 0.08,
@@ -47,12 +48,13 @@ export interface Trip {
   milliseconds: number;
 }
 
-type Scene = 'intro' | 'play' | 'write' | 'input' | 'result' | 'farewell';
+type Scene = 'intro' | 'read' | 'play' | 'write' | 'input' | 'result' | 'farewell';
 
 const HOME_FIELD = '.code-editor';
 
 const TARGETS: Record<Scene, string> = {
   intro: '.cm-content',
+  read: '.cm-content',
   write: '.cm-content',
   play: '.aero-button-run',
   input: '.terminal-input',
@@ -355,6 +357,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
   const [isHoldingStone, setIsHoldingStone] = useState(false);
   const [hasMet, setHasMet] = useState(() => readFlag(MET_KEY));
   const key = stepKey(lesson.place);
+  const [codeReadAt, setCodeReadAt] = useState<string | null>(null);
 
   const scene = ((): Scene => {
     if (isWaitingInput) {
@@ -373,7 +376,12 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
       return 'result';
     }
 
-    return lesson.step?.check === null ? 'play' : 'write';
+    if (lesson.step?.check !== null) {
+      return 'write';
+    }
+
+    // The code comes first: the play only comes up after he points at what will run.
+    return codeReadAt === key ? 'play' : 'read';
   })();
 
   const pose = ((): Pose => {
@@ -478,6 +486,8 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     switch (scene) {
       case 'intro':
         return t('Meow! I am a therian, and I will teach you to program.');
+      case 'read':
+        return t('Read this code.');
       case 'play':
         return t('Press ▶');
       case 'write':
@@ -644,6 +654,18 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
                   onClick={() => {
                     writeFlag(MET_KEY);
                     setHasMet(true);
+                  }}>
+                  {t('Continue')}
+                </button>
+              </div>
+            ) : null}
+            {scene === 'read' && typed.isDone ? (
+              <div className="lesson-actions">
+                <button
+                  type="button"
+                  className="button button-primary"
+                  onClick={() => {
+                    setCodeReadAt(key);
                   }}>
                   {t('Continue')}
                 </button>

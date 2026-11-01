@@ -75,6 +75,9 @@ describe('lesson mode', () => {
     await enterLessonMode();
 
     expect(document.querySelector('.cm-content')).toHaveTextContent('show');
+    expect(screen.getByText('Read this code.')).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Continue' }));
 
     expect(screen.getByText('Press ▶')).toBeInTheDocument();
 

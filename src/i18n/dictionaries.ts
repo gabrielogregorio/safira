@@ -1,5 +1,6 @@
 export const dictionaries = {
   'pt-br': {
+    'Read this code.': 'Leia este código.',
     Settings: 'Configurações',
     Data: 'Dados',
     'Delete everything': 'Apagar tudo',
@@ -196,6 +197,7 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   es: {
+    'Read this code.': 'Lee este código.',
     Settings: 'Configuración',
     Data: 'Datos',
     'Delete everything': 'Borrar todo',
@@ -393,6 +395,7 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   'zh-cn': {
+    'Read this code.': '先读这段代码。',
     Settings: '设置',
     Data: '数据',
     'Delete everything': '全部删除',
@@ -584,6 +587,7 @@ export const dictionaries = {
     Programs: '程序',
   },
   ja: {
+    'Read this code.': 'このコードを読みましょう。',
     Settings: '設定',
     Data: 'データ',
     'Delete everything': 'すべて削除',

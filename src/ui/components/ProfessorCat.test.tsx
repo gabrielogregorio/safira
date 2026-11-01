@@ -54,12 +54,17 @@ describe('ProfessorCat', () => {
     expect(screen.queryByRole('button', { name: 'Continue' })).not.toBeInTheDocument();
   });
 
-  it('lights the Run button only on a program to run', () => {
+  it('shows the code before asking for a run, and only then lights the button', async () => {
     sessionStorage.setItem('safira.cat.met', 'true');
     const step = { ...lessons[0].steps[0], check: null };
     const { unmount } = render(
       <ProfessorCat lesson={lessonMode({ step })} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
     );
+
+    expect(screen.getByText('Read this code.')).toBeInTheDocument();
+    expect(document.documentElement.dataset['spotlight']).toBeUndefined();
+
+    await press('Continue');
 
     expect(screen.getByText('Press ▶')).toBeInTheDocument();
     expect(document.documentElement.dataset['spotlight']).toBe('run');
