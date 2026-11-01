@@ -5,7 +5,7 @@ import { LOCALES, useTranslation } from '@/i18n/i18n';
 import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
 import type { CodeFont, Settings } from '@/settings/settings';
-import { clampFontSize, THEME_IDS } from '@/settings/settings';
+import { clampFontSize, FONT_SIZE_STEP, THEME_IDS } from '@/settings/settings';
 import { VISION_MODES } from '@/settings/vision';
 import { visionLabel } from '@/ui/visionLabels';
 import type { SoundName } from '@/ui/sound/sounds';
@@ -52,7 +52,6 @@ interface RadioSubmenuProps<Value extends string> {
 
 const BUG_REPORT_URL = 'https://github.com/safira-lang/safira-ide/issues';
 const BLOG_URL = 'https://github.com/gabrielogregorio/safira/wiki';
-const FONT_STEP = 1;
 const CODE_FONTS: { id: CodeFont; label: string }[] = [
   { id: 'mono', label: 'JetBrains Mono' },
   { id: 'aero', label: 'Istok Web' },
@@ -255,13 +254,13 @@ export const IdeMenuBar = ({
         <Action
           label={t('Increase font')}
           onSelect={() => {
-            onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_STEP) });
+            onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_SIZE_STEP) });
           }}
         />
         <Action
           label={t('Decrease font')}
           onSelect={() => {
-            onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_STEP) });
+            onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_SIZE_STEP) });
           }}
         />
         <Action label={t('Full screen')} shortcut="F11" onSelect={onToggleFullScreen} />

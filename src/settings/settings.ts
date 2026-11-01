@@ -41,6 +41,7 @@ export type PanelName = keyof PanelSizes;
 export const DEFAULT_FONT_SIZE = 15;
 export const MINIMUM_FONT_SIZE = 10;
 export const MAXIMUM_FONT_SIZE = 32;
+export const FONT_SIZE_STEP = 2;
 
 const STORAGE_KEY = 'safira.settings.v1';
 

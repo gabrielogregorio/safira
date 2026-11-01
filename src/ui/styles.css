@@ -1673,6 +1673,31 @@ html.snap-return #root {
   padding: 0 5px;
 }
 
+.font-steps {
+  display: none;
+  gap: 6px;
+}
+
+.font-step {
+  background: linear-gradient(rgb(255 255 255 / 70%), transparent 55%), var(--color-panel-strong);
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  box-shadow: 0 1px 3px rgb(6 50 100 / 28%);
+  color: var(--color-text);
+  cursor: var(--cursor-pointer);
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  height: 36px;
+  min-height: 0;
+  padding: 0;
+  width: 36px;
+}
+
+.font-step-big {
+  font-size: 1.25rem;
+}
+
 .suggestions-toggle {
   align-items: center;
   cursor: var(--cursor-pointer);
@@ -2700,6 +2725,18 @@ html.snap-return #root {
 }
 
 @media (max-width: 768px) {
+  .tab {
+    display: none;
+  }
+
+  .font-steps {
+    display: flex;
+  }
+
+  .tab-bar {
+    align-items: center;
+  }
+
   .project-name {
     flex: 0 0 100%;
   }

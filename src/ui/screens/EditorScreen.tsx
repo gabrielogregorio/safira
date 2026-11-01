@@ -20,7 +20,7 @@ import {
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
 import type { RunMode, RunnerFailure } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
-import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
+import { clampFontSize, clampPanelSize, FONT_SIZE_STEP, PANEL_LIMITS } from '@/settings/settings';
 import { BackIcon, PlayIcon, StopIcon } from '@/ui/components/AeroIcons';
 import { CloseButton } from '@/ui/components/CloseButton';
 import { CodeEditor } from '@/ui/components/CodeEditor';
@@ -664,6 +664,28 @@ export const EditorScreen = ({
                 </button>
               </div>
             ))}
+        <div className="font-steps">
+          <button
+            type="button"
+            className="font-step font-step-big"
+            aria-label={t('Increase font')}
+            title={t('Increase font')}
+            onClick={() => {
+              onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_SIZE_STEP) });
+            }}>
+            A
+          </button>
+          <button
+            type="button"
+            className="font-step"
+            aria-label={t('Decrease font')}
+            title={t('Decrease font')}
+            onClick={() => {
+              onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_SIZE_STEP) });
+            }}>
+            a
+          </button>
+        </div>
         <label className="suggestions-toggle suggestions-toggle-first" title={t('Press Tab to accept the gray text')}>
           <input
             type="checkbox"
