@@ -1,4 +1,12 @@
-import { createProject, loadProjects, MAIN_FILE, removeProject, saveProjects, upsertProject } from './projectStore';
+import {
+  createId,
+  createProject,
+  loadProjects,
+  MAIN_FILE,
+  removeProject,
+  saveProjects,
+  upsertProject,
+} from './projectStore';
 
 describe('projectStore', () => {
   beforeEach(() => {
@@ -52,5 +60,21 @@ describe('projectStore', () => {
     const project = createProject('A');
 
     expect(removeProject([project], project.id)).toEqual([]);
+  });
+});
+
+describe('createId', () => {
+  it('uses the browser id when the page is secure', () => {
+    expect(createId()).toMatch(/^[0-9a-f-]{36}$/);
+  });
+
+  it('still works when the page is opened by a local network address', () => {
+    const original = crypto.randomUUID;
+    Object.defineProperty(crypto, 'randomUUID', { value: undefined, configurable: true });
+
+    expect(createId()).toMatch(/^[0-9a-f]{32}$/);
+    expect(createId()).not.toBe(createId());
+
+    Object.defineProperty(crypto, 'randomUUID', { value: original, configurable: true });
   });
 });
