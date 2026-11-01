@@ -296,9 +296,12 @@ describe('running by hand', () => {
     expect([...interpreter.run('nada.safira')]).toEqual([]);
   });
 
-  it('saves the answer in a variable', async () => {
-    expect((await runScript('guarde a resposta em nota\nmostre "Nota: " + nota', ['7'])).texts).toEqual(['Nota: 7']);
-  });
+  it.each(['guarde a resposta em nota', 'salve o que o usuario digitar na nota', 'save the answer to nota'])(
+    'saves the answer with %s',
+    async (line) => {
+      expect((await runScript(`${line}\nmostre "Nota: " + nota`, ['7'])).texts).toEqual(['Nota: 7']);
+    },
+  );
 
   it('reads an empty text when no answer arrives', () => {
     const effects = effectsOf('x = o que o usuario digitar\nmostre "[" + x + "]"');

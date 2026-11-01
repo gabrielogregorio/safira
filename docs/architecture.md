@@ -34,7 +34,7 @@ pure helpers such as highlighting and formatting.
 
 - The parser never fails: an unknown line becomes an `invalid` statement that fails when it runs, so `tente` can catch it.
 - Rule order in `parser.ts` is part of the language.
-- All words live in `commands.json`, and every language is always active, so a script can mix them.
+- All words live in `commands.json`, and every language is always active, so a script can mix them. A command with many phrases has a short `shown` list, used by suggestions and by Available commands, while the parser accepts every phrase.
 - Variables are global, including function parameters.
 - `#safira X` on line 1 is hidden by the editor. `SUPPORTED_VERSIONS` lists what this version runs, and a script without
   the line counts as `0.38`. The alert only appears for an unsupported version.

@@ -507,6 +507,8 @@ describe('EditorScreen', () => {
 
       expect(within(dialog).getAllByRole('listitem').length).toBeGreaterThan(0);
       expect(dialog).toHaveTextContent('mostre');
+      expect(dialog).toHaveTextContent('guarde a resposta em');
+      expect(dialog).not.toHaveTextContent('anotar resposta');
 
       await userEvent.keyboard('{Escape}');
 

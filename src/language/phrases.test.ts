@@ -1,5 +1,5 @@
 import type { CommandKey } from './phrases';
-import { getAllCommands, getPhrases, isContinuationWord } from './phrases';
+import { getAllCommands, getPhrases, isContinuationWord, shownPhrases } from './phrases';
 
 describe('phrases', () => {
   it('lists the commands of every language', () => {
@@ -20,6 +20,22 @@ describe('phrases', () => {
     );
 
     expect(uncolored).toEqual([]);
+  });
+
+  it('shows a short list when a command has one', () => {
+    expect(shownPhrases({ color: 'tempo', phrases: ['a', 'b'], shown: ['a'] })).toEqual(['a']);
+  });
+
+  it('shows every phrase when a command has no short list', () => {
+    expect(shownPhrases({ color: 'tempo', phrases: ['a', 'b'] })).toEqual(['a', 'b']);
+  });
+
+  it('accepts every phrase that a command shows', () => {
+    const missing = getAllCommands().flatMap(([, { phrases, shown = [] }]) =>
+      shown.filter((phrase) => !phrases.includes(phrase)),
+    );
+
+    expect(missing).toEqual([]);
   });
 
   it('knows the words that continue a command', () => {

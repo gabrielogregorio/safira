@@ -113,7 +113,43 @@ describe('lines that do not parse', () => {
 });
 
 describe('saving the answer', () => {
-  it.each(['guarde a resposta em nota', 'guarde a resposta na nota', 'save the answer in nota'])('reads %s', (line) => {
+  it.each([
+    'guarde a resposta em nota',
+    'guarde a resposta na nota',
+    'guarde a resposta no nota',
+    'guardar a resposta em nota',
+    'guarda a resposta em nota',
+    'guarde resposta em nota',
+    'guarde a resposta na variavel nota',
+    'guarde a resposta na variável nota',
+    'guarde a resposta do usuario em nota',
+    'guarde a resposta do usuário em nota',
+    'guarde o que o usuario digitar em nota',
+    'guarde o que for digitado em nota',
+    'salve a resposta em nota',
+    'salvar a resposta em nota',
+    'armazene a resposta em nota',
+    'coloque a resposta em nota',
+    'anote a resposta em nota',
+    'save the answer in nota',
+    'store the answer in nota',
+    'keep the answer in nota',
+    'save the answer to nota',
+    'save the answer as nota',
+    'save the answer in the variable nota',
+    'save the response in nota',
+    'save answer in nota',
+    'save what the user types in nota',
+    'put the answer into nota',
+    'guarda la respuesta en nota',
+    'guarda la respuesta en la nota',
+    'guardar la respuesta en nota',
+    'guarda lo que escribe el usuario en nota',
+    '保存回答到 nota',
+    '保存答案到 nota',
+    '回答を保存 nota',
+    '回答を保存する nota',
+  ])('reads %s', (line) => {
     expect(first(line)).toMatchObject({
       kind: 'assign',
       name: 'nota',
@@ -125,9 +161,12 @@ describe('saving the answer', () => {
     expect(first('guarde a resposta em')).toMatchObject({ kind: 'invalid' });
   });
 
-  it('leaves a variable with the same first word alone', () => {
-    expect(first('guarde = 1')).toMatchObject({ kind: 'assign', name: 'guarde' });
-  });
+  it.each(['guarde', 'salve', 'save', 'store', 'keep', 'put', 'anote', 'coloque'])(
+    'leaves a variable called %s alone',
+    (word) => {
+      expect(first(`${word} = 1`)).toMatchObject({ kind: 'assign', name: word });
+    },
+  );
 });
 
 describe('lists', () => {

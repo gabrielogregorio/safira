@@ -9,6 +9,11 @@ describe('suggestCompletion', () => {
     expect(suggest('rep')).toBe('ita 3 vezes {');
   });
 
+  it('suggests the clear form of a command with many phrases', () => {
+    expect(suggest('guar')).toBe('de a resposta em');
+    expect(suggestCompletion('sav', '', 'sav', 'en-us')).toBe('e the answer in');
+  });
+
   it('follows the language of the interface', () => {
     expect(suggestCompletion('sh', '', 'sh', 'en-us')).toBe('ow "Hello!"');
     expect(suggestCompletion('mu', '', 'mu', 'es')).toBe('estra "¡Hola!"');
