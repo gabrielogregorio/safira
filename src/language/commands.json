@@ -596,6 +596,19 @@
     "color": "condicionais",
     "phrases": ["repetir", "repeat", "repita", "繰り返す", "重复"]
   },
+  "nao_faca_nada": {
+    "color": "contas",
+    "phrases": [
+      "no hagas nada",
+      "no hacer nada",
+      "nao faca nada",
+      "nao fazer nada",
+      "nao faz nada",
+      "do nothing",
+      "什么都不做",
+      "何もしない"
+    ]
+  },
   "guarde_resposta": {
     "color": "tempo",
     "shown": ["guarde a resposta em", "save the answer in", "guarda la respuesta en", "保存回答到", "回答を保存"],

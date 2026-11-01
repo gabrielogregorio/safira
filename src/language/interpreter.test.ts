@@ -296,6 +296,15 @@ describe('running by hand', () => {
     expect([...interpreter.run('nada.safira')]).toEqual([]);
   });
 
+  it('goes on after doing nothing', async () => {
+    const { texts, error } = await runScript(
+      'se 1 == 2 entao mostre "a" senao não faça nada\nnão faça nada\nmostre "b"',
+    );
+
+    expect(error).toBeNull();
+    expect(texts).toEqual(['b']);
+  });
+
   it.each(['guarde a resposta em nota', 'salve o que o usuario digitar na nota', 'save the answer to nota'])(
     'saves the answer with %s',
     async (line) => {

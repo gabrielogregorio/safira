@@ -112,6 +112,34 @@ describe('lines that do not parse', () => {
   });
 });
 
+describe('doing nothing', () => {
+  it.each([
+    'não faça nada',
+    'nao faca nada',
+    'não fazer nada',
+    'não faz nada',
+    'do nothing',
+    'no hagas nada',
+    'no hacer nada',
+    '什么都不做',
+    '何もしない',
+  ])('reads %s', (line) => {
+    expect(first(line)).toMatchObject({ kind: 'noop' });
+  });
+
+  it('works as the only command of a condition', () => {
+    expect(first('se 1 == 1 entao não faça nada senao mostre "x"')).toMatchObject({
+      kind: 'if',
+      branches: [{ body: [{ kind: 'noop' }] }],
+      otherwise: [{ kind: 'print' }],
+    });
+  });
+
+  it('leaves a variable called nada alone', () => {
+    expect(first('nada = 1')).toMatchObject({ kind: 'assign', name: 'nada' });
+  });
+});
+
 describe('saving the answer', () => {
   it.each([
     'guarde a resposta em nota',

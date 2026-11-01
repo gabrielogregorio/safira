@@ -212,6 +212,8 @@ export class Interpreter {
         return 'continue';
       case 'halt':
         return 'halt';
+      case 'noop':
+        return 'normal';
       case 'clear':
         yield { type: 'clear' };
 

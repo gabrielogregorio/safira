@@ -218,6 +218,17 @@ export const STATEMENTS: Statement[] = [
     code: '[tente] {\n  [mostre] "a"\n} [se_der_erro] {\n  [mostre] "b"\n} [senao_der_erro] {\n  [mostre] "c"\n} [em_qualquer_caso] {\n  [mostre] "d"\n}',
     output: ['a', 'c', 'd'],
   },
+  { name: 'do nothing', code: '[nao_faca_nada]\n[mostre] "n"', output: ['n'] },
+  {
+    name: 'do nothing in a branch',
+    code: '[se] 1 [logico_igual] 1 [se_final] {\n  [nao_faca_nada]\n} [se_nao] {\n  [mostre] "s"\n}\n[mostre] "f"',
+    output: ['f'],
+  },
+  {
+    name: 'do nothing inline',
+    code: '[se] 1 [logico_igual] 1 [se_final] [nao_faca_nada] [se_nao] [mostre] "s"',
+    output: [],
+  },
   { name: 'comment', code: '# nada\n[mostre] "x" # fim', output: ['x'] },
 ];
 

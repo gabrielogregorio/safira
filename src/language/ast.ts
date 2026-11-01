@@ -58,6 +58,7 @@ export type StatementBody =
   | { kind: 'break' }
   | { kind: 'continue' }
   | { kind: 'halt' }
+  | { kind: 'noop' }
   | { kind: 'clear' }
   | { kind: 'wait'; amount: Expression; unit: 'seconds' | 'milliseconds' }
   | { kind: 'tone'; frequencies: number[]; amount: Expression | null; unit: 'seconds' | 'milliseconds' }

@@ -20,6 +20,7 @@ export class Parser extends ExpressionParser {
     () => this.parseSimple('continue', { kind: 'continue' }),
     () => this.parseSimple('pare', { kind: 'break' }),
     () => this.parseSimple('interrompa', { kind: 'halt' }),
+    () => this.parseSimple('nao_faca_nada', { kind: 'noop' }),
     () => this.parseWhile(),
     () => this.parseRepeat(),
     () => this.parseForRange(),
