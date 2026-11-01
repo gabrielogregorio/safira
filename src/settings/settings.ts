@@ -2,6 +2,7 @@ import type { SyntaxCategory } from '@/language/highlight';
 import type { Locale } from '@/language/messages';
 import type { VisionMode } from './vision';
 import { isVisionMode } from './vision';
+import { storageKey } from './storageKey';
 
 export type ThemeId = 'light' | 'dark' | 'simple';
 export type CodeFont = 'mono' | 'aero';
@@ -43,7 +44,7 @@ export const MINIMUM_FONT_SIZE = 10;
 export const MAXIMUM_FONT_SIZE = 32;
 export const FONT_SIZE_STEP = 2;
 
-const STORAGE_KEY = 'safira.settings.v1';
+const STORAGE_KEY = storageKey('settings.v1');
 
 export const DEFAULT_SETTINGS: Settings = {
   locale: null,

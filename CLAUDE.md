@@ -63,4 +63,5 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - Lessons teach in the comments of the code. `ProfessorCat` only points, so explanations never go in his balloon.
 - Browser APIs of secure contexts fail when the page opens by a local address. Test by IP before relying on one, as `createId` had to.
 - The flags dance while their sound plays, and Playwright only clicks what stands still.
+- Browser keys go through `storageKey`, or a preview writes over the data of the site. It does not keep a preview from reading them: they share an origin.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.

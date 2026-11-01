@@ -4,12 +4,13 @@ import Markdown from 'react-markdown';
 import { useTranslation } from '@/i18n/i18n';
 import { stepKey } from '@/lessons/lessonPlace';
 import type { LessonMode } from '@/ui/hooks/useLessonMode';
+import { storageKey } from '@/settings/storageKey';
 import { prefersMotion } from '@/ui/motion';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { LessonBrief } from './LessonBrief';
 import { useTypedText } from './TypedText';
 
-const MET_KEY = 'safira.cat.met';
+const MET_KEY = storageKey('cat.met');
 const CAT_SIZE = 96;
 const EDGE_MARGIN = 12;
 const PANIC_RATE = 1.6;

@@ -14,4 +14,20 @@ describe('eraseEverything', () => {
     expect(sessionStorage.getItem('safira.cat.met')).toBeNull();
     expect(localStorage.getItem('other-site')).toBe('keep');
   });
+
+  it('keeps each preview and the site apart', () => {
+    localStorage.setItem('safira.projects.v1', '[]');
+    localStorage.setItem('safira-preview.1.0.0.projects.v1', '[]');
+
+    eraseEverything('safira-preview.1.0.0.');
+
+    expect(localStorage.getItem('safira.projects.v1')).toBe('[]');
+    expect(localStorage.getItem('safira-preview.1.0.0.projects.v1')).toBeNull();
+
+    localStorage.setItem('safira-preview.1.0.0.projects.v1', '[]');
+    eraseEverything();
+
+    expect(localStorage.getItem('safira.projects.v1')).toBeNull();
+    expect(localStorage.getItem('safira-preview.1.0.0.projects.v1')).toBe('[]');
+  });
 });

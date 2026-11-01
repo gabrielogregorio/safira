@@ -1,8 +1,9 @@
 import { addScriptVersion } from '@/language/version';
+import { storageKey } from '@/settings/storageKey';
 
 export const MAIN_FILE = 'main.safira';
 
-const STORAGE_KEY = 'safira.projects.v1';
+const STORAGE_KEY = storageKey('projects.v1');
 
 export interface Project {
   id: string;

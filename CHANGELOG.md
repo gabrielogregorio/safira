@@ -6,6 +6,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
 ### Added
 
+- Each preview keeps its own projects and settings, so testing one never changes the data of the site.
 - Accessibility modes for protanopia, deuteranopia, tritanopia, achromatopsia, low vision, light sensitivity, and epilepsy and dizziness, tested with axe and with simulated color vision.
 - Flags dance while the sound of their language plays.
 - The gear beside the Safira name opens the settings: the accessibility modes, each with a short explanation, and a way to delete everything after a confirmation, when the fingers snap, the whole screen turns to dust and goes black, and the reset site fades in over 5 seconds.

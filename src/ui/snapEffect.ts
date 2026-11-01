@@ -29,6 +29,7 @@ const FADE_MILLISECONDS = 800;
 const DARK_FADE_MILLISECONDS = 300;
 const DUST_MILLISECONDS = 4200;
 const MILLISECONDS_PER_SECOND = 1000;
+// Fixed, because the script in index.html reads it. A tab has its own sessionStorage and the next load takes it.
 const RETURN_KEY = 'safira.snap.return';
 const CELL_PIXELS = 18;
 const DEVOUR_MILLISECONDS = 2600;

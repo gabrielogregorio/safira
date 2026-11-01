@@ -1,4 +1,6 @@
-const STORAGE_KEY = 'safira.drafts.v1';
+import { storageKey } from '@/settings/storageKey';
+
+const STORAGE_KEY = storageKey('drafts.v1');
 
 export type ProjectDrafts = Record<string, string>;
 

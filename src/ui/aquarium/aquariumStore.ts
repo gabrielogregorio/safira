@@ -1,8 +1,9 @@
 import { useSyncExternalStore } from 'react';
+import { storageKey } from '@/settings/storageKey';
 import type { StoredFish } from './aquariumWorld';
 import { createPopulation, MASS_LOST_PER_SECOND, MINIMUM_MASS, SPECIES } from './aquariumWorld';
 
-const STORAGE_KEY = 'safira.aquarium.v1';
+const STORAGE_KEY = storageKey('aquarium.v1');
 const MILLISECONDS_PER_SECOND = 1000;
 const CHANGE_EVENT = 'safira-aquarium-change';
 

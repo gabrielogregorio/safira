@@ -19,6 +19,10 @@ Include the version, the steps and the impact.
 - Lesson markdown ignores raw HTML.
 - A recursion limit stops functions that never end, and the Stop button terminates the worker.
 
+## Stored data
+
+Nothing is collected or sent anywhere: projects and settings stay in this browser. The site and its previews share one origin, so each preview uses its own storage keys. That prevents accidents, not reading: code in a preview could read the data of the site, which is why previews are only published from branches of this repository, never from forks.
+
 ## Pipeline
 
 - No workflow uses `pull_request_target`, and pull requests from forks get a read-only token and no secrets.

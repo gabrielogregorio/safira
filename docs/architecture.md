@@ -82,6 +82,8 @@ The course is 13 very short lessons, each with a program to run and then a chall
 | `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
 | `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, lesson mode, place, progress and whether the cat left |
 
+`storageKey` builds these names. A preview shares the origin of the site, so under `/preview/<branch>/` the prefix becomes `safira-preview.<branch>.` and a change there never touches the data of the site, Delete everything included. The site keeps `safira.`, so nothing needs a migration.
+
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
 
 ## Addresses
@@ -111,7 +113,7 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 
 ## Deleting everything
 
-Settings > Delete everything removes every `safira.` key from both storages, then `snapAway` in `src/ui/snapEffect.ts` turns the screen to dust and black. A flag in `sessionStorage` survives the reload, and the small script in `index.html` reads it before the first paint, so the reset screen stays black for 2 seconds, fades in over 5 and gets the pointer back 4 seconds into the fade.
+Settings > Delete everything removes every key of this copy from both storages, then `snapAway` in `src/ui/snapEffect.ts` turns the screen to dust and black. A flag in `sessionStorage` survives the reload, and the small script in `index.html` reads it before the first paint, so the reset screen stays black for 2 seconds, fades in over 5 and gets the pointer back 4 seconds into the fade.
 
 ## Running on the local network
 
