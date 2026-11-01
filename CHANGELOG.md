@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- After Show the solution, the cat only says Press ▶ and lights the button.
+- Each file and folder has a ⋮ button that opens its menu, always visible on a phone.
+- On a phone, opening a file, an example or a tab goes straight to the code panel, and the code font goes down to 12.
+- The home screen links to GitHub and to the wiki at the bottom, each with its own sound.
+- The top menu of the IDE has its own click sound.
+- Lesson files have numbers in their names, so no language shows names in Portuguese, and untouched lessons of another language leave the project when the language changes.
+
 ## 1.1.0
 
 Fully compatible with 1.0.0: scripts of every earlier version keep running.
@@ -31,6 +42,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 ### Fixed
 
 - A click that opens a modal no longer plays two sounds together on a slow machine.
+- A long press on a file opens its menu on a phone, where the row used to start a drag.
 - The Japanese colors `オレンジ` and `ピンク` are recognized.
 - The preview of a pull request is removed from `gh-pages` when the pull request closes.
 

@@ -111,6 +111,29 @@ describe('useLessonMode', () => {
     expect(worker.terminate).toHaveBeenCalledTimes(1);
   });
 
+  it('forgets the failure when the solution is written, until the step starts over', async () => {
+    vi.useFakeTimers();
+    const file = lessonFilePath(FOLDER, challenge);
+    const { result, finishRun, onReplaceCode } = setup(file, {}, silentWorker());
+
+    finishRun(file);
+    await act(() => vi.advanceTimersByTimeAsync(4000));
+    expect(result.current.hasRun).toBe(true);
+
+    act(() => {
+      result.current.showSolution();
+    });
+
+    expect(result.current).toMatchObject({ verdict: { status: 'idle' }, hasRun: false, isSolutionShown: true });
+    expect(onReplaceCode).toHaveBeenLastCalledWith(lessons[0].steps[1].solution);
+
+    act(() => {
+      result.current.startOver();
+    });
+
+    expect(result.current.isSolutionShown).toBe(false);
+  });
+
   it('opens nothing for a place that does not exist', () => {
     const { result, onChangeSettings, onOpenFile } = setup();
 

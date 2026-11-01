@@ -41,6 +41,9 @@ import languagePtBrUrl from './files/language-pt-br.wav';
 import languageZhCnUrl from './files/language-zh-cn.wav';
 import lineDeleteUrl from './files/line-delete.wav';
 import modalCloseUrl from './files/modal-close.wav';
+import linkGithubUrl from './files/link-github.wav';
+import linkWikiUrl from './files/link-wiki.wav';
+import menuClickUrl from './files/menu-click.wav';
 import modalOpenUrl from './files/modal-open.wav';
 import moveUrl from './files/move.wav';
 import openUrl from './files/open.wav';
@@ -65,6 +68,9 @@ import weatherSimpleUrl from './files/weather-simple.wav';
 
 export type SoundName =
   | 'click'
+  | 'menuClick'
+  | 'linkGithub'
+  | 'linkWiki'
   | 'hover'
   | 'hoverSpecial'
   | 'toggle'
@@ -130,6 +136,9 @@ export type SoundName =
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
   click: clickUrl,
+  menuClick: menuClickUrl,
+  linkGithub: linkGithubUrl,
+  linkWiki: linkWikiUrl,
   hover: hoverUrl,
   hoverSpecial: hoverSpecialUrl,
   toggle: toggleUrl,
@@ -212,8 +221,8 @@ export const SEA_SOUNDS: Record<ThemeId, SoundName> = { light: 'seaLight', dark:
 
 // One gesture can ask for several sounds: a click on a button that also closes a modal, for example.
 // Waiting a little lets the most meaningful one play first, and the others step aside.
-const WAIT_MILLISECONDS: Partial<Record<SoundName, number>> = { modalClose: 10, click: 20 };
-const STEPS_ASIDE: SoundName[] = ['click', 'modalClose'];
+const WAIT_MILLISECONDS: Partial<Record<SoundName, number>> = { modalClose: 10, click: 20, menuClick: 20 };
+const STEPS_ASIDE: SoundName[] = ['click', 'menuClick', 'modalClose'];
 const SAME_GESTURE_MILLISECONDS = 80;
 const HOVER_GAP_MILLISECONDS = 40;
 

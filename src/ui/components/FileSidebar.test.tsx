@@ -110,6 +110,55 @@ describe('FileSidebar', () => {
     expect(screen.queryByLabelText('File name')).not.toBeInTheDocument();
   });
 
+  it('opens the menu of a row from its button, without a right click', async () => {
+    const { onDelete } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'More actions for main.safira' }));
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Delete' }));
+
+    expect(onDelete).toHaveBeenCalledWith(expect.objectContaining({ kind: 'file', path: 'main.safira' }));
+  });
+
+  it('keeps the rows draggable with a mouse', () => {
+    setup();
+
+    expect(screen.getByRole('button', { name: 'main.safira' }).parentElement).toHaveAttribute('draggable', 'true');
+  });
+
+  it('lets go of dragging on a touch screen, so that a long press reaches the menu', () => {
+    vi.stubGlobal('matchMedia', () => ({ matches: true }));
+    setup();
+
+    expect(screen.getByRole('button', { name: 'main.safira' }).parentElement).toHaveAttribute('draggable', 'false');
+
+    vi.unstubAllGlobals();
+  });
+
+  it('does not open the file when the finger leaves after a long press', async () => {
+    const { onOpen } = setup();
+    rightClick('main.safira');
+    await screen.findByRole('menuitem', { name: 'Delete' });
+    fireEvent.click(screen.getByRole('button', { name: 'main.safira' }));
+
+    expect(onOpen).not.toHaveBeenCalled();
+    expect(screen.getByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
+  });
+
+  it('keeps the menu open when the row takes the focus', async () => {
+    setup();
+    rightClick('main.safira');
+    await screen.findByRole('menuitem', { name: 'Delete' });
+    fireEvent.focusIn(screen.getByRole('button', { name: 'main.safira' }));
+
+    expect(screen.getByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
+  });
+
+  it('opens the file with a plain click', async () => {
+    const { onOpen } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'main.safira' }));
+
+    expect(onOpen).toHaveBeenCalledWith('main.safira');
+  });
+
   it('has no delete button on the rows', () => {
     setup();
 

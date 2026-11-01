@@ -1,5 +1,5 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import type { DragEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
+import type { DragEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import type { Translate } from '@/i18n/i18n';
 import { useTranslation } from '@/i18n/i18n';
@@ -132,31 +132,75 @@ const dropPlaceAt = (event: DragEvent, node: TreeNode): DropPlace => {
   return position > 1 - edge ? 'after' : 'inside';
 };
 
-const RowMenu = ({ items, children }: RowMenuProps) => (
-  <ContextMenu.Root modal={false}>
-    <ContextMenu.Trigger asChild>{children}</ContextMenu.Trigger>
-    <ContextMenu.Portal>
-      <ContextMenu.Content
-        className="menubar-content"
-        collisionPadding={8}
-        onCloseAutoFocus={(event) => {
-          event.preventDefault();
+// The menu of a row lives on its context menu event, so this button asks for it the way a right click does.
+const isTouchScreen = (): boolean =>
+  typeof window.matchMedia === 'function' && window.matchMedia('(pointer: coarse)').matches;
+
+const openRowMenu = (event: MouseEvent<HTMLButtonElement>): void => {
+  const { left, bottom } = event.currentTarget.getBoundingClientRect();
+  event.currentTarget.dispatchEvent(
+    new window.MouseEvent('contextmenu', { bubbles: true, cancelable: true, clientX: left, clientY: bottom }),
+  );
+};
+
+const RowMenuButton = ({ name }: { name: string }) => {
+  const t = useTranslation();
+  const label = t('More actions for {name}', { name });
+
+  return (
+    <button type="button" className="tree-more" aria-label={label} title={label} onClick={openRowMenu}>
+      ⋮
+    </button>
+  );
+};
+
+const RowMenu = ({ items, children }: RowMenuProps) => {
+  const isOpen = useRef(false);
+
+  return (
+    <ContextMenu.Root
+      modal={false}
+      onOpenChange={(open) => {
+        isOpen.current = open;
+      }}>
+      <ContextMenu.Trigger
+        asChild
+        onClickCapture={(event) => {
+          // Lifting the finger after a long press clicks the row, which would open the file and hide the menu.
+          if (isOpen.current) {
+            event.preventDefault();
+            event.stopPropagation();
+          }
         }}>
-        {items.map((item) => (
-          <ContextMenu.Item
-            key={item.label}
-            className="menubar-item"
-            disabled={item.disabled}
-            data-sound={item.sound}
-            onSelect={item.onSelect}>
-            {item.label}
-            {item.shortcut === undefined ? null : <span className="menubar-shortcut">{item.shortcut}</span>}
-          </ContextMenu.Item>
-        ))}
-      </ContextMenu.Content>
-    </ContextMenu.Portal>
-  </ContextMenu.Root>
-);
+        {children}
+      </ContextMenu.Trigger>
+      <ContextMenu.Portal>
+        <ContextMenu.Content
+          className="menubar-content"
+          collisionPadding={8}
+          onCloseAutoFocus={(event) => {
+            event.preventDefault();
+          }}
+          onFocusOutside={(event) => {
+            // Lifting the finger focuses the row, and a touch outside still closes the menu.
+            event.preventDefault();
+          }}>
+          {items.map((item) => (
+            <ContextMenu.Item
+              key={item.label}
+              className="menubar-item"
+              disabled={item.disabled}
+              data-sound={item.sound}
+              onSelect={item.onSelect}>
+              {item.label}
+              {item.shortcut === undefined ? null : <span className="menubar-shortcut">{item.shortcut}</span>}
+            </ContextMenu.Item>
+          ))}
+        </ContextMenu.Content>
+      </ContextMenu.Portal>
+    </ContextMenu.Root>
+  );
+};
 
 const moveItems = (t: Translate, actions: TreeActions, node: TreeNode): RowMenuItem[] => [
   {
@@ -411,6 +455,7 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
                 {node.name}
               </span>
             </button>
+            <RowMenuButton name={node.name} />
           </div>
         )}
       </RowMenu>
@@ -476,6 +521,7 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                       {node.name}
                     </span>
                   </button>
+                  <RowMenuButton name={node.name} />
                 </div>
               )}
             </RowMenu>
@@ -612,7 +658,8 @@ export const FileSidebar = ({
     dragged === null ? null : planMove(paths, order, dragged, anchor, place);
 
   const dragProps = (node: TreeNode): DragProps => ({
-    draggable: canRename,
+    // On a touch screen, holding a draggable row starts a drag, which cancels the long press of the menu.
+    draggable: canRename && !isTouchScreen(),
     'data-drop': dropTarget?.path === node.path ? dropTarget.place : undefined,
     onDragStart: (event) => {
       event.stopPropagation();

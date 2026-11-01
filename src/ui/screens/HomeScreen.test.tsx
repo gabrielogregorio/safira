@@ -33,6 +33,18 @@ const setup = (props: Partial<ComponentProps<typeof HomeScreen>> = {}) => {
 };
 
 describe('HomeScreen', () => {
+  it.each([
+    ['Safira on GitHub', 'https://github.com/gabrielogregorio/safira', 'linkGithub'],
+    ['Safira wiki', 'https://github.com/gabrielogregorio/safira/wiki', 'linkWiki'],
+  ])('links to %s in a new tab, with a sound of its own', (name, href, sound) => {
+    setup();
+    const link = screen.getByRole('link', { name });
+
+    expect(link).toHaveAttribute('href', href);
+    expect(link).toHaveAttribute('target', '_blank');
+    expect(link).toHaveAttribute('data-sound', sound);
+  });
+
   afterEach(() => {
     vi.restoreAllMocks();
   });

@@ -351,7 +351,7 @@ test('imports from a virtual folder created in the sidebar', async ({ page }) =>
   await expect(page.getByLabel('Folder name')).toBeFocused();
   await page.keyboard.type('dados');
   await page.keyboard.press('Enter');
-  await page.getByRole('button', { name: 'dados' }).click({ button: 'right' });
+  await page.getByRole('button', { name: 'dados', exact: true }).click({ button: 'right' });
   await page.getByRole('menuitem', { name: 'New file' }).click();
   await expect(page.getByLabel('File name')).toBeFocused();
   await page.keyboard.type('lib');
@@ -595,12 +595,15 @@ test('files and folders are renamed from the right click', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
-  await page.locator('.file-sidebar').getByRole('button', { name: 'main.safira' }).click({ button: 'right' });
+  await page
+    .locator('.file-sidebar')
+    .getByRole('button', { name: 'main.safira', exact: true })
+    .click({ button: 'right' });
   await page.getByRole('menuitem', { name: 'Rename' }).click();
   await expect(page.getByLabel('File name')).toBeFocused();
   await page.keyboard.type('inicio');
   await page.keyboard.press('Enter');
-  await expect(page.locator('.file-sidebar').getByRole('button', { name: 'inicio.safira' })).toBeVisible();
+  await expect(page.locator('.file-sidebar').getByRole('button', { name: 'inicio.safira', exact: true })).toBeVisible();
   await expect(page.locator('.tab-active')).toContainText('inicio.safira');
   await expect(page).toHaveURL(/inicio\.safira/);
 });

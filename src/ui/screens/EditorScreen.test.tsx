@@ -526,14 +526,15 @@ describe('EditorScreen', () => {
       expect(loadSettings().fontSize).toBe(DEFAULT_SETTINGS.fontSize);
     });
 
-    it('never goes below the size that makes a phone zoom into the field', async () => {
+    it('lets the code get a little smaller on a phone, down to a readable size', async () => {
       vi.stubGlobal('innerWidth', 400);
       openProject({ [MAIN]: '' });
-      await userEvent.click(screen.getByRole('button', { name: 'Decrease font' }));
-      await userEvent.click(screen.getByRole('button', { name: 'Decrease font' }));
-      await userEvent.click(screen.getByRole('button', { name: 'Decrease font' }));
 
-      expect(loadSettings().fontSize).toBe(16);
+      for (let press = 0; press < 5; press += 1) {
+        await userEvent.click(screen.getByRole('button', { name: 'Decrease font' }));
+      }
+
+      expect(loadSettings().fontSize).toBe(12);
     });
 
     it('turns the suggestions off and on, each with its sound', async () => {
@@ -569,6 +570,46 @@ describe('EditorScreen', () => {
 
       expect(document.getElementById('content')).toHaveClass('workspace-output');
       expect(within(panels).getByRole('button', { name: 'Output' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    it.each([
+      [
+        'an example of the menu',
+        async () => {
+          await choose('Learn', 'Lists');
+        },
+      ],
+      [
+        'a file of the tree',
+        async () => {
+          await userEvent.click(screen.getByRole('button', { name: 'outro.safira' }));
+        },
+      ],
+      [
+        'a new file',
+        async () => {
+          await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+          await userEvent.keyboard('{Enter}');
+        },
+      ],
+    ])('goes to the code on a phone after opening %s', async (_name, open) => {
+      openProject({ [MAIN]: '', 'outro.safira': '' });
+      const panels = screen.getByRole('navigation', { name: 'Safira IDE' });
+      await userEvent.click(within(panels).getByRole('button', { name: 'Output' }));
+      await open();
+
+      expect(within(panels).getByRole('button', { name: 'Code' })).toHaveAttribute('aria-pressed', 'true');
+    });
+
+    it('goes to the code on a phone after changing tabs', async () => {
+      openProject({ [MAIN]: '', 'outro.safira': '' });
+      await userEvent.click(screen.getByRole('button', { name: 'outro.safira' }));
+      const panels = screen.getByRole('navigation', { name: 'Safira IDE' });
+      await userEvent.click(within(panels).getByRole('button', { name: 'Output' }));
+      const tabs = screen.getByRole('navigation', { name: 'Virtual files of this project' });
+      await userEvent.click(within(tabs).getByRole('button', { name: MAIN }));
+
+      expect(within(panels).getByRole('button', { name: 'Code' })).toHaveAttribute('aria-pressed', 'true');
     });
 
     describe('full screen', () => {

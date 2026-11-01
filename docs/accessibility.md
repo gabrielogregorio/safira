@@ -34,7 +34,7 @@ Color modes also mark code with weight, slant and underline, so color is never t
 - The top menu follows the menu bar pattern: arrows move between and inside menus, Escape returns to the trigger.
 - Theme and language are buttons that cycle on each click, and each one says the current choice in its name.
 - Panel dividers are separators that work with the arrow keys.
-- Files and folders move without dragging: Alt+Up and Alt+Down change the order, Alt+M opens the list of folders, and the same actions are in the right click menu, which a long press opens on a phone. The result is announced and the focus stays on the moved item.
+- Files and folders move without dragging: Alt+Up and Alt+Down change the order, Alt+M opens the list of folders, and the same actions are in the right click menu, which the ⋮ button of each row opens, by mouse, keyboard or touch. The result is announced and the focus stays on the moved item.
 - With the reduced motion preference or the calm mode, the aquarium is a still picture that says why.
 - Language, theme and globe animations are skipped with the reduced motion preference, and the rewritten letters are not announced.
 - On a phone, touch targets have at least 44 pixels.

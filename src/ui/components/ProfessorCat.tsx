@@ -335,6 +335,10 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
       return 'input';
     }
 
+    if (lesson.isSolutionShown && lesson.isOnStepFile && !lesson.hasRun) {
+      return 'play';
+    }
+
     if (lesson.isLastStep && lesson.isDone && lesson.hasRun) {
       return 'farewell';
     }

@@ -72,7 +72,9 @@ const MENU_OFFSET = 6;
 
 const Menu = ({ label, children }: MenuProps) => (
   <Menubar.Menu>
-    <Menubar.Trigger className="menubar-trigger">{label}</Menubar.Trigger>
+    <Menubar.Trigger className="menubar-trigger" data-sound="menuClick">
+      {label}
+    </Menubar.Trigger>
     <Menubar.Portal>
       <Menubar.Content className="menubar-content" align="start" sideOffset={MENU_OFFSET} collisionPadding={8}>
         {children}
@@ -81,7 +83,7 @@ const Menu = ({ label, children }: MenuProps) => (
   </Menubar.Menu>
 );
 
-const Action = ({ label, shortcut, disabled = false, sound, hoverRate, onSelect }: ActionProps) => (
+const Action = ({ label, shortcut, disabled = false, sound = 'menuClick', hoverRate, onSelect }: ActionProps) => (
   <Menubar.Item
     className="menubar-item"
     disabled={disabled}

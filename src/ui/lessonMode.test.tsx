@@ -82,7 +82,7 @@ describe('lesson mode', () => {
     expect(document.querySelector('.cm-content')).toHaveTextContent('show');
     expect(screen.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(firstLesson.id);
     expect(document.querySelector('.tab')).toBeNull();
-    expect(Object.keys(loadProjects()[0].files)).toContain('lessons/01-fale-comigo-1.safira');
+    expect(Object.keys(loadProjects()[0].files)).toContain('lessons/01-1.safira');
   });
 
   it('shows a program to run before the challenge', async () => {
@@ -112,6 +112,11 @@ describe('lesson mode', () => {
     expect(await nextButton()).toBeDisabled();
 
     await userEvent.click(screen.getByRole('button', { name: 'Show the solution' }));
+
+    expect(await screen.findByText('Press ▶')).toBeInTheDocument();
+    expect(screen.queryByText(/^Tip: /)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show the solution' })).not.toBeInTheDocument();
+
     await run();
 
     expect(await screen.findByText('Correct! Challenge complete.')).toBeInTheDocument();
@@ -146,7 +151,8 @@ describe('lesson mode', () => {
     await finishExample();
     await run();
     await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Start over' }));
+    await run();
+    await userEvent.click(await screen.findByRole('button', { name: 'Start over' }));
 
     expect(document.querySelector('.cm-content')).not.toHaveTextContent('show "');
   });
@@ -156,7 +162,7 @@ describe('lesson mode', () => {
     await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Choose a lesson' }), lessons[2].id);
 
     expect(await screen.findByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(lessons[2].id);
-    expect(Object.keys(loadProjects()[0].files)).toContain('lessons/03-sua-cidade-1.safira');
+    expect(Object.keys(loadProjects()[0].files)).toContain('lessons/03-1.safira');
   });
 
   it('keeps the place after a reload', async () => {
@@ -184,7 +190,8 @@ describe('lesson mode', () => {
     await userEvent.click(await screen.findByRole('menuitemradio', { name: 'Español' }));
 
     expect(await screen.findByRole('option', { name: /^1\. Háblame/ })).toBeInTheDocument();
-    expect(Object.keys(loadProjects()[0].files)).toContain('clases/01-fale-comigo-1.safira');
+    expect(Object.keys(loadProjects()[0].files)).toContain('clases/01-1.safira');
+    expect(Object.keys(loadProjects()[0].files)).not.toContain('lessons/01-1.safira');
   });
 
   it('offers the way back from another file', async () => {

@@ -35,6 +35,7 @@ const lessonMode = (changes: Partial<LessonMode> = {}): LessonMode => ({
   isLastStep: false,
   verdict: { status: 'idle' },
   hasRun: false,
+  isSolutionShown: false,
   open: vi.fn(),
   toggle: vi.fn(),
   goToNext: vi.fn(),
@@ -130,6 +131,21 @@ describe('ProfessorCat', () => {
     unmount();
 
     expect(document.documentElement.dataset['spotlight']).toBeUndefined();
+  });
+
+  it('only asks for a run after the solution is shown', () => {
+    render(
+      <ProfessorCat
+        lesson={lessonMode({ isSolutionShown: true })}
+        hasError={false}
+        isWaitingInput={false}
+        onAbandon={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByText('Press ▶')).toBeInTheDocument();
+    expect(screen.queryByText('Write your answer and press ▶ Run.')).not.toBeInTheDocument();
+    expect(document.documentElement.dataset['spotlight']).toBe('run');
   });
 
   it('shows the result after a run, with the way forward', async () => {
