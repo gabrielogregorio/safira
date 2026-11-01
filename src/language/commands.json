@@ -596,6 +596,23 @@
     "color": "condicionais",
     "phrases": ["repetir", "repeat", "repita", "繰り返す", "重复"]
   },
+  "guarde_resposta": {
+    "color": "tempo",
+    "phrases": [
+      "guarda la respuesta en",
+      "guardar a resposta em",
+      "guardar a resposta na",
+      "guardar a resposta no",
+      "guarde a resposta em",
+      "guarde a resposta na",
+      "guarde a resposta no",
+      "store the answer in",
+      "save the answer in",
+      "keep the answer in",
+      "回答を保存",
+      "保存回答到"
+    ]
+  },
   "digitado": {
     "color": "tempo",
     "phrases": [

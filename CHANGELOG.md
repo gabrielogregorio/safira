@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `guarde a resposta em nota`, `save the answer in note` and the same in the other languages put what the user types in a variable.
+
 ## 1.0.0
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.

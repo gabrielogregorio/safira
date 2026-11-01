@@ -29,6 +29,7 @@ export const STATEMENTS: Statement[] = [
   { name: 'assign true', code: 'v = [logico_true]\n[mostre] v', output: ['True'] },
   { name: 'assign false', code: 'v = [logico_false]\n[mostre] v', output: ['False'] },
   { name: 'text input', code: 'v = [digitado]\n[mostre] v', inputs: ['7'], output: ['7'] },
+  { name: 'save the answer', code: '[guarde_resposta] v\n[mostre] v', inputs: ['7'], output: ['7'] },
   { name: 'number input', code: 'v = [digitadoNumero]\n[mostre] v + 1', inputs: ['4'], output: ['5'] },
   { name: 'if true', code: '[se] 1 [logico_igual] 1 [se_final] {\n  [mostre] "s"\n}', output: ['s'] },
   { name: 'if false', code: '[se] 1 [logico_igual] 2 [se_final] {\n  [mostre] "s"\n}\n[mostre] "f"', output: ['f'] },

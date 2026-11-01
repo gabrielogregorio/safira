@@ -112,6 +112,24 @@ describe('lines that do not parse', () => {
   });
 });
 
+describe('saving the answer', () => {
+  it.each(['guarde a resposta em nota', 'guarde a resposta na nota', 'save the answer in nota'])('reads %s', (line) => {
+    expect(first(line)).toMatchObject({
+      kind: 'assign',
+      name: 'nota',
+      value: { kind: 'input', numeric: false, variableName: null },
+    });
+  });
+
+  it('needs the name of a variable', () => {
+    expect(first('guarde a resposta em')).toMatchObject({ kind: 'invalid' });
+  });
+
+  it('leaves a variable with the same first word alone', () => {
+    expect(first('guarde = 1')).toMatchObject({ kind: 'assign', name: 'guarde' });
+  });
+});
+
 describe('lists', () => {
   it('sets a position with the word that gives a value', () => {
     expect(first('lista x na posicao 1 recebe 5')).toMatchObject({ kind: 'listSet', name: 'x' });
