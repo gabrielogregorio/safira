@@ -256,6 +256,11 @@ export const snapAway = async (): Promise<void> => {
   await fallIntoTheDark();
 };
 
+/** The pointer goes with everything else, and comes back when the new screen starts to appear. */
+export const hidePointer = (): void => {
+  document.documentElement.classList.add('snap-running');
+};
+
 /** The reload comes back in the dark, and `index.html` reads this before anything is painted. */
 export const markReturnFromSnap = (): void => {
   try {

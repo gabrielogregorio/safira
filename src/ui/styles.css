@@ -894,6 +894,11 @@ select {
   transform: rotate(90deg);
 }
 
+html.snap-running,
+html.snap-running * {
+  cursor: none !important;
+}
+
 .snap-devour {
   inset: 0;
   pointer-events: none;
@@ -917,7 +922,7 @@ select {
 }
 
 html.snap-return #root {
-  animation: snap-return 5000ms ease-in-out both;
+  animation: snap-return 5000ms ease-in-out 2000ms both;
 }
 
 @keyframes snap-dark {

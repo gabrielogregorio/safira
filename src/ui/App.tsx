@@ -18,7 +18,7 @@ import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
 import { SettingsDialog } from '@/ui/components/SettingsDialog';
 import { eraseEverything } from '@/settings/eraseEverything';
-import { markReturnFromSnap, snapAway } from '@/ui/snapEffect';
+import { hidePointer, markReturnFromSnap, snapAway } from '@/ui/snapEffect';
 import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
@@ -39,8 +39,6 @@ import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 import { printConsoleInvite } from '@/ui/consoleInvite';
 
-// A moment of plain black before the reset screen starts its fade in.
-const DARK_PAUSE_MILLISECONDS = 1000;
 const AFTER_SNAP_MILLISECONDS = 350;
 
 interface AppProps {
@@ -352,14 +350,13 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
                 onEraseEverything={() => {
                   eraseEverything();
                   markReturnFromSnap();
+                  hidePointer();
                   // The fingers snap first, and only then the screen starts to crumble.
                   setTimeout(() => {
                     void soundPlayer.play('snapDust');
                     void snapAway().then(() => {
-                      setTimeout(() => {
-                        window.location.hash = '#/';
-                        window.location.reload();
-                      }, DARK_PAUSE_MILLISECONDS);
+                      window.location.hash = '#/';
+                      window.location.reload();
                     });
                   }, AFTER_SNAP_MILLISECONDS);
                 }}
