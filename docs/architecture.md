@@ -122,4 +122,4 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - `R` in a note list is a rest. That was a decision, not something asked for.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
 - The Brazilian language sound plays the opening of Asa Branca (1947), which is not in the public domain. Replace it if the rights become a problem.
-- The README needs a GIF, and no manual screen reader pass was done.
+- No manual screen reader pass was done.

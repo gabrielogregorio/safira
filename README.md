@@ -15,7 +15,7 @@ A programming language in natural language for first-time programmers, with a we
 
 </div>
 
-[![Safira IDE running a list example](docs/screenshot.png)](https://gabrielogregorio.github.io/safira/)
+[![Safira switching to English, then running a program with a variable and a color](docs/demo.gif)](https://gabrielogregorio.github.io/safira/)
 
 ## About
 
