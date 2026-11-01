@@ -16,9 +16,10 @@
         if (sessionStorage.getItem('safira.snap.return') !== null) {
           sessionStorage.removeItem('safira.snap.return');
           document.documentElement.classList.add('snap-return', 'snap-running');
+          // 2 s of black, then 4 s into the fade in.
           setTimeout(function () {
             document.documentElement.classList.remove('snap-running');
-          }, 2000);
+          }, 6000);
         }
       } catch {
         // Without storage the page only skips the fade in.
