@@ -1,5 +1,5 @@
 #safira 0.9
-# 🗣️ Talking calculator
+# ✍️ Math in words
 
 function math receives parameters a, b {
     show "% plus % is %" inserting a, b, a plus b

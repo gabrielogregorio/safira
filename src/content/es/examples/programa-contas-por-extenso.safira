@@ -1,5 +1,5 @@
 #safira 0.9
-# 🗣️ Calculadora parlante
+# ✍️ Cuentas en palabras
 
 funcion cuentas recibe parametros a, b {
     muestra "% más % es %" insertando a, b, a mas b

@@ -1,5 +1,5 @@
 #safira 0.9
-# 🗣️ Calculadora falante
+# ✍️ Contas por extenso
 
 função contas recebe parâmetros a, b {
     mostre "% mais % dá %" inserindo a, b, a mais b
