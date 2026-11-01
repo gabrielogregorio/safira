@@ -6,7 +6,7 @@ import { checkProgram } from '@/lessons/lessonCheck';
 import { examplesOf, findExampleByPrefix, lessonsOf } from './content';
 
 const EXAMPLE_COUNT = 34;
-const LESSON_COUNT = 12;
+const LESSON_COUNT = 13;
 const MAIN_FILE = 'main.safira';
 const PROGRAM_INPUTS = ['2', '2', '2', ...Array.from({ length: 20 }, () => '0')];
 const LONG_CODE_LINES = 16;
@@ -86,10 +86,9 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
     }
   });
 
-  it('every step explains itself, and the document hides the answers', () => {
+  it('every step explains itself', () => {
     for (const lesson of lessons) {
       expect(lesson.steps.filter((step) => step.title === '' || step.text === '')).toEqual([]);
-      expect(lesson.text).not.toMatch(/```(solution|check)/);
       expect(lesson.steps.filter((step) => /```/.test(step.text))).toEqual([]);
     }
   });

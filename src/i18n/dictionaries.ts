@@ -1,5 +1,7 @@
 export const dictionaries = {
   'pt-br': {
+    'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
+      'Chega! Já ensinei demais. Se vira olhando os exemplos no menu. Adeus, para sempre.',
     'Type your answer here and press Enter.': 'Digite sua resposta aqui e aperte Enter.',
     'Show it all': 'Mostrar tudo',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
@@ -185,11 +187,12 @@ export const dictionaries = {
     Back: 'Voltar',
     'Paused on line {line}': 'Pausado na linha {line}',
     'Run your program to see its variables here.': 'Execute seu programa para ver as variáveis aqui.',
-    'Click the dots beside the lines to pause there.': 'Clique nos pontos ao lado das linhas para pausar ali.',
     Learn: 'Aprender',
     Programs: 'Programas',
   },
   es: {
+    'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
+      '¡Basta! Ya enseñé demasiado. Arréglatelas con los ejemplos del menú. Adiós, para siempre.',
     'Type your answer here and press Enter.': 'Escribe tu respuesta aquí y pulsa Enter.',
     'Show it all': 'Mostrar todo',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
@@ -376,11 +379,12 @@ export const dictionaries = {
     Back: 'Volver',
     'Paused on line {line}': 'Pausado en la línea {line}',
     'Run your program to see its variables here.': 'Ejecute su programa para ver las variables aquí.',
-    'Click the dots beside the lines to pause there.': 'Haga clic en los puntos junto a las líneas para pausar allí.',
     Learn: 'Aprender',
     Programs: 'Programas',
   },
   'zh-cn': {
+    'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
+      '够了!我教得够多了。自己去看菜单里的示例吧。永别了。',
     'Type your answer here and press Enter.': '在这里输入答案,然后按 Enter。',
     'Show it all': '全部显示',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
@@ -561,11 +565,12 @@ export const dictionaries = {
     Back: '返回',
     'Paused on line {line}': '已暂停在第 {line} 行',
     'Run your program to see its variables here.': '运行程序后，变量会显示在这里。',
-    'Click the dots beside the lines to pause there.': '点击行旁边的圆点，即可在那里暂停。',
     Learn: '学习',
     Programs: '程序',
   },
   ja: {
+    'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
+      'もういい!教えすぎました。あとはメニューの例を見て自分でやりなさい。永遠にさようなら。',
     'Type your answer here and press Enter.': 'ここに答えを入力して Enter を押しましょう。',
     'Show it all': '全部表示',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
@@ -750,7 +755,6 @@ export const dictionaries = {
     Back: '戻る',
     'Paused on line {line}': '{line} 行目で一時停止中',
     'Run your program to see its variables here.': 'プログラムを実行すると、ここに変数が表示されます。',
-    'Click the dots beside the lines to pause there.': '行の横の点をクリックすると、そこで一時停止します。',
     Learn: '学ぶ',
     Programs: 'プログラム',
   },

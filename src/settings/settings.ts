@@ -21,8 +21,9 @@ export interface Settings {
   sound: boolean;
   codeFont: CodeFont;
   suggestions: boolean;
-  readLessons: string[];
   lessonMode: boolean;
+  /** Professor Cat gave up on this browser, and lesson mode is gone with him. */
+  catLeft: boolean;
   lessonPlace: LessonPlace | null;
   /** Steps done, as `lesson:step`. They survive a change of language. */
   lessonProgress: string[];
@@ -51,8 +52,8 @@ export const DEFAULT_SETTINGS: Settings = {
   sound: true,
   codeFont: 'mono',
   suggestions: true,
-  readLessons: [],
   lessonMode: false,
+  catLeft: false,
   lessonPlace: null,
   lessonProgress: [],
   panels: { sidebar: 220, output: 460, inspector: 240 },

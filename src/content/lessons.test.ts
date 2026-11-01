@@ -48,11 +48,4 @@ describe('parseLesson', () => {
       check: { hint: 'Dica', cases: [{ shows: ['2'] }] },
     });
   });
-
-  it('leaves answers out of the document', () => {
-    expect(lesson.text).toContain('Introdução.');
-    expect(lesson.text).toContain('# aqui');
-    expect(lesson.text).not.toContain('mostre 2');
-    expect(lesson.text).not.toContain('Dica');
-  });
 });

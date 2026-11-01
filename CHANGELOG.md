@@ -12,7 +12,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - The globe on the home screen loses its fish when the aquarium is empty.
 - Professor Cat in lesson mode: he stays in the upper part of the code field, speaks only after he stops, types what he says, introduces himself, explains each step, turns to the Run button and then to the result, and points at them with a large hand, gives a thumbs up on a right answer and a facepalm on a wrong one. His only sound is a meow. Dragging the stone on the floor makes him run, and letting it go brings him back to where he stopped.
 - Lesson progress at the bottom of the IDE, and in errors a hint for text without quotes and an example that opens in a modal.
-- Lesson mode inside the IDE: a switch beside Smart suggestions swaps the tabs for a lesson bar, each step opens as a script, a run gives the check, and challenges are tested with hidden answers, so the next step only opens after a correct run. Hints, the solution and a way to start over are one click away.
+- Lesson mode in the Help menu: 13 very short challenges, tested with hidden answers, with hints, the solution and a way to start over. At the end Professor Cat gets irritated, sends you to the examples and leaves this browser for good.
 - Examples and lessons in English, Portuguese, Spanish, Simplified Chinese and Japanese, rewritten for people who never programmed.
 - Commands for lists, files and counting in English and Spanish, such as `for each x from 1 to 5` and `add "x" at the end of the list of fruits`.
 - Commands in Simplified Chinese and Japanese, such as `如果 n 大于 5 那么 {` and `もし n 大なり 5 なら {`. Words are separated by spaces. A number can touch its unit, as in `1秒`, and the punctuation of those keyboards works.
@@ -34,7 +34,7 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 - Commands on the same line after conditions and loops, as in `se x entao mostre "a" senao mostre "b"`.
 - Addresses for every screen, lesson, lesson section, project and file, with the browser back button.
 - Click a project name to rename it in place: Enter or a click outside saves, Escape cancels. In the IDE the name sits on top of the file sidebar.
-- Files and folders are renamed from the right click. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order. The right click also downloads a file as it is, or a folder as a `.zip`.
+- Files and folders are renamed from the right click, or with F2 on the open file. Tabs, breakpoints and unsaved text follow, and a name in use is refused. Dragging moves them into folders and changes their order. The right click also downloads a file as it is, or a folder as a `.zip`.
 - File sidebar with folders in each project. New items appear in the tree with a selected provisional name, and a right click offers delete, new file and new folder.
 - Everything saves itself while typing, in the browser, with no save button and no question when leaving.
 - Import and export of projects as `.zip`, into a new project or the open one, also by dropping the file on the home screen.

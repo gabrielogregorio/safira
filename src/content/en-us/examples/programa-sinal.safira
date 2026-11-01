@@ -4,13 +4,13 @@
 repeat 2 times {
     clear
     show "🔴 Stop"
-    wait 2 seconds
+    wait 4 seconds
 
     clear
     show "🟢 Go"
-    wait 2 seconds
+    wait 4 seconds
 
     clear
     show "🟠 Careful"
-    wait 1 second
+    wait 2 seconds
 }

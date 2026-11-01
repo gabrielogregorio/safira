@@ -264,58 +264,6 @@ describe('App', () => {
     expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
   });
 
-  const openProject = (hash = '#/projects/1/main.safira'): void => {
-    localStorage.setItem(
-      'safira.projects.v1',
-      JSON.stringify([{ id: '1', name: 'P', files: { 'main.safira': '' }, breakpoints: {} }]),
-    );
-    window.history.replaceState(null, '', hash);
-    renderApp();
-  };
-
-  it('has no lessons outside the IDE', () => {
-    renderApp();
-
-    expect(screen.queryByRole('button', { name: 'Lessons' })).not.toBeInTheDocument();
-  });
-
-  it('opens a lesson from its address over the project', () => {
-    openProject('#/projects/1/main.safira/lessons/aula-03-variaveis');
-
-    expect(screen.getByRole('dialog', { name: 'Lessons' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'Variables', level: 2 })).toBeInTheDocument();
-  });
-
-  it('opens the lessons from Help, walks through them and closes back to the file', async () => {
-    openProject();
-    await userEvent.click(screen.getByRole('menuitem', { name: 'Help' }));
-    await userEvent.click(await screen.findByRole('menuitem', { name: 'Lessons' }));
-    await userEvent.click(await screen.findByRole('link', { name: 'Next' }));
-
-    expect(await screen.findByRole('heading', { name: 'Show on screen', level: 2 })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Welcome to Safira (Read)' })).toBeInTheDocument();
-
-    await userEvent.keyboard('{Escape}');
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    expect(window.location.hash).toBe('#/projects/1/main.safira');
-  });
-
-  it('opens the code of a lesson as a file of the project and does not repeat it', async () => {
-    const lessonHash = '#/projects/1/main.safira/lessons/aula-02-exibicao';
-    openProject(lessonHash);
-    await userEvent.click(screen.getAllByRole('button', { name: 'Open in the IDE' })[0]);
-
-    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-    expect(document.querySelector('.tab-active')).toHaveTextContent('aula-02-exibicao.safira');
-    expect(document.querySelector('.cm-content')).toHaveTextContent('show');
-
-    window.location.hash = lessonHash;
-    await userEvent.click((await screen.findAllByRole('button', { name: 'Open in the IDE' }))[0]);
-
-    expect(Object.keys(loadProjects()[0].files)).toEqual(['main.safira', 'aula-02-exibicao.safira']);
-  });
-
   it('creates files and folders from the sidebar', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));

@@ -21,6 +21,9 @@ const POINT_REACH = 140;
 const HALF_TURN = 180;
 const LIGHT_DELAY_MILLISECONDS = 180;
 const HALF = 0.5;
+const ANGRY_RATE = 0.7;
+const GOODBYE_MILLISECONDS = 2500;
+const LEAVING_MILLISECONDS = 900;
 const MOST_DRIFT_X = 46;
 const MOST_DRIFT_Y = 36;
 const SHORTEST_TRIP_MILLISECONDS = 1500;
@@ -28,7 +31,14 @@ const TRIP_VARIATION_MILLISECONDS = 750;
 
 /** 0 is the top of the code field and 1 the bottom. */
 // He stays in the upper part, with the balloon growing down, so the first lines of code stay in sight.
-const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 0.2, explain: 0.2, play: 0.08, input: 0.08, result: 0.3 };
+const HEIGHT_IN_FIELD: Record<Scene, number> = {
+  intro: 0.2,
+  explain: 0.2,
+  play: 0.08,
+  input: 0.08,
+  result: 0.3,
+  farewell: 0.08,
+};
 
 export interface Trip {
   driftX: number;
@@ -36,7 +46,7 @@ export interface Trip {
   milliseconds: number;
 }
 
-type Scene = 'intro' | 'explain' | 'play' | 'input' | 'result';
+type Scene = 'intro' | 'explain' | 'play' | 'input' | 'result' | 'farewell';
 
 const HOME_FIELD = '.code-editor';
 
@@ -45,6 +55,7 @@ const TARGETS: Record<Scene, string> = {
   explain: '.cm-content',
   play: '.aero-button-run',
   input: '.terminal-input',
+  farewell: '.menubar-trigger:nth-child(3)',
   result: '[role="log"]',
 };
 
@@ -254,6 +265,7 @@ interface ProfessorCatProps {
   lesson: LessonMode;
   hasError: boolean;
   isWaitingInput: boolean;
+  onAbandon: () => void;
 }
 
 interface Spot {
@@ -332,7 +344,7 @@ const fleeFrom = (element: HTMLElement, stone: DOMRect): void => {
   element.style.transform = `translate(${String(x)}px, ${String(y)}px)`;
 };
 
-export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatProps) => {
+export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: ProfessorCatProps) => {
   const t = useTranslation();
   const root = useRef<HTMLDivElement>(null);
   const stone = useRef<HTMLButtonElement>(null);
@@ -345,6 +357,10 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatP
   const scene = ((): Scene => {
     if (isWaitingInput) {
       return 'input';
+    }
+
+    if (lesson.isLastStep && lesson.isDone && lesson.hasRun) {
+      return 'farewell';
     }
 
     if (!hasMet && !lesson.hasRun) {
@@ -448,9 +464,9 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatP
 
   useEffect(() => {
     if (isHere && isSettled) {
-      void soundPlayer.play('catMeow');
+      void soundPlayer.play('catMeow', scene === 'farewell' ? ANGRY_RATE : 1);
     }
-  }, [isHere, isSettled, stage]);
+  }, [isHere, isSettled, scene, stage]);
 
   const speech = ((): string => {
     if (!isSettled || lesson.step === undefined) {
@@ -468,11 +484,48 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatP
         return lesson.step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.');
       case 'input':
         return t('Type your answer here and press Enter.');
+      case 'farewell':
+        return t('Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.');
       case 'result':
         return lesson.isOnStepFile ? t('Look at the result over there.') : '';
     }
   })();
   const typed = useTypedText(speech);
+  const [isLeaving, setIsLeaving] = useState(false);
+  const hasSaidGoodbye = scene === 'farewell' && isSettled && typed.isDone;
+
+  useEffect(() => {
+    if (!hasSaidGoodbye) {
+      return undefined;
+    }
+
+    const timer = setTimeout(
+      () => {
+        setIsLeaving(true);
+      },
+      prefersMotion() ? GOODBYE_MILLISECONDS : 0,
+    );
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [hasSaidGoodbye]);
+
+  useEffect(() => {
+    if (!isLeaving) {
+      return undefined;
+    }
+
+    if (root.current !== null) {
+      root.current.style.transform = `translate(${String(window.innerWidth + CAT_SIZE)}px, ${String(-CAT_SIZE)}px)`;
+    }
+
+    const timer = setTimeout(onAbandon, prefersMotion() ? LEAVING_MILLISECONDS : 0);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [isLeaving, onAbandon]);
 
   if (lesson.step === undefined) {
     return null;
@@ -547,7 +600,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatP
     </button>
   );
 
-  if (isHoldingStone) {
+  if (isHoldingStone || isLeaving) {
     return (
       <>
         <div ref={root} className="cat cat-fleeing" data-pose="wave">
@@ -555,7 +608,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatP
             <CatArt pose="wave" />
           </div>
         </div>
-        {stoneButton}
+        {isLeaving ? null : stoneButton}
       </>
     );
   }

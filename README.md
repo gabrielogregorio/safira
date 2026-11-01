@@ -31,10 +31,9 @@ project has its own virtual files, which is where `crie o arquivo`, `leia o arqu
 Click the dot beside a line to set a breakpoint: running stops there, and the variables inspector shows the values. On a
 phone the IDE splits into Code, Output and Variables panels.
 
-The interface, lessons and examples come in English, Portuguese, Spanish, Simplified Chinese and Japanese. Turn on Lesson mode in the IDE to learn step by step: run each script, solve the challenge, get the check and move on.
+The interface, lessons and examples come in English, Portuguese, Spanish, Simplified Chinese and Japanese. Turn on Lesson mode in the Help menu for a very short tutorial with Professor Cat. He only teaches it once.
 
-Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`,
-`#/projects/<id>/main.safira/lessons/aula-02-exibicao/comando-de-exibicao`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
+Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
 so that it comes back after a crash or a power cut.
 
 Every script keeps its language version on a hidden first line (`#safira 0.9`). The IDE only mentions it when the version

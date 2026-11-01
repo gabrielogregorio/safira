@@ -8,14 +8,6 @@ describe('routes', () => {
     ['#/aquarium', { name: 'aquarium' }],
     ['#/globe', { name: 'globe' }],
     ['#/new/16-listas', { name: 'new', exampleId: '16-listas' }],
-    [
-      '#/projects/abc/main.safira/lessons',
-      { name: 'project', projectId: 'abc', file: 'main.safira', lesson: { lessonId: null, section: null } },
-    ],
-    [
-      '#/projects/abc/main.safira/lessons/aula-02/comando',
-      { name: 'project', projectId: 'abc', file: 'main.safira', lesson: { lessonId: 'aula-02', section: 'comando' } },
-    ],
     ['#/projects/abc', { name: 'project', projectId: 'abc', file: null }],
     ['#/projects/abc/main.safira', { name: 'project', projectId: 'abc', file: 'main.safira' }],
   ])('reads and writes %s', (hash, route) => {

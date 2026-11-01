@@ -15,12 +15,9 @@ import {
   joinPath,
   movePath,
   parentFolder,
-  provisionalName,
   sanitizePath,
 } from '@/projects/fileTree';
 import { MAIN_FILE, type Project } from '@/projects/projectStore';
-import type { LessonPlace } from '@/routing/routes';
-import { routeToHash } from '@/routing/routes';
 import type { RunMode, RunnerFailure } from '@/runtime/protocol';
 import type { PanelName, Settings } from '@/settings/settings';
 import { clampPanelSize, PANEL_LIMITS } from '@/settings/settings';
@@ -36,7 +33,6 @@ import { FileSidebar } from '@/ui/components/FileSidebar';
 import { LessonBar } from '@/ui/components/LessonBar';
 import { LessonProgress } from '@/ui/components/LessonProgress';
 import { ProfessorCat } from '@/ui/components/ProfessorCat';
-import { LessonsDialog } from '@/ui/components/LessonsDialog';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
 import { Modal } from '@/ui/components/Modal';
 import { Terminal } from '@/ui/components/Terminal';
@@ -61,14 +57,12 @@ import { soundPlayer } from '@/ui/sound/sounds';
 interface EditorScreenProps {
   project: Project;
   routeFile: string | null;
-  routeLesson?: LessonPlace;
   settings: Settings;
   locale: Locale;
   createWorker?: WorkerFactory;
   createLessonCheckWorker?: CheckWorkerFactory;
   onSaveProject: (project: Project) => void;
   onSelectFile: (file: string) => void;
-  onChangeLesson: (file: string, lesson: LessonPlace) => void;
   onChangeSettings: (changes: Partial<Settings>) => void;
   onBack: () => void;
 }
@@ -81,7 +75,6 @@ type Dialog =
 
 const MOBILE_PANELS: MobilePanel[] = ['files', 'code', 'output', 'variables'];
 const AUTOSAVE_MILLISECONDS = 300;
-const SCRIPT_EXTENSION = '.safira';
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
 type MobilePanel = 'files' | 'code' | 'output' | 'variables';
 
@@ -105,14 +98,12 @@ const initialFile = (project: Project): string =>
 export const EditorScreen = ({
   project,
   routeFile,
-  routeLesson,
   settings,
   locale,
   createWorker = createRunnerWorker,
   createLessonCheckWorker = createCheckWorker,
   onSaveProject,
   onSelectFile,
-  onChangeLesson,
   onChangeSettings,
   onBack,
 }: EditorScreenProps) => {
@@ -404,23 +395,6 @@ export const EditorScreen = ({
     [currentFiles],
   );
 
-  const openLessonCode = useCallback(
-    (lessonId: string, code: string) => {
-      const source = addScriptVersion(code);
-      const paths = Object.keys(project.files);
-      const existing = paths.find((path) => project.files[path] === source);
-      const path = existing ?? provisionalName(lessonId, SCRIPT_EXTENSION, paths, null);
-
-      if (existing === undefined) {
-        onSaveProject({ ...project, files: { ...project.files, [path]: source } });
-      }
-
-      openFile(path, source);
-      setMobilePanel('code');
-    },
-    [onSaveProject, openFile, project],
-  );
-
   const importIntoProject = useCallback(
     async (file: File) => {
       const result = await readArchiveFile(file);
@@ -498,6 +472,11 @@ export const EditorScreen = ({
     onOpenFile: openLessonFile,
     onReplaceCode: updateActiveText,
   });
+
+  // He leaves for good: only clearing the browser brings him back, like the eaten fish.
+  const abandonLessons = useCallback(() => {
+    onChangeSettings({ lessonMode: false, catLeft: true });
+  }, [onChangeSettings]);
 
   const toggleFullScreen = useCallback(() => {
     if (document.fullscreenElement === null) {
@@ -582,28 +561,8 @@ export const EditorScreen = ({
 
   const runLabel = runner.status === 'paused' ? t('Continue') : t('Run');
 
-  const lessonHref = (lessonId: string, section: string | null): string =>
-    routeToHash({ name: 'project', projectId: project.id, file: activeFile, lesson: { lessonId, section } });
-
   return (
     <div className="editor-screen">
-      {routeLesson === undefined ? null : (
-        <LessonsDialog
-          lessonId={routeLesson.lessonId}
-          section={routeLesson.section}
-          readLessons={settings.readLessons}
-          lessonHref={lessonHref}
-          onMarkRead={(id) => {
-            if (!settings.readLessons.includes(id)) {
-              onChangeSettings({ readLessons: [...settings.readLessons, id] });
-            }
-          }}
-          onOpenCode={openLessonCode}
-          onClose={() => {
-            onSelectFile(activeFile);
-          }}
-        />
-      )}
       <header className="toolbar">
         <button
           type="button"
@@ -664,9 +623,6 @@ export const EditorScreen = ({
           onShowCommands={() => {
             setDialog({ kind: 'commands' });
           }}
-          onOpenLessons={() => {
-            onChangeLesson(activeFile, { lessonId: null, section: null });
-          }}
           onToggleLessonMode={lesson.toggle}
         />
       </header>
@@ -708,11 +664,7 @@ export const EditorScreen = ({
                 </button>
               </div>
             ))}
-        <label className="suggestions-toggle suggestions-toggle-first">
-          <input type="checkbox" checked={settings.lessonMode} onChange={lesson.toggle} />
-          {t('Lesson mode')}
-        </label>
-        <label className="suggestions-toggle" title={t('Press Tab to accept the gray text')}>
+        <label className="suggestions-toggle suggestions-toggle-first" title={t('Press Tab to accept the gray text')}>
           <input
             type="checkbox"
             checked={settings.suggestions}
@@ -727,7 +679,12 @@ export const EditorScreen = ({
       </nav>
 
       {settings.lessonMode ? (
-        <ProfessorCat lesson={lesson} hasError={failure !== null} isWaitingInput={runner.status === 'waiting-input'} />
+        <ProfessorCat
+          lesson={lesson}
+          hasError={failure !== null}
+          isWaitingInput={runner.status === 'waiting-input'}
+          onAbandon={abandonLessons}
+        />
       ) : null}
 
       <ArchiveInput

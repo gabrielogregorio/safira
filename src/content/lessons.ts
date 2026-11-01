@@ -11,13 +11,10 @@ export interface LessonStep {
 export interface Lesson {
   id: string;
   title: string;
-  /** The whole lesson as a document, without solutions and checks. */
-  text: string;
   steps: LessonStep[];
 }
 
 const FENCE = /```(safira|solution|check)\n([\s\S]*?)```\n?/g;
-const HIDDEN_FENCE = /```(solution|check)\n[\s\S]*?```\n?/g;
 const TITLE = /^# (.+)$/m;
 
 const readFence = (section: string, name: string): string | null => {
@@ -46,7 +43,6 @@ export const parseLesson = (id: string, source: string): Lesson => {
   return {
     id,
     title: TITLE.exec(head)?.[1].trim() ?? id,
-    text: source.replace(TITLE, '').replace(HIDDEN_FENCE, '').trim(),
     steps: sections.map(parseStep),
   };
 };

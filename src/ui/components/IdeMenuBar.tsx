@@ -26,7 +26,6 @@ interface IdeMenuBarProps {
   onChangeSettings: (changes: Partial<Settings>) => void;
   onToggleFullScreen: () => void;
   onShowCommands: () => void;
-  onOpenLessons: () => void;
   onToggleLessonMode: () => void;
 }
 
@@ -52,7 +51,7 @@ interface RadioSubmenuProps<Value extends string> {
 }
 
 const BUG_REPORT_URL = 'https://github.com/safira-lang/safira-ide/issues';
-const BLOG_URL = 'https://safiralang.blogspot.com/';
+const BLOG_URL = 'https://github.com/gabrielogregorio/safira/wiki';
 const FONT_STEP = 1;
 const CODE_FONTS: { id: CodeFont; label: string }[] = [
   { id: 'mono', label: 'JetBrains Mono' },
@@ -138,7 +137,6 @@ export const IdeMenuBar = ({
   onChangeSettings,
   onToggleFullScreen,
   onShowCommands,
-  onOpenLessons,
   onToggleLessonMode,
 }: IdeMenuBarProps) => {
   const t = useTranslation();
@@ -269,8 +267,7 @@ export const IdeMenuBar = ({
         <Action label={t('Full screen')} shortcut="F11" onSelect={onToggleFullScreen} />
       </Menu>
       <Menu label={t('Help')}>
-        <Action label={t('Lesson mode')} onSelect={onToggleLessonMode} />
-        <Action label={t('Lessons')} onSelect={onOpenLessons} />
+        {settings.catLeft ? null : <Action label={t('Lesson mode')} onSelect={onToggleLessonMode} />}
         <Action label={t('Available commands')} onSelect={onShowCommands} />
         <Action
           label={t('Report a bug')}

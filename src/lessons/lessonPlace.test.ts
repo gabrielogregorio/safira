@@ -15,8 +15,8 @@ import {
 
 const step = { title: 'Passo', text: 'Texto', code: '', solution: null, check: null };
 const lessons: Lesson[] = [
-  { id: 'aula-01-um', title: 'Um', text: '', steps: [step, step] },
-  { id: 'aula-02-dois', title: 'Dois', text: '', steps: [step] },
+  { id: 'aula-01-um', title: 'Um', steps: [step, step] },
+  { id: 'aula-02-dois', title: 'Dois', steps: [step] },
 ];
 
 describe('lesson places', () => {

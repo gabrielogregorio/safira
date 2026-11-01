@@ -18,7 +18,6 @@ const setup = (isRunning = false) => {
     onChangeSettings: vi.fn(),
     onToggleFullScreen: vi.fn(),
     onShowCommands: vi.fn(),
-    onOpenLessons: vi.fn(),
   };
   render(<IdeMenuBar locale="en-us" settings={DEFAULT_SETTINGS} isRunning={isRunning} {...actions} />);
 

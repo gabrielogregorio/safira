@@ -4,13 +4,13 @@
 repetir 2 veces {
     limpiar la pantalla
     muestra "🔴 Alto"
-    esperar 2 segundos
+    esperar 4 segundos
 
     limpiar la pantalla
     muestra "🟢 Siga"
-    esperar 2 segundos
+    esperar 4 segundos
 
     limpiar la pantalla
     muestra "🟠 Precaución"
-    esperar 1 segundo
+    esperar 2 segundos
 }

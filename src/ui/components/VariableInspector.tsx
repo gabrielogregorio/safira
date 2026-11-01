@@ -44,7 +44,6 @@ export const VariableInspector = ({ variables }: VariableInspectorProps) => {
       {variables.length === 0 ? (
         <div className="inspector-empty">
           <p>{t('Run your program to see its variables here.')}</p>
-          <p>{t('Click the dots beside the lines to pause there.')}</p>
         </div>
       ) : (
         <div className="inspector-table" role="region" aria-label={t('Variables')} tabIndex={0}>

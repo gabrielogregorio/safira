@@ -350,8 +350,6 @@ p {
 .home-section,
 .toolbar,
 .inspector,
-.lessons-nav,
-.lesson,
 .tab-bar {
   backdrop-filter: blur(14px) saturate(150%);
   background: var(--color-panel);
@@ -2639,60 +2637,6 @@ select {
   overflow: hidden;
 }
 
-.lessons {
-  display: grid;
-  gap: 12px;
-  grid-template-columns: 260px minmax(0, 1fr);
-  height: 100%;
-}
-
-.lessons-nav {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 0;
-  padding: 12px;
-}
-
-.lessons-list {
-  flex: 1;
-  min-height: 0;
-  overflow-y: auto;
-}
-
-.lesson-link {
-  border-radius: 9px;
-  color: var(--color-text);
-  display: block;
-  padding: 7px 10px;
-  text-decoration: none;
-}
-
-.lesson-link:hover {
-  background: var(--color-hover);
-}
-
-.lesson-link[aria-current='page'] {
-  background: var(--color-hover);
-  font-weight: 700;
-}
-
-.lesson {
-  height: 100%;
-  min-width: 0;
-  overflow-y: auto;
-  padding: 20px 24px;
-}
-
-.lesson a:not(.button) {
-  color: var(--color-accent);
-}
-
-.lesson h2 {
-  margin-top: 24px;
-  scroll-margin-top: 8px;
-}
-
 .heading-link {
   margin-left: 8px;
   opacity: 0.55;
@@ -2701,43 +2645,6 @@ select {
 
 .heading-link:hover {
   opacity: 1;
-}
-
-.lesson table {
-  border-collapse: collapse;
-  display: block;
-  overflow-x: auto;
-}
-
-.lesson th,
-.lesson td {
-  border: 1px solid var(--color-line);
-  padding: 4px 10px;
-}
-
-.lesson-code {
-  margin: 12px 0;
-}
-
-.lesson-code code {
-  font-size: 0.95rem;
-}
-
-.lesson-code pre {
-  background: var(--color-panel-strong);
-  border: 1px solid var(--color-line);
-  border-radius: 12px;
-  font-family: var(--font-code);
-  margin: 0 0 6px;
-  overflow-x: auto;
-  padding: 12px;
-}
-
-.lesson-pager {
-  display: flex;
-  gap: 8px;
-  justify-content: space-between;
-  padding-top: 16px;
 }
 
 @media (max-width: 768px) {
@@ -2893,39 +2800,6 @@ select {
   .mobile-panel-button[aria-pressed='true'] {
     background: linear-gradient(180deg, #ffffff 0%, #d9f1ff 48%, #a9dcfa 52%, #d4f0ff 100%);
     color: #06263f;
-  }
-
-  .lessons {
-    gap: 6px;
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-rows: auto minmax(0, 1fr);
-  }
-
-  .lessons-nav {
-    padding: 8px;
-  }
-
-  .lessons-list {
-    display: flex;
-    gap: 4px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x proximity;
-  }
-
-  .lessons-list li {
-    flex: none;
-    scroll-snap-align: start;
-  }
-
-  .lesson-link {
-    align-items: center;
-    display: flex;
-    min-height: 44px;
-  }
-
-  .lesson {
-    padding: 14px;
   }
 
   .tree-name,

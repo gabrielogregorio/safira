@@ -46,15 +46,6 @@ const createProjectWithCode = async (page: Page, code: string): Promise<void> =>
   await page.keyboard.insertText(code);
 };
 
-const openLessons = async (page: Page): Promise<void> => {
-  await page.goto('/');
-  await page.getByRole('button', { name: 'Create project' }).click();
-  await page.getByRole('button', { name: 'Go ahead' }).click();
-  await page.getByRole('menuitem', { name: 'Help' }).click();
-  await page.getByRole('menuitem', { name: 'Lessons' }).click();
-  await expect(page.getByRole('dialog', { name: 'Lessons' })).toBeVisible();
-};
-
 const breakpointDots = (page: Page): Locator =>
   page.locator('.editor-breakpoints .cm-gutterElement').filter({ visible: true });
 
@@ -282,12 +273,6 @@ test.describe('accessibility', () => {
       await expectNoViolations(page);
     });
   }
-
-  test('lessons have no violations', async ({ page }) => {
-    await openLessons(page);
-    await waitForAnimations(page);
-    await expectNoViolations(page);
-  });
 });
 
 test.describe('layout', () => {
@@ -349,36 +334,6 @@ test('the editor takes the focus when a project opens', async ({ page }) => {
 
   await expect(page.getByLabel('Code editor')).toBeFocused();
   await expect(page.getByLabel('Code editor')).toContainText('mostre "foco"');
-});
-
-test('the page does not scroll in the lessons and the sidebar stays in place', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 500 });
-  await openLessons(page);
-  await page.getByRole('link', { name: 'Next' }).click();
-  await expect(page.getByRole('heading', { name: 'Show on screen', exact: true, level: 2 }).first()).toBeVisible();
-  const sidebarTop = await page
-    .getByRole('link', { name: /^Welcome to Safira/ })
-    .evaluate((link) => link.getBoundingClientRect().top);
-  await page.locator('.lesson').evaluate((lesson) => {
-    lesson.scrollTop = lesson.scrollHeight;
-  });
-
-  expect(await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)).toBe(0);
-  expect(
-    await page.getByRole('link', { name: /^Welcome to Safira/ }).evaluate((link) => link.getBoundingClientRect().top),
-  ).toBe(sidebarTop);
-  expect(await page.locator('.lesson').evaluate((lesson) => lesson.scrollTop)).toBeGreaterThan(0);
-});
-
-test('a lesson example opens and runs in the same project', async ({ page }) => {
-  await openLessons(page);
-  await page.getByRole('link', { name: 'Next' }).click();
-  await page.getByRole('button', { name: 'Open in the IDE' }).first().click();
-  await expect(page.getByRole('dialog')).toHaveCount(0);
-  await expect(page.locator('.tab-active')).toContainText('aula-02-exibicao.safira');
-  await runCode(page);
-
-  await expect(page.getByRole('log')).toContainText('Script finished');
 });
 
 test('what was typed survives the page dying', async ({ page }) => {
@@ -913,6 +868,8 @@ test.describe('phone', () => {
 });
 
 test.describe('lesson mode', () => {
+  const TYPING_TIMEOUT = 15_000;
+
   const startLessonMode = async (page: Page, isFirstTime = false): Promise<void> => {
     if (!isFirstTime) {
       await page.addInitScript(() => {
@@ -923,49 +880,30 @@ test.describe('lesson mode', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Create project' }).click();
     await page.getByRole('button', { name: 'Go ahead' }).click();
-    await page.locator('label', { hasText: 'Lesson mode' }).click();
-    await expect(page.locator('.cat-bubble')).toBeVisible();
+    await page.getByRole('menuitem', { name: 'Help' }).click();
+    await page.getByRole('menuitem', { name: 'Lesson mode' }).click();
+    await expect(page.locator('.cat-bubble')).toBeVisible({ timeout: TYPING_TIMEOUT });
   };
 
-  const runAndGoOn = async (page: Page): Promise<void> => {
+  const solveChallenge = async (page: Page): Promise<void> => {
     await page.getByRole('button', { name: 'Run', exact: true }).click();
-    const next = page.locator('.lesson-actions').getByRole('button', { name: 'Next' });
-    await expect(next).toBeEnabled();
-    await next.click();
+    await page.getByRole('button', { name: 'Show the solution' }).click({ timeout: TYPING_TIMEOUT });
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await expect(page.locator('.cat-bubble')).toContainText('Correct! Challenge complete.', {
+      timeout: TYPING_TIMEOUT,
+    });
   };
 
-  test('goes through a lesson up to a checked challenge', async ({ page }) => {
+  test('checks a challenge and goes to the next one', async ({ page }) => {
     await startLessonMode(page);
-    await runAndGoOn(page);
-    await runAndGoOn(page);
-    await runAndGoOn(page);
-
-    await page.getByRole('button', { name: 'Run', exact: true }).click();
-    await expect(page.locator('.lesson-status')).toContainText('Tip:');
-    await expect(page.locator('.lesson-actions').getByRole('button', { name: 'Next' })).toBeDisabled();
-
-    await page.getByRole('button', { name: 'Show the solution' }).click();
-    await page.getByRole('button', { name: 'Run', exact: true }).click();
-    await expect(page.locator('.lesson-status')).toContainText('Correct! Challenge complete.');
-
-    await page.locator('.lesson-actions').getByRole('button', { name: 'Next' }).click();
-    await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-exibicao');
+    await solveChallenge(page);
+    await page.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-a-conta');
   });
 
-  test('the cat teaches a step, shows the result and runs from the stone', async ({ page }) => {
+  test('the cat runs from the dragged stone and continues when it drops', async ({ page }) => {
     await startLessonMode(page, true);
-    await expect(page.locator('.cat-bubble')).toContainText('Professor Cat');
-    await page.locator('.cat-bubble').getByRole('button', { name: 'Continue' }).click();
-    await expect(page.locator('.cat-bubble')).toContainText('list of orders');
-    await expectNoViolations(page);
-
-    await page.locator('.cat-bubble').getByRole('button', { name: 'Continue' }).click();
-    await expect(page.locator('.cat-bubble')).toContainText('Run');
-    await expect(page.locator('.cat')).toHaveAttribute('data-pose', 'point');
-    await expect(page.locator('.cat')).toHaveAttribute('data-facing', 'right');
-
-    await page.getByRole('button', { name: 'Run', exact: true }).click();
-    await expect(page.locator('.cat-bubble .lesson-status')).toContainText('Well done');
+    await expect(page.locator('.cat-bubble')).toContainText('Professor Cat', { timeout: TYPING_TIMEOUT });
 
     const stone = await page.getByRole('button', { name: 'Drag the stone' }).boundingBox();
     await page.mouse.move((stone?.x ?? 0) + 10, (stone?.y ?? 0) + 10);
@@ -973,7 +911,7 @@ test.describe('lesson mode', () => {
     await page.mouse.move(400, 300, { steps: 4 });
     await expect(page.locator('.cat-bubble')).toBeHidden();
     await page.mouse.up();
-    await expect(page.locator('.cat-bubble .lesson-status')).toContainText('Well done');
+    await expect(page.locator('.cat-bubble')).toBeVisible();
   });
 
   test('keeps the page inside the phone screen', async ({ page }) => {
@@ -992,8 +930,7 @@ test.describe('lesson mode', () => {
       await page.getByRole('menuitem', { name: 'Theme' }).click();
       await page.getByRole('menuitemradio', { name: theme }).click();
       await page.keyboard.press('Escape');
-      await page.getByRole('button', { name: 'Run', exact: true }).click();
-      await expect(page.locator('.lesson-status')).toContainText('Well done');
+      await solveChallenge(page);
       await waitForAnimations(page);
 
       const results = await new AxeBuilder({ page }).include('.tab-bar').include('.cat-bubble').analyze();

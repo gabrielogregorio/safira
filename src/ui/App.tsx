@@ -305,12 +305,8 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
             createWorker={createWorker}
             createLessonCheckWorker={createLessonCheckWorker}
             onSaveProject={handleSave}
-            routeLesson={route.name === 'project' ? route.lesson : undefined}
             onSelectFile={(file) => {
               navigate({ name: 'project', projectId: activeProject.id, file });
-            }}
-            onChangeLesson={(file, lesson) => {
-              navigate({ name: 'project', projectId: activeProject.id, file, lesson });
             }}
             onChangeSettings={changeSettings}
             onBack={goHome}

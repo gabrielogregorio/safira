@@ -434,6 +434,24 @@ export const FileSidebar = ({
   const [renaming, setRenaming] = useState<string | null>(null);
 
   const [dragged, setDragged] = useState<TreeNode | null>(null);
+
+  // F2 renames what is selected, as in a file manager. The selection is the open file, wherever the focus is.
+  useEffect(() => {
+    const renameSelected = (event: KeyboardEvent): void => {
+      if (event.key === 'F2' && canRename) {
+        event.preventDefault();
+        void soundPlayer.play('renameStart');
+        setRenaming(activeFile);
+      }
+    };
+
+    window.addEventListener('keydown', renameSelected);
+
+    return () => {
+      window.removeEventListener('keydown', renameSelected);
+    };
+  }, [activeFile, canRename]);
+
   const [dropTarget, setDropTarget] = useState<{ path: string; place: DropPlace } | null>(null);
 
   const endDrag = (): void => {

@@ -147,6 +147,20 @@ describe('FileSidebar', () => {
     return screen.findByRole<HTMLInputElement>('textbox');
   };
 
+  it('renames the selected file with F2', async () => {
+    setup();
+    await userEvent.keyboard('{F2}');
+
+    expect(screen.getByRole('textbox')).toHaveFocus();
+  });
+
+  it('ignores F2 while renaming is not allowed', async () => {
+    setup(false);
+    await userEvent.keyboard('{F2}');
+
+    expect(screen.queryByRole('textbox')).not.toBeInTheDocument();
+  });
+
   it('renames a file from the right click, selecting only the name', async () => {
     const { onRename } = setup();
     const input = await startRename('main.safira');
