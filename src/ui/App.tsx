@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, LocaleContext, TranslationContext } from '@/i18n/i18n';
-import { clearDrafts } from '@/projects/draftStore';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
 import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
@@ -341,7 +340,6 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
             }}
             onDelete={(id) => {
               persist(removeProject(projects, id));
-              clearDrafts(id);
             }}
             preferenceToggles={preferenceToggles}
             settingsButton={

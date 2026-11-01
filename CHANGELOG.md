@@ -6,6 +6,8 @@ Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
 ### Added
 
+- Files and folders can move without dragging: Alt+Up, Alt+Down and Alt+M, and Move up, Move down and Move to in the right click menu.
+- The aquarium has a Feed the fish button that works by keyboard, and it stays still with the reduced motion preference.
 - Each preview keeps its own projects and settings, so testing one never changes the data of the site.
 - Accessibility modes for protanopia, deuteranopia, tritanopia, achromatopsia, low vision, light sensitivity, and epilepsy and dizziness, tested with axe and with simulated color vision.
 - Flags dance while the sound of their language plays.

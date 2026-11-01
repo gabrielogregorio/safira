@@ -386,18 +386,13 @@ describe('App', () => {
         {
           id: '1',
           name: 'P',
-          files: { 'dados/a.safira': 'mostre 1\n', 'dados/b.txt': 'x', 'main.safira': '' },
+          files: { 'dados/a.safira': 'mostre 2\n', 'dados/b.txt': 'x', 'main.safira': '' },
           breakpoints: { 'dados/a.safira': [1] },
         },
       ]),
     );
-    localStorage.setItem('safira.drafts.v1', JSON.stringify({ '1': { 'dados/a.safira': 'mostre 2\n' } }));
     window.history.replaceState(null, '', '#/projects/1/dados%2Fa.safira');
     renderApp();
-    // The text recovered from the draft saves itself, and the rename must not race with that.
-    await waitFor(() => {
-      expect(loadProjects()[0].files['dados/a.safira']).toContain('mostre 2');
-    });
     fireEvent.contextMenu(screen.getByRole('button', { name: 'dados', expanded: true }));
     await userEvent.click(await screen.findByRole('menuitem', { name: 'Rename' }));
     await userEvent.keyboard('info{Enter}');

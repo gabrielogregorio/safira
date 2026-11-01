@@ -1,16 +1,20 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import type { DragEvent, ReactNode } from 'react';
+import type { DragEvent, KeyboardEvent as ReactKeyboardEvent, ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
+import type { Translate } from '@/i18n/i18n';
 import { useTranslation } from '@/i18n/i18n';
-import type { DropPlace, FolderNode, PlannedMove, TreeNode } from '@/projects/fileTree';
+import type { DropPlace, FolderNode, MoveDirection, PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
   buildFileTree,
   extensionStart,
   isPathTaken,
+  moveDestinations,
   planMove,
+  planStep,
   provisionalName,
   renameTarget,
 } from '@/projects/fileTree';
+import { Modal } from './Modal';
 import { NewFileIcon, NewFolderIcon, ProjectBadge, TreeFileIcon, TreeFolderIcon } from './AeroIcons';
 import type { SoundName } from '@/ui/sound/sounds';
 import { soundPlayer } from '@/ui/sound/sounds';
@@ -46,6 +50,9 @@ interface TreeActions {
   onFinishDraft: (draft: Draft, name: string | null) => void;
   onDelete: (node: TreeNode) => void;
   onDownload: (node: TreeNode) => void;
+  onStep: (node: TreeNode, direction: MoveDirection) => void;
+  canStep: (node: TreeNode, direction: MoveDirection) => boolean;
+  onStartMove: (node: TreeNode) => void;
   renaming: string | null;
   canRename: boolean;
   onStartRename: (path: string) => void;
@@ -73,9 +80,24 @@ interface DraftRowProps {
   onFinish: (draft: Draft, name: string | null) => void;
 }
 
+interface RowMenuItem {
+  label: string;
+  onSelect: () => void;
+  disabled?: boolean;
+  sound?: SoundName;
+  shortcut?: string;
+}
+
 interface RowMenuProps {
-  items: { label: string; onSelect: () => void; disabled?: boolean; sound?: SoundName }[];
+  items: RowMenuItem[];
   children: ReactNode;
+}
+
+interface MoveChoicesProps {
+  node: TreeNode;
+  paths: string[];
+  order: string[];
+  onChoose: (plan: PlannedMove) => void;
 }
 
 interface NameInputProps {
@@ -94,6 +116,7 @@ interface RenameRowProps {
 
 const FILE_EXTENSION = '.safira';
 const PRESS_SETTLE_MILLISECONDS = 30;
+const MOVE_SHORTCUTS = 'Alt+ArrowUp Alt+ArrowDown Alt+M';
 const FOLDER_EDGE = 0.25;
 const FILE_MIDDLE = 0.5;
 
@@ -127,12 +150,56 @@ const RowMenu = ({ items, children }: RowMenuProps) => (
             data-sound={item.sound}
             onSelect={item.onSelect}>
             {item.label}
+            {item.shortcut === undefined ? null : <span className="menubar-shortcut">{item.shortcut}</span>}
           </ContextMenu.Item>
         ))}
       </ContextMenu.Content>
     </ContextMenu.Portal>
   </ContextMenu.Root>
 );
+
+const moveItems = (t: Translate, actions: TreeActions, node: TreeNode): RowMenuItem[] => [
+  {
+    label: t('Move up'),
+    shortcut: 'Alt+↑',
+    disabled: !actions.canStep(node, 'up'),
+    onSelect: () => {
+      actions.onStep(node, 'up');
+    },
+  },
+  {
+    label: t('Move down'),
+    shortcut: 'Alt+↓',
+    disabled: !actions.canStep(node, 'down'),
+    onSelect: () => {
+      actions.onStep(node, 'down');
+    },
+  },
+  {
+    label: t('Move to...'),
+    shortcut: 'Alt+M',
+    disabled: !actions.canRename,
+    onSelect: () => {
+      actions.onStartMove(node);
+    },
+  },
+];
+
+const moveKeys =
+  (actions: TreeActions, node: TreeNode) =>
+  (event: ReactKeyboardEvent): void => {
+    if (!event.altKey || !actions.canRename) {
+      return;
+    }
+
+    if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+      event.preventDefault();
+      actions.onStep(node, event.key === 'ArrowUp' ? 'up' : 'down');
+    } else if (event.key.toLowerCase() === 'm') {
+      event.preventDefault();
+      actions.onStartMove(node);
+    }
+  };
 
 const NameInput = ({ label, value, selectionEnd, isAllowed = () => true, onFinish }: NameInputProps) => {
   const t = useTranslation();
@@ -307,6 +374,7 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
               actions.onStartRename(node.path);
             },
           },
+          ...moveItems(t, actions, node),
           {
             label: t('Download'),
             sound: 'export',
@@ -329,6 +397,9 @@ const FolderRow = ({ node, ...actions }: TreeActions & { node: FolderNode }) => 
               type="button"
               className="tree-name"
               aria-expanded={isOpen}
+              aria-keyshortcuts={MOVE_SHORTCUTS}
+              data-tree-path={node.path}
+              onKeyDown={moveKeys(actions, node)}
               onClick={() => {
                 setIsClosed(isOpen);
               }}>
@@ -368,6 +439,7 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                     actions.onStartRename(node.path);
                   },
                 },
+                ...moveItems(t, actions, node),
                 {
                   label: t('Download'),
                   sound: 'export',
@@ -393,6 +465,9 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
                     className="tree-name"
                     data-sound="tab"
                     aria-current={node.path === actions.activeFile ? 'page' : undefined}
+                    aria-keyshortcuts={MOVE_SHORTCUTS}
+                    data-tree-path={node.path}
+                    onKeyDown={moveKeys(actions, node)}
                     onClick={() => {
                       actions.onOpen(node.path);
                     }}>
@@ -410,6 +485,37 @@ const TreeList = ({ nodes, folder, ...actions }: TreeListProps) => {
       {actions.draft?.folder === folder ? (
         <DraftRow draft={actions.draft} paths={actions.paths} onFinish={actions.onFinishDraft} />
       ) : null}
+    </ul>
+  );
+};
+
+const MoveChoices = ({ node, paths, order, onChoose }: MoveChoicesProps) => {
+  const t = useTranslation();
+  const destinations = moveDestinations(paths, order, node);
+
+  if (destinations.length === 0) {
+    return <p>{t('There is no folder to move this to.')}</p>;
+  }
+
+  return (
+    <ul className="move-choices">
+      {destinations.map((folder) => (
+        <li key={folder?.path ?? ''}>
+          <button
+            type="button"
+            className="button"
+            data-fixed-text={folder === null ? undefined : true}
+            onClick={() => {
+              const plan = planMove(paths, order, node, folder, 'inside');
+
+              if (plan !== null) {
+                onChoose(plan);
+              }
+            }}>
+            {folder === null ? t('Project root') : folder.path}
+          </button>
+        </li>
+      ))}
     </ul>
   );
 };
@@ -453,6 +559,42 @@ export const FileSidebar = ({
   }, [activeFile, canRename]);
 
   const [dropTarget, setDropTarget] = useState<{ path: string; place: DropPlace } | null>(null);
+  const [moving, setMoving] = useState<TreeNode | null>(null);
+  const [movedMessage, setMovedMessage] = useState('');
+  const sidebar = useRef<HTMLElement>(null);
+  const focusAfterMove = useRef<string | null>(null);
+
+  // After the modal gives the focus back, so the moved item keeps it even under a new path.
+  useEffect(() => {
+    const path = focusAfterMove.current;
+
+    if (path === null) {
+      return undefined;
+    }
+
+    focusAfterMove.current = null;
+    const timer = setTimeout(() => {
+      sidebar.current?.querySelector<HTMLElement>(`[data-tree-path="${CSS.escape(path)}"]`)?.focus();
+    });
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [paths, order]);
+
+  const moveWithKeyboard = (node: TreeNode, plan: PlannedMove): void => {
+    focusAfterMove.current = plan.target;
+    setMovedMessage(t('Moved: {name}', { name: node.name }));
+    onMove(node, plan);
+  };
+
+  const step = (node: TreeNode, direction: MoveDirection): void => {
+    const plan = planStep(paths, order, node, direction);
+
+    if (plan !== null) {
+      moveWithKeyboard(node, plan);
+    }
+  };
 
   const endDrag = (): void => {
     setDragged(null);
@@ -520,6 +662,7 @@ export const FileSidebar = ({
 
   return (
     <nav
+      ref={sidebar}
       className="file-sidebar"
       aria-label={t('Files')}
       onDragOver={(event) => {
@@ -574,12 +717,35 @@ export const FileSidebar = ({
         onFinishDraft={finishDraft}
         onDelete={onDelete}
         onDownload={onDownload}
+        onStep={step}
+        canStep={(node, direction) => canRename && planStep(paths, order, node, direction) !== null}
+        onStartMove={setMoving}
         renaming={renaming}
         canRename={canRename}
         onStartRename={setRenaming}
         onFinishRename={finishRename}
         dragProps={dragProps}
       />
+      <p className="visually-hidden" role="status">
+        {movedMessage}
+      </p>
+      {moving === null ? null : (
+        <Modal
+          title={t('Move {name} to', { name: moving.name })}
+          onClose={() => {
+            setMoving(null);
+          }}>
+          <MoveChoices
+            node={moving}
+            paths={paths}
+            order={order}
+            onChoose={(plan) => {
+              setMoving(null);
+              moveWithKeyboard(moving, plan);
+            }}
+          />
+        </Modal>
+      )}
     </nav>
   );
 };

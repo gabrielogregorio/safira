@@ -12,7 +12,9 @@ import {
   isPathTaken,
   movePath,
   parentFolder,
+  moveDestinations,
   planMove,
+  planStep,
   provisionalName,
   renameTarget,
 } from './fileTree';
@@ -198,5 +200,51 @@ describe('filesOfFolder', () => {
     const files = { 'a/b/c.txt': '1', 'a/d.txt': '2', 'ab/e.txt': '3', 'f.txt': '4' };
 
     expect(filesOfFolder(files, 'a')).toEqual({ 'b/c.txt': '1', 'd.txt': '2' });
+  });
+});
+
+describe('moving without dragging', () => {
+  const file = (path: string): TreeNode => ({ kind: 'file', name: path.split('/').at(-1) ?? path, path });
+  const folder = (path: string): TreeNode => ({
+    kind: 'folder',
+    name: path.split('/').at(-1) ?? path,
+    path,
+    children: [],
+  });
+  const paths = ['a.txt', 'b.txt', 'dados/c.txt', 'dados/d.txt', 'dados/sub/.keep', 'vazia/.keep'];
+
+  it('steps among the items of the same folder', () => {
+    expect(planStep(paths, ['b.txt', 'a.txt'], file('a.txt'), 'up')?.order.indexOf('a.txt')).toBe(0);
+    expect(planStep(paths, ['a.txt', 'b.txt'], file('a.txt'), 'down')?.target).toBe('a.txt');
+  });
+
+  it('steps inside a folder and keeps it there', () => {
+    expect(planStep(paths, [], file('dados/d.txt'), 'up')?.target).toBe('dados/d.txt');
+  });
+
+  it('stops at the edges of the folder', () => {
+    const order = ['dados/sub', 'dados/c.txt', 'dados/d.txt'];
+
+    expect(planStep(paths, order, folder('dados/sub'), 'up')).toBeNull();
+    expect(planStep(paths, order, file('dados/d.txt'), 'down')).toBeNull();
+  });
+
+  it('offers every folder that can take a file, and the root', () => {
+    const names = moveDestinations(paths, [], file('dados/c.txt')).map((folder) => folder?.path ?? null);
+
+    expect(names).toEqual(expect.arrayContaining([null, 'dados/sub', 'vazia']));
+    expect(names).not.toContain('dados');
+  });
+
+  it('does not offer a folder as its own destination', () => {
+    const names = moveDestinations(paths, [], folder('dados')).map((destination) => destination?.path ?? null);
+
+    expect(names).toContain('vazia');
+    expect(names).not.toContain('dados');
+    expect(names).not.toContain('dados/sub');
+  });
+
+  it('does not offer a folder that already has that name', () => {
+    expect(moveDestinations(['a.txt', 'vazia/a.txt'], [], file('a.txt'))).toEqual([]);
   });
 });

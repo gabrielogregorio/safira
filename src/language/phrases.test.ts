@@ -1,7 +1,7 @@
 import { getAllCommands, getPhrases, isContinuationWord } from './phrases';
 
 describe('phrases', () => {
-  it('lists the commands of the three languages', () => {
+  it('lists the commands of every language', () => {
     const phrases = getPhrases('mostre').map((words) => words.join(' '));
 
     expect(phrases).toEqual(expect.arrayContaining(['mostre', 'show', 'muestra']));

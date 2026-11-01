@@ -3119,3 +3119,38 @@ html.snap-return #root {
 :root[data-vision='lowVision'] * {
   text-shadow: none !important;
 }
+
+.aquarium-feed {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  translate: -50% 0;
+  transition: opacity 0.4s ease;
+}
+
+.aquarium-note {
+  max-width: calc(100vw - 32px);
+  margin: 0;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: rgb(0 0 0 / 55%);
+  color: #fff;
+  text-align: center;
+}
+
+.is-idle .aquarium-feed:not(:focus-visible) {
+  opacity: 0;
+}
+
+.move-choices {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.move-choices .button {
+  width: 100%;
+  text-align: left;
+}

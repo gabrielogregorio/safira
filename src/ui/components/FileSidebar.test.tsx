@@ -276,4 +276,81 @@ describe('FileSidebar', () => {
 
     expect(onDownload).toHaveBeenCalledExactlyOnceWith(expect.objectContaining({ name }));
   });
+
+  it('moves the focused file with Alt and the arrows, and says so', async () => {
+    const { onMove } = setup();
+    screen.getByRole('button', { name: 'new-file.safira' }).focus();
+    await userEvent.keyboard('{Alt>}{ArrowUp}{/Alt}');
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'new-file.safira' }),
+      expect.objectContaining({ target: 'new-file.safira' }),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Moved: new-file.safira');
+  });
+
+  it('ignores the arrows without Alt, and Alt while a program runs', async () => {
+    setup(false);
+    const { onMove } = setup();
+    screen.getAllByRole('button', { name: 'main.safira' })[1].focus();
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(onMove).not.toHaveBeenCalled();
+  });
+
+  it('lists move up and down in the menu and locks the edge', async () => {
+    setup();
+    rightClick('dados');
+
+    expect(await screen.findByRole('menuitem', { name: /Move up/ })).toHaveAttribute('data-disabled');
+    expect(screen.getByRole('menuitem', { name: /Move down/ })).not.toHaveAttribute('data-disabled');
+  });
+
+  it('chooses a folder in a modal opened by the keyboard', async () => {
+    const { onMove } = setup();
+    screen.getByRole('button', { name: 'main.safira' }).focus();
+    await userEvent.keyboard('{Alt>}m{/Alt}');
+    await userEvent.click(await screen.findByRole('button', { name: 'vazia' }));
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'main.safira' }),
+      expect.objectContaining({ target: 'vazia/main.safira' }),
+    );
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+  });
+
+  it('moves a file out to the root of the project from the menu', async () => {
+    const { onMove } = setup();
+    rightClick('a.txt');
+    await userEvent.click(await screen.findByRole('menuitem', { name: /Move to/ }));
+    await userEvent.click(await screen.findByRole('button', { name: 'Project root' }));
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'dados/a.txt' }),
+      expect.objectContaining({ target: 'a.txt' }),
+    );
+  });
+
+  it('says when there is nowhere to go', async () => {
+    render(
+      <FileSidebar
+        projectName="P"
+        paths={['main.safira']}
+        activeFile="main.safira"
+        canRename
+        onOpen={vi.fn()}
+        onCreateFile={vi.fn()}
+        onCreateFolder={vi.fn()}
+        onDelete={vi.fn()}
+        onRename={vi.fn()}
+        onMove={vi.fn()}
+        onDownload={vi.fn()}
+        onRenameProject={vi.fn()}
+      />,
+    );
+    rightClick('main.safira');
+    await userEvent.click(await screen.findByRole('menuitem', { name: /Move to/ }));
+
+    expect(await screen.findByText('There is no folder to move this to.')).toBeInTheDocument();
+  });
 });

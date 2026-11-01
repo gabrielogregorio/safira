@@ -5,6 +5,7 @@ import {
   createWorld,
   FISH_COUNT,
   fatnessOf,
+  feedFish,
   lengthOf,
   MINIMUM_MASS,
   movePointer,
@@ -407,5 +408,22 @@ describe('aquariumWorld', () => {
       expect(world.fishes).toHaveLength(2);
       expect(world.fishes.every((fish) => Math.hypot(fish.vx, fish.vy) > 0)).toBe(true);
     }
+  });
+});
+
+describe('feeding without a pointer', () => {
+  it('drops the food beside a fish', () => {
+    const world = createWorld(oneFish(), 800, 600, steady);
+    const [fish] = world.fishes;
+
+    expect(feedFish(world)).toEqual([{ kind: 'food' }]);
+    expect(Math.min(...world.food.map((food) => distance2(food, fish.x, fish.y)))).toBeLessThan(120);
+  });
+
+  it('drops it in the middle of an empty aquarium', () => {
+    const world = createWorld([], 800, 600, steady);
+    feedFish(world);
+
+    expect(Math.min(...world.food.map((food) => distance2(food, 400, 300)))).toBeLessThan(120);
   });
 });

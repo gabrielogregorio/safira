@@ -34,6 +34,8 @@ Color modes also mark code with weight, slant and underline, so color is never t
 - The top menu follows the menu bar pattern: arrows move between and inside menus, Escape returns to the trigger.
 - Theme and language are buttons that cycle on each click, and each one says the current choice in its name.
 - Panel dividers are separators that work with the arrow keys.
+- Files and folders move without dragging: Alt+Up and Alt+Down change the order, Alt+M opens the list of folders, and the same actions are in the right click menu, which a long press opens on a phone. The result is announced and the focus stays on the moved item.
+- With the reduced motion preference or the calm mode, the aquarium is a still picture that says why.
 - Language, theme and globe animations are skipped with the reduced motion preference, and the rewritten letters are not announced.
 - On a phone, touch targets have at least 44 pixels.
 
@@ -43,6 +45,6 @@ Color modes also mark code with weight, slant and underline, so color is never t
 - The simulation is a model. No person with each condition has checked these palettes yet.
 - In the editor, Tab indents, so leaving it needs Shift+Tab or the skip link.
 - The breakpoint dots work by mouse and touch. By keyboard, use F10 on the line.
-- Moving and reordering files in the sidebar needs a mouse: dragging has no keyboard or touch alternative.
-- The aquarium needs a pointer and keeps moving with the reduced motion preference. It is optional and holds no content.
+- The aquarium is a picture for a screen reader, and only feeding works by keyboard. Fish, bubbles and plants need a pointer. It is optional and holds no content.
+- A file moved into a closed folder stays hidden, so the focus cannot follow it.
 - Neither NVDA nor Orca were tested by hand yet.

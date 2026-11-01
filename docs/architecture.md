@@ -78,7 +78,6 @@ The course is 13 very short lessons, each with a program to run and then a chall
 | Key | Content |
 |---|---|
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
-| `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
 | `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
 | `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, lesson mode, place, progress and whether the cat left |
 
@@ -129,7 +128,7 @@ Settings > Delete everything removes every key of this copy from both storages, 
 - Japanese commands come before their values, as in `もし n 大なり 5 なら`, because the grammar has one order for every language.
 - `print` and `display` keep the line open, because `legacyGolden.json` records that. English content uses `show`, which ends the line.
 - Previews are not removed from `gh-pages` when a pull request closes.
-- A `.zip` does not carry the order chosen in the sidebar, and dragging has no keyboard or touch alternative.
+- A `.zip` does not carry the order chosen in the sidebar.
 - `R` in a note list is a rest. That was a decision, not something asked for.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.
 - The Brazilian language sound plays the opening of Asa Branca (1947), which is not in the public domain. Replace it if the rights become a problem.

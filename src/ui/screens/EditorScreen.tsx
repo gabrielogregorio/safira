@@ -6,7 +6,6 @@ import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands } from '@/language/phrases';
 import { addScriptVersion, isSupportedVersion, readScriptVersion, SUPPORTED_VERSIONS } from '@/language/version';
-import { clearDrafts, loadDrafts } from '@/projects/draftStore';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
   filesOfFolder,
@@ -86,17 +85,10 @@ const visibleFontSize = (size: number): number =>
   clampFontSize(window.innerWidth <= PHONE_WIDTH ? Math.max(size, SMALLEST_PHONE_FONT_SIZE) : size);
 
 const restoreTabs = (project: Project, routeFile: string | null): EditorTab[] => {
-  const drafts = loadDrafts(project.id);
   const routed = routeFile !== null && project.files[routeFile] !== undefined ? routeFile : null;
   const firstFile = routed ?? initialFile(project);
-  const files = [...new Set([firstFile, ...Object.keys(drafts)])];
 
-  return files.map((file) => {
-    const tab = openTab(file, project.files[file] ?? '');
-    const draft = drafts[file];
-
-    return draft === undefined ? tab : { ...tab, text: draft };
-  });
+  return [openTab(firstFile, project.files[firstFile] ?? '')];
 };
 
 const initialFile = (project: Project): string =>
@@ -164,7 +156,6 @@ export const EditorScreen = ({
 
     latestTabs.current = latestTabs.current.map(markSaved);
     setTabs((current) => current.map(markSaved));
-    clearDrafts(latestProject.current.id);
     latestProject.current = { ...latestProject.current, files };
     onSaveProject(latestProject.current);
   }, [onSaveProject]);

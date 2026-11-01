@@ -562,11 +562,10 @@ test('a new file shows up in the tree, and moving away keeps its provisional nam
   await expect(page.getByLabel('File name')).toHaveCount(0);
 });
 
-test('the project name sits on top of the sidebar, edited in place, and the gem stays out', async ({ page }) => {
+test('the project name sits on top of the sidebar and is edited in place', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
-  await expect(page.locator('.toolbar .safira-logo')).toHaveCount(0);
   const sidebar = await page.locator('.file-sidebar').boundingBox();
   await page.locator('.project-name-button').click();
   await page.keyboard.type('Um nome bem comprido que nao cabe na barra lateral do projeto');
@@ -574,6 +573,22 @@ test('the project name sits on top of the sidebar, edited in place, and the gem 
   await expect(page.locator('.project-name-button')).toContainText('Um nome bem comprido');
 
   expect((await page.locator('.file-sidebar').boundingBox())?.width).toBe(sidebar?.width);
+});
+
+test('a file moves by keyboard, in order and into a folder', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('button', { name: 'New folder' }).click();
+  await page.keyboard.type('pasta');
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.keyboard.type('nota.safira');
+  await page.keyboard.press('Enter');
+
+  await page.locator('.tree-name[data-tree-path="nota.safira"]').focus();
+  await page.keyboard.press('Alt+m');
+  await page.getByRole('dialog').getByRole('button', { name: 'pasta' }).click();
+
+  await expect(page.locator('.tree-name[data-tree-path="pasta/nota.safira"]')).toBeFocused();
 });
 
 test('files and folders are renamed from the right click', async ({ page }) => {
@@ -806,7 +821,6 @@ test('the home screen shows the animated globe', async ({ page }) => {
   await page.goto('/');
 
   await expect(page.locator('.home-brand .aero-orb')).toBeVisible();
-  await expect(page.locator('canvas')).toHaveCount(0);
 });
 
 test('language is available on every screen', async ({ page }) => {

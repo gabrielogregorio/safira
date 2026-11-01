@@ -8,6 +8,7 @@ import { drawWorld, easePalette, startingPalette } from '@/ui/aquarium/aquariumR
 import type { World, WorldEvent } from '@/ui/aquarium/aquariumWorld';
 import {
   createWorld,
+  feedFish,
   movePointer,
   pressPointer,
   releasePointer,
@@ -17,6 +18,7 @@ import {
   warmUpWorld,
 } from '@/ui/aquarium/aquariumWorld';
 import { useIdle } from '@/ui/hooks/useIdle';
+import { prefersMotion } from '@/ui/motion';
 import type { SoundName } from '@/ui/sound/sounds';
 import { SEA_SOUNDS, soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
@@ -60,6 +62,8 @@ const playEvents = (events: WorldEvent[]): void => {
 export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) => {
   const t = useTranslation();
   const isIdle = useIdle();
+  // Decided once: a still picture must not start moving in the middle of a visit.
+  const [isMoving] = useState(prefersMotion);
   // A state and not a ref: the dialog mounts its content after this effect would run.
   const [canvas, setCanvas] = useState<HTMLCanvasElement | null>(null);
   const worldRef = useRef<World | null>(null);
@@ -88,6 +92,10 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
       canvas.setAttribute('height', String(window.innerHeight * ratio));
       context.setTransform(ratio, 0, 0, ratio, 0, 0);
       resizeWorld(world, window.innerWidth, window.innerHeight);
+
+      if (!isMoving) {
+        drawWorld(context, world, palette);
+      }
     };
 
     const save = (): void => {
@@ -106,9 +114,13 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
       }
     };
 
-    fit();
     warmUpWorld(world);
-    frame = requestAnimationFrame(draw);
+    fit();
+
+    if (isMoving) {
+      frame = requestAnimationFrame(draw);
+    }
+
     const saveTimer = setInterval(save, SAVE_MILLISECONDS);
     window.addEventListener('resize', fit);
     window.addEventListener('pagehide', save);
@@ -120,7 +132,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
       window.removeEventListener('pagehide', save);
       save();
     };
-  }, [canvas]);
+  }, [canvas, isMoving]);
 
   useEffect(() => {
     if (isSoundOn) {
@@ -136,7 +148,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
   };
 
   const handlePointer = (event: PointerEvent, act: (world: World, x: number, y: number) => void): void => {
-    if (worldRef.current !== null) {
+    if (isMoving && worldRef.current !== null) {
       act(worldRef.current, event.clientX, event.clientY);
     }
   };
@@ -161,7 +173,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
             role="img"
             aria-label={t('Aquarium')}
             onWheel={() => {
-              if (worldRef.current !== null) {
+              if (isMoving && worldRef.current !== null) {
                 playEvents(scrollPointer(worldRef.current));
               }
             }}
@@ -190,6 +202,22 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
               });
             }}
           />
+          {isMoving ? (
+            <button
+              type="button"
+              className="button aquarium-feed"
+              onClick={() => {
+                if (worldRef.current !== null) {
+                  playEvents(feedFish(worldRef.current));
+                }
+              }}>
+              {t('Feed the fish')}
+            </button>
+          ) : (
+            <p className="aquarium-feed aquarium-note">
+              {t('The animation is off because of your motion preference.')}
+            </p>
+          )}
           <Dialog.Close asChild>
             <CloseButton />
           </Dialog.Close>

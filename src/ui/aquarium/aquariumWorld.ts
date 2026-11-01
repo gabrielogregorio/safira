@@ -665,6 +665,13 @@ export const movePointer = (world: World, x: number, y: number, buttons = 1): vo
   pointer.y = y;
 };
 
+// Beside a fish, or a fish with poor luck would never see it. This is the way to feed without a pointer.
+export const feedFish = (world: World): WorldEvent[] => {
+  const fish = world.fishes[Math.floor(world.random() * world.fishes.length)] as Fish | undefined;
+
+  return [dropFood(world, fish?.x ?? world.width / 2, fish?.y ?? world.height / 2)];
+};
+
 // Scrolling while holding a button drops one piece for each tick of the wheel.
 export const scrollPointer = (world: World): WorldEvent[] => {
   const { pointer } = world;
