@@ -383,6 +383,21 @@ describe('aquariumWorld', () => {
     expect(fish.mass).toBeGreaterThan(BURST_MASS - 2);
   });
 
+  it('drops food as an irregular handful, not as a square', () => {
+    const world = createWorld([], 800, 600, Math.random);
+
+    for (let drop = 0; drop < 40; drop += 1) {
+      pressPointer(world, 400, 300);
+      releasePointer(world);
+    }
+
+    const distances = world.food.map((food) => Math.hypot(food.x - 400, food.y - 300));
+    const middle = distances.filter((value) => value < Math.max(...distances) / 2).length;
+
+    expect(world.food.length).toBeGreaterThan(10);
+    expect(middle / distances.length).toBeGreaterThan(0.5);
+  });
+
   it('opens with every fish already swimming and nobody eaten', () => {
     for (let attempt = 0; attempt < WARM_UP_ATTEMPTS; attempt += 1) {
       const fishes = [...oneFish(10), { id: 1, species: 1, mass: MINIMUM_MASS }];

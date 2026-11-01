@@ -578,15 +578,23 @@ const scareFish = (world: World, fish: Fish, x: number, y: number): WorldEvent =
   return { kind: 'flee', voice: SPECIES[fish.species].voice };
 };
 
+const FOOD_CLUSTER_REACH = 1.5;
+const FOOD_CLUSTER_DENSITY = 1.8;
+const FOOD_CLUSTER_FLATNESS = 0.8;
+
 const dropFood = (world: World, x: number, y: number, pieces = FOOD_PER_CLICK, spread = FOOD_SPREAD): WorldEvent => {
   // The growth has no end, so the amount in the water is what keeps the page alive.
   const room = MOST_FOOD_IN_WATER - world.food.length;
   const grown = Math.min(Math.round(pieces * world.foodGrowth), MOST_FOOD_PER_DROP, room);
 
   for (let piece = 0; piece < grown; piece += 1) {
+    // A thrown handful: dense in the middle, with a few grains that land far from the rest.
+    const angle = world.random() * Math.PI * 2;
+    const reach = spread * FOOD_CLUSTER_REACH * world.random() ** FOOD_CLUSTER_DENSITY;
+
     world.food.push({
-      x: x + between(world.random, -spread, spread),
-      y: y + between(world.random, -spread, spread),
+      x: x + Math.cos(angle) * reach,
+      y: y + Math.sin(angle) * reach * FOOD_CLUSTER_FLATNESS,
       age: 0,
       sway: world.random() * Math.PI * 2,
     });
