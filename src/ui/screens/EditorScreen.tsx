@@ -4,7 +4,7 @@ import { findExampleByPrefix } from '@/content/content';
 import { useTranslation } from '@/i18n/i18n';
 import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
-import { getAllCommands } from '@/language/phrases';
+import { getAllCommands, shownPhrases } from '@/language/phrases';
 import { addScriptVersion, isSupportedVersion, readScriptVersion, SUPPORTED_VERSIONS } from '@/language/version';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
@@ -941,7 +941,7 @@ export const EditorScreen = ({
             {getAllCommands()
               .filter(([, definition]) => definition.phrases.length > 0)
               .map(([key, definition]) => (
-                <li key={key}>{definition.phrases.join(', ')}</li>
+                <li key={key}>{shownPhrases(definition).join(', ')}</li>
               ))}
           </ul>
         </Modal>

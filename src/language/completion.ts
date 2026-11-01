@@ -1,7 +1,7 @@
 import type { Statement } from './ast';
 import type { Locale } from './messages';
 import { parse } from './parser';
-import { getAllCommands } from './phrases';
+import { getAllCommands, shownPhrases } from './phrases';
 import { removeAccents, tokenize } from './tokenizer';
 import { importCandidates } from './virtualFileSystem';
 
@@ -69,7 +69,7 @@ const STARTERS_BY_LOCALE: Record<Locale, string[]> = {
 const startersFor = (locale: Locale): string[] => STARTERS_BY_LOCALE[locale];
 
 const allPhrases = getAllCommands()
-  .flatMap(([, definition]) => definition.phrases)
+  .flatMap(([, definition]) => shownPhrases(definition))
   .filter((phrase) => phrase.length >= MINIMUM_PHRASE)
   .sort((first, second) => first.length - second.length);
 

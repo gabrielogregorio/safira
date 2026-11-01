@@ -4,7 +4,12 @@
 
 A programming language in natural language for first-time programmers, with a web IDE.
 
-[**See it live »**](https://gabrielogregorio.github.io/safira/)
+[**See it live »**](https://gabrielogregorio.github.io/safira/) · [**Read the wiki »**](https://github.com/gabrielogregorio/safira/wiki)
+
+[![Tests](https://github.com/gabrielogregorio/safira/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/tests.yml)
+[![Lint](https://github.com/gabrielogregorio/safira/actions/workflows/check-quality.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/check-quality.yml)
+[![CodeQL](https://github.com/gabrielogregorio/safira/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/codeql-analysis.yml)
+[![Deploy](https://github.com/gabrielogregorio/safira/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/deploy.yml)
 
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6)
 ![React](https://img.shields.io/badge/React-19-61dafb)
@@ -40,6 +45,10 @@ so that it comes back after a crash or a power cut.
 
 Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
 is not supported. A script without that line is treated as version 0.38, the last Python release.
+
+## Documentation
+
+The [wiki](https://github.com/gabrielogregorio/safira/wiki) has a [getting started tutorial](https://github.com/gabrielogregorio/safira/wiki/Getting-Started), the [language guide](https://github.com/gabrielogregorio/safira/wiki/Language-Guide), [commands by language](https://github.com/gabrielogregorio/safira/wiki/Commands-by-Language), [recipes](https://github.com/gabrielogregorio/safira/wiki/Recipes) and [common errors](https://github.com/gabrielogregorio/safira/wiki/Common-Errors). Internals are in [`docs/`](docs).
 
 ## Set up on a new PC
 

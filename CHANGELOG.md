@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- `não faça nada`, `do nothing` and the same in the other languages, for an empty branch of a condition.
+- `guarde a resposta em nota`, `save the answer in note` and the same in the other languages put what the user types in a variable, with natural variations such as `salve o que o usuário digitar na nota` and `save the response to note`.
+
 ## 1.0.0
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.

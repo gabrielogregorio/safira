@@ -6,6 +6,8 @@ export type CommandKey = keyof typeof commands;
 export interface CommandDefinition {
   color: string;
   phrases: string[];
+  /** What people see, in suggestions and in the list of commands, when `phrases` is too long to read. */
+  shown?: string[];
 }
 
 const definitions: Record<string, CommandDefinition> = commands;
@@ -19,6 +21,8 @@ const phraseWordsByKey = new Map<string, string[][]>(
 export const getPhrases = (key: CommandKey): string[][] => phraseWordsByKey.get(key) ?? [];
 
 export const getAllCommands = (): [string, CommandDefinition][] => Object.entries(definitions);
+
+export const shownPhrases = (definition: CommandDefinition): string[] => definition.shown ?? definition.phrases;
 
 const CONTINUATION_KEYS: CommandKey[] = [
   'adicione_texto_arquivo_sub',

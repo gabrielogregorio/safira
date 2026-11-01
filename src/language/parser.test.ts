@@ -112,6 +112,91 @@ describe('lines that do not parse', () => {
   });
 });
 
+describe('doing nothing', () => {
+  it.each([
+    'não faça nada',
+    'nao faca nada',
+    'não fazer nada',
+    'não faz nada',
+    'do nothing',
+    'no hagas nada',
+    'no hacer nada',
+    '什么都不做',
+    '何もしない',
+  ])('reads %s', (line) => {
+    expect(first(line)).toMatchObject({ kind: 'noop' });
+  });
+
+  it('works as the only command of a condition', () => {
+    expect(first('se 1 == 1 entao não faça nada senao mostre "x"')).toMatchObject({
+      kind: 'if',
+      branches: [{ body: [{ kind: 'noop' }] }],
+      otherwise: [{ kind: 'print' }],
+    });
+  });
+
+  it('leaves a variable called nada alone', () => {
+    expect(first('nada = 1')).toMatchObject({ kind: 'assign', name: 'nada' });
+  });
+});
+
+describe('saving the answer', () => {
+  it.each([
+    'guarde a resposta em nota',
+    'guarde a resposta na nota',
+    'guarde a resposta no nota',
+    'guardar a resposta em nota',
+    'guarda a resposta em nota',
+    'guarde resposta em nota',
+    'guarde a resposta na variavel nota',
+    'guarde a resposta na variável nota',
+    'guarde a resposta do usuario em nota',
+    'guarde a resposta do usuário em nota',
+    'guarde o que o usuario digitar em nota',
+    'guarde o que for digitado em nota',
+    'salve a resposta em nota',
+    'salvar a resposta em nota',
+    'armazene a resposta em nota',
+    'coloque a resposta em nota',
+    'anote a resposta em nota',
+    'save the answer in nota',
+    'store the answer in nota',
+    'keep the answer in nota',
+    'save the answer to nota',
+    'save the answer as nota',
+    'save the answer in the variable nota',
+    'save the response in nota',
+    'save answer in nota',
+    'save what the user types in nota',
+    'put the answer into nota',
+    'guarda la respuesta en nota',
+    'guarda la respuesta en la nota',
+    'guardar la respuesta en nota',
+    'guarda lo que escribe el usuario en nota',
+    '保存回答到 nota',
+    '保存答案到 nota',
+    '回答を保存 nota',
+    '回答を保存する nota',
+  ])('reads %s', (line) => {
+    expect(first(line)).toMatchObject({
+      kind: 'assign',
+      name: 'nota',
+      value: { kind: 'input', numeric: false, variableName: null },
+    });
+  });
+
+  it('needs the name of a variable', () => {
+    expect(first('guarde a resposta em')).toMatchObject({ kind: 'invalid' });
+  });
+
+  it.each(['guarde', 'salve', 'save', 'store', 'keep', 'put', 'anote', 'coloque'])(
+    'leaves a variable called %s alone',
+    (word) => {
+      expect(first(`${word} = 1`)).toMatchObject({ kind: 'assign', name: word });
+    },
+  );
+});
+
 describe('lists', () => {
   it('sets a position with the word that gives a value', () => {
     expect(first('lista x na posicao 1 recebe 5')).toMatchObject({ kind: 'listSet', name: 'x' });

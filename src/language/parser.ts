@@ -20,6 +20,7 @@ export class Parser extends ExpressionParser {
     () => this.parseSimple('continue', { kind: 'continue' }),
     () => this.parseSimple('pare', { kind: 'break' }),
     () => this.parseSimple('interrompa', { kind: 'halt' }),
+    () => this.parseSimple('nao_faca_nada', { kind: 'noop' }),
     () => this.parseWhile(),
     () => this.parseRepeat(),
     () => this.parseForRange(),
@@ -37,6 +38,7 @@ export class Parser extends ExpressionParser {
     () => this.parseOrphanElse('se_nao_se'),
     () => this.parseOrphanElse('se_nao'),
     () => this.parseIf(),
+    () => this.parseSaveAnswer(),
     () => this.parseAssignment(),
     () => this.parseIncrement('incremente', 1),
     () => this.parseIncrement('decremente', -1),
@@ -415,6 +417,12 @@ export class Parser extends ExpressionParser {
     }
 
     return { kind: 'assign', name, value: this.parseValue() };
+  }
+
+  private parseSaveAnswer(): StatementBody {
+    this.expectPhrase('guarde_resposta');
+
+    return { kind: 'assign', name: this.expectName(), value: { kind: 'input', numeric: false, variableName: null } };
   }
 
   private parseIncrement(key: CommandKey, sign: 1 | -1): StatementBody {
