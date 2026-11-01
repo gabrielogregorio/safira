@@ -6,10 +6,13 @@ import { routeToHash } from '@/routing/routes';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
+import { GitHubIcon, WikiIcon } from '@/ui/components/AeroIcons';
 import { AeroOrb } from '@/ui/components/AeroOrb';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { soundPlayer } from '@/ui/sound/sounds';
+
+const REPOSITORY_URL = 'https://github.com/gabrielogregorio/safira';
 
 interface HomeScreenProps {
   projects: Project[];
@@ -177,6 +180,27 @@ export const HomeScreen = ({
           ))}
         </ul>
       </section>
+
+      <footer className="home-links">
+        <a
+          className="aero-button home-link"
+          href={REPOSITORY_URL}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={t('Safira on GitHub')}
+          title={t('Safira on GitHub')}>
+          <GitHubIcon />
+        </a>
+        <a
+          className="aero-button home-link"
+          href={`${REPOSITORY_URL}/wiki`}
+          target="_blank"
+          rel="noreferrer"
+          aria-label={t('Safira wiki')}
+          title={t('Safira wiki')}>
+          <WikiIcon />
+        </a>
+      </footer>
 
       {isCreating ? (
         <NewProjectDialog initialExampleId={initialExampleId} onCreate={onCreate} onClose={onCancelCreating} />

@@ -78,8 +78,8 @@ const AUTOSAVE_MILLISECONDS = 300;
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
 type MobilePanel = 'files' | 'code' | 'output' | 'variables';
 
-// On a phone the code never goes below this, or the iPhone zooms into the field. See `.cm-content` in the styles.
-const SMALLEST_PHONE_FONT_SIZE = 16;
+// Smaller than this, code on a phone stops being readable.
+const SMALLEST_PHONE_FONT_SIZE = 12;
 const PHONE_WIDTH = 768;
 
 const visibleFontSize = (size: number): number =>
@@ -258,6 +258,7 @@ export const EditorScreen = ({
       setTabs((current) => (current.some((tab) => tab.file === file) ? current : [...current, openTab(file, stored)]));
       onSelectFile(file);
       setDialog(null);
+      setMobilePanel('code');
     },
     [onSelectFile],
   );
@@ -454,7 +455,6 @@ export const EditorScreen = ({
       // Each step replaces the last one, so a course does not leave dozens of open tabs.
       setTabs((openTabs) => openTabs.filter((tab) => !tab.file.startsWith(`${t('lessons')}/`) || tab.file === path));
       openFile(path, stored);
-      setMobilePanel('code');
     },
     [onSaveProject, openFile, saveOpenTabs, t],
   );
@@ -644,6 +644,7 @@ export const EditorScreen = ({
                   aria-current={tab.file === activeFile ? 'page' : undefined}
                   onClick={() => {
                     onSelectFile(tab.file);
+                    setMobilePanel('code');
                   }}>
                   <span data-fixed-text>{tab.file}</span>
                 </button>
@@ -757,7 +758,6 @@ export const EditorScreen = ({
           }}
           onOpen={(path) => {
             openFile(path, project.files[path]);
-            setMobilePanel('code');
           }}
           onCreateFile={createFile}
           onCreateFolder={createFolder}

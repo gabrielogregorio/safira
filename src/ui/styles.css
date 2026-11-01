@@ -850,7 +850,30 @@ select {
   gap: 16px;
   margin: 0 auto;
   max-width: 1000px;
-  padding: 24px 16px 64px;
+  min-height: 100dvh;
+  padding: 24px 16px 28px;
+}
+
+.home-links {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  margin-top: auto;
+  padding-top: 18px;
+}
+
+.home-link {
+  align-items: center;
+  display: inline-flex;
+  height: 46px;
+  justify-content: center;
+  text-decoration: none;
+  width: 46px;
+}
+
+.home-link svg {
+  height: 24px;
+  width: 24px;
 }
 
 .home-hero,
@@ -2863,10 +2886,7 @@ html.snap-return #root {
   }
 
   input,
-  select,
-  /* Below 16px the iPhone zooms into the field, so the font buttons stop there. */
-  .code-editor .cm-content,
-  .code-editor .cm-gutters {
+  select {
     font-size: max(16px, 1em);
   }
 
