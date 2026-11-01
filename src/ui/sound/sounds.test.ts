@@ -1,5 +1,7 @@
 import { clickableAt, createSoundPlayer, isPlainTextField, SOUND_FILES, soundForClick, soundPlayer } from './sounds';
 
+const SLOW_RENDER_MILLISECONDS = 40;
+
 const fakeNode = () => ({
   connect: vi.fn(),
   start: vi.fn(),
@@ -145,6 +147,23 @@ describe('createSoundPlayer', () => {
     const context = fakeContext();
     const player = createSoundPlayer(() => asContext(context));
     await Promise.all([player.play('click'), player.play('modalOpen')]);
+
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.modalOpen);
+    expect(context.sources).toHaveLength(1);
+  });
+
+  it('lets the click step aside even when the modal takes long to render', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    const click = player.play('click');
+    const renderStart = performance.now();
+
+    // A render blocks the page, so the timer of the click runs late, right before the sound of the modal.
+    while (performance.now() - renderStart < SLOW_RENDER_MILLISECONDS) {
+      // Holds the thread, as a slow render does.
+    }
+
+    await Promise.all([click, player.play('modalOpen')]);
 
     expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.modalOpen);
     expect(context.sources).toHaveLength(1);
@@ -557,6 +576,10 @@ describe('soundForClick', () => {
     expect(clickOn('<button><span>Run</span></button>', 'span')).toBe('click');
     expect(clickOn('<a href="#/">Home</a>', 'a')).toBe('click');
     expect(clickOn('<div role="menuitem">Save</div>', 'div')).toBe('click');
+  });
+
+  it('stays quiet on a button whose result has its own sound', () => {
+    expect(clickOn('<button data-sound="none">Create</button>', 'button')).toBeNull();
   });
 
   it('uses the sound named by the button', () => {

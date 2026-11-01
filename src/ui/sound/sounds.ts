@@ -270,6 +270,7 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   let output: GainNode | null = null;
   let isEnabled = true;
   let lastSound: { name: SoundName; time: number } | null = null;
+  let lastClaim = -SAME_GESTURE_MILLISECONDS;
   let lastHover = -HOVER_GAP_MILLISECONDS;
   let loop: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
   let languageVoice: { source: AudioBufferSourceNode; gain: GainNode } | null = null;
@@ -300,6 +301,10 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
   };
 
   const isSameGesture = (name: SoundName): boolean => {
+    if (STEPS_ASIDE.includes(name) && performance.now() - lastClaim <= SAME_GESTURE_MILLISECONDS) {
+      return true;
+    }
+
     if (lastSound === null || performance.now() - lastSound.time > SAME_GESTURE_MILLISECONDS) {
       return false;
     }
@@ -346,6 +351,11 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
       }
     },
     play: async (name: SoundName, rate = 1): Promise<void> => {
+      // Claimed before any waiting: a slow render can make the timer of the click run ahead of this sound.
+      if (!STEPS_ASIDE.includes(name) && name !== 'hover' && !NOT_A_GESTURE.includes(name)) {
+        lastClaim = performance.now();
+      }
+
       await wait(WAIT_MILLISECONDS[name] ?? 0);
 
       if (NEEDS_EARLIER_PRESS.includes(name) && context === null) {
@@ -532,6 +542,8 @@ export const clickableAt = (target: EventTarget | null): Element | null => {
 const isSoundName = (value: string | undefined): value is SoundName =>
   value !== undefined && (SOUND_NAMES as string[]).includes(value);
 
+const SILENT_CLICK = 'none';
+
 export const soundForClick = (target: EventTarget | null): SoundName | null => {
   if (!(target instanceof Element)) {
     return null;
@@ -544,6 +556,11 @@ export const soundForClick = (target: EventTarget | null): SoundName | null => {
   }
 
   const named = clicked.dataset['sound'];
+
+  // What the click opens has its own sound, and it comes too late for the click to step aside.
+  if (named === SILENT_CLICK) {
+    return null;
+  }
 
   if (isSoundName(named)) {
     return named;
