@@ -30,6 +30,7 @@ import hoverUrl from './files/hover.wav';
 import ideOpenUrl from './files/ide-open.wav';
 import importUrl from './files/import.wav';
 import languageEnUsUrl from './files/language-en-us.wav';
+import snapDustUrl from './files/snap-dust.wav';
 import catMeowUrl from './files/cat-meow.wav';
 import lessonFailUrl from './files/lesson-fail.wav';
 import lessonPassUrl from './files/lesson-pass.wav';
@@ -121,7 +122,8 @@ export type SoundName =
   | 'terminalSend'
   | 'lessonPass'
   | 'lessonFail'
-  | 'catMeow';
+  | 'catMeow'
+  | 'snapDust';
 
 // Recorded sounds from Kenney's Interface Sounds pack, which is CC0. See files/LICENSE-kenney.txt.
 export const SOUND_FILES: Record<SoundName, string> = {
@@ -185,6 +187,7 @@ export const SOUND_FILES: Record<SoundName, string> = {
   lessonPass: lessonPassUrl,
   lessonFail: lessonFailUrl,
   catMeow: catMeowUrl,
+  snapDust: snapDustUrl,
 };
 
 // Each language lands with something of its region, and each sky with its own weather.

@@ -18,6 +18,7 @@ import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
 import { SettingsDialog } from '@/ui/components/SettingsDialog';
 import { eraseEverything } from '@/settings/eraseEverything';
+import { markReturnFromSnap, snapAway } from '@/ui/snapEffect';
 import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
@@ -37,6 +38,9 @@ import { scrambleDocument } from '@/ui/textScramble';
 import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 import { printConsoleInvite } from '@/ui/consoleInvite';
+
+// With the dust before it and the fade in after it, the site comes back in about 5 seconds.
+const DARK_PAUSE_MILLISECONDS = 1200;
 
 interface AppProps {
   createWorker?: WorkerFactory;
@@ -346,8 +350,14 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
                 vision={settings.vision}
                 onEraseEverything={() => {
                   eraseEverything();
-                  window.location.hash = '#/';
-                  window.location.reload();
+                  markReturnFromSnap();
+                  void soundPlayer.play('snapDust');
+                  void snapAway().then(() => {
+                    setTimeout(() => {
+                      window.location.hash = '#/';
+                      window.location.reload();
+                    }, DARK_PAUSE_MILLISECONDS);
+                  });
                 }}
                 onChange={(vision) => {
                   changeSettings({ vision });
