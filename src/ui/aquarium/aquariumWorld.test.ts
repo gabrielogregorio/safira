@@ -197,7 +197,7 @@ describe('aquariumWorld', () => {
       world.fishes[0].x = 100;
       world.fishes[0].y = 300;
       world.fishes[0].targetX = 100;
-      world.food.push({ x: 600, y: 300, age: 0, sway: 0 });
+      world.food.push({ x: 320, y: 300, age: 0, sway: 0 });
       stepWorld(world, 1);
     }
 
