@@ -2,19 +2,18 @@
 
 ## Nome e sobrenome
 
-Assim o programa pede um texto: `nome = o que o usuário digitar`.
-
 ```safira
+# Assim o programa pede um texto.
 nome = o que o usuário digitar
 mostre "Olá, " + nome
 ```
 
 ## Desafio: Nome e sobrenome
 
-Peça o nome, peça o sobrenome e mostre os dois juntos, com um espaço no meio.
-
 ```safira
-# Escreva aqui.
+# Desafio: Peça o nome, peça o sobrenome e mostre os dois
+# juntos, com um espaço no meio.
+
 ```
 
 ```solution

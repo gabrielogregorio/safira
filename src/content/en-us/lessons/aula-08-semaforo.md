@@ -2,9 +2,9 @@
 
 ## Traffic light
 
-`clear` wipes what was shown, and `repeat 2 times {` repeats.
-
 ```safira
+# repeat does it all again.
+# clear wipes what was shown.
 repeat 2 times {
     clear
     show "Hello"
@@ -18,10 +18,11 @@ repeat 2 times {
 
 ## Challenge: Traffic light
 
-Make a traffic light that repeats 2 times: show `Stop` for 4 seconds, `Go` for 4 seconds and `Caution` for 2 seconds, clearing the screen between them.
-
 ```safira
-# Write here.
+# Challenge: Make a traffic light that repeats 2 times:
+# show Stop for 4 seconds, Go for 4 seconds and Caution
+# for 2 seconds, clearing the screen between them.
+
 ```
 
 ```solution

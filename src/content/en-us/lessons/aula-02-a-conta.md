@@ -2,18 +2,17 @@
 
 ## The math
 
-Without quotes, the computer does the math: `show 2 + 2`.
-
 ```safira
+# Without quotes, the computer does the math.
 show 2 + 2
 ```
 
 ## Challenge: The math
 
-Show the result of `25 * 4`, without writing the result.
-
 ```safira
-# Write here.
+# Challenge: Show the result of 25 * 4, without writing
+# the result.
+
 ```
 
 ```solution

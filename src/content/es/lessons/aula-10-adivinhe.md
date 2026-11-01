@@ -2,11 +2,11 @@
 
 ## Adivina
 
-`un número aleatorio entre 1 y 3` sortea, y `si a es igual a b entonces {` compara. Después viene `} si no {`.
-
 ```safira
+# Sortea un número.
 dado = un número aleatorio entre 1 y 2
 
+# El si elige el camino.
 si dado es igual a 1 entonces {
     muestra "Cara"
 } si no {
@@ -16,10 +16,10 @@ si dado es igual a 1 entonces {
 
 ## Desafío: Adivina
 
-Sortea un número en `secreto`, pide un número y muestra `Acertaste` si es igual o `Fallaste` si no.
-
 ```safira
-# Escribe aquí.
+# Desafío: Sortea un número en secreto, pide un número y
+# muestra Acertaste si es igual o Fallaste si no.
+
 ```
 
 ```solution

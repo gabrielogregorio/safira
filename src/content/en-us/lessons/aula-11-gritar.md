@@ -2,19 +2,18 @@
 
 ## Shout
 
-`text in upper case` makes everything big.
-
 ```safira
 text = "safira"
+
+# in upper case makes everything big.
 show text in upper case
 ```
 
 ## Challenge: Shout
 
-Ask for a text and show it all in capitals.
-
 ```safira
-# Write here.
+# Challenge: Ask for a text and show it all in capitals.
+
 ```
 
 ```solution

@@ -2,19 +2,21 @@
 
 ## Your city
 
-A variable keeps a value: `name = "Ana"`. The `+` joins texts.
-
 ```safira
+# A variable keeps a value.
 name = "Ana"
+
+# The + joins texts.
 show "Hello, " + name
 ```
 
 ## Challenge: Your city
 
-Create the variable `city` with the value `"Lima"` and show `I live in Lima`, joining the text with the variable.
-
 ```safira
-# Write here.
+# Challenge: Create the variable city with the value
+# "Lima" and show I live in Lima, joining the text with
+# the variable.
+
 ```
 
 ```solution

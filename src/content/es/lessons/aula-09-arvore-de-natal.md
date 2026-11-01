@@ -2,9 +2,8 @@
 
 ## Árbol parpadeante
 
-`limpiar la pantalla` y `esperar` hacen parpadear cualquier cosa.
-
 ```safira
+# Limpiar y esperar hace parpadear cualquier cosa.
 repetir 2 veces {
     limpiar la pantalla
     muestra "⭐"
@@ -18,9 +17,11 @@ repetir 2 veces {
 
 ## Desafío: Árbol parpadeante
 
-Haz que el árbol parpadee 3 veces: usa `repetir`, `limpiar la pantalla` y `esperar 1 segundo`, mostrando el árbol encendido y luego apagado.
-
 ```safira
+# Desafío: Haz que el árbol parpadee 3 veces: usa repetir,
+# limpiar la pantalla y esperar 1 segundo, mostrando el
+# árbol encendido y luego apagado.
+
 muestra "    ⭐"
 muestra "   🎄🎄"
 muestra "  🎄🔴🎄"

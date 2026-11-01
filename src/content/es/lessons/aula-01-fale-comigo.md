@@ -2,18 +2,17 @@
 
 ## Háblame
 
-¡Bienvenido! `muestra` escribe en la pantalla. Míralo funcionar.
-
 ```safira
+# muestra escribe en la pantalla.
 muestra "Hola, mundo!"
 ```
 
 ## Desafío: Háblame
 
-Haz que el programa muestre `Hola, Safira!`.
-
 ```safira
-# Escribe aquí.
+# Desafío: Haz que el programa muestre Hola, Safira!
+# .
+
 ```
 
 ```solution

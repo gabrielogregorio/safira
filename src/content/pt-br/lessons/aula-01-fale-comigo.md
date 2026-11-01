@@ -2,18 +2,17 @@
 
 ## Fale comigo
 
-Bem-vindo! `mostre` escreve na tela. Veja funcionando.
-
 ```safira
+# mostre escreve na tela.
 mostre "Olá, mundo!"
 ```
 
 ## Desafio: Fale comigo
 
-Faça o programa mostrar `Olá, Safira!`.
-
 ```safira
-# Escreva aqui.
+# Desafio: Faça o programa mostrar Olá, Safira!
+# .
+
 ```
 
 ```solution

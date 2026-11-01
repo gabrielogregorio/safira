@@ -2,19 +2,18 @@
 
 ## First and last name
 
-This asks for a text: `name = what the user types`.
-
 ```safira
+# This asks for a text.
 name = what the user types
 show "Hello, " + name
 ```
 
 ## Challenge: First and last name
 
-Ask for the first name, ask for the last name and show both together, with a space between them.
-
 ```safira
-# Write here.
+# Challenge: Ask for the first name, ask for the last name
+# and show both together, with a space between them.
+
 ```
 
 ```solution

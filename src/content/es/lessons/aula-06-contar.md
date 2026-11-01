@@ -2,9 +2,8 @@
 
 ## Contar
 
-Una repetición cuenta por ti: `para cada x desde 1 hasta 3 {`, y cierra con `}`.
-
 ```safira
+# La repetición cuenta por ti.
 para cada x desde 1 hasta 3 {
     muestra x
 }
@@ -12,10 +11,9 @@ para cada x desde 1 hasta 3 {
 
 ## Desafío: Contar
 
-Muestra los números del 1 al 5.
-
 ```safira
-# Escribe aquí.
+# Desafío: Muestra los números del 1 al 5.
+
 ```
 
 ```solution

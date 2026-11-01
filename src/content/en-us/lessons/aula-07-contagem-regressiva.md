@@ -2,20 +2,21 @@
 
 ## Countdown
 
-`wait 1 second` makes a pause.
-
 ```safira
 show "Ready..."
+
+# wait makes a pause.
 wait 1 second
 show "Go!"
 ```
 
 ## Challenge: Countdown
 
-Show 3, 2 and 1, with a wait between them, and then show `Fire!`.
-
 ```safira
-# Write here.
+# Challenge: Show 3, 2 and 1, with a wait between them,
+# and then show Fire!
+# .
+
 ```
 
 ```solution

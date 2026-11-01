@@ -2,18 +2,17 @@
 
 ## Talk to me
 
-Welcome! `show` writes on the screen. See it work.
-
 ```safira
+# show writes on the screen.
 show "Hello, world!"
 ```
 
 ## Challenge: Talk to me
 
-Make the program show `Hello, Safira!`.
-
 ```safira
-# Write here.
+# Challenge: Make the program show Hello, Safira!
+# .
+
 ```
 
 ```solution

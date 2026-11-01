@@ -2,19 +2,19 @@
 
 ## Gritar
 
-`texto em maiúsculo` deixa tudo grande.
-
 ```safira
 texto = "safira"
+
+# em maiúsculo deixa tudo grande.
 mostre texto em maiúsculo
 ```
 
 ## Desafio: Gritar
 
-Peça um texto e mostre esse texto todo em maiúsculas.
-
 ```safira
-# Escreva aqui.
+# Desafio: Peça um texto e mostre esse texto todo em
+# maiúsculas.
+
 ```
 
 ```solution

@@ -9,7 +9,7 @@ const lessons = lessonsOf('en-us');
 const lessonMode = (changes: Partial<LessonMode> = {}): LessonMode => ({
   lessons,
   place: { lessonId: lessons[0].id, step: 0 },
-  step: lessons[0].steps[0],
+  step: lessons[0].steps[1],
   isOnStepFile: true,
   isDone: false,
   isLastStep: false,
@@ -45,27 +45,23 @@ describe('ProfessorCat', () => {
     expect(screen.queryByText(/I am a therian/)).not.toBeInTheDocument();
   });
 
-  it('explains the step, then asks for a run', async () => {
+  it('only points: no title and no explanation in the balloon', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
     render(<ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />);
-    await press('Continue');
-
-    expect(screen.getByRole('heading', { name: lessons[0].steps[0].title })).toBeInTheDocument();
-
-    await press('Continue');
 
     expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Continue' })).not.toBeInTheDocument();
   });
 
-  it('lights the Run button only while asking for a run', async () => {
+  it('lights the Run button only on a program to run', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
+    const step = { ...lessons[0].steps[0], check: null };
     const { unmount } = render(
-      <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
+      <ProfessorCat lesson={lessonMode({ step })} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
     );
-    await press('Continue');
 
-    expect(document.documentElement.dataset['spotlight']).toBeUndefined();
-
-    await press('Continue');
-
+    expect(screen.getByText('Press ▶')).toBeInTheDocument();
     expect(document.documentElement.dataset['spotlight']).toBe('run');
 
     unmount();
@@ -101,7 +97,7 @@ describe('ProfessorCat', () => {
 
     fireEvent.pointerUp(stone, { pointerId: 1 });
 
-    expect(screen.getByRole('heading', { name: lessons[0].steps[0].title })).toBeInTheDocument();
+    expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Drag the stone' })).toHaveAttribute('aria-pressed', 'false');
   });
 
@@ -183,11 +179,11 @@ describe('ProfessorCat', () => {
     });
   });
 
-  it('points while explaining', async () => {
+  it('points at the code in a challenge', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
     const { container } = render(
       <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
     );
-    await press('Continue');
 
     expect(container.querySelector('.cat')).toHaveAttribute('data-pose', 'point');
   });

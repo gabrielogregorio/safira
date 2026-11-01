@@ -2,19 +2,18 @@
 
 ## Gritar
 
-`texto en mayusculas` lo deja todo grande.
-
 ```safira
 texto = "safira"
+
+# en mayusculas lo deja todo grande.
 muestra texto en mayusculas
 ```
 
 ## Desafío: Gritar
 
-Pide un texto y muéstralo todo en mayúsculas.
-
 ```safira
-# Escribe aquí.
+# Desafío: Pide un texto y muéstralo todo en mayúsculas.
+
 ```
 
 ```solution

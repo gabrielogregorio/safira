@@ -2,20 +2,21 @@
 
 ## Cuenta regresiva
 
-`esperar 1 segundo` hace una pausa.
-
 ```safira
 muestra "Preparados..."
+
+# esperar hace una pausa.
 esperar 1 segundo
 muestra "Ya!"
 ```
 
 ## Desafío: Cuenta regresiva
 
-Muestra 3, 2 y 1, con una espera entre ellos, y después muestra `Fuego!`.
-
 ```safira
-# Escribe aquí.
+# Desafío: Muestra 3, 2 y 1, con una espera entre ellos, y
+# después muestra Fuego!
+# .
+
 ```
 
 ```solution

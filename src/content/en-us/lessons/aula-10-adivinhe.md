@@ -2,11 +2,11 @@
 
 ## Guess
 
-`a random number between 1 and 3` draws a number, and `if a is equal to b then {` compares. Then comes `} else {`.
-
 ```safira
+# Draws a number.
 die = a random number between 1 and 2
 
+# The if picks the way.
 if die is equal to 1 then {
     show "Heads"
 } else {
@@ -16,10 +16,10 @@ if die is equal to 1 then {
 
 ## Challenge: Guess
 
-Draw a number into `secret`, ask for a number and show `Right` if it matches or `Wrong` if not.
-
 ```safira
-# Write here.
+# Challenge: Draw a number into secret, ask for a number
+# and show Right if it matches or Wrong if not.
+
 ```
 
 ```solution

@@ -2,12 +2,14 @@
 
 ## Shopping list
 
-`list of fruits receive "grape", "pear"` creates a list. `add "kiwi" at the end of the list of fruits` grows it. `scroll through the list of fruits assigning in item {` goes through all of it.
-
 ```safira
+# Creates the list.
 list of fruits receive "grape", "pear"
+
+# Adds at the end.
 add "kiwi" at the end of the list of fruits
 
+# Goes through all the items.
 scroll through the list of fruits assigning in item {
     show item
 }
@@ -15,10 +17,10 @@ scroll through the list of fruits assigning in item {
 
 ## Challenge: Shopping list
 
-Create the list `shopping` with `rice` and `beans`, add `milk` at the end and show each item.
-
 ```safira
-# Write here.
+# Challenge: Create the list shopping with rice and beans,
+# add milk at the end and show each item.
+
 ```
 
 ```solution

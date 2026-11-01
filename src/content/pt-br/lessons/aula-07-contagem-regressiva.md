@@ -2,20 +2,21 @@
 
 ## Contagem regressiva
 
-`espere 1 segundo` faz uma pausa.
-
 ```safira
 mostre "Preparar..."
+
+# espere faz uma pausa.
 espere 1 segundo
 mostre "Já!"
 ```
 
 ## Desafio: Contagem regressiva
 
-Mostre 3, 2 e 1, com uma espera entre eles, e depois mostre `Fogo!`.
-
 ```safira
-# Escreva aqui.
+# Desafio: Mostre 3, 2 e 1, com uma espera entre eles, e
+# depois mostre Fogo!
+# .
+
 ```
 
 ```solution

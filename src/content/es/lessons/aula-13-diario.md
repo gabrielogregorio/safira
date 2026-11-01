@@ -2,22 +2,23 @@
 
 ## Diario
 
-`crea el archivo "a.txt"` crea. `sobrescribir "hola" al archivo "a.txt"` escribe. `lea el archivo "a.txt"` trae el texto.
-
 ```safira
+# Crea el archivo y escribe en él.
 crea el archivo "a.txt"
 sobrescribir "hola" al archivo "a.txt"
 
+# Lee el archivo.
 texto = lea el archivo "a.txt"
 muestra texto
 ```
 
 ## Desafío: Diario
 
-Crea `diario.txt`, escribe `Hoy aprendi Safira` en él, lee el archivo y muestra el texto.
-
 ```safira
-# Escribe aquí.
+# Desafío: Crea diario.
+# txt, escribe Hoy aprendi Safira en él, lee el archivo y
+# muestra el texto.
+
 ```
 
 ```solution

@@ -2,19 +2,20 @@
 
 ## Tu ciudad
 
-Una variable guarda un valor: `nombre = "Ana"`. El `+` une textos.
-
 ```safira
+# Una variable guarda un valor.
 nombre = "Ana"
+
+# El + une textos.
 muestra "Hola, " + nombre
 ```
 
 ## Desafío: Tu ciudad
 
-Crea la variable `ciudad` con el valor `"Lima"` y muestra `Vivo en Lima`, uniendo el texto con la variable.
-
 ```safira
-# Escribe aquí.
+# Desafío: Crea la variable ciudad con el valor "Lima" y
+# muestra Vivo en Lima, uniendo el texto con la variable.
+
 ```
 
 ```solution

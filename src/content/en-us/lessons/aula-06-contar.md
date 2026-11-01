@@ -2,9 +2,8 @@
 
 ## Count
 
-A loop counts for you: `for each x from 1 to 3 {`, closed with `}`.
-
 ```safira
+# The loop counts for you.
 for each x from 1 to 3 {
     show x
 }
@@ -12,10 +11,9 @@ for each x from 1 to 3 {
 
 ## Challenge: Count
 
-Show the numbers from 1 to 5.
-
 ```safira
-# Write here.
+# Challenge: Show the numbers from 1 to 5.
+
 ```
 
 ```solution

@@ -1,4 +1,4 @@
-import { render, screen, within } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lessonsOf } from '@/content/content';
 import { loadProjects } from '@/projects/projectStore';
@@ -31,9 +31,6 @@ const enterLessonMode = async (): Promise<void> => {
 const run = async (): Promise<void> => {
   await userEvent.click(screen.getByRole('button', { name: 'Run' }));
 };
-
-const continueButton = (): HTMLElement =>
-  within(document.querySelector<HTMLElement>('.cat-bubble') as HTMLElement).getByRole('button', { name: 'Continue' });
 
 const nextButton = (): Promise<HTMLElement> => screen.findByRole('button', { name: 'Next' });
 
@@ -68,7 +65,7 @@ describe('lesson mode', () => {
   it('shows the first step in the IDE and swaps the tabs for the lesson bar', async () => {
     await enterLessonMode();
 
-    expect(screen.getByRole('heading', { name: firstLesson.steps[0].title })).toBeInTheDocument();
+    expect(document.querySelector('.cm-content')).toHaveTextContent('show');
     expect(screen.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(firstLesson.id);
     expect(document.querySelector('.tab')).toBeNull();
     expect(Object.keys(loadProjects()[0].files)).toContain('lessons/01-fale-comigo-1.safira');
@@ -78,8 +75,6 @@ describe('lesson mode', () => {
     await enterLessonMode();
 
     expect(document.querySelector('.cm-content')).toHaveTextContent('show');
-
-    await userEvent.click(continueButton());
 
     expect(screen.getByText('Press ▶')).toBeInTheDocument();
 
@@ -92,8 +87,6 @@ describe('lesson mode', () => {
   it('refuses a wrong answer, explains it, and accepts the solution', async () => {
     await enterLessonMode();
     await finishExample();
-    await userEvent.click(continueButton());
-
     expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
 
     await run();
@@ -127,7 +120,7 @@ describe('lesson mode', () => {
     await solveChallenge();
     await userEvent.click(await nextButton());
 
-    expect(screen.getByRole('heading', { name: lessons[1].steps[0].title })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(lessons[1].id);
     expect(screen.getByRole('button', { name: 'Next step' })).toBeDisabled();
   });
 
@@ -138,14 +131,15 @@ describe('lesson mode', () => {
     await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
     await userEvent.click(screen.getByRole('button', { name: 'Start over' }));
 
-    expect(document.querySelector('.cm-content')).not.toHaveTextContent('show');
+    expect(document.querySelector('.cm-content')).not.toHaveTextContent('show "');
   });
 
   it('changes lessons in the bar', async () => {
     await enterLessonMode();
     await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Choose a lesson' }), lessons[2].id);
 
-    expect(await screen.findByRole('heading', { name: lessons[2].steps[0].title })).toBeInTheDocument();
+    expect(await screen.findByRole('combobox', { name: 'Choose a lesson' })).toHaveValue(lessons[2].id);
+    expect(Object.keys(loadProjects()[0].files)).toContain('lessons/03-sua-cidade-1.safira');
   });
 
   it('keeps the place after a reload', async () => {
@@ -154,7 +148,7 @@ describe('lesson mode', () => {
     document.body.replaceChildren();
     renderApp();
 
-    expect(await screen.findByRole('heading', { name: firstLesson.steps[1].title })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Step 1: .* \(done\)$/ })).toBeInTheDocument();
   });
 
   it('gives the tabs back when the mode ends', async () => {
@@ -172,7 +166,7 @@ describe('lesson mode', () => {
     await userEvent.click(await screen.findByRole('menuitem', { name: 'Language' }));
     await userEvent.click(await screen.findByRole('menuitemradio', { name: 'Español' }));
 
-    expect(await screen.findByRole('heading', { name: lessonsOf('es')[0].steps[0].title })).toBeInTheDocument();
+    expect(await screen.findByRole('option', { name: /^1\. Háblame/ })).toBeInTheDocument();
     expect(Object.keys(loadProjects()[0].files)).toContain('clases/01-fale-comigo-1.safira');
   });
 

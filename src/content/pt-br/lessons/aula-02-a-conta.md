@@ -2,18 +2,17 @@
 
 ## A conta
 
-Sem aspas, o computador faz a conta: `mostre 2 + 2`.
-
 ```safira
+# Sem aspas, o computador faz a conta.
 mostre 2 + 2
 ```
 
 ## Desafio: A conta
 
-Mostre o resultado de `25 * 4`, sem escrever o resultado.
-
 ```safira
-# Escreva aqui.
+# Desafio: Mostre o resultado de 25 * 4, sem escrever o
+# resultado.
+
 ```
 
 ```solution

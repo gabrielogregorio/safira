@@ -86,9 +86,9 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
     }
   });
 
-  it('every step explains itself', () => {
+  it('every step teaches through comments in the code', () => {
     for (const lesson of lessons) {
-      expect(lesson.steps.filter((step) => step.title === '' || step.text === '')).toEqual([]);
+      expect(lesson.steps.filter((step) => step.title === '' || !step.code.includes('#'))).toEqual([]);
       expect(lesson.steps.filter((step) => /```/.test(step.text))).toEqual([]);
     }
   });

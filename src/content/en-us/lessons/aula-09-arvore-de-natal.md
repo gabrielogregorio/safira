@@ -2,9 +2,8 @@
 
 ## Blinking tree
 
-`clear` and `wait` make anything blink.
-
 ```safira
+# Clearing and waiting makes anything blink.
 repeat 2 times {
     clear
     show "⭐"
@@ -18,9 +17,11 @@ repeat 2 times {
 
 ## Challenge: Blinking tree
 
-Make the tree blink 3 times: use `repeat`, `clear` and `wait 1 second`, showing the tree on and then off.
-
 ```safira
+# Challenge: Make the tree blink 3 times: use repeat,
+# clear and wait 1 second, showing the tree on and then
+# off.
+
 show "    ⭐"
 show "   🎄🎄"
 show "  🎄🔴🎄"

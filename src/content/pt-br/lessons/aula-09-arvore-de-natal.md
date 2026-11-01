@@ -2,9 +2,8 @@
 
 ## Árvore piscando
 
-`limpe a tela` e `espere` fazem qualquer coisa piscar.
-
 ```safira
+# Limpar e esperar faz qualquer coisa piscar.
 repita 2 vezes {
     limpe a tela
     mostre "⭐"
@@ -18,9 +17,11 @@ repita 2 vezes {
 
 ## Desafio: Árvore piscando
 
-Faça a árvore piscar 3 vezes: use `repita`, `limpe a tela` e `espere 1 segundo`, mostrando a árvore acesa e depois apagada.
-
 ```safira
+# Desafio: Faça a árvore piscar 3 vezes: use repita, limpe
+# a tela e espere 1 segundo, mostrando a árvore acesa e
+# depois apagada.
+
 mostre "    ⭐"
 mostre "   🎄🎄"
 mostre "  🎄🔴🎄"

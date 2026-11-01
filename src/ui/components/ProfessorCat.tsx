@@ -33,7 +33,8 @@ const TRIP_VARIATION_MILLISECONDS = 750;
 // He stays in the upper part, with the balloon growing down, so the first lines of code stay in sight.
 const HEIGHT_IN_FIELD: Record<Scene, number> = {
   intro: 0.2,
-  explain: 0.2,
+  write: 0.2,
+
   play: 0.08,
   input: 0.08,
   result: 0.3,
@@ -46,13 +47,13 @@ export interface Trip {
   milliseconds: number;
 }
 
-type Scene = 'intro' | 'explain' | 'play' | 'input' | 'result' | 'farewell';
+type Scene = 'intro' | 'play' | 'write' | 'input' | 'result' | 'farewell';
 
 const HOME_FIELD = '.code-editor';
 
 const TARGETS: Record<Scene, string> = {
   intro: '.cm-content',
-  explain: '.cm-content',
+  write: '.cm-content',
   play: '.aero-button-run',
   input: '.terminal-input',
   farewell: '.menubar-trigger:nth-child(3)',
@@ -354,7 +355,6 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
   const [isHoldingStone, setIsHoldingStone] = useState(false);
   const [hasMet, setHasMet] = useState(() => readFlag(MET_KEY));
   const key = stepKey(lesson.place);
-  const [playAt, setPlayAt] = useState<string | null>(null);
 
   const scene = ((): Scene => {
     if (isWaitingInput) {
@@ -373,7 +373,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
       return 'result';
     }
 
-    return playAt === key ? 'play' : 'explain';
+    return lesson.step?.check === null ? 'play' : 'write';
   })();
 
   const pose = ((): Pose => {
@@ -478,10 +478,10 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     switch (scene) {
       case 'intro':
         return t('Meow! I am a therian, and I will teach you to program.');
-      case 'explain':
-        return `## ${lesson.step.title}\n\n${lesson.step.text}`;
       case 'play':
-        return lesson.step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.');
+        return t('Press ▶');
+      case 'write':
+        return t('Write your answer and press ▶ Run.');
       case 'input':
         return t('Type your answer here and press Enter.');
       case 'farewell':
@@ -644,18 +644,6 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
                   onClick={() => {
                     writeFlag(MET_KEY);
                     setHasMet(true);
-                  }}>
-                  {t('Continue')}
-                </button>
-              </div>
-            ) : null}
-            {scene === 'explain' && typed.isDone ? (
-              <div className="lesson-actions">
-                <button
-                  type="button"
-                  className="button button-primary"
-                  onClick={() => {
-                    setPlayAt(key);
                   }}>
                   {t('Continue')}
                 </button>
