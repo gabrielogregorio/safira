@@ -5,10 +5,9 @@ describe('routes', () => {
   it.each<[string, Route]>([
     ['#/', { name: 'home' }],
     ['#/new', { name: 'new', exampleId: null }],
+    ['#/aquarium', { name: 'aquarium' }],
+    ['#/globe', { name: 'globe' }],
     ['#/new/16-listas', { name: 'new', exampleId: '16-listas' }],
-    ['#/lessons', { name: 'lessons', lessonId: null, section: null }],
-    ['#/lessons/aula-02', { name: 'lessons', lessonId: 'aula-02', section: null }],
-    ['#/lessons/aula-02/comando', { name: 'lessons', lessonId: 'aula-02', section: 'comando' }],
     ['#/projects/abc', { name: 'project', projectId: 'abc', file: null }],
     ['#/projects/abc/main.safira', { name: 'project', projectId: 'abc', file: 'main.safira' }],
   ])('reads and writes %s', (hash, route) => {
@@ -23,7 +22,10 @@ describe('routes', () => {
     expect(parseRoute(routeToHash(route))).toEqual(route);
   });
 
-  it.each(['', '#', '#/nada', '#/projects', '#/%E0%A4%A'])('sends %s to the home screen', (hash) => {
-    expect(parseRoute(hash)).toEqual({ name: 'home' });
-  });
+  it.each(['', '#', '#/nada', '#/projects', '#/%E0%A4%A', '#/lessons/aula-02'])(
+    'sends %s to the home screen',
+    (hash) => {
+      expect(parseRoute(hash)).toEqual({ name: 'home' });
+    },
+  );
 });

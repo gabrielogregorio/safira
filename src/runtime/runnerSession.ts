@@ -1,5 +1,6 @@
 import { driveExecution } from '@/language/driver';
 import { Interpreter, SafiraError } from '@/language/interpreter';
+import { translateMessage } from '@/language/messages';
 import { snapBreakpoints } from '@/language/statementLines';
 import { VirtualFileSystem } from '@/language/virtualFileSystem';
 import type { Breakpoints, OutputItem, RunMode, RunnerEvent, RunnerRequest, StartRequest } from './protocol';
@@ -80,13 +81,13 @@ export class RunnerSession {
     return this.mode === 'debug' && (this.breakpoints[file] ?? []).includes(line);
   }
 
-  private pause(file: string, line: number): Promise<void> | undefined {
+  private pause(interpreter: Interpreter, file: string, line: number): Promise<void> | undefined {
     if (!this.shouldPause(file, line)) {
       return undefined;
     }
 
     this.flush();
-    this.post({ type: 'paused', file, line, variables: this.interpreter?.getVariables() ?? [] });
+    this.post({ type: 'paused', file, line, variables: interpreter.getVariables() });
 
     return new Promise((resolve) => {
       this.resolvePause = resolve;
@@ -103,7 +104,7 @@ export class RunnerSession {
 
     try {
       await driveExecution(interpreter.run(request.file), {
-        onStep: (file, line) => this.pause(file, line),
+        onStep: (file, line) => this.pause(interpreter, file, line),
         onOutput: (inline, text, color) => {
           this.enqueue({ inline, text, color });
         },
@@ -124,16 +125,37 @@ export class RunnerSession {
 
           return this.clock.sleep(milliseconds);
         },
+        onTone: (frequency, milliseconds) => {
+          this.flush();
+          this.post({ type: 'tone', frequency, milliseconds });
+
+          return this.clock.sleep(milliseconds);
+        },
         onFilesChanged: () => {
           this.post({ type: 'files', files: this.files.snapshot() });
         },
       });
     } catch (error) {
-      if (!(error instanceof SafiraError)) {
+      if (error instanceof SafiraError) {
+        failure = {
+          message: error.message,
+          file: error.file,
+          line: error.line,
+          example: error.example,
+          missingName: error.missingName,
+        };
+      } else if (error instanceof RangeError) {
+        // Blocks nested beyond what the stack of the browser can read.
+        failure = {
+          message: translateMessage(request.locale, 'programa_complexo_demais'),
+          file: request.file,
+          line: 1,
+          example: null,
+          missingName: null,
+        };
+      } else {
         throw error;
       }
-
-      failure = { message: error.message, file: error.file, line: error.line, example: error.example };
     }
 
     this.flush();

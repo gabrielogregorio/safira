@@ -1,20 +1,20 @@
 import * as Menubar from '@radix-ui/react-menubar';
 import type { ReactNode } from 'react';
-import { examples } from '@/content/content';
+import { examplesOf } from '@/content/content';
 import { LOCALES, useTranslation } from '@/i18n/i18n';
 import type { Locale } from '@/language/messages';
 import type { RunMode } from '@/runtime/protocol';
 import type { CodeFont, Settings } from '@/settings/settings';
-import { clampFontSize, THEME_IDS } from '@/settings/settings';
+import { clampFontSize, FONT_SIZE_STEP, THEME_IDS } from '@/settings/settings';
+import { VISION_MODES } from '@/settings/vision';
+import { visionLabel } from '@/ui/visionLabels';
+import type { SoundName } from '@/ui/sound/sounds';
 
 interface IdeMenuBarProps {
   settings: Settings;
   locale: Locale;
   isRunning: boolean;
-  onOpenFile: () => void;
   onNewTab: () => void;
-  onSave: () => void;
-  onSaveAs: () => void;
   onFormat: () => void;
   onExportProject: () => void;
   onImportArchive: () => void;
@@ -26,6 +26,7 @@ interface IdeMenuBarProps {
   onChangeSettings: (changes: Partial<Settings>) => void;
   onToggleFullScreen: () => void;
   onShowCommands: () => void;
+  onToggleLessonMode: () => void;
 }
 
 interface MenuProps {
@@ -37,6 +38,8 @@ interface ActionProps {
   label: string;
   shortcut?: string;
   disabled?: boolean;
+  sound?: SoundName;
+  hoverRate?: number;
   onSelect: () => void;
 }
 
@@ -48,14 +51,23 @@ interface RadioSubmenuProps<Value extends string> {
 }
 
 const BUG_REPORT_URL = 'https://github.com/safira-lang/safira-ide/issues';
-const BLOG_URL = 'https://safiralang.blogspot.com/';
-const FONT_STEP = 1;
+const BLOG_URL = 'https://github.com/gabrielogregorio/safira/wiki';
 const CODE_FONTS: { id: CodeFont; label: string }[] = [
   { id: 'mono', label: 'JetBrains Mono' },
   { id: 'aero', label: 'Istok Web' },
 ];
 const PROGRAM_PREFIX = 'programa-';
 const SUBMENU_OFFSET = 4;
+const PENTATONIC_STEPS = [0, 2, 4, 7, 9];
+const SEMITONES_PER_OCTAVE = 12;
+
+// Passing over the programs walks up a little xylophone, a different note for each one.
+const scaleRate = (index: number): number => {
+  const octave = Math.floor(index / PENTATONIC_STEPS.length);
+  const step = PENTATONIC_STEPS[index % PENTATONIC_STEPS.length];
+
+  return 2 ** (octave + step / SEMITONES_PER_OCTAVE - 1);
+};
 const MENU_OFFSET = 6;
 
 const Menu = ({ label, children }: MenuProps) => (
@@ -69,8 +81,13 @@ const Menu = ({ label, children }: MenuProps) => (
   </Menubar.Menu>
 );
 
-const Action = ({ label, shortcut, disabled = false, onSelect }: ActionProps) => (
-  <Menubar.Item className="menubar-item" disabled={disabled} onSelect={onSelect}>
+const Action = ({ label, shortcut, disabled = false, sound, hoverRate, onSelect }: ActionProps) => (
+  <Menubar.Item
+    className="menubar-item"
+    disabled={disabled}
+    data-sound={sound}
+    data-hover-rate={hoverRate}
+    onSelect={onSelect}>
     {label}
     {shortcut === undefined ? null : <span className="menubar-shortcut">{shortcut}</span>}
   </Menubar.Item>
@@ -107,10 +124,7 @@ export const IdeMenuBar = ({
   settings,
   locale,
   isRunning,
-  onOpenFile,
   onNewTab,
-  onSave,
-  onSaveAs,
   onFormat,
   onExportProject,
   onImportArchive,
@@ -122,8 +136,10 @@ export const IdeMenuBar = ({
   onChangeSettings,
   onToggleFullScreen,
   onShowCommands,
+  onToggleLessonMode,
 }: IdeMenuBarProps) => {
   const t = useTranslation();
+  const examples = examplesOf(locale);
   const lessons = examples.filter((example) => !example.id.startsWith(PROGRAM_PREFIX));
   const programs = examples.filter((example) => example.id.startsWith(PROGRAM_PREFIX));
   const themeOptions = THEME_IDS.map((id) => ({
@@ -134,14 +150,10 @@ export const IdeMenuBar = ({
   return (
     <Menubar.Root className="menubar" aria-label={t('Safira IDE')}>
       <Menu label={t('File')}>
-        <Action label={t('Open file')} shortcut="Ctrl+O" onSelect={onOpenFile} />
         <Action label={t('New tab')} shortcut="Ctrl+N" onSelect={onNewTab} />
         <Menubar.Separator className="menubar-separator" />
-        <Action label={t('Save')} shortcut="Ctrl+S" onSelect={onSave} />
-        <Action label={t('Save as')} shortcut="Ctrl+Shift+S" onSelect={onSaveAs} />
-        <Menubar.Separator className="menubar-separator" />
-        <Action label={t('Export project (.zip)')} onSelect={onExportProject} />
-        <Action label={t('Import .zip into this project')} onSelect={onImportArchive} />
+        <Action label={t('Export project (.zip)')} sound="export" onSelect={onExportProject} />
+        <Action label={t('Import .zip into this project')} sound="import" onSelect={onImportArchive} />
         <Menubar.Separator className="menubar-separator" />
         <Action label={t('Format code')} onSelect={onFormat} />
       </Menu>
@@ -185,10 +197,11 @@ export const IdeMenuBar = ({
         ))}
         <Menubar.Separator className="menubar-separator" />
         <Menubar.Label className="menubar-label">{t('Programs')}</Menubar.Label>
-        {programs.map((example) => (
+        {programs.map((example, index) => (
           <Action
             key={example.id}
             label={example.title}
+            hoverRate={scaleRate(index)}
             onSelect={() => {
               onOpenExample(example.id, example.text);
             }}
@@ -201,15 +214,15 @@ export const IdeMenuBar = ({
           value={settings.theme}
           options={themeOptions}
           onChange={(theme) => {
-            onChangeSettings({ theme, syntax: theme });
+            onChangeSettings({ theme });
           }}
         />
         <RadioSubmenu
-          label={t('Syntax colors')}
-          value={settings.syntax}
-          options={themeOptions}
-          onChange={(syntax) => {
-            onChangeSettings({ syntax });
+          label={t('Accessibility')}
+          value={settings.vision}
+          options={VISION_MODES.map((id) => ({ id, label: visionLabel(t, id) }))}
+          onChange={(vision) => {
+            onChangeSettings({ vision });
           }}
         />
         <RadioSubmenu
@@ -241,18 +254,19 @@ export const IdeMenuBar = ({
         <Action
           label={t('Increase font')}
           onSelect={() => {
-            onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_STEP) });
+            onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_SIZE_STEP) });
           }}
         />
         <Action
           label={t('Decrease font')}
           onSelect={() => {
-            onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_STEP) });
+            onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_SIZE_STEP) });
           }}
         />
         <Action label={t('Full screen')} shortcut="F11" onSelect={onToggleFullScreen} />
       </Menu>
       <Menu label={t('Help')}>
+        {settings.catLeft ? null : <Action label={t('Lesson mode')} onSelect={onToggleLessonMode} />}
         <Action label={t('Available commands')} onSelect={onShowCommands} />
         <Action
           label={t('Report a bug')}

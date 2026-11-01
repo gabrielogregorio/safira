@@ -1,3 +1,4 @@
+import type { Value } from './ast';
 import {
   capitalize,
   floorModulo,
@@ -69,6 +70,14 @@ describe('values', () => {
 
   it('skips letters in a slice with a step', () => {
     expect(sliceForward('abcdef', 1, 6, 1)).toBe('bdf');
+  });
+
+  it('treats a hole in a list as an empty value', () => {
+    expect(valuesAreEqual([null], new Array<Value>(1))).toBe(true);
+  });
+
+  it('skips letters in a backward slice with a step', () => {
+    expect(sliceBackward('abcdef', 5, 2, 1)).toBe('ac');
   });
 
   it('keeps the original backward slice', () => {

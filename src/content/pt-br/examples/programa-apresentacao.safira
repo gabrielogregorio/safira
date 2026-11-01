@@ -1,0 +1,8 @@
+#safira 0.9
+# 💎 Apresentação
+
+mostre "Qual é o seu nome?"
+nome = o que o usuário digitar
+
+mostre "Prazer, " + nome + "! 👋"
+mostre "Eu sou a Safira 💎" na cor azul

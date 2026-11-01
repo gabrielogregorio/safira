@@ -1,0 +1,10 @@
+#safira 0.9
+# 🎆 Ano novo
+
+para cada numero de 3 até 1 {
+    mostre numero
+    espere 1 segundo
+}
+
+mostre "🎆 🎇 ✨"
+mostre "🎉 Feliz Ano Novo!"

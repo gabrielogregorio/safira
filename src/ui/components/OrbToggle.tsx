@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { useId, useState } from 'react';
+import type { SoundName } from '@/ui/sound/sounds';
 
 export interface OrbSlot {
   id: string;
@@ -12,6 +13,8 @@ interface OrbToggleProps {
   activeIndex: number;
   backdrop: ReactNode;
   onClick: () => void;
+  sound?: SoundName;
+  className?: string;
 }
 
 const FULL_TURN = 360;
@@ -22,7 +25,15 @@ const SLOT_SPACING = 52;
 const pivotHeight = (slotCount: number): number =>
   Math.round(ORB_CENTER + SLOT_SPACING / (2 * Math.sin(Math.PI / slotCount)));
 
-export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbToggleProps) => {
+export const OrbToggle = ({
+  label,
+  slots,
+  activeIndex,
+  backdrop,
+  onClick,
+  sound = 'toggle',
+  className = '',
+}: OrbToggleProps) => {
   const id = useId();
   const [turn, setTurn] = useState(activeIndex);
   const stepsAhead = (activeIndex - (turn % slots.length) + slots.length) % slots.length;
@@ -36,7 +47,13 @@ export const OrbToggle = ({ label, slots, activeIndex, backdrop, onClick }: OrbT
   const pivotY = pivotHeight(slots.length);
 
   return (
-    <button type="button" className="orb-toggle" aria-label={label} title={label} data-sound="toggle" onClick={onClick}>
+    <button
+      type="button"
+      className={`orb-toggle ${className}`.trim()}
+      aria-label={label}
+      title={label}
+      data-sound={sound}
+      onClick={onClick}>
       <svg viewBox="0 0 48 48" aria-hidden="true">
         <defs>
           <clipPath id={`${id}-orb`}>

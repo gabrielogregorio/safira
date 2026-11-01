@@ -1,0 +1,12 @@
+#safira 0.9
+# Condições
+# O "se" escolhe o que fazer.
+
+mostre "Qual foi a sua nota?"
+nota = o número que o usuário digitar
+
+se nota for maior ou igual a 6 então {
+    mostre "Você passou! 🎉"
+} senão {
+    mostre "Tente de novo."
+}

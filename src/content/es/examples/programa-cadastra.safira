@@ -1,0 +1,10 @@
+#safira 0.9
+# 📝 Registro
+
+muestra "🙂 ¿Cómo te llamas?"
+nombre = lo que escribe el usuario
+
+muestra "📏 ¿Cuánto mides?"
+altura = el número que ingresa el usuario
+
+muestra "📝 " + nombre + " mide " + altura + " de altura."

@@ -1,0 +1,10 @@
+#safira 0.9
+# 📝 Cadastro
+
+mostre "🙂 Qual é o seu nome?"
+nome = o que o usuário digitar
+
+mostre "📏 Qual é a sua altura?"
+altura = o número que o usuário digitar
+
+mostre "📝 " + nome + " tem " + altura + " de altura."

@@ -1,14 +1,16 @@
 import { addScriptVersion } from '@/language/version';
+import { storageKey } from '@/settings/storageKey';
 
 export const MAIN_FILE = 'main.safira';
 
-const STORAGE_KEY = 'safira.projects.v1';
+const STORAGE_KEY = storageKey('projects.v1');
 
 export interface Project {
   id: string;
   name: string;
   files: Record<string, string>;
   breakpoints: Record<string, number[]>;
+  order?: string[];
   updatedAt: number;
 }
 
@@ -38,8 +40,19 @@ export const saveProjects = (projects: Project[]): boolean => {
   }
 };
 
+const HEX_RADIX = 16;
+const BYTES_IN_ID = 16;
+
+// `randomUUID` only exists on https and localhost. Opened by the address of the machine, the page has no access to it.
+export const createId = (): string =>
+  typeof crypto.randomUUID === 'function'
+    ? crypto.randomUUID()
+    : Array.from(crypto.getRandomValues(new Uint8Array(BYTES_IN_ID)), (byte) =>
+        byte.toString(HEX_RADIX).padStart(2, '0'),
+      ).join('');
+
 export const createProject = (name: string, source: string = addScriptVersion('')): Project => ({
-  id: crypto.randomUUID(),
+  id: createId(),
   name,
   files: { [MAIN_FILE]: source },
   breakpoints: {},

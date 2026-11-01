@@ -7,6 +7,7 @@ import { useEffect, useRef } from 'react';
 import { highlightCode } from '@/language/highlight';
 import type { Locale } from '@/language/messages';
 import type { CodeFont } from '@/settings/settings';
+import { editorSounds } from './editorSounds';
 import { ghostText } from './ghostText';
 
 interface CodeEditorProps {
@@ -16,6 +17,7 @@ interface CodeEditorProps {
   codeFont: CodeFont;
   suggestions: boolean;
   locale: Locale;
+  scripts: Record<string, string>;
   breakpoints: number[];
   debugLine: number | null;
   errorLine: number | null;
@@ -149,6 +151,7 @@ export const CodeEditor = ({
   codeFont,
   suggestions,
   locale,
+  scripts,
   breakpoints,
   debugLine,
   errorLine,
@@ -167,18 +170,13 @@ export const CodeEditor = ({
   }, [onChange, onToggleBreakpoint, onCursorChange]);
 
   useEffect(() => {
-    const host = hostRef.current;
-
-    if (host === null) {
-      return undefined;
-    }
-
+    const host = hostRef.current as HTMLElement;
     const view = new EditorView({
       parent: host,
       state: EditorState.create({
         doc: value,
         extensions: [
-          ghostCompartment.current.of(suggestions ? ghostText(locale) : []),
+          ghostCompartment.current.of(suggestions ? ghostText(locale, scripts) : []),
           history(),
           keymap.of([indentWithTab, ...defaultKeymap, ...historyKeymap]),
           breakpointField,
@@ -203,6 +201,7 @@ export const CodeEditor = ({
           lineNumbers(),
           syntaxHighlight,
           EditorView.lineWrapping,
+          editorSounds,
           EditorView.contentAttributes.of({ 'aria-label': label }),
           fontCompartment.current.of(EditorView.theme({ '&': { fontSize: `${fontSize}px` } })),
           EditorView.updateListener.of((update) => {
@@ -261,9 +260,9 @@ export const CodeEditor = ({
 
   useEffect(() => {
     viewRef.current?.dispatch({
-      effects: ghostCompartment.current.reconfigure(suggestions ? ghostText(locale) : []),
+      effects: ghostCompartment.current.reconfigure(suggestions ? ghostText(locale, scripts) : []),
     });
-  }, [suggestions, locale]);
+  }, [suggestions, locale, scripts]);
 
   return <div ref={hostRef} className="code-editor" />;
 };

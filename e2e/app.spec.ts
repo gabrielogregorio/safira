@@ -53,6 +53,63 @@ const runCode = async (page: Page): Promise<void> => {
   await page.getByRole('button', { name: 'Run', exact: true }).click();
 };
 
+const VISION_NAMES = [
+  'Protanopia (weak red)',
+  'Deuteranopia (weak green)',
+  'Tritanopia (weak blue)',
+  'Achromatopsia (no colors)',
+  'Low vision (cataract, glaucoma)',
+  'Light sensitivity (migraine, photophobia)',
+  'Epilepsy and dizziness (no motion)',
+];
+
+const chooseVision = async (page: Page, name: string): Promise<void> => {
+  await page.getByRole('button', { name: 'Settings' }).click();
+  await page.getByRole('radio', { name }).check();
+  await page.keyboard.press('Escape');
+  await expect(page.getByRole('dialog')).toBeHidden();
+};
+
+for (const vision of VISION_NAMES) {
+  for (const theme of ['Light', 'Dark', 'Simple']) {
+    test(`has no violations with ${vision} in the ${theme} theme`, async ({ page }) => {
+      await page.goto('/');
+      await chooseTheme(page, theme);
+      await chooseVision(page, vision);
+      await expectNoViolations(page);
+
+      await createProjectWithCode(page, '# nota\nse 1 == 1 entao mostre "oi"\nx recebe 2 + 3');
+      await expectNoViolations(page);
+    });
+  }
+}
+
+test('keeps the mode after a reload and offers it in the menu', async ({ page }) => {
+  await page.goto('/');
+  await chooseVision(page, 'Tritanopia (weak blue)');
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'tritanopia');
+  await page.reload();
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'tritanopia');
+
+  await createProjectWithCode(page, 'mostre "oi"');
+  await page.getByRole('menuitem', { name: 'Interface' }).click();
+  await page.getByRole('menuitem', { name: 'Accessibility' }).click();
+  await expect(page.getByRole('menuitemradio', { name: 'Tritanopia (weak blue)' })).toHaveAttribute(
+    'aria-checked',
+    'true',
+  );
+  await page.getByRole('menuitemradio', { name: 'Default' }).click();
+  await expect(page.locator('html')).toHaveAttribute('data-vision', 'default');
+});
+
+test('marks code with more than color and stops the motion in the calm mode', async ({ page }) => {
+  await page.goto('/');
+  await chooseVision(page, 'Achromatopsia (no colors)');
+  await createProjectWithCode(page, '# nota\nmostre "oi"');
+  await expect(page.locator('.syntax-comentario').first()).toHaveCSS('font-style', 'italic');
+  await expect(page.locator('.syntax-string').first()).toHaveCSS('text-decoration-line', 'underline');
+});
+
 test('runs a program in the worker', async ({ page }) => {
   await createProjectWithCode(page, 'repita 2 vezes { mostre "oi" }\nmostre 1 + 2');
   await runCode(page);
@@ -99,9 +156,8 @@ test('imports another virtual file and keeps projects after a reload', async ({ 
 
   await page.keyboard.press('Control+s');
   await page.reload();
-  await page.keyboard.press('Control+o');
 
-  await expect(page.getByRole('dialog').getByRole('button', { name: 'lib.safira' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^lib\.safira/ })).toBeVisible();
 });
 
 test('debugs line by line with the variables panel', async ({ page }) => {
@@ -156,7 +212,7 @@ test('navigates the top menu with the keyboard', async ({ page }) => {
   await createProjectWithCode(page, 'mostre 1');
   await page.getByRole('menuitem', { name: 'File' }).focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('menuitem', { name: 'Open file' })).toBeFocused();
+  await expect(page.getByRole('menuitem', { name: 'New tab' })).toBeFocused();
   await waitForAnimations(page);
 
   await page.keyboard.press('ArrowRight');
@@ -176,11 +232,14 @@ test('changes the theme from the menu', async ({ page }) => {
   await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
 });
 
-test('asks before closing a tab with unsaved work', async ({ page }) => {
-  await createProjectWithCode(page, 'mostre 1');
-  await page.getByRole('button', { name: 'Close tab main.safira' }).click();
-
-  await expect(page.getByRole('dialog', { name: 'Do you want to save your program?' })).toBeVisible();
+test('closing a tab keeps what was typed, without asking', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "fica"');
+  await page
+    .getByRole('button', { name: /^Close tab/ })
+    .first()
+    .click();
+  await expect(page.getByRole('dialog')).toHaveCount(0);
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('fica');
 });
 
 test('colors the syntax of the code', async ({ page }) => {
@@ -214,12 +273,6 @@ test.describe('accessibility', () => {
       await expectNoViolations(page);
     });
   }
-
-  test('lessons have no violations', async ({ page }) => {
-    await page.goto('/');
-    await page.getByRole('button', { name: 'Lessons' }).click();
-    await expectNoViolations(page);
-  });
 });
 
 test.describe('layout', () => {
@@ -283,38 +336,12 @@ test('the editor takes the focus when a project opens', async ({ page }) => {
   await expect(page.getByLabel('Code editor')).toContainText('mostre "foco"');
 });
 
-test('the page does not scroll in the lessons and the sidebar stays in place', async ({ page }) => {
-  await page.setViewportSize({ width: 1280, height: 500 });
-  await page.goto('/#/lessons/aula-02-exibicao');
-  const sidebarTop = await page
-    .getByRole('link', { name: /^Apresentação/ })
-    .evaluate((link) => link.getBoundingClientRect().top);
-  await page.locator('.lesson').evaluate((lesson) => {
-    lesson.scrollTop = lesson.scrollHeight;
-  });
-
-  expect(await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight)).toBe(0);
-  expect(
-    await page.getByRole('link', { name: /^Apresentação/ }).evaluate((link) => link.getBoundingClientRect().top),
-  ).toBe(sidebarTop);
-  expect(await page.locator('.lesson').evaluate((lesson) => lesson.scrollTop)).toBeGreaterThan(0);
-});
-
-test('a lesson example opens and runs in the IDE', async ({ page }) => {
-  await page.goto('/#/lessons/aula-02-exibicao');
-  await page.getByRole('button', { name: 'Open in the IDE' }).first().click();
-  await runCode(page);
-
-  await expect(page.getByRole('log')).toContainText('Script finished');
-});
-
-test('recovers unsaved work after the page dies', async ({ page }) => {
-  await createProjectWithCode(page, 'mostre "nao salvo"');
-  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.drafts.v1'))).toContain('nao salvo');
+test('what was typed survives the page dying', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre "fica salvo"');
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('safira.projects.v1'))).toContain('fica salvo');
   await page.reload();
 
-  await expect(page.getByText('Your unsaved work was recovered.')).toBeVisible();
-  await expect(page.getByLabel('Code editor')).toContainText('mostre "nao salvo"');
+  await expect(page.locator('.cm-content')).toContainText('fica salvo');
 });
 
 test('imports from a virtual folder created in the sidebar', async ({ page }) => {
@@ -393,20 +420,22 @@ test('changing the language several times always ends on the text of the chosen 
   await page.goto('/');
   const language = page.locator('.orb-toggles button').nth(1);
   const title = page.locator('.home-settings .button-primary');
+  // The flag dances while its sound plays, and Playwright only clicks what stands still.
+  const nextLanguage = (): Promise<void> => language.evaluate((button) => (button as HTMLButtonElement).click());
 
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Criar projeto');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Crear proyecto');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('创建项目');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('プロジェクトを作成');
-  await language.click();
+  await nextLanguage();
   await expect(title).toHaveText('Create project');
 
   for (let click = 0; click < 5; click += 1) {
-    await language.click();
+    await nextLanguage();
   }
 
   await expect(title).toHaveText('Create project');
@@ -533,6 +562,49 @@ test('a new file shows up in the tree, and moving away keeps its provisional nam
   await expect(page.getByLabel('File name')).toHaveCount(0);
 });
 
+test('the project name sits on top of the sidebar and is edited in place', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  const sidebar = await page.locator('.file-sidebar').boundingBox();
+  await page.locator('.project-name-button').click();
+  await page.keyboard.type('Um nome bem comprido que nao cabe na barra lateral do projeto');
+  await page.locator('.tab-bar').click({ position: { x: 300, y: 10 } });
+  await expect(page.locator('.project-name-button')).toContainText('Um nome bem comprido');
+
+  expect((await page.locator('.file-sidebar').boundingBox())?.width).toBe(sidebar?.width);
+});
+
+test('a file moves by keyboard, in order and into a folder', async ({ page }) => {
+  await createProjectWithCode(page, 'mostre 1');
+  await page.getByRole('button', { name: 'New folder' }).click();
+  await page.keyboard.type('pasta');
+  await page.keyboard.press('Enter');
+  await page.getByRole('button', { name: 'New file' }).click();
+  await page.keyboard.type('nota.safira');
+  await page.keyboard.press('Enter');
+
+  await page.locator('.tree-name[data-tree-path="nota.safira"]').focus();
+  await page.keyboard.press('Alt+m');
+  await page.getByRole('dialog').getByRole('button', { name: 'pasta' }).click();
+
+  await expect(page.locator('.tree-name[data-tree-path="pasta/nota.safira"]')).toBeFocused();
+});
+
+test('files and folders are renamed from the right click', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Create project' }).click();
+  await page.getByRole('button', { name: 'Go ahead' }).click();
+  await page.locator('.file-sidebar').getByRole('button', { name: 'main.safira' }).click({ button: 'right' });
+  await page.getByRole('menuitem', { name: 'Rename' }).click();
+  await expect(page.getByLabel('File name')).toBeFocused();
+  await page.keyboard.type('inicio');
+  await page.keyboard.press('Enter');
+  await expect(page.locator('.file-sidebar').getByRole('button', { name: 'inicio.safira' })).toBeVisible();
+  await expect(page.locator('.tab-active')).toContainText('inicio.safira');
+  await expect(page).toHaveURL(/inicio\.safira/);
+});
+
 test('deleting is on the right click menu and asks for confirmation', async ({ page }) => {
   await createProjectWithCode(page, 'mostre 1');
   await page.getByRole('button', { name: 'New file' }).click();
@@ -614,10 +686,10 @@ test('the home screen keeps theme and language at the right of the action button
   await page.goto('/');
   const hero = await page.locator('.home-hero').boundingBox();
   const corner = await page.locator('.home-corner').boundingBox();
-  const lessons = await page.getByRole('button', { name: 'Lessons' }).boundingBox();
+  const create = await page.getByRole('button', { name: 'Create project' }).boundingBox();
   const middle = (box: typeof corner): number => (box?.y ?? 0) + (box?.height ?? 0) / 2;
 
-  expect(Math.abs(middle(corner) - middle(lessons))).toBeLessThan(2);
+  expect(Math.abs(middle(corner) - middle(create))).toBeLessThan(2);
   expect((hero?.x ?? 0) + (hero?.width ?? 0) - (corner?.x ?? 0) - (corner?.width ?? 0)).toBeLessThan(40);
 });
 
@@ -639,7 +711,10 @@ test('the sound can be turned off, and that is remembered', async ({ page }) => 
   await expect(page.getByRole('button', { name: 'Sound: Off' })).toBeVisible();
 });
 
-test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
+// The pointer passes over the button first, and that hover sound is shorter than this.
+const HOVER_SOUND_SECONDS = 0.1;
+
+const recordSounds = async (page: Page): Promise<() => Promise<number[]>> => {
   await page.addInitScript(() => {
     const started: number[] = [];
     const start = AudioBufferSourceNode.prototype.start;
@@ -649,8 +724,17 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
     };
     Object.assign(window, { startedSounds: started });
   });
-  const sounds = (): Promise<number[]> =>
-    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
+
+  return () =>
+    page.evaluate(
+      (limit) =>
+        (window as unknown as { startedSounds: number[] }).startedSounds.filter((duration) => duration > limit),
+      HOVER_SOUND_SECONDS,
+    );
+};
+
+test('clicking and deleting play the recorded sounds, and the sound switch silences them', async ({ page }) => {
+  const sounds = await recordSounds(page);
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
@@ -671,17 +755,7 @@ test('clicking and deleting play the recorded sounds, and the sound switch silen
 });
 
 test('modals sound when they open and when they close', async ({ page }) => {
-  await page.addInitScript(() => {
-    const started: number[] = [];
-    const start = AudioBufferSourceNode.prototype.start;
-    AudioBufferSourceNode.prototype.start = function startAndRecord(...values) {
-      started.push(this.buffer?.duration ?? 0);
-      start.apply(this, values);
-    };
-    Object.assign(window, { startedSounds: started });
-  });
-  const sounds = (): Promise<number[]> =>
-    page.evaluate(() => (window as unknown as { startedSounds: number[] }).startedSounds);
+  const sounds = await recordSounds(page);
 
   await page.goto('/');
   await page.getByRole('button', { name: 'Create project' }).click();
@@ -743,21 +817,17 @@ test('a suggestion can be accepted by touching it', async ({ page }) => {
   await expect(page.locator('.cm-content')).toContainText('show "Hello!"');
 });
 
-test('the logo is a live 3D gem', async ({ page }) => {
+test('the home screen shows the animated globe', async ({ page }) => {
   await page.goto('/');
-  await page.mouse.move(900, 300);
 
-  await expect(page.locator('canvas.safira-logo')).toBeVisible();
-  await expect(page.locator('svg.safira-logo')).toHaveCount(0);
+  await expect(page.locator('.home-brand .aero-orb')).toBeVisible();
 });
 
 test('language is available on every screen', async ({ page }) => {
   await page.goto('/');
-  await page.getByRole('button', { name: 'Lessons' }).click();
   await expect(page.getByRole('button', { name: /^Theme: / })).toBeVisible();
   await expect(page.getByRole('button', { name: /^Language: / })).toBeVisible();
 
-  await page.getByRole('button', { name: 'Back to projects' }).click();
   await page.getByRole('button', { name: 'Create project' }).click();
   await page.getByRole('button', { name: 'Go ahead' }).click();
   await page.getByRole('menuitem', { name: 'Interface' }).click();
@@ -808,7 +878,83 @@ test.describe('phone', () => {
     await page.getByRole('button', { name: 'Create project' }).tap();
     await page.getByRole('button', { name: 'Go ahead' }).tap();
     await page.getByRole('menuitem', { name: 'Examples' }).tap();
-    await expect(page.getByRole('menuitem', { name: 'Listas' })).toBeVisible();
+    await expect(page.getByRole('menuitem', { name: 'Lists' })).toBeVisible();
     await expectNoViolations(page);
   });
+});
+
+test.describe('lesson mode', () => {
+  const TYPING_TIMEOUT = 15_000;
+
+  const startLessonMode = async (page: Page, isFirstTime = false): Promise<void> => {
+    if (!isFirstTime) {
+      await page.addInitScript(() => {
+        sessionStorage.setItem('safira.cat.met', 'true');
+      });
+    }
+
+    await page.goto('/');
+    await page.getByRole('button', { name: 'Create project' }).click();
+    await page.getByRole('button', { name: 'Go ahead' }).click();
+    await page.getByRole('menuitem', { name: 'Help' }).click();
+    await page.getByRole('menuitem', { name: 'Lesson mode' }).click();
+    await expect(page.locator('.cat-bubble')).toBeVisible({ timeout: TYPING_TIMEOUT });
+  };
+
+  const solveChallenge = async (page: Page): Promise<void> => {
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await page.getByRole('button', { name: 'Next', exact: true }).click({ timeout: TYPING_TIMEOUT });
+    await expect(page.locator('.cat-bubble')).toBeVisible({ timeout: TYPING_TIMEOUT });
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await page.getByRole('button', { name: 'Show the solution' }).click({ timeout: TYPING_TIMEOUT });
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await expect(page.locator('.cat-bubble')).toContainText('Correct! Challenge complete.', {
+      timeout: TYPING_TIMEOUT,
+    });
+  };
+
+  test('checks a challenge and goes to the next one', async ({ page }) => {
+    await startLessonMode(page);
+    await solveChallenge(page);
+    await page.getByRole('button', { name: 'Next', exact: true }).click();
+    await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-a-conta');
+  });
+
+  test('the cat runs from the dragged stone and continues when it drops', async ({ page }) => {
+    await startLessonMode(page, true);
+    await expect(page.locator('.cat-bubble')).toContainText('therian', { timeout: TYPING_TIMEOUT });
+
+    const stone = await page.getByRole('button', { name: 'Drag the stone' }).boundingBox();
+    await page.mouse.move((stone?.x ?? 0) + 10, (stone?.y ?? 0) + 10);
+    await page.mouse.down();
+    await page.mouse.move(400, 300, { steps: 4 });
+    await expect(page.locator('.cat-bubble')).toBeHidden();
+    await page.mouse.up();
+    await expect(page.locator('.cat-bubble')).toBeVisible();
+  });
+
+  test('keeps the page inside the phone screen', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await startLessonMode(page);
+
+    const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+
+  for (const theme of ['Light', 'Dark', 'Simple']) {
+    test(`has no accessibility problem in the ${theme} theme`, async ({ page }) => {
+      await startLessonMode(page);
+      await page.getByRole('menuitem', { name: 'Interface' }).click();
+      await page.getByRole('menuitem', { name: 'Theme' }).click();
+      await page.getByRole('menuitemradio', { name: theme }).click();
+      await page.keyboard.press('Escape');
+      await solveChallenge(page);
+      await waitForAnimations(page);
+
+      const results = await new AxeBuilder({ page }).include('.tab-bar').include('.cat-bubble').analyze();
+
+      expect(results.violations).toEqual([]);
+    });
+  }
 });

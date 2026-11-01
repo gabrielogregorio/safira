@@ -1,0 +1,13 @@
+#safira 0.9
+# Ask the user
+# The program stops and waits for you to type.
+
+show "What is your name?"
+name = what the user types
+
+show "How old are you?"
+age = the number that the user enters
+
+future = age + 10
+show "Hello, " + name
+show "In 10 years you will be " + future

@@ -97,6 +97,8 @@ export const LanguageToggle = ({ locale, onChange }: LanguageToggleProps) => {
 
   return (
     <OrbToggle
+      className="language-orb"
+      sound="click"
       label={t('Language: {name}', { name: LOCALES.find((option) => option.id === locale)?.label ?? locale })}
       slots={slots}
       activeIndex={LOCALES.findIndex((option) => option.id === locale)}

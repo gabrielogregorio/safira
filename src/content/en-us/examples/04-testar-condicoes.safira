@@ -1,0 +1,12 @@
+#safira 0.9
+# Conditions
+# The "if" chooses what to do.
+
+show "What was your grade?"
+grade = the number that the user enters
+
+if grade is greater than or equal to 6 then {
+    show "You passed! 🎉"
+} else {
+    show "Try again."
+}

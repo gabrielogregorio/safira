@@ -1,8 +1,8 @@
 import type { ConditionalBranch, Expression, Statement, StatementBody } from './ast';
 import { ExpressionParser } from './expressionParser';
 import type { CommandKey } from './phrases';
-import { ParseFailure } from './tokenCursor';
 import { tokenize } from './tokenizer';
+import { noteFrequency } from './notes';
 
 const ASSIGNMENT_SYMBOLS = ['=', ':=', '<-'];
 
@@ -24,6 +24,7 @@ export class Parser extends ExpressionParser {
     () => this.parseRepeat(),
     () => this.parseForRange(),
     () => this.parseWait(),
+    () => this.parseTone(),
     () => this.parseImport(),
     () => this.parseOrphanBlock('se_der_erro', 'precisa_def_tente_p_der_erro'),
     () => this.parseOrphanBlock('senao_der_erro', 'precisa_def_tente_p_n_der_erro'),
@@ -106,7 +107,7 @@ export class Parser extends ExpressionParser {
     return {
       kind: 'invalid',
       messageKey: 'comando_desconhecido',
-      detail: `'${(this.sourceLines[line - 1] ?? '').trim()}'`,
+      detail: `'${this.sourceLines[line - 1].trim()}'`,
       line,
     };
   }
@@ -248,6 +249,46 @@ export class Parser extends ExpressionParser {
     return { kind: 'wait', amount, unit: 'seconds' };
   }
 
+  // The tokens of a note are glued together: C, 2 and # for C2#.
+  private parseNote(): number {
+    const first = this.advance();
+    let name = first.text;
+    let end = first.end;
+
+    while (this.current.start === end && this.current.kind !== 'end' && this.current.text !== ',') {
+      const part = this.advance();
+      name += part.text;
+      end = part.end;
+    }
+
+    const frequency = first.kind === 'word' ? noteFrequency(name) : null;
+
+    return frequency ?? this.fail();
+  }
+
+  private parseTone(): StatementBody {
+    this.expectPhrase('toque');
+    const frequencies = [this.parseNote()];
+
+    while (this.acceptSymbol(',')) {
+      frequencies.push(this.parseNote());
+    }
+
+    if (!this.acceptPhrase('toque_por')) {
+      return { kind: 'tone', frequencies, amount: null, unit: 'seconds' };
+    }
+
+    const amount = this.parseAdditive();
+
+    if (this.acceptPhrase('esperaEmMs')) {
+      return { kind: 'tone', frequencies, amount, unit: 'milliseconds' };
+    }
+
+    this.acceptPhrase('esperaEmSegundos');
+
+    return { kind: 'tone', frequencies, amount, unit: 'seconds' };
+  }
+
   private parseImport(): StatementBody {
     this.expectPhrase('importe');
     const parts: string[] = [];
@@ -321,11 +362,12 @@ export class Parser extends ExpressionParser {
   }
 
   private parseClauseElse(): Statement[] | null {
-    if (this.peekAfterNewlines(() => this.peekPhrase('senao_der_erro')) !== null) {
-      return null;
-    }
+    const saved = this.position;
+    this.skipNewlines();
+    const isClauseOfTry = this.peekPhrase('senao_der_erro') !== null;
+    this.position = saved;
 
-    return this.parseClause('se_nao');
+    return isClauseOfTry ? null : this.parseClause('se_nao');
   }
 
   private parseBranch(): ConditionalBranch {
@@ -480,16 +522,6 @@ export class Parser extends ExpressionParser {
   }
 }
 
-export const parse = (source: string): Statement[] => {
-  try {
-    return new Parser(source).parseProgram();
-  } catch (error) {
-    if (error instanceof ParseFailure) {
-      return [{ kind: 'invalid', messageKey: 'comando_desconhecido', detail: '', line: 1 }];
-    }
-
-    throw error;
-  }
-};
+export const parse = (source: string): Statement[] => new Parser(source).parseProgram();
 
 export type { Expression };

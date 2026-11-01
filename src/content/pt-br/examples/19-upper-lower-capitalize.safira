@@ -1,0 +1,9 @@
+#safira 0.9
+# Maiúsculas e minúsculas
+# Muda o jeito de escrever um texto.
+
+nome = "ana maria"
+
+mostre nome em maiusculo
+mostre nome em minusculo
+mostre nome captalizado

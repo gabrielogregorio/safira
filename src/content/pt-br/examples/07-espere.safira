@@ -1,0 +1,11 @@
+#safira 0.9
+# Esperar
+# O programa faz uma pausa antes de continuar.
+
+mostre "Preparar..."
+espere 1 segundo
+
+mostre "Apontar..."
+espere 1 segundo
+
+mostre "Já!"

@@ -1,0 +1,11 @@
+#safira 0.9
+# Continue
+# Skips the rest of this round and goes to the next one.
+
+for each number from 1 to 5 {
+    if number is equal to 3 then {
+        continue
+    }
+
+    show number
+}

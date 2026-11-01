@@ -1,0 +1,10 @@
+#safira 0.9
+# 📝 Sign-up
+
+show "🙂 What is your name?"
+name = what the user types
+
+show "📏 How tall are you?"
+height = the number that the user enters
+
+show "📝 " + name + " is " + height + " tall."

@@ -1,0 +1,18 @@
+#safira 0.9
+# Mostrar na tela
+# Cada mostre escreve em uma linha nova.
+
+mostre "Olá, mundo!"
+mostre 10 + 5
+
+# Use + para juntar texto e variável.
+nome = "Ana"
+mostre "Olá, " + nome
+
+# Use "nessa linha" para continuar na mesma linha.
+mostre nessa linha "Bom "
+mostre nessa linha "dia!"
+mostre ""
+
+# Escolha uma cor.
+mostre "Texto azul" na cor azul

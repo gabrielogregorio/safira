@@ -1,0 +1,12 @@
+#safira 0.9
+# 💧 Drink water
+
+show "💧 How many glasses of water did you drink today?"
+glasses = the number that the user enters
+
+if glasses is greater than or equal to 8 then {
+    show "💧 Well done!"
+} else {
+    missing = 8 - glasses
+    show "🥤 " + missing + " glasses to go."
+}

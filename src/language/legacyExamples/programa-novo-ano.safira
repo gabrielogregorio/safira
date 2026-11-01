@@ -1,0 +1,12 @@
+#safira 0.9
+funcao a { retorne "🎆" }
+funcao b { retorne "🎇" }
+funcao c { retorne "✨" }
+
+mostre "   % % % % %" % c(), a(), c(), b(), c()
+mostre "  % % % % % %" % b(), c(), a(), c(), b(), a()
+mostre "   % % % % %" % c(), b(), c(), a(), c()
+mostre ""
+mostre "   🥂  🍾  🥂"
+mostre ""
+mostre "🎉 Feliz Ano Novo! 🎊"

@@ -1,0 +1,9 @@
+#safira 0.9
+# Variáveis
+# Uma variável é uma caixinha com um nome que guarda um valor.
+
+nome = "Ana"
+idade = 20
+
+mostre nome
+mostre idade

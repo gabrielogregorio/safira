@@ -1,0 +1,7 @@
+#safira 0.9
+# Repita
+# Faz a mesma coisa quantas vezes você pedir.
+
+repita 3 vezes {
+    mostre "Olá!"
+}

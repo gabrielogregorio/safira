@@ -1,0 +1,7 @@
+#safira 0.9
+# Count
+# The variable goes from one number to another.
+
+for each number from 1 to 5 {
+    show number
+}

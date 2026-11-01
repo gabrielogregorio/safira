@@ -1,0 +1,89 @@
+import { parse } from './parser';
+import { runScript } from './testHarness';
+
+const invalidLines = (source: string): string[] =>
+  parse(source).flatMap((statement) => (statement.kind === 'invalid' ? [statement.detail] : []));
+
+describe('the same commands in each language', () => {
+  it.each([
+    ['for each x from 1 to 3 {\n  print x\n}', ['1', '2', '3']],
+    ['para cada x desde 1 hasta 3 {\n  muestra x\n}', ['1', '2', '3']],
+  ])('counts with %s', async (source, expected) => {
+    expect((await runScript(source)).texts).toEqual(expected);
+  });
+
+  it.each([
+    [
+      'list of fruits receive "a", "b"\nadd "c" at the end of the list of fruits\nadd "z" at the start of the list of fruits\nremove "a" from the list of fruits\nprint fruits\nprint the size of the list of fruits\nif have "c" in the list of fruits then {\n  print "yes"\n}',
+    ],
+    [
+      'lista de frutas recibe "a", "b"\nañadir "c" al final de la lista de frutas\nañadir "z" al inicio de la lista de frutas\neliminarlo "a" de la lista de frutas\nmuestra frutas\nmuestra el tamaño de la lista de frutas\nsi tener "c" en la lista de frutas entonces {\n  muestra "yes"\n}',
+    ],
+  ])('changes a list in %s', async (source) => {
+    expect((await runScript(source)).texts).toEqual(["['z', 'b', 'c']", '3', 'yes']);
+  });
+
+  it.each([
+    [
+      'create the file "a.txt"\nadd "x" to the file "a.txt"\noverwrite "y" to the file "a.txt"\nprint read the file "a.txt"',
+    ],
+    [
+      'crea el archivo "a.txt"\nagregue "x" al archivo "a.txt"\nsobrescribir "y" al archivo "a.txt"\nmuestra lea el archivo "a.txt"',
+    ],
+  ])('writes a file in %s', async (source) => {
+    expect((await runScript(source)).texts).toEqual(['y']);
+  });
+
+  it.each([
+    ['n = 1\nincrease 3 in n\ndecrease 1 in n\nprint n'],
+    ['n = 1\nincrementar 3 en n\ndecrementar 1 en n\nmuestra n'],
+  ])('moves a number in %s', async (source) => {
+    expect((await runScript(source)).texts).toEqual(['3']);
+  });
+
+  it('reads accents in commands', () => {
+    expect(invalidLines('n = 7\nse n for maior que 5 então {\n  mostre "a"\n} senão {\n  mostre "b"\n}')).toEqual([]);
+  });
+
+  it('keeps text in any alphabet', async () => {
+    expect((await runScript('name = "世界"\nprint "你好," + name')).texts).toEqual(['你好,世界']);
+  });
+
+  it.each([
+    ['显示 “你好”', ['你好']],
+    ['表示 「こんにちは」', ['こんにちは']],
+    ['等待 1秒\n显示 "a"', ['a']],
+    ['重复 2次 {\n  显示 "a"\n}', ['a', 'a']],
+    ['繰り返す 2回 {\n  表示 "a"\n}', ['a', 'a']],
+    ['函数 加一(数) {\n  返回 数 + 1\n}\n显示 加一(1)', ['2']],
+    ['列表 水果 包含 “苹果”,“梨”\n显示 列表长度 水果', ['2']],
+    ['显示 "a" 颜色 蓝色', ['a']],
+    ['表示 "a" 色 #ff1122', ['a']],
+  ])('reads Chinese and Japanese keyboards in %s', async (source, expected) => {
+    const { texts, error } = await runScript(source);
+
+    expect(error).toBeNull();
+    expect(texts).toEqual(expected);
+  });
+
+  it('keeps wide symbols inside text and comments', async () => {
+    expect((await runScript('显示 "a,b(“c”)" # 注释,(\n显示 1')).texts).toEqual(['a,b(“c”)', '1']);
+  });
+
+  it.each([
+    ['鳴らす ド 長さ 1秒', 261.63],
+    ['播放 哆 持续 1秒', 261.63],
+  ])('plays the notes of %s', async (source, frequency) => {
+    expect((await runScript(source)).tones[0].frequency).toBeCloseTo(frequency, 1);
+  });
+
+  it('points a text to a file, even after a word that also means color', async () => {
+    const source = 'crie o arquivo "a.txt"\nadicione "x" in the file "a.txt"\nmostre leia o arquivo "a.txt"';
+
+    expect((await runScript(source)).texts).toEqual(['x']);
+  });
+
+  it('takes a hex color after the short color words', async () => {
+    expect((await runScript('mostre "a" in #ff1122')).events[0]).toMatchObject({ text: 'a', color: '#ff1122' });
+  });
+});

@@ -1,0 +1,15 @@
+#safira 0.9
+# 📅 Day of the week
+
+show "📅 Type a number from 1 to 3:"
+day = the number that the user enters
+
+if day is equal to 1 then {
+    show "Sunday 😴"
+} else if day is equal to 2 then {
+    show "Monday 😩"
+} else if day is equal to 3 then {
+    show "Tuesday 📚"
+} else {
+    show "I do not know that day."
+}

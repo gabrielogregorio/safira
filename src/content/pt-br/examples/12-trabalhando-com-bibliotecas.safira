@@ -1,0 +1,10 @@
+#safira 0.9
+# Bibliotecas
+# Uma biblioteca é outro arquivo de código que você pode usar aqui.
+
+crie o arquivo "biblioteca.safira"
+sobrescreva "idade = 25" no arquivo "biblioteca.safira"
+
+importe "biblioteca"
+
+mostre idade

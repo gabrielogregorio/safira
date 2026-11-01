@@ -1,0 +1,12 @@
+#safira 0.9
+# Enquanto
+# Repete enquanto a condição for verdadeira.
+
+senha = 1
+
+enquanto senha for diferente de 0 {
+    mostre "Digite 0 para sair:"
+    senha = o número que o usuário digitar
+}
+
+mostre "Até logo!"

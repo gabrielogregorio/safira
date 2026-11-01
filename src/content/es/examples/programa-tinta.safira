@@ -1,0 +1,11 @@
+#safira 0.9
+# 🎨 Calcular pintura
+
+muestra "📐 ¿Cuántos metros cuadrados tiene la pared?"
+pared = el número que ingresa el usuario
+
+muestra "🪣 ¿Cuántos metros pinta un bote?"
+bote = el número que ingresa el usuario
+
+botes = pared / bote
+muestra "🎨 Necesitas " + botes + " botes."

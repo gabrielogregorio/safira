@@ -1,0 +1,9 @@
+#safira 0.9
+# Percorrer uma lista
+# Passa por cada item, um de cada vez.
+
+lista de frutas recebe "uva", "maçã", "manga"
+
+percorra a lista de frutas atribuindo em fruta {
+    mostre fruta
+}

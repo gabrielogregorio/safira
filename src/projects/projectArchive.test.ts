@@ -13,7 +13,7 @@ const zipOf = (files: Record<string, string>): Uint8Array =>
 
 describe('project archives', () => {
   it('restores what was exported, with accents and folders', () => {
-    const files = { 'main.safira': '#safira 1.0\nmostre "olá"', 'dados/notas.txt': 'açaí' };
+    const files = { 'main.safira': '#safira 0.9\nmostre "olá"', 'dados/notas.txt': 'açaí' };
 
     expect(importArchive(exportArchive(files))).toEqual({ ok: true, files, skipped: [] });
   });

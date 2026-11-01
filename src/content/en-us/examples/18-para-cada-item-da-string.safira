@@ -1,0 +1,9 @@
+#safira 0.9
+# Go through a text
+# Visits each letter of a text.
+
+word = "Safira"
+
+scroll through word assigning in letter {
+    show letter
+}

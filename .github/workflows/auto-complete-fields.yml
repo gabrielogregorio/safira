@@ -61,7 +61,7 @@ jobs:
               [(f) => f.endsWith('.md'), 'documentation'],
               [(f) => /\.(spec|test)\.tsx?$/.test(f) || f.startsWith('e2e/') || f.startsWith('tests/'), 'tests'],
               [(f) => f.startsWith('.github/'), 'ci'],
-              [(f) => f.startsWith('src/core/i18n/'), 'i18n'],
+              [(f) => f.startsWith('src/i18n/'), 'i18n'],
               [(f) => f.startsWith('src/'), 'frontend'],
               [(f) => f === 'package.json' || f === 'pnpm-lock.yaml', 'dependencies'],
             ];

@@ -1,6 +1,7 @@
 import type { BinaryOperator, CaseMode, Expression, Value } from './ast';
 import type { CommandKey } from './phrases';
 import { isContinuationWord } from './phrases';
+import { removeAccents } from './tokenizer';
 import { TokenCursor } from './tokenCursor';
 
 type OperatorRule = [BinaryOperator, CommandKey | null, string | null];
@@ -26,7 +27,13 @@ const CASE_RULES: [CaseMode, CommandKey][] = [
   ['lower', 'to_lower'],
   ['capitalize', 'to_captalize'],
 ];
-const NUMERIC_INPUT_WORDS = ['numerica', 'numeric', 'number', 'numero'];
+const NUMERIC_INPUT_WORDS = [
+  'numerica',
+  'numeric',
+  'number',
+  'numero',
+  ...['用户输入的数字', '输入数字', 'ユーザーが入力した数字', '数字入力'].map(removeAccents),
+];
 
 export class ExpressionParser extends TokenCursor {
   private acceptOperator(rules: OperatorRule[]): BinaryOperator | null {
@@ -53,6 +60,14 @@ export class ExpressionParser extends TokenCursor {
     }
   }
 
+  // `in` and `en` also start a color, but in `add "x" in the file` they point to the file.
+  private isBeforeFileTarget(): boolean {
+    return (
+      this.peekPhrase('adicione_texto_arquivo_sub') !== null ||
+      this.peekPhrase('sobrescreva_texto_arquivo_sub') !== null
+    );
+  }
+
   protected parseValue(): Expression {
     let value = this.parseFormatted();
 
@@ -61,7 +76,7 @@ export class ExpressionParser extends TokenCursor {
 
       if (withCase !== null) {
         value = withCase;
-      } else if (this.acceptPhrase('na_cor')) {
+      } else if (!this.isBeforeFileTarget() && this.acceptPhrase('na_cor')) {
         value = { kind: 'colored', value, color: this.parseCondition() };
       } else {
         return value;

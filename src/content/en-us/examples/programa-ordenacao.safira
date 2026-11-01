@@ -1,0 +1,16 @@
+#safira 0.9
+# 🔢 Put in order
+
+show "Type a number:"
+first = the number that the user enters
+
+show "Type another number:"
+second = the number that the user enters
+
+if first is less than second then {
+    show first
+    show second
+} else {
+    show second
+    show first
+}

@@ -83,3 +83,57 @@ describe('parse', () => {
     ]);
   });
 });
+
+describe('lines that do not parse', () => {
+  const messageKeyOf = (source: string): unknown => (first(source) as { messageKey?: unknown }).messageKey;
+
+  it.each([
+    ['repita 2 vezes', 'a block that never comes'],
+    ['mostre (1', 'a parenthesis left open'],
+    ['funcao 1 { }', 'a number as a name'],
+  ])('rejects %s, %s', (source) => {
+    expect(messageKeyOf(source)).toBe('comando_desconhecido');
+  });
+
+  it.each(['senao se 1 == 1 { }', 'senao se 1 == 1 entao { }', 'senao { }'])('rejects %s without an if', (source) => {
+    expect(messageKeyOf(source)).toBe('precisa_def_p_cond_senao');
+  });
+
+  it('leaves "senao der erro" after an if for the try that is missing', () => {
+    expect(parse('se 1 == 1 { } senao der erro { }').map((statement) => statement.kind)).toEqual(['if', 'invalid']);
+  });
+
+  it.each(['importe', 'toque'])('reads a lonely %s as a name', (word) => {
+    expect(first(word)).toMatchObject({ kind: 'expression', value: { kind: 'variable', name: word } });
+  });
+
+  it('lets a failure that is not about the syntax go through', () => {
+    expect(() => parse('('.repeat(5_000))).toThrow(RangeError);
+  });
+});
+
+describe('lists', () => {
+  it('sets a position with the word that gives a value', () => {
+    expect(first('lista x na posicao 1 recebe 5')).toMatchObject({ kind: 'listSet', name: 'x' });
+  });
+
+  it('reads a list alone in a line as a value', () => {
+    expect(first('lista x')).toMatchObject({ kind: 'expression', value: { kind: 'listValue', name: 'x' } });
+  });
+
+  it('rejects a position without a value', () => {
+    expect(first('lista x na posicao 1 5')).toMatchObject({ kind: 'invalid' });
+  });
+});
+
+describe('expressions', () => {
+  it('ignores a plus sign before a value', () => {
+    expect(first('x = +1')).toMatchObject({ value: { kind: 'literal', value: 1 } });
+  });
+
+  it('reads the spanish question about a file', () => {
+    expect(first('x = existe el archivo "a"')).toMatchObject({
+      value: { kind: 'fileExists', path: { value: 'a' }, negated: false },
+    });
+  });
+});

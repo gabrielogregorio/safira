@@ -1,0 +1,11 @@
+#safira 0.9
+# Wait
+# The program takes a pause before going on.
+
+show "Ready..."
+wait 1 second
+
+show "Aim..."
+wait 1 second
+
+show "Go!"

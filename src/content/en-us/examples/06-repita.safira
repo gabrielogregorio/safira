@@ -1,0 +1,7 @@
+#safira 0.9
+# Repeat
+# Does the same thing as many times as you ask.
+
+repeat 3 times {
+    show "Hello!"
+}

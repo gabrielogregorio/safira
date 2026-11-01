@@ -1,0 +1,16 @@
+#safira 0.9
+# 🚦 Semáforo
+
+repita 2 vezes {
+    limpe a tela
+    mostre "🔴 Pare"
+    espere 4 segundos
+
+    limpe a tela
+    mostre "🟢 Siga"
+    espere 4 segundos
+
+    limpe a tela
+    mostre "🟠 Atenção"
+    espere 2 segundos
+}

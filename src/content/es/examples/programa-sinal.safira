@@ -1,0 +1,16 @@
+#safira 0.9
+# 🚦 Semáforo
+
+repetir 2 veces {
+    limpiar la pantalla
+    muestra "🔴 Alto"
+    esperar 4 segundos
+
+    limpiar la pantalla
+    muestra "🟢 Siga"
+    esperar 4 segundos
+
+    limpiar la pantalla
+    muestra "🟠 Precaución"
+    esperar 2 segundos
+}

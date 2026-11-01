@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { Locale } from '@/language/messages';
 import { LanguageToggle } from './LanguageToggle';
 
 describe('LanguageToggle', () => {
@@ -7,6 +8,12 @@ describe('LanguageToggle', () => {
     render(<LanguageToggle locale="pt-br" onChange={vi.fn()} />);
 
     expect(screen.getByRole('button', { name: 'Language: Português (Brasil)' })).toBeInTheDocument();
+  });
+
+  it('falls back to the code of a language it does not know', () => {
+    render(<LanguageToggle locale={'fr' as string as Locale} onChange={vi.fn()} />);
+
+    expect(screen.getByRole('button', { name: 'Language: fr' })).toBeInTheDocument();
   });
 
   it.each([

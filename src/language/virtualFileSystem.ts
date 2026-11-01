@@ -2,6 +2,32 @@ const CURRENT_DIRECTORY_PREFIX = /^(\.\/)+/;
 
 export const normalizePath = (path: string): string => path.trim().replace(CURRENT_DIRECTORY_PREFIX, '');
 
+const SAFIRA_EXTENSION = '.safira';
+
+export const withSafiraExtension = (name: string): string =>
+  name.endsWith(SAFIRA_EXTENSION) ? name : `${name}${SAFIRA_EXTENSION}`;
+
+const walkPath = (folder: string[], path: string): string => {
+  const walked = [...folder];
+
+  for (const segment of path.split('/')) {
+    if (segment === '..') {
+      walked.pop();
+    } else if (segment !== '.' && segment !== '') {
+      walked.push(segment);
+    }
+  }
+
+  return walked.join('/');
+};
+
+// Beside the file that imports first, as `./` promises. Then from the root, which is how old scripts name files.
+export const importCandidates = (importer: string, name: string): string[] => {
+  const file = withSafiraExtension(name);
+
+  return [...new Set([walkPath(importer.split('/').slice(0, -1), file), walkPath([], file)])];
+};
+
 export class VirtualFileSystem {
   private readonly files: Map<string, string>;
 

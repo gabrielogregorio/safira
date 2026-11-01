@@ -1,9 +1,21 @@
-import { render, screen, waitFor, within, fireEvent } from '@testing-library/react';
+import { act, render, screen, waitFor, within, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { strToU8, zipSync } from 'fflate';
 import { loadProjects } from '@/projects/projectStore';
+import { loadSettings } from '@/settings/settings';
 import { App } from './App';
 import { FakeWorker } from './fakeWorker';
+import { snapAway } from './snapEffect';
+import { soundPlayer } from './sound/sounds';
+import { scrambleDocument } from './textScramble';
+
+vi.mock('./snapEffect', () => ({
+  hidePointer: vi.fn(),
+  markReturnFromSnap: vi.fn(),
+  snapAway: vi.fn(() => Promise.resolve()),
+}));
+
+vi.mock('./textScramble', () => ({ scrambleDocument: vi.fn(() => vi.fn()) }));
 
 let worker: FakeWorker;
 
@@ -24,12 +36,30 @@ const openExample = async (name: string): Promise<void> => {
   await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
 };
 
+const allowMotion = (): void => {
+  vi.stubGlobal('matchMedia', () => ({
+    matches: true,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  }));
+};
+
 describe('App', () => {
   beforeEach(() => {
     localStorage.clear();
     window.history.replaceState(null, '', '#/');
     Object.defineProperty(navigator, 'language', { value: 'en-US', configurable: true });
     document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute('data-theme-changing');
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    vi.mocked(scrambleDocument).mockClear();
   });
 
   it('shows the home screen without projects', () => {
@@ -37,14 +67,14 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Variáveis' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Variables' })).not.toBeInTheDocument();
   });
 
   it('only shows the examples after pressing create', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
 
-    expect(screen.getByRole('button', { name: 'Variáveis' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Variables' })).toBeInTheDocument();
   });
 
   it('creates a project without choosing anything', async () => {
@@ -68,7 +98,7 @@ describe('App', () => {
   it('can undo the choice of an example', async () => {
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
-    const example = screen.getByRole('button', { name: 'Pare' });
+    const example = screen.getByRole('button', { name: 'Break' });
     await userEvent.click(example);
 
     expect(example).toHaveAttribute('aria-pressed', 'true');
@@ -80,19 +110,19 @@ describe('App', () => {
 
   it('runs an example and shows its output in the terminal', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
     await userEvent.click(screen.getByRole('button', { name: 'Run' }));
 
     const terminal = screen.getByRole('log');
     await waitFor(() => {
-      expect(terminal).toHaveTextContent('soma: 4');
+      expect(terminal).toHaveTextContent('1');
     });
     expect(worker.requests[0]).toMatchObject({ type: 'start', mode: 'run', file: 'main.safira' });
   });
 
   it('does not show the hidden version line in the editor', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
 
     expect(document.querySelector('.cm-content')).not.toHaveTextContent('#safira');
   });
@@ -111,7 +141,8 @@ describe('App', () => {
 
     await userEvent.click(within(alert).getByRole('button', { name: 'See an example' }));
 
-    expect(screen.getByRole('button', { name: '01-variaveis.safira' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('dialog', { name: 'Variables' })).toHaveTextContent('name');
+    expect(screen.queryByRole('button', { name: '01-variaveis.safira' })).not.toBeInTheDocument();
   });
 
   it('warns only when the script version is not supported', async () => {
@@ -131,7 +162,7 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('link', { name: 'Open Futuro' }));
 
     expect(screen.getByRole('alert')).toHaveTextContent('declares Safira 9.0');
-    expect(screen.getByRole('alert')).toHaveTextContent('0.38, 1.0');
+    expect(screen.getByRole('alert')).toHaveTextContent('0.38, 0.9, 1.0');
   });
 
   it('asks for input in the terminal and continues', async () => {
@@ -203,11 +234,11 @@ describe('App', () => {
 
   it('runs with Ctrl+Enter', async () => {
     renderApp();
-    await openExample('Pare');
+    await openExample('Break');
     await userEvent.keyboard('{Control>}{Enter}{/Control}');
 
     await waitFor(() => {
-      expect(screen.getByRole('log')).toHaveTextContent('soma: 4');
+      expect(screen.getByRole('log')).toHaveTextContent('1');
     });
   });
 
@@ -244,24 +275,6 @@ describe('App', () => {
     expect(screen.getByRole('cell', { name: 'nome' })).toBeInTheDocument();
   });
 
-  it('recovers unsaved work after a crash', async () => {
-    localStorage.setItem(
-      'safira.projects.v1',
-      JSON.stringify([{ id: '1', name: 'Queda', files: { 'main.safira': '#safira 1.0\nmostre 1' }, breakpoints: {} }]),
-    );
-    localStorage.setItem('safira.drafts.v1', JSON.stringify({ 1: { 'main.safira': 'mostre 2' } }));
-    renderApp();
-    await userEvent.click(screen.getByRole('link', { name: 'Open Queda' }));
-
-    expect(screen.getByText('Your unsaved work was recovered.')).toBeInTheDocument();
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre 2');
-
-    await userEvent.click(screen.getByRole('button', { name: 'Discard' }));
-
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre 1');
-    expect(localStorage.getItem('safira.drafts.v1')).toBe('{}');
-  });
-
   it('opens a project from its address', () => {
     localStorage.setItem(
       'safira.projects.v1',
@@ -279,27 +292,6 @@ describe('App', () => {
     renderApp();
 
     expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
-  });
-
-  it('opens a lesson from its address', () => {
-    window.history.replaceState(null, '', '#/lessons/aula-03-variaveis');
-    renderApp();
-
-    expect(screen.getByRole('heading', { name: 'Variáveis', level: 1 })).toBeInTheDocument();
-  });
-
-  it('creates a project from an example of a lesson and does not repeat it', async () => {
-    window.history.replaceState(null, '', '#/lessons/aula-02-exibicao');
-    renderApp();
-    await userEvent.click(screen.getAllByRole('button', { name: 'Open in the IDE' })[0]);
-
-    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre');
-
-    window.history.replaceState(null, '', '#/lessons/aula-02-exibicao');
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
-    await userEvent.click((await screen.findAllByRole('button', { name: 'Open in the IDE' }))[0]);
-
-    expect(loadProjects()).toHaveLength(1);
   });
 
   it('creates files and folders from the sidebar', async () => {
@@ -378,10 +370,8 @@ describe('App', () => {
       JSON.stringify([{ id: '1', name: 'Velho', files: {}, breakpoints: {} }]),
     );
     renderApp();
-    await userEvent.click(screen.getByRole('button', { name: 'Rename Velho' }));
-    const field = screen.getByLabelText('Project name', { selector: '[role=dialog] input' });
-    await userEvent.clear(field);
-    await userEvent.type(field, 'Novo{Enter}');
+    await userEvent.click(screen.getByRole('button', { name: 'Velho' }));
+    await userEvent.keyboard('Novo{Enter}');
 
     expect(screen.getByText('Novo')).toBeInTheDocument();
 
@@ -389,6 +379,62 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Delete' }));
 
     expect(screen.getByText('You have no projects yet.')).toBeInTheDocument();
+  });
+
+  it('renames the project by clicking its name in the IDE, without the gem', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([{ id: '1', name: 'Velho', files: { 'main.safira': '' }, breakpoints: {} }]),
+    );
+    window.history.replaceState(null, '', '#/projects/1/main.safira');
+    renderApp();
+    await userEvent.click(within(screen.getByRole('heading', { level: 1 })).getByRole('button', { name: 'Velho' }));
+    await userEvent.keyboard('Novo{Enter}');
+
+    expect(loadProjects().map((project) => project.name)).toEqual(['Novo']);
+    expect(screen.getByRole('heading', { name: 'Novo', level: 1 })).toBeInTheDocument();
+    expect(document.querySelector('.safira-logo')).toBeNull();
+  });
+
+  it('renames a project by clicking its name on the home screen', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([{ id: '1', name: 'Velho', files: {}, breakpoints: {} }]),
+    );
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Velho' }));
+    await userEvent.keyboard('Novo');
+    await userEvent.click(document.body);
+
+    expect(loadProjects().map((project) => project.name)).toEqual(['Novo']);
+  });
+
+  it('moves files, breakpoints, tabs and unsaved text when a folder is renamed', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([
+        {
+          id: '1',
+          name: 'P',
+          files: { 'dados/a.safira': 'mostre 2\n', 'dados/b.txt': 'x', 'main.safira': '' },
+          breakpoints: { 'dados/a.safira': [1] },
+        },
+      ]),
+    );
+    window.history.replaceState(null, '', '#/projects/1/dados%2Fa.safira');
+    renderApp();
+    fireEvent.contextMenu(screen.getByRole('button', { name: 'dados', expanded: true }));
+    await userEvent.click(await screen.findByRole('menuitem', { name: 'Rename' }));
+    await userEvent.keyboard('info{Enter}');
+
+    const [project] = loadProjects();
+
+    expect(Object.keys(project.files)).toEqual(['info/a.safira', 'info/b.txt', 'main.safira']);
+    expect(project.files['info/a.safira']).toContain('mostre 2');
+    expect(project.breakpoints).toEqual({ 'info/a.safira': [1] });
+    expect(window.location.hash).toContain('info');
+    expect(document.querySelector('.tab-active')).toHaveTextContent('info/a.safira');
+    expect(document.querySelector('.cm-content')).toHaveTextContent('mostre 2');
   });
 
   it('keeps the project when the delete confirmation is cancelled', async () => {
@@ -428,15 +474,13 @@ describe('App', () => {
     expect(document.documentElement.dataset['theme']).toBe('dark');
   });
 
-  it('offers the icons in the lessons and leaves them to the menu in the editor', async () => {
+  it('offers the icons at home and leaves them to the menu in the editor', async () => {
     renderApp();
-    await userEvent.click(screen.getByRole('button', { name: 'Lessons' }));
 
     expect(screen.getByRole('button', { name: /^Theme: / })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /^Language: / })).toBeInTheDocument();
 
-    await userEvent.click(screen.getByRole('button', { name: 'Back to projects' }));
-    await openExample('Pare');
+    await openExample('Break');
 
     expect(screen.queryByRole('button', { name: /^Language: / })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: /^Sound: / })).not.toBeInTheDocument();
@@ -477,12 +521,191 @@ describe('App', () => {
     expect(screen.queryByText('Drop the .zip to create a project')).not.toBeInTheDocument();
   });
 
-  it('opens the lessons and walks through them', async () => {
-    renderApp();
-    await userEvent.click(screen.getByRole('button', { name: 'Lessons' }));
-    await userEvent.click(screen.getByRole('link', { name: 'Next' }));
+  describe('theme animation', () => {
+    const THEME_CHANGE_MILLISECONDS = 1700;
+    const root = document.documentElement;
 
-    expect(await screen.findByRole('heading', { name: 'Exibição', level: 1 })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Apresentação (Read)' })).toBeInTheDocument();
+    const pressTheme = (): void => {
+      fireEvent.click(screen.getByRole('button', { name: /^Theme: / }));
+    };
+
+    const wait = (milliseconds: number): void => {
+      act(() => {
+        vi.advanceTimersByTime(milliseconds);
+      });
+    };
+
+    beforeEach(() => {
+      allowMotion();
+      vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+    });
+
+    it('marks the page during the change and clears the mark afterwards', () => {
+      renderApp();
+      pressTheme();
+
+      expect(root.dataset['themeChanging']).toBe('true');
+
+      wait(THEME_CHANGE_MILLISECONDS);
+
+      expect(root.dataset['themeChanging']).toBeUndefined();
+    });
+
+    it('counts the time again when the theme changes during the animation', () => {
+      renderApp();
+      pressTheme();
+      wait(THEME_CHANGE_MILLISECONDS - 1);
+      pressTheme();
+      wait(THEME_CHANGE_MILLISECONDS - 1);
+
+      expect(root.dataset['themeChanging']).toBe('true');
+
+      wait(1);
+
+      expect(root.dataset['themeChanging']).toBeUndefined();
+    });
+
+    it('cancels the pending cleanup when it leaves the screen', () => {
+      const { unmount } = renderApp();
+      pressTheme();
+      unmount();
+      wait(THEME_CHANGE_MILLISECONDS);
+
+      expect(root.dataset['themeChanging']).toBe('true');
+    });
+  });
+
+  it('never marks the theme change without motion', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: /^Theme: / }));
+
+    expect(document.documentElement.dataset['themeChanging']).toBeUndefined();
+  });
+
+  it('scrambles the texts when the language changes, if motion is allowed', async () => {
+    allowMotion();
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: /^Language: / }));
+
+    expect(scrambleDocument).toHaveBeenCalledExactlyOnceWith(document.body);
+  });
+
+  it('plays the note of an item that has one when hovered', async () => {
+    const play = vi.spyOn(soundPlayer, 'play').mockResolvedValue(undefined);
+    renderApp();
+    await openExample('Break');
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Examples' }));
+    const label = await screen.findByText('Programs');
+    await userEvent.hover(label.nextElementSibling as Element);
+
+    expect(play).toHaveBeenCalledWith('hoverSpecial', 0.5);
+  });
+
+  it('applies the sound choice before saving it', async () => {
+    const setEnabled = vi.spyOn(soundPlayer, 'setEnabled');
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: /^Sound: / }));
+
+    expect(setEnabled).toHaveBeenLastCalledWith(false);
+    expect(loadSettings().sound).toBe(false);
+  });
+
+  it('jumps to the content from the skip link', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('link', { name: 'Skip to content' }));
+
+    expect(document.getElementById('content')).toHaveFocus();
+  });
+
+  it('warns when the browser refuses to save the projects', async () => {
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new DOMException('full', 'QuotaExceededError');
+    });
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Create project' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
+
+    expect(screen.getByRole('alert')).toHaveTextContent('The browser refused to save your projects.');
+  });
+
+  it('closes the notice of an import', async () => {
+    const file = new File(['nada'], 'quebrado.zip', { type: 'application/zip' });
+    file.arrayBuffer = () => Promise.resolve(new Uint8Array([1, 2, 3]).buffer);
+    renderApp();
+    await userEvent.upload(screen.getByLabelText('Import project (.zip)', { selector: 'input' }), file);
+    const status = await screen.findByRole('status');
+    await userEvent.click(within(status).getByRole('button', { name: 'Close' }));
+
+    expect(screen.queryByText('This file is not a valid .zip.')).not.toBeInTheDocument();
+  });
+
+  it('keeps the other projects when one is renamed', async () => {
+    localStorage.setItem(
+      'safira.projects.v1',
+      JSON.stringify([
+        { id: '1', name: 'Velho', files: {}, breakpoints: {} },
+        { id: '2', name: 'Outro', files: {}, breakpoints: {} },
+      ]),
+    );
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Velho' }));
+    await userEvent.keyboard('Novo{Enter}');
+
+    expect(loadProjects().map((project) => project.name)).toEqual(['Novo', 'Outro']);
+  });
+
+  it('opens the aquarium from the orb and goes back home', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Open the aquarium' }));
+
+    expect(window.location.hash).toBe('#/aquarium');
+    expect(await screen.findByRole('img', { name: 'Aquarium' })).toBeInTheDocument();
+
+    await userEvent.click(within(screen.getByRole('dialog')).getByRole('button', { name: 'Close' }));
+
+    await waitFor(() => {
+      expect(window.location.hash).toBe('#/');
+    });
+  });
+
+  it('shows the globe alone on its address and goes back home', async () => {
+    window.history.replaceState(null, '', '#/globe');
+    renderApp();
+
+    expect(screen.queryByRole('heading', { name: 'Safira', level: 1 })).not.toBeInTheDocument();
+    expect(document.querySelector('.wallpaper')).not.toBeNull();
+
+    await userEvent.click(screen.getByRole('button', { name: 'Close' }));
+
+    expect(screen.getByRole('heading', { name: 'Safira', level: 1 })).toBeInTheDocument();
+  });
+
+  it('crumbles the screen after erasing everything and starts over', async () => {
+    const reload = vi.fn();
+    const location = { hash: '', search: '', reload };
+    localStorage.setItem('safira.projects.v1', JSON.stringify([{ id: '1', name: 'P', files: {}, breakpoints: {} }]));
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Delete everything' }));
+    const confirmation = screen.getByRole('dialog', { name: 'Delete everything?' });
+    await userEvent.click(within(confirmation).getByRole('button', { name: 'Delete everything' }));
+
+    expect(loadProjects()).toEqual([]);
+
+    vi.stubGlobal('location', location);
+
+    await waitFor(() => {
+      expect(reload).toHaveBeenCalledOnce();
+    });
+    expect(snapAway).toHaveBeenCalledOnce();
+    expect(location.hash).toBe('#/');
+  });
+
+  it('changes the vision mode from the settings at home', async () => {
+    renderApp();
+    await userEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    await userEvent.click(screen.getByRole('radio', { name: 'Tritanopia (weak blue)' }));
+
+    expect(loadSettings().vision).toBe('tritanopia');
   });
 });

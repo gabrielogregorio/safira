@@ -1,0 +1,8 @@
+#safira 0.9
+# 💎 Introduction
+
+show "What is your name?"
+name = what the user types
+
+show "Nice to meet you, " + name + "! 👋"
+show "I am Safira 💎" in color blue

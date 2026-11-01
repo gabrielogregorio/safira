@@ -1,0 +1,15 @@
+#safira 0.9
+funcao a { retorne "🔴" }
+funcao b { retorne "🟡" }
+funcao c { retorne "🔵" }
+
+mostre "        ⭐"
+mostre "       🎄🎄"
+mostre "      🎄%🎄" % a()
+mostre "     🎄%🎄%" % b(), c()
+mostre "    %🎄%🎄%" % a(), b(), a()
+mostre "   🎄%🎄%🎄%" % c(), a(), b()
+mostre "        🟫"
+mostre "   🎁🎁🎁🟫🎁🎁🎁"
+mostre ""
+mostre "🎅 Feliz Natal!"

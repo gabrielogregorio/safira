@@ -1,7 +1,8 @@
 export type Route =
   | { name: 'home' }
   | { name: 'new'; exampleId: string | null }
-  | { name: 'lessons'; lessonId: string | null; section: string | null }
+  | { name: 'aquarium' }
+  | { name: 'globe' }
   | { name: 'project'; projectId: string; file: string | null };
 
 const decodeSegment = (segment: string): string | null => {
@@ -24,8 +25,8 @@ export const parseRoute = (hash: string): Route => {
     return { name: 'new', exampleId: first };
   }
 
-  if (screen === 'lessons') {
-    return { name: 'lessons', lessonId: first, section: second };
+  if (screen === 'aquarium' || screen === 'globe') {
+    return { name: screen };
   }
 
   if (screen === 'projects' && first !== null) {
@@ -47,8 +48,9 @@ export const routeToHash = (route: Route): string => {
       return '#/';
     case 'new':
       return buildHash(['new', route.exampleId]);
-    case 'lessons':
-      return buildHash(['lessons', route.lessonId, route.section]);
+    case 'aquarium':
+    case 'globe':
+      return buildHash([route.name]);
     case 'project':
       return buildHash(['projects', route.projectId, route.file]);
   }

@@ -1,4 +1,7 @@
+import { Interpreter } from './interpreter';
+import { noteFrequency } from './notes';
 import { runScript } from './testHarness';
+import { VirtualFileSystem } from './virtualFileSystem';
 
 describe('behavior fixed from the legacy interpreter', () => {
   it('keeps a line break in the printed text', async () => {
@@ -80,6 +83,32 @@ describe('virtual files', () => {
     expect(result.files.read('a.txt')).toBe('oi');
   });
 
+  it.each(['here/main', 'here/main.safira', './here/main', './here/main.safira'])(
+    'imports "%s", with quotes',
+    async (path) => {
+      const result = await runScript(`importe "${path}"\nmostre v`, [], { 'here/main.safira': 'v = 7' });
+
+      expect(result.texts).toEqual(['7']);
+    },
+  );
+
+  it('imports beside the file that is importing, and from the root', async () => {
+    const files = {
+      'a/um.safira': 'importe "./dois"\nimporte "../raiz"',
+      'a/dois.safira': 'x = 2',
+      'raiz.safira': 'y = 3',
+    };
+
+    expect((await runScript('importe "a/um"\nmostre x + y', [], files)).texts).toEqual(['5']);
+  });
+
+  it('names the missing file with its extension once', async () => {
+    const { error } = await runScript('importe "./nada.safira"');
+
+    expect(error?.message).toContain('nada.safira');
+    expect(error?.message).not.toContain('.safira.safira');
+  });
+
   it('reports the line of the imported file', async () => {
     const result = await runScript('importe lib', [], { 'lib.safira': '\nmostre nada' });
 
@@ -87,7 +116,7 @@ describe('virtual files', () => {
   });
 
   it('ignores the hidden version line of an imported file', async () => {
-    expect((await runScript('importe lib\nmostre v', [], { 'lib.safira': '#safira 1.0\nv = 1' })).texts).toEqual(['1']);
+    expect((await runScript('importe lib\nmostre v', [], { 'lib.safira': '#safira 0.9\nv = 1' })).texts).toEqual(['1']);
   });
 });
 
@@ -137,5 +166,180 @@ describe('commands on the same line as a condition', () => {
 
   it('reports an unknown inline command when it runs', async () => {
     expect((await runScript('se 1 == 1 entao nada nada')).error?.message).toContain('Um comando desconhecido');
+  });
+});
+
+describe('leaving a loop', () => {
+  it.each([
+    ['while', 'enquanto 1 == 1 { retorne "x" }'],
+    ['repeat', 'repita 3 vezes { retorne "x" }'],
+    ['for range', 'para cada i de 1 ate 3 { retorne "x" }'],
+    ['for each', 'lista de l = 1, 2\npercorra a lista de lista l atribuindo cada valor em i { retorne "x" }'],
+  ])('returns from a function inside a %s', async (_name, loop) => {
+    expect((await runScript(`funcao f {\n${loop}\n}\nmostre f()`)).texts).toEqual(['x']);
+  });
+
+  it('ends a for each with a break', async () => {
+    const source = 'percorra a lista de "abc" atribuindo cada valor em letra {\nmostre letra\npare\n}\nmostre "fim"';
+
+    expect((await runScript(source)).texts).toEqual(['a', 'fim']);
+  });
+});
+
+describe('return and print without a value', () => {
+  it('returns an empty text', async () => {
+    expect((await runScript('funcao f { retorne }\nmostre "[" + f() + "]"')).texts).toEqual(['[]']);
+  });
+
+  it('prints an empty line', async () => {
+    expect((await runScript('mostre')).texts).toEqual(['']);
+  });
+});
+
+describe('errors of commands', () => {
+  it.each([
+    ['percorra a lista de 5 atribuindo cada valor em x { }', "A variável '5' não é numérica!"],
+    ['repita "a" vezes { }', "A variável 'a' não é numérica!"],
+    ['espere "a" segundos', 'O tempo de espera precisa ser um número'],
+    ['toque C por "a" segundos', 'O tempo de espera precisa ser um número'],
+    ['crie o arquivo ""', 'Você precisa informar o nome de um arquivo'],
+    ['adicione "x" no arquivo "nada.txt"', "O arquivo 'nada.txt' não existe!"],
+    ['x = 1\nincremente "a" em x', "A variável 'a' não é numérica!"],
+    [
+      'x = 1\nsubstitua "a" por "b" na variavel x',
+      'Para usar o recurso substituição, é necessário informar uma variável string',
+    ],
+    ['mostre "a" - 1', 'Não foi possivel realizar a conta  |a|'],
+    ['mostre "a" > 1', 'Não foi possível realizar a condição:  |a 1|'],
+    ['lista de l = 1\nmostre lista l > 1', 'Não foi possível realizar a condição:  |[1] 1|'],
+    ['mostre 5 formatando 1', 'O comando inserindo precisa de um texto'],
+    ['mostre 5 em maiusculo', 'Para converter entre maiúsculas e minúsculas, é necessário informar uma string'],
+    ['mostre um numero aleatorio entre "a" e 2', 'O valor 1 não é numérico'],
+    ['mostre um numero aleatorio entre 1 e "a"', 'O valor 2 não é numérico'],
+    ['x = 1\nmostre x[1:2]', 'Só é possível fatiar um texto'],
+    ['x = "abc"\nmostre x[0:2]', 'A posição 0 está fora do texto, que tem 3 letras'],
+    ['x = "abc"\nmostre x[1:9]', 'A posição 9 está fora do texto, que tem 3 letras'],
+  ])('%s', async (source, message) => {
+    expect((await runScript(source)).error?.message).toBe(message);
+  });
+});
+
+describe('values', () => {
+  it('counts a boolean as a number in a sum', async () => {
+    expect((await runScript('mostre verdade + 1')).texts).toEqual(['2']);
+  });
+
+  it('joins two lists with a plus', async () => {
+    const source = 'lista de a = 1\nlista de b = 2\nc = lista a + lista b\nmostre c';
+
+    expect((await runScript(source)).texts).toEqual(['[1, 2]']);
+  });
+
+  it('rejects a list plus a number', async () => {
+    const { error } = await runScript('lista de a = 1\nmostre lista a + 1');
+
+    expect(error?.message).toBe('Não foi possivel realizar a conta  |[1]|');
+  });
+
+  it('compares two texts', async () => {
+    expect((await runScript('se "a" < "b" { mostre "antes" }')).texts).toEqual(['antes']);
+  });
+
+  it.each([
+    ['1 == 1 ou nada', 'True'],
+    ['1 == 2 e nada', 'False'],
+  ])('stops at the left side of %s', async (condition, expected) => {
+    expect((await runScript(`mostre ${condition}`)).texts).toEqual([expected]);
+  });
+
+  it('keeps a color it does not know as it was written', async () => {
+    expect((await runScript('mostre "a" na cor "nada"')).events[0].color).toBe('nada');
+  });
+
+  it('prefers a variable to a question for the person', async () => {
+    expect((await runScript('entrada = "guardado"\nx = entrada\nmostre x', ['digitado'])).texts).toEqual(['guardado']);
+  });
+});
+
+describe('try', () => {
+  it('runs without any clause', async () => {
+    expect((await runScript('tente { mostre "a" }\nmostre "b"')).texts).toEqual(['a', 'b']);
+  });
+
+  it('leaves the loop from inside a clause', async () => {
+    const source = 'repita 3 vezes {\nmostre "a"\ntente { mostre nada }\nse der erro { pare }\n}';
+
+    expect((await runScript(source)).texts).toEqual(['a']);
+  });
+});
+
+describe('import', () => {
+  it('stops the whole program when the imported file halts', async () => {
+    expect((await runScript('importe lib\nmostre "b"', [], { 'lib.safira': 'interrompa' })).texts).toEqual([]);
+  });
+});
+
+describe('running by hand', () => {
+  const effectsOf = (source: string, random?: () => number) => {
+    const interpreter = new Interpreter({
+      files: new VirtualFileSystem({ 'main.safira': source }),
+      locale: 'pt-br',
+      random,
+    });
+
+    return [...interpreter.run('main.safira')];
+  };
+
+  it('does nothing for a file that does not exist', () => {
+    const interpreter = new Interpreter({ files: new VirtualFileSystem(), locale: 'pt-br' });
+
+    expect([...interpreter.run('nada.safira')]).toEqual([]);
+  });
+
+  it('reads an empty text when no answer arrives', () => {
+    const effects = effectsOf('x = o que o usuario digitar\nmostre "[" + x + "]"');
+
+    expect(effects.at(-1)).toMatchObject({ type: 'output', text: '[]' });
+  });
+
+  it('does not hide an error that is not from the script', () => {
+    const fail = () => {
+      throw new RangeError('quebrou');
+    };
+
+    expect(() => effectsOf('tente { x = um numero aleatorio entre 1 e 2 }\nse der erro { }', fail)).toThrow(RangeError);
+  });
+});
+
+describe('tone', () => {
+  it('plays each note of a chord for the same time', async () => {
+    const [low, high] = [noteFrequency('C'), noteFrequency('E')];
+
+    expect((await runScript('toque C, E por 2 segundos')).tones).toEqual([
+      { frequency: low, milliseconds: 2000 },
+      { frequency: high, milliseconds: 2000 },
+    ]);
+  });
+
+  it.each([-1, 1_000_001])('refuses a list with %s positions, and tente catches it', async (size) => {
+    const { texts, error } = await runScript(
+      `tente {\n  lista x com ${String(size)} posicoes\n} se der erro {\n  mostre "pegou"\n}`,
+    );
+
+    expect(error).toBeNull();
+    expect(texts).toEqual(['pegou']);
+  });
+
+  it('keeps a success clause of tente on the line after a closing if', async () => {
+    const source = 'tente {\n  se 1 for igual a 1 entao {\n    mostre "a"\n  }\n}\nsenao der erro {\n  mostre "b"\n}';
+
+    expect((await runScript(source)).texts).toEqual(['a', 'b']);
+  });
+
+  it('accepts senao der erro on the line after an if inside tente', async () => {
+    const source =
+      'tente {\n  mostre 1\n} se der erro {\n  se 1 for igual a 1 entao {\n    mostre "e"\n  }\n}\nsenao der erro {\n  mostre "b"\n}';
+
+    expect((await runScript(source)).error).toBeNull();
   });
 });

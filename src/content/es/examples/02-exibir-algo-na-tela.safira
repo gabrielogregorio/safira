@@ -1,0 +1,18 @@
+#safira 0.9
+# Mostrar en pantalla
+# Cada muestra escribe en una línea nueva.
+
+muestra "¡Hola, mundo!"
+muestra 10 + 5
+
+# Usa + para unir texto y variable.
+nombre = "Ana"
+muestra "Hola, " + nombre
+
+# Usa "en esta linea" para seguir en la misma línea.
+mostrar en esta linea "Buen "
+mostrar en esta linea "día!"
+muestra ""
+
+# Elige un color.
+muestra "Texto azul" en color azul

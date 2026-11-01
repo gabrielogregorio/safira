@@ -1,0 +1,14 @@
+#safira 0.9
+# 🔼 Número mayor
+
+muestra "Escribe un número:"
+primero = el número que ingresa el usuario
+
+muestra "Escribe otro número:"
+segundo = el número que ingresa el usuario
+
+si primero es mayor que segundo entonces {
+    muestra "🔼 El mayor es " + primero
+} si no {
+    muestra "🔼 El mayor es " + segundo
+}

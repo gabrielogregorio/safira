@@ -4,6 +4,8 @@
 
 A programming language in natural language for first-time programmers, with a web IDE.
 
+[**See it live »**](https://gabrielogregorio.github.io/safira/)
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff)
@@ -13,11 +15,11 @@ A programming language in natural language for first-time programmers, with a we
 
 </div>
 
-![Safira IDE running a list example](docs/screenshot.png)
+[![Safira switching to English, then running a program with a variable and a color](docs/demo.gif)](https://gabrielogregorio.github.io/safira/)
 
 ## About
 
-Safira accepts commands the way a person talks. The same script can mix Portuguese, English and Spanish:
+Safira accepts commands the way a person talks. The same script can mix Portuguese, English, Spanish, Chinese and Japanese:
 
 ```
 idade recebe 18
@@ -31,11 +33,9 @@ project has its own virtual files, which is where `crie o arquivo`, `leia o arqu
 Click the dot beside a line to set a breakpoint: running stops there, and the variables inspector shows the values. On a
 phone the IDE splits into Code, Output and Variables panels.
 
-The interface comes in English, Portuguese, Spanish, Simplified Chinese and Japanese. Lessons and examples are in
-Portuguese. Text marked `data-fixed-text`, such as project names, stays out of the language animation.
+The interface, lessons and examples come in English, Portuguese, Spanish, Simplified Chinese and Japanese. Turn on Lesson mode in the Help menu for a very short tutorial with Professor Cat. He only teaches it once.
 
-Every screen has an address: `#/new/16-listas`, `#/lessons/aula-02-exibicao/comando-de-exibicao`,
-`#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and unsaved work is kept while typing
+Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
 so that it comes back after a crash or a power cut.
 
 Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
@@ -99,4 +99,4 @@ Assets use relative paths and routes use the hash, so one build works at any add
 
 ## License
 
-MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1, and the interface sounds are from Kenney's Interface Sounds pack, under CC0.
+MIT, see [LICENSE](LICENSE). The bundled Istok Web and JetBrains Mono fonts are under the SIL Open Font License 1.1, and the interface sounds are from Kenney's Interface Sounds pack, under CC0. The Brazilian language sound plays the opening of Asa Branca, by Luiz Gonzaga and Humberto Teixeira (1947), which is not in the public domain and is not covered by the MIT license.

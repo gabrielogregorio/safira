@@ -1,0 +1,12 @@
+#safira 0.9
+# Listas
+# Uma lista guarda vários valores em uma variável só.
+
+lista de compras recebe "maçã", "pão"
+
+adicione "leite" no final da lista de compras
+remova "pão" da lista de compras
+
+mostre compras
+mostre lista de compras na posição 1
+mostre o tamanho da lista de compras

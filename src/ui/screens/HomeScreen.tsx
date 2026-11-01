@@ -6,8 +6,10 @@ import { routeToHash } from '@/routing/routes';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
-import { SafiraLogo } from '@/ui/components/SafiraLogo';
-import { TextPrompt } from '@/ui/components/TextPrompt';
+import { AeroOrb } from '@/ui/components/AeroOrb';
+import type { ScreenPoint } from '@/ui/components/Aquarium';
+import { ProjectNameField } from '@/ui/components/ProjectNameField';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 interface HomeScreenProps {
   projects: Project[];
@@ -17,14 +19,15 @@ interface HomeScreenProps {
   onCancelCreating: () => void;
   onCreate: (name: string, source?: string) => void;
   onImportProject: (file: File) => void;
+  onOpenAquarium: (origin: ScreenPoint) => void;
   onExportProject: (project: Project) => void;
   onRename: (id: string, name: string) => void;
   onDelete: (id: string) => void;
-  onOpenLessons: () => void;
   preferenceToggles: ReactNode;
+  settingsButton: ReactNode;
 }
 
-const HERO_LOGO_SIZE = 84;
+const HERO_ORB_SIZE = 96;
 
 export const HomeScreen = ({
   projects,
@@ -34,14 +37,14 @@ export const HomeScreen = ({
   onCancelCreating,
   onCreate,
   onImportProject,
+  onOpenAquarium,
   onExportProject,
   onRename,
   onDelete,
-  onOpenLessons,
   preferenceToggles,
+  settingsButton,
 }: HomeScreenProps) => {
   const t = useTranslation();
-  const [renaming, setRenaming] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState<Project | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const [isDropping, setIsDropping] = useState(false);
@@ -69,6 +72,7 @@ export const HomeScreen = ({
       const file = event.dataTransfer?.files[0];
 
       if (file !== undefined) {
+        void soundPlayer.play('import');
         onImportProject(file);
       }
     };
@@ -95,8 +99,20 @@ export const HomeScreen = ({
       ) : null}
       <header className="home-hero">
         <div className="home-brand">
-          <SafiraLogo size={HERO_LOGO_SIZE} />
+          <button
+            type="button"
+            className="aero-orb-button"
+            data-sound="aquarium"
+            aria-label={t('Open the aquarium')}
+            title={t('Open the aquarium')}
+            onClick={(event) => {
+              const { left, top, width, height } = event.currentTarget.getBoundingClientRect();
+              onOpenAquarium({ x: left + width / 2, y: top + height / 2 });
+            }}>
+            <AeroOrb size={HERO_ORB_SIZE} />
+          </button>
           <h1 data-fixed-text>Safira</h1>
+          <div className="home-brand-settings">{settingsButton}</div>
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">
@@ -106,15 +122,13 @@ export const HomeScreen = ({
           <button
             type="button"
             className="button"
+            data-sound="import"
             onClick={() => {
               archiveInput.current?.click();
             }}>
             {t('Import project (.zip)')}
           </button>
           <ArchiveInput ref={archiveInput} label={t('Import project (.zip)')} onSelect={onImportProject} />
-          <button type="button" className="button" onClick={onOpenLessons}>
-            {t('Lessons')}
-          </button>
           <div className="home-corner">{preferenceToggles}</div>
         </div>
       </header>
@@ -126,11 +140,16 @@ export const HomeScreen = ({
           {projects.map((project) => (
             <li key={project.id} className="project-row">
               <span className="project-name" data-fixed-text>
-                {project.name}
+                <ProjectNameField
+                  name={project.name}
+                  onRename={(name) => {
+                    onRename(project.id, name);
+                  }}
+                />
               </span>
               <a
                 className="button button-primary"
-                data-sound="open"
+                data-sound="homeOpen"
                 href={routeToHash({ name: 'project', projectId: project.id, file: null })}
                 aria-label={`${t('Open')} ${project.name}`}>
                 {t('Open')}
@@ -138,20 +157,12 @@ export const HomeScreen = ({
               <button
                 type="button"
                 className="button"
+                data-sound="export"
                 aria-label={`${t('Export')} ${project.name}`}
                 onClick={() => {
                   onExportProject(project);
                 }}>
                 {t('Export')}
-              </button>
-              <button
-                type="button"
-                className="button"
-                aria-label={`${t('Rename')} ${project.name}`}
-                onClick={() => {
-                  setRenaming(project);
-                }}>
-                {t('Rename')}
               </button>
               <button
                 type="button"
@@ -174,6 +185,7 @@ export const HomeScreen = ({
       {deleting === null ? null : (
         <Modal
           title={t('Delete project?')}
+          openSound="alert"
           onClose={() => {
             setDeleting(null);
           }}>
@@ -200,21 +212,6 @@ export const HomeScreen = ({
             </button>
           </div>
         </Modal>
-      )}
-
-      {renaming === null ? null : (
-        <TextPrompt
-          title={t('Rename')}
-          label={t('Project name')}
-          initialValue={renaming.name}
-          onClose={() => {
-            setRenaming(null);
-          }}
-          onSubmit={(value) => {
-            onRename(renaming.id, value);
-            setRenaming(null);
-          }}
-        />
       )}
     </main>
   );

@@ -22,7 +22,7 @@ export const appendOutput = (buffer: TerminalBuffer, items: OutputItem[]): Termi
     const segment = { text, color };
 
     if (isLastLineOpen) {
-      lines[lines.length - 1] = [...(lines[lines.length - 1] ?? []), segment];
+      lines[lines.length - 1] = [...lines[lines.length - 1], segment];
     } else {
       lines.push([segment]);
     }

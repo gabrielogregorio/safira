@@ -1,0 +1,14 @@
+#safira 0.9
+# 🔼 Biggest number
+
+show "Type a number:"
+first = the number that the user enters
+
+show "Type another number:"
+second = the number that the user enters
+
+if first is greater than second then {
+    show "🔼 The biggest is " + first
+} else {
+    show "🔼 The biggest is " + second
+}

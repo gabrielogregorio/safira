@@ -20,6 +20,12 @@ export const openTab = (file: string, stored: string): EditorTab => {
 export const toStoredText = (tab: Pick<EditorTab, 'file' | 'text'>): string =>
   isScript(tab.file) ? addScriptVersion(tab.text) : tab.text;
 
+export const moveTab = (tab: EditorTab, file: string): EditorTab => ({
+  ...tab,
+  file,
+  version: tab.version === '' ? readScriptVersion(tab.text).version : tab.version,
+});
+
 export const isDirty = (tab: EditorTab): boolean => tab.text !== tab.savedText;
 
 export const nextUntitledName = (existing: string[]): string => {

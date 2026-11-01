@@ -1,0 +1,12 @@
+#safira 0.9
+# Tratar errores
+# Si hay un error dentro del tratar, el programa no se detiene.
+
+tratar {
+    muestra "Voy a intentar algo imposible."
+    esto no existe en safira
+} si sale mal {
+    muestra "Hubo un error, pero todo está bien."
+}
+
+muestra "El programa continúa."

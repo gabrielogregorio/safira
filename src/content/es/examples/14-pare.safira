@@ -1,0 +1,11 @@
+#safira 0.9
+# Detener
+# Sale de la repetición al instante.
+
+para cada numero desde 1 hasta 5 {
+    si numero es igual a 3 entonces {
+        detener
+    }
+
+    muestra numero
+}

@@ -1,26 +1,15 @@
 {
   "percorrer_lst_str_a_cada": {
     "color": "lista",
-    "phrases": [
-      "from",
-      "de"
-    ]
+    "phrases": ["from", "de"]
   },
   "percorrer_lst_str_a_cada_subum": {
     "color": "lista",
-    "phrases": [
-      "ate",
-      "to",
-      "a"
-    ]
+    "phrases": ["ate", "to", "a"]
   },
   "percorrer_lst_str_a_cada_subdois": {
     "color": "lista",
-    "phrases": [
-      "a cada",
-      "every",
-      "cada"
-    ]
+    "phrases": ["a cada", "every", "cada"]
   },
   "percorrer_lst_str_a_cada_final": {
     "color": "lista",
@@ -28,18 +17,11 @@
   },
   "percorrer_lst_str_ate": {
     "color": "lista",
-    "phrases": [
-      "from",
-      "de"
-    ]
+    "phrases": ["from", "de"]
   },
   "percorrer_lst_str_ate_sub": {
     "color": "lista",
-    "phrases": [
-      "ate",
-      "to",
-      "a"
-    ]
+    "phrases": ["ate", "to", "a"]
   },
   "percorrer_lst_str_ate_final": {
     "color": "lista",
@@ -69,7 +51,9 @@
       "browse",
       "buscar",
       "scroll",
-      "walk"
+      "walk",
+      "順番に",
+      "遍历"
     ]
   },
   "percorra_items_lista_sub": {
@@ -92,28 +76,22 @@
       "asignando un",
       "assigning in",
       "para cada",
-      "for each"
+      "for each",
+      "取り出す",
+      "放入"
     ]
   },
   "para_cada": {
     "color": "condicionais",
-    "phrases": [
-      "para cada",
-      "for each",
-      "for"
-    ]
+    "phrases": ["para cada", "for each", "for", "数える", "对于"]
   },
   "para_cada_de": {
     "color": "lista",
-    "phrases": [
-      "de"
-    ]
+    "phrases": ["desde", "from", "de", "从", "を"]
   },
   "para_cada_ate": {
     "color": "condicionais",
-    "phrases": [
-      "ate"
-    ]
+    "phrases": ["hasta", "ate", "to", "から", "到"]
   },
   "matematica_mod": {
     "color": "contas",
@@ -121,76 +99,39 @@
   },
   "matematica_elev": {
     "color": "contas",
-    "phrases": [
-      "elevado por",
-      "elevated by",
-      "elevado a"
-    ]
+    "phrases": ["elevado por", "elevated by", "elevado a", "的次方", "乗"]
   },
   "matematica_mult": {
     "color": "contas",
-    "phrases": [
-      "multiplicado por",
-      "multiplied by",
-      "multiplicar",
-      "multiplique",
-      "multiply"
-    ]
+    "phrases": ["multiplicado por", "multiplied by", "multiplicar", "multiplique", "multiply", "掛ける", "乘"]
   },
   "matematica_div": {
     "color": "contas",
-    "phrases": [
-      "dividido por",
-      "divided by",
-      "dividido"
-    ]
+    "phrases": ["dividido por", "divided by", "dividido", "除以", "割る"]
   },
   "matematica_sub": {
     "color": "contas",
-    "phrases": [
-      "menos",
-      "minus"
-    ]
+    "phrases": ["menos", "minus", "引く", "减"]
   },
   "matematica_add": {
     "color": "contas",
-    "phrases": [
-      "mais",
-      "plus",
-      "mas"
-    ]
+    "phrases": ["mais", "plus", "mas", "足す", "加"]
   },
   "logico_e": {
     "color": "logico",
-    "phrases": [
-      "and",
-      "e",
-      "y"
-    ]
+    "phrases": ["and", "并且", "かつ", "e", "y"]
   },
   "logico_ou": {
     "color": "logico",
-    "phrases": [
-      "or",
-      "ou",
-      "o"
-    ]
+    "phrases": ["または", "or", "ou", "或者", "o"]
   },
   "logico_menor_igual": {
     "color": "logico",
-    "phrases": [
-      "is less than or equal a",
-      "es menor o igual que",
-      "for menor ou igual a"
-    ]
+    "phrases": ["is less than or equal a", "es menor o igual que", "for menor ou igual a", "小于等于", "以下"]
   },
   "logico_maior_igual": {
     "color": "logico",
-    "phrases": [
-      "is greater than or equal to",
-      "for maior ou igual a",
-      "es mayor o igual a"
-    ]
+    "phrases": ["is greater than or equal to", "for maior ou igual a", "es mayor o igual a", "大于等于", "以上"]
   },
   "logico_diferente": {
     "color": "logico",
@@ -200,98 +141,50 @@
       "is different from",
       "for diferente de",
       "es diferente de",
-      "no es igual"
+      "no es igual",
+      "等しくない",
+      "不等于"
     ]
   },
   "logico_igual": {
     "color": "logico",
-    "phrases": [
-      "for igual a",
-      "is equal to",
-      "es igual a",
-      "equals"
-    ]
+    "phrases": ["for igual a", "is equal to", "es igual a", "equals", "等しい", "等于"]
   },
   "logico_maior": {
     "color": "logico",
-    "phrases": [
-      "is greater than",
-      "for maior que",
-      "es mayor que"
-    ]
+    "phrases": ["is greater than", "for maior que", "es mayor que", "大なり", "大于"]
   },
   "logico_menor": {
     "color": "logico",
-    "phrases": [
-      "for menor que",
-      "es menor que",
-      "es menos que",
-      "is less than"
-    ]
+    "phrases": ["for menor que", "es menor que", "es menos que", "is less than", "小なり", "小于"]
   },
   "logico_true": {
     "color": "logico",
-    "phrases": [
-      "verdadeira",
-      "verdadeiro",
-      "verdade",
-      "cierto",
-      "verdad",
-      "truth",
-      "true"
-    ]
+    "phrases": ["verdadeira", "verdadeiro", "verdade", "cierto", "verdad", "truth", "true", "真"]
   },
   "logico_false": {
     "color": "logico",
-    "phrases": [
-      "mentira",
-      "false",
-      "falso"
-    ]
+    "phrases": ["mentira", "false", "falso", "假", "偽"]
   },
   "na_cor": {
     "color": "condicionais",
-    "phrases": [
-      "en color",
-      "in color",
-      "na cor",
-      "en",
-      "in"
-    ]
+    "phrases": ["en color", "in color", "na cor", "en", "in", "颜色", "色"]
   },
   "substitua": {
     "color": "lista",
-    "phrases": [
-      "reemplace",
-      "substitua",
-      "replace"
-    ]
+    "phrases": ["reemplace", "substitua", "replace", "替换", "置換"]
   },
   "substitua_por": {
     "color": "lista",
-    "phrases": [
-      "with",
-      "con",
-      "por"
-    ]
+    "phrases": ["with", "con", "por", "を次に", "为"]
   },
   "substitua_na_variavel": {
     "color": "lista",
-    "phrases": [
-      "in the variable",
-      "en la variable",
-      "na variavel"
-    ]
+    "phrases": ["in the variable", "en la variable", "na variavel", "在变量", "変数"]
   },
   "to_lower": {
     "color": "lista",
-    "phrases": [
-      "in lower case",
-      "para minusculo",
-      "en minusculas",
-      "em minusculo",
-      "to lower"
-    ]
+    "phrases": ["in lower case", "para minusculo", "en minusculas", "em minusculo", "to lower", "转小写", "小文字"]
   },
   "to_upper": {
     "color": "lista",
@@ -301,112 +194,54 @@
       "en mayusculas",
       "em maiusculo",
       "en mayuscula",
-      "to upper"
+      "to upper",
+      "转大写",
+      "大文字"
     ]
   },
   "to_captalize": {
     "color": "lista",
-    "phrases": [
-      "para captalizado",
-      "in capitalized",
-      "captalizado",
-      "captalize"
-    ]
+    "phrases": ["para captalizado", "in capitalized", "captalizado", "captalize", "首字母大写", "先頭大文字"]
   },
   "limpatela": {
     "color": "tempo",
-    "phrases": [
-      "limpiar la pantalla",
-      "limpar a tela",
-      "limpe a tela",
-      "limpatela",
-      "clear"
-    ]
+    "phrases": ["limpiar la pantalla", "limpar a tela", "limpe a tela", "limpatela", "clear", "画面消去", "清屏"]
   },
   "listaNaPosicao": {
     "color": "lista",
-    "phrases": [
-      "en posicion",
-      "in position",
-      "na posicao"
-    ]
+    "phrases": ["en posicion", "in position", "na posicao", "位置"]
   },
   "se": {
     "color": "condicionais",
-    "phrases": [
-      "if the",
-      "si el",
-      "si la",
-      "se o",
-      "whether",
-      "quando",
-      "caso",
-      "if",
-      "se",
-      "si"
-    ]
+    "phrases": ["if the", "si el", "si la", "se o", "whether", "quando", "caso", "if", "se", "si", "如果", "もし"]
   },
   "pare": {
     "color": "contas",
-    "phrases": [
-      "detener",
-      "break",
-      "pare"
-    ]
+    "phrases": ["detener", "break", "pare", "抜ける", "跳出"]
   },
   "retorne": {
     "color": "contas",
-    "phrases": [
-      "retorne",
-      "return",
-      "volver"
-    ]
+    "phrases": ["retorne", "return", "volver", "返回", "返す"]
   },
   "interrompa": {
     "color": "contas",
-    "phrases": [
-      "interromper",
-      "interrumpir",
-      "interrompa",
-      "interrupt"
-    ]
+    "phrases": ["interromper", "interrumpir", "interrompa", "interrupt", "プログラム終了", "结束程序"]
   },
   "continue": {
     "color": "contas",
-    "phrases": [
-      "continuar",
-      "continues",
-      "continua",
-      "continue",
-      "seguir"
-    ]
+    "phrases": ["continuar", "continues", "continua", "continue", "seguir", "继续", "次へ"]
   },
   "importe": {
     "color": "condicionais",
-    "phrases": [
-      "importe a biblioteca",
-      "importar biblioteca",
-      "importe",
-      "incluir",
-      "import"
-    ]
+    "phrases": ["importe a biblioteca", "importar biblioteca", "importe", "incluir", "import", "読み込む", "导入"]
   },
   "se_nao_se": {
     "color": "condicionais",
-    "phrases": [
-      "si no si",
-      "senao se",
-      "else if"
-    ]
+    "phrases": ["si no si", "senao se", "else if", "そうでなくもし", "否则如果"]
   },
   "se_nao": {
     "color": "condicionais",
-    "phrases": [
-      "if no",
-      "si no",
-      "senao",
-      "else"
-    ]
+    "phrases": ["if no", "si no", "そうでなければ", "senao", "else", "否则"]
   },
   "tipo_variavel": {
     "color": "lista",
@@ -418,8 +253,11 @@
       "o tipo de",
       "tipo da",
       "tipo de",
+      "type of",
       "tipo",
-      "type"
+      "type",
+      "类型",
+      "型"
     ]
   },
   "leia_arquivo": {
@@ -435,14 +273,14 @@
       "leia o texto do arquivo",
       "lea el archivo",
       "leia o arquivo",
-      "read the file"
+      "read the file",
+      "ファイル読み込み",
+      "读取文件"
     ]
   },
   "sobrescreva_texto_arquivo_sub_sub": {
     "color": "lista",
-    "phrases": [
-      "file"
-    ]
+    "phrases": ["file"]
   },
   "sobrescreva_texto_arquivo_sub": {
     "color": "lista",
@@ -451,18 +289,15 @@
       "in the file",
       "to the file",
       "no arquivo",
-      "in the"
+      "al archivo",
+      "in the",
+      "ファイルへ",
+      "到文件"
     ]
   },
   "sobrescreva_texto_arquivo": {
     "color": "lista",
-    "phrases": [
-      "sobrescrever",
-      "sobrescribir",
-      "sobrescreva",
-      "sobrescriba",
-      "overwrite"
-    ]
+    "phrases": ["sobrescrever", "sobrescribir", "sobrescreva", "sobrescriba", "overwrite", "上書き", "覆盖"]
   },
   "adicione_texto_arquivo_sub": {
     "color": "lista",
@@ -472,53 +307,30 @@
       "to the file",
       "al archivo",
       "no arquivo",
-      "to the"
+      "to the",
+      "ファイルへ",
+      "到文件"
     ]
   },
   "adicione_texto_arquivo": {
     "color": "lista",
-    "phrases": [
-      "adicione",
-      "agregue",
-      "escreva",
-      "escriba",
-      "write",
-      "add"
-    ]
+    "phrases": ["adicione", "agregue", "escreva", "escriba", "write", "書き込む", "add", "写入"]
   },
   "arquivo_existe": {
     "color": "lista",
-    "phrases": [
-      "el archivo",
-      "o arquivo",
-      "the file",
-      "archivo",
-      "arquivo",
-      "file"
-    ]
+    "phrases": ["el archivo", "o arquivo", "the file", "archivo", "arquivo", "file", "ファイル", "文件"]
   },
   "arquivo_existe_completo": {
     "color": "lista",
-    "phrases": [
-      "existe el archivo"
-    ]
+    "phrases": ["existe el archivo"]
   },
   "arquivo_existe_nao_sub_existe": {
     "color": "lista",
-    "phrases": [
-      "does not exist",
-      "nao existe",
-      "not exists",
-      "no existe",
-      "not exist"
-    ]
+    "phrases": ["does not exist", "nao existe", "not exists", "no existe", "not exist", "存在しない", "不存在"]
   },
   "arquivo_existe_sub_existe": {
     "color": "lista",
-    "phrases": [
-      "existe",
-      "exists"
-    ]
+    "phrases": ["existe", "exists", "存在する", "存在"]
   },
   "delete_arquivo": {
     "color": "lista",
@@ -527,16 +339,14 @@
       "delete o arquivo",
       "exclua o arquivo",
       "remova o arquivo",
-      "delete the file"
+      "delete the file",
+      "ファイル削除",
+      "删除文件"
     ]
   },
   "crie_arquivo": {
     "color": "lista",
-    "phrases": [
-      "crea el archivo",
-      "create the file",
-      "crie o arquivo"
-    ]
+    "phrases": ["crea el archivo", "create the file", "crie o arquivo", "ファイル作成", "创建文件"]
   },
   "se_final": {
     "color": "condicionais",
@@ -550,7 +360,11 @@
       "entao",
       "knife",
       "faca",
-      "then"
+      "then",
+      "ならば",
+      "那么",
+      "なら",
+      "就"
     ]
   },
   "formatar_textos": {
@@ -565,74 +379,55 @@
       "inserindo",
       "inserting",
       "formato",
-      "format"
+      "format",
+      "埋め込み",
+      "填入"
     ]
   },
   "declaraListas": {
     "color": "lista",
-    "phrases": [
-      "lista de",
-      "list of",
-      "lista"
-    ]
+    "phrases": ["lista de", "list of", "lista", "リスト", "列表"]
   },
   "declaraListasObterPosicao": {
     "color": "lista",
-    "phrases": [
-      "lista de",
-      "list of",
-      "lista"
-    ]
+    "phrases": ["lista de", "list of", "lista", "リスト", "列表"]
   },
   "adicionarItensListas": {
     "color": "lista",
-    "phrases": [
-      "adicione",
-      "anadir",
-      "add"
-    ]
+    "phrases": ["adicione", "anadir", "add", "添加", "追加"]
   },
   "listaPosicoesCom": {
     "color": "lista",
-    "phrases": [
-      "posiciones",
-      "positions",
-      "posicoes"
-    ]
+    "phrases": ["posiciones", "positions", "posicoes", "个位置", "個"]
   },
   "remover_itens_listas": {
     "color": "lista",
-    "phrases": [
-      "eliminarlo",
-      "remova",
-      "remove"
-    ]
+    "phrases": ["eliminarlo", "remova", "remove", "移除", "削除"]
   },
   "listaCom": {
     "color": "lista",
-    "phrases": [
-      "com"
-    ]
+    "phrases": ["with", "com", "サイズ", "con", "有"]
   },
   "tamanho_da_lista": {
     "color": "lista",
     "phrases": [
+      "el tamano de la lista de",
+      "the size of the list of",
       "el tamano de la  lista",
       "o tamanho da lista de",
+      "tamano de la lista de",
       "tamanho da lista de",
       "o tamanho da lista",
       "tamano de la lista",
       "tamanho da lista",
+      "リストの長さ",
+      "列表长度",
       "len"
     ]
   },
   "tiver_lista": {
     "color": "lista",
-    "phrases": [
-      "tener",
-      "tiver",
-      "have"
-    ]
+    "phrases": ["tener", "tiver", "have", "含む", "有"]
   },
   "aleatorio": {
     "color": "tempo",
@@ -642,16 +437,14 @@
       "un numero aleatorio entre",
       "a random number between",
       "numero aleatorio entre",
-      "random number between"
+      "random number between",
+      "随机数",
+      "乱数"
     ]
   },
   "aleatorioEntre": {
     "color": "lista",
-    "phrases": [
-      "and",
-      "e",
-      "y"
-    ]
+    "phrases": ["and", "から", "e", "y", "到"]
   },
   "mostreNessa": {
     "color": "exibicao",
@@ -660,21 +453,26 @@
       "mostrar en esta linea",
       "escribe en esa linea",
       "mostrar en esa linea",
-      "escreva nessa linha",
-      "imprima nessa linha",
-      "mostrar nessa linha",
       "print on that line",
       "write on that line",
-      "mostre nessa linha",
-      "mostra nessa linha",
+      "print on this line",
       "show in that line",
       "show in this line",
       "show on that line",
+      "show on this line",
+      "escreva nessa linha",
+      "imprima nessa linha",
+      "mostrar nessa linha",
+      "mostre nessa linha",
+      "mostra nessa linha",
       "exiba nessa linha",
       "show that line",
-      "display",
       "escreva",
-      "print"
+      "display",
+      "続けて表示",
+      "print",
+      "同行显示",
+      "同行打印"
     ]
   },
   "mostre": {
@@ -707,7 +505,12 @@
       "mostra",
       "exiba",
       "write",
-      "show"
+      "show",
+      "显示",
+      "打印",
+      "输出",
+      "表示",
+      "出力"
     ]
   },
   "recebeParametros": {
@@ -722,7 +525,9 @@
       "recibido",
       "receive",
       "recebe",
-      "recibe"
+      "recibe",
+      "受け取る",
+      "接收"
     ]
   },
   "declara_variaveis": {
@@ -742,26 +547,19 @@
       "recebe",
       "recibe",
       "worth",
-      "vale"
+      "vale",
+      "设为",
+      "赋值",
+      "は"
     ]
   },
   "funcoes": {
     "color": "tempo",
-    "phrases": [
-      "function",
-      "funcion",
-      "funcao",
-      "def"
-    ]
+    "phrases": ["function", "funcion", "funcao", "def", "函数", "関数"]
   },
   "enquanto": {
     "color": "condicionais",
-    "phrases": [
-      "mientras que",
-      "enquanto",
-      "mientras",
-      "while"
-    ]
+    "phrases": ["mientras que", "enquanto", "mientras", "while", "条件ループ", "当"]
   },
   "enquanto_final": {
     "color": "condicionais",
@@ -775,29 +573,28 @@
       "entao",
       "knife",
       "faca",
-      "then"
+      "then",
+      "ならば",
+      "那么",
+      "なら",
+      "就"
     ]
+  },
+  "toque": {
+    "color": "tempo",
+    "phrases": ["toque a nota", "tocar", "toque", "toca", "play", "鳴らす", "播放"]
+  },
+  "toque_por": {
+    "color": "tempo",
+    "phrases": ["durante", "por", "for", "by", "持续", "長さ"]
   },
   "aguarde": {
     "color": "tempo",
-    "phrases": [
-      "aguarde o",
-      "espere o",
-      "aguarde",
-      "esperar",
-      "espera",
-      "espere",
-      "delay",
-      "wait"
-    ]
+    "phrases": ["aguarde o", "espere o", "aguarde", "esperar", "espera", "espere", "delay", "wait", "等待", "待つ"]
   },
   "repita": {
     "color": "condicionais",
-    "phrases": [
-      "repetir",
-      "repeat",
-      "repita"
-    ]
+    "phrases": ["repetir", "repeat", "repita", "繰り返す", "重复"]
   },
   "digitado": {
     "color": "tempo",
@@ -840,60 +637,40 @@
       "typed number",
       "user digits",
       "mecanografiado",
+      "ユーザーが入力した数字",
       "digitado",
       "entrada",
+      "用户输入的数字",
+      "ユーザーの入力",
       "typing",
       "input",
-      "typed"
+      "typed",
+      "用户输入",
+      "输入数字",
+      "数字入力",
+      "输入",
+      "入力"
     ]
   },
   "incremente": {
     "color": "tempo",
-    "phrases": [
-      "incrementar",
-      "incremente",
-      "increase"
-    ]
+    "phrases": ["incrementar", "incremente", "increase", "増やす", "增加"]
   },
   "decremente": {
     "color": "logico",
-    "phrases": [
-      "decrecientemente",
-      "decreasingly",
-      "decremente"
-    ]
+    "phrases": ["decrecientemente", "decreasingly", "decrementar", "decremente", "decrease", "減らす", "减少"]
   },
   "repitaVezes": {
     "color": "condicionais",
-    "phrases": [
-      "times",
-      "veces",
-      "vezes",
-      "vez"
-    ]
+    "phrases": ["times", "veces", "vezes", "vez", "次", "回"]
   },
   "esperaEmSegundos": {
     "color": "tempo",
-    "phrases": [
-      "em segundos",
-      "in seconds",
-      "segundos",
-      "seconds",
-      "segundo",
-      "second",
-      "s"
-    ]
+    "phrases": ["em segundos", "in seconds", "segundos", "seconds", "segundo", "second", "s", "秒"]
   },
   "esperaEmMs": {
     "color": "tempo",
-    "phrases": [
-      "milissegundos",
-      "milisegundos",
-      "milissegundo",
-      "milisegundo",
-      "millisecond",
-      "ms"
-    ]
+    "phrases": ["milissegundos", "milisegundos", "milissegundo", "milisegundo", "millisecond", "ミリ秒", "ms", "毫秒"]
   },
   "esperaEm": {
     "color": "tempo",
@@ -909,8 +686,11 @@
       "seconds",
       "segundo",
       "second",
+      "ミリ秒",
       "ms",
-      "s"
+      "毫秒",
+      "s",
+      "秒"
     ]
   },
   "passandoParametros": {
@@ -928,7 +708,9 @@
       "parameter",
       "parametro",
       "passando",
-      "passing"
+      "passing",
+      "传入",
+      "渡す"
     ]
   },
   "passando_parametros_abrir": {
@@ -949,104 +731,76 @@
   },
   "recebeDeclaraListas": {
     "color": "lista",
-    "phrases": [
-      "recibe el",
-      "is worth",
-      "receive",
-      "recibir",
-      "recebe",
-      "com"
-    ]
+    "phrases": ["recibe el", "is worth", "receive", "recibir", "recebe", "com", "包含", "は"]
   },
   "addItensListaInterno": {
     "color": "lista",
     "phrases": [
+      "en la lista de",
       "da lista de",
       "na lista de",
       "a lista de",
       "in list of",
       "na lista",
-      "a lista"
+      "a lista",
+      "リストへ",
+      "到列表"
     ]
   },
   "addItensListaInternoPosicaoFinaliza": {
     "color": "lista",
-    "phrases": [
-      "da lista de"
-    ]
+    "phrases": ["of the list of", "de la lista de", "da lista de", "リストへ", "到列表"]
   },
   "addItensListaInternoInicio": {
     "color": "lista",
     "phrases": [
+      "at the start of the list of",
+      "al inicio de la lista de",
       "no inicio da lista de",
       "no inicio a lista de",
-      "no inicio na lista"
+      "no inicio na lista",
+      "到列表开头",
+      "リスト先頭"
     ]
   },
   "addItensListaInternoFinal": {
     "color": "lista",
     "phrases": [
+      "at the end of the list of",
+      "al final de la lista de",
       "no final da lista de",
       "no final a lista de",
-      "no final na lista"
+      "no final na lista",
+      "到列表末尾",
+      "リスト末尾"
     ]
   },
   "remover_itens_listas_interno": {
     "color": "lista",
-    "phrases": [
-      "da lista de",
-      "da lista"
-    ]
+    "phrases": ["from the list of", "de la lista de", "da lista de", "da lista", "リストから", "从列表"]
   },
   "tiver_interno_lista": {
     "color": "lista",
-    "phrases": [
-      "na lista de",
-      "na lista",
-      "em"
-    ]
+    "phrases": ["in the list of", "en la lista de", "na lista de", "na lista", "リスト内", "在列表", "em"]
   },
   "incremente_decremente": {
     "color": "tempo",
-    "phrases": [
-      "da variavel",
-      "na variavel",
-      "em",
-      "na",
-      "no"
-    ]
+    "phrases": ["da variavel", "na variavel", "em", "na", "no", "in", "en", "给", "を"]
   },
   "tente": {
     "color": "condicionais",
-    "phrases": [
-      "tratar",
-      "tente",
-      "try"
-    ]
+    "phrases": ["tratar", "tente", "try", "尝试", "試す"]
   },
   "se_der_erro": {
     "color": "condicionais",
-    "phrases": [
-      "se der erro",
-      "si sale mal",
-      "except"
-    ]
+    "phrases": ["se der erro", "si sale mal", "except", "エラーなら", "如果出错"]
   },
   "senao_der_erro": {
     "color": "condicionais",
-    "phrases": [
-      "if it doesn't go wrong",
-      "si no sale mal",
-      "senao der erro"
-    ]
+    "phrases": ["if it doesn't go wrong", "si no sale mal", "senao der erro", "エラーなしなら", "如果没出错"]
   },
   "em_qualquer_caso": {
     "color": "condicionais",
-    "phrases": [
-      "em qualquer caso",
-      "in any case",
-      "finalmente",
-      "finally"
-    ]
+    "phrases": ["em qualquer caso", "in any case", "finalmente", "finally", "最後に", "最后"]
   }
 }

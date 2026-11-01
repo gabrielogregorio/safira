@@ -2,6 +2,7 @@ import * as Dialog from '@radix-ui/react-dialog';
 import type { ReactNode } from 'react';
 import { useCallback, useLayoutEffect, useRef } from 'react';
 import { prefersMotion } from '@/ui/motion';
+import type { SoundName } from '@/ui/sound/sounds';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { CloseButton } from './CloseButton';
 
@@ -9,6 +10,8 @@ interface ModalProps {
   title: string;
   children: ReactNode;
   onClose: () => void;
+  isWide?: boolean;
+  openSound?: SoundName;
 }
 
 const ZOOM_RECTANGLES = [0, 1, 2, 3];
@@ -37,14 +40,14 @@ const playClosingAnimation = (overlay: HTMLElement): void => {
   }, CLOSING_MILLISECONDS);
 };
 
-export const Modal = ({ title, children, onClose }: ModalProps) => {
+export const Modal = ({ title, children, onClose, isWide = false, openSound = 'modalOpen' }: ModalProps) => {
   const overlay = useRef<HTMLDivElement | null>(null);
   const keepOverlay = useCallback((node: HTMLDivElement | null) => {
     overlay.current = node ?? overlay.current;
   }, []);
 
   useLayoutEffect(() => {
-    void soundPlayer.play('modalOpen');
+    void soundPlayer.play(openSound);
 
     return () => {
       void soundPlayer.play('modalClose');
@@ -53,15 +56,13 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
         playClosingAnimation(overlay.current);
       }
     };
-  }, []);
+  }, [openSound]);
 
   return (
     <Dialog.Root
       open
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          onClose();
-        }
+      onOpenChange={() => {
+        onClose();
       }}>
       <Dialog.Portal>
         <Dialog.Overlay ref={keepOverlay} className="modal-backdrop">
@@ -70,7 +71,10 @@ export const Modal = ({ title, children, onClose }: ModalProps) => {
               <span key={rectangle} />
             ))}
           </div>
-          <Dialog.Content className="modal" aria-describedby={undefined} onOpenAutoFocus={focusMarkedElement}>
+          <Dialog.Content
+            className={isWide ? 'modal modal-wide' : 'modal'}
+            aria-describedby={undefined}
+            onOpenAutoFocus={focusMarkedElement}>
             <header className="modal-header">
               <Dialog.Title asChild>
                 <h2>{title}</h2>

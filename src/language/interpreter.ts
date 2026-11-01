@@ -15,6 +15,9 @@ import {
 } from './values';
 import { readScriptVersion } from './version';
 import type { VirtualFileSystem } from './virtualFileSystem';
+import { importCandidates, withSafiraExtension } from './virtualFileSystem';
+
+const DEFAULT_TONE_SECONDS = 0.5;
 
 export type Effect =
   | { type: 'step'; file: string; line: number }
@@ -22,6 +25,7 @@ export type Effect =
   | { type: 'clear' }
   | { type: 'input' }
   | { type: 'sleep'; milliseconds: number }
+  | { type: 'tone'; frequency: number; milliseconds: number }
   | { type: 'files' };
 
 export type Execution<Result> = Generator<Effect, Result, string | undefined>;
@@ -47,8 +51,8 @@ export interface InterpreterOptions {
 }
 
 const MAXIMUM_CALL_DEPTH = 400;
+const LARGEST_SIZED_LIST = 1_000_000;
 const MILLISECONDS_PER_SECOND = 1000;
-const SAFIRA_EXTENSION = '.safira';
 const ESCAPED_NEWLINE = /\\n/g;
 
 const EXAMPLE_BY_STATEMENT: Partial<Record<StatementKind, string>> = {
@@ -82,6 +86,8 @@ export class SafiraError extends Error {
   public file = '';
   public line = 0;
   public example: string | null = null;
+  /** The name that has no value, which is often a text without quotes. */
+  public missingName: string | null = null;
 }
 
 const randomInteger = (minimum: number, maximum: number): number =>
@@ -210,6 +216,10 @@ export class Interpreter {
         yield { type: 'clear' };
 
         return 'normal';
+      case 'tone':
+        yield* this.executeTone(statement);
+
+        return 'normal';
       case 'wait':
         yield* this.executeWait(statement.amount, statement.unit);
 
@@ -263,8 +273,6 @@ export class Interpreter {
         break;
       case 'replaceText':
         yield* this.executeReplaceText(statement.name, statement.search, statement.replacement);
-        break;
-      default:
         break;
     }
   }
@@ -385,15 +393,30 @@ export class Interpreter {
     yield { type: 'sleep', milliseconds: unit === 'seconds' ? value * MILLISECONDS_PER_SECOND : value };
   }
 
-  private *executeImport(name: string): Execution<Signal> {
-    const file = name + SAFIRA_EXTENSION;
-    const source = this.files.read(file);
+  private *executeTone(statement: Statement & { kind: 'tone' }): Execution<void> {
+    const value = statement.amount === null ? DEFAULT_TONE_SECONDS : yield* this.evaluate(statement.amount);
 
-    if (source === null) {
+    if (typeof value !== 'number') {
+      this.fail('wait_not_numeric');
+    }
+
+    const milliseconds = statement.unit === 'seconds' ? value * MILLISECONDS_PER_SECOND : value;
+
+    for (const frequency of statement.frequencies) {
+      yield { type: 'tone', frequency, milliseconds };
+    }
+  }
+
+  private *executeImport(name: string): Execution<Signal> {
+    const found = importCandidates(this.currentFile, name).find((path) => this.files.exists(path));
+    const source = found === undefined ? null : this.files.read(found);
+
+    if (found === undefined || source === null) {
+      const file = withSafiraExtension(name);
       this.fail('erro_abrir_biblioteca', file, translateMessage(this.locale, 'arquivo_nao_existe', file));
     }
 
-    const signal = yield* this.runSource(file, source);
+    const signal = yield* this.runSource(found, source);
 
     return signal === 'halt' ? 'halt' : 'normal';
   }
@@ -489,6 +512,11 @@ export class Interpreter {
 
   private *executeListDeclareSized(name: string, size: Expression): Execution<void> {
     const length = this.toInteger(yield* this.evaluate(size));
+
+    if (length < 0 || length > LARGEST_SIZED_LIST) {
+      this.fail('tamanho_de_lista_invalido', length);
+    }
+
     this.variables.set(name, new Array<Value>(length).fill(''));
   }
 
@@ -506,7 +534,10 @@ export class Interpreter {
     const value = this.variables.get(name);
 
     if (value === undefined) {
-      return this.failWithDetail('voce_precisa_definir_variavel', `'${name}'`);
+      const error = new SafiraError(`${translateMessage(this.locale, 'voce_precisa_definir_variavel')} '${name}'`);
+      error.missingName = name;
+
+      throw error;
     }
 
     return value;
@@ -774,7 +805,7 @@ export class Interpreter {
     const value = yield* this.evaluate(expression.value);
 
     if (typeof value !== 'string') {
-      return this.fail('p_maiusc_minusc_cap_texto', expression.mode);
+      return this.fail('p_maiusc_minusc_cap_texto');
     }
 
     if (expression.mode === 'upper') {
@@ -800,7 +831,7 @@ export class Interpreter {
     }
 
     parameters.forEach((parameter, index) => {
-      this.variables.set(parameter, values[index] ?? null);
+      this.variables.set(parameter, values[index]);
     });
   }
 
@@ -835,7 +866,7 @@ export class Interpreter {
     const list = this.getList(name);
     this.checkPosition(position, list.length);
 
-    return list[position - 1] ?? null;
+    return list[position - 1];
   }
 
   private *evaluateInput(numeric: boolean, variableName: string | null): Execution<Value> {

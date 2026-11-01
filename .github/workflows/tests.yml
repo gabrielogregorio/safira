@@ -26,6 +26,9 @@ jobs:
       - name: Run unit tests with coverage thresholds
         run: pnpm run unit:coverage
 
+      - name: Run every command combination in each language
+        run: pnpm run unit:matrix
+
   e2e:
     name: E2E Tests (Playwright, axe and memory)
     needs: unit

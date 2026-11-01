@@ -1,0 +1,7 @@
+#safira 0.9
+# Contar
+# A variável vai de um número até outro.
+
+para cada numero de 1 até 5 {
+    mostre numero
+}

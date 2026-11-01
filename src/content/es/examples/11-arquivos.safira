@@ -1,0 +1,9 @@
+#safira 0.9
+# Archivos
+# El archivo creado aparece en la barra de archivos del proyecto.
+
+crea el archivo "recado.txt"
+agregue "Comprar pan" al archivo "recado.txt"
+
+texto = lea el archivo "recado.txt"
+muestra texto

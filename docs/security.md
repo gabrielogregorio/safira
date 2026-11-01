@@ -16,8 +16,16 @@ Include the version, the steps and the impact.
 - Files are virtual, kept per project. The language has no access to disk, network or browser storage.
 - Output is rendered as text by React.
 - An imported `.zip` is limited to 500 files and 4 MB, paths that leave the project are refused and binary files are skipped.
-- Lesson markdown ignores raw HTML.
+- Markdown in the balloon of Professor Cat ignores raw HTML.
 - A recursion limit stops functions that never end, and the Stop button terminates the worker.
+
+## Stored data
+
+Nothing is collected or sent anywhere: projects and settings stay in this browser. The site and its previews share one origin, so each preview uses its own storage keys. That prevents accidents, not reading: code in a preview could read the data of the site, which is why previews are only published from branches of this repository, never from forks.
+
+## Known limits
+
+There is no Content Security Policy. GitHub Pages cannot set headers, and `index.html` has an inline script, so a policy needs a change there first. Programs still cannot reach the page, because the interpreter never evaluates code.
 
 ## Pipeline
 

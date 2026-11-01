@@ -3,6 +3,7 @@ import type { VariableSnapshot } from '@/language/interpreter';
 import type { Breakpoints, RunMode, RunnerEvent, RunnerFailure, RunnerRequest, StartRequest } from '@/runtime/protocol';
 import type { TerminalBuffer } from '@/ui/terminalBuffer';
 import { appendOutput, EMPTY_TERMINAL } from '@/ui/terminalBuffer';
+import { soundPlayer } from '@/ui/sound/sounds';
 
 export type RunnerStatus = 'idle' | 'running' | 'paused' | 'waiting-input';
 
@@ -38,6 +39,7 @@ const MILLISECONDS_PER_SECOND = 1000;
 export const useRunner = (
   onFilesChanged: (files: Record<string, string>) => void,
   createWorker: WorkerFactory = createRunnerWorker,
+  onFinished?: (failure: RunnerFailure | null) => void,
 ): Runner => {
   const workerRef = useRef<RunnerWorker | null>(null);
   const startedAt = useRef(0);
@@ -65,6 +67,9 @@ export const useRunner = (
         case 'clear':
           setTerminal(EMPTY_TERMINAL);
           break;
+        case 'tone':
+          soundPlayer.tone(event.frequency, event.milliseconds);
+          break;
         case 'input-request':
           setStatus('waiting-input');
           setVariables(event.variables);
@@ -85,10 +90,11 @@ export const useRunner = (
           setPausedAt(null);
           setDuration((performance.now() - startedAt.current) / MILLISECONDS_PER_SECOND);
           setStatus('idle');
+          onFinished?.(event.failure);
           break;
       }
     },
-    [closeWorker, onFilesChanged],
+    [closeWorker, onFilesChanged, onFinished],
   );
 
   const start = useCallback<Runner['start']>(

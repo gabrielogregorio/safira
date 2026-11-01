@@ -1,0 +1,13 @@
+#safira 0.9
+# Preguntar al usuario
+# El programa se detiene y espera a que escribas.
+
+muestra "¿Cómo te llamas?"
+nombre = lo que escribe el usuario
+
+muestra "¿Cuántos años tienes?"
+edad = el número que ingresa el usuario
+
+futuro = edad + 10
+muestra "Hola, " + nombre
+muestra "Dentro de 10 años tendrás " + futuro

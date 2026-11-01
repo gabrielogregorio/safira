@@ -1,14 +1,19 @@
+import type { Statement } from './ast';
 import type { Locale } from './messages';
+import { parse } from './parser';
 import { getAllCommands } from './phrases';
 import { removeAccents, tokenize } from './tokenizer';
+import { importCandidates } from './virtualFileSystem';
 
+const SCRIPT_EXTENSION = '.safira';
+const CURRENT_FOLDER = './';
 const MINIMUM_TYPED = 2;
 const MINIMUM_PHRASE = 4;
 const LONGEST_PHRASE_WORDS = 4;
 const INSIDE_WORD = /^[\p{L}\p{N}_]/u;
 
 // Whole lines that a beginner is likely to want, shown first and always valid Safira.
-export const STARTER_LINES: Record<'pt' | 'en' | 'es', string[]> = {
+export const STARTER_LINES: Record<'pt' | 'en' | 'es' | 'zh' | 'ja', string[]> = {
   pt: [
     'mostre "Olá!"',
     'mostre nessa linha "Olá!"',
@@ -20,29 +25,48 @@ export const STARTER_LINES: Record<'pt' | 'en' | 'es', string[]> = {
     'limpe a tela',
     'tente {',
     'importe biblioteca',
+    'toque C por 1s',
     'funcao nome {',
     'retorne 1',
   ],
   en: [
     'show "Hello!"',
+    'play C by 1s',
     'repeat 3 times {',
     'if 1 is equal to 1 then {',
     'while 1 is less than 10 {',
     'try {',
     'return 1',
   ],
-  es: ['muestra "¡Hola!"', 'repetir 3 veces {', 'mientras 1 sea menor que 10 {', 'volver 1'],
+  es: [
+    'muestra "¡Hola!"',
+    'repetir 3 veces {',
+    'mientras 1 es menor que 10 {',
+    'si 1 es igual a 1 entonces {',
+    'volver 1',
+  ],
+  zh: ['显示 "你好!"', '重复 3 次 {', '如果 1 等于 1 那么 {', '当 1 小于 10 {', '等待 1 秒', '返回 1'],
+  ja: [
+    '表示 「こんにちは」',
+    '繰り返す 3 回 {',
+    'もし 1 等しい 1 なら {',
+    '条件ループ 1 小なり 10 {',
+    '待つ 1 秒',
+    '返す 1',
+  ],
 };
 
 const normalize = (text: string): string => removeAccents(text).toLowerCase();
 
-const startersFor = (locale: Locale): string[] => {
-  if (locale === 'pt-br') {
-    return STARTER_LINES.pt;
-  }
-
-  return locale === 'es' ? STARTER_LINES.es : STARTER_LINES.en;
+const STARTERS_BY_LOCALE: Record<Locale, string[]> = {
+  'pt-br': STARTER_LINES.pt,
+  'en-us': STARTER_LINES.en,
+  es: STARTER_LINES.es,
+  'zh-cn': STARTER_LINES.zh,
+  ja: STARTER_LINES.ja,
 };
+
+const startersFor = (locale: Locale): string[] => STARTERS_BY_LOCALE[locale];
 
 const allPhrases = getAllCommands()
   .flatMap(([, definition]) => definition.phrases)
@@ -111,7 +135,130 @@ const fromNames = (typedWord: string, document: string): string | null => {
   return names[0] === undefined ? null : names[0][0].slice(typedWord.length);
 };
 
-export const suggestCompletion = (before: string, after: string, document: string, locale: Locale): string | null => {
+const phrasesOf = (name: string): string[] =>
+  getAllCommands()
+    .filter(([key]) => key === name)
+    .flatMap(([, definition]) => definition.phrases);
+
+const functionPhrases = phrasesOf('funcoes');
+
+const importPhrases = phrasesOf('importe').sort((first, second) => second.length - first.length);
+
+const importTextOf = (before: string): string | null => {
+  const line = before.trimStart();
+  const phrase = importPhrases.find((candidate) => normalize(line).startsWith(`${candidate} `));
+
+  return phrase === undefined ? null : line.slice(phrase.length).trimStart();
+};
+
+// The rest of a project file, without the extension until the person has typed the whole name before it.
+const restOfPath = (typedPath: string, scriptPaths: string[]): string | null => {
+  const typed = typedPath.startsWith(CURRENT_FOLDER) ? typedPath.slice(CURRENT_FOLDER.length) : typedPath;
+  const path = scriptPaths.find((candidate) => candidate.length > typed.length && candidate.startsWith(typed));
+
+  if (path === undefined) {
+    return null;
+  }
+
+  const name = path.slice(0, -SCRIPT_EXTENSION.length);
+
+  return typed.length < name.length ? name.slice(typed.length) : path.slice(typed.length);
+};
+
+const fromProjectFiles = (importText: string, after: string, scriptPaths: string[]): string | null => {
+  if (importText === '') {
+    const first = scriptPaths[0];
+
+    return first === undefined ? null : `"${CURRENT_FOLDER}${first.slice(0, -SCRIPT_EXTENSION.length)}"`;
+  }
+
+  const isQuoted = importText.startsWith('"');
+  const typedPath = isQuoted ? importText.slice(1) : importText;
+
+  if (typedPath.includes('"')) {
+    return null;
+  }
+
+  const rest = restOfPath(typedPath, scriptPaths);
+
+  if (rest === null) {
+    return null;
+  }
+
+  const folder = typedPath === '' ? CURRENT_FOLDER : '';
+  const closingQuote = isQuoted && !after.startsWith('"') ? '"' : '';
+
+  return `${folder}${rest}${closingQuote}`;
+};
+
+interface FunctionSignature {
+  name: string;
+  parameters: string[];
+}
+
+const declaredIn = (source: string): Statement[] => {
+  try {
+    return parse(source);
+  } catch {
+    return [];
+  }
+};
+
+const signaturesIn = (statements: Statement[]): FunctionSignature[] =>
+  statements.flatMap((statement) =>
+    statement.kind === 'functionDeclaration' ? [{ name: statement.name, parameters: statement.parameters ?? [] }] : [],
+  );
+
+// Functions of this file and of the files it imports, because only those exist when it runs.
+const reachableFunctions = (document: string, scripts: Record<string, string>): FunctionSignature[] => {
+  const statements = declaredIn(document);
+  const imported = statements.flatMap((statement) => {
+    const path = statement.kind === 'import' ? importCandidates('', statement.name).at(-1) : undefined;
+    const source = path === undefined ? undefined : scripts[path];
+
+    return source === undefined ? [] : signaturesIn(declaredIn(source));
+  });
+
+  return [...signaturesIn(statements), ...imported];
+};
+
+const isDeclaringFunction = (typedWords: string[]): boolean =>
+  typedWords.length > 1 && functionPhrases.includes(typedWords[0]);
+
+const fromFunctions = (
+  typedWord: string,
+  after: string,
+  document: string,
+  scripts: Record<string, string>,
+): string | null => {
+  if (after.startsWith('(')) {
+    return null;
+  }
+
+  const found = reachableFunctions(document, scripts)
+    .filter(({ name }) => normalize(name).startsWith(typedWord))
+    .sort((first, second) => first.name.length - second.name.length)[0];
+
+  return found === undefined ? null : `${found.name.slice(typedWord.length)}(${found.parameters.join(', ')})`;
+};
+
+export const suggestCompletion = (
+  before: string,
+  after: string,
+  document: string,
+  locale: Locale,
+  scripts: Record<string, string> = {},
+): string | null => {
+  const importText = importTextOf(before);
+
+  if (importText !== null && !INSIDE_WORD.test(after)) {
+    const path = fromProjectFiles(importText, after, Object.keys(scripts));
+
+    if (path !== null) {
+      return path;
+    }
+  }
+
   const typedLine = normalize(before.trimStart());
   const typedWords = typedLine.split(/\s+/).filter(Boolean);
   const typedWord = /\s$/.test(before) ? '' : (typedWords.at(-1) ?? '');
@@ -124,7 +271,13 @@ export const suggestCompletion = (before: string, after: string, document: strin
     return null;
   }
 
+  const call =
+    typedWord.length < MINIMUM_TYPED || isDeclaringFunction(typedWords)
+      ? null
+      : fromFunctions(typedWord, after, document, scripts);
+
   return (
+    call ??
     fromStarters(typedLine, locale) ??
     fromPhrases(typedWords) ??
     (typedWord.length < MINIMUM_TYPED ? null : fromNames(typedWord, document))

@@ -1,0 +1,9 @@
+#safira 0.9
+# Go through a list
+# Visits each item, one at a time.
+
+list of fruits receive "grape", "apple", "mango"
+
+scroll through the list of fruits assigning in fruit {
+    show fruit
+}

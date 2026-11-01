@@ -77,7 +77,7 @@ const lastTicks = new Map<string, number>();
 let phase: keyof typeof cpuSecondsByPhase = 'flow';
 let lastSampleAt = performance.now();
 
-// Everything under the browser counts for CPU, because the gem is drawn by the GPU process.
+// Everything under the browser counts for CPU, because the scenery is drawn by the GPU process.
 const sample = (): void => {
   const processIds = readdirSync('/proc').filter((name) => /^\d+$/.test(name) && isDescendantOf(name, browserId));
   const now = performance.now();
@@ -125,7 +125,7 @@ for (let round = 0; round < ROUNDS; round += 1) {
 
 const flowSeconds = (performance.now() - startedAt) / MILLISECONDS_PER_SECOND;
 
-// The page sits open for hours: the sky and the gem must not eat the machine while nobody touches it.
+// The page sits open for hours: the sky must not eat the machine while nobody touches it.
 sample();
 phase = 'idle';
 await page.mouse.move(600, 400);

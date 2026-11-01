@@ -28,4 +28,11 @@ describe('VariableInspector', () => {
     expect(screen.queryByRole('cell', { name: 'idade' })).not.toBeInTheDocument();
     expect(screen.getByRole('cell', { name: 'nome' })).toBeInTheDocument();
   });
+
+  it('explains each type on hover', () => {
+    render(<VariableInspector variables={variables} />);
+
+    expect(screen.getByText('float')).toHaveAttribute('title', expect.stringContaining('decimal places') as string);
+    expect(screen.getByText('string')).toHaveAttribute('title', expect.stringContaining('between quotes') as string);
+  });
 });

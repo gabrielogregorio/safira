@@ -65,6 +65,31 @@ const NAMED_COLORS: Record<string, string> = {
   silver: SILVER,
   turquesa: TURQUOISE,
   turquoise: TURQUOISE,
+  蓝色: BLUE,
+  绿色: GREEN,
+  红色: RED,
+  黄色: YELLOW,
+  橙色: ORANGE,
+  紫色: PURPLE,
+  粉色: PINK,
+  黑色: BLACK,
+  白色: WHITE,
+  灰色: GRAY,
+  棕色: BROWN,
+  金色: GOLD,
+  银色: SILVER,
+  青: BLUE,
+  緑: GREEN,
+  赤: RED,
+  黄色い: YELLOW,
+  オレンジ: ORANGE,
+  紫: PURPLE,
+  ピンク: PINK,
+  黒: BLACK,
+  白: WHITE,
+  灰色い: GRAY,
+  茶色: BROWN,
+  銀色: SILVER,
 };
 
 const HEX_DIGITS = '(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})';
@@ -77,7 +102,7 @@ export const resolveColor = (text: string): string | null => {
   const zeroX = ZERO_X_COLOR.exec(color);
 
   if (zeroX !== null) {
-    return `#${zeroX[1] ?? ''}`;
+    return `#${zeroX[1]}`;
   }
 
   return HASH_COLOR.test(color) ? color : (NAMED_COLORS[color] ?? null);

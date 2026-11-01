@@ -1,0 +1,11 @@
+#safira 0.9
+# Aumentar y disminuir
+# Cambia el valor de una variable numérica.
+
+puntos = 10
+
+incrementar 5 en puntos
+muestra puntos
+
+decrementar 2 en puntos
+muestra puntos

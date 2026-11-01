@@ -1,0 +1,10 @@
+#safira 0.9
+# Funções
+# Uma função é um bloco de código com nome. Você usa quando quiser.
+
+funcao saudar(nome) {
+    mostre "Olá, " + nome + "!"
+}
+
+saudar("Ana")
+saudar("Bia")

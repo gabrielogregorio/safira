@@ -1,0 +1,697 @@
+export interface Species {
+  length: number;
+  speed: number;
+  voice: number;
+}
+
+export const SPECIES: Species[] = [
+  { length: 46, speed: 62, voice: 1 },
+  { length: 34, speed: 78, voice: 1.25 },
+  { length: 58, speed: 50, voice: 0.85 },
+  { length: 40, speed: 70, voice: 1.12 },
+  { length: 50, speed: 56, voice: 0.95 },
+  { length: 30, speed: 84, voice: 1.4 },
+  { length: 44, speed: 60, voice: 1.05 },
+  { length: 66, speed: 44, voice: 0.72 },
+];
+
+export const FISH_COUNT = 24;
+export const MINIMUM_MASS = 1;
+export const MASS_LOST_PER_SECOND = 0.0008;
+const MASS_PER_FOOD = 0.0252;
+export const BURST_MASS = 22.7;
+const BUBBLES_FROM_BURST = 18;
+const PREY_MASS_SHARE = 0.09;
+const PREDATOR_MASS = 3;
+const WARM_UP_SECONDS = 5;
+const WARM_UP_STEP_SECONDS = 1 / 15;
+const PREDATOR_ADVANTAGE = 1.8;
+const SECONDS_BETWEEN_PREY = 12;
+const FOOD_VISION = 115;
+const PREY_VISION = 420;
+const FOOD_LIFETIME_SECONDS = 45;
+const FOOD_SINK_SPEED = 7;
+const FLEE_SECONDS = 1.6;
+const FLEE_SPEED = 3.6;
+const HUNT_SPEED = 1.5;
+const PREY_CHASE_SPEED = 3;
+const BUBBLES_FROM_PREY = 9;
+const TURN_RATE = 2.4;
+const FOOD_PER_CLICK = 3;
+const POP_FOOD_GROWTH = 1.5;
+const MOST_FOOD_PER_DROP = 200;
+const MOST_FOOD_IN_WATER = 800;
+const FOOD_PER_RIGHT_CLICK = 6;
+const FOOD_PER_BOTH_BUTTONS = 18;
+const FOOD_SPREAD = 18;
+const WIDE_FOOD_SPREAD = 60;
+const RIGHT_BUTTON = 2;
+const BOTH_BUTTONS = 3;
+const APPETITE_VISION = 0.35;
+const APPETITE_SPEED = 0.12;
+const SURFACE_MARGIN = 30;
+const BOTTOM_MARGIN = 50;
+const MAXIMUM_BUBBLES = 70;
+const BUBBLES_PER_SECOND = 1.6;
+const PLANT_BUBBLES = 14;
+const PLANT_SHAKE = 1;
+const PLANT_WIDTH = 26;
+const HOLD_SECONDS = 0.28;
+const HOLD_RADIUS = 280;
+const HOLD_PULL = 150;
+const HOLD_BUBBLES_PER_SECOND = 12;
+const DRAG_RADIUS = 170;
+const DRAG_PUSH = 0.7;
+const CLICK_DISTANCE = 12;
+const RIPPLE_SECONDS = 1.4;
+const RIPPLE_GAP = 26;
+const PLANT_SPACING = 130;
+const POP_SECONDS = 0.35;
+const BUBBLE_REACH = 1.5;
+const BUBBLE_MARGIN = 10;
+const PERSONAL_SPACE = 0.38;
+const SEPARATION_SPEED = 120;
+const FLAT_BODY = 2;
+const FEEDING_SPACE = 0.2;
+const ARRIVAL_DISTANCE = 70;
+const SLOWEST_ARRIVAL = 0.35;
+
+export interface StoredFish {
+  id: number;
+  species: number;
+  mass: number;
+}
+
+export interface Fish extends StoredFish {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  targetX: number;
+  targetY: number;
+  targetUntil: number;
+  fleeUntil: number;
+  fleeX: number;
+  fleeY: number;
+  preyAt: number;
+  swim: number;
+  isFeeding: boolean;
+}
+
+export interface Food {
+  x: number;
+  y: number;
+  age: number;
+  sway: number;
+}
+
+export interface Bubble {
+  x: number;
+  y: number;
+  radius: number;
+  speed: number;
+  sway: number;
+}
+
+export interface Ripple {
+  x: number;
+  y: number;
+  age: number;
+}
+
+export interface Pop {
+  x: number;
+  y: number;
+  radius: number;
+  age: number;
+}
+
+export interface Plant {
+  x: number;
+  height: number;
+  sway: number;
+  shake: number;
+}
+
+export interface Pointer {
+  x: number;
+  y: number;
+  dragX: number;
+  dragY: number;
+  startX: number;
+  startY: number;
+  heldFor: number;
+  hasMoved: boolean;
+  buttons: number;
+}
+
+export interface World {
+  width: number;
+  height: number;
+  time: number;
+  fishes: Fish[];
+  food: Food[];
+  bubbles: Bubble[];
+  ripples: Ripple[];
+  pops: Pop[];
+  plants: Plant[];
+  pointer: Pointer | null;
+  foodGrowth: number;
+  random: () => number;
+}
+
+export type WorldEvent =
+  | { kind: 'eat'; voice: number }
+  | { kind: 'chomp'; voice: number }
+  | { kind: 'burst'; voice: number }
+  | { kind: 'flee'; voice: number }
+  | { kind: 'pop'; voice: number }
+  | { kind: 'plant' }
+  | { kind: 'food' }
+  | { kind: 'hold' };
+
+export const createPopulation = (): StoredFish[] =>
+  Array.from({ length: FISH_COUNT }, (_, id) => ({ id, species: id % SPECIES.length, mass: MINIMUM_MASS }));
+
+const GOLDEN_ANGLE = 137.508;
+const FULL_TURN = 360;
+
+// The id gives each fish a color of its own for life. The golden angle keeps neighbors far apart on the wheel.
+export const colorsOf = (id: number): { body: string; fin: string } => {
+  const hue = Math.round(id * GOLDEN_ANGLE) % FULL_TURN;
+  const lightness = 62 + (id % 3) * 8;
+
+  return { body: `hsl(${hue} 88% ${lightness}%)`, fin: `hsl(${hue} 82% ${lightness - 22}%)` };
+};
+
+export const fatnessOf = (mass: number): number => (mass - MINIMUM_MASS) * 0.16;
+
+// Eating opens the appetite: the fatter the fish, the farther it sees food and the faster it goes after it.
+export const appetiteOf = (mass: number): number => mass - MINIMUM_MASS;
+
+// The body grows forward and backward as well as up and down, so a fat fish stays a fish and not a ball.
+export const lengthOf = (fish: Pick<StoredFish, 'species' | 'mass'>): number =>
+  SPECIES[fish.species].length * (1 + fatnessOf(fish.mass) * 0.85);
+
+const distance = (firstX: number, firstY: number, secondX: number, secondY: number): number =>
+  Math.hypot(firstX - secondX, firstY - secondY);
+
+const between = (random: () => number, minimum: number, maximum: number): number =>
+  minimum + random() * (maximum - minimum);
+
+const placeFish = (stored: StoredFish, world: Pick<World, 'width' | 'height' | 'random'>): Fish => {
+  const { width, height, random } = world;
+  const x = between(random, 0, width);
+  const y = between(random, SURFACE_MARGIN, height - BOTTOM_MARGIN);
+
+  return {
+    ...stored,
+    x,
+    y,
+    vx: 0,
+    vy: 0,
+    targetX: x,
+    targetY: y,
+    targetUntil: 0,
+    fleeUntil: 0,
+    fleeX: 0,
+    fleeY: 0,
+    preyAt: 0,
+    swim: random() * Math.PI * 2,
+    isFeeding: false,
+  };
+};
+
+const placePlants = (width: number, height: number, random: () => number): Plant[] => {
+  const count = Math.max(3, Math.round(width / PLANT_SPACING));
+
+  return Array.from({ length: count }, (_, index) => ({
+    x: ((index + 0.5) / count) * width + between(random, -30, 30),
+    height: Math.min(height * 0.45, between(random, 90, 220)),
+    sway: random() * Math.PI * 2,
+    shake: 0,
+  }));
+};
+
+export const createWorld = (
+  stored: StoredFish[],
+  width: number,
+  height: number,
+  random: () => number = Math.random,
+): World => ({
+  width,
+  height,
+  time: 0,
+  fishes: stored.map((fish) => placeFish(fish, { width, height, random })),
+  food: [],
+  bubbles: [],
+  ripples: [],
+  pops: [],
+  plants: placePlants(width, height, random),
+  pointer: null,
+  foodGrowth: 1,
+  random,
+});
+
+export const resizeWorld = (world: World, width: number, height: number): void => {
+  world.width = width;
+  world.height = height;
+  world.plants = placePlants(width, height, world.random);
+};
+
+const spawnBubble = (world: World, x: number, y: number): void => {
+  if (world.bubbles.length < MAXIMUM_BUBBLES) {
+    world.bubbles.push({
+      x,
+      y,
+      radius: between(world.random, 3, 12),
+      speed: between(world.random, 36, 80),
+      sway: world.random() * Math.PI * 2,
+    });
+  }
+};
+
+const nearestFood = (world: World, fish: Fish): Food | null => {
+  const vision = FOOD_VISION * (1 + appetiteOf(fish.mass) * APPETITE_VISION) + lengthOf(fish);
+  let nearest: Food | null = null;
+  let nearestDistance = vision;
+
+  for (const food of world.food) {
+    const away = distance(fish.x, fish.y, food.x, food.y);
+
+    if (away < nearestDistance) {
+      nearest = food;
+      nearestDistance = away;
+    }
+  }
+
+  return nearest;
+};
+
+const nearestPrey = (world: World, fish: Fish): Fish | null => {
+  if (fish.mass < PREDATOR_MASS || world.time < fish.preyAt) {
+    return null;
+  }
+
+  let nearest: Fish | null = null;
+  let nearestDistance = PREY_VISION;
+
+  for (const other of world.fishes) {
+    const away = distance(fish.x, fish.y, other.x, other.y);
+
+    if (other !== fish && fish.mass >= other.mass * PREDATOR_ADVANTAGE && away < nearestDistance) {
+      nearest = other;
+      nearestDistance = away;
+    }
+  }
+
+  return nearest;
+};
+
+// Food comes first, unless the prey is the closer of the two.
+const closerPrey = (world: World, fish: Fish, food: Food | null): Fish | null => {
+  const prey = nearestPrey(world, fish);
+
+  if (prey === null || food === null) {
+    return prey;
+  }
+
+  return distance(fish.x, fish.y, prey.x, prey.y) < distance(fish.x, fish.y, food.x, food.y) ? prey : null;
+};
+
+const steerTo = (fish: Fish, x: number, y: number, speed: number, seconds: number): void => {
+  const away = distance(fish.x, fish.y, x, y) || 1;
+  const blend = Math.min(1, TURN_RATE * seconds);
+  fish.vx += (((x - fish.x) / away) * speed - fish.vx) * blend;
+  fish.vy += (((y - fish.y) / away) * speed - fish.vy) * blend;
+};
+
+const applyPointer = (world: World, fish: Fish, seconds: number): void => {
+  const { pointer } = world;
+
+  if (pointer === null) {
+    return;
+  }
+
+  const away = distance(fish.x, fish.y, pointer.x, pointer.y) || 1;
+
+  if (pointer.heldFor > HOLD_SECONDS && !pointer.hasMoved && away < HOLD_RADIUS) {
+    const pull = HOLD_PULL * (1 - away / HOLD_RADIUS) * seconds;
+    fish.x += ((pointer.x - fish.x) / away) * pull - ((pointer.y - fish.y) / away) * pull;
+    fish.y += ((pointer.y - fish.y) / away) * pull + ((pointer.x - fish.x) / away) * pull;
+  } else if (pointer.hasMoved && away < DRAG_RADIUS) {
+    const push = DRAG_PUSH * (1 - away / DRAG_RADIUS);
+    fish.x += pointer.dragX * push;
+    fish.y += pointer.dragY * push;
+  }
+};
+
+const eatFood = (world: World, fish: Fish, events: WorldEvent[]): void => {
+  const reach = Math.max(14, lengthOf(fish) * 0.5);
+  const eaten = world.food.findIndex((food) => distance(fish.x, fish.y, food.x, food.y) < reach);
+
+  if (eaten !== -1) {
+    world.food.splice(eaten, 1);
+    fish.mass += MASS_PER_FOOD;
+    events.push({ kind: 'eat', voice: SPECIES[fish.species].voice });
+  }
+};
+
+const eatPrey = (world: World, fish: Fish, prey: Fish, events: WorldEvent[]): void => {
+  if (distance(fish.x, fish.y, prey.x, prey.y) < lengthOf(fish) * 0.6) {
+    world.fishes = world.fishes.filter((other) => other !== prey);
+    world.ripples.push({ x: prey.x, y: prey.y, age: 0 });
+
+    for (let bubble = 0; bubble < BUBBLES_FROM_PREY; bubble += 1) {
+      spawnBubble(world, prey.x + between(world.random, -24, 24), prey.y + between(world.random, -24, 24));
+    }
+
+    fish.mass += Math.min(0.3, prey.mass * PREY_MASS_SHARE);
+    fish.preyAt = world.time + SECONDS_BETWEEN_PREY;
+    events.push({ kind: 'chomp', voice: SPECIES[fish.species].voice });
+  }
+};
+
+const moveFish = (world: World, fish: Fish, seconds: number, events: WorldEvent[]): void => {
+  const species = SPECIES[fish.species];
+  const speed = species.speed / (1 + fatnessOf(fish.mass) * 0.4);
+  const food = nearestFood(world, fish);
+  const prey = closerPrey(world, fish, food);
+  fish.isFeeding = food !== null && prey === null && world.time >= fish.fleeUntil;
+
+  if (world.time < fish.fleeUntil) {
+    steerTo(fish, fish.x + fish.fleeX, fish.y + fish.fleeY, speed * FLEE_SPEED, seconds * 2);
+  } else if (prey !== null) {
+    // Fat and slow must still catch what it wants, or big fish would never eat anyone.
+    steerTo(fish, prey.x, prey.y, speed * PREY_CHASE_SPEED, seconds);
+    eatPrey(world, fish, prey, events);
+  } else if (food === null) {
+    if (world.time > fish.targetUntil || distance(fish.x, fish.y, fish.targetX, fish.targetY) < 20) {
+      fish.targetX = between(world.random, 0, world.width);
+      fish.targetY = between(world.random, SURFACE_MARGIN, world.height - BOTTOM_MARGIN);
+      fish.targetUntil = world.time + between(world.random, 4, 10);
+    }
+
+    steerTo(fish, fish.targetX, fish.targetY, speed, seconds);
+  } else {
+    // It slows down as it arrives, so it stays over the food instead of shooting past it and turning back.
+    const arrival = Math.max(SLOWEST_ARRIVAL, Math.min(1, distance(fish.x, fish.y, food.x, food.y) / ARRIVAL_DISTANCE));
+    steerTo(fish, food.x, food.y, speed * HUNT_SPEED * arrival * (1 + appetiteOf(fish.mass) * APPETITE_SPEED), seconds);
+  }
+
+  eatFood(world, fish, events);
+  applyPointer(world, fish, seconds);
+  fish.x = Math.min(world.width + 40, Math.max(-40, fish.x + fish.vx * seconds));
+  fish.y = Math.min(world.height - BOTTOM_MARGIN / 2, Math.max(SURFACE_MARGIN / 2, fish.y + fish.vy * seconds));
+  fish.swim += seconds * (4 + Math.hypot(fish.vx, fish.vy) * 0.08);
+  fish.mass = Math.max(MINIMUM_MASS, fish.mass - MASS_LOST_PER_SECOND * seconds);
+};
+
+const moveWater = (world: World, seconds: number): void => {
+  const { height, pointer, random } = world;
+
+  world.food = world.food.filter((food) => {
+    food.age += seconds;
+    food.y = Math.min(height - 20, food.y + FOOD_SINK_SPEED * seconds);
+
+    return food.age < FOOD_LIFETIME_SECONDS;
+  });
+  world.bubbles = world.bubbles.filter((bubble) => {
+    bubble.y -= bubble.speed * seconds;
+    bubble.sway += seconds * 2;
+
+    if (pointer?.hasMoved === true && distance(bubble.x, bubble.y, pointer.x, pointer.y) < DRAG_RADIUS) {
+      bubble.x += pointer.dragX;
+      bubble.y += pointer.dragY;
+    }
+
+    return bubble.y > -bubble.radius;
+  });
+  world.ripples = world.ripples.filter((ripple) => {
+    ripple.age += seconds;
+
+    return ripple.age < RIPPLE_SECONDS;
+  });
+  world.pops = world.pops.filter((pop) => {
+    pop.age += seconds;
+
+    return pop.age < POP_SECONDS;
+  });
+
+  for (const plant of world.plants) {
+    plant.sway += seconds * 1.1;
+    plant.shake = Math.max(0, plant.shake - seconds * 0.9);
+  }
+
+  if (random() < BUBBLES_PER_SECOND * seconds) {
+    spawnBubble(world, between(random, 0, world.width), height + 10);
+  }
+};
+
+const movePointerEffects = (world: World, seconds: number, events: WorldEvent[]): void => {
+  const { pointer } = world;
+
+  if (pointer === null) {
+    return;
+  }
+
+  const wasHolding = pointer.heldFor > HOLD_SECONDS;
+  pointer.heldFor += seconds;
+
+  if (pointer.hasMoved) {
+    pointer.dragX *= 0.8;
+    pointer.dragY *= 0.8;
+  } else if (pointer.heldFor > HOLD_SECONDS) {
+    if (!wasHolding) {
+      events.push({ kind: 'hold' });
+      world.ripples.push({ x: pointer.x, y: pointer.y, age: 0 });
+    }
+
+    if (world.random() < HOLD_BUBBLES_PER_SECOND * seconds) {
+      spawnBubble(world, pointer.x + between(world.random, -50, 50), pointer.y + between(world.random, -50, 50));
+    }
+
+    if (world.random() < 2 * seconds) {
+      world.ripples.push({ x: pointer.x, y: pointer.y, age: 0 });
+    }
+  }
+};
+
+// Too much food and a fish pops like a bubble. Like an eaten one, it does not come back.
+const burstFish = (world: World, events: WorldEvent[]): void => {
+  for (const fish of world.fishes.filter(({ mass }) => mass >= BURST_MASS)) {
+    const radius = lengthOf(fish) / 2;
+    world.fishes = world.fishes.filter((other) => other !== fish);
+    world.pops.push({ x: fish.x, y: fish.y, radius, age: 0 });
+    world.ripples.push({ x: fish.x, y: fish.y, age: 0 });
+    events.push({ kind: 'burst', voice: SPECIES[fish.species].voice });
+
+    for (let bubble = 0; bubble < BUBBLES_FROM_BURST; bubble += 1) {
+      const angle = (bubble / BUBBLES_FROM_BURST) * Math.PI * 2;
+      spawnBubble(world, fish.x + Math.cos(angle) * radius, fish.y + Math.sin(angle) * radius * 0.7);
+    }
+  }
+};
+
+const canEat = (hunter: Fish, prey: Fish): boolean =>
+  hunter.mass >= PREDATOR_MASS && hunter.mass >= prey.mass * PREDATOR_ADVANTAGE;
+
+// A soft push, stronger the more they overlap. They can swim close, but never pile up on the same spot.
+const separatePair = (first: Fish, second: Fish, seconds: number): void => {
+  const offsetX = second.x - first.x;
+  const offsetY = (second.y - first.y) * FLAT_BODY;
+  const away = Math.hypot(offsetX, offsetY);
+  const space = (lengthOf(first) + lengthOf(second)) * PERSONAL_SPACE;
+
+  if (away >= space) {
+    return;
+  }
+
+  const push = (SEPARATION_SPEED * seconds * (1 - away / space)) / 2;
+  const directionX = away === 0 ? 0 : offsetX / away;
+  const directionY = away === 0 ? 1 : offsetY / away;
+  const firstPush = first.isFeeding ? push * FEEDING_SPACE : push;
+  const secondPush = second.isFeeding ? push * FEEDING_SPACE : push;
+  first.x -= directionX * firstPush;
+  first.y -= directionY * firstPush;
+  second.x += directionX * secondPush;
+  second.y += directionY * secondPush;
+};
+
+const separateFishes = (world: World, seconds: number): void => {
+  world.fishes.forEach((first, index) => {
+    for (const second of world.fishes.slice(index + 1)) {
+      if (!canEat(first, second) && !canEat(second, first)) {
+        separatePair(first, second, seconds);
+      }
+    }
+  });
+};
+
+// The tank was already alive before it opened, so nobody is caught standing still. Nobody hunts in this time.
+export const warmUpWorld = (world: World): void => {
+  for (const fish of world.fishes) {
+    // Past the end of the warm up, or the last step can already bite, and rounding decides when that is.
+    fish.preyAt = world.time + WARM_UP_SECONDS + WARM_UP_STEP_SECONDS;
+  }
+
+  for (let elapsed = 0; elapsed < WARM_UP_SECONDS; elapsed += WARM_UP_STEP_SECONDS) {
+    stepWorld(world, WARM_UP_STEP_SECONDS);
+  }
+};
+
+export const stepWorld = (world: World, seconds: number): WorldEvent[] => {
+  const events: WorldEvent[] = [];
+  world.time += seconds;
+
+  for (const fish of [...world.fishes]) {
+    if (world.fishes.includes(fish)) {
+      moveFish(world, fish, seconds, events);
+    }
+  }
+
+  burstFish(world, events);
+  separateFishes(world, seconds);
+  moveWater(world, seconds);
+  movePointerEffects(world, seconds, events);
+
+  return events;
+};
+
+const pressedFish = (world: World, x: number, y: number): Fish | undefined =>
+  world.fishes.find((fish) => distance(fish.x, fish.y, x, y) < Math.max(26, lengthOf(fish) * 0.6));
+
+const pressedBubble = (world: World, x: number, y: number): Bubble | undefined =>
+  world.bubbles.find((bubble) => distance(bubble.x, bubble.y, x, y) < (bubble.radius + BUBBLE_MARGIN) * BUBBLE_REACH);
+
+const pressedPlant = (world: World, x: number, y: number): Plant | undefined =>
+  world.plants.find(
+    (plant) => Math.abs(plant.x - x) < PLANT_WIDTH && y > world.height - plant.height && y <= world.height,
+  );
+
+const scareFish = (world: World, fish: Fish, x: number, y: number): WorldEvent => {
+  const away = distance(fish.x, fish.y, x, y) || 1;
+  fish.fleeX = ((fish.x - x) / away) * 200;
+  fish.fleeY = ((fish.y - y) / away) * 200;
+  fish.fleeUntil = world.time + FLEE_SECONDS;
+
+  return { kind: 'flee', voice: SPECIES[fish.species].voice };
+};
+
+const FOOD_CLUSTER_REACH = 1.5;
+const FOOD_CLUSTER_DENSITY = 1.8;
+const FOOD_CLUSTER_FLATNESS = 0.8;
+
+const dropFood = (world: World, x: number, y: number, pieces = FOOD_PER_CLICK, spread = FOOD_SPREAD): WorldEvent => {
+  // The growth has no end, so the amount in the water is what keeps the page alive.
+  const room = MOST_FOOD_IN_WATER - world.food.length;
+  const grown = Math.min(Math.round(pieces * world.foodGrowth), MOST_FOOD_PER_DROP, room);
+
+  for (let piece = 0; piece < grown; piece += 1) {
+    // A thrown handful: dense in the middle, with a few grains that land far from the rest.
+    const angle = world.random() * Math.PI * 2;
+    const reach = spread * FOOD_CLUSTER_REACH * world.random() ** FOOD_CLUSTER_DENSITY;
+
+    world.food.push({
+      x: x + Math.cos(angle) * reach,
+      y: y + Math.sin(angle) * reach * FOOD_CLUSTER_FLATNESS,
+      age: 0,
+      sway: world.random() * Math.PI * 2,
+    });
+  }
+
+  return { kind: 'food' };
+};
+
+// What a quick click does depends on what is under it, and only open water feeds the fish.
+const clickAt = (world: World, x: number, y: number): WorldEvent => {
+  const bubble = pressedBubble(world, x, y);
+  const fish = pressedFish(world, x, y);
+  const plant = pressedPlant(world, x, y);
+
+  if (bubble !== undefined) {
+    world.bubbles = world.bubbles.filter((other) => other !== bubble);
+    world.pops.push({ x: bubble.x, y: bubble.y, radius: bubble.radius, age: 0 });
+    world.foodGrowth *= POP_FOOD_GROWTH;
+
+    return { kind: 'pop', voice: 1.5 - bubble.radius / 16 };
+  }
+
+  if (fish !== undefined) {
+    return scareFish(world, fish, x, y);
+  }
+
+  if (plant !== undefined) {
+    plant.shake = PLANT_SHAKE;
+
+    for (let index = 0; index < PLANT_BUBBLES; index += 1) {
+      spawnBubble(world, plant.x + between(world.random, -14, 14), world.height - world.random() * plant.height);
+    }
+
+    return { kind: 'plant' };
+  }
+
+  return dropFood(world, x, y);
+};
+
+export const pressPointer = (world: World, x: number, y: number, buttons = 1): void => {
+  world.pointer = { x, y, dragX: 0, dragY: 0, startX: x, startY: y, heldFor: 0, hasMoved: false, buttons };
+};
+
+export const movePointer = (world: World, x: number, y: number, buttons = 1): void => {
+  const { pointer } = world;
+
+  if (pointer === null) {
+    return;
+  }
+
+  // The second button of a chord only shows up here, because a press of it fires no event of its own.
+  pointer.buttons |= buttons;
+
+  const startedDragging = !pointer.hasMoved && distance(x, y, pointer.startX, pointer.startY) > CLICK_DISTANCE;
+  pointer.hasMoved ||= startedDragging;
+
+  if (pointer.hasMoved) {
+    pointer.dragX = x - pointer.x;
+    pointer.dragY = y - pointer.y;
+    const last = world.ripples.at(-1);
+
+    if (last === undefined || distance(last.x, last.y, x, y) > RIPPLE_GAP) {
+      world.ripples.push({ x, y, age: 0 });
+    }
+  }
+
+  pointer.x = x;
+  pointer.y = y;
+};
+
+// Beside a fish, or a fish with poor luck would never see it. This is the way to feed without a pointer.
+export const feedFish = (world: World): WorldEvent[] => {
+  const fish = world.fishes[Math.floor(world.random() * world.fishes.length)] as Fish | undefined;
+
+  return [dropFood(world, fish?.x ?? world.width / 2, fish?.y ?? world.height / 2)];
+};
+
+// Scrolling while holding a button drops one piece for each tick of the wheel.
+export const scrollPointer = (world: World): WorldEvent[] => {
+  const { pointer } = world;
+
+  return pointer === null ? [] : [dropFood(world, pointer.x, pointer.y, 1)];
+};
+
+export const releasePointer = (world: World): WorldEvent[] => {
+  const { pointer } = world;
+  world.pointer = null;
+
+  if (pointer?.buttons === BOTH_BUTTONS) {
+    return [dropFood(world, pointer.x, pointer.y, FOOD_PER_BOTH_BUTTONS, WIDE_FOOD_SPREAD)];
+  }
+
+  if (pointer?.buttons === RIGHT_BUTTON) {
+    return [dropFood(world, pointer.x, pointer.y, FOOD_PER_RIGHT_CLICK)];
+  }
+
+  return pointer === null || pointer.hasMoved || pointer.heldFor > HOLD_SECONDS
+    ? []
+    : [clickAt(world, pointer.x, pointer.y)];
+};

@@ -82,6 +82,7 @@ export const ThemeToggle = ({ theme, onChange }: ThemeToggleProps) => {
 
   return (
     <OrbToggle
+      sound="click"
       label={t('Theme: {name}', { name: names[theme] })}
       slots={SLOTS}
       activeIndex={THEME_IDS.indexOf(theme)}

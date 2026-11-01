@@ -1,2775 +1,2758 @@
 [
- {
-  "name": "example: 01. Variaveis",
-  "source": "# Uma variável é um nome associado a um valor.\n\n# Está é a variável chamada idade,\n# Ela tem o valor de 20\n# Na safira, todos os números são chamados de floats\nidade =  123\n\n# Esta é a variável chamada nome,\n# Ela tem o vaor do texto \"CJ\".\n# Textos ficam entre aspas.\n# Na maioria das linguagens de programação, textos são chamados de Strings\nnome =   \"julia\"\n\n# Essa é uma variável casado,\n# Ela tem o valor de verdadeiro\n# Na maioria das linguagens de programação, isso é chamado de booleano\ncasado = falso\n\n# Vamos exibir o tipo de cada variável\nmostre \"\"\nmostre \"Variável | % | % \" inserindo \"Valor\", \"Tipo\"\nmostre \"---------+-%-+-%-\" inserindo \"-----\", \"----\"\nmostre \"idade    | % | % \" inserindo idade  , o tipo de idade\nmostre \"nome     | % | % \" inserindo nome   , o tipo de nome\nmostre \"casado   | % | % \" inserindo casado , o tipo de casado\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Variável | Valor | Tipo ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "---------+-------+------",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "idade    | 123.0 | float ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "nome     | julia | string ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "casado   | False | booleano ",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 02. Exibir algo na tela",
-  "source": "# Este comando exibe alguma coisa na tela\n# Uma mensagem por exemplo\n\n\nnome = \"Safira\" \n\nmostre \"Bom dia, \"\nmostre \"% tudo bem?\" inserindo nome\n\nmostre \"\"\nmostre \":--------------------------------------------:\"\nmostre \":  Você deve ter notado que o comando mostre :\"\nmostre \":  exibir cada coisa em uma linha diferente  :\"\nmostre \":  Se você quiser exibir tudo na mesma linha :\"\nmostre \":  precisa usar o comando mostre nessa linha :\"\nmostre \":--------------------------------------------:\"\nmostre \"\"\n\n\nmostre nessa linha \"Bom dia \"\nmostre nessa linha nome\n\nmostre \"\"\n\n# Você também pode dar uma cor aos textos exibidos\n# Basta informar um código Hexadecimal ou o nome das cores,\n# por enquanto em inglês. Pesquise por esse código no Google por #88ffff\nmostre \"Texto colorido\" na cor \"#88ffff\"\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Bom dia, ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Safira tudo bem?",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":--------------------------------------------:",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":  Você deve ter notado que o comando mostre :",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":  exibir cada coisa em uma linha diferente  :",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":  Se você quiser exibir tudo na mesma linha :",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":  precisa usar o comando mostre nessa linha :",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": ":--------------------------------------------:",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "Bom dia ",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "Safira",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Texto colorido",
-    "color": "#88ffff"
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 03. Digitado",
-  "source": "# Cenário:\n# Você quer perguntar a um usuário as notas que\n# ele tirou, para mostrar a média final dele.\n# como fazer isso?\n\n# Para fazer isso, usamos o comando de entrada, esse\n# comando vai ler o que a pessoa digitar e salvar\n# em algum lugar, no caso, uma variável\n \nmostre \"********************************\"\nmostre \"*                              *\"\nmostre \"* PROGRAMA DE CALCULO DE MÉDIA *\"\nmostre \"*                              *\"\nmostre \"********************************\"\n\n\nmostre \"Qual é o seu nome?\"\nnome = o que o usuario digitar\n\nmostre \"Digite sua primeira nota: \"\nnota1 = o numero que o usuario digitar\n\nmostre \"Digite sua segunda nota: \"\nnota2 = o numero que o usuario digitar\n\nmostre \"% sua média final é %\" inserindo nome, (nota1 + nota2) / 2\n\n",
-  "inputs": [
-   "Ana",
-   "7",
-   "9"
-  ],
-  "events": [
-   {
-    "type": "line",
-    "text": "********************************",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "*                              *",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "* PROGRAMA DE CALCULO DE MÉDIA *",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "*                              *",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "********************************",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Qual é o seu nome?",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Digite sua primeira nota: ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Digite sua segunda nota: ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Ana sua média final é 8.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 04. Testar Condicoes",
-  "source": "# Cenário:\n# Agora imagine que você queira saber\n# se você passou de ano ou não.\n\n# Para isso, você precisará fazer um teste, para isso\n# usamos o comando de condicionais, o se\n\nmostre \"Digite sua média \"\nmedia vale o numero que for digitado\n\nse media for igual a 10\n{\n    mostre \"Você foi excelente\"\n}\nsenao se media for maior que 9\n{\n    mostre \"Você foi muito bom\"\n}\nsenao se media for maior ou igual a 6\n{\n    mostre \"Você passou!\"\n}\nsenao \n{\n    mostre \"Tente novamente\"\n}\n",
-  "inputs": [
-   "7"
-  ],
-  "events": [
-   {
-    "type": "line",
-    "text": "Digite sua média ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Você passou!",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 05. Enquanto",
-  "source": "# Imagine que você queira executar uma séria\n# de comandos enquanto uma condição for verdadeira.\n# Exemplo:\n\nopcao = 99\nenquanto opcao for diferente de 0\n{\n    # Esse comando limpa a tela do terminal\n    limpar a tela\n\n    mostre \"+=============================+\"\n    mostre \"| Escolha uma opção:          |\"\n    mostre \"| 0 - Sair                    |\"\n    mostre \"| 1 - Consulta Saldo          |\"\n    mostre \"| 2 - Consulta CPF            |\"\n    mostre \"| 3 - Consulta Identidade     |\"\n    mostre \"+=============================+\"\n\n    opcao recebe o numero que o usuario digitar\n}\n",
-  "inputs": [
-   "1",
-   "0"
-  ],
-  "events": [
-   {
-    "type": "clear"
-   },
-   {
-    "type": "line",
-    "text": "+=============================+",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| Escolha uma opção:          |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 0 - Sair                    |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 1 - Consulta Saldo          |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 2 - Consulta CPF            |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 3 - Consulta Identidade     |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "+=============================+",
-    "color": ""
-   },
-   {
-    "type": "clear"
-   },
-   {
-    "type": "line",
-    "text": "+=============================+",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| Escolha uma opção:          |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 0 - Sair                    |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 1 - Consulta Saldo          |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 2 - Consulta CPF            |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "| 3 - Consulta Identidade     |",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "+=============================+",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 06. Repita",
-  "source": "# Imagine que você queira executar um trecho várias vezes\n# você pode usar o comando repita\n\nmostre \"[X]\" na cor \"#ff4488\"\nmostre \"[ ]\" na cor \"#ffaa22\"\nmostre \"[ ]\" na cor \"#44ff44\"\n\nrepita 10 vezes\n{\n    mostre \" | \" na cor \"#dddddd\"\n}\n\nrepita 20 vezes\n{\n    mostre nessa linha \"-*\"    \n} \n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "[X]",
-    "color": "#ff4488"
-   },
-   {
-    "type": "line",
-    "text": "[ ]",
-    "color": "#ffaa22"
-   },
-   {
-    "type": "line",
-    "text": "[ ]",
-    "color": "#44ff44"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "line",
-    "text": " | ",
-    "color": "#dddddd"
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "-*",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 07. Espere",
-  "source": "# se você quiser esperar um pouco antes de executar o\n# próximo comando, você pode usar o comando espere.\n\nmostre \"Olá, amigo(a)!\"\nespere 2 segundos         # Espera em segundos\n\nmostre \"Como você está?\"\nespere 2000 milisegundos  # Espera em  milissegundos\n\nmostre \"Você conhece a Safira?\"\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Olá, amigo(a)!",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Como você está?",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Você conhece a Safira?",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 08. Sortear um número aleatorio",
-  "source": "# Imagine que você queira fazer um sorteio,\n# podemos usar o comando aleatório\n\n\nmostre \"Vou pensar em um número aleatório entre 10 e 15 e você vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um número: \"\n\n\n\n# Número que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# Número que você vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Você acertou, incrível!\"\n} senao {\n    mostre \"Eu pensei no número % você errou!\" inserindo numero_aleatorio\n} \n",
-  "inputs": [
-   "10"
-  ],
-  "events": [
-   {
-    "type": "line",
-    "text": "Vou pensar em um número aleatório entre 10 e 15 e você vai tentar descobrir, ok?",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "Digite um número: ",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Você acertou, incrível!",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 09. Incremente-decremente",
-  "source": "# Você quer aumentar o valor de uma variável numérica\n# Você pode usar o comando incremente, ou somar a variável + 1\n\nnumero = 1\nmostre \"Número      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"Número + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"Número - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, é pegando o\n# número e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"Número + 1  : %\" inserindo numero\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Número      : 1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Número + 15 : 16.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Número - 2  : 14.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Número + 1  : 15.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 10. Funcoes",
-  "source": "# Imagine que você queira executar alguns comandos em várias\n# partes do código, para evitar muito código duplicado, você pode\n# usar as funções\n\n# Está é uma função com parâmetros\n# Parâmetros são valores que ela pode\n# Receber e trabalhar com eles\nfuncao calculaMedia recebe parametros nome, nota1, nota2\n{\n\n    mostre \"Nome %\" inserindo nome\n    mostre \"Nota 1 = %\" inserindo nota1\n    mostre \"Nota 2 = %\" inserindo nota2\n    mostre \"Média  = %\" inserindo (nota1 + nota2) / 2\n\n    mostre \"\"\n}\n\n\n# Essa é uma função sem parâmetros\nfuncao mostra_logo\n{\n    mostre \"@========= MEDIA ALUNOS ===========@\"\n    mostre \"\"\n}\n\n# Chamando funções sem parâmetros\nmostra_logo()\n\n# Chamando funções com parâmetros\naluno3_nota1 = 6.5\naluno3_nota2 = 7.5\ncalculaMedia passando parametros \"João da Silva\", aluno3_nota1, aluno3_nota2\n\naluno4_nota1 = 9.1\naluno4_nota2 = 2.7\ncalculaMedia passando parametros \"Mile Santos\", aluno4_nota1, aluno4_nota2\n\n# Chamando funções sem parâmetros\nmostra_logo()\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "@========= MEDIA ALUNOS ===========@",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nome João da Silva",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nota 1 = 6.5",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nota 2 = 7.5",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Média  = 7.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nome Mile Santos",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nota 1 = 9.1",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Nota 2 = 2.7",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Média  = 5.9",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "@========= MEDIA ALUNOS ===========@",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 11. Arquivos",
-  "source": "# Você quer criar arquivos de texto\n# para salvar configurações, resultados, etc.\n# Você pode usar os comandos para manipulação de arquivos\n\n\n# Criar um arquivo qualquer sem nada dentro\ncrie o arquivo \"arquivo.txt\"\n\n\n# Escreve um texto na última linha do arquivo criado\nadicione \"Texto qualquer\" no arquivo \"arquivo.txt\"\n\n\n# Apaga todo o texto do arquivo e coloca esse texto no lugar\nsobrescreva \"Iai, tudo bem amigo\" no arquivo \"arquivo.txt\"\n\n\n# Obter todo o texto do arquivo\nconteudo = leia o texto do arquivo \"arquivo.txt\"\n\n\n# O resultado é uma String(Texto)\nmostre \"Conteúdo do arquivo: %\" inserindo conteudo\n\n\n# Verifica se o arquivo não existe\nse o arquivo \"arquivoQUeNaoExiste.txt\" nao existe\n{\n    mostre \"O arquivo % nãos existe\" inserindo \"'arquivoQUeNaoExiste.txt'\"\n}\n\n# Verifica se o arquivo existe\nse o arquivo \"arquivo.txt\" existe\n{\n    mostre \"O arquivo % existe e será removido\" inserindo \"'arquivo.txt'\"\n    \n    \n    # Comando para excluir um arquivo\n    delete o arquivo \"arquivo.txt\"\n}\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Conteúdo do arquivo: Iai, tudo bem amigo",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "O arquivo 'arquivoQUeNaoExiste.txt' nãos existe",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "O arquivo 'arquivo.txt' existe e será removido",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 12. Trabalhando com bibliotecas",
-  "source": "# O seu programa está ficando muito grande\n# e você quer dividir seu código, salvando algumas funções\n# em outro arquivo.\n\n# Você pode criar uma biblioteca!\n# Bibliotecas são códigos igual a qualquer outro, com a \n# diferença que você pode chama-los a partir de outro código\n\n\n# Se a biblioteca já existe, vamos deleta-la\nse o arquivo \"biblioteca.safira\" existe\n{ delete o arquivo \"biblioteca.safira\" }\n\n\n\n# Vamos criar a biblioteca.\ncrie o arquivo \"biblioteca.safira\"\n\n\n# Vamos adicionar um comando dentro desse arquivo\n# Você pode fazer isso com o bloco de notas de preferir\n# O \\n serve para pular uma linha!\nadicione \"idade recebe 25\" no arquivo \"biblioteca.safira\" \n\n\n# Vamos importar a biblioteca para nosso programa.\n# A partir disso, o código dentro do arquivo \"biblioteca.safira\" será\n# executado e teremos acesso as funções e variáveis dentro dele.\n# Perceba que o arquivo chama \"biblioteca.safira\", mas para importa-lo,\n# só precisamos digitar biblioteca e a safira irá entender o resto\nimporte biblioteca\n\nmostre \"A idade é %\" inserindo idade\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "A idade é 25.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 13. continue",
-  "source": "# Você quer executar um loop, porém, quando\n# chegar em uma condição, você não quer executar\n# os comandos restantes. Como fazer isso?\n# Você pode usar o comando continue\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma recebe soma mais 1\n    \n    # Se o valor for igual a 5, ignore o trecho abaixo\n    se soma for igual a 5 {\n        continue\n    }\n    \n    \n    # Mostrando na tela\n    mostre \"Soma: %\" inserindo soma\n}\n\n\nmostre \"oi\"\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Soma: 2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 6.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 7.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 8.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 9.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Soma: 10.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "oi",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 14. pare",
-  "source": "# Mudando só um pouquinho do cenário anterior\n#\n# E se você quisesse executar um loop, porém, quando \n# chegar em uma condição, você quer para o loop.\n# Como fazer isso? Vamos usar o pare!\n\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma vale soma mais 1\n\n    # Se o valor for igual a 5, pare o loop!\n    se soma for igual a 5 { pare }\n\n    # Mostrando na tela\n    mostre \"soma: %\" inserindo soma\n}\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "soma: 2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "soma: 3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "soma: 4.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 15. interrompa",
-  "source": "# Você quer finalizar o programa por completo ao chegar em um ponto\n# Como fazer isso? Vamos usar o interrompa!\n\n\nmostre \"Iniciando sistema!\"\nmostre \"Carregando dados!\"\n\ninterrompa\n\nmostre \"Enviando Mensagens!\"\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Iniciando sistema!",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Carregando dados!",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 16. Listas",
-  "source": "# Você quer trabalhar com uma lista de itens\n# Como fazer isso? Vamos usar os comandos de listas\n\n\n# Cria uma lista 2 posições com valores já definidos\nlista de compras recebe \"Maça\", \"Melancia\"\nmostre compras\n\n\n# Altera o valor de uma posição com outro valor\nlista de compras na posicao 2 recebe \"Manga\"\nmostre compras\n\n\n# Insere um item em uma posição especifica,\n# mudando a posição do valor antigo desta posição\nadicione \"Banana\" na posicao 2 da lista de compras\nmostre compras\n\n\n# Adiciona um item no final da lista\nadicione \"Uvas\" no final da lista de compras\n\n# Adiciona um item no início da lista\nadicione \"Melão\" no inicio da lista de compras\nmostre compras\n\n\n# Verifica se tem um valor na lista\nse tiver \"Melão\" na lista de compras\n{\n    # Remover um item da lista\n    remova \"Melão\" da lista de compras\n    mostre compras\n}\n\n\n# Retornar um valor em uma posição\nmostre lista de compras na posicao 1\n\n\n# Cria uma lista chamada números com 100 posições de texto\nlista de numeros com 100 posicoes\n\n\n# Retorna a quantidade de itens de uma lista\nmostre \"A lista de nomes tem    : % posições\" inserindo o tamanho da lista de compras\nmostre \"A lista de números tem  : % posições\" inserindo o tamanho da lista de numeros\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "['Maça', 'Melancia']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['Maça', 'Manga']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['Maça', 'Banana', 'Manga']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['Melão', 'Maça', 'Banana', 'Manga', 'Uvas']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['Maça', 'Banana', 'Manga', 'Uvas']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Maça",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "A lista de nomes tem    : 4 posições",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "A lista de números tem  : 100 posições",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 17. para_cada_item_da_lista",
-  "source": "# Você quer uma forma simples de percorrer\n# toda a lista, obtendo o valor de cada item\n\nlista de compras recebe \"uva\", \"maça\", \"manga\", \"laranja\"\n\npercorra a lista de compras atribuindo em item_compra {\n    mostre item_compra\n}\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "uva",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "maça",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "manga",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "laranja",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 18. para_cada_item_da_string",
-  "source": "# Você quer percorrer todas as letras de um texto.\n# Você quer inverter um texto, percorrendo cada letra\n# e colocando ela na ordem inversa\n# Você pode o mesmo comando para percorrer listas\n\n\ncodigo = \"!01 é êcov ,aid mob ,álO\"\nmostre \"Código Secreto   : %\" inserindo codigo\n\ninvertido = \"\"\n\npercorra codigo atribuindo em letra {\n    # Atribuindo o valor da letra e do texto invertido\n    invertido = letra + invertido\n}\n\nmostre \"Código Traduzido : %\" inserindo invertido\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "Código Secreto   : !01 é êcov ,aid mob ,álO",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Código Traduzido : Olá, bom dia, você é 10!",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 19. upper_lower_capitalize",
-  "source": "# Você quer formatar um texto que está sem padrão\n# Você tem 3 opções básicas;\n# 1. colocar todo o texto em maiúscula\n# 2. colocar todo o texto em minúscula\n# 3. deixar a primeira letra em maisucula.\n\nnome = \"sAfirA LINGUAGeM\"\n\nnome_em_minusculo recebe nome em minusculo\nnome_em_maiusculo recebe nome em maiusculo\nnome_captalizado recebe nome captalizado\n\nprintln nome_em_minusculo\nprintln nome_em_maiusculo\nprintln nome_captalizado\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "safira linguagem",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "SAFIRA LINGUAGEM",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Safira linguagem",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 20. para cada",
-  "source": "# Cria uma variável ou modifica o valor de uma\n# Atribuindo dinamicamente o valor de uma variável\n# Executando ao mesmo tempo um laço\n\n#****** Uso simples comando ******#\npara cada x de 0 ate 100\n{\n    mostre \"X vale -> %\" inserindo x\n}\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "X vale -> 0.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 5.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 6.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 7.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 8.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 9.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 10.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 11.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 12.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 13.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 14.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 15.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 16.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 17.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 18.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 19.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 20.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 21.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 22.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 23.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 24.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 25.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 26.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 27.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 28.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 29.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 30.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 31.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 32.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 33.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 34.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 35.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 36.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 37.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 38.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 39.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 40.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 41.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 42.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 43.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 44.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 45.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 46.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 47.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 48.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 49.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 50.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 51.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 52.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 53.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 54.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 55.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 56.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 57.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 58.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 59.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 60.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 61.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 62.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 63.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 64.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 65.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 66.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 67.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 68.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 69.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 70.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 71.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 72.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 73.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 74.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 75.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 76.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 77.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 78.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 79.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 80.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 81.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 82.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 83.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 84.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 85.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 86.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 87.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 88.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 89.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 90.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 91.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 92.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 93.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 94.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 95.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 96.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 97.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 98.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 99.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "X vale -> 100.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: 21. Tente",
-  "source": "# Você tem um trecho de código que pode acontecer um erro\n# e você precisa tratar o erro e o programa continuar rodando mesmo com o erro.\n# Você pode usar o tente\n\n\ntente\n{\n    mostre \"1. Isso não deve provocar um erro\"\n    isso não faz sentido e deve provocar um erro\n}\nse der erro\n{\n    mostre \"2. Aconteceu um erro!\"\n}\nsenao der erro\n{\n    mostre \"3. Não aconteceu um erro!\"\n}\nem qualquer caso\n{\n    mostre \"4. Deu um erro ou não!\"\n}\n\nmostre \"\"\nmostre \"O programa continua executando, independente se deu erro ou não\"\n\n# Os comandos\n# * senao der erro\n# * em qualquer caso\n# \n# Você pode colocar eles ou não, é você que escolhe\n\n",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1. Isso não deve provocar um erro",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2. Aconteceu um erro!",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "4. Deu um erro ou não!",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "O programa continua executando, independente se deu erro ou não",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "example: biblioteca",
-  "source": "idade recebe 25",
-  "inputs": [],
-  "events": [],
-  "error": false
- },
- {
-  "name": "assign_phrases",
-  "source": "a = 1\nb recebe 2\nc vale 3\nd tem o valor 4\ne1 := 5\nf <- 6\ng is worth 7\nh equals 8\ni1 obtiene 9\nmostre a + b + c + d + e1 + f + g + h + i1",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "45.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "math_words",
-  "source": "mostre 2 mais 3\nmostre 7 menos 2\nmostre 3 multiplicado por 4\nmostre 9 dividido por 2\nmostre 2 elevado a 10\nmostre 2 plus 2\nmostre 5 minus 1\nmostre 2 multiplied by 8\nmostre 8 divided by 4",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "5.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "5.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "12.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "4.5",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1024.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "16.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "math_prec",
-  "source": "mostre 2 + 3 * 4\nmostre (2 + 3) * 4\nmostre 2 ** 3 ** 2\nmostre 7 % 3\nmostre -7 % 3\nmostre 10 / 4\nmostre 1 + 2 - 3",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "14.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "20.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "512.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.5",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "0.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "floats",
-  "source": "mostre 0.1 + 0.2\nmostre 7.5\nx = 2.5\nmostre x * 2",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "0.30000000000000004",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "7.5",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "5.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "strings_concat",
-  "source": "a = \"x\"\nmostre \"o\" + \"i\"\nmostre a + \"b\"\nmostre \"n=\" a\nmostre \"\" ",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "oi",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "xb",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "n=x",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "cond_words",
-  "source": "x = 5\nse x for maior que 3 { mostre \"a\" }\nse x for menor que 3 { mostre \"b\" }\nse x for igual a 5 { mostre \"c\" }\nse x for diferente de 5 { mostre \"d\" }\nse x for maior ou igual a 5 { mostre \"e\" }\nse x for menor ou igual a 4 { mostre \"f\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "cond_bool",
-  "source": "a = verdadeiro\nb = falso\nmostre a\nmostre b\nse a { mostre \"s\" }\nse b { mostre \"n\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "True",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "False",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "s",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "cond_string",
-  "source": "n = \"ana\"\nse n == \"ana\" { mostre \"ok\" }\nse n != \"bia\" { mostre \"ok2\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "ok",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "ok2",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "if_entao",
-  "source": "se 1 == 1 entao faca {\nmostre \"a\"\n}\nquando 1 == 1 {\nmostre \"b\"\n}\ncaso 1 == 1 entao {\nmostre \"c\"\n}",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "orphan_else",
-  "source": "mostre \"a\"\nsenao { mostre \"b\" }\nmostre \"c\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "orphan_except",
-  "source": "mostre \"a\"\nse der erro { mostre \"b\" }\nmostre \"c\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "repita",
-  "source": "repita 3 vezes { mostre \"a\" }\nrepita 1 vez { mostre \"b\" }\nn = 2\nrepita n vezes { mostre \"c\" }\nrepeat 2 times { mostre \"d\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "d",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "d",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "enquanto",
-  "source": "i = 0\nenquanto i < 3 { mostre i\ni = i + 1 }\nwhile i > 0 { i = i - 1 }\nmostre i",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "0.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "0.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "loop_ctrl",
-  "source": "i = 0\nenquanto i < 6 {\ni = i + 1\nse i == 2 { continue }\nse i == 5 { pare }\nmostre i\n}\nrepita 3 vezes { mostre \"x\"\npare }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "x",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "para_cada",
-  "source": "para cada x de 1 ate 3 { mostre x }\npara cada y de 3 ate 1 { mostre y }\nfor each z de 1 ate 2 { mostre z }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "percorra",
-  "source": "lista de c recebe \"a\", \"b\"\npercorra a lista de c atribuindo em i { mostre i }\npercorra \"xy\" atribuindo em l { mostre l }\nscroll c assigning in w { mostre w }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "x",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "y",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "slices",
-  "source": "t = \"abcdef\"\nmostre t[1:3]\nmostre t de 2 ate 4\nmostre t[1:6:1]\nmostre t[5:2]",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "abc",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "bcd",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "bdf",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "abcd",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "case",
-  "source": "t = \"aBc dE\"\nmostre t em maiusculo\nmostre t em minusculo\nmostre t captalizado\nmostre t para maiusculo\nmostre t to lower\nmostre t in upper case",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "ABC DE",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "abc de",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "Abc de",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "ABC DE",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "abc de",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "ABC DE",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "format",
-  "source": "a = 1\nmostre \"% e %\" inserindo a, \"b\"\nmostre \"x=%\" formatando 2\nmostre \"%\" % 3\nmostre \"% %\" format 1, 2",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1.0 e b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "x=2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0 2.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "color",
-  "source": "mostre \"a\" na cor \"#ff0000\"\nmostre nessa linha \"b\"\nmostre nessa linha \"c\" na cor \"#00ff00\"\nmostre \"\"\nmostre \"%\" inserindo 1 na cor \"#112233\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": "#ff0000"
-   },
-   {
-    "type": "inline",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "c",
-    "color": "#00ff00"
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": "#112233"
-   }
-  ],
-  "error": false
- },
- {
-  "name": "show_variants",
-  "source": "mostrar \"a\"\nexiba \"b\"\nimprima \"c\"\nprintln \"d\"\nprintf \"e\"\nshow \"f\"\nmuestra \"g\"\nprint \"h\"\nescreva \"i\"\nescreva nessa linha \"j\"\nmostre \"\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "d",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "f",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "g",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "h",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "i",
-    "color": ""
-   },
-   {
-    "type": "inline",
-    "text": "j",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "lists_all",
-  "source": "lista de c recebe 1, \"b\", verdadeiro\nmostre c\nmostre lista de c na posicao 2\nlista de c na posicao 1 recebe 9\nadicione 4 na lista de c\nadicione 5 no final da lista de c\nadicione 6 no inicio da lista de c\nadicione 7 na posicao 2 da lista de c\nmostre c\nremova \"b\" da lista de c\nmostre c\nmostre o tamanho da lista de c\nse tiver 9 na lista de c { mostre \"tem\" }\nse tiver 99 na lista de c { mostre \"nao\" }\nlista de v com 3 posicoes\nmostre v\nlista de u recebe \"so\"\nmostre u\nmostre lista c",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "[1.0, 'b', True]",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "[6.0, 7.0, 9.0, 'b', True, 4.0, 5.0]",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "[6.0, 7.0, 9.0, True, 4.0, 5.0]",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "6",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "tem",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['', '', '']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "['so']",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "[6.0, 7.0, 9.0, True, 4.0, 5.0]",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "list_errors",
-  "source": "lista de c recebe 1, 2\ntente { mostre lista de c na posicao 9 } se der erro { mostre \"e1\" }\ntente { mostre lista de c na posicao 0 } se der erro { mostre \"e2\" }\ntente { remova 9 da lista de c } se der erro { mostre \"e3\" }\nx = 1\ntente { adicione 1 na lista de x } se der erro { mostre \"e4\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "e1",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e2",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e3",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e4",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "list_type",
-  "source": "lista de c recebe 1, 2\nmostre o tipo de c\nmostre tipo de \"a\"\nmostre o tipo da variavel c\nmostre type 1\nb = falso\nmostre tipo de b",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "lista",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "string",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "lista",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "float",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "booleano",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "random",
-  "source": "x = um numero aleatorio entre 3 e 9\nmostre x\ny = a random number between 1 and 2\nmostre y\ntente { z = numero aleatorio entre 5 e 5 } se der erro { mostre \"e\" }\ntente { z = numero aleatorio entre 9 e 5 } se der erro { mostre \"f\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "3",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "f",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "input_text",
-  "source": "n = o que o usuario digitar\nmostre n\nm = o numero que for digitado\nmostre m + 1\nmostre digitado",
-  "inputs": [
-   "oi",
-   "4",
-   "tchau"
-  ],
-  "events": [
-   {
-    "type": "line",
-    "text": "oi",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "5.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "tchau",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "input_bad_number",
-  "source": "x = o numero que for digitado\nmostre \"nao chega\"",
-  "inputs": [
-   "abc"
-  ],
-  "events": [],
-  "error": true
- },
- {
-  "name": "files",
-  "source": "crie o arquivo \"a.txt\"\nadicione \"um\" no arquivo \"a.txt\"\nadicione \"dois\" no arquivo \"a.txt\"\nmostre leia o arquivo \"a.txt\"\nsobrescreva \"tres\" no arquivo \"a.txt\"\nx = leia o texto do arquivo \"a.txt\"\nmostre x\nse o arquivo \"a.txt\" existe { mostre \"s\" }\nse o arquivo \"b.txt\" nao existe { mostre \"n\" }\ndelete o arquivo \"a.txt\"\nse o arquivo \"a.txt\" nao existe { mostre \"foi\" }\nremova o arquivo \"z\" ",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "umdois",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "tres",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "s",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "n",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "foi",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "file_missing",
-  "source": "mostre leia o arquivo \"nada.txt\"",
-  "inputs": [],
-  "events": [],
-  "error": true
- },
- {
-  "name": "file_create_twice",
-  "source": "crie o arquivo \"a\"\nsobrescreva \"x\" no arquivo \"a\"\ncrie o arquivo \"a\"\nmostre leia o arquivo \"a\"\ndelete o arquivo \"a\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "x",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "import",
-  "source": "crie o arquivo \"lib.safira\"\nsobrescreva \"funcao f {\\n mostre 1\\n}\\nv = 2\" no arquivo \"lib.safira\"\nimporte lib\nf()\nmostre v\ndelete o arquivo \"lib.safira\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "import_missing",
-  "source": "mostre \"a\"\nimporte nada\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "functions",
-  "source": "funcao a { mostre \"a\" }\na()\nfuncao b recebe x { mostre x }\nb passando 1\nb(2)\nfuncao c(x, y) { retorne x + y }\nmostre c(1, 2)\nd = c passando parametros 3, 4\nmostre d\ndef e(): { retorne \"r\" }\nmostre e()\nfunction f receives p { retorne p * 2 }\nmostre f(4)\nfuncao g { retorne 1\nmostre \"nao\" }\nmostre g()",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "2.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "3.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "7.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "r",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "8.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "function_globals",
-  "source": "funcao f recebe x { y = x }\nf(1)\nmostre x\nmostre y",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "1.0",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "function_errors",
-  "source": "tente { nada() } se der erro { mostre \"a\" }\nfuncao f recebe x { mostre x }\ntente { f() } se der erro { mostre \"b\" }\nfuncao g { mostre 1 }\ntente { g(1) } se der erro { mostre \"c\" }\nfuncao h(a, b) { mostre a }\ntente { h(1) } se der erro { mostre \"d\" }\ntente { h(1, 2, 3) } se der erro { mostre \"e\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "d",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "try_all",
-  "source": "tente { mostre \"a\" } se der erro { mostre \"b\" } senao der erro { mostre \"c\" } em qualquer caso { mostre \"d\" }\ntente { nada nada } se der erro { mostre \"e\" } senao der erro { mostre \"f\" } em qualquer caso { mostre \"g\" }\ntry { nada nada } except { mostre \"h\" } finally { mostre \"i\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "d",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "g",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "h",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "i",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "try_loop",
-  "source": "repita 3 vezes { tente { pare } se der erro { mostre \"x\" } }\nmostre \"fim\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "fim",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "undefined",
-  "source": "mostre \"a\"\nmostre nada\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "unknown",
-  "source": "mostre \"a\"\nisso nao existe\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": true
- },
- {
-  "name": "interrompa",
-  "source": "funcao f { interrompa }\nmostre \"a\"\nf()\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "interrompa_try",
-  "source": "tente { interrompa } se der erro { mostre \"x\" }\nmostre \"b\"",
-  "inputs": [],
-  "events": [],
-  "error": false
- },
- {
-  "name": "top_return",
-  "source": "mostre \"a\"\nretorne 1\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "top_break",
-  "source": "mostre \"a\"\npare\nmostre \"b\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "clear",
-  "source": "mostre \"a\"\nlimpar a tela\nmostre \"b\"\nlimpatela\nclear",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "clear"
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "clear"
-   },
-   {
-    "type": "clear"
-   }
-  ],
-  "error": false
- },
- {
-  "name": "comments",
-  "source": "# c\nmostre \"a\" # c\nmostre \"b\" // c\nmostre \"c # d\"\nmostre \"e // f\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "b",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c # d",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e // f",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "blocks_next_line",
-  "source": "se 1 == 1\n{\nmostre \"a\"\n}\nsenao\n{\nmostre \"b\"\n}",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "nested",
-  "source": "repita 2 vezes {\n  para cada i de 1 ate 2 {\n    se i == 2 { mostre \"dois\" } senao { mostre \"um\" }\n  }\n}",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "um",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "dois",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "um",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "dois",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "incdec",
-  "source": "n = 1\nincremente 2 em n\nincrease 2 na n\ndecremente 1 no n\nmostre n\ntente { incremente 1 em z } se der erro { mostre \"e\" }\nt = \"a\"\ntente { incremente 1 em t } se der erro { mostre \"f\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "4.0",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "f",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "wait",
-  "source": "espere 1 ms\naguarde 1 milissegundo\nwait 1 ms\nmostre \"a\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "en_program",
-  "source": "if 1 == 1 then { show \"a\" } else { show \"b\" }\nlist of c receive 1, 2\nshow c\nadd 3 in list of c\nshow c",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "[1.0, 2.0]",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "[1.0, 2.0, 3.0]",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "es_program",
-  "source": "si 1 == 1 { muestra \"a\" } si no { muestra \"b\" }\nrepetir 2 veces { muestra \"c\" }\nmientras 1 == 2 { muestra \"d\" }\nmostrar \"e\"",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "a",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "c",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "e",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "mixed",
-  "source": "x recebe 1\nif x is equal to 1 { mostrar \"um\" } senao { show \"outro\" }\nrepeat 2 vezes { imprima \"z\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "um",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "z",
-    "color": ""
-   },
-   {
-    "type": "line",
-    "text": "z",
-    "color": ""
-   }
-  ],
-  "error": false
- },
- {
-  "name": "mixed_upper",
-  "source": "se \"a\" == \"a\" { println \"ok\" }",
-  "inputs": [],
-  "events": [
-   {
-    "type": "line",
-    "text": "ok",
-    "color": ""
-   }
-  ],
-  "error": false
- }
+  {
+    "name": "example: 01. Variaveis",
+    "source": "# Uma variável é um nome associado a um valor.\n\n# Está é a variável chamada idade,\n# Ela tem o valor de 20\n# Na safira, todos os números são chamados de floats\nidade =  123\n\n# Esta é a variável chamada nome,\n# Ela tem o vaor do texto \"CJ\".\n# Textos ficam entre aspas.\n# Na maioria das linguagens de programação, textos são chamados de Strings\nnome =   \"julia\"\n\n# Essa é uma variável casado,\n# Ela tem o valor de verdadeiro\n# Na maioria das linguagens de programação, isso é chamado de booleano\ncasado = falso\n\n# Vamos exibir o tipo de cada variável\nmostre \"\"\nmostre \"Variável | % | % \" inserindo \"Valor\", \"Tipo\"\nmostre \"---------+-%-+-%-\" inserindo \"-----\", \"----\"\nmostre \"idade    | % | % \" inserindo idade  , o tipo de idade\nmostre \"nome     | % | % \" inserindo nome   , o tipo de nome\nmostre \"casado   | % | % \" inserindo casado , o tipo de casado\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Variável | Valor | Tipo ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "---------+-------+------",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "idade    | 123.0 | float ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "nome     | julia | string ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "casado   | False | booleano ",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 02. Exibir algo na tela",
+    "source": "# Este comando exibe alguma coisa na tela\n# Uma mensagem por exemplo\n\n\nnome = \"Safira\" \n\nmostre \"Bom dia, \"\nmostre \"% tudo bem?\" inserindo nome\n\nmostre \"\"\nmostre \":--------------------------------------------:\"\nmostre \":  Você deve ter notado que o comando mostre :\"\nmostre \":  exibir cada coisa em uma linha diferente  :\"\nmostre \":  Se você quiser exibir tudo na mesma linha :\"\nmostre \":  precisa usar o comando mostre nessa linha :\"\nmostre \":--------------------------------------------:\"\nmostre \"\"\n\n\nmostre nessa linha \"Bom dia \"\nmostre nessa linha nome\n\nmostre \"\"\n\n# Você também pode dar uma cor aos textos exibidos\n# Basta informar um código Hexadecimal ou o nome das cores,\n# por enquanto em inglês. Pesquise por esse código no Google por #88ffff\nmostre \"Texto colorido\" na cor \"#88ffff\"\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Bom dia, ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Safira tudo bem?",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":--------------------------------------------:",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":  Você deve ter notado que o comando mostre :",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":  exibir cada coisa em uma linha diferente  :",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":  Se você quiser exibir tudo na mesma linha :",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":  precisa usar o comando mostre nessa linha :",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": ":--------------------------------------------:",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "Bom dia ",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "Safira",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Texto colorido",
+        "color": "#88ffff"
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 03. Digitado",
+    "source": "# Cenário:\n# Você quer perguntar a um usuário as notas que\n# ele tirou, para mostrar a média final dele.\n# como fazer isso?\n\n# Para fazer isso, usamos o comando de entrada, esse\n# comando vai ler o que a pessoa digitar e salvar\n# em algum lugar, no caso, uma variável\n \nmostre \"********************************\"\nmostre \"*                              *\"\nmostre \"* PROGRAMA DE CALCULO DE MÉDIA *\"\nmostre \"*                              *\"\nmostre \"********************************\"\n\n\nmostre \"Qual é o seu nome?\"\nnome = o que o usuario digitar\n\nmostre \"Digite sua primeira nota: \"\nnota1 = o numero que o usuario digitar\n\nmostre \"Digite sua segunda nota: \"\nnota2 = o numero que o usuario digitar\n\nmostre \"% sua média final é %\" inserindo nome, (nota1 + nota2) / 2\n\n",
+    "inputs": ["Ana", "7", "9"],
+    "events": [
+      {
+        "type": "line",
+        "text": "********************************",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "*                              *",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "* PROGRAMA DE CALCULO DE MÉDIA *",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "*                              *",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "********************************",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Qual é o seu nome?",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Digite sua primeira nota: ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Digite sua segunda nota: ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Ana sua média final é 8.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 04. Testar Condicoes",
+    "source": "# Cenário:\n# Agora imagine que você queira saber\n# se você passou de ano ou não.\n\n# Para isso, você precisará fazer um teste, para isso\n# usamos o comando de condicionais, o se\n\nmostre \"Digite sua média \"\nmedia vale o numero que for digitado\n\nse media for igual a 10\n{\n    mostre \"Você foi excelente\"\n}\nsenao se media for maior que 9\n{\n    mostre \"Você foi muito bom\"\n}\nsenao se media for maior ou igual a 6\n{\n    mostre \"Você passou!\"\n}\nsenao \n{\n    mostre \"Tente novamente\"\n}\n",
+    "inputs": ["7"],
+    "events": [
+      {
+        "type": "line",
+        "text": "Digite sua média ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Você passou!",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 05. Enquanto",
+    "source": "# Imagine que você queira executar uma séria\n# de comandos enquanto uma condição for verdadeira.\n# Exemplo:\n\nopcao = 99\nenquanto opcao for diferente de 0\n{\n    # Esse comando limpa a tela do terminal\n    limpar a tela\n\n    mostre \"+=============================+\"\n    mostre \"| Escolha uma opção:          |\"\n    mostre \"| 0 - Sair                    |\"\n    mostre \"| 1 - Consulta Saldo          |\"\n    mostre \"| 2 - Consulta CPF            |\"\n    mostre \"| 3 - Consulta Identidade     |\"\n    mostre \"+=============================+\"\n\n    opcao recebe o numero que o usuario digitar\n}\n",
+    "inputs": ["1", "0"],
+    "events": [
+      {
+        "type": "clear"
+      },
+      {
+        "type": "line",
+        "text": "+=============================+",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| Escolha uma opção:          |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 0 - Sair                    |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 1 - Consulta Saldo          |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 2 - Consulta CPF            |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 3 - Consulta Identidade     |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "+=============================+",
+        "color": ""
+      },
+      {
+        "type": "clear"
+      },
+      {
+        "type": "line",
+        "text": "+=============================+",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| Escolha uma opção:          |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 0 - Sair                    |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 1 - Consulta Saldo          |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 2 - Consulta CPF            |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "| 3 - Consulta Identidade     |",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "+=============================+",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 06. Repita",
+    "source": "# Imagine que você queira executar um trecho várias vezes\n# você pode usar o comando repita\n\nmostre \"[X]\" na cor \"#ff4488\"\nmostre \"[ ]\" na cor \"#ffaa22\"\nmostre \"[ ]\" na cor \"#44ff44\"\n\nrepita 10 vezes\n{\n    mostre \" | \" na cor \"#dddddd\"\n}\n\nrepita 20 vezes\n{\n    mostre nessa linha \"-*\"    \n} \n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "[X]",
+        "color": "#ff4488"
+      },
+      {
+        "type": "line",
+        "text": "[ ]",
+        "color": "#ffaa22"
+      },
+      {
+        "type": "line",
+        "text": "[ ]",
+        "color": "#44ff44"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "line",
+        "text": " | ",
+        "color": "#dddddd"
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "-*",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 07. Espere",
+    "source": "# se você quiser esperar um pouco antes de executar o\n# próximo comando, você pode usar o comando espere.\n\nmostre \"Olá, amigo(a)!\"\nespere 2 segundos         # Espera em segundos\n\nmostre \"Como você está?\"\nespere 2000 milisegundos  # Espera em  milissegundos\n\nmostre \"Você conhece a Safira?\"\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Olá, amigo(a)!",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Como você está?",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Você conhece a Safira?",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 08. Sortear um número aleatorio",
+    "source": "# Imagine que você queira fazer um sorteio,\n# podemos usar o comando aleatório\n\n\nmostre \"Vou pensar em um número aleatório entre 10 e 15 e você vai tentar descobrir, ok?\"\nmostre \"\"\nmostre nessa linha \"Digite um número: \"\n\n\n\n# Número que o computador vai pensar\nnumero_aleatorio = um numero aleatorio entre 10 e 15\n\n# Número que você vai digitar (Use o modo Debug para ler a mente do computador)\nnumero_pensado = o numero que for digitado\n\n\n \nse o numero_aleatorio for igual a numero_pensado entao {\n    mostre \"Você acertou, incrível!\"\n} senao {\n    mostre \"Eu pensei no número % você errou!\" inserindo numero_aleatorio\n} \n",
+    "inputs": ["10"],
+    "events": [
+      {
+        "type": "line",
+        "text": "Vou pensar em um número aleatório entre 10 e 15 e você vai tentar descobrir, ok?",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "Digite um número: ",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Você acertou, incrível!",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 09. Incremente-decremente",
+    "source": "# Você quer aumentar o valor de uma variável numérica\n# Você pode usar o comando incremente, ou somar a variável + 1\n\nnumero = 1\nmostre \"Número      : %\" inserindo numero\n\n\nincremente 15 em numero\nmostre \"Número + 15 : %\" inserindo numero\n\n\ndecremente 2 em numero\nmostre \"Número - 2  : %\" inserindo numero\n\n\n# Uma outra forma de fazer isso, é pegando o\n# número e somando a ele mesmo, exemplo:\nnumero recebe numero + 1\nmostre \"Número + 1  : %\" inserindo numero\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Número      : 1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Número + 15 : 16.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Número - 2  : 14.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Número + 1  : 15.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 10. Funcoes",
+    "source": "# Imagine que você queira executar alguns comandos em várias\n# partes do código, para evitar muito código duplicado, você pode\n# usar as funções\n\n# Está é uma função com parâmetros\n# Parâmetros são valores que ela pode\n# Receber e trabalhar com eles\nfuncao calculaMedia recebe parametros nome, nota1, nota2\n{\n\n    mostre \"Nome %\" inserindo nome\n    mostre \"Nota 1 = %\" inserindo nota1\n    mostre \"Nota 2 = %\" inserindo nota2\n    mostre \"Média  = %\" inserindo (nota1 + nota2) / 2\n\n    mostre \"\"\n}\n\n\n# Essa é uma função sem parâmetros\nfuncao mostra_logo\n{\n    mostre \"@========= MEDIA ALUNOS ===========@\"\n    mostre \"\"\n}\n\n# Chamando funções sem parâmetros\nmostra_logo()\n\n# Chamando funções com parâmetros\naluno3_nota1 = 6.5\naluno3_nota2 = 7.5\ncalculaMedia passando parametros \"João da Silva\", aluno3_nota1, aluno3_nota2\n\naluno4_nota1 = 9.1\naluno4_nota2 = 2.7\ncalculaMedia passando parametros \"Mile Santos\", aluno4_nota1, aluno4_nota2\n\n# Chamando funções sem parâmetros\nmostra_logo()\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "@========= MEDIA ALUNOS ===========@",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nome João da Silva",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nota 1 = 6.5",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nota 2 = 7.5",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Média  = 7.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nome Mile Santos",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nota 1 = 9.1",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Nota 2 = 2.7",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Média  = 5.9",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "@========= MEDIA ALUNOS ===========@",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 11. Arquivos",
+    "source": "# Você quer criar arquivos de texto\n# para salvar configurações, resultados, etc.\n# Você pode usar os comandos para manipulação de arquivos\n\n\n# Criar um arquivo qualquer sem nada dentro\ncrie o arquivo \"arquivo.txt\"\n\n\n# Escreve um texto na última linha do arquivo criado\nadicione \"Texto qualquer\" no arquivo \"arquivo.txt\"\n\n\n# Apaga todo o texto do arquivo e coloca esse texto no lugar\nsobrescreva \"Iai, tudo bem amigo\" no arquivo \"arquivo.txt\"\n\n\n# Obter todo o texto do arquivo\nconteudo = leia o texto do arquivo \"arquivo.txt\"\n\n\n# O resultado é uma String(Texto)\nmostre \"Conteúdo do arquivo: %\" inserindo conteudo\n\n\n# Verifica se o arquivo não existe\nse o arquivo \"arquivoQUeNaoExiste.txt\" nao existe\n{\n    mostre \"O arquivo % nãos existe\" inserindo \"'arquivoQUeNaoExiste.txt'\"\n}\n\n# Verifica se o arquivo existe\nse o arquivo \"arquivo.txt\" existe\n{\n    mostre \"O arquivo % existe e será removido\" inserindo \"'arquivo.txt'\"\n    \n    \n    # Comando para excluir um arquivo\n    delete o arquivo \"arquivo.txt\"\n}\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Conteúdo do arquivo: Iai, tudo bem amigo",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "O arquivo 'arquivoQUeNaoExiste.txt' nãos existe",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "O arquivo 'arquivo.txt' existe e será removido",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 12. Trabalhando com bibliotecas",
+    "source": "# O seu programa está ficando muito grande\n# e você quer dividir seu código, salvando algumas funções\n# em outro arquivo.\n\n# Você pode criar uma biblioteca!\n# Bibliotecas são códigos igual a qualquer outro, com a \n# diferença que você pode chama-los a partir de outro código\n\n\n# Se a biblioteca já existe, vamos deleta-la\nse o arquivo \"biblioteca.safira\" existe\n{ delete o arquivo \"biblioteca.safira\" }\n\n\n\n# Vamos criar a biblioteca.\ncrie o arquivo \"biblioteca.safira\"\n\n\n# Vamos adicionar um comando dentro desse arquivo\n# Você pode fazer isso com o bloco de notas de preferir\n# O \\n serve para pular uma linha!\nadicione \"idade recebe 25\" no arquivo \"biblioteca.safira\" \n\n\n# Vamos importar a biblioteca para nosso programa.\n# A partir disso, o código dentro do arquivo \"biblioteca.safira\" será\n# executado e teremos acesso as funções e variáveis dentro dele.\n# Perceba que o arquivo chama \"biblioteca.safira\", mas para importa-lo,\n# só precisamos digitar biblioteca e a safira irá entender o resto\nimporte biblioteca\n\nmostre \"A idade é %\" inserindo idade\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "A idade é 25.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 13. continue",
+    "source": "# Você quer executar um loop, porém, quando\n# chegar em uma condição, você não quer executar\n# os comandos restantes. Como fazer isso?\n# Você pode usar o comando continue\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma recebe soma mais 1\n    \n    # Se o valor for igual a 5, ignore o trecho abaixo\n    se soma for igual a 5 {\n        continue\n    }\n    \n    \n    # Mostrando na tela\n    mostre \"Soma: %\" inserindo soma\n}\n\n\nmostre \"oi\"\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Soma: 2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 6.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 7.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 8.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 9.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Soma: 10.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "oi",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 14. pare",
+    "source": "# Mudando só um pouquinho do cenário anterior\n#\n# E se você quisesse executar um loop, porém, quando \n# chegar em uma condição, você quer para o loop.\n# Como fazer isso? Vamos usar o pare!\n\n\nsoma = 1\nenquanto soma for menor que 10\n{\n    # Incrementando o valor da soma em +1\n    soma vale soma mais 1\n\n    # Se o valor for igual a 5, pare o loop!\n    se soma for igual a 5 { pare }\n\n    # Mostrando na tela\n    mostre \"soma: %\" inserindo soma\n}\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "soma: 2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "soma: 3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "soma: 4.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 15. interrompa",
+    "source": "# Você quer finalizar o programa por completo ao chegar em um ponto\n# Como fazer isso? Vamos usar o interrompa!\n\n\nmostre \"Iniciando sistema!\"\nmostre \"Carregando dados!\"\n\ninterrompa\n\nmostre \"Enviando Mensagens!\"\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Iniciando sistema!",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Carregando dados!",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 16. Listas",
+    "source": "# Você quer trabalhar com uma lista de itens\n# Como fazer isso? Vamos usar os comandos de listas\n\n\n# Cria uma lista 2 posições com valores já definidos\nlista de compras recebe \"Maça\", \"Melancia\"\nmostre compras\n\n\n# Altera o valor de uma posição com outro valor\nlista de compras na posicao 2 recebe \"Manga\"\nmostre compras\n\n\n# Insere um item em uma posição especifica,\n# mudando a posição do valor antigo desta posição\nadicione \"Banana\" na posicao 2 da lista de compras\nmostre compras\n\n\n# Adiciona um item no final da lista\nadicione \"Uvas\" no final da lista de compras\n\n# Adiciona um item no início da lista\nadicione \"Melão\" no inicio da lista de compras\nmostre compras\n\n\n# Verifica se tem um valor na lista\nse tiver \"Melão\" na lista de compras\n{\n    # Remover um item da lista\n    remova \"Melão\" da lista de compras\n    mostre compras\n}\n\n\n# Retornar um valor em uma posição\nmostre lista de compras na posicao 1\n\n\n# Cria uma lista chamada números com 100 posições de texto\nlista de numeros com 100 posicoes\n\n\n# Retorna a quantidade de itens de uma lista\nmostre \"A lista de nomes tem    : % posições\" inserindo o tamanho da lista de compras\nmostre \"A lista de números tem  : % posições\" inserindo o tamanho da lista de numeros\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "['Maça', 'Melancia']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['Maça', 'Manga']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['Maça', 'Banana', 'Manga']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['Melão', 'Maça', 'Banana', 'Manga', 'Uvas']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['Maça', 'Banana', 'Manga', 'Uvas']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Maça",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "A lista de nomes tem    : 4 posições",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "A lista de números tem  : 100 posições",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 17. para_cada_item_da_lista",
+    "source": "# Você quer uma forma simples de percorrer\n# toda a lista, obtendo o valor de cada item\n\nlista de compras recebe \"uva\", \"maça\", \"manga\", \"laranja\"\n\npercorra a lista de compras atribuindo em item_compra {\n    mostre item_compra\n}\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "uva",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "maça",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "manga",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "laranja",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 18. para_cada_item_da_string",
+    "source": "# Você quer percorrer todas as letras de um texto.\n# Você quer inverter um texto, percorrendo cada letra\n# e colocando ela na ordem inversa\n# Você pode o mesmo comando para percorrer listas\n\n\ncodigo = \"!01 é êcov ,aid mob ,álO\"\nmostre \"Código Secreto   : %\" inserindo codigo\n\ninvertido = \"\"\n\npercorra codigo atribuindo em letra {\n    # Atribuindo o valor da letra e do texto invertido\n    invertido = letra + invertido\n}\n\nmostre \"Código Traduzido : %\" inserindo invertido\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "Código Secreto   : !01 é êcov ,aid mob ,álO",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Código Traduzido : Olá, bom dia, você é 10!",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 19. upper_lower_capitalize",
+    "source": "# Você quer formatar um texto que está sem padrão\n# Você tem 3 opções básicas;\n# 1. colocar todo o texto em maiúscula\n# 2. colocar todo o texto em minúscula\n# 3. deixar a primeira letra em maisucula.\n\nnome = \"sAfirA LINGUAGeM\"\n\nnome_em_minusculo recebe nome em minusculo\nnome_em_maiusculo recebe nome em maiusculo\nnome_captalizado recebe nome captalizado\n\nprintln nome_em_minusculo\nprintln nome_em_maiusculo\nprintln nome_captalizado\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "safira linguagem",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "SAFIRA LINGUAGEM",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Safira linguagem",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 20. para cada",
+    "source": "# Cria uma variável ou modifica o valor de uma\n# Atribuindo dinamicamente o valor de uma variável\n# Executando ao mesmo tempo um laço\n\n#****** Uso simples comando ******#\npara cada x de 0 ate 100\n{\n    mostre \"X vale -> %\" inserindo x\n}\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "X vale -> 0.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 5.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 6.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 7.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 8.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 9.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 10.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 11.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 12.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 13.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 14.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 15.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 16.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 17.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 18.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 19.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 20.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 21.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 22.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 23.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 24.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 25.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 26.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 27.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 28.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 29.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 30.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 31.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 32.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 33.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 34.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 35.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 36.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 37.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 38.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 39.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 40.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 41.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 42.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 43.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 44.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 45.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 46.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 47.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 48.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 49.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 50.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 51.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 52.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 53.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 54.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 55.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 56.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 57.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 58.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 59.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 60.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 61.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 62.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 63.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 64.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 65.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 66.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 67.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 68.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 69.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 70.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 71.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 72.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 73.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 74.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 75.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 76.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 77.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 78.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 79.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 80.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 81.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 82.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 83.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 84.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 85.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 86.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 87.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 88.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 89.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 90.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 91.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 92.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 93.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 94.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 95.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 96.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 97.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 98.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 99.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "X vale -> 100.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: 21. Tente",
+    "source": "# Você tem um trecho de código que pode acontecer um erro\n# e você precisa tratar o erro e o programa continuar rodando mesmo com o erro.\n# Você pode usar o tente\n\n\ntente\n{\n    mostre \"1. Isso não deve provocar um erro\"\n    isso não faz sentido e deve provocar um erro\n}\nse der erro\n{\n    mostre \"2. Aconteceu um erro!\"\n}\nsenao der erro\n{\n    mostre \"3. Não aconteceu um erro!\"\n}\nem qualquer caso\n{\n    mostre \"4. Deu um erro ou não!\"\n}\n\nmostre \"\"\nmostre \"O programa continua executando, independente se deu erro ou não\"\n\n# Os comandos\n# * senao der erro\n# * em qualquer caso\n# \n# Você pode colocar eles ou não, é você que escolhe\n\n",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1. Isso não deve provocar um erro",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2. Aconteceu um erro!",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "4. Deu um erro ou não!",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "O programa continua executando, independente se deu erro ou não",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "example: biblioteca",
+    "source": "idade recebe 25",
+    "inputs": [],
+    "events": [],
+    "error": false
+  },
+  {
+    "name": "assign_phrases",
+    "source": "a = 1\nb recebe 2\nc vale 3\nd tem o valor 4\ne1 := 5\nf <- 6\ng is worth 7\nh equals 8\ni1 obtiene 9\nmostre a + b + c + d + e1 + f + g + h + i1",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "45.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "math_words",
+    "source": "mostre 2 mais 3\nmostre 7 menos 2\nmostre 3 multiplicado por 4\nmostre 9 dividido por 2\nmostre 2 elevado a 10\nmostre 2 plus 2\nmostre 5 minus 1\nmostre 2 multiplied by 8\nmostre 8 divided by 4",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "5.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "5.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "12.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "4.5",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1024.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "16.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "math_prec",
+    "source": "mostre 2 + 3 * 4\nmostre (2 + 3) * 4\nmostre 2 ** 3 ** 2\nmostre 7 % 3\nmostre -7 % 3\nmostre 10 / 4\nmostre 1 + 2 - 3",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "14.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "20.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "512.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.5",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "0.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "floats",
+    "source": "mostre 0.1 + 0.2\nmostre 7.5\nx = 2.5\nmostre x * 2",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "0.30000000000000004",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "7.5",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "5.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "strings_concat",
+    "source": "a = \"x\"\nmostre \"o\" + \"i\"\nmostre a + \"b\"\nmostre \"n=\" a\nmostre \"\" ",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "oi",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "xb",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "n=x",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "cond_words",
+    "source": "x = 5\nse x for maior que 3 { mostre \"a\" }\nse x for menor que 3 { mostre \"b\" }\nse x for igual a 5 { mostre \"c\" }\nse x for diferente de 5 { mostre \"d\" }\nse x for maior ou igual a 5 { mostre \"e\" }\nse x for menor ou igual a 4 { mostre \"f\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "cond_bool",
+    "source": "a = verdadeiro\nb = falso\nmostre a\nmostre b\nse a { mostre \"s\" }\nse b { mostre \"n\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "True",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "False",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "s",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "cond_string",
+    "source": "n = \"ana\"\nse n == \"ana\" { mostre \"ok\" }\nse n != \"bia\" { mostre \"ok2\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "ok",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "ok2",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "if_entao",
+    "source": "se 1 == 1 entao faca {\nmostre \"a\"\n}\nquando 1 == 1 {\nmostre \"b\"\n}\ncaso 1 == 1 entao {\nmostre \"c\"\n}",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "orphan_else",
+    "source": "mostre \"a\"\nsenao { mostre \"b\" }\nmostre \"c\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "orphan_except",
+    "source": "mostre \"a\"\nse der erro { mostre \"b\" }\nmostre \"c\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "repita",
+    "source": "repita 3 vezes { mostre \"a\" }\nrepita 1 vez { mostre \"b\" }\nn = 2\nrepita n vezes { mostre \"c\" }\nrepeat 2 times { mostre \"d\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "d",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "d",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "enquanto",
+    "source": "i = 0\nenquanto i < 3 { mostre i\ni = i + 1 }\nwhile i > 0 { i = i - 1 }\nmostre i",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "0.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "0.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "loop_ctrl",
+    "source": "i = 0\nenquanto i < 6 {\ni = i + 1\nse i == 2 { continue }\nse i == 5 { pare }\nmostre i\n}\nrepita 3 vezes { mostre \"x\"\npare }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "x",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "para_cada",
+    "source": "para cada x de 1 ate 3 { mostre x }\npara cada y de 3 ate 1 { mostre y }\nfor each z de 1 ate 2 { mostre z }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "percorra",
+    "source": "lista de c recebe \"a\", \"b\"\npercorra a lista de c atribuindo em i { mostre i }\npercorra \"xy\" atribuindo em l { mostre l }\nscroll c assigning in w { mostre w }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "x",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "y",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "slices",
+    "source": "t = \"abcdef\"\nmostre t[1:3]\nmostre t de 2 ate 4\nmostre t[1:6:1]\nmostre t[5:2]",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "abc",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "bcd",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "bdf",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "abcd",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "case",
+    "source": "t = \"aBc dE\"\nmostre t em maiusculo\nmostre t em minusculo\nmostre t captalizado\nmostre t para maiusculo\nmostre t to lower\nmostre t in upper case",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "ABC DE",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "abc de",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "Abc de",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "ABC DE",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "abc de",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "ABC DE",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "format",
+    "source": "a = 1\nmostre \"% e %\" inserindo a, \"b\"\nmostre \"x=%\" formatando 2\nmostre \"%\" % 3\nmostre \"% %\" format 1, 2",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1.0 e b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "x=2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0 2.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "color",
+    "source": "mostre \"a\" na cor \"#ff0000\"\nmostre nessa linha \"b\"\nmostre nessa linha \"c\" na cor \"#00ff00\"\nmostre \"\"\nmostre \"%\" inserindo 1 na cor \"#112233\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": "#ff0000"
+      },
+      {
+        "type": "inline",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "c",
+        "color": "#00ff00"
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": "#112233"
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "show_variants",
+    "source": "mostrar \"a\"\nexiba \"b\"\nimprima \"c\"\nprintln \"d\"\nprintf \"e\"\nshow \"f\"\nmuestra \"g\"\nprint \"h\"\nescreva \"i\"\nescreva nessa linha \"j\"\nmostre \"\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "d",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "f",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "g",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "h",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "i",
+        "color": ""
+      },
+      {
+        "type": "inline",
+        "text": "j",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "lists_all",
+    "source": "lista de c recebe 1, \"b\", verdadeiro\nmostre c\nmostre lista de c na posicao 2\nlista de c na posicao 1 recebe 9\nadicione 4 na lista de c\nadicione 5 no final da lista de c\nadicione 6 no inicio da lista de c\nadicione 7 na posicao 2 da lista de c\nmostre c\nremova \"b\" da lista de c\nmostre c\nmostre o tamanho da lista de c\nse tiver 9 na lista de c { mostre \"tem\" }\nse tiver 99 na lista de c { mostre \"nao\" }\nlista de v com 3 posicoes\nmostre v\nlista de u recebe \"so\"\nmostre u\nmostre lista c",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "[1.0, 'b', True]",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "[6.0, 7.0, 9.0, 'b', True, 4.0, 5.0]",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "[6.0, 7.0, 9.0, True, 4.0, 5.0]",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "6",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "tem",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['', '', '']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "['so']",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "[6.0, 7.0, 9.0, True, 4.0, 5.0]",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "list_errors",
+    "source": "lista de c recebe 1, 2\ntente { mostre lista de c na posicao 9 } se der erro { mostre \"e1\" }\ntente { mostre lista de c na posicao 0 } se der erro { mostre \"e2\" }\ntente { remova 9 da lista de c } se der erro { mostre \"e3\" }\nx = 1\ntente { adicione 1 na lista de x } se der erro { mostre \"e4\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "e1",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e2",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e3",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e4",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "list_type",
+    "source": "lista de c recebe 1, 2\nmostre o tipo de c\nmostre tipo de \"a\"\nmostre o tipo da variavel c\nmostre type 1\nb = falso\nmostre tipo de b",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "lista",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "string",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "lista",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "float",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "booleano",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "random",
+    "source": "x = um numero aleatorio entre 3 e 9\nmostre x\ny = a random number between 1 and 2\nmostre y\ntente { z = numero aleatorio entre 5 e 5 } se der erro { mostre \"e\" }\ntente { z = numero aleatorio entre 9 e 5 } se der erro { mostre \"f\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "3",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "f",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "input_text",
+    "source": "n = o que o usuario digitar\nmostre n\nm = o numero que for digitado\nmostre m + 1\nmostre digitado",
+    "inputs": ["oi", "4", "tchau"],
+    "events": [
+      {
+        "type": "line",
+        "text": "oi",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "5.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "tchau",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "input_bad_number",
+    "source": "x = o numero que for digitado\nmostre \"nao chega\"",
+    "inputs": ["abc"],
+    "events": [],
+    "error": true
+  },
+  {
+    "name": "files",
+    "source": "crie o arquivo \"a.txt\"\nadicione \"um\" no arquivo \"a.txt\"\nadicione \"dois\" no arquivo \"a.txt\"\nmostre leia o arquivo \"a.txt\"\nsobrescreva \"tres\" no arquivo \"a.txt\"\nx = leia o texto do arquivo \"a.txt\"\nmostre x\nse o arquivo \"a.txt\" existe { mostre \"s\" }\nse o arquivo \"b.txt\" nao existe { mostre \"n\" }\ndelete o arquivo \"a.txt\"\nse o arquivo \"a.txt\" nao existe { mostre \"foi\" }\nremova o arquivo \"z\" ",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "umdois",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "tres",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "s",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "n",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "foi",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "file_missing",
+    "source": "mostre leia o arquivo \"nada.txt\"",
+    "inputs": [],
+    "events": [],
+    "error": true
+  },
+  {
+    "name": "file_create_twice",
+    "source": "crie o arquivo \"a\"\nsobrescreva \"x\" no arquivo \"a\"\ncrie o arquivo \"a\"\nmostre leia o arquivo \"a\"\ndelete o arquivo \"a\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "x",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "import",
+    "source": "crie o arquivo \"lib.safira\"\nsobrescreva \"funcao f {\\n mostre 1\\n}\\nv = 2\" no arquivo \"lib.safira\"\nimporte lib\nf()\nmostre v\ndelete o arquivo \"lib.safira\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "import_missing",
+    "source": "mostre \"a\"\nimporte nada\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "functions",
+    "source": "funcao a { mostre \"a\" }\na()\nfuncao b recebe x { mostre x }\nb passando 1\nb(2)\nfuncao c(x, y) { retorne x + y }\nmostre c(1, 2)\nd = c passando parametros 3, 4\nmostre d\ndef e(): { retorne \"r\" }\nmostre e()\nfunction f receives p { retorne p * 2 }\nmostre f(4)\nfuncao g { retorne 1\nmostre \"nao\" }\nmostre g()",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "2.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "3.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "7.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "r",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "8.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "function_globals",
+    "source": "funcao f recebe x { y = x }\nf(1)\nmostre x\nmostre y",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "1.0",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "function_errors",
+    "source": "tente { nada() } se der erro { mostre \"a\" }\nfuncao f recebe x { mostre x }\ntente { f() } se der erro { mostre \"b\" }\nfuncao g { mostre 1 }\ntente { g(1) } se der erro { mostre \"c\" }\nfuncao h(a, b) { mostre a }\ntente { h(1) } se der erro { mostre \"d\" }\ntente { h(1, 2, 3) } se der erro { mostre \"e\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "d",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "try_all",
+    "source": "tente { mostre \"a\" } se der erro { mostre \"b\" } senao der erro { mostre \"c\" } em qualquer caso { mostre \"d\" }\ntente { nada nada } se der erro { mostre \"e\" } senao der erro { mostre \"f\" } em qualquer caso { mostre \"g\" }\ntry { nada nada } except { mostre \"h\" } finally { mostre \"i\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "d",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "g",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "h",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "i",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "try_loop",
+    "source": "repita 3 vezes { tente { pare } se der erro { mostre \"x\" } }\nmostre \"fim\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "fim",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "undefined",
+    "source": "mostre \"a\"\nmostre nada\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "unknown",
+    "source": "mostre \"a\"\nisso nao existe\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": true
+  },
+  {
+    "name": "interrompa",
+    "source": "funcao f { interrompa }\nmostre \"a\"\nf()\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "interrompa_try",
+    "source": "tente { interrompa } se der erro { mostre \"x\" }\nmostre \"b\"",
+    "inputs": [],
+    "events": [],
+    "error": false
+  },
+  {
+    "name": "top_return",
+    "source": "mostre \"a\"\nretorne 1\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "top_break",
+    "source": "mostre \"a\"\npare\nmostre \"b\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "clear",
+    "source": "mostre \"a\"\nlimpar a tela\nmostre \"b\"\nlimpatela\nclear",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "clear"
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "clear"
+      },
+      {
+        "type": "clear"
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "comments",
+    "source": "# c\nmostre \"a\" # c\nmostre \"b\" // c\nmostre \"c # d\"\nmostre \"e // f\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "b",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c # d",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e // f",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "blocks_next_line",
+    "source": "se 1 == 1\n{\nmostre \"a\"\n}\nsenao\n{\nmostre \"b\"\n}",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "nested",
+    "source": "repita 2 vezes {\n  para cada i de 1 ate 2 {\n    se i == 2 { mostre \"dois\" } senao { mostre \"um\" }\n  }\n}",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "um",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "dois",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "um",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "dois",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "incdec",
+    "source": "n = 1\nincremente 2 em n\nincrease 2 na n\ndecremente 1 no n\nmostre n\ntente { incremente 1 em z } se der erro { mostre \"e\" }\nt = \"a\"\ntente { incremente 1 em t } se der erro { mostre \"f\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "4.0",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "f",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "wait",
+    "source": "espere 1 ms\naguarde 1 milissegundo\nwait 1 ms\nmostre \"a\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "en_program",
+    "source": "if 1 == 1 then { show \"a\" } else { show \"b\" }\nlist of c receive 1, 2\nshow c\nadd 3 in list of c\nshow c",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "[1.0, 2.0]",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "[1.0, 2.0, 3.0]",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "es_program",
+    "source": "si 1 == 1 { muestra \"a\" } si no { muestra \"b\" }\nrepetir 2 veces { muestra \"c\" }\nmientras 1 == 2 { muestra \"d\" }\nmostrar \"e\"",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "a",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "c",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "e",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "mixed",
+    "source": "x recebe 1\nif x is equal to 1 { mostrar \"um\" } senao { show \"outro\" }\nrepeat 2 vezes { imprima \"z\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "um",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "z",
+        "color": ""
+      },
+      {
+        "type": "line",
+        "text": "z",
+        "color": ""
+      }
+    ],
+    "error": false
+  },
+  {
+    "name": "mixed_upper",
+    "source": "se \"a\" == \"a\" { println \"ok\" }",
+    "inputs": [],
+    "events": [
+      {
+        "type": "line",
+        "text": "ok",
+        "color": ""
+      }
+    ],
+    "error": false
+  }
 ]

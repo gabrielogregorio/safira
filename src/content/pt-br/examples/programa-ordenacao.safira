@@ -1,0 +1,16 @@
+#safira 0.9
+# 🔢 Colocar em ordem
+
+mostre "Digite um número:"
+primeiro = o número que o usuário digitar
+
+mostre "Digite outro número:"
+segundo = o número que o usuário digitar
+
+se primeiro for menor que segundo então {
+    mostre primeiro
+    mostre segundo
+} senão {
+    mostre segundo
+    mostre primeiro
+}

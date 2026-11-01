@@ -1,0 +1,7 @@
+#safira 0.9
+# Sortear um número
+# Cada vez que roda, sai um número diferente.
+
+dado = um número aleatório entre 1 e 6
+
+mostre "🎲 Saiu o número " + dado

@@ -6,6 +6,25 @@
     <meta name="description" content="Safira, a programming language in natural language, with a web IDE" />
     <link rel="icon" type="image/png" href="./icone.png" />
     <title>Safira</title>
+    <style>
+      html.snap-return {
+        background: #000000;
+      }
+    </style>
+    <script>
+      try {
+        if (sessionStorage.getItem('safira.snap.return') !== null) {
+          sessionStorage.removeItem('safira.snap.return');
+          document.documentElement.classList.add('snap-return', 'snap-running');
+          // 2 s of black, then 4 s into the fade in.
+          setTimeout(function () {
+            document.documentElement.classList.remove('snap-running');
+          }, 6000);
+        }
+      } catch {
+        // Without storage the page only skips the fade in.
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>

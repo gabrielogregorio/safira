@@ -32,21 +32,61 @@ export const joinPath = (folder: string | null, name: string): string => (folder
 
 export const isInsideFolder = (path: string, folder: string): boolean => path.startsWith(`${folder}/`);
 
-export const provisionalName = (base: string, extension: string, paths: string[], folder: string | null): string => {
-  const isTaken = (name: string): boolean => {
-    const path = joinPath(folder, name);
+// What is inside a folder, with paths that start at that folder.
+export const filesOfFolder = (files: Record<string, string>, folder: string): Record<string, string> =>
+  Object.fromEntries(
+    Object.entries(files)
+      .filter(([path]) => isInsideFolder(path, folder))
+      .map(([path, text]) => [path.slice(folder.length + 1), text]),
+  );
 
-    return paths.some((existing) => existing === path || isInsideFolder(existing, path));
-  };
+export const isPathTaken = (paths: string[], path: string): boolean =>
+  paths.some((existing) => existing === path || isInsideFolder(existing, path));
+
+export const provisionalName = (base: string, extension: string, paths: string[], folder: string | null): string => {
   let candidate = `${base}${extension}`;
   let copy = 2;
 
-  while (isTaken(candidate)) {
+  while (isPathTaken(paths, joinPath(folder, candidate))) {
     candidate = `${base}-${copy}${extension}`;
     copy += 1;
   }
 
   return candidate;
+};
+
+export const movePath = (path: string, from: string, to: string): string =>
+  path === from || isInsideFolder(path, from) ? `${to}${path.slice(from.length)}` : path;
+
+// The dot that starts the extension. A name like `.env` has none, so all of it is the stem.
+export const extensionStart = (name: string): number => {
+  const dot = name.lastIndexOf('.');
+
+  return dot > 0 ? dot : name.length;
+};
+
+const isSafeSegment = (name: string): boolean => name !== '.' && name !== '..' && !/[/\\]/.test(name);
+
+// A typed name without an extension keeps the one the file had, as a file manager does.
+export const renameTarget = (node: TreeNode, typedName: string): string | null => {
+  const typed = typedName.trim();
+
+  if (typed === '' || !isSafeSegment(typed)) {
+    return null;
+  }
+
+  const name =
+    node.kind === 'file' && extensionStart(typed) === typed.length
+      ? `${typed}${node.name.slice(extensionStart(node.name))}`
+      : typed;
+
+  return `${node.path.slice(0, node.path.length - node.name.length)}${name}`;
+};
+
+export const parentFolder = (path: string): string | null => {
+  const slash = path.lastIndexOf('/');
+
+  return slash === -1 ? null : path.slice(0, slash);
 };
 
 const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
@@ -57,10 +97,28 @@ const byFoldersThenName = (first: TreeNode, second: TreeNode): number => {
   return first.name.localeCompare(second.name);
 };
 
-const sortTree = (nodes: TreeNode[]): TreeNode[] =>
+// A place the person chose wins. What has no place yet goes after it, in the usual order.
+const byChosenOrder =
+  (ranks: Map<string, number>) =>
+  (first: TreeNode, second: TreeNode): number => {
+    const firstRank = ranks.get(first.path);
+    const secondRank = ranks.get(second.path);
+
+    if (firstRank !== undefined && secondRank !== undefined) {
+      return firstRank - secondRank;
+    }
+
+    if (firstRank === undefined && secondRank === undefined) {
+      return byFoldersThenName(first, second);
+    }
+
+    return firstRank === undefined ? 1 : -1;
+  };
+
+const sortTree = (nodes: TreeNode[], ranks: Map<string, number>): TreeNode[] =>
   nodes
-    .map((node) => (node.kind === 'folder' ? { ...node, children: sortTree(node.children) } : node))
-    .sort(byFoldersThenName);
+    .map((node) => (node.kind === 'folder' ? { ...node, children: sortTree(node.children, ranks) } : node))
+    .sort(byChosenOrder(ranks));
 
 const findOrCreateFolder = (siblings: TreeNode[], name: string, path: string): FolderNode => {
   const existing = siblings.find((node): node is FolderNode => node.kind === 'folder' && node.name === name);
@@ -75,7 +133,7 @@ const findOrCreateFolder = (siblings: TreeNode[], name: string, path: string): F
   return folder;
 };
 
-export const buildFileTree = (paths: string[]): TreeNode[] => {
+export const buildFileTree = (paths: string[], order: string[] = []): TreeNode[] => {
   const root: TreeNode[] = [];
 
   for (const path of paths) {
@@ -94,5 +152,88 @@ export const buildFileTree = (paths: string[]): TreeNode[] => {
     }
   }
 
-  return sortTree(root);
+  return sortTree(root, new Map(order.map((path, index) => [path, index])));
+};
+
+const flattenTree = (nodes: TreeNode[]): string[] =>
+  nodes.flatMap((node) => (node.kind === 'folder' ? [node.path, ...flattenTree(node.children)] : [node.path]));
+
+export type DropPlace = 'before' | 'after' | 'inside';
+
+export interface PlannedMove {
+  target: string;
+  order: string[];
+}
+
+const siblingsOf = (nodes: TreeNode[], path: string): TreeNode[] => {
+  if (nodes.some((node) => node.path === path)) {
+    return nodes;
+  }
+
+  return nodes.flatMap((node) => (node.kind === 'folder' ? siblingsOf(node.children, path) : []));
+};
+
+export type MoveDirection = 'up' | 'down';
+
+// One step among the items of the same folder. Returns null at the edge.
+export const planStep = (
+  paths: string[],
+  order: string[],
+  node: TreeNode,
+  direction: MoveDirection,
+): PlannedMove | null => {
+  const siblings = siblingsOf(buildFileTree(paths, order), node.path);
+  const index = siblings.findIndex((sibling) => sibling.path === node.path);
+  const anchor = direction === 'up' ? siblings[index - 1] : siblings[index + 1];
+
+  if (anchor === undefined) {
+    return null;
+  }
+
+  return planMove(paths, order, node, anchor, direction === 'up' ? 'before' : 'after');
+};
+
+export interface MoveDestination {
+  folder: FolderNode | null;
+  plan: PlannedMove;
+}
+
+const foldersOf = (nodes: TreeNode[]): FolderNode[] =>
+  nodes.flatMap((node) => (node.kind === 'folder' ? [node, ...foldersOf(node.children)] : []));
+
+// Every folder that can take the item, with null for the root of the project.
+export const moveDestinations = (paths: string[], order: string[], node: TreeNode): MoveDestination[] =>
+  [null, ...foldersOf(buildFileTree(paths, order))].flatMap((folder) => {
+    const plan = planMove(paths, order, node, folder, 'inside');
+
+    return plan !== null && plan.target !== node.path ? [{ folder, plan }] : [];
+  });
+
+// Without an anchor the item goes to the end of the root. Returns null for a move that cannot happen.
+export const planMove = (
+  paths: string[],
+  order: string[],
+  node: TreeNode,
+  anchor: TreeNode | null,
+  place: DropPlace,
+): PlannedMove | null => {
+  const anchorPath = anchor?.path ?? '';
+  const destination = place === 'inside' ? (anchor?.path ?? null) : parentFolder(anchorPath);
+  const target = joinPath(destination, node.name);
+  const isIntoItself = destination !== null && (destination === node.path || isInsideFolder(destination, node.path));
+
+  if (anchor?.path === node.path || isIntoItself || (target !== node.path && isPathTaken(paths, target))) {
+    return null;
+  }
+
+  const others = flattenTree(buildFileTree(paths, order))
+    .filter((path) => path !== node.path)
+    .map((path) => movePath(path, node.path, target));
+  const index = others.indexOf(anchorPath) + Number(place === 'after');
+
+  if (place === 'inside') {
+    return { target, order: [...others, target] };
+  }
+
+  return { target, order: [...others.slice(0, index), target, ...others.slice(index)] };
 };

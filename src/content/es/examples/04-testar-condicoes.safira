@@ -1,0 +1,12 @@
+#safira 0.9
+# Condiciones
+# El "si" elige qué hacer.
+
+muestra "¿Cuál fue tu nota?"
+nota = el número que ingresa el usuario
+
+si nota es mayor o igual a 6 entonces {
+    muestra "¡Aprobaste! 🎉"
+} si no {
+    muestra "Inténtalo de nuevo."
+}

@@ -1,0 +1,11 @@
+#safira 0.9
+# 🎨 Paint calculator
+
+show "📐 How many square meters is the wall?"
+wall = the number that the user enters
+
+show "🪣 How many square meters does one can paint?"
+can = the number that the user enters
+
+cans = wall / can
+show "🎨 You need " + cans + " cans."

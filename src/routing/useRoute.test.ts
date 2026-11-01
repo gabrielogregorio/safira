@@ -7,9 +7,9 @@ describe('useRoute', () => {
   });
 
   it('reads the current address', () => {
-    window.history.replaceState(null, '', '#/lessons');
+    window.history.replaceState(null, '', '#/new');
 
-    expect(renderHook(() => useRoute()).result.current.route).toMatchObject({ name: 'lessons' });
+    expect(renderHook(() => useRoute()).result.current.route).toMatchObject({ name: 'new' });
   });
 
   it('changes the address and the route together', () => {
