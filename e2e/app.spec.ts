@@ -920,19 +920,6 @@ test.describe('lesson mode', () => {
     await expect(page.getByRole('combobox', { name: 'Choose a lesson' })).toHaveValue('aula-02-a-conta');
   });
 
-  test('the cat runs from the dragged stone and continues when it drops', async ({ page }) => {
-    await startLessonMode(page, true);
-    await expect(page.locator('.cat-bubble')).toContainText('therian', { timeout: TYPING_TIMEOUT });
-
-    const stone = await page.getByRole('button', { name: 'Drag the stone' }).boundingBox();
-    await page.mouse.move((stone?.x ?? 0) + 10, (stone?.y ?? 0) + 10);
-    await page.mouse.down();
-    await page.mouse.move(400, 300, { steps: 4 });
-    await expect(page.locator('.cat-bubble')).toBeHidden();
-    await page.mouse.up();
-    await expect(page.locator('.cat-bubble')).toBeVisible();
-  });
-
   test('keeps the page inside the phone screen', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 844 });
     await startLessonMode(page);

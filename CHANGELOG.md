@@ -16,6 +16,11 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 
 - Learn is a menu of its own, and Examples only holds the ready-made programs.
 - Lesson mode has a switch beside Smart suggestions while it is on.
+- On a phone, lessons are chosen from numbered pages at the bottom of the screen.
+
+### Removed
+
+- The stone of lesson mode, and with it the cat running away from it.
 
 ### Fixed
 

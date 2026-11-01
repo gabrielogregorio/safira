@@ -56,6 +56,9 @@ export const LessonBar = ({ lessons, place, progress, onOpen }: LessonBarProps) 
           </option>
         ))}
       </select>
+      <span className="lesson-title" data-fixed-text>
+        {lesson?.title}
+      </span>
       <ol className="lesson-steps" aria-label={t('Lesson steps')}>
         {steps.map((step, index) => {
           const number = index + 1;

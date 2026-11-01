@@ -2127,6 +2127,11 @@ html.snap-return #root {
   padding: 2px 10px;
 }
 
+.lesson-title,
+.lesson-pager {
+  display: none;
+}
+
 .lesson-steps {
   display: flex;
   gap: 4px;
@@ -2273,34 +2278,8 @@ html.snap-return #root {
   gap: 8px;
 }
 
-.cat-fleeing {
+.cat-leaving {
   transition: transform 800ms cubic-bezier(0.3, 0.1, 0.7, 0.5);
-}
-
-.cat-stone {
-  background: none;
-  border: none;
-  bottom: 2px;
-  cursor: var(--cursor-pointer);
-  filter: drop-shadow(0 2px 3px rgb(6 40 90 / 45%));
-  height: 34px;
-  left: 50%;
-  min-height: 0;
-  padding: 0;
-  position: fixed;
-  touch-action: none;
-  transition: transform 320ms cubic-bezier(0.5, 0, 1, 0.6);
-  width: 48px;
-  z-index: 30;
-}
-
-.cat-stone:hover:not(.cat-stone-held) {
-  transform: translateY(-3px) rotate(-6deg);
-}
-
-.cat-stone-held {
-  cursor: grabbing;
-  transition: none;
 }
 
 :root[data-spotlight='run'] .aero-button-run:not(:disabled) {
@@ -2784,11 +2763,6 @@ html.snap-return #root {
     width: calc(100vw - 24px);
   }
 
-  .cat-stone {
-    bottom: 66px;
-    left: 12px;
-  }
-
   .editor-screen {
     gap: 6px;
     padding: 6px;
@@ -2904,6 +2878,66 @@ html.snap-return #root {
     display: none;
   }
 
+  .lesson-select {
+    display: none;
+  }
+
+  .lesson-title {
+    display: block;
+    flex: 1 1 0;
+    font-weight: 700;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .lesson-pager {
+    display: flex;
+    gap: 2px;
+    justify-content: center;
+  }
+
+  .lesson-page {
+    background: linear-gradient(rgb(255 255 255 / 70%), transparent 55%), var(--color-panel-strong);
+    border: 1px solid var(--color-border);
+    border-radius: 12px;
+    color: var(--color-text);
+    cursor: var(--cursor-pointer);
+    flex: 1 1 0;
+    font: inherit;
+    font-weight: 700;
+    max-width: 48px;
+    min-height: 44px;
+    min-width: 0;
+    padding: 0;
+    position: relative;
+  }
+
+  .lesson-page[aria-current='true'] {
+    outline: 3px solid var(--color-accent);
+    outline-offset: -3px;
+  }
+
+  .lesson-page:disabled {
+    cursor: var(--cursor-arrow);
+    opacity: 0.45;
+  }
+
+  .lesson-page-done {
+    background: var(--aero-run-face);
+    border-color: var(--aero-run-edge);
+    color: #ffffff;
+  }
+
+  .lesson-page-done::after {
+    content: '✓';
+    font-size: 0.65rem;
+    position: absolute;
+    right: 3px;
+    top: 1px;
+  }
+
   .mobile-panels {
     backdrop-filter: blur(14px) saturate(150%);
     background: var(--color-panel);
@@ -3016,7 +3050,7 @@ html.snap-return #root {
   :root[data-spotlight='run'] .aero-button-run,
   .cat,
   .cat-bird,
-  .cat-fleeing,
+  .cat-leaving,
   .cat-waving-arm,
   .cat-thumbs-arm,
   .settings-gear,
@@ -3065,7 +3099,7 @@ html.snap-return #root {
 :root[data-vision='calm'] .cat-bird,
 :root[data-vision='calm'] .cat-waving-arm,
 :root[data-vision='calm'] .cat-thumbs-arm,
-:root[data-vision='calm'] .cat-fleeing,
+:root[data-vision='calm'] .cat-leaving,
 :root[data-vision='calm'] .settings-gear,
 :root[data-vision='calm'] .lesson-next-ready,
 :root[data-vision='calm'] .aquarium,
