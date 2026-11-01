@@ -1,12 +1,12 @@
 # Accessibility
 
-The target is WCAG 2.1 AA.
+The target is WCAG 2.1 AA. WCAG 2.2 was not measured. To report a barrier, open an issue with the bug form.
 
 ## Tools
 
 - axe runs in E2E on the home screen, the editor and lesson mode, in the three themes, and on the home screen and the editor in every vision mode with each theme.
 - `src/settings/vision.test.ts` measures every palette: WCAG contrast against the editor background, and distance between code groups as each kind of color blindness sees them, simulated with the Machado 2009 matrices.
-- Lighthouse has a floor of 95 for accessibility.
+- Lighthouse has a floor of 95 for accessibility, but it runs by hand with `pnpm run e2e:lighthouse`, not in CI.
 - `eslint-plugin-jsx-a11y` runs in lint, and every `button` declares its `type`.
 - Layout is tested from 320 to 1440 pixels, with no horizontal scroll.
 
@@ -27,7 +27,7 @@ Color modes also mark code with weight, slant and underline, so color is never t
 
 ## What works
 
-- Every action is reachable by keyboard, with the shortcuts listed in the menus.
+- The actions of the IDE are reachable by keyboard, with the shortcuts listed in the menus. The exceptions are under Known limits.
 - Landmarks, a skip link and a visible focus ring.
 - The terminal is a live region, so a screen reader announces what programs print.
 - Modals take the focus and close with Escape.
@@ -43,4 +43,6 @@ Color modes also mark code with weight, slant and underline, so color is never t
 - The simulation is a model. No person with each condition has checked these palettes yet.
 - In the editor, Tab indents, so leaving it needs Shift+Tab or the skip link.
 - The breakpoint dots work by mouse and touch. By keyboard, use F10 on the line.
+- Moving and reordering files in the sidebar needs a mouse: dragging has no keyboard or touch alternative.
+- The aquarium needs a pointer and keeps moving with the reduced motion preference. It is optional and holds no content.
 - Neither NVDA nor Orca were tested by hand yet.
