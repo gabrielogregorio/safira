@@ -36,13 +36,13 @@ describe('ProfessorCat', () => {
       <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
     );
 
-    expect(screen.getByText(/I am Professor Cat/)).toBeInTheDocument();
+    expect(screen.getByText(/I am a therian/)).toBeInTheDocument();
 
     await press('Continue');
     unmount();
     render(<ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />);
 
-    expect(screen.queryByText(/I am Professor Cat/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/I am a therian/)).not.toBeInTheDocument();
   });
 
   it('explains the step, then asks for a run', async () => {

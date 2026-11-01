@@ -903,7 +903,7 @@ test.describe('lesson mode', () => {
 
   test('the cat runs from the dragged stone and continues when it drops', async ({ page }) => {
     await startLessonMode(page, true);
-    await expect(page.locator('.cat-bubble')).toContainText('Professor Cat', { timeout: TYPING_TIMEOUT });
+    await expect(page.locator('.cat-bubble')).toContainText('therian', { timeout: TYPING_TIMEOUT });
 
     const stone = await page.getByRole('button', { name: 'Drag the stone' }).boundingBox();
     await page.mouse.move((stone?.x ?? 0) + 10, (stone?.y ?? 0) + 10);

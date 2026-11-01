@@ -475,9 +475,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
 
     switch (scene) {
       case 'intro':
-        return t(
-          'Meow! I am Professor Cat, and I will teach you to program, one step at a time. If you want me gone for a moment, drag the stone on the floor. When you let go, I come back.',
-        );
+        return t('Meow! I am a therian, and I will teach you to program.');
       case 'explain':
         return `## ${lesson.step.title}\n\n${lesson.step.text}`;
       case 'play':
@@ -619,7 +617,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     <>
       <div ref={root} className={`cat cat-at-${scene}`} data-pose={pose}>
         {isSettled ? (
-          <section className="cat-bubble" aria-label={t('Professor Cat')} aria-live="polite">
+          <section className="cat-bubble" aria-label={t('The cat')} aria-live="polite">
             <div className="lesson-brief-text" data-fixed-text aria-hidden={typed.isDone ? undefined : true}>
               <Markdown>{hideOpenCode(typed.shown)}</Markdown>
             </div>
