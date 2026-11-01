@@ -1,0 +1,93 @@
+#safira 0.9
+# 🚀 Despegue
+
+lista de cohete recibe "        /\", "       /  \", "      | ** |", "      | ** |", "     /|    |\", "    /_|____|_\"
+lista de llama1 recibe "       (**)", "        ()"
+lista de llama2 recibe "      ( ** )", "       (())", "        ()"
+lista de estrellas recibe "  *        .     *   .", "       .      *       ", " .     *          .   ", "    *       .        *"
+
+funcion cielo(total) {
+    para cada fila desde 1 hasta total {
+        muestra lista de estrellas en posición (fila % 4 + 1) en color gris
+    }
+}
+
+funcion escena(arriba, fuego) {
+    limpiar la pantalla
+    cielo(arriba)
+
+    desplazar cohete asignando en pieza {
+        muestra pieza en color azul
+    }
+
+    si fuego es igual a 1 entonces {
+        desplazar llama1 asignando en pieza {
+            muestra pieza en color naranja
+        }
+    } si no {
+        desplazar llama2 asignando en pieza {
+            muestra pieza en color amarillo
+        }
+    }
+}
+
+funcion cuenta(numero) {
+    escena(6, 1)
+    muestra ""
+    muestra "        >> " + numero + " <<" en color rojo
+    tocar C por 200ms
+    esperar 700 ms
+}
+
+cuenta(3)
+cuenta(2)
+cuenta(1)
+tocar C5, E5, G5 por 120ms
+
+repetir 2 veces {
+    escena(6, 1)
+    tocar C3 por 90ms
+    escena(6, 2)
+    tocar C3 por 90ms
+}
+
+para cada altura desde 6 hasta 0 {
+    escena(altura, altura % 2)
+    tocar G3, C4 por 60ms
+}
+
+tocar E5 por 90ms
+limpiar la pantalla
+muestra ""
+muestra "        .  *  .        " en color blanco
+esperar 120 ms
+limpiar la pantalla
+muestra ""
+muestra "     *  . \ | / .  *   " en color amarillo
+muestra "    .  --  ** --  .    " en color naranja
+muestra "     *  . / | \ .  *   " en color amarillo
+tocar G5, C6 por 100ms
+limpiar la pantalla
+muestra ""
+muestra "  *   .   \  |  /   .   *" en color amarillo
+muestra "   .   ---  ***  ---   . " en color rojo
+muestra "  *   .   /  |  \   .   *" en color amarillo
+tocar E6, G6 por 100ms
+limpiar la pantalla
+muestra ""
+muestra ""
+mostrar en esta linea "   S" en color cian
+tocar C5 por 120ms
+mostrar en esta linea "  A" en color azul
+tocar E5 por 120ms
+mostrar en esta linea "  F" en color morado
+tocar G5 por 120ms
+mostrar en esta linea "  I" en color rosa
+tocar A5 por 120ms
+mostrar en esta linea "  R" en color naranja
+tocar C6 por 120ms
+mostrar en esta linea "  A" en color amarillo
+tocar E6 por 400ms
+muestra ""
+muestra ""
+muestra "   Escrito en español. 💎" en color verde

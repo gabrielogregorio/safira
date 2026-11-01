@@ -10,6 +10,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 - `guarde a resposta em nota`, `save the answer in note` and the same in the other languages put what the user types in a variable, with natural variations such as `salve o que o usuário digitar na nota` and `save the response to note`.
 - Songs in the Examples menu: an original piece called Céu de Safira, Oh! Susanna, Malagueña, Mo Li Hua, Sakura Sakura and the opening of Asa Branca, in every language.
 - A race start program in the Examples menu, with five lights, a random hold and a podium.
+- A liftoff program in the Examples menu, an ASCII animation with color and sound.
 - A lesson about color and sound, so the course now has 14 lessons.
 
 ### Changed
@@ -25,6 +26,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 ### Fixed
 
 - A click that opens a modal no longer plays two sounds together on a slow machine.
+- The Japanese colors `オレンジ` and `ピンク` are recognized.
 - The preview of a pull request is removed from `gh-pages` when the pull request closes.
 
 ## 1.0.0

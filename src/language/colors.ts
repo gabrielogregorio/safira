@@ -92,6 +92,9 @@ const NAMED_COLORS: Record<string, string> = {
   銀色: SILVER,
 };
 
+// The names are compared without accents, and that also takes the marks off the Japanese ones.
+const COLORS_BY_PLAIN_NAME = new Map(Object.entries(NAMED_COLORS).map(([name, color]) => [removeAccents(name), color]));
+
 const HEX_DIGITS = '(?:[0-9a-f]{8}|[0-9a-f]{6}|[0-9a-f]{3,4})';
 const HASH_COLOR = new RegExp(`^#${HEX_DIGITS}$`);
 const ZERO_X_COLOR = new RegExp(`^0x(${HEX_DIGITS})$`);
@@ -105,5 +108,5 @@ export const resolveColor = (text: string): string | null => {
     return `#${zeroX[1]}`;
   }
 
-  return HASH_COLOR.test(color) ? color : (NAMED_COLORS[color] ?? null);
+  return HASH_COLOR.test(color) ? color : (COLORS_BY_PLAIN_NAME.get(color) ?? null);
 };

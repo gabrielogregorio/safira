@@ -5,13 +5,13 @@ import { readScriptVersion } from '@/language/version';
 import { checkProgram } from '@/lessons/lessonCheck';
 import { examplesOf, findExampleByPrefix, lessonsOf, toExample } from './content';
 
-const EXAMPLE_COUNT = 41;
+const EXAMPLE_COUNT = 42;
 const LESSON_COUNT = 14;
 const MAIN_FILE = 'main.safira';
 const PROGRAM_INPUTS = ['2', '2', '2', ...Array.from({ length: 20 }, () => '0')];
 const LONG_CODE_LINES = 16;
 // A song or a full game cannot be a short lesson, and neither of them is one.
-const LONG_PROGRAM = /^programa-(musica-|largada)/;
+const LONG_PROGRAM = /^programa-(musica-|largada|decolagem)/;
 const LATIN_COMMAND =
   /^\s*(show|print|if|else|repeat|while|for|wait|play|function|return|try|list|add|remove|create|read|mostre|se|repita)\b/;
 const LATIN_COMMAND_LINE: Partial<Record<(typeof LOCALES)[number]['id'], RegExp>> = {
