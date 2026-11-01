@@ -149,10 +149,12 @@ const HANDS: Record<Pose, () => JSX.Element> = {
 
 const CatFace = ({ isUpset }: { isUpset: boolean }) => (
   <g className="cat-head">
-    <path d="M36 28 L38 4 L54 18 Z" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
-    <path d="M84 28 L82 4 L66 18 Z" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
-    <path d="M41 22 L41 11 L49 18 Z" fill="#2f7fc4" />
-    <path d="M79 22 L79 11 L71 18 Z" fill="#2f7fc4" />
+    <g className="cat-ears" stroke="#24527e" strokeWidth="1.2">
+      <ellipse cx="45" cy="0" rx="9" ry="27" fill="url(#cat-fur)" transform="rotate(-9 45 22)" />
+      <ellipse cx="45" cy="1" rx="4.4" ry="19" fill="#2f7fc4" stroke="none" transform="rotate(-9 45 22)" />
+      <path d="M71 18 C70 -4 74 -20 84 -24 C92 -22 92 -6 83 4 C86 8 84 14 83 20 Z" fill="url(#cat-fur)" />
+      <path d="M76 12 C76 -4 78 -14 83 -18 C87 -14 86 -6 80 2 Z" fill="#2f7fc4" stroke="none" />
+    </g>
     <ellipse cx="60" cy="38" rx="27" ry="23" fill="url(#cat-fur)" stroke="#24527e" strokeWidth="1.2" />
     {isUpset ? (
       <g fill="none" stroke="#0e2a46" strokeWidth="2.4" strokeLinecap="round">
