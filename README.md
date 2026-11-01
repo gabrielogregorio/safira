@@ -43,7 +43,7 @@ The interface, lessons and examples come in English, Portuguese, Spanish, Simpli
 Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
 so that it comes back after a crash or a power cut.
 
-Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
+Every script keeps its language version on a hidden first line (`#safira 1.1`). The IDE only mentions it when the version
 is not supported. A script without that line is treated as version 0.38, the last Python release.
 
 ## Documentation
