@@ -691,8 +691,21 @@ export const EditorScreen = ({
               onChangeSettings({ suggestions: event.target.checked });
             }}
           />
-          {t('Smart suggestions')}
+          <span className="switch-text">{t('Smart suggestions')}</span>
         </label>
+        {settings.lessonMode ? (
+          <label className="suggestions-toggle">
+            <input
+              type="checkbox"
+              checked
+              onChange={() => {
+                void soundPlayer.play('suggestionsOff');
+                lesson.toggle();
+              }}
+            />
+            <span className="switch-text">{t('Lesson mode')}</span>
+          </label>
+        ) : null}
       </nav>
 
       {settings.lessonMode ? (

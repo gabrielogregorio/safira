@@ -52,6 +52,20 @@ describe('lesson mode', () => {
     window.history.replaceState(null, '', '#/');
   });
 
+  it('shows a switch while it is on, and turning the switch off removes it', async () => {
+    await openProject();
+    await pressHelpItem();
+    const lessonSwitch = await screen.findByRole('checkbox', { name: 'Lesson mode' });
+
+    expect(lessonSwitch).toBeChecked();
+
+    await userEvent.click(lessonSwitch);
+
+    expect(screen.queryByRole('checkbox', { name: 'Lesson mode' })).not.toBeInTheDocument();
+    expect(document.querySelector('.cat')).toBeNull();
+    expect(loadSettings().lessonMode).toBe(false);
+  });
+
   it('only starts from the Help menu', async () => {
     await openProject();
 

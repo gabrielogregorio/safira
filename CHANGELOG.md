@@ -15,6 +15,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 ### Changed
 
 - Learn is a menu of its own, and Examples only holds the ready-made programs.
+- Lesson mode has a switch beside Smart suggestions while it is on.
 
 ### Fixed
 

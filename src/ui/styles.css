@@ -1712,6 +1712,12 @@ html.snap-return #root {
   padding: 0 8px;
 }
 
+/* The letters of Istok Web sit above the center of their line, so they need a nudge to meet the switch. */
+.switch-text {
+  position: relative;
+  top: 1px;
+}
+
 .suggestions-toggle input {
   appearance: none;
   background: linear-gradient(rgb(255 255 255 / 45%), transparent 55%), linear-gradient(#8fa3b6, #5f7488);
