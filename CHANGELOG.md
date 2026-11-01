@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
+
+Fully compatible with 1.0.0: scripts of every earlier version keep running.
 
 ### Added
 
