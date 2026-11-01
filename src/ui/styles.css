@@ -2700,6 +2700,20 @@ html.snap-return #root {
 }
 
 @media (max-width: 768px) {
+  .home-settings > .button {
+    flex: 1 1 0;
+    font-size: 0.9rem;
+    min-width: 0;
+    padding-inline: 8px;
+  }
+
+  .home-corner {
+    display: flex;
+    flex: 0 0 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
   .cat-bubble {
     bottom: 104px;
     max-height: 46vh;
