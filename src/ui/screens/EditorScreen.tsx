@@ -726,7 +726,9 @@ export const EditorScreen = ({
         </label>
       </nav>
 
-      {settings.lessonMode ? <ProfessorCat lesson={lesson} hasError={failure !== null} /> : null}
+      {settings.lessonMode ? (
+        <ProfessorCat lesson={lesson} hasError={failure !== null} isWaitingInput={runner.status === 'waiting-input'} />
+      ) : null}
 
       <ArchiveInput
         ref={archiveInput}

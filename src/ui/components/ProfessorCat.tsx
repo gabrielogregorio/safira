@@ -12,7 +12,6 @@ import { useTypedText } from './TypedText';
 const MET_KEY = 'safira.cat.met';
 const CAT_SIZE = 96;
 const EDGE_MARGIN = 12;
-const FLEE_MILLISECONDS = 800;
 const PANIC_RATE = 1.6;
 const DRAG_START_PIXELS = 4;
 const PHONE_WIDTH = 768;
@@ -29,7 +28,7 @@ const TRIP_VARIATION_MILLISECONDS = 750;
 
 /** 0 is the top of the code field and 1 the bottom. */
 // He stays in the upper part, with the balloon growing down, so the first lines of code stay in sight.
-const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 0.2, explain: 0.2, play: 0.08, result: 0.3 };
+const HEIGHT_IN_FIELD: Record<Scene, number> = { intro: 0.2, explain: 0.2, play: 0.08, input: 0.08, result: 0.3 };
 
 export interface Trip {
   driftX: number;
@@ -37,7 +36,7 @@ export interface Trip {
   milliseconds: number;
 }
 
-type Scene = 'intro' | 'explain' | 'play' | 'result';
+type Scene = 'intro' | 'explain' | 'play' | 'input' | 'result';
 
 const HOME_FIELD = '.code-editor';
 
@@ -45,6 +44,7 @@ const TARGETS: Record<Scene, string> = {
   intro: '.cm-content',
   explain: '.cm-content',
   play: '.aero-button-run',
+  input: '.terminal-input',
   result: '[role="log"]',
 };
 
@@ -253,6 +253,7 @@ const Stone = () => (
 interface ProfessorCatProps {
   lesson: LessonMode;
   hasError: boolean;
+  isWaitingInput: boolean;
 }
 
 interface Spot {
@@ -317,30 +318,35 @@ const placeOnScreen = (element: HTMLElement, scene: Scene, trip: Trip): void => 
 };
 
 // He runs along the line from the stone to him, far enough to leave the screen.
+// Called on every move of the stone, so the transition turns him around in the middle of the run.
 const fleeFrom = (element: HTMLElement, stone: DOMRect): void => {
   const cat = element.getBoundingClientRect();
-  const distanceX = cat.left + CAT_SIZE / 2 - (stone.left + stone.width / 2);
+  const distanceX = cat.left + CAT_SIZE / 2 - (stone.left + stone.width / 2) || 1;
   const distanceY = cat.top + CAT_SIZE / 2 - (stone.top + stone.height / 2);
-  const length = Math.hypot(distanceX, distanceY) || 1;
+  const length = Math.hypot(distanceX, distanceY);
   const reach = Math.hypot(window.innerWidth, window.innerHeight);
+  const x = cat.left + (distanceX / length) * reach;
+  const y = cat.top + (distanceY / length) * reach;
 
   element.dataset['facing'] = distanceX < 0 ? 'left' : 'right';
-  element.style.setProperty('--flee-x', `${String(cat.left + (distanceX / length) * reach)}px`);
-  element.style.setProperty('--flee-y', `${String(cat.top + (distanceY / length) * reach)}px`);
+  element.style.transform = `translate(${String(x)}px, ${String(y)}px)`;
 };
 
-export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
+export const ProfessorCat = ({ lesson, hasError, isWaitingInput }: ProfessorCatProps) => {
   const t = useTranslation();
   const root = useRef<HTMLDivElement>(null);
   const stone = useRef<HTMLButtonElement>(null);
   const pressedAt = useRef<{ x: number; y: number } | null>(null);
   const [isHoldingStone, setIsHoldingStone] = useState(false);
-  const [hasLeft, setHasLeft] = useState(false);
   const [hasMet, setHasMet] = useState(() => readFlag(MET_KEY));
   const key = stepKey(lesson.place);
   const [playAt, setPlayAt] = useState<string | null>(null);
 
   const scene = ((): Scene => {
+    if (isWaitingInput) {
+      return 'input';
+    }
+
     if (!hasMet && !lesson.hasRun) {
       return 'intro';
     }
@@ -368,7 +374,7 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   const tripScene = useRef(scene);
 
   const reposition = useCallback(() => {
-    if (root.current !== null) {
+    if (root.current !== null && !root.current.classList.contains('cat-fleeing')) {
       if (tripScene.current !== scene) {
         tripScene.current = scene;
         trip.current = planTrip();
@@ -460,39 +466,26 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
         return `## ${lesson.step.title}\n\n${lesson.step.text}`;
       case 'play':
         return lesson.step.check === null ? t('Press ▶') : t('Write your answer and press ▶ Run.');
+      case 'input':
+        return t('Type your answer here and press Enter.');
       case 'result':
         return lesson.isOnStepFile ? t('Look at the result over there.') : '';
     }
   })();
   const typed = useTypedText(speech);
 
-  useEffect(() => {
-    if (!isHoldingStone) {
-      return undefined;
-    }
-
-    const timer = setTimeout(
-      () => {
-        setHasLeft(true);
-      },
-      prefersMotion() ? FLEE_MILLISECONDS : 0,
-    );
-
-    return () => {
-      clearTimeout(timer);
-      setHasLeft(false);
-    };
-  }, [isHoldingStone]);
-
   if (lesson.step === undefined) {
     return null;
   }
 
-  const pickUpStone = (): void => {
+  const runFromStone = (): void => {
     if (root.current !== null && stone.current !== null) {
       fleeFrom(root.current, stone.current.getBoundingClientRect());
     }
+  };
 
+  const pickUpStone = (): void => {
+    runFromStone();
     void soundPlayer.play('catMeow', PANIC_RATE);
     setIsHoldingStone(true);
   };
@@ -531,7 +524,9 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
         if (Math.hypot(x, y) >= DRAG_START_PIXELS) {
           event.currentTarget.style.transform = `translate(${String(x)}px, ${String(y)}px)`;
 
-          if (!isHoldingStone) {
+          if (isHoldingStone) {
+            runFromStone();
+          } else {
             pickUpStone();
           }
         }
@@ -555,13 +550,11 @@ export const ProfessorCat = ({ lesson, hasError }: ProfessorCatProps) => {
   if (isHoldingStone) {
     return (
       <>
-        {hasLeft ? null : (
-          <div ref={root} className="cat cat-fleeing" data-pose="wave">
-            <div className="cat-bird">
-              <CatArt pose="wave" />
-            </div>
+        <div ref={root} className="cat cat-fleeing" data-pose="wave">
+          <div className="cat-bird">
+            <CatArt pose="wave" />
           </div>
-        )}
+        </div>
         {stoneButton}
       </>
     );

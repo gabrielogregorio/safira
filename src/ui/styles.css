@@ -2188,8 +2188,7 @@ select {
 }
 
 .cat-fleeing {
-  animation: cat-flee 800ms cubic-bezier(0.5, 0, 1, 0.6) both;
-  transition: none;
+  transition: transform 800ms cubic-bezier(0.3, 0.1, 0.7, 0.5);
 }
 
 .cat-stone {
@@ -2260,6 +2259,20 @@ select {
   width: 1px;
 }
 
+:root[data-language-sound] .language-orb {
+  animation: flag-dance 620ms ease-in-out infinite;
+}
+
+@keyframes flag-dance {
+  25% {
+    transform: rotate(-7deg) translateY(-2px);
+  }
+
+  75% {
+    transform: rotate(7deg) translateY(-2px);
+  }
+}
+
 .cat-bird svg {
   height: 100%;
   overflow: visible;
@@ -2327,12 +2340,6 @@ select {
 
   70% {
     transform: translate(-2px, -2px) rotate(1deg);
-  }
-}
-
-@keyframes cat-flee {
-  to {
-    transform: translate(var(--flee-x), var(--flee-y)) scale(0.6);
   }
 }
 
@@ -2970,6 +2977,7 @@ select {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  :root[data-language-sound] .language-orb,
   .cat-saucer-light,
   .cat-beam,
   :root[data-spotlight='run'] .aero-button-run,
@@ -3017,6 +3025,7 @@ select {
 }
 
 :root[data-vision='calm'][data-spotlight='run'] .aero-button-run,
+:root[data-vision='calm'][data-language-sound] .language-orb,
 :root[data-vision='calm'] .cat-saucer-light,
 :root[data-vision='calm'] .cat-beam,
 :root[data-vision='calm'] .cat,

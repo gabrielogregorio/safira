@@ -222,6 +222,16 @@ const wait = (milliseconds: number): Promise<void> =>
   });
 
 const SOUND_NAMES = Object.keys(SOUND_FILES) as SoundName[];
+
+/** The flags dance on this signal, so they stop exactly when the music stops. */
+const markLanguageSoundStart = (): void => {
+  document.documentElement.dataset['languageSound'] = 'playing';
+};
+
+const markLanguageSoundEnd = (): void => {
+  delete document.documentElement.dataset['languageSound'];
+};
+
 const LANGUAGE_SOUND_NAMES: SoundName[] = Object.values(LANGUAGE_SOUNDS);
 const LANGUAGE_FADE_SECONDS = 0.012;
 const LANGUAGE_STOP_SECONDS = 0.06;
@@ -387,6 +397,14 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
           source.connect(gain);
           gain.connect(output);
           languageVoice = { source, gain };
+          markLanguageSoundStart();
+          source.onended = () => {
+            // A newer language may have taken over by the time this one ends.
+            if (languageVoice?.source === source) {
+              languageVoice = null;
+              markLanguageSoundEnd();
+            }
+          };
         } else {
           source.connect(output);
         }

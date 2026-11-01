@@ -392,10 +392,8 @@ describe('App', () => {
       JSON.stringify([{ id: '1', name: 'Velho', files: {}, breakpoints: {} }]),
     );
     renderApp();
-    await userEvent.click(screen.getByRole('button', { name: 'Rename Velho' }));
-    const field = screen.getByLabelText('Project name', { selector: '[role=dialog] input' });
-    await userEvent.clear(field);
-    await userEvent.type(field, 'Novo{Enter}');
+    await userEvent.click(screen.getByRole('button', { name: 'Velho' }));
+    await userEvent.keyboard('Novo{Enter}');
 
     expect(screen.getByText('Novo')).toBeInTheDocument();
 

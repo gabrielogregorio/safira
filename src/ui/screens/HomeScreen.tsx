@@ -10,7 +10,6 @@ import { AeroOrb } from '@/ui/components/AeroOrb';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
 import { soundPlayer } from '@/ui/sound/sounds';
-import { TextPrompt } from '@/ui/components/TextPrompt';
 
 interface HomeScreenProps {
   projects: Project[];
@@ -46,7 +45,6 @@ export const HomeScreen = ({
   settingsButton,
 }: HomeScreenProps) => {
   const t = useTranslation();
-  const [renaming, setRenaming] = useState<Project | null>(null);
   const [deleting, setDeleting] = useState<Project | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const [isDropping, setIsDropping] = useState(false);
@@ -169,16 +167,6 @@ export const HomeScreen = ({
               <button
                 type="button"
                 className="button"
-                data-sound="renameStart"
-                aria-label={`${t('Rename')} ${project.name}`}
-                onClick={() => {
-                  setRenaming(project);
-                }}>
-                {t('Rename')}
-              </button>
-              <button
-                type="button"
-                className="button"
                 aria-label={`${t('Delete')} ${project.name}`}
                 onClick={() => {
                   setDeleting(project);
@@ -224,22 +212,6 @@ export const HomeScreen = ({
             </button>
           </div>
         </Modal>
-      )}
-
-      {renaming === null ? null : (
-        <TextPrompt
-          title={t('Rename')}
-          label={t('Project name')}
-          initialValue={renaming.name}
-          onClose={() => {
-            setRenaming(null);
-          }}
-          onSubmit={(value) => {
-            void soundPlayer.play('rename');
-            onRename(renaming.id, value);
-            setRenaming(null);
-          }}
-        />
       )}
     </main>
   );

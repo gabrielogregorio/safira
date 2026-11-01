@@ -161,6 +161,13 @@ describe('createSoundPlayer', () => {
     expect(context.sources[1]?.stop).not.toHaveBeenCalled();
   });
 
+  it('tells the page while a language sound plays', async () => {
+    const player = createSoundPlayer(() => asContext(fakeContext()));
+    await player.play('languagePtBr');
+
+    expect(document.documentElement.dataset['languageSound']).toBe('playing');
+  });
+
   it('skips a language that is overtaken while its file loads', async () => {
     const context = fakeContext();
     const player = createSoundPlayer(() => asContext(context));

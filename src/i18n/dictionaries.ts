@@ -1,5 +1,6 @@
 export const dictionaries = {
   'pt-br': {
+    'Type your answer here and press Enter.': 'Digite sua resposta aqui e aperte Enter.',
     'Show it all': 'Mostrar tudo',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
       'Sem aspas, a Safira procura uma variável chamada {name}. Se for um texto, escreva "{name}".',
@@ -189,6 +190,7 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   es: {
+    'Type your answer here and press Enter.': 'Escribe tu respuesta aquí y pulsa Enter.',
     'Show it all': 'Mostrar todo',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
       'Sin comillas, Safira busca una variable llamada {name}. Si es un texto, escribe "{name}".',
@@ -379,6 +381,7 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   'zh-cn': {
+    'Type your answer here and press Enter.': '在这里输入答案,然后按 Enter。',
     'Show it all': '全部显示',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
       '没有引号时,Safira 会寻找名为 {name} 的变量。如果是文字,请写成 "{name}"。',
@@ -563,6 +566,7 @@ export const dictionaries = {
     Programs: '程序',
   },
   ja: {
+    'Type your answer here and press Enter.': 'ここに答えを入力して Enter を押しましょう。',
     'Show it all': '全部表示',
     'Without quotes, Safira looks for a variable called {name}. If it is a text, write "{name}".':
       '引用符がないと、Safira は {name} という変数を探します。文字なら "{name}" と書きましょう。',
