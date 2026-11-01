@@ -1562,6 +1562,26 @@ html.snap-return #root {
   text-overflow: ellipsis;
 }
 
+.tree-more {
+  background: none;
+  border: none;
+  border-radius: 8px;
+  color: var(--color-text);
+  cursor: var(--cursor-pointer);
+  flex: none;
+  font: inherit;
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-height: 30px;
+  opacity: 0;
+  padding: 0 8px;
+}
+
+.tree-row:hover .tree-more,
+.tree-more:focus-visible {
+  opacity: 1;
+}
+
 .tree-name {
   align-items: center;
   background: none;
@@ -3061,6 +3081,16 @@ html.snap-return #root {
   .tree-input {
     min-height: 44px;
     min-width: 40px;
+  }
+
+  .tree-more {
+    min-height: 44px;
+    min-width: 44px;
+    opacity: 1;
+  }
+
+  .tree-row {
+    -webkit-touch-callout: none;
   }
 
   .button-small {

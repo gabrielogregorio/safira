@@ -23,6 +23,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 - Learn is a menu of its own, and Examples only holds the ready-made programs.
 - Lesson mode has a switch beside Smart suggestions while it is on.
 - On a phone, lessons are chosen from numbered pages at the bottom of the screen.
+- Each file and folder has a ⋮ button that opens its menu, always visible on a phone.
 
 ### Removed
 
@@ -31,6 +32,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 ### Fixed
 
 - A click that opens a modal no longer plays two sounds together on a slow machine.
+- A long press on a file opens its menu on a phone, where the row used to start a drag.
 - The Japanese colors `オレンジ` and `ピンク` are recognized.
 - The preview of a pull request is removed from `gh-pages` when the pull request closes.
 
