@@ -6,6 +6,11 @@ A programming language in natural language for first-time programmers, with a we
 
 [**See it live »**](https://gabrielogregorio.github.io/safira/)
 
+[![Tests](https://github.com/gabrielogregorio/safira/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/tests.yml)
+[![Lint](https://github.com/gabrielogregorio/safira/actions/workflows/check-quality.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/check-quality.yml)
+[![CodeQL](https://github.com/gabrielogregorio/safira/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/codeql-analysis.yml)
+[![Deploy](https://github.com/gabrielogregorio/safira/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/gabrielogregorio/safira/actions/workflows/deploy.yml)
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff)
