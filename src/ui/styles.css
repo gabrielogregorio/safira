@@ -2914,6 +2914,36 @@ html.snap-return #root {
     max-height: 85dvh;
     max-width: none;
   }
+
+  /* The long lists take the whole screen, so nothing of the page behind is left at the top. */
+  .modal:has(.new-project),
+  .modal:has(.vision-options) {
+    border-radius: 0;
+    height: 100dvh;
+    max-height: 100dvh;
+  }
+
+  .modal:has(.new-project) .modal-body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    min-height: 0;
+  }
+
+  .new-project {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .new-project .example-grid {
+    flex: 1;
+    max-height: none;
+    min-height: 0;
+  }
+
+  .new-project-footer .button {
+    flex: 1;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
