@@ -9,6 +9,7 @@
 - On a phone, opening a file, an example or a tab goes straight to the code panel, and the code font goes down to 12.
 - The home screen links to GitHub and to the wiki at the bottom, each with its own sound.
 - The top menu of the IDE has its own click sound.
+- Lesson files have numbers in their names, so no language shows names in Portuguese, and untouched lessons of another language leave the project when the language changes.
 
 ## 1.1.0
 

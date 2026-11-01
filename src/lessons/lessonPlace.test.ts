@@ -3,6 +3,7 @@ import {
   firstPlace,
   isLessonDone,
   isStepDone,
+  legacyLessonFilePath,
   lessonFilePath,
   nextPlace,
   placeOfFile,
@@ -21,11 +22,15 @@ const lessons: Lesson[] = [
 
 describe('lesson places', () => {
   it('names the file of a step', () => {
-    expect(lessonFilePath('aulas', { lessonId: 'aula-01-um', step: 1 })).toBe('aulas/01-um-2.safira');
+    expect(lessonFilePath('aulas', { lessonId: 'aula-01-um', step: 1 })).toBe('aulas/01-2.safira');
+  });
+
+  it('remembers the old name of a step', () => {
+    expect(legacyLessonFilePath('aulas', { lessonId: 'aula-01-um', step: 1 })).toBe('aulas/01-um-2.safira');
   });
 
   it('finds the step of a file', () => {
-    expect(placeOfFile(lessons, 'aulas', 'aulas/02-dois-1.safira')).toEqual({ lessonId: 'aula-02-dois', step: 0 });
+    expect(placeOfFile(lessons, 'aulas', 'aulas/02-1.safira')).toEqual({ lessonId: 'aula-02-dois', step: 0 });
     expect(placeOfFile(lessons, 'aulas', 'main.safira')).toBeNull();
   });
 

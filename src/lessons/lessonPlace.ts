@@ -11,8 +11,12 @@ export const isStepDone = (progress: string[], place: LessonPlace): boolean => p
 export const isLessonDone = (progress: string[], lesson: Lesson): boolean =>
   lesson.steps.every((_step, step) => isStepDone(progress, { lessonId: lesson.id, step }));
 
-/** The folder has the language in its name, so each language keeps its own scripts. */
+/** The folder has the language in its name, and the file has only numbers, since the slugs are in Portuguese. */
 export const lessonFilePath = (folder: string, { lessonId, step }: LessonPlace): string =>
+  `${folder}/${lessonId.replace(LESSON_PREFIX, '').split('-')[0]}-${String(step + 1)}${SCRIPT_EXTENSION}`;
+
+/** The name a step had up to 1.1.0, kept only to clean those files up. */
+export const legacyLessonFilePath = (folder: string, { lessonId, step }: LessonPlace): string =>
   `${folder}/${lessonId.replace(LESSON_PREFIX, '')}-${String(step + 1)}${SCRIPT_EXTENSION}`;
 
 const allPlaces = (lessons: Lesson[]): LessonPlace[] =>

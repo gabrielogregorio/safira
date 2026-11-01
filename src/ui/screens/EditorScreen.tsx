@@ -6,6 +6,7 @@ import { formatCode } from '@/language/formatter';
 import type { Locale } from '@/language/messages';
 import { getAllCommands, shownPhrases } from '@/language/phrases';
 import { addScriptVersion, isSupportedVersion, readScriptVersion, SUPPORTED_VERSIONS } from '@/language/version';
+import { isLessonFile, untouchedOldLessonFiles } from '@/lessons/lessonFiles';
 import type { PlannedMove, TreeNode } from '@/projects/fileTree';
 import {
   filesOfFolder,
@@ -445,18 +446,20 @@ export const EditorScreen = ({
     (path: string, code: string) => {
       saveOpenTabs();
       const current = latestProject.current;
+      const oldFiles = untouchedOldLessonFiles(current.files, locale);
       const stored = current.files[path] ?? addScriptVersion(code);
 
-      if (current.files[path] === undefined) {
-        latestProject.current = { ...current, files: { ...current.files, [path]: stored } };
+      if (current.files[path] === undefined || oldFiles.length > 0) {
+        const files = Object.fromEntries(Object.entries(current.files).filter(([file]) => !oldFiles.includes(file)));
+        latestProject.current = { ...current, files: { ...files, [path]: stored } };
         onSaveProject(latestProject.current);
       }
 
       // Each step replaces the last one, so a course does not leave dozens of open tabs.
-      setTabs((openTabs) => openTabs.filter((tab) => !tab.file.startsWith(`${t('lessons')}/`) || tab.file === path));
+      setTabs((openTabs) => openTabs.filter((tab) => !isLessonFile(tab.file) || tab.file === path));
       openFile(path, stored);
     },
-    [onSaveProject, openFile, saveOpenTabs, t],
+    [locale, onSaveProject, openFile, saveOpenTabs],
   );
 
   const lesson = useLessonMode({
