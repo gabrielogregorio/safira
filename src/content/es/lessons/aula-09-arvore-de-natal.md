@@ -3,7 +3,7 @@
 ## Árbol parpadeante
 
 ```safira
-# Limpiar y esperar hace parpadear cualquier cosa.
+# Hace parpadear la estrella: borra, muestra y espera.
 repetir 2 veces {
     limpiar la pantalla
     muestra "⭐"
@@ -18,9 +18,12 @@ repetir 2 veces {
 ## Desafío: Árbol parpadeante
 
 ```safira
-# Desafío: Haz que el árbol parpadee 3 veces: usa repetir,
-# limpiar la pantalla y esperar 1 segundo, mostrando el
-# árbol encendido y luego apagado.
+# Desafío: Haz que el árbol
+# parpadee 3 veces.
+# Muestra el árbol encendido,
+# espera, borra la pantalla y
+# muestra el árbol con las luces
+# en ⚫.
 
 muestra "    ⭐"
 muestra "   🎄🎄"

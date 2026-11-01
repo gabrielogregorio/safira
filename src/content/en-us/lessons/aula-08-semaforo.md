@@ -3,8 +3,8 @@
 ## Traffic light
 
 ```safira
-# repeat does it all again.
-# clear wipes what was shown.
+# Repeats everything 2 times.
+# Clears the screen, shows a text and waits.
 repeat 2 times {
     clear
     show "Hello"
@@ -19,9 +19,10 @@ repeat 2 times {
 ## Challenge: Traffic light
 
 ```safira
-# Challenge: Make a traffic light that repeats 2 times:
-# show Stop for 4 seconds, Go for 4 seconds and Caution
-# for 2 seconds, clearing the screen between them.
+# Challenge: Make a traffic light that repeats 2 times.
+# Show Stop for 4 seconds, Go for 4 seconds and Caution
+# for 2 seconds.
+# Clear the screen between them.
 
 ```
 

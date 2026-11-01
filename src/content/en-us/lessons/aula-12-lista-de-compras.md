@@ -3,13 +3,13 @@
 ## Shopping list
 
 ```safira
-# Creates the list.
+# Creates a list with two fruits.
 list of fruits receive "grape", "pear"
 
-# Adds at the end.
+# Puts one more fruit at the end.
 add "kiwi" at the end of the list of fruits
 
-# Goes through all the items.
+# Shows each fruit, one per line.
 scroll through the list of fruits assigning in item {
     show item
 }
@@ -18,8 +18,10 @@ scroll through the list of fruits assigning in item {
 ## Challenge: Shopping list
 
 ```safira
-# Challenge: Create the list shopping with rice and beans,
-# add milk at the end and show each item.
+# Challenge: Create a list called shopping with rice and
+# beans.
+# Put milk at the end.
+# Show each item.
 
 ```
 

@@ -5,15 +5,15 @@
 ```safira
 texto = "safira"
 
-# em maiúsculo deixa tudo grande.
+# Mostra o texto todo em letras grandes.
 mostre texto em maiúsculo
 ```
 
 ## Desafio: Gritar
 
 ```safira
-# Desafio: Peça um texto e mostre esse texto todo em
-# maiúsculas.
+# Desafio: Peça um texto e mostre ele todo em letras
+# grandes.
 
 ```
 

@@ -3,15 +3,14 @@
 ## Háblame
 
 ```safira
-# muestra escribe en la pantalla.
+# Muestra un texto en la pantalla.
 muestra "Hola, mundo!"
 ```
 
 ## Desafío: Háblame
 
 ```safira
-# Desafío: Haz que el programa muestre Hola, Safira!
-# .
+# Desafío: Muestra en la pantalla el texto Hola, Safira!
 
 ```
 

@@ -3,7 +3,7 @@
 ## Double it
 
 ```safira
-# This asks for a number.
+# Asks for a number and shows that number plus 1.
 n = the number that the user enters
 show n + 1
 ```

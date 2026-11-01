@@ -3,10 +3,10 @@
 ## Adivinhe
 
 ```safira
-# Sorteia um número.
+# Sorteia um número: 1 ou 2.
 dado = um número aleatório entre 1 e 2
 
-# O se escolhe o caminho.
+# Se saiu 1, mostra Cara. Se não, mostra Coroa.
 se dado for igual a 1 então {
     mostre "Cara"
 } senão {
@@ -17,8 +17,10 @@ se dado for igual a 1 então {
 ## Desafio: Adivinhe
 
 ```safira
-# Desafio: Sorteie um número em segredo, peça um número e
-# mostre Acertou se for igual ou Errou se não for.
+# Desafio: Sorteie um número de 1 a 3 e guarde em segredo.
+# Peça um número.
+# Se for igual, mostre Acertou.
+# Se não, mostre Errou.
 
 ```
 

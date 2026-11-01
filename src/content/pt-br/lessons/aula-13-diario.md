@@ -3,11 +3,11 @@
 ## Diário
 
 ```safira
-# Cria o arquivo e escreve nele.
+# Cria um arquivo e escreve nele.
 crie o arquivo "a.txt"
 sobrescreva "oi" no arquivo "a.txt"
 
-# Lê o arquivo.
+# Lê o que foi escrito e mostra na tela.
 texto = leia o arquivo "a.txt"
 mostre texto
 ```
@@ -15,9 +15,9 @@ mostre texto
 ## Desafio: Diário
 
 ```safira
-# Desafio: Crie diario.
-# txt, escreva Hoje aprendi Safira nele, leia o arquivo e
-# mostre o texto.
+# Desafio: Crie o arquivo diario.
+# txt e escreva nele Hoje aprendi Safira.
+# Depois leia o arquivo e mostre o que está escrito.
 
 ```
 

@@ -3,7 +3,7 @@
 ## Nombre y apellido
 
 ```safira
-# Así el programa pide un texto.
+# Pide tu nombre y te saluda.
 nombre = lo que escribe el usuario
 muestra "Hola, " + nombre
 ```

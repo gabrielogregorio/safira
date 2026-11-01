@@ -3,15 +3,16 @@
 ## La cuenta
 
 ```safira
-# Sin comillas, la computadora hace la cuenta.
+# Hace una cuenta y muestra el resultado.
 muestra 2 + 2
 ```
 
 ## Desafío: La cuenta
 
 ```safira
-# Desafío: Muestra el resultado de 25 * 4, sin escribir el
-# resultado.
+# Desafío: Muestra el resultado de 25 * 4.
+# El * quiere decir por.
+# Escribe la cuenta, no el resultado.
 
 ```
 

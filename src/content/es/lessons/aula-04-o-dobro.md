@@ -3,7 +3,7 @@
 ## El doble
 
 ```safira
-# Así el programa pide un número.
+# Pide un número y muestra ese número más 1.
 n = el número que ingresa el usuario
 muestra n + 1
 ```

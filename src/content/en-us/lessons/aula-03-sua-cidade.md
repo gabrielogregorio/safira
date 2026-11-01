@@ -3,19 +3,19 @@
 ## Your city
 
 ```safira
-# A variable keeps a value.
+# Keeps the name Ana.
 name = "Ana"
 
-# The + joins texts.
+# Shows a hello with the name.
 show "Hello, " + name
 ```
 
 ## Challenge: Your city
 
 ```safira
-# Challenge: Create the variable city with the value
-# "Lima" and show I live in Lima, joining the text with
-# the variable.
+# Challenge: Keep "Lima" with the name city.
+# Then show the sentence I live in Lima, using the name
+# city.
 
 ```
 

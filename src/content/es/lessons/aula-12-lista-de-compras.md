@@ -3,13 +3,13 @@
 ## Lista de compras
 
 ```safira
-# Crea la lista.
+# Crea una lista con dos frutas.
 lista de frutas recibe "uva", "pera"
 
-# Añade al final.
+# Pone una fruta más al final.
 añadir "kiwi" al final de la lista de frutas
 
-# Pasa por todos los items.
+# Muestra cada fruta, una por línea.
 desplazarse por la lista de frutas asignando en item {
     muestra item
 }
@@ -18,8 +18,10 @@ desplazarse por la lista de frutas asignando en item {
 ## Desafío: Lista de compras
 
 ```safira
-# Desafío: Crea la lista compras con arroz y frijol, añade
-# leche al final y muestra cada item.
+# Desafío: Crea una lista llamada compras con arroz y
+# frijol.
+# Pon leche al final.
+# Muestra cada cosa.
 
 ```
 

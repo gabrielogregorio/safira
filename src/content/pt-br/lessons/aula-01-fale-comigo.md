@@ -3,15 +3,14 @@
 ## Fale comigo
 
 ```safira
-# mostre escreve na tela.
+# Mostra um texto na tela.
 mostre "Olá, mundo!"
 ```
 
 ## Desafio: Fale comigo
 
 ```safira
-# Desafio: Faça o programa mostrar Olá, Safira!
-# .
+# Desafio: Mostre na tela o texto Olá, Safira!
 
 ```
 

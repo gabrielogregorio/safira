@@ -3,15 +3,14 @@
 ## Talk to me
 
 ```safira
-# show writes on the screen.
+# Shows a text on the screen.
 show "Hello, world!"
 ```
 
 ## Challenge: Talk to me
 
 ```safira
-# Challenge: Make the program show Hello, Safira!
-# .
+# Challenge: Show the text Hello, Safira! on the screen.
 
 ```
 

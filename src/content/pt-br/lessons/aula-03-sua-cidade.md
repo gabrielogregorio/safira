@@ -3,18 +3,19 @@
 ## Sua cidade
 
 ```safira
-# Uma variável guarda um valor.
+# Guarda o nome Ana.
 nome = "Ana"
 
-# O + junta textos.
+# Mostra um oi junto com o nome.
 mostre "Olá, " + nome
 ```
 
 ## Desafio: Sua cidade
 
 ```safira
-# Desafio: Crie a variável cidade com o valor "Lima" e
-# mostre Eu moro em Lima, juntando o texto com a variável.
+# Desafio: Guarde "Lima" com o nome cidade.
+# Depois mostre a frase Eu moro em Lima, usando o nome
+# cidade.
 
 ```
 

@@ -3,18 +3,19 @@
 ## Tu ciudad
 
 ```safira
-# Una variable guarda un valor.
+# Guarda el nombre Ana.
 nombre = "Ana"
 
-# El + une textos.
+# Muestra un saludo con el nombre.
 muestra "Hola, " + nombre
 ```
 
 ## Desafío: Tu ciudad
 
 ```safira
-# Desafío: Crea la variable ciudad con el valor "Lima" y
-# muestra Vivo en Lima, uniendo el texto con la variable.
+# Desafío: Guarda "Lima" con el nombre ciudad.
+# Después muestra la frase Vivo en Lima, usando el nombre
+# ciudad.
 
 ```
 

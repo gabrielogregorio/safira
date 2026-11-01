@@ -3,8 +3,8 @@
 ## Semáforo
 
 ```safira
-# repita faz tudo de novo.
-# limpe a tela apaga o que foi mostrado.
+# Repete tudo 2 vezes.
+# Apaga a tela, mostra um texto e espera.
 repita 2 vezes {
     limpe a tela
     mostre "Olá"
@@ -19,9 +19,10 @@ repita 2 vezes {
 ## Desafio: Semáforo
 
 ```safira
-# Desafio: Faça um semáforo que repete 2 vezes: mostre
-# Pare por 4 segundos, Siga por 4 segundos e Atenção por 2
-# segundos, limpando a tela entre eles.
+# Desafio: Faça um semáforo que repete 2 vezes.
+# Mostre Pare por 4 segundos, Siga por 4 segundos e
+# Atenção por 2 segundos.
+# Apague a tela entre eles.
 
 ```
 

@@ -3,15 +3,16 @@
 ## The math
 
 ```safira
-# Without quotes, the computer does the math.
+# Does the math and shows the result.
 show 2 + 2
 ```
 
 ## Challenge: The math
 
 ```safira
-# Challenge: Show the result of 25 * 4, without writing
-# the result.
+# Challenge: Show the result of 25 * 4.
+# The * means times.
+# Write the math, not the result.
 
 ```
 

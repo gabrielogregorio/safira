@@ -3,7 +3,7 @@
 ## Contar
 
 ```safira
-# La repetición cuenta por ti.
+# Muestra los números del 1 al 3.
 para cada x desde 1 hasta 3 {
     muestra x
 }

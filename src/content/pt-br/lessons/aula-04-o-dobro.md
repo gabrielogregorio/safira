@@ -3,7 +3,7 @@
 ## O dobro
 
 ```safira
-# Assim o programa pede um número.
+# Pede um número e mostra esse número mais 1.
 n = o número que o usuário digitar
 mostre n + 1
 ```

@@ -3,15 +3,16 @@
 ## A conta
 
 ```safira
-# Sem aspas, o computador faz a conta.
+# Faz uma conta e mostra o resultado.
 mostre 2 + 2
 ```
 
 ## Desafio: A conta
 
 ```safira
-# Desafio: Mostre o resultado de 25 * 4, sem escrever o
-# resultado.
+# Desafio: Mostre o resultado de 25 * 4.
+# O * quer dizer vezes.
+# Escreva a conta, não o resultado.
 
 ```
 

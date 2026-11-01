@@ -3,11 +3,11 @@
 ## Diary
 
 ```safira
-# Creates the file and writes in it.
+# Creates a file and writes in it.
 create the file "a.txt"
 overwrite "hi" to the file "a.txt"
 
-# Reads the file.
+# Reads what was written and shows it.
 text = read the file "a.txt"
 show text
 ```
@@ -15,9 +15,9 @@ show text
 ## Challenge: Diary
 
 ```safira
-# Challenge: Create diary.
-# txt, write Today I learned Safira in it, read the file
-# and show the text.
+# Challenge: Create the file diary.
+# txt and write Today I learned Safira in it.
+# Then read the file and show what is written.
 
 ```
 

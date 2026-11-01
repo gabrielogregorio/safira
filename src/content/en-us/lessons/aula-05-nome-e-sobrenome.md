@@ -3,7 +3,7 @@
 ## First and last name
 
 ```safira
-# This asks for a text.
+# Asks for your name and says hello to you.
 name = what the user types
 show "Hello, " + name
 ```

@@ -5,7 +5,7 @@
 ```safira
 show "Ready..."
 
-# wait makes a pause.
+# Waits 1 second before going on.
 wait 1 second
 show "Go!"
 ```
@@ -13,9 +13,8 @@ show "Go!"
 ## Challenge: Countdown
 
 ```safira
-# Challenge: Show 3, 2 and 1, with a wait between them,
-# and then show Fire!
-# .
+# Challenge: Show 3, 2 and 1, with a wait between them.
+# At the end, show Fire!
 
 ```
 

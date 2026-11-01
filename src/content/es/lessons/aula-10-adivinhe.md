@@ -3,10 +3,10 @@
 ## Adivina
 
 ```safira
-# Sortea un número.
+# Sortea un número: 1 o 2.
 dado = un número aleatorio entre 1 y 2
 
-# El si elige el camino.
+# Si sale 1, muestra Cara. Si no, muestra Cruz.
 si dado es igual a 1 entonces {
     muestra "Cara"
 } si no {
@@ -17,8 +17,11 @@ si dado es igual a 1 entonces {
 ## Desafío: Adivina
 
 ```safira
-# Desafío: Sortea un número en secreto, pide un número y
-# muestra Acertaste si es igual o Fallaste si no.
+# Desafío: Sortea un número del 1 al 3 y guárdalo en
+# secreto.
+# Pide un número.
+# Si es igual, muestra Acertaste.
+# Si no, muestra Fallaste.
 
 ```
 

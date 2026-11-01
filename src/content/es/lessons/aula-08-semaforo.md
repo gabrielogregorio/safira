@@ -3,8 +3,8 @@
 ## Semáforo
 
 ```safira
-# repetir lo hace todo de nuevo.
-# limpiar la pantalla borra lo mostrado.
+# Repite todo 2 veces.
+# Borra la pantalla, muestra un texto y espera.
 repetir 2 veces {
     limpiar la pantalla
     muestra "Hola"
@@ -19,9 +19,10 @@ repetir 2 veces {
 ## Desafío: Semáforo
 
 ```safira
-# Desafío: Haz un semáforo que se repite 2 veces: muestra
-# Alto por 4 segundos, Sigue por 4 segundos y Atención por
-# 2 segundos, limpiando la pantalla entre ellos.
+# Desafío: Haz un semáforo que se repite 2 veces.
+# Muestra Alto por 4 segundos, Sigue por 4 segundos y
+# Atención por 2 segundos.
+# Borra la pantalla entre ellos.
 
 ```
 

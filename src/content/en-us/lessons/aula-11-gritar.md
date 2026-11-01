@@ -5,14 +5,15 @@
 ```safira
 text = "safira"
 
-# in upper case makes everything big.
+# Shows the whole text in capital letters.
 show text in upper case
 ```
 
 ## Challenge: Shout
 
 ```safira
-# Challenge: Ask for a text and show it all in capitals.
+# Challenge: Ask for a text and show all of it in capital
+# letters.
 
 ```
 

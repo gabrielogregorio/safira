@@ -5,7 +5,7 @@
 ```safira
 mostre "Preparar..."
 
-# espere faz uma pausa.
+# Espera 1 segundo antes de continuar.
 espere 1 segundo
 mostre "Já!"
 ```
@@ -13,9 +13,8 @@ mostre "Já!"
 ## Desafio: Contagem regressiva
 
 ```safira
-# Desafio: Mostre 3, 2 e 1, com uma espera entre eles, e
-# depois mostre Fogo!
-# .
+# Desafio: Mostre 3, 2 e 1, com uma espera entre eles.
+# No final, mostre Fogo!
 
 ```
 

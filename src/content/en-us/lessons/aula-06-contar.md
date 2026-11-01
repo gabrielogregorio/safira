@@ -3,7 +3,7 @@
 ## Count
 
 ```safira
-# The loop counts for you.
+# Shows the numbers from 1 to 3.
 for each x from 1 to 3 {
     show x
 }
