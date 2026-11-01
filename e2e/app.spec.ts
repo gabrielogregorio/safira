@@ -877,7 +877,7 @@ test.describe('phone', () => {
     await page.goto('/');
     await page.getByRole('button', { name: 'Create project' }).tap();
     await page.getByRole('button', { name: 'Go ahead' }).tap();
-    await page.getByRole('menuitem', { name: 'Examples' }).tap();
+    await page.getByRole('menuitem', { name: 'Learn' }).tap();
     await expect(page.getByRole('menuitem', { name: 'Lists' })).toBeVisible();
     await expectNoViolations(page);
   });

@@ -1369,13 +1369,6 @@ html.snap-return #root {
   opacity: 0.8;
 }
 
-.menubar-label {
-  color: var(--color-muted);
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 6px 12px 2px;
-}
-
 .menubar-separator {
   background: var(--color-line);
   height: 1px;

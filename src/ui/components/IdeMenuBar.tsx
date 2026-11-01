@@ -184,8 +184,7 @@ export const IdeMenuBar = ({
         <Action label={t('Toggle breakpoint')} shortcut="F10" onSelect={onToggleBreakpoint} />
         <Action label={t('Clear breakpoints')} onSelect={onClearBreakpoints} />
       </Menu>
-      <Menu label={t('Examples')}>
-        <Menubar.Label className="menubar-label">{t('Learn')}</Menubar.Label>
+      <Menu label={t('Learn')}>
         {lessons.map((example) => (
           <Action
             key={example.id}
@@ -195,8 +194,8 @@ export const IdeMenuBar = ({
             }}
           />
         ))}
-        <Menubar.Separator className="menubar-separator" />
-        <Menubar.Label className="menubar-label">{t('Programs')}</Menubar.Label>
+      </Menu>
+      <Menu label={t('Examples')}>
         {programs.map((example, index) => (
           <Action
             key={example.id}

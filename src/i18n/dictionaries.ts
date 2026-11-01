@@ -204,7 +204,6 @@ export const dictionaries = {
     'Paused on line {line}': 'Pausado na linha {line}',
     'Run your program to see its variables here.': 'Execute seu programa para ver as variáveis aqui.',
     Learn: 'Aprender',
-    Programs: 'Programas',
   },
   es: {
     'Read this code.': 'Lee este código.',
@@ -412,7 +411,6 @@ export const dictionaries = {
     'Paused on line {line}': 'Pausado en la línea {line}',
     'Run your program to see its variables here.': 'Ejecute su programa para ver las variables aquí.',
     Learn: 'Aprender',
-    Programs: 'Programas',
   },
   'zh-cn': {
     'Read this code.': '先读这段代码。',
@@ -613,7 +611,6 @@ export const dictionaries = {
     'Paused on line {line}': '已暂停在第 {line} 行',
     'Run your program to see its variables here.': '运行程序后，变量会显示在这里。',
     Learn: '学习',
-    Programs: '程序',
   },
   ja: {
     'Read this code.': 'このコードを読みましょう。',
@@ -818,7 +815,6 @@ export const dictionaries = {
     'Paused on line {line}': '{line} 行目で一時停止中',
     'Run your program to see its variables here.': 'プログラムを実行すると、ここに変数が表示されます。',
     Learn: '学ぶ',
-    Programs: 'プログラム',
   },
 } as const;
 
