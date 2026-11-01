@@ -41,6 +41,8 @@ import languagePtBrUrl from './files/language-pt-br.wav';
 import languageZhCnUrl from './files/language-zh-cn.wav';
 import lineDeleteUrl from './files/line-delete.wav';
 import modalCloseUrl from './files/modal-close.wav';
+import linkGithubUrl from './files/link-github.wav';
+import linkWikiUrl from './files/link-wiki.wav';
 import menuClickUrl from './files/menu-click.wav';
 import modalOpenUrl from './files/modal-open.wav';
 import moveUrl from './files/move.wav';
@@ -67,6 +69,8 @@ import weatherSimpleUrl from './files/weather-simple.wav';
 export type SoundName =
   | 'click'
   | 'menuClick'
+  | 'linkGithub'
+  | 'linkWiki'
   | 'hover'
   | 'hoverSpecial'
   | 'toggle'
@@ -133,6 +137,8 @@ export type SoundName =
 export const SOUND_FILES: Record<SoundName, string> = {
   click: clickUrl,
   menuClick: menuClickUrl,
+  linkGithub: linkGithubUrl,
+  linkWiki: linkWikiUrl,
   hover: hoverUrl,
   hoverSpecial: hoverSpecialUrl,
   toggle: toggleUrl,

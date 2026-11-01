@@ -184,6 +184,7 @@ export const HomeScreen = ({
       <footer className="home-links">
         <a
           className="aero-button home-link"
+          data-sound="linkGithub"
           href={REPOSITORY_URL}
           target="_blank"
           rel="noreferrer"
@@ -193,6 +194,7 @@ export const HomeScreen = ({
         </a>
         <a
           className="aero-button home-link"
+          data-sound="linkWiki"
           href={`${REPOSITORY_URL}/wiki`}
           target="_blank"
           rel="noreferrer"
