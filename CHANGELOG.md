@@ -26,6 +26,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 - Each file and folder has a ⋮ button that opens its menu, always visible on a phone.
 - On a phone, opening a file, an example or a tab goes straight to the code panel, and the code font goes down to 12.
 - The home screen links to GitHub and to the wiki at the bottom.
+- The top menu of the IDE has its own click sound.
 
 ### Removed
 

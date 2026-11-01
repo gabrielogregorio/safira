@@ -169,6 +169,14 @@ describe('createSoundPlayer', () => {
     expect(context.sources).toHaveLength(1);
   });
 
+  it('lets the sound of the menu step aside for the modal that an item opens', async () => {
+    const context = fakeContext();
+    const player = createSoundPlayer(() => asContext(context));
+    await Promise.all([player.play('menuClick'), player.play('modalOpen')]);
+
+    expect(fetch).toHaveBeenCalledExactlyOnceWith(SOUND_FILES.modalOpen);
+  });
+
   it('plays the closing sound, not the click, on the button that closes a modal', async () => {
     const context = fakeContext();
     const player = createSoundPlayer(() => asContext(context));

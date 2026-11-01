@@ -41,6 +41,18 @@ describe('IdeMenuBar', () => {
     vi.restoreAllMocks();
   });
 
+  it('has a sound of its own, for the menus and for their plain items', async () => {
+    setup();
+    const file = screen.getByRole('menuitem', { name: 'File' });
+
+    expect(file).toHaveAttribute('data-sound', 'menuClick');
+
+    await userEvent.click(file);
+
+    expect(await screen.findByRole('menuitem', { name: 'Format code' })).toHaveAttribute('data-sound', 'menuClick');
+    expect(screen.getByRole('menuitem', { name: 'Export project (.zip)' })).toHaveAttribute('data-sound', 'export');
+  });
+
   it('shows the six menus', () => {
     setup();
 
