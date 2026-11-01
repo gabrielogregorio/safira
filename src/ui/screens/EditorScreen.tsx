@@ -78,6 +78,13 @@ const AUTOSAVE_MILLISECONDS = 300;
 const FUNCTION_KEYS = ['F5', 'F6', 'F7', 'F10', 'F11'];
 type MobilePanel = 'files' | 'code' | 'output' | 'variables';
 
+// On a phone the code never goes below this, or the iPhone zooms into the field. See `.cm-content` in the styles.
+const SMALLEST_PHONE_FONT_SIZE = 16;
+const PHONE_WIDTH = 768;
+
+const visibleFontSize = (size: number): number =>
+  clampFontSize(window.innerWidth <= PHONE_WIDTH ? Math.max(size, SMALLEST_PHONE_FONT_SIZE) : size);
+
 const restoreTabs = (project: Project, routeFile: string | null): EditorTab[] => {
   const drafts = loadDrafts(project.id);
   const routed = routeFile !== null && project.files[routeFile] !== undefined ? routeFile : null;
@@ -671,7 +678,7 @@ export const EditorScreen = ({
             aria-label={t('Increase font')}
             title={t('Increase font')}
             onClick={() => {
-              onChangeSettings({ fontSize: clampFontSize(settings.fontSize + FONT_SIZE_STEP) });
+              onChangeSettings({ fontSize: visibleFontSize(settings.fontSize + FONT_SIZE_STEP) });
             }}>
             A
           </button>
@@ -681,7 +688,7 @@ export const EditorScreen = ({
             aria-label={t('Decrease font')}
             title={t('Decrease font')}
             onClick={() => {
-              onChangeSettings({ fontSize: clampFontSize(settings.fontSize - FONT_SIZE_STEP) });
+              onChangeSettings({ fontSize: visibleFontSize(settings.fontSize - FONT_SIZE_STEP) });
             }}>
             a
           </button>

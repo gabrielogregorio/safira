@@ -2818,7 +2818,8 @@ html.snap-return #root {
   input,
   select,
   /* Below 16px the iPhone zooms into the field, so the font buttons stop there. */
-  .code-editor .cm-content {
+  .code-editor .cm-content,
+  .code-editor .cm-gutters {
     font-size: max(16px, 1em);
   }
 
