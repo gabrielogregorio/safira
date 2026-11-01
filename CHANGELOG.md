@@ -6,6 +6,7 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 
 ### Added
 
+- `repita pra sempre`, `repeat forever` and the same in the other languages, with variations such as `para sempre` and `loop forever`.
 - `não faça nada`, `do nothing` and the same in the other languages, for an empty branch of a condition.
 - `guarde a resposta em nota`, `save the answer in note` and the same in the other languages put what the user types in a variable, with natural variations such as `salve o que o usuário digitar na nota` and `save the response to note`.
 - Songs in the Examples menu: an original piece called Céu de Safira, Oh! Susanna, Malagueña, Mo Li Hua, Sakura Sakura and the opening of Asa Branca, in every language.

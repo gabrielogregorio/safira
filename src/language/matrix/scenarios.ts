@@ -244,6 +244,12 @@ export const STATEMENTS: Statement[] = [
     code: '[ao_tecla] [tecla_soltar] ArrowUp {\n  [mostre] "k"\n}\n[mostre] "s"',
     output: ['s'],
   },
+  {
+    name: 'repeat forever',
+    code: 'c = 0\n[repita_sempre] {\n  c = c + 1\n  [se] c [logico_igual] 3 [se_final] [pare]\n}\n[mostre] c',
+    output: ['3'],
+  },
+  { name: 'repeat forever inline', code: '[repita_sempre] [pare]\n[mostre] "s"', output: ['s'] },
   { name: 'comment', code: '# nada\n[mostre] "x" # fim', output: ['x'] },
 ];
 

@@ -338,6 +338,18 @@ describe('running by hand', () => {
     });
   });
 
+  it('repeats forever until told to stop', async () => {
+    const source = 'c = 0\nrepita pra sempre {\n  c = c + 1\n  se c == 3 entao pare\n  mostre c\n}\nmostre "fim"';
+
+    expect((await runScript(source)).texts).toEqual(['1', '2', 'fim']);
+  });
+
+  it('skips a turn of a loop that never ends', async () => {
+    const source = 'c = 0\nrepeat forever {\n  c = c + 1\n  if c == 1 then continue\n  show c\n  interrupt\n}';
+
+    expect((await runScript(source)).texts).toEqual(['2']);
+  });
+
   it('goes on after doing nothing', async () => {
     const { texts, error } = await runScript(
       'se 1 == 2 entao mostre "a" senao não faça nada\nnão faça nada\nmostre "b"',

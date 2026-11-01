@@ -174,6 +174,43 @@ describe('keys', () => {
   });
 });
 
+describe('repeating forever', () => {
+  it.each([
+    'repita pra sempre',
+    'repita para sempre',
+    'repita sempre',
+    'repetir para sempre',
+    'repita infinitamente',
+    'pra sempre',
+    'para sempre',
+    'repeat forever',
+    'loop forever',
+    'forever',
+    'repetir para siempre',
+    'para siempre',
+    '永远重复',
+    'ずっと繰り返す',
+  ])('reads %s', (line) => {
+    expect(first(`${line} {\n}`)).toMatchObject({ kind: 'while', condition: { kind: 'literal', value: true } });
+  });
+
+  it('accepts a command on the same line', () => {
+    expect(first('repita pra sempre pare')).toMatchObject({ kind: 'while', body: [{ kind: 'break' }] });
+  });
+
+  it('keeps a loop with a number of times', () => {
+    expect(first('repita 2 vezes {\n}')).toMatchObject({ kind: 'repeat' });
+  });
+
+  it('keeps para cada working', () => {
+    expect(first('para cada x de 1 ate 2 {\n}')).toMatchObject({ kind: 'forRange' });
+  });
+
+  it('keeps a variable called sempre', () => {
+    expect(first('sempre = 1')).toMatchObject({ kind: 'assign', name: 'sempre' });
+  });
+});
+
 describe('doing nothing', () => {
   it.each([
     'não faça nada',

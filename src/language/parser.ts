@@ -22,6 +22,7 @@ export class Parser extends ExpressionParser {
     () => this.parseSimple('interrompa', { kind: 'halt' }),
     () => this.parseSimple('nao_faca_nada', { kind: 'noop' }),
     () => this.parseWhile(),
+    () => this.parseForever(),
     () => this.parseRepeat(),
     () => this.parseForRange(),
     () => this.parseWait(),
@@ -209,6 +210,12 @@ export class Parser extends ExpressionParser {
     this.acceptPhrase('enquanto_final');
 
     return { kind: 'while', condition, body: this.parseBody() };
+  }
+
+  private parseForever(): StatementBody {
+    this.expectPhrase('repita_sempre');
+
+    return { kind: 'while', condition: { kind: 'literal', value: true }, body: this.parseBody() };
   }
 
   private parseRepeat(): StatementBody {

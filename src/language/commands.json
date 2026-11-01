@@ -592,6 +592,43 @@
     "color": "tempo",
     "phrases": ["aguarde o", "espere o", "aguarde", "esperar", "espera", "espere", "delay", "wait", "等待", "待つ"]
   },
+  "repita_sempre": {
+    "color": "condicionais",
+    "shown": ["repita pra sempre", "repeat forever", "repetir para siempre", "永远重复", "ずっと繰り返す"],
+    "phrases": [
+      "keep repeating forever",
+      "repetir para siempre",
+      "repetir para sempre",
+      "repite para siempre",
+      "repete para sempre",
+      "repetir pra sempre",
+      "repita para sempre",
+      "repete pra sempre",
+      "repita pra sempre",
+      "repetir infinitamente",
+      "repete infinitamente",
+      "repita infinitamente",
+      "repetir eternamente",
+      "repete eternamente",
+      "repita eternamente",
+      "repetir siempre",
+      "keep repeating",
+      "repeat forever",
+      "repetir sempre",
+      "repite siempre",
+      "repete sempre",
+      "repita sempre",
+      "loop forever",
+      "para siempre",
+      "para sempre",
+      "pra sempre",
+      "forever",
+      "ずっと繰り返す",
+      "無限に繰り返す",
+      "一直重复",
+      "永远重复"
+    ]
+  },
   "repita": {
     "color": "condicionais",
     "phrases": ["repetir", "repeat", "repita", "繰り返す", "重复"]
