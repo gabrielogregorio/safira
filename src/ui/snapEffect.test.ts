@@ -1,4 +1,4 @@
-import { planDevour, planGrains } from './snapEffect';
+import { hidePointer, markReturnFromSnap, planDevour, planGrains, snapAway } from './snapEffect';
 
 const part = { left: 10, top: 20, width: 100, height: 50, color: '#123', delay: 300 };
 
@@ -39,5 +39,100 @@ describe('planGrains', () => {
 
     expect(grains).toHaveLength(6);
     expect(grains.every((grain) => grain.speedX > 0 && grain.speedY < 0)).toBe(true);
+  });
+});
+
+describe('snapAway', () => {
+  const SNAP_MILLISECONDS = 6000;
+  let painted: string[];
+  let crumbled: Keyframe[][];
+
+  const fakeCanvasContext = (): CanvasRenderingContext2D =>
+    new Proxy(
+      {},
+      {
+        get: (_target, name: string) => () => {
+          painted.push(name);
+        },
+        set: () => true,
+      },
+    ) as CanvasRenderingContext2D;
+
+  const withMotion = (hasMotion: boolean): void => {
+    window.matchMedia = vi.fn().mockReturnValue({ matches: hasMotion });
+  };
+
+  const run = async (): Promise<void> => {
+    const finished = snapAway();
+    await vi.advanceTimersByTimeAsync(SNAP_MILLISECONDS);
+    await finished;
+  };
+
+  beforeEach(() => {
+    vi.useFakeTimers();
+    painted = [];
+    crumbled = [];
+    document.body.innerHTML =
+      '<div id="root"><section class="home-hero"><p>oi</p><button>ok</button><svg></svg></section></div>';
+    vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(new DOMRect(10, 10, 100, 40));
+    vi.spyOn(HTMLCanvasElement.prototype, 'getContext').mockImplementation(() => fakeCanvasContext());
+    Element.prototype.animate = vi.fn((frames: Keyframe[]) => {
+      crumbled.push(frames);
+
+      return {} as Animation;
+    });
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.restoreAllMocks();
+    document.body.replaceChildren();
+    document.documentElement.classList.remove('snap-running');
+  });
+
+  it('crumbles the page, eats the screen and ends in the dark', async () => {
+    withMotion(true);
+    await run();
+
+    expect(crumbled.length).toBeGreaterThanOrEqual(4);
+    expect(document.querySelector('.snap-devour')).not.toBeNull();
+    expect(document.querySelector('.snap-dust')).not.toBeNull();
+    expect(document.querySelector('.snap-dark')).not.toBeNull();
+    expect(painted).toContain('fillRect');
+  });
+
+  it('skips the dust without motion and only goes dark', async () => {
+    withMotion(false);
+    await run();
+
+    expect(crumbled).toEqual([]);
+    expect(document.querySelector('.snap-dust')).toBeNull();
+    expect(document.querySelector('.snap-dark')).not.toBeNull();
+  });
+
+  it('ignores parts outside the screen', async () => {
+    withMotion(true);
+    vi.mocked(Element.prototype.getBoundingClientRect).mockReturnValue(new DOMRect(10, 99_999, 100, 40));
+    await run();
+
+    expect(crumbled).toEqual([]);
+  });
+});
+
+describe('around the snap', () => {
+  it('hides the pointer', () => {
+    hidePointer();
+
+    expect(document.documentElement).toHaveClass('snap-running');
+
+    document.documentElement.classList.remove('snap-running');
+  });
+
+  it('leaves a note for the page that comes back', () => {
+    markReturnFromSnap();
+
+    expect(sessionStorage.getItem('safira.snap.return')).toBe('true');
+
+    sessionStorage.clear();
   });
 });

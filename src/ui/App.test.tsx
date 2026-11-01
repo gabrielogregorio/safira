@@ -394,6 +394,10 @@ describe('App', () => {
     localStorage.setItem('safira.drafts.v1', JSON.stringify({ '1': { 'dados/a.safira': 'mostre 2\n' } }));
     window.history.replaceState(null, '', '#/projects/1/dados%2Fa.safira');
     renderApp();
+    // The text recovered from the draft saves itself, and the rename must not race with that.
+    await waitFor(() => {
+      expect(loadProjects()[0].files['dados/a.safira']).toContain('mostre 2');
+    });
     fireEvent.contextMenu(screen.getByRole('button', { name: 'dados', expanded: true }));
     await userEvent.click(await screen.findByRole('menuitem', { name: 'Rename' }));
     await userEvent.keyboard('info{Enter}');
@@ -401,7 +405,7 @@ describe('App', () => {
     const [project] = loadProjects();
 
     expect(Object.keys(project.files)).toEqual(['info/a.safira', 'info/b.txt', 'main.safira']);
-    expect(project.files['info/a.safira']).toBe('mostre 1\n');
+    expect(project.files['info/a.safira']).toContain('mostre 2');
     expect(project.breakpoints).toEqual({ 'info/a.safira': [1] });
     expect(window.location.hash).toContain('info');
     expect(document.querySelector('.tab-active')).toHaveTextContent('info/a.safira');
