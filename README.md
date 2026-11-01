@@ -4,6 +4,8 @@
 
 A programming language in natural language for first-time programmers, with a web IDE.
 
+[**See it live »**](https://gabrielogregorio.github.io/safira/)
+
 ![TypeScript](https://img.shields.io/badge/TypeScript-6-3178c6)
 ![React](https://img.shields.io/badge/React-19-61dafb)
 ![Vite](https://img.shields.io/badge/Vite-8-646cff)
@@ -13,11 +15,11 @@ A programming language in natural language for first-time programmers, with a we
 
 </div>
 
-![Safira IDE running a list example](docs/screenshot.png)
+[![Safira IDE running a list example](docs/screenshot.png)](https://gabrielogregorio.github.io/safira/)
 
 ## About
 
-Safira accepts commands the way a person talks. The same script can mix Portuguese, English and Spanish:
+Safira accepts commands the way a person talks. The same script can mix Portuguese, English, Spanish, Chinese and Japanese:
 
 ```
 idade recebe 18
