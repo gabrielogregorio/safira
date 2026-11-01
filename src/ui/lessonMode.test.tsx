@@ -112,6 +112,11 @@ describe('lesson mode', () => {
     expect(await nextButton()).toBeDisabled();
 
     await userEvent.click(screen.getByRole('button', { name: 'Show the solution' }));
+
+    expect(await screen.findByText('Press ▶')).toBeInTheDocument();
+    expect(screen.queryByText(/^Tip: /)).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Show the solution' })).not.toBeInTheDocument();
+
     await run();
 
     expect(await screen.findByText('Correct! Challenge complete.')).toBeInTheDocument();
@@ -146,7 +151,8 @@ describe('lesson mode', () => {
     await finishExample();
     await run();
     await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
-    await userEvent.click(screen.getByRole('button', { name: 'Start over' }));
+    await run();
+    await userEvent.click(await screen.findByRole('button', { name: 'Start over' }));
 
     expect(document.querySelector('.cm-content')).not.toHaveTextContent('show "');
   });
