@@ -1,0 +1,15 @@
+#safira 0.9
+# 🏴‍☠️ Pirate's chest
+
+show "How many coins are in the chest?"
+
+try {
+    coins = the number that the user enters
+    each_one = coins divided by 4
+} except {
+    show "💀 Pirates refuse that! Numbers only."
+} if it doesn't go wrong {
+    show "Each pirate gets % coins 🪙" inserting each_one
+} finally {
+    show "🦜 The sharing is over!"
+}

@@ -1,0 +1,13 @@
+#safira 0.9
+# 🔮 Bola de cristal
+
+mostre "🔮 Faça uma pergunta para a bola de cristal:"
+guarde a resposta em pergunta
+
+lista de destinos recebe "Sim!", "Nem pensar.", "Com certeza.", "Pergunte de novo.", "As estrelas dizem talvez."
+sorte = um número aleatório entre 1 e 5
+
+limpe a tela
+mostre "Você perguntou: %" inserindo pergunta
+espere 1 segundo
+mostre "🔮 " + lista de destinos na posição sorte na cor roxo

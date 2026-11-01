@@ -1,0 +1,13 @@
+#safira 0.9
+# 🔮 Crystal ball
+
+show "🔮 Ask the crystal ball a question:"
+save the answer in question
+
+list of fates receive "Yes!", "No way.", "Definitely.", "Ask again.", "The stars say maybe."
+luck = a random number between 1 and 5
+
+clear
+show "You asked: %" inserting question
+wait 1 seconds
+show "🔮 " + list of fates in position luck in color purple

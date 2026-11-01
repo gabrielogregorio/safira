@@ -1,0 +1,15 @@
+#safira 0.9
+# 🏴‍☠️ Cofre del pirata
+
+muestra "¿Cuántas monedas hay en el cofre?"
+
+tratar {
+    monedas = el número que ingresa el usuario
+    cada_uno = monedas dividido por 4
+} si sale mal {
+    muestra "💀 ¡El pirata no acepta eso! Solo números."
+} si no sale mal {
+    muestra "Cada pirata recibe % monedas 🪙" insertando cada_uno
+} finalmente {
+    muestra "🦜 ¡Fin del reparto!"
+}

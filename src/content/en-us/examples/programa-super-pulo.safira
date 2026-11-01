@@ -1,0 +1,27 @@
+#safira 0.9
+# 🦘 Super jump
+# Click the output. Hold Space to charge and release to jump. Esc leaves.
+
+power = 0
+bar = ""
+show "Hold Space to charge the jump!"
+
+while true {
+    if press Esc then interrupt
+
+    if hold Space then {
+        increase 1 em power
+        bar = bar + "🟩"
+        clear
+        show bar
+    }
+
+    on release Space {
+        show "🦘 A jump of % meters!" inserting power
+        play C5, E5, G5 for 100ms
+        power = 0
+        bar = ""
+    }
+
+    wait 100 ms
+}
