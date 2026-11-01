@@ -21,6 +21,7 @@ const POINT_REACH = 140;
 const HALF_TURN = 180;
 const LIGHT_DELAY_MILLISECONDS = 180;
 const HALF = 0.5;
+const READ_BALLOON_WIDTH = 240;
 const ANGRY_RATE = 0.7;
 const GOODBYE_MILLISECONDS = 2500;
 const LEAVING_MILLISECONDS = 900;
@@ -303,7 +304,10 @@ const whereToStand = (element: HTMLElement, scene: Scene, trip: Trip): Spot | nu
   const y = Math.min(lowest, Math.max(highest, highest + (lowest - highest) * HEIGHT_IN_FIELD[scene] + trip.driftY));
   element.style.setProperty('--cat-room-height', `${String(box.bottom - y - EDGE_MARGIN)}px`);
 
-  return { x: box.right - CAT_SIZE - EDGE_MARGIN + trip.driftX, y };
+  // Reading the code, the balloon goes on his right, so he stands that much further in.
+  const roomForBalloon = scene === 'read' ? READ_BALLOON_WIDTH : 0;
+
+  return { x: box.right - CAT_SIZE - EDGE_MARGIN - roomForBalloon + trip.driftX, y };
 };
 
 // He turns to the target, and the arm goes to the angle that leaves the finger on it.

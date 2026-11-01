@@ -2259,6 +2259,12 @@ html.snap-return #root {
   width: min(360px, var(--cat-room-width, 40vw));
 }
 
+.cat-at-read .cat-bubble {
+  left: 104px;
+  right: auto;
+  width: 220px;
+}
+
 .cat-bubble p {
   margin: 0;
 }
@@ -2769,8 +2775,10 @@ html.snap-return #root {
     margin-left: 0;
   }
 
-  .cat-bubble {
+  .cat-bubble,
+  .cat-at-read .cat-bubble {
     bottom: 104px;
+    left: auto;
     max-height: 46vh;
     right: 0;
     top: auto;
