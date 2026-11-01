@@ -1,0 +1,103 @@
+#safira 0.9
+# 🦖 Jogo do dinossauro
+# Execute e clique na saída. Space ou Cima pulam, Esc sai.
+
+recorde = 0
+lista de arco recebe 1, 2, 2, 2, 1
+
+função reiniciar() {
+    cacto1 = 16
+    cacto2 = 26
+    nuvem = 14
+    salto = 0
+    altura = 0
+    pontos = 0
+    vivo = verdadeiro
+    tempo = 90
+}
+
+função bloco(c, nivel) {
+    se c == 3 e nivel == altura então retorne "🦖"
+    se nivel == 0 e c == cacto1 então retorne "🌵"
+    se nivel == 0 e c == cacto2 então retorne "🌵"
+    se nivel == 2 e c == nuvem então retorne "☁️"
+    retorne "⬛"
+}
+
+função linha(nivel) {
+    texto = ""
+
+    para cada c de 1 até 16 {
+        texto = texto + bloco(c, nivel)
+    }
+
+    mostre texto
+}
+
+função desenhar() {
+    limpe a tela
+    mostre "🦖 Pontos: " + pontos + "   🏆 Recorde: " + recorde
+    linha(2)
+    linha(1)
+    linha(0)
+    mostre "🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫"
+
+    se vivo == falso então mostre "💥 Fim de jogo! Aperte Enter." na cor vermelho
+}
+
+função avancar() {
+    cacto1 = cacto1 - 1
+    cacto2 = cacto2 - 1
+    nuvem = nuvem - 1
+    pontos = pontos + 1
+
+    se cacto1 < 1 então cacto1 = cacto2 + um número aleatório entre 8 e 16
+    se cacto2 < 1 então cacto2 = cacto1 + um número aleatório entre 8 e 16
+    se nuvem < 1 então nuvem = 16
+
+    se salto > 0 então {
+        altura = lista de arco na posição salto
+        salto = salto - 1
+    } senão {
+        altura = 0
+    }
+
+    se pontos % 50 == 0 e tempo > 40 então {
+        tempo = tempo - 10
+        toque C6 por 40ms
+    }
+
+    se altura == 0 e cacto1 == 3 então vivo = falso
+    se altura == 0 e cacto2 == 3 então vivo = falso
+
+    se vivo == falso então {
+        se pontos > recorde então recorde = pontos
+        toque E4, C4 por 120ms
+    }
+}
+
+reiniciar()
+desenhar()
+
+enquanto verdadeiro {
+    se apertar Esc então interrompa
+
+    se apertar Space ou apertar Cima então {
+        se vivo e salto == 0 e altura == 0 então {
+            salto = 5
+            toque E5 por 30ms
+        }
+    }
+
+    se vivo então {
+        avancar()
+        desenhar()
+    } senão {
+        se apertar Enter então {
+            reiniciar()
+            desenhar()
+        }
+    }
+
+    espere tempo ms
+}
