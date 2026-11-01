@@ -21,7 +21,8 @@ const POINT_REACH = 140;
 const HALF_TURN = 180;
 const LIGHT_DELAY_MILLISECONDS = 180;
 const HALF = 0.5;
-const READ_BALLOON_WIDTH = 240;
+const READ_INDENT = 24;
+const READ_GAP = 38;
 const ANGRY_RATE = 0.7;
 const GOODBYE_MILLISECONDS = 2500;
 const LEAVING_MILLISECONDS = 900;
@@ -55,8 +56,8 @@ const HOME_FIELD = '.code-editor';
 
 const TARGETS: Record<Scene, string> = {
   intro: '.cm-content',
-  read: '.cm-content',
-  write: '.cm-content',
+  read: '.cm-line',
+  write: '.cm-line',
   play: '.aero-button-run',
   input: '.terminal-input',
   farewell: '.menubar-trigger:nth-child(3)',
@@ -304,10 +305,14 @@ const whereToStand = (element: HTMLElement, scene: Scene, trip: Trip): Spot | nu
   const y = Math.min(lowest, Math.max(highest, highest + (lowest - highest) * HEIGHT_IN_FIELD[scene] + trip.driftY));
   element.style.setProperty('--cat-room-height', `${String(box.bottom - y - EDGE_MARGIN)}px`);
 
-  // Reading the code, the balloon goes on his right, so he stands that much further in.
-  const roomForBalloon = scene === 'read' ? READ_BALLOON_WIDTH : 0;
+  // Showing the code, he flies right under its last line, however short the code is.
+  const lastLine = [...document.querySelectorAll('.cm-line')].at(-1)?.getBoundingClientRect();
 
-  return { x: box.right - CAT_SIZE - EDGE_MARGIN - roomForBalloon + trip.driftX, y };
+  if (scene === 'read' && lastLine !== undefined) {
+    return { x: lastLine.left + READ_INDENT, y: Math.min(lowest, lastLine.bottom + READ_GAP) };
+  }
+
+  return { x: box.right - CAT_SIZE - EDGE_MARGIN + trip.driftX, y };
 };
 
 // He turns to the target, and the arm goes to the angle that leaves the finger on it.
