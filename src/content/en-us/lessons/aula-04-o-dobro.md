@@ -4,6 +4,13 @@
 
 This asks for a number: `n = the number that the user enters`.
 
+```safira
+n = the number that the user enters
+show n + 1
+```
+
+## Challenge: Double it
+
 Ask for a number and show its double.
 
 ```safira

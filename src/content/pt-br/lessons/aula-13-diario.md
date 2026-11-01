@@ -4,6 +4,16 @@
 
 `crie o arquivo "a.txt"` cria. `sobrescreva "oi" no arquivo "a.txt"` escreve. `leia o arquivo "a.txt"` traz o texto.
 
+```safira
+crie o arquivo "a.txt"
+sobrescreva "oi" no arquivo "a.txt"
+
+texto = leia o arquivo "a.txt"
+mostre texto
+```
+
+## Desafio: Diário
+
 Crie `diario.txt`, escreva `Hoje aprendi Safira` nele, leia o arquivo e mostre o texto.
 
 ```safira

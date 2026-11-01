@@ -4,6 +4,17 @@
 
 `list of fruits receive "grape", "pear"` creates a list. `add "kiwi" at the end of the list of fruits` grows it. `scroll through the list of fruits assigning in item {` goes through all of it.
 
+```safira
+list of fruits receive "grape", "pear"
+add "kiwi" at the end of the list of fruits
+
+scroll through the list of fruits assigning in item {
+    show item
+}
+```
+
+## Challenge: Shopping list
+
 Create the list `shopping` with `rice` and `beans`, add `milk` at the end and show each item.
 
 ```safira

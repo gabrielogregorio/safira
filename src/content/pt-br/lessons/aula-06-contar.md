@@ -4,6 +4,14 @@
 
 Uma repetição conta para você: `para cada x de 1 até 3 {`, e feche com `}`.
 
+```safira
+para cada x de 1 até 3 {
+    mostre x
+}
+```
+
+## Desafio: Contar
+
 Mostre os números de 1 até 5.
 
 ```safira

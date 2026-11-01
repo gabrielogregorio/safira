@@ -4,6 +4,18 @@
 
 `um número aleatório entre 1 e 3` sorteia, e `se a for igual a b então {` compara. Depois vem `} senão {`.
 
+```safira
+dado = um número aleatório entre 1 e 2
+
+se dado for igual a 1 então {
+    mostre "Cara"
+} senão {
+    mostre "Coroa"
+}
+```
+
+## Desafio: Adivinhe
+
 Sorteie um número em `segredo`, peça um número e mostre `Acertou` se for igual ou `Errou` se não for.
 
 ```safira

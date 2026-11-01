@@ -4,6 +4,17 @@
 
 `lista de frutas recibe "uva", "pera"` crea una lista. `añadir "kiwi" al final de la lista de frutas` la aumenta. `desplazarse por la lista de frutas asignando en item {` pasa por todos.
 
+```safira
+lista de frutas recibe "uva", "pera"
+añadir "kiwi" al final de la lista de frutas
+
+desplazarse por la lista de frutas asignando en item {
+    muestra item
+}
+```
+
+## Desafío: Lista de compras
+
 Crea la lista `compras` con `arroz` y `frijol`, añade `leche` al final y muestra cada item.
 
 ```safira

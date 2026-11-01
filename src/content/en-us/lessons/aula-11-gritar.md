@@ -4,6 +4,13 @@
 
 `text in upper case` makes everything big.
 
+```safira
+text = "safira"
+show text in upper case
+```
+
+## Challenge: Shout
+
 Ask for a text and show it all in capitals.
 
 ```safira

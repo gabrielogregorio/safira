@@ -35,7 +35,14 @@ const run = async (): Promise<void> => {
 const continueButton = (): HTMLElement =>
   within(document.querySelector<HTMLElement>('.cat-bubble') as HTMLElement).getByRole('button', { name: 'Continue' });
 
-const solveStep = async (): Promise<void> => {
+const nextButton = (): Promise<HTMLElement> => screen.findByRole('button', { name: 'Next' });
+
+const finishExample = async (): Promise<void> => {
+  await run();
+  await userEvent.click(await nextButton());
+};
+
+const solveChallenge = async (): Promise<void> => {
   await run();
   await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
   await run();
@@ -67,8 +74,24 @@ describe('lesson mode', () => {
     expect(Object.keys(loadProjects()[0].files)).toContain('lessons/01-fale-comigo-1.safira');
   });
 
+  it('shows a program to run before the challenge', async () => {
+    await enterLessonMode();
+
+    expect(document.querySelector('.cm-content')).toHaveTextContent('show');
+
+    await userEvent.click(continueButton());
+
+    expect(screen.getByText('Press ▶')).toBeInTheDocument();
+
+    await run();
+
+    expect(await screen.findByText('Well done! You can move on.')).toBeInTheDocument();
+    expect(loadSettings().lessonProgress).toEqual([`${firstLesson.id}:0`]);
+  });
+
   it('refuses a wrong answer, explains it, and accepts the solution', async () => {
     await enterLessonMode();
+    await finishExample();
     await userEvent.click(continueButton());
 
     expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
@@ -76,32 +99,33 @@ describe('lesson mode', () => {
     await run();
 
     expect(await screen.findByText(/^Tip: /)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeDisabled();
+    expect(await nextButton()).toBeDisabled();
 
     await userEvent.click(screen.getByRole('button', { name: 'Show the solution' }));
     await run();
 
     expect(await screen.findByText('Correct! Challenge complete.')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next' })).toBeEnabled();
-    expect(loadSettings().lessonProgress).toContain(`${firstLesson.id}:0`);
+    expect(await nextButton()).toBeEnabled();
+    expect(loadSettings().lessonProgress).toContain(`${firstLesson.id}:1`);
   });
 
   it('counts the steps done at the bottom', async () => {
     await enterLessonMode();
-    const total = String(lessons.length);
+    const total = String(lessons.reduce((sum, lesson) => sum + lesson.steps.length, 0));
 
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', `0 of ${total} steps`);
 
-    await solveStep();
-    await screen.findByText('Correct! Challenge complete.');
+    await run();
+    await nextButton();
 
     expect(screen.getByRole('progressbar')).toHaveAttribute('aria-valuetext', `1 of ${total} steps`);
   });
 
-  it('goes to the next lesson', async () => {
+  it('goes to the next lesson after the challenge', async () => {
     await enterLessonMode();
-    await solveStep();
-    await userEvent.click(await screen.findByRole('button', { name: 'Next' }));
+    await finishExample();
+    await solveChallenge();
+    await userEvent.click(await nextButton());
 
     expect(screen.getByRole('heading', { name: lessons[1].steps[0].title })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Next step' })).toBeDisabled();
@@ -109,6 +133,7 @@ describe('lesson mode', () => {
 
   it('puts the starting code back', async () => {
     await enterLessonMode();
+    await finishExample();
     await run();
     await userEvent.click(await screen.findByRole('button', { name: 'Show the solution' }));
     await userEvent.click(screen.getByRole('button', { name: 'Start over' }));
@@ -125,12 +150,11 @@ describe('lesson mode', () => {
 
   it('keeps the place after a reload', async () => {
     await enterLessonMode();
-    await solveStep();
-    await userEvent.click(await screen.findByRole('button', { name: 'Next' }));
+    await finishExample();
     document.body.replaceChildren();
     renderApp();
 
-    expect(await screen.findByRole('heading', { name: lessons[1].steps[0].title })).toBeInTheDocument();
+    expect(await screen.findByRole('heading', { name: firstLesson.steps[1].title })).toBeInTheDocument();
   });
 
   it('gives the tabs back when the mode ends', async () => {
@@ -163,7 +187,8 @@ describe('lesson mode', () => {
     await enterLessonMode();
     const last = lessons[lessons.length - 1];
     await userEvent.selectOptions(screen.getByRole('combobox', { name: 'Choose a lesson' }), last.id);
-    await solveStep();
+    await finishExample();
+    await solveChallenge();
 
     await vi.waitFor(() => {
       expect(loadSettings().catLeft).toBe(true);

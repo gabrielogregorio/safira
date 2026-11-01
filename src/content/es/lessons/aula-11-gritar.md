@@ -4,6 +4,13 @@
 
 `texto en mayusculas` lo deja todo grande.
 
+```safira
+texto = "safira"
+muestra texto en mayusculas
+```
+
+## Desafío: Gritar
+
 Pide un texto y muéstralo todo en mayúsculas.
 
 ```safira

@@ -2,7 +2,13 @@
 
 ## Fale comigo
 
-Bem-vindo! São desafios rápidos. `mostre` escreve na tela: `mostre "oi"`.
+Bem-vindo! `mostre` escreve na tela. Veja funcionando.
+
+```safira
+mostre "Olá, mundo!"
+```
+
+## Desafio: Fale comigo
 
 Faça o programa mostrar `Olá, Safira!`.
 

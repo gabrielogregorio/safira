@@ -4,6 +4,13 @@
 
 Así el programa pide un número: `n = el número que ingresa el usuario`.
 
+```safira
+n = el número que ingresa el usuario
+muestra n + 1
+```
+
+## Desafío: El doble
+
 Pide un número y muestra su doble.
 
 ```safira

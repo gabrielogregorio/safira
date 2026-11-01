@@ -887,6 +887,9 @@ test.describe('lesson mode', () => {
 
   const solveChallenge = async (page: Page): Promise<void> => {
     await page.getByRole('button', { name: 'Run', exact: true }).click();
+    await page.getByRole('button', { name: 'Next', exact: true }).click({ timeout: TYPING_TIMEOUT });
+    await expect(page.locator('.cat-bubble')).toBeVisible({ timeout: TYPING_TIMEOUT });
+    await page.getByRole('button', { name: 'Run', exact: true }).click();
     await page.getByRole('button', { name: 'Show the solution' }).click({ timeout: TYPING_TIMEOUT });
     await page.getByRole('button', { name: 'Run', exact: true }).click();
     await expect(page.locator('.cat-bubble')).toContainText('Correct! Challenge complete.', {

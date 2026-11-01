@@ -4,6 +4,13 @@
 
 This asks for a text: `name = what the user types`.
 
+```safira
+name = what the user types
+show "Hello, " + name
+```
+
+## Challenge: First and last name
+
 Ask for the first name, ask for the last name and show both together, with a space between them.
 
 ```safira

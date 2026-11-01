@@ -4,6 +4,16 @@
 
 `create the file "a.txt"` creates. `overwrite "hi" to the file "a.txt"` writes. `read the file "a.txt"` brings the text.
 
+```safira
+create the file "a.txt"
+overwrite "hi" to the file "a.txt"
+
+text = read the file "a.txt"
+show text
+```
+
+## Challenge: Diary
+
 Create `diary.txt`, write `Today I learned Safira` in it, read the file and show the text.
 
 ```safira

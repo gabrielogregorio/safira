@@ -4,6 +4,13 @@
 
 Así el programa pide un texto: `nombre = lo que escribe el usuario`.
 
+```safira
+nombre = lo que escribe el usuario
+muestra "Hola, " + nombre
+```
+
+## Desafío: Nombre y apellido
+
 Pide el nombre, pide el apellido y muestra los dos juntos, con un espacio en medio.
 
 ```safira

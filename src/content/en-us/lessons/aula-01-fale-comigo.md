@@ -2,7 +2,13 @@
 
 ## Talk to me
 
-Welcome! These challenges are quick. `show` writes on the screen: `show "hi"`.
+Welcome! `show` writes on the screen. See it work.
+
+```safira
+show "Hello, world!"
+```
+
+## Challenge: Talk to me
 
 Make the program show `Hello, Safira!`.
 

@@ -4,6 +4,12 @@
 
 Sem aspas, o computador faz a conta: `mostre 2 + 2`.
 
+```safira
+mostre 2 + 2
+```
+
+## Desafio: A conta
+
 Mostre o resultado de `25 * 4`, sem escrever o resultado.
 
 ```safira

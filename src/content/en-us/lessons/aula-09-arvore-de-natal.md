@@ -2,7 +2,21 @@
 
 ## Blinking tree
 
-Your tree is ready here. To blink, swap the lights for ⚫ in a second tree.
+`clear` and `wait` make anything blink.
+
+```safira
+repeat 2 times {
+    clear
+    show "⭐"
+    wait 1 second
+
+    clear
+    show "🌟"
+    wait 1 second
+}
+```
+
+## Challenge: Blinking tree
 
 Make the tree blink 3 times: use `repeat`, `clear` and `wait 1 second`, showing the tree on and then off.
 

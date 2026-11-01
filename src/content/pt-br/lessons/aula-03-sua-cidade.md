@@ -4,6 +4,13 @@
 
 Uma variável guarda um valor: `nome = "Ana"`. O `+` junta textos.
 
+```safira
+nome = "Ana"
+mostre "Olá, " + nome
+```
+
+## Desafio: Sua cidade
+
 Crie a variável `cidade` com o valor `"Lima"` e mostre `Eu moro em Lima`, juntando o texto com a variável.
 
 ```safira

@@ -4,6 +4,13 @@
 
 Assim o programa pede um texto: `nome = o que o usuário digitar`.
 
+```safira
+nome = o que o usuário digitar
+mostre "Olá, " + nome
+```
+
+## Desafio: Nome e sobrenome
+
 Peça o nome, peça o sobrenome e mostre os dois juntos, com um espaço no meio.
 
 ```safira

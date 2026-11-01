@@ -4,6 +4,20 @@
 
 `limpiar la pantalla` borra lo mostrado, y `repetir 2 veces {` repite.
 
+```safira
+repetir 2 veces {
+    limpiar la pantalla
+    muestra "Hola"
+    esperar 1 segundo
+
+    limpiar la pantalla
+    muestra "Adios"
+    esperar 1 segundo
+}
+```
+
+## Desafío: Semáforo
+
 Haz un semáforo que se repite 2 veces: muestra `Alto` por 4 segundos, `Sigue` por 4 segundos y `Atención` por 2 segundos, limpiando la pantalla entre ellos.
 
 ```safira

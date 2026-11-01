@@ -2,7 +2,21 @@
 
 ## Árbol parpadeante
 
-Tu árbol ya está aquí. Para que parpadee, cambia las luces por ⚫ en un segundo árbol.
+`limpiar la pantalla` y `esperar` hacen parpadear cualquier cosa.
+
+```safira
+repetir 2 veces {
+    limpiar la pantalla
+    muestra "⭐"
+    esperar 1 segundo
+
+    limpiar la pantalla
+    muestra "🌟"
+    esperar 1 segundo
+}
+```
+
+## Desafío: Árbol parpadeante
 
 Haz que el árbol parpadee 3 veces: usa `repetir`, `limpiar la pantalla` y `esperar 1 segundo`, mostrando el árbol encendido y luego apagado.
 

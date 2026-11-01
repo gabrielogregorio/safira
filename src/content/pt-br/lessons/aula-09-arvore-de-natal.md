@@ -2,7 +2,21 @@
 
 ## Árvore piscando
 
-Sua árvore já está pronta aqui. Para piscar, troque as luzes por ⚫ em uma segunda árvore.
+`limpe a tela` e `espere` fazem qualquer coisa piscar.
+
+```safira
+repita 2 vezes {
+    limpe a tela
+    mostre "⭐"
+    espere 1 segundo
+
+    limpe a tela
+    mostre "🌟"
+    espere 1 segundo
+}
+```
+
+## Desafio: Árvore piscando
 
 Faça a árvore piscar 3 vezes: use `repita`, `limpe a tela` e `espere 1 segundo`, mostrando a árvore acesa e depois apagada.
 

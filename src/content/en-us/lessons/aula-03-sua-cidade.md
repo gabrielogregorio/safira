@@ -4,6 +4,13 @@
 
 A variable keeps a value: `name = "Ana"`. The `+` joins texts.
 
+```safira
+name = "Ana"
+show "Hello, " + name
+```
+
+## Challenge: Your city
+
 Create the variable `city` with the value `"Lima"` and show `I live in Lima`, joining the text with the variable.
 
 ```safira

@@ -2,7 +2,13 @@
 
 ## Háblame
 
-¡Bienvenido! Son desafíos rápidos. `muestra` escribe en la pantalla: `muestra "hola"`.
+¡Bienvenido! `muestra` escribe en la pantalla. Míralo funcionar.
+
+```safira
+muestra "Hola, mundo!"
+```
+
+## Desafío: Háblame
 
 Haz que el programa muestre `Hola, Safira!`.
 

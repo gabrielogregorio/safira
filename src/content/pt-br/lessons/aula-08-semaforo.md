@@ -4,6 +4,20 @@
 
 `limpe a tela` apaga o que foi mostrado, e `repita 2 vezes {` repete.
 
+```safira
+repita 2 vezes {
+    limpe a tela
+    mostre "Olá"
+    espere 1 segundo
+
+    limpe a tela
+    mostre "Tchau"
+    espere 1 segundo
+}
+```
+
+## Desafio: Semáforo
+
 Faça um semáforo que repete 2 vezes: mostre `Pare` por 4 segundos, `Siga` por 4 segundos e `Atenção` por 2 segundos, limpando a tela entre eles.
 
 ```safira
