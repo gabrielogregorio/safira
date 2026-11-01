@@ -80,7 +80,7 @@ The course is 13 very short lessons, each with a program to run and then a chall
 | `safira.projects.v1` | Projects with files, breakpoints and the order chosen in the sidebar. A `.zip` does not carry the order |
 | `safira.drafts.v1` | Read once, to bring in unsaved text from older versions |
 | `safira.aquarium.v1` | The fish of this browser and their weight. Clearing it is the only way to bring eaten fish back |
-| `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, read lessons, lesson mode, place and progress |
+| `safira.settings.v1` | Language, chosen theme, vision mode, fonts, sound, suggestions, panel sizes, lesson mode, place, progress and whether the cat left |
 
 An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visibleFiles` and `buildFileTree`.
 
@@ -109,11 +109,20 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - Modals use Radix Dialog. The closing animation plays on a clone, because a modal closes by unmounting.
 - On a phone the IDE splits into Files, Code, Output and Variables panels, and dividers are hidden.
 
+## Deleting everything
+
+Settings > Delete everything removes every `safira.` key from both storages, then `snapAway` in `src/ui/snapEffect.ts` turns the screen to dust and black. A flag in `sessionStorage` survives the reload, and the small script in `index.html` reads it before the first paint, so the reset screen stays black for 2 seconds, fades in over 5 and gets the pointer back 4 seconds into the fade.
+
+## Running on the local network
+
+`vite --host 0.0.0.0` serves the page by the address of the machine. A page opened that way is not a secure context, so `crypto.randomUUID` does not exist there. `createId` in `projectStore.ts` falls back to `getRandomValues`.
+
 ## Known gaps
 
-- Coverage is 92%, with thresholds at 90/83/87/90. The goal is 100%.
+- Coverage is 91%, with thresholds at 90/83/87/90. The goal is 100%.
 - Lighthouse is not in `tests.yml`, and the deploy workflows have not run on GitHub yet.
-- The bundle has about 906 kB. Loading the lessons on demand should remove the markdown packages from it.
+- Content in the five languages loads at once, which costs bundle size. Loading only the active language should help.
+- With the page idle, the headless test browser used about one CPU core. It was not measured on a normal machine.
 - Chinese and Japanese commands need spaces between words, because nothing segments those languages. The whole-line and phrase suggestions there are short.
 - Japanese commands come before their values, as in `もし n 大なり 5 なら`, because the grammar has one order for every language.
 - `print` and `display` keep the line open, because `legacyGolden.json` records that. English content uses `show`, which ends the line.

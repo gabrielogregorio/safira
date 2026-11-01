@@ -60,4 +60,7 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - A phrase in `commands.json` starting with `in`, `en` or similar is checked against colors first: `isBeforeFileTarget` keeps `add "x" in the file` working.
 - Chinese and Japanese words must be separated by spaces. `normalizeWideSymbols` keeps text length, so positions stay right.
 - `src/language/matrix` runs in `unit:matrix`, apart from coverage: side by side, it starves the interface tests into timeouts.
+- Lessons teach in the comments of the code. `ProfessorCat` only points, so explanations never go in his balloon.
+- Browser APIs of secure contexts fail when the page opens by a local address. Test by IP before relying on one, as `createId` had to.
+- The flags dance while their sound plays, and Playwright only clicks what stands still.
 - Vite can keep stale modules after many fast edits and serve a blank page. Restart the server before debugging it.
