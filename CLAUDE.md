@@ -42,7 +42,7 @@ Architecture, storage keys, addresses and known gaps: `docs/architecture.md`.
 - `.code-editor` uses `overflow: clip`: with `hidden`, the file sheen left a scrollable area and shifted the editor.
 - One click can ask for several sounds. `sounds.ts` lets the most meaningful one play, so do not fix overlaps elsewhere.
 - Moving the focus to a button during an Enter `keydown` clicks that button: call `preventDefault` on the key.
-- The hidden `1.0` stays in `SUPPORTED_VERSIONS` for scripts saved before the version went back to `0.9`.
+- Bundled examples and lessons declare `#safira 0.9` on purpose. It stays in `SUPPORTED_VERSIONS`, so they do not need a rewrite for each release.
 - `typing` and `hover` must not set `lastSound` in `sounds.ts`, or the click that follows them is swallowed.
 - `#` after a glued note is a sharp only on lines starting with `toque`, `tocar`, `toca` or `play`. Elsewhere it stays a comment, and so does a `#` with a space before it.
 - Saving is automatic in `saveOpenTabs`. It updates `latestTabs` by hand, so the flush on unmount does not save the same tabs twice.

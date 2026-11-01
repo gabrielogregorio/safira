@@ -53,7 +53,7 @@ describe('App', () => {
     await userEvent.click(screen.getByRole('button', { name: 'Go ahead' }));
 
     expect(screen.getByRole('heading', { name: 'New project' })).toBeInTheDocument();
-    expect(loadProjects().map((project) => project.files['main.safira'])).toEqual(['#safira 0.9\n']);
+    expect(loadProjects().map((project) => project.files['main.safira'])).toEqual(['#safira 1.0\n']);
   });
 
   it('creates a project with the typed name', async () => {
@@ -120,7 +120,7 @@ describe('App', () => {
       'safira.projects.v1',
       JSON.stringify([
         { id: '1', name: 'Futuro', files: { 'main.safira': '#safira 9.0\nmostre 1' }, breakpoints: {} },
-        { id: '2', name: 'Atual', files: { 'main.safira': '#safira 0.9\nmostre 1' }, breakpoints: {} },
+        { id: '2', name: 'Atual', files: { 'main.safira': '#safira 1.0\nmostre 1' }, breakpoints: {} },
       ]),
     );
     renderApp();

@@ -1,6 +1,6 @@
 # Changelog
 
-## 0.9.0
+## 1.0.0
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 

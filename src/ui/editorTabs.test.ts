@@ -14,7 +14,7 @@ describe('editor tabs', () => {
   });
 
   it('writes the version line back when saving a script', () => {
-    expect(toStoredText({ file: 'a.safira', text: 'mostre 1' })).toBe('#safira 0.9\nmostre 1');
+    expect(toStoredText({ file: 'a.safira', text: 'mostre 1' })).toBe('#safira 1.0\nmostre 1');
   });
 
   it('keeps a text file exactly as it is', () => {
