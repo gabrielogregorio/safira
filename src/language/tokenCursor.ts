@@ -58,6 +58,11 @@ export class TokenCursor {
     });
   }
 
+  /** Every phrase of the command found here, longest first. */
+  protected phrasesHere(key: CommandKey): string[][] {
+    return getPhrases(key).filter((words) => this.phraseLengthAt(words, this.position));
+  }
+
   protected peekPhrase(key: CommandKey): string[] | null {
     return getPhrases(key).find((words) => this.phraseLengthAt(words, this.position)) ?? null;
   }

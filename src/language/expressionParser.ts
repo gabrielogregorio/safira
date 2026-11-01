@@ -1,4 +1,6 @@
-import type { BinaryOperator, CaseMode, Expression, Value } from './ast';
+import type { BinaryOperator, CaseMode, Expression, KeyPart, Value } from './ast';
+import type { KeyMode } from './keys';
+import { normalizeKey } from './keys';
 import type { CommandKey } from './phrases';
 import { isContinuationWord } from './phrases';
 import { removeAccents } from './tokenizer';
@@ -22,6 +24,12 @@ const MULTIPLICATIVE_RULES: OperatorRule[] = [
   ['multiply', 'matematica_mult', '*'],
   ['divide', 'matematica_div', '/'],
 ];
+const KEY_RULES: [KeyMode, CommandKey][] = [
+  ['press', 'tecla_apertar'],
+  ['hold', 'tecla_segurar'],
+  ['release', 'tecla_soltar'],
+];
+const LONGEST_KEY_NAME = 4;
 const CASE_RULES: [CaseMode, CommandKey][] = [
   ['upper', 'to_upper'],
   ['lower', 'to_lower'],
@@ -126,6 +134,13 @@ export class ExpressionParser extends TokenCursor {
   }
 
   private parseComparison(): Expression {
+    // Only a condition reads keys: in `espere hold segundos`, hold is a variable.
+    const keyState = this.attempt(() => this.parseKeyState());
+
+    if (keyState !== null) {
+      return keyState;
+    }
+
     return this.parseLeftAssociative(COMPARISON_RULES, () => this.parseAdditive());
   }
 
@@ -230,6 +245,59 @@ export class ExpressionParser extends TokenCursor {
     }
 
     return this.parseCommandValue() ?? this.parseName();
+  }
+
+  protected parseKeyState(): Expression {
+    // `apertar tecla` can be the whole command, or the command and a variable called tecla.
+    for (const [mode, key] of KEY_RULES) {
+      for (const words of this.phrasesHere(key)) {
+        const state = this.attempt(() => {
+          this.position += words.length;
+
+          return this.parseKeys(mode);
+        });
+
+        if (state !== null) {
+          return state;
+        }
+      }
+    }
+
+    return this.fail();
+  }
+
+  private parseKeys(mode: KeyMode): Expression {
+    const parts = [this.parseKeyPart()];
+
+    while (this.acceptSymbol('+')) {
+      parts.push(this.parseKeyPart());
+    }
+
+    const endsCondition =
+      this.isStatementEnd() ||
+      this.isSymbol(')') ||
+      (['se_final', 'logico_e', 'logico_ou'] as const).some((key) => this.peekPhrase(key) !== null);
+
+    return endsCondition ? { kind: 'keyState', mode, parts } : this.fail();
+  }
+
+  private parseKeyPart(): KeyPart {
+    if (this.current.kind === 'string') {
+      return { kind: 'value', value: this.parseString() };
+    }
+
+    for (let length = LONGEST_KEY_NAME; length > 0; length -= 1) {
+      const tokens = Array.from({ length }, (_token, offset) => this.tokenAt(this.position + offset));
+      const text = tokens.map((token) => token.text).join(' ');
+
+      if (tokens.every((token) => token.kind === 'word' || token.kind === 'number') && normalizeKey(text) !== null) {
+        this.position += length;
+
+        return { kind: 'name', text };
+      }
+    }
+
+    return { kind: 'value', value: { kind: 'variable', name: this.expectName() } };
   }
 
   private parseString(): Expression {

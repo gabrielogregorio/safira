@@ -1,5 +1,6 @@
 import { driveExecution } from '@/language/driver';
 import { Interpreter, SafiraError } from '@/language/interpreter';
+import { KeyTracker } from '@/language/keys';
 import { translateMessage } from '@/language/messages';
 import { snapBreakpoints } from '@/language/statementLines';
 import { VirtualFileSystem } from '@/language/virtualFileSystem';
@@ -22,6 +23,8 @@ export class RunnerSession {
   private files = new VirtualFileSystem();
   private resolveInput: ((text: string) => void) | null = null;
   private resolvePause: (() => void) | null = null;
+  private readonly keys = new KeyTracker();
+  private isListeningKeys = false;
 
   public constructor(
     private readonly post: (event: RunnerEvent) => void,
@@ -43,6 +46,17 @@ export class RunnerSession {
         break;
       case 'breakpoints':
         this.setBreakpoints(request.breakpoints);
+        break;
+      case 'key':
+        if (request.isDown) {
+          this.keys.press(request.key);
+        } else {
+          this.keys.release(request.key);
+        }
+
+        break;
+      case 'keys-clear':
+        this.keys.clear();
         break;
     }
 
@@ -130,6 +144,19 @@ export class RunnerSession {
           this.post({ type: 'tone', frequency, milliseconds });
 
           return this.clock.sleep(milliseconds);
+        },
+        onKey: async (mode, keys) => {
+          this.flush();
+
+          if (!this.isListeningKeys) {
+            this.isListeningKeys = true;
+            this.post({ type: 'keys-listening' });
+          }
+
+          // A turn of the event loop, or the messages with the keys never arrive.
+          await this.clock.sleep(0);
+
+          return this.keys.check(mode, keys);
         },
         onFilesChanged: () => {
           this.post({ type: 'files', files: this.files.snapshot() });

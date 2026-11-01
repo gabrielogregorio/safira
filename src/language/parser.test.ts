@@ -112,6 +112,68 @@ describe('lines that do not parse', () => {
   });
 });
 
+describe('keys', () => {
+  const condition = (line: string) =>
+    (first(`${line} {\n}`) as { branches: { condition: unknown }[] }).branches[0].condition;
+
+  it.each([
+    ['se o usuario apertar pra cima', 'press', 'pra cima'],
+    ['se apertar ArrowUp', 'press', 'ArrowUp'],
+    ['se apertar Cima', 'press', 'Cima'],
+    ['se pressionar Enter', 'press', 'Enter'],
+    ['se segurar Enter', 'hold', 'Enter'],
+    ['se soltar a tecla Enter', 'release', 'Enter'],
+    ['ao soltar tecla Enter', 'release', 'Enter'],
+    ['ao apertar Enter', 'press', 'Enter'],
+    ['if press Up', 'press', 'Up'],
+    ['if the user holds Up', 'hold', 'Up'],
+    ['on release Enter', 'release', 'Enter'],
+    ['si presiona arriba', 'press', 'arriba'],
+    ['如果 按下 上', 'press', '上'],
+    ['もし 押した 上', 'press', '上'],
+  ])('reads %s', (line, mode, text) => {
+    expect(condition(line)).toEqual({ kind: 'keyState', mode, parts: [{ kind: 'name', text }] });
+  });
+
+  it('reads a combination', () => {
+    expect(condition('se apertar Shift+Enter')).toMatchObject({
+      parts: [
+        { kind: 'name', text: 'Shift' },
+        { kind: 'name', text: 'Enter' },
+      ],
+    });
+  });
+
+  it('reads a text and a variable as the key', () => {
+    expect(condition('se apertar "a"')).toMatchObject({ parts: [{ kind: 'value' }] });
+    expect(condition('se apertar tecla')).toMatchObject({
+      parts: [{ kind: 'value', value: { kind: 'variable', name: 'tecla' } }],
+    });
+  });
+
+  it('joins with other conditions', () => {
+    expect(condition('se apertar E e vida > 0 entao')).toMatchObject({
+      kind: 'binary',
+      left: { kind: 'keyState' },
+    });
+  });
+
+  it.each(['se hold for maior que 2 entao', 'se hold > 2', 'se press', 'se hold entao'])(
+    'keeps a variable called like a key word in %s',
+    (line) => {
+      expect(first(`${line} {\n}`)).toMatchObject({ kind: 'if' });
+    },
+  );
+
+  it('leaves a variable alone when the line is not a condition', () => {
+    expect(first('wait hold seconds')).toMatchObject({ kind: 'wait', amount: { kind: 'variable', name: 'hold' } });
+  });
+
+  it('still reads ao as a name', () => {
+    expect(first('ao = 1')).toMatchObject({ kind: 'assign', name: 'ao' });
+  });
+});
+
 describe('doing nothing', () => {
   it.each([
     'não faça nada',

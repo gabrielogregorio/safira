@@ -398,6 +398,13 @@
     "zh-cn": "函数调用自身的次数过多",
     "ja": "関数が自分自身を呼び出した回数が多すぎます"
   },
+  "tecla_desconhecida": {
+    "pt-br": "A tecla {} não existe",
+    "en-us": "The key {} does not exist",
+    "es": "La tecla {} no existe",
+    "zh-cn": "按键 {} 不存在",
+    "ja": "キー {} は存在しません"
+  },
   "wait_not_numeric": {
     "pt-br": "O tempo de espera precisa ser um número",
     "en-us": "The waiting time must be a number",

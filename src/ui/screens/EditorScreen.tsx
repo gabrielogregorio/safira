@@ -866,6 +866,9 @@ export const EditorScreen = ({
             footer={terminalFooter()}
             isWaitingInput={runner.status === 'waiting-input'}
             onSubmitInput={runner.submitInput}
+            isListeningKeys={runner.isListeningKeys}
+            onKey={runner.sendKey}
+            onKeysLost={runner.clearKeys}
           />
           <Splitter
             label={t('Resize the variables panel')}

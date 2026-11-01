@@ -1,4 +1,5 @@
 import type { Execution } from './interpreter';
+import type { KeyMode } from './keys';
 
 export interface ExecutionHost {
   onStep?: (file: string, line: number) => void | Promise<void>;
@@ -7,6 +8,7 @@ export interface ExecutionHost {
   onInput: () => Promise<string>;
   onSleep: (milliseconds: number) => Promise<void>;
   onTone: (frequency: number, milliseconds: number) => Promise<void>;
+  onKey: (mode: KeyMode, keys: string[]) => Promise<boolean>;
   onFilesChanged: () => void;
 }
 
@@ -47,6 +49,9 @@ export const driveExecution = async (execution: Execution<void>, host: Execution
         break;
       case 'tone':
         await host.onTone(effect.frequency, effect.milliseconds);
+        break;
+      case 'key':
+        reply = String(await host.onKey(effect.mode, effect.keys));
         break;
       case 'files':
         host.onFilesChanged();

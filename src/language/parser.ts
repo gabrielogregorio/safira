@@ -38,6 +38,7 @@ export class Parser extends ExpressionParser {
     () => this.parseOrphanElse('se_nao_se'),
     () => this.parseOrphanElse('se_nao'),
     () => this.parseIf(),
+    () => this.parseKeyEvent(),
     () => this.parseSaveAnswer(),
     () => this.parseAssignment(),
     () => this.parseIncrement('incremente', 1),
@@ -361,6 +362,14 @@ export class Parser extends ExpressionParser {
 
       branches.push(branch);
     }
+  }
+
+  private parseKeyEvent(): StatementBody {
+    this.expectPhrase('ao_tecla');
+    const condition = this.parseKeyState();
+    this.acceptPhrase('se_final');
+
+    return { kind: 'if', branches: [{ condition, body: this.parseBody() }], otherwise: null };
   }
 
   private parseClauseElse(): Statement[] | null {

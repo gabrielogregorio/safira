@@ -39,6 +39,55 @@ const flushMicrotasks = (): Promise<void> =>
   });
 
 describe('RunnerSession', () => {
+  describe('keys', () => {
+    // A real turn of the event loop, or a program that waits for a key would never let the test send one.
+    const createLiveSession = (): { session: RunnerSession; events: RunnerEvent[] } => {
+      const events: RunnerEvent[] = [];
+      const session = new RunnerSession((event) => events.push(event), {
+        now: () => 0,
+        sleep: () => flushMicrotasks(),
+      });
+
+      return { session, events };
+    };
+
+    const LOOP = 'enquanto verdadeiro {\n  se apertar Enter entao interrompa\n}\nmostre "nunca"';
+
+    it('announces that the program listens once, and hears a key sent while it runs', async () => {
+      const { events, session } = createLiveSession();
+      const running = session.handle(startRequest(LOOP));
+      await flushMicrotasks();
+      await session.handle({ type: 'key', key: 'enter', isDown: true });
+      await running;
+
+      expect(events.filter((event) => event.type === 'keys-listening')).toHaveLength(1);
+      expect(events.at(-1)).toMatchObject({ type: 'finished', failure: null });
+      expect(outputTexts(events)).toEqual([]);
+    });
+
+    it('gives the messages a turn on each check', async () => {
+      const { sleeps, session } = createSession();
+      await session.handle(startRequest('se apertar Enter entao mostre "x"'));
+
+      expect(sleeps).toEqual([0]);
+    });
+
+    it('hears a key going up and forgets the keys on request', async () => {
+      const { events, session } = createLiveSession();
+      const running = session.handle(
+        startRequest('enquanto verdadeiro {\n  se soltar A entao interrompa\n  se segurar B entao mostre "b"\n}'),
+      );
+      await flushMicrotasks();
+      await session.handle({ type: 'key', key: 'b', isDown: true });
+      await session.handle({ type: 'keys-clear' });
+      await session.handle({ type: 'key', key: 'a', isDown: true });
+      await session.handle({ type: 'key', key: 'a', isDown: false });
+      await running;
+
+      expect(events.at(-1)).toMatchObject({ type: 'finished', failure: null });
+    });
+  });
+
   it('sends the output and finishes without failure', async () => {
     const { session, events } = createSession();
     await session.handle(startRequest('mostre "a"\nmostre "b"'));

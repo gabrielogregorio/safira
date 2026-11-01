@@ -1,4 +1,5 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
+import type { RunnerEvent } from '@/runtime/protocol';
 import { FakeWorker } from '@/ui/fakeWorker';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { createRunnerWorker, useRunner } from './useRunner';
@@ -30,6 +31,34 @@ describe('useRunner', () => {
   afterEach(() => {
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+  });
+
+  it('sends the keys to the worker and knows when the program listens', () => {
+    const { result, workers, start } = setup();
+    start('');
+    const [worker] = workers;
+
+    expect(result.current.isListeningKeys).toBe(false);
+
+    act(() => {
+      worker.onmessage?.({ data: { type: 'keys-listening' } } as MessageEvent<RunnerEvent>);
+    });
+
+    expect(result.current.isListeningKeys).toBe(true);
+
+    act(() => {
+      result.current.sendKey('enter', true);
+      result.current.clearKeys();
+    });
+
+    expect(worker.requests).toContainEqual({ type: 'key', key: 'enter', isDown: true });
+    expect(worker.requests).toContainEqual({ type: 'keys-clear' });
+
+    act(() => {
+      result.current.stop();
+    });
+
+    expect(result.current.isListeningKeys).toBe(false);
   });
 
   it('creates the real worker as a module', () => {

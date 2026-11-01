@@ -296,6 +296,48 @@ describe('running by hand', () => {
     expect([...interpreter.run('nada.safira')]).toEqual([]);
   });
 
+  describe('keys', () => {
+    const run = (source: string, pressed: string[]) =>
+      runScript(source, [], {}, (_mode, keys) => pressed.includes(keys.join('+')));
+
+    it.each(['Enter', 'enter', 'ENTER', '"Enter"', '"enter"'])('treats %s as the same key', async (name) => {
+      expect((await run(`se apertar ${name} entao mostre "sim"`, ['enter'])).texts).toEqual(['sim']);
+    });
+
+    it('takes the key from a variable', async () => {
+      expect((await run('tecla = "W"\nse apertar tecla entao mostre "sim"', ['w'])).texts).toEqual(['sim']);
+    });
+
+    it('prefers a variable with text over the name of a key', async () => {
+      expect((await run('cima = "w"\nse apertar cima entao mostre "sim"', ['w'])).texts).toEqual(['sim']);
+    });
+
+    it('reads a combination from a text', async () => {
+      expect((await run('se segurar "Shift+Enter" entao mostre "sim"', ['shift+enter'])).texts).toEqual(['sim']);
+    });
+
+    it('asks for the mode of the condition', async () => {
+      const modes: string[] = [];
+      await runScript('se segurar A { }\nse soltar A { }\nse apertar A { }', [], {}, (mode) => {
+        modes.push(mode);
+
+        return false;
+      });
+
+      expect(modes).toEqual(['hold', 'release', 'press']);
+    });
+
+    it('fails on a key that does not exist', async () => {
+      const { error } = await run('tecla = "banana"\nse apertar tecla entao mostre "x"', []);
+
+      expect(error?.message).toContain('banana');
+    });
+
+    it('takes a number as the name of a key', async () => {
+      expect((await run('se apertar 7 entao mostre "sim"', ['7'])).texts).toEqual(['sim']);
+    });
+  });
+
   it('goes on after doing nothing', async () => {
     const { texts, error } = await runScript(
       'se 1 == 2 entao mostre "a" senao não faça nada\nnão faça nada\nmostre "b"',

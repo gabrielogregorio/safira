@@ -1927,6 +1927,7 @@ html.snap-return #root {
 }
 
 .terminal {
+  position: relative;
   background: linear-gradient(180deg, #0c2340 0%, #050f20 100%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-panel);
@@ -1937,6 +1938,51 @@ html.snap-return #root {
   flex-direction: column;
   min-height: 0;
   overflow: hidden;
+}
+
+.terminal-size {
+  height: 34px;
+  min-height: 0;
+  position: absolute;
+  right: 8px;
+  top: 8px;
+  width: 34px;
+  z-index: 2;
+}
+
+.terminal-maximized {
+  border: none;
+  border-radius: 0;
+  inset: 0;
+  position: fixed;
+  z-index: 60;
+}
+
+.terminal-maximized .terminal-log {
+  font-size: clamp(1.15rem, 3.4vmin, 2.6rem);
+  padding: 20px;
+}
+
+.terminal-keys-hint {
+  background: rgb(255 255 255 / 12%);
+  border: none;
+  border-top: 1px solid rgb(255 255 255 / 25%);
+  color: #dff4ff;
+  cursor: var(--cursor-pointer);
+  font: inherit;
+  font-weight: 700;
+  min-height: 34px;
+  padding: 6px 10px;
+}
+
+.key-pad {
+  display: none;
+}
+
+.terminal-log:focus-visible,
+.terminal-log:focus {
+  outline: 2px solid var(--color-accent);
+  outline-offset: -2px;
 }
 
 .terminal-log {
@@ -2876,6 +2922,51 @@ html.snap-return #root {
 
   .status-bar > span {
     display: none;
+  }
+
+  .terminal-keys-hint {
+    display: none;
+  }
+
+  .key-pad {
+    display: grid;
+    gap: 4px;
+    grid-template-areas: '. up .' 'left down right' 'enter enter enter';
+    grid-template-columns: repeat(3, minmax(0, 72px));
+    justify-content: center;
+    padding: 6px;
+    touch-action: none;
+  }
+
+  .key-pad-button {
+    background: rgb(255 255 255 / 16%);
+    border: 1px solid rgb(255 255 255 / 40%);
+    border-radius: 12px;
+    color: #ffffff;
+    font: inherit;
+    font-size: 1.2rem;
+    font-weight: 700;
+    min-height: 44px;
+  }
+
+  .key-pad-arrowup {
+    grid-area: up;
+  }
+
+  .key-pad-arrowleft {
+    grid-area: left;
+  }
+
+  .key-pad-arrowdown {
+    grid-area: down;
+  }
+
+  .key-pad-arrowright {
+    grid-area: right;
+  }
+
+  .key-pad-enter {
+    grid-area: enter;
   }
 
   .lesson-select {

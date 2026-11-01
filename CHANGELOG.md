@@ -11,6 +11,9 @@ Fully compatible with 1.0.0: scripts of every earlier version keep running.
 - Songs in the Examples menu: an original piece called Céu de Safira, Oh! Susanna, Malagueña, Mo Li Hua, Sakura Sakura and the opening of Asa Branca, in every language.
 - A race start program in the Examples menu, with five lights, a random hold and a podium.
 - A liftoff program in the Examples menu, an ASCII animation with color and sound.
+- Keyboard conditions: `se apertar Cima`, `se segurar Shift+Enter`, `ao soltar tecla Enter`, `if press ArrowUp`. The key can be a name in any case, a text or a variable. A program only hears the keys while the program area has the focus, and a phone shows keys on the screen.
+- A Mini RPG in the Examples menu, in every language.
+- A button that maximizes the program area over the whole screen.
 - A lesson about color and sound, so the course now has 14 lessons.
 
 ### Changed

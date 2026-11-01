@@ -101,6 +101,7 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - There is no saving by hand. Open tabs reach the project 300 ms after typing stops, on `pagehide` and when leaving. Ctrl+S only forces it.
 - `importe` looks beside the importing file first, then from the root, with or without `.safira`.
 - Notes travel from the worker as `tone` events, and `soundPlayer.tone` plays them. A rest only waits.
+- Keys travel from `Terminal` to the worker as messages, and only while the program area has the focus. `KeyTracker` in `keys.ts` keeps what is down. Each key condition yields a `key` effect, and `RunnerSession` gives the event loop a turn there, or the messages would never arrive during a loop. Only conditions read keys, in `parseComparison`: in `espere hold segundos`, `hold` is a variable.
 - Each sound is named in `sounds.ts`. A click plays `data-sound`, text fields share a focus and a typing sound, and any clickable element has a hover sound. `data-sound="none"` silences the click of a button whose result has its own sound and arrives after a route change, as the plain click cannot step aside in time.
 
 - The look is Frutiger Aero: glass panels, glossy buttons, sky, water and aurora, with no external images.

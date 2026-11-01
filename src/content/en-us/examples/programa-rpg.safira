@@ -1,0 +1,180 @@
+#safira 0.9
+# ⚔️ Mini RPG
+# Click the output. Arrows or WASD walk, Esc leaves.
+# Walk into a monster to attack.
+
+
+list of map receive "###########", "#.........#", "#.##...##.#", "#.#..#..#.#", "#...###...#", "#.#.....#.#", "###########"
+list of monster_x receive 0, 0, 0
+list of monster_y receive 0, 0, 0
+list of monster_life receive 0, 0, 0
+
+function start_game() {
+    hero_x = 2
+    hero_y = 2
+    life = 10
+    has_key = false
+    has_potion = true
+    playing = true
+    message = "Find the 🗝️ and escape through the 🚪"
+    list of monster_x in position 1 = 6
+    list of monster_y in position 1 = 3
+    list of monster_life in position 1 = 3
+    list of monster_x in position 2 = 10
+    list of monster_y in position 2 = 2
+    list of monster_life in position 2 = 3
+    list of monster_x in position 3 = 5
+    list of monster_y in position 3 = 6
+    list of monster_life in position 3 = 5
+}
+
+function is_wall(px, py) {
+    row = list of map in position py
+    return row[px:px] == "#"
+}
+
+function monster_at(px, py) {
+    for each m from 1 to 3 {
+        alive = list of monster_life in position m
+        mx = list of monster_x in position m
+        my = list of monster_y in position m
+
+        if alive > 0 and mx == px and my == py then {
+            return m
+        }
+    }
+
+    return 0
+}
+
+function tile(cx, cy) {
+    if cx == hero_x and cy == hero_y then return "🧙"
+    if monster_at(cx, cy) > 0 then return "👹"
+    if cx == 10 and cy == 6 and has_key == false then return "🗝️"
+    if cx == 6 and cy == 2 and has_potion then return "🧪"
+    if cx == 2 and cy == 6 then return "🚪"
+    if is_wall(cx, cy) then return "🧱"
+    return "⬛"
+}
+
+function draw() {
+    clear
+    key_mark = "❌"
+    if has_key then key_mark = "✅"
+    show "⚔️ Mini RPG   ❤️ " + life + "   🗝️ " + key_mark
+
+    for each cy from 1 to 7 {
+        text_row = ""
+
+        for each cx from 1 to 11 {
+            text_row = text_row + tile(cx, cy)
+        }
+
+        show text_row
+    }
+
+    show message in color yellow
+}
+
+function attack(target) {
+    damage = a random number between 1 and 3
+    remaining = list of monster_life in position target
+    list of monster_life in position target = remaining - damage
+    play C5 for 80ms
+
+    if remaining - damage > 0 then {
+        message = "A hit of " + damage + "! The monster holds on."
+    } else {
+        message = "Monster defeated! ⚔️"
+        play E5, G5 for 80ms
+    }
+}
+
+function move_monsters() {
+    for each n from 1 to 3 {
+        strength = list of monster_life in position n
+
+        if strength > 0 then {
+            way = a random number between 1 and 4
+            ox = list of monster_x in position n
+            oy = list of monster_y in position n
+            if way == 1 then ox = ox + 1
+            if way == 2 then ox = ox - 1
+            if way == 3 then oy = oy + 1
+            if way == 4 then oy = oy - 1
+
+            if ox == hero_x and oy == hero_y then {
+                life = life - 1
+                message = "A monster hit you! 💥"
+                play C3 for 100ms
+            } else if is_wall(ox, oy) == false and monster_at(ox, oy) == 0 then {
+                list of monster_x in position n = ox
+                list of monster_y in position n = oy
+            }
+        }
+    }
+}
+
+function walk(dx, dy) {
+    new_x = hero_x + dx
+    new_y = hero_y + dy
+    target = monster_at(new_x, new_y)
+
+    if target > 0 then {
+        attack(target)
+    } else if is_wall(new_x, new_y) == false then {
+        hero_x = new_x
+        hero_y = new_y
+        message = "..."
+    }
+
+    if hero_x == 6 and hero_y == 2 and has_potion then {
+        has_potion = false
+        life = life + 5
+        message = "Potion! +5 life 🧪"
+        play G5, C6 for 80ms
+    }
+
+    if hero_x == 10 and hero_y == 6 and has_key == false then {
+        has_key = true
+        message = "You got the key! 🗝️"
+        play E5, G5, C6 for 80ms
+    }
+
+    move_monsters()
+
+    if life <= 0 then {
+        playing = false
+        message = "You fell... Press Enter to try again."
+        play E4, C4, A3 for 200ms
+    }
+
+    if hero_x == 2 and hero_y == 6 and has_key then {
+        playing = false
+        message = "You escaped! 🏆 Press Enter to play again."
+        play C5, E5, G5, C6 for 150ms
+    }
+
+    draw()
+}
+
+start_game()
+draw()
+
+while true {
+    if press Esc then interrupt
+
+    if playing then {
+        if press Up or press W then walk(0, -1)
+        if press Down or press S then walk(0, 1)
+        if press Left or press A then walk(-1, 0)
+        if press Right or press D then walk(1, 0)
+    } else {
+        on release Enter {
+            start_game()
+            draw()
+        }
+    }
+
+    wait 30 ms
+}

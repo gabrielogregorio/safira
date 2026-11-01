@@ -104,6 +104,7 @@ const runProgram = async (request: CheckRequest, inputs: string[]): Promise<Prog
       onInput: () => Promise.resolve(queue.shift() ?? ''),
       onSleep: () => Promise.resolve(),
       onTone: () => Promise.resolve(),
+      onKey: () => Promise.resolve(false),
       onFilesChanged: () => undefined,
     });
   } catch (error) {

@@ -1,5 +1,6 @@
 import { driveExecution } from './driver';
 import { Interpreter, SafiraError } from './interpreter';
+import type { KeyMode } from './keys';
 import { VirtualFileSystem } from './virtualFileSystem';
 
 export interface RecordedEvent {
@@ -19,7 +20,12 @@ export interface RunResult {
 
 const MAIN_FILE = 'main.safira';
 
-export const runScript = async (source: string, inputs: string[] = [], extraFiles = {}): Promise<RunResult> => {
+export const runScript = async (
+  source: string,
+  inputs: string[] = [],
+  extraFiles = {},
+  isKeyActive: (mode: KeyMode, keys: string[]) => boolean = () => false,
+): Promise<RunResult> => {
   const files = new VirtualFileSystem({ ...extraFiles, [MAIN_FILE]: source });
   const interpreter = new Interpreter({ files, locale: 'pt-br', random: (minimum) => minimum });
   const events: RecordedEvent[] = [];
@@ -43,6 +49,7 @@ export const runScript = async (source: string, inputs: string[] = [], extraFile
 
         return Promise.resolve();
       },
+      onKey: (mode, keys) => Promise.resolve(isKeyActive(mode, keys)),
       onFilesChanged: () => undefined,
     });
   } catch (caught) {
