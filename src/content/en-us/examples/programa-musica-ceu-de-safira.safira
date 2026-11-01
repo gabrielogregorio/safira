@@ -1,0 +1,63 @@
+#safira 0.9
+# 🎵 Sapphire Sky
+
+function chords() {
+    play A4, C5, E5, C5 for 150ms
+    play F4, A4, C5, A4 for 150ms
+    play G4, C5, E5, C5 for 150ms
+    play G4, B4, D5, B4 for 150ms
+}
+
+function verse() {
+    play E5, R, E5, D5 for 200ms
+    play C5 for 400ms
+    play D5, E5, C5, A4 for 200ms
+    play R for 200ms
+    play A4, C5, D5, E5 for 200ms
+    play G5 for 400ms
+    play E5, D5 for 200ms
+    play C5 for 600ms
+}
+
+function chorus() {
+    play A5, G5, E5, G5 for 150ms
+    play A5 for 450ms
+    play C6, A5, G5, E5 for 150ms
+    play D5 for 450ms
+    play E5, G5, A5, C6 for 150ms
+    play D6 for 300ms
+    play C6, B5 for 150ms
+    play A5 for 600ms
+}
+
+function ending() {
+    play E5, D5, C5, B4 for 150ms
+    play A4 for 300ms
+    play A4, E5, A5 for 150ms
+    play A5 for 900ms
+}
+
+clear
+show "Sapphire Sky" in color cyan
+
+show "🌊" in color blue
+repeat 2 times {
+    chords()
+}
+
+show "🌱" in color green
+verse()
+chords()
+
+show "✨" in color gold
+repeat 2 times {
+    chorus()
+}
+
+show "🌱" in color green
+verse()
+
+show "💎" in color purple
+ending()
+
+show "The end 🎵"

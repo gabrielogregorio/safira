@@ -5,11 +5,13 @@ import { readScriptVersion } from '@/language/version';
 import { checkProgram } from '@/lessons/lessonCheck';
 import { examplesOf, findExampleByPrefix, lessonsOf, toExample } from './content';
 
-const EXAMPLE_COUNT = 34;
-const LESSON_COUNT = 13;
+const EXAMPLE_COUNT = 41;
+const LESSON_COUNT = 14;
 const MAIN_FILE = 'main.safira';
 const PROGRAM_INPUTS = ['2', '2', '2', ...Array.from({ length: 20 }, () => '0')];
 const LONG_CODE_LINES = 16;
+// A song or a full game cannot be a short lesson, and neither of them is one.
+const LONG_PROGRAM = /^programa-(musica-|largada)/;
 const LATIN_COMMAND =
   /^\s*(show|print|if|else|repeat|while|for|wait|play|function|return|try|list|add|remove|create|read|mostre|se|repita)\b/;
 const LATIN_COMMAND_LINE: Partial<Record<(typeof LOCALES)[number]['id'], RegExp>> = {
@@ -64,7 +66,9 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
 
   it.each(examples.map((example) => [example.id, example.text] as const))('%s is short and valid', async (id, text) => {
     expect(readScriptVersion(text)).toMatchObject({ version: '0.9', isDeclared: true });
-    expect(scriptLines(text).length).toBeLessThanOrEqual(LONG_CODE_LINES);
+    if (!LONG_PROGRAM.test(id)) {
+      expect(scriptLines(text).length).toBeLessThanOrEqual(LONG_CODE_LINES);
+    }
 
     if (!id.startsWith('21')) {
       expect(invalidLines(text)).toEqual([]);

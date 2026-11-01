@@ -1,0 +1,9 @@
+#safira 0.9
+# 🎶 Asa Branca
+# The opening of Asa Branca, by Luiz Gonzaga and Humberto Teixeira (1947).
+
+show "🐦"
+play G4, A4 for 150ms
+play B4, D5, D5, B4, C5, C5 for 300ms
+
+show "The end 🎵"

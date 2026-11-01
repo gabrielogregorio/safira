@@ -1,0 +1,53 @@
+#safira 0.9
+# 🌼 Mo Li Hua
+# Canção tradicional da China.
+
+mostre "🌼"
+toque E4 por 320ms
+toque E4, G4, A4, C5, C5, A4 por 160ms
+toque G4 por 320ms
+toque G4, A4 por 160ms
+toque G4 por 640ms
+
+mostre "🌼"
+toque E4 por 320ms
+toque E4, G4, A4, C5, C5, A4 por 160ms
+toque G4 por 320ms
+toque G4, A4 por 160ms
+toque G4 por 640ms
+
+mostre "🌿"
+toque G4, G4, G4 por 320ms
+toque E4, G4 por 160ms
+toque A4, A4 por 320ms
+toque G4 por 640ms
+
+mostre "🌿"
+toque E4 por 320ms
+toque D4, E4 por 160ms
+toque G4 por 320ms
+toque E4, D4 por 160ms
+toque C4 por 320ms
+toque C4, D4 por 160ms
+toque C4 por 640ms
+
+mostre "🌼"
+toque E4, D4, C4, E4 por 160ms
+toque D4 por 480ms
+toque E4 por 160ms
+toque G4 por 320ms
+toque A4, C5 por 160ms
+toque G4 por 640ms
+
+mostre "🌼"
+toque D4 por 320ms
+toque E4, G4, D4, E4, C4, A3 por 160ms
+toque G3 por 640ms
+
+mostre "🌿"
+toque A3, C4 por 320ms
+toque D4 por 480ms
+toque E4, C4, D4, C4, A3 por 160ms
+toque G3 por 640ms
+
+mostre "Fim 🎵"

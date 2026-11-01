@@ -1,0 +1,63 @@
+#safira 0.9
+# 🎵 Céu de Safira
+
+função acordes() {
+    toque A4, C5, E5, C5 por 150ms
+    toque F4, A4, C5, A4 por 150ms
+    toque G4, C5, E5, C5 por 150ms
+    toque G4, B4, D5, B4 por 150ms
+}
+
+função estrofe() {
+    toque E5, R, E5, D5 por 200ms
+    toque C5 por 400ms
+    toque D5, E5, C5, A4 por 200ms
+    toque R por 200ms
+    toque A4, C5, D5, E5 por 200ms
+    toque G5 por 400ms
+    toque E5, D5 por 200ms
+    toque C5 por 600ms
+}
+
+função refrao() {
+    toque A5, G5, E5, G5 por 150ms
+    toque A5 por 450ms
+    toque C6, A5, G5, E5 por 150ms
+    toque D5 por 450ms
+    toque E5, G5, A5, C6 por 150ms
+    toque D6 por 300ms
+    toque C6, B5 por 150ms
+    toque A5 por 600ms
+}
+
+função final() {
+    toque E5, D5, C5, B4 por 150ms
+    toque A4 por 300ms
+    toque A4, E5, A5 por 150ms
+    toque A5 por 900ms
+}
+
+limpe a tela
+mostre "Céu de Safira" na cor ciano
+
+mostre "🌊" na cor azul
+repita 2 vezes {
+    acordes()
+}
+
+mostre "🌱" na cor verde
+estrofe()
+acordes()
+
+mostre "✨" na cor dourado
+repita 2 vezes {
+    refrao()
+}
+
+mostre "🌱" na cor verde
+estrofe()
+
+mostre "💎" na cor roxo
+final()
+
+mostre "Fim 🎵"

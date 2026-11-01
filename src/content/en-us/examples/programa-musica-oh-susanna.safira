@@ -1,0 +1,43 @@
+#safira 0.9
+# 🪕 Oh! Susanna
+# Stephen Foster, 1848.
+
+show "🪕"
+play C5, D5 for 95ms
+play E5, G5 for 190ms
+play G5 for 285ms
+play A5 for 95ms
+play G5, E5 for 190ms
+play C5 for 285ms
+play D5 for 95ms
+play E5, E5, D5, C5 for 190ms
+play D5 for 570ms
+
+show "🪕"
+play C5, D5 for 95ms
+play E5, G5 for 190ms
+play G5 for 285ms
+play A5 for 95ms
+play G5, E5 for 190ms
+play C5 for 285ms
+play D5 for 95ms
+play E5, E5, D5, D5 for 190ms
+play C5 for 570ms
+
+show "🎵"
+play F5, F5, A5 for 380ms
+play A5, A5, G5, G5, E5, C5 for 190ms
+play D5 for 570ms
+
+show "🪕"
+play C5, D5 for 95ms
+play E5, G5 for 190ms
+play G5 for 285ms
+play A5 for 95ms
+play G5, E5 for 190ms
+play C5 for 285ms
+play D5 for 95ms
+play E5, E5, D5, D5 for 190ms
+play C5 for 570ms
+
+show "The end 🎵"

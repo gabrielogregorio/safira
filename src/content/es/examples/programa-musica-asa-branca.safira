@@ -1,0 +1,9 @@
+#safira 0.9
+# 🎶 Asa Branca
+# El comienzo de Asa Branca, de Luiz Gonzaga y Humberto Teixeira (1947).
+
+muestra "🐦"
+tocar G4, A4 por 150ms
+tocar B4, D5, D5, B4, C5, C5 por 300ms
+
+muestra "Fin 🎵"

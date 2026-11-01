@@ -1,0 +1,43 @@
+#safira 0.9
+# 🎸 Malagueña
+# Tradicional da Espanha, sobre a cadência andaluza.
+
+mostre "🎸"
+toque A3, E4, A4, C5 por 110ms
+toque E5 por 220ms
+toque G3, D4, G4, B4 por 110ms
+toque D5 por 220ms
+toque F3, C4, F4, A4 por 110ms
+toque C5 por 220ms
+toque E3, B3, E4, G4# por 110ms
+toque B4 por 220ms
+
+mostre "💃"
+toque E5 por 220ms
+toque F5, E5 por 110ms
+toque D5 por 220ms
+toque E5, D5 por 110ms
+toque C5 por 220ms
+toque D5, C5 por 110ms
+toque B4 por 440ms
+
+mostre "🎸"
+toque A4, B4, C5, D5 por 110ms
+toque E5 por 220ms
+toque D5, C5, B4, C5, A4, B4 por 110ms
+toque G4# por 440ms
+
+mostre "💃"
+toque E5 por 220ms
+toque F5, E5 por 110ms
+toque D5 por 220ms
+toque E5, D5 por 110ms
+toque C5 por 220ms
+toque D5, C5 por 110ms
+toque B4 por 440ms
+
+mostre "🎸"
+toque E5, D5, C5, B4, A4, G4, F4 por 110ms
+toque E4 por 550ms
+
+mostre "Fim 🎵"

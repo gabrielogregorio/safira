@@ -1,0 +1,9 @@
+#safira 0.9
+# 🎶 Asa Branca
+# Asa Branca の冒頭。Luiz Gonzaga と Humberto Teixeira の作品(1947)。
+
+表示 "🐦"
+鳴らす G4, A4 長さ 150ミリ秒
+鳴らす B4, D5, D5, B4, C5, C5 長さ 300ミリ秒
+
+表示 "おわり 🎵"

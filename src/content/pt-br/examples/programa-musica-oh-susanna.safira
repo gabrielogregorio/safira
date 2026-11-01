@@ -1,0 +1,43 @@
+#safira 0.9
+# 🪕 Oh! Susanna
+# Stephen Foster, 1848.
+
+mostre "🪕"
+toque C5, D5 por 95ms
+toque E5, G5 por 190ms
+toque G5 por 285ms
+toque A5 por 95ms
+toque G5, E5 por 190ms
+toque C5 por 285ms
+toque D5 por 95ms
+toque E5, E5, D5, C5 por 190ms
+toque D5 por 570ms
+
+mostre "🪕"
+toque C5, D5 por 95ms
+toque E5, G5 por 190ms
+toque G5 por 285ms
+toque A5 por 95ms
+toque G5, E5 por 190ms
+toque C5 por 285ms
+toque D5 por 95ms
+toque E5, E5, D5, D5 por 190ms
+toque C5 por 570ms
+
+mostre "🎵"
+toque F5, F5, A5 por 380ms
+toque A5, A5, G5, G5, E5, C5 por 190ms
+toque D5 por 570ms
+
+mostre "🪕"
+toque C5, D5 por 95ms
+toque E5, G5 por 190ms
+toque G5 por 285ms
+toque A5 por 95ms
+toque G5, E5 por 190ms
+toque C5 por 285ms
+toque D5 por 95ms
+toque E5, E5, D5, D5 por 190ms
+toque C5 por 570ms
+
+mostre "Fim 🎵"
