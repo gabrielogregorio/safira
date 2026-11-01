@@ -193,15 +193,20 @@ export const planStep = (
   return planMove(paths, order, node, anchor, direction === 'up' ? 'before' : 'after');
 };
 
+export interface MoveDestination {
+  folder: FolderNode | null;
+  plan: PlannedMove;
+}
+
 const foldersOf = (nodes: TreeNode[]): FolderNode[] =>
   nodes.flatMap((node) => (node.kind === 'folder' ? [node, ...foldersOf(node.children)] : []));
 
 // Every folder that can take the item, with null for the root of the project.
-export const moveDestinations = (paths: string[], order: string[], node: TreeNode): (FolderNode | null)[] =>
-  [null, ...foldersOf(buildFileTree(paths, order))].filter((folder) => {
+export const moveDestinations = (paths: string[], order: string[], node: TreeNode): MoveDestination[] =>
+  [null, ...foldersOf(buildFileTree(paths, order))].flatMap((folder) => {
     const plan = planMove(paths, order, node, folder, 'inside');
 
-    return plan !== null && plan.target !== node.path;
+    return plan !== null && plan.target !== node.path ? [{ folder, plan }] : [];
   });
 
 // Without an anchor the item goes to the end of the root. Returns null for a move that cannot happen.

@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { examplesOf } from '@/content/content';
 import { DEFAULT_SETTINGS, FONT_SIZE_STEP } from '@/settings/settings';
 import { IdeMenuBar } from './IdeMenuBar';
 
@@ -29,7 +30,17 @@ const choose = async (menu: string, item: string): Promise<void> => {
   await userEvent.click(await screen.findByRole('menuitem', { name: (name) => name.startsWith(item) }));
 };
 
+const chooseRadio = async (submenu: string, item: string): Promise<void> => {
+  await userEvent.click(screen.getByRole('menuitem', { name: 'Interface' }));
+  await userEvent.click(await screen.findByRole('menuitem', { name: (name) => name.startsWith(submenu) }));
+  await userEvent.click(await screen.findByRole('menuitemradio', { name: (name) => name.endsWith(item) }));
+};
+
 describe('IdeMenuBar', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
   it('shows the five menus', () => {
     setup();
 
@@ -68,6 +79,14 @@ describe('IdeMenuBar', () => {
     expect(onRun).toHaveBeenCalledWith('step');
   });
 
+  it('runs everything and runs to the next breakpoint', async () => {
+    const { onRun } = setup();
+    await choose('Run', 'Run all');
+    await choose('Run', 'Run to breakpoint');
+
+    expect(onRun.mock.calls).toEqual([['run'], ['debug']]);
+  });
+
   it('only allows stopping while running', async () => {
     setup();
     await userEvent.click(screen.getByRole('menuitem', { name: 'Run' }));
@@ -82,10 +101,61 @@ describe('IdeMenuBar', () => {
     expect(onOpenExample).toHaveBeenCalledWith('16-listas', expect.stringContaining('list of'));
   });
 
+  it('opens a program, which plays its own note when hovered', async () => {
+    const { onOpenExample } = setup();
+    const [firstProgram] = examplesOf('en-us').filter((example) => example.id.startsWith('programa-'));
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Examples' }));
+    const item = await screen.findByRole('menuitem', { name: firstProgram.title });
+
+    expect(item).toHaveAttribute('data-hover-rate', '0.5');
+
+    await userEvent.click(item);
+
+    expect(onOpenExample).toHaveBeenCalledWith(firstProgram.id, firstProgram.text);
+  });
+
+  it.each([
+    ['Theme', 'Dark', { theme: 'dark' }],
+    ['Accessibility', 'Tritanopia (weak blue)', { vision: 'tritanopia' }],
+    ['Code font', 'Istok Web', { codeFont: 'aero' }],
+  ])('Interface > %s > %s changes the setting', async (submenu, item, change) => {
+    const { onChangeSettings } = setup();
+    await chooseRadio(submenu, item);
+
+    expect(onChangeSettings).toHaveBeenCalledExactlyOnceWith(change);
+  });
+
+  it('turns the sound off', async () => {
+    const { onChangeSettings } = setup();
+    await userEvent.click(screen.getByRole('menuitem', { name: 'Interface' }));
+    await userEvent.click(await screen.findByRole('menuitemcheckbox', { name: /Sound$/ }));
+
+    expect(onChangeSettings).toHaveBeenCalledExactlyOnceWith({ sound: !DEFAULT_SETTINGS.sound });
+  });
+
+  it('opens the bug report and the blog in a new page', async () => {
+    const open = vi.spyOn(window, 'open').mockReturnValue(null);
+    setup();
+    await choose('Help', 'Report a bug');
+    await choose('Help', 'Community blog');
+
+    expect(open.mock.calls).toEqual([
+      ['https://github.com/safira-lang/safira-ide/issues', '_blank', 'noopener'],
+      ['https://github.com/gabrielogregorio/safira/wiki', '_blank', 'noopener'],
+    ]);
+  });
+
   it('changes the font size within the limits', async () => {
     const { onChangeSettings } = setup();
     await choose('Interface', 'Increase font');
 
     expect(onChangeSettings).toHaveBeenCalledWith({ fontSize: DEFAULT_SETTINGS.fontSize + FONT_SIZE_STEP });
+  });
+
+  it('decreases the font size', async () => {
+    const { onChangeSettings } = setup();
+    await choose('Interface', 'Decrease font');
+
+    expect(onChangeSettings).toHaveBeenCalledExactlyOnceWith({ fontSize: DEFAULT_SETTINGS.fontSize - FONT_SIZE_STEP });
   });
 });

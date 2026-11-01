@@ -3,6 +3,7 @@ import { createTranslator, detectLocale, LocaleContext, TranslationContext } fro
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
 import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
+import type { Route } from '@/routing/routes';
 import { useRoute } from '@/routing/useRoute';
 import type { Settings } from '@/settings/settings';
 import { loadSettings, saveSettings } from '@/settings/settings';
@@ -302,7 +303,7 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
           <EditorScreen
             key={activeProject.id}
             project={activeProject}
-            routeFile={route.name === 'project' ? route.file : null}
+            routeFile={(route as Extract<Route, { name: 'project' }>).file}
             settings={{ ...settings, theme: skyTheme }}
             locale={locale}
             createWorker={createWorker}

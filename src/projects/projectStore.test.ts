@@ -34,6 +34,12 @@ describe('projectStore', () => {
     expect(loadProjects()).toEqual([]);
   });
 
+  it('ignores saved data that is not a list', () => {
+    localStorage.setItem('safira.projects.v1', '{}');
+
+    expect(loadProjects()).toEqual([]);
+  });
+
   it('drops entries that are not projects', () => {
     localStorage.setItem('safira.projects.v1', JSON.stringify([{ nada: 1 }]));
 

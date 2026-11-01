@@ -12,6 +12,13 @@ describe('VirtualFileSystem', () => {
     expect(new VirtualFileSystem().read('a')).toBeNull();
   });
 
+  it('creates the file when appending to one that does not exist', () => {
+    const files = new VirtualFileSystem();
+    files.append('a', 'x');
+
+    expect(files.read('a')).toBe('x');
+  });
+
   it('appends to the end of a file', () => {
     const files = new VirtualFileSystem({ a: 'x' });
     files.append('a', 'y');

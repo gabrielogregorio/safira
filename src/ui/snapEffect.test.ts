@@ -45,6 +45,7 @@ describe('planGrains', () => {
 describe('snapAway', () => {
   const SNAP_MILLISECONDS = 6000;
   let painted: string[];
+  let colors: string[];
   let crumbled: Keyframe[][];
 
   const fakeCanvasContext = (): CanvasRenderingContext2D =>
@@ -54,7 +55,13 @@ describe('snapAway', () => {
         get: (_target, name: string) => () => {
           painted.push(name);
         },
-        set: () => true,
+        set: (_target, name: string, value: string) => {
+          if (name === 'fillStyle') {
+            colors.push(value);
+          }
+
+          return true;
+        },
       },
     ) as CanvasRenderingContext2D;
 
@@ -71,6 +78,7 @@ describe('snapAway', () => {
   beforeEach(() => {
     vi.useFakeTimers();
     painted = [];
+    colors = [];
     crumbled = [];
     document.body.innerHTML =
       '<div id="root"><section class="home-hero"><p>oi</p><button>ok</button><svg></svg></section></div>';
@@ -107,6 +115,24 @@ describe('snapAway', () => {
 
     expect(crumbled).toEqual([]);
     expect(document.querySelector('.snap-dust')).toBeNull();
+    expect(document.querySelector('.snap-dark')).not.toBeNull();
+  });
+
+  it('makes the dust of a painted part from its background', async () => {
+    withMotion(true);
+    document.querySelector<HTMLElement>('.home-hero p')?.style.setProperty('background-color', 'rgb(1, 2, 3)');
+    await run();
+
+    expect(colors).toContain('rgb(1, 2, 3)');
+  });
+
+  it('still ends in the dark on a browser with no canvas', async () => {
+    withMotion(true);
+    vi.mocked(HTMLCanvasElement.prototype.getContext).mockReturnValue(null);
+    await run();
+
+    expect(painted).toEqual([]);
+    expect(document.querySelector('.snap-devour')).not.toBeNull();
     expect(document.querySelector('.snap-dark')).not.toBeNull();
   });
 

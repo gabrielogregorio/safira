@@ -499,18 +499,14 @@ const MoveChoices = ({ node, paths, order, onChoose }: MoveChoicesProps) => {
 
   return (
     <ul className="move-choices">
-      {destinations.map((folder) => (
+      {destinations.map(({ folder, plan }) => (
         <li key={folder?.path ?? ''}>
           <button
             type="button"
             className="button"
             data-fixed-text={folder === null ? undefined : true}
             onClick={() => {
-              const plan = planMove(paths, order, node, folder, 'inside');
-
-              if (plan !== null) {
-                onChoose(plan);
-              }
+              onChoose(plan);
             }}>
             {folder === null ? t('Project root') : folder.path}
           </button>

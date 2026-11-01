@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ProjectNameField } from './ProjectNameField';
 
@@ -55,6 +55,18 @@ describe('ProjectNameField', () => {
     await userEvent.type(field, `${typed}{Enter}`);
 
     expect(onRename).not.toHaveBeenCalled();
+  });
+
+  it('renames once when the field also loses the focus as Enter closes it', async () => {
+    const { field, onRename } = await openField();
+    await userEvent.keyboard('Novo');
+
+    act(() => {
+      fireEvent.keyDown(field, { key: 'Enter' });
+      fireEvent.blur(field);
+    });
+
+    expect(onRename).toHaveBeenCalledTimes(1);
   });
 
   it('trims the name and opens again after saving', async () => {

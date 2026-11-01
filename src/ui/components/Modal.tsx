@@ -61,10 +61,8 @@ export const Modal = ({ title, children, onClose, isWide = false, openSound = 'm
   return (
     <Dialog.Root
       open
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          onClose();
-        }
+      onOpenChange={() => {
+        onClose();
       }}>
       <Dialog.Portal>
         <Dialog.Overlay ref={keepOverlay} className="modal-backdrop">

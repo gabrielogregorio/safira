@@ -1,3 +1,5 @@
+import { Interpreter } from '@/language/interpreter';
+import { noteFrequency } from '@/language/notes';
 import type { RunnerEvent, RunnerRequest } from './protocol';
 import { RunnerSession } from './runnerSession';
 
@@ -155,6 +157,45 @@ describe('RunnerSession', () => {
     await session.handle(startRequest('espere 2 segundos'));
 
     expect(sleeps).toEqual([2000]);
+  });
+
+  it('plays a note and waits for it', async () => {
+    const { session, events, sleeps } = createSession();
+    await session.handle(startRequest('toque C por 2 segundos'));
+
+    expect(events).toContainEqual({ type: 'tone', frequency: noteFrequency('C'), milliseconds: 2000 });
+    expect(sleeps).toEqual([2000]);
+  });
+
+  it('does not pause in debug on a file without breakpoints', async () => {
+    const { session, events } = createSession();
+    await session.handle(startRequest('mostre 1', { mode: 'debug', breakpoints: { 'outro.safira': [1] } }));
+
+    expect(events.some((event) => event.type === 'paused')).toBe(false);
+    expect(events.at(-1)).toMatchObject({ type: 'finished', failure: null });
+  });
+
+  it('finishes with a message when the blocks are too deep to read', async () => {
+    const { session, events } = createSession();
+    vi.spyOn(Interpreter.prototype, 'run').mockImplementationOnce(() => {
+      throw new RangeError('Maximum call stack size exceeded');
+    });
+    await session.handle(startRequest('mostre 1'));
+
+    expect(events.at(-1)).toMatchObject({
+      type: 'finished',
+      failure: { message: 'Este programa tem blocos demais, um dentro do outro', file: MAIN, line: 1 },
+    });
+  });
+
+  it('does not hide an error that is not from the script', async () => {
+    const { session, events } = createSession();
+    vi.spyOn(Interpreter.prototype, 'run').mockImplementationOnce(() => {
+      throw new TypeError('quebrou');
+    });
+
+    await expect(session.handle(startRequest('mostre 1'))).rejects.toThrow(TypeError);
+    expect(events.some((event) => event.type === 'finished')).toBe(false);
   });
 
   it('splits a long output in batches', async () => {

@@ -120,7 +120,7 @@ Settings > Delete everything removes every key of this copy from both storages, 
 
 ## Known gaps
 
-- Coverage is 91%, with thresholds at 90/83/87/90. The goal is 100%.
+- `tokenize` grows faster than the size of the source: 40 thousand `(` take about 8 seconds. Only an absurd program feels it, and Stop works.
 - Lighthouse is not in `tests.yml`.
 - Content in the five languages loads at once, which costs bundle size. Loading only the active language should help.
 - With the page idle, the headless test browser used about one CPU core. It was not measured on a normal machine.

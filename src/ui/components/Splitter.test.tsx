@@ -80,6 +80,16 @@ describe('Splitter', () => {
     expect(onChange).toHaveBeenNthCalledWith(2, 184);
   });
 
+  it('uses the up and down arrows in a horizontal divider', async () => {
+    const { onChange, separator } = setup(false, 'horizontal');
+    separator.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await userEvent.keyboard('{ArrowUp}');
+
+    expect(onChange).toHaveBeenNthCalledWith(1, 216);
+    expect(onChange).toHaveBeenNthCalledWith(2, 184);
+  });
+
   it('ignores the arrows of the other axis', async () => {
     const { onChange, separator } = setup();
     separator.focus();

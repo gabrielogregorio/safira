@@ -2,6 +2,7 @@ import {
   isDirty,
   isScript,
   mergeProgramFiles,
+  moveTab,
   nextUntitledName,
   openTab,
   toStoredText,
@@ -45,6 +46,18 @@ describe('editor tabs', () => {
     const result = mergeProgramFiles([clean, dirty], { 'a.txt': 'novo', 'b.txt': 'novo' });
 
     expect(result.map((tab) => tab.text)).toEqual(['novo', 'editado']);
+  });
+
+  it('reads the version of a text file that becomes a script', () => {
+    const moved = moveTab(openTab('a.txt', '#safira 0.9\nmostre 1'), 'a.safira');
+
+    expect(moved).toMatchObject({ file: 'a.safira', version: '0.9' });
+  });
+
+  it('keeps the version a script already had when it moves', () => {
+    const moved = moveTab(openTab('a.safira', '#safira 0.9\nmostre 1'), 'pasta/a.safira');
+
+    expect(moved).toMatchObject({ file: 'pasta/a.safira', text: 'mostre 1', version: '0.9' });
   });
 
   it('keeps a tab whose file the program did not send', () => {

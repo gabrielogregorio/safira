@@ -4,6 +4,15 @@
 
 Safira was rewritten from Python and Tkinter to a web IDE in TypeScript.
 
+### Fixed
+
+- A list with a negative or huge size is now an error that `tente` can catch, instead of stopping the run with no message.
+- `senao der erro` on the line after a closing `se` no longer breaks that `se`.
+- Blocks nested too deep end the run with a message.
+- The error for upper and lower case no longer shows an internal name.
+- F11 and the Full screen menu do nothing in browsers without that feature, instead of failing.
+- A sea sound that was still loading stops when the sound is turned off.
+
 ### Added
 
 - Files and folders can move without dragging: Alt+Up, Alt+Down and Alt+M, and Move up, Move down and Move to in the right click menu.

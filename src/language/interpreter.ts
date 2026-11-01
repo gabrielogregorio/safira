@@ -51,6 +51,7 @@ export interface InterpreterOptions {
 }
 
 const MAXIMUM_CALL_DEPTH = 400;
+const LARGEST_SIZED_LIST = 1_000_000;
 const MILLISECONDS_PER_SECOND = 1000;
 const ESCAPED_NEWLINE = /\\n/g;
 
@@ -272,8 +273,6 @@ export class Interpreter {
         break;
       case 'replaceText':
         yield* this.executeReplaceText(statement.name, statement.search, statement.replacement);
-        break;
-      default:
         break;
     }
   }
@@ -513,6 +512,11 @@ export class Interpreter {
 
   private *executeListDeclareSized(name: string, size: Expression): Execution<void> {
     const length = this.toInteger(yield* this.evaluate(size));
+
+    if (length < 0 || length > LARGEST_SIZED_LIST) {
+      this.fail('tamanho_de_lista_invalido', length);
+    }
+
     this.variables.set(name, new Array<Value>(length).fill(''));
   }
 
@@ -801,7 +805,7 @@ export class Interpreter {
     const value = yield* this.evaluate(expression.value);
 
     if (typeof value !== 'string') {
-      return this.fail('p_maiusc_minusc_cap_texto', expression.mode);
+      return this.fail('p_maiusc_minusc_cap_texto');
     }
 
     if (expression.mode === 'upper') {
@@ -827,7 +831,7 @@ export class Interpreter {
     }
 
     parameters.forEach((parameter, index) => {
-      this.variables.set(parameter, values[index] ?? null);
+      this.variables.set(parameter, values[index]);
     });
   }
 
@@ -862,7 +866,7 @@ export class Interpreter {
     const list = this.getList(name);
     this.checkPosition(position, list.length);
 
-    return list[position - 1] ?? null;
+    return list[position - 1];
   }
 
   private *evaluateInput(numeric: boolean, variableName: string | null): Execution<Value> {

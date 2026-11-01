@@ -1,8 +1,28 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lessonsOf } from '@/content/content';
+import type * as i18n from '@/i18n/i18n';
+import type { Translate } from '@/i18n/i18n';
 import type { LessonMode } from '@/ui/hooks/useLessonMode';
 import { planTrip, ProfessorCat } from './ProfessorCat';
+
+const WRITE_SPEECH = 'Write your answer and press ▶ Run.';
+
+// No translated speech has code in it today, so the backtick handling needs its own line of text.
+const translation = vi.hoisted(() => ({ writeSpeech: null as string | null }));
+
+vi.mock('@/i18n/i18n', async (importOriginal) => {
+  const actual = await importOriginal<typeof i18n>();
+
+  return {
+    ...actual,
+    useTranslation: (): Translate => {
+      const t = actual.useTranslation();
+
+      return (text, values) => (text === WRITE_SPEECH ? (translation.writeSpeech ?? t(text, values)) : t(text, values));
+    },
+  };
+});
 
 const lessons = lessonsOf('en-us');
 
@@ -26,9 +46,55 @@ const lessonMode = (changes: Partial<LessonMode> = {}): LessonMode => ({
 
 const press = (name: string) => userEvent.click(screen.getByRole('button', { name }));
 
+const renderCat = (changes: Partial<LessonMode> = {}, onAbandon = vi.fn()) =>
+  render(<ProfessorCat lesson={lessonMode(changes)} hasError={false} isWaitingInput={false} onAbandon={onAbandon} />);
+
+const farewell = { isLastStep: true, isDone: true, hasRun: true };
+
+const withMotion = (): void => {
+  vi.stubGlobal('matchMedia', vi.fn().mockReturnValue({ matches: true }));
+  vi.useFakeTimers();
+};
+
+const advance = (milliseconds: number): void => {
+  act(() => {
+    vi.advanceTimersByTime(milliseconds);
+  });
+};
+
+const catElement = (container: HTMLElement): HTMLElement => container.querySelector<HTMLElement>('.cat') as HTMLElement;
+
+const pressStone = (): HTMLElement => {
+  const stone = screen.getByRole('button', { name: 'Drag the stone' });
+  stone.setPointerCapture = vi.fn();
+  fireEvent.pointerDown(stone, { clientX: 100, clientY: 100, pointerId: 1 });
+
+  return stone;
+};
+
 describe('ProfessorCat', () => {
+  const boxes: HTMLElement[] = [];
+
+  const addBox = (className: string, box: DOMRect): void => {
+    const element = document.createElement('div');
+    element.className = className;
+    element.getBoundingClientRect = () => box;
+    document.body.append(element);
+    boxes.push(element);
+  };
+
   beforeEach(() => {
     sessionStorage.clear();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+    vi.unstubAllGlobals();
+    vi.restoreAllMocks();
+    translation.writeSpeech = null;
+    boxes.splice(0).forEach((element) => {
+      element.remove();
+    });
   });
 
   it('introduces himself once per session', async () => {
@@ -182,6 +248,202 @@ describe('ProfessorCat', () => {
     await vi.waitFor(() => {
       expect(onAbandon).toHaveBeenCalledTimes(1);
     });
+  });
+
+  it('draws nothing when there is no step', () => {
+    const { container } = renderCat({ step: undefined });
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
+  it('still introduces himself when the browser blocks the storage', async () => {
+    vi.spyOn(Storage.prototype, 'getItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    vi.spyOn(Storage.prototype, 'setItem').mockImplementation(() => {
+      throw new Error('blocked');
+    });
+    renderCat();
+
+    expect(screen.getByText(/I am a therian/)).toBeInTheDocument();
+
+    await press('Continue');
+
+    expect(screen.queryByText(/I am a therian/)).not.toBeInTheDocument();
+  });
+
+  it('stays in the corner on a phone', () => {
+    vi.stubGlobal('innerWidth', 500);
+    vi.stubGlobal('innerHeight', 800);
+    const { container } = renderCat();
+
+    expect(catElement(container).style.transform).toBe('translate(392px, 640px)');
+  });
+
+  it.each([
+    ['right', new DOMRect(1000, 400, 400, 20), '23deg'],
+    ['left', new DOMRect(100, 400, 100, 20), '12deg'],
+  ])('turns %s and aims the arm at the target', (facing, target, angle) => {
+    sessionStorage.setItem('safira.cat.met', 'true');
+    vi.spyOn(Math, 'random').mockReturnValue(0.5);
+    addBox('code-editor', new DOMRect(100, 100, 800, 600));
+    addBox('cm-line', target);
+    const { container } = renderCat();
+    const cat = catElement(container);
+
+    expect(cat.style.transform).toBe('translate(769px, 208px)');
+    expect(cat.dataset['facing']).toBe(facing);
+    expect(cat.style.getPropertyValue('--point-angle')).toBe(angle);
+  });
+
+  it('keeps quiet until the saucer arrives', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
+    vi.spyOn(Math, 'random').mockReturnValue(0.5);
+    withMotion();
+    const lesson = lessonMode();
+    const { container, rerender } = render(
+      <ProfessorCat lesson={lesson} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
+    );
+
+    rerender(<ProfessorCat lesson={lesson} hasError={false} isWaitingInput onAbandon={vi.fn()} />);
+
+    expect(container.querySelector('.cat-bubble')).toBeNull();
+
+    advance(1874);
+
+    expect(container.querySelector('.cat-bubble')).toBeNull();
+
+    advance(1);
+
+    expect(container.querySelector('.cat-bubble')).not.toBeNull();
+  });
+
+  it('types his speech, with a way to show it all at once', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
+    withMotion();
+    const { container } = renderCat();
+    const typed = container.querySelector('.lesson-brief-text');
+
+    expect(typed).toHaveAttribute('aria-hidden', 'true');
+    expect(container.querySelector('.visually-hidden')).toHaveTextContent(WRITE_SPEECH);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Show it all' }));
+
+    expect(typed).not.toHaveAttribute('aria-hidden');
+    expect(typed).toHaveTextContent(WRITE_SPEECH);
+    expect(screen.queryByRole('button', { name: 'Show it all' })).not.toBeInTheDocument();
+  });
+
+  it('hides a backtick until its pair is typed', () => {
+    sessionStorage.setItem('safira.cat.met', 'true');
+    translation.writeSpeech = 'Use `show` now';
+    withMotion();
+    const { container } = renderCat();
+    const typed = container.querySelector('.lesson-brief-text');
+
+    advance(7 * 24);
+
+    expect(typed).toHaveTextContent(/^Use sh$/);
+
+    advance(7 * 24);
+
+    expect(typed?.querySelector('code')).toHaveTextContent('show');
+  });
+
+  it('takes his time to say goodbye and to fly away', () => {
+    withMotion();
+    const onAbandon = vi.fn();
+    const { container } = renderCat(farewell, onAbandon);
+
+    advance(3000);
+    advance(2499);
+
+    expect(catElement(container)).not.toHaveClass('cat-fleeing');
+
+    advance(1);
+
+    expect(catElement(container)).toHaveClass('cat-fleeing');
+    expect(catElement(container).style.transform).toBe('translate(1120px, -96px)');
+    expect(onAbandon).not.toHaveBeenCalled();
+
+    advance(900);
+
+    expect(onAbandon).toHaveBeenCalledTimes(1);
+  });
+
+  it('still leaves when the step disappears on the way out', () => {
+    vi.useFakeTimers();
+    const firstAbandon = vi.fn();
+    const lastAbandon = vi.fn();
+    const { rerender } = renderCat(farewell, firstAbandon);
+
+    advance(0);
+    rerender(
+      <ProfessorCat
+        lesson={lessonMode({ ...farewell, step: undefined })}
+        hasError={false}
+        isWaitingInput={false}
+        onAbandon={lastAbandon}
+      />,
+    );
+    advance(0);
+
+    expect(firstAbandon).not.toHaveBeenCalled();
+    expect(lastAbandon).toHaveBeenCalledTimes(1);
+  });
+
+  it('ignores the stone being moved without a press', () => {
+    const { container } = renderCat();
+    const stone = screen.getByRole('button', { name: 'Drag the stone' });
+
+    fireEvent.pointerMove(stone, { clientX: 300, clientY: 300, pointerId: 1 });
+
+    expect(stone.style.transform).toBe('');
+    expect(container.querySelector('.cat-bubble')).not.toBeNull();
+  });
+
+  it('does not mistake a shaky click for a drag', () => {
+    const { container } = renderCat();
+    const stone = pressStone();
+
+    fireEvent.pointerMove(stone, { clientX: 102, clientY: 101, pointerId: 1 });
+
+    expect(stone).toHaveAttribute('aria-pressed', 'false');
+    expect(container.querySelector('.cat-bubble')).not.toBeNull();
+  });
+
+  it('turns around when the held stone goes past him', () => {
+    const { container } = renderCat();
+    const stone = pressStone();
+
+    fireEvent.pointerMove(stone, { clientX: 100, clientY: 60, pointerId: 1 });
+
+    expect(catElement(container).dataset['facing']).toBe('right');
+
+    stone.getBoundingClientRect = () => new DOMRect(500, 0, 10, 10);
+    fireEvent.pointerMove(stone, { clientX: 600, clientY: 100, pointerId: 1 });
+
+    expect(catElement(container).dataset['facing']).toBe('left');
+    expect(stone.style.transform).toBe('translate(500px, 0px)');
+  });
+
+  it('runs to the right when the stone is exactly over him', () => {
+    const { container } = renderCat();
+    const stone = pressStone();
+    stone.getBoundingClientRect = () => new DOMRect(48, 48, 0, 0);
+
+    fireEvent.pointerMove(stone, { clientX: 100, clientY: 60, pointerId: 1 });
+
+    expect(catElement(container).dataset['facing']).toBe('right');
+    expect(catElement(container).style.transform).toBe('translate(1280px, 0px)');
+  });
+
+  it('ignores the click that ends a mouse press', () => {
+    const { container } = renderCat();
+
+    fireEvent.click(screen.getByRole('button', { name: 'Drag the stone' }), { detail: 1 });
+
+    expect(container.querySelector('.cat-bubble')).not.toBeNull();
   });
 
   it('points at the code in a challenge', () => {

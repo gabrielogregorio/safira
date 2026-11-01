@@ -52,6 +52,14 @@ describe('buildFileTree', () => {
     ]);
   });
 
+  it('puts a file with a chosen place before the ones without it', () => {
+    expect(buildFileTree(['a.txt', 'b.txt', 'c.txt'], ['c.txt']).map((node) => node.name)).toEqual([
+      'c.txt',
+      'a.txt',
+      'b.txt',
+    ]);
+  });
+
   it('merges files of the same folder', () => {
     const [folder] = buildFileTree(['p/a', 'p/b']);
 
@@ -230,14 +238,14 @@ describe('moving without dragging', () => {
   });
 
   it('offers every folder that can take a file, and the root', () => {
-    const names = moveDestinations(paths, [], file('dados/c.txt')).map((folder) => folder?.path ?? null);
+    const names = moveDestinations(paths, [], file('dados/c.txt')).map(({ folder: place }) => place?.path ?? null);
 
     expect(names).toEqual(expect.arrayContaining([null, 'dados/sub', 'vazia']));
     expect(names).not.toContain('dados');
   });
 
   it('does not offer a folder as its own destination', () => {
-    const names = moveDestinations(paths, [], folder('dados')).map((destination) => destination?.path ?? null);
+    const names = moveDestinations(paths, [], folder('dados')).map(({ folder: place }) => place?.path ?? null);
 
     expect(names).toContain('vazia');
     expect(names).not.toContain('dados');

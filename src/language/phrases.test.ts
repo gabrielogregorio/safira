@@ -1,3 +1,4 @@
+import type { CommandKey } from './phrases';
 import { getAllCommands, getPhrases, isContinuationWord } from './phrases';
 
 describe('phrases', () => {
@@ -25,5 +26,11 @@ describe('phrases', () => {
     expect(isContinuationWord('inserindo')).toBe(true);
     expect(isContinuationWord('senao')).toBe(true);
     expect(isContinuationWord('banana')).toBe(false);
+  });
+});
+
+describe('getPhrases', () => {
+  it('has nothing for a command that does not exist', () => {
+    expect(getPhrases('nada' as CommandKey)).toEqual([]);
   });
 });

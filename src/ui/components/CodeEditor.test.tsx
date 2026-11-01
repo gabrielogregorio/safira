@@ -1,4 +1,5 @@
-import { render, screen } from '@testing-library/react';
+import { EditorView } from '@codemirror/view';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { CodeEditor } from './CodeEditor';
 
 const baseProps = {
@@ -61,6 +62,37 @@ describe('CodeEditor', () => {
     rerender(<CodeEditor {...baseProps} value="b" />);
 
     expect(content()).toHaveTextContent('b');
+  });
+
+  it('toggles the breakpoint of the line pressed in the gutter', () => {
+    const onToggleBreakpoint = vi.fn();
+    render(<CodeEditor {...baseProps} value="a" onToggleBreakpoint={onToggleBreakpoint} />);
+    const dot = document.querySelector('.editor-breakpoints .breakpoint-dot');
+
+    fireEvent.mouseDown(dot as Element);
+
+    expect(onToggleBreakpoint).toHaveBeenCalledExactlyOnceWith(1);
+  });
+
+  it('starts without the suggestions when they are off', () => {
+    render(<CodeEditor {...baseProps} value="mo" suggestions={false} />);
+    const view = EditorView.findFromDOM(content() as HTMLElement) as EditorView;
+
+    view.dispatch({ changes: { from: 2, insert: 's' }, selection: { anchor: 3 }, userEvent: 'input.type' });
+
+    expect(document.querySelector('.cm-ghost-text')).toBeNull();
+  });
+
+  it('removes a suggestion on screen when they are turned off', () => {
+    const { rerender } = render(<CodeEditor {...baseProps} value="mo" />);
+    const view = EditorView.findFromDOM(content() as HTMLElement) as EditorView;
+    view.dispatch({ changes: { from: 2, insert: 's' }, selection: { anchor: 3 }, userEvent: 'input.type' });
+
+    expect(document.querySelector('.cm-ghost-text')).not.toBeNull();
+
+    rerender(<CodeEditor {...baseProps} value="mos" suggestions={false} />);
+
+    expect(document.querySelector('.cm-ghost-text')).toBeNull();
   });
 
   it('ignores a line outside of the text', () => {

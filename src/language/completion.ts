@@ -135,11 +135,14 @@ const fromNames = (typedWord: string, document: string): string | null => {
   return names[0] === undefined ? null : names[0][0].slice(typedWord.length);
 };
 
-const functionPhrases = getAllCommands().find(([key]) => key === 'funcoes')?.[1].phrases ?? [];
+const phrasesOf = (name: string): string[] =>
+  getAllCommands()
+    .filter(([key]) => key === name)
+    .flatMap(([, definition]) => definition.phrases);
 
-const importPhrases = (getAllCommands().find(([key]) => key === 'importe')?.[1].phrases ?? [])
-  .slice()
-  .sort((first, second) => second.length - first.length);
+const functionPhrases = phrasesOf('funcoes');
+
+const importPhrases = phrasesOf('importe').sort((first, second) => second.length - first.length);
 
 const importTextOf = (before: string): string | null => {
   const line = before.trimStart();
@@ -220,7 +223,7 @@ const reachableFunctions = (document: string, scripts: Record<string, string>): 
 };
 
 const isDeclaringFunction = (typedWords: string[]): boolean =>
-  functionPhrases.includes(typedWords[0] ?? '') && typedWords.length > 1;
+  typedWords.length > 1 && functionPhrases.includes(typedWords[0]);
 
 const fromFunctions = (
   typedWord: string,

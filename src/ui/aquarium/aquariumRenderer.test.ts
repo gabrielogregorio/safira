@@ -72,6 +72,20 @@ describe('aquarium drawing', () => {
     expect(styles.filter((style) => style.includes('NaN') || style.includes('undefined'))).toEqual([]);
   });
 
+  it('draws each piece of food and six fading sparks for each pop', () => {
+    const { context, calls, styles } = fakeCanvas();
+    const world = createWorld([], WIDTH, HEIGHT);
+    world.plants = [];
+    world.food.push({ x: 100, y: 100, age: 0, sway: 0 }, { x: 200, y: 100, age: 0, sway: 0 });
+    world.pops.push({ x: 300, y: 300, radius: 8, age: 0.175 });
+    drawWorld(context, world, startingPalette('light'));
+
+    expect(calls.filter((name) => name === 'arc')).toHaveLength(2);
+    expect(calls.filter((name) => name === 'stroke')).toHaveLength(6);
+    expect(styles).toContain('#e8a23c');
+    expect(styles).toContain('rgb(255 255 255 / 0.5)');
+  });
+
   it('moves the colors toward the theme little by little', () => {
     const palette = startingPalette('light');
     const start = [...palette.deep];

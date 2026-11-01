@@ -57,6 +57,10 @@ describe('lesson places', () => {
     expect(resumePlace(lessons[0], ['aula-01-um:0', 'aula-01-um:1'])).toEqual({ lessonId: 'aula-01-um', step: 0 });
   });
 
+  it('has an empty first place when there are no lessons', () => {
+    expect(firstPlace([])).toEqual({ lessonId: '', step: 0 });
+  });
+
   it('reads a step', () => {
     expect(stepAt(lessons, { lessonId: 'aula-01-um', step: 0 })).toBe(step);
     expect(stepAt(lessons, { lessonId: 'aula-01-um', step: 9 })).toBeUndefined();

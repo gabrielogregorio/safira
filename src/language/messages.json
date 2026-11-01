@@ -287,11 +287,25 @@
     "ja": "変数 '{}' は数値ではありません！"
   },
   "p_maiusc_minusc_cap_texto": {
-    "pt-br": "Para usar o recurso de conversão para {}, é necessário informar uma string",
-    "en-us": "To use the {} conversion feature, you need to enter a string",
-    "es": "Para utilizar la función de conversión {}, debe ingresar una cadena",
-    "zh-cn": "要使用 {} 转换功能，你需要输入文本",
-    "ja": "{} 変換を使うには文字列を入力してください"
+    "pt-br": "Para converter entre maiúsculas e minúsculas, é necessário informar uma string",
+    "en-us": "To convert between upper and lower case, you need to enter a string",
+    "es": "Para convertir entre mayúsculas y minúsculas, debe ingresar una cadena",
+    "zh-cn": "要转换大小写，你需要输入文本",
+    "ja": "大文字と小文字を変換するには文字列を入力してください"
+  },
+  "tamanho_de_lista_invalido": {
+    "pt-br": "Uma lista não pode ter {} posições",
+    "en-us": "A list cannot have {} positions",
+    "es": "Una lista no puede tener {} posiciones",
+    "zh-cn": "列表不能有 {} 个位置",
+    "ja": "リストに {} 個の位置は作れません"
+  },
+  "programa_complexo_demais": {
+    "pt-br": "Este programa tem blocos demais, um dentro do outro",
+    "en-us": "This program has too many blocks inside each other",
+    "es": "Este programa tiene demasiados bloques, uno dentro de otro",
+    "zh-cn": "这个程序的嵌套块太多了",
+    "ja": "このプログラムは入れ子のブロックが多すぎます"
   },
   "p_substituir_texto_valor": {
     "pt-br": "Para substituir um texto, o valor {} precisa ser uma string. O valor {} é do tipo '{}'",

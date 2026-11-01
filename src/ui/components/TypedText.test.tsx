@@ -1,5 +1,5 @@
-import { act, renderHook } from '@testing-library/react';
-import { useTypedText } from './TypedText';
+import { act, render, renderHook, screen } from '@testing-library/react';
+import { TypedLine, useTypedText } from './TypedText';
 
 const withMotion = (hasMotion: boolean): void => {
   window.matchMedia = vi.fn().mockReturnValue({ matches: hasMotion });
@@ -49,5 +49,31 @@ describe('useTypedText', () => {
     rerender({ text: 'novo' });
 
     expect(result.current).toMatchObject({ shown: '', isDone: false });
+  });
+});
+
+describe('TypedLine', () => {
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  it('gives screen readers the whole sentence while the letters arrive', () => {
+    withMotion(true);
+    vi.useFakeTimers();
+    const { container } = render(<TypedLine text="olá" />);
+
+    act(() => {
+      vi.advanceTimersByTime(25);
+    });
+
+    expect(container.querySelector('[aria-hidden="true"]')).toHaveTextContent(/^o$/);
+    expect(screen.getByText('olá')).toHaveClass('visually-hidden');
+  });
+
+  it('becomes plain text when it finishes', () => {
+    withMotion(false);
+    const { container } = render(<TypedLine text="olá" />);
+
+    expect(container.innerHTML).toBe('olá');
   });
 });

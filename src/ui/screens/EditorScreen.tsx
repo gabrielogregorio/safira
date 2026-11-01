@@ -118,8 +118,8 @@ export const EditorScreen = ({
 
   const latestProject = useRef(project);
   const latestTabs = useRef(tabs);
-  const activeFile = tabs.some((tab) => tab.file === routeFile) ? (routeFile as string) : (tabs[0]?.file ?? MAIN_FILE);
-  const activeTab = tabs.find((tab) => tab.file === activeFile) ?? tabs[0];
+  const activeFile = tabs.some((tab) => tab.file === routeFile) ? (routeFile as string) : tabs[0].file;
+  const activeTab = tabs.find((tab) => tab.file === activeFile) as EditorTab;
 
   if (routeFile !== null && project.files[routeFile] !== undefined && !tabs.some((tab) => tab.file === routeFile)) {
     setTabs([...tabs, openTab(routeFile, project.files[routeFile])]);
@@ -385,7 +385,7 @@ export const EditorScreen = ({
       const files = currentFiles();
 
       if (node.kind === 'file') {
-        downloadFile(node.name, files[node.path] ?? '');
+        downloadFile(node.name, files[node.path]);
       } else {
         downloadProject({ name: node.name, files: filesOfFolder(files, node.path) });
       }
@@ -477,8 +477,9 @@ export const EditorScreen = ({
   }, [onChangeSettings]);
 
   const toggleFullScreen = useCallback(() => {
-    if (document.fullscreenElement === null) {
-      void document.documentElement.requestFullscreen();
+    // Without the Fullscreen API, as on an iPhone, this is undefined and not null.
+    if ((document.fullscreenElement ?? null) === null) {
+      void document.documentElement.requestFullscreen?.();
     } else {
       void document.exitFullscreen();
     }
@@ -524,10 +525,6 @@ export const EditorScreen = ({
       window.removeEventListener('keydown', handleKey, true);
     };
   }, [cursor.line, newTab, runOrResume, saveOpenTabs, toggleBreakpoint, toggleFullScreen]);
-
-  if (activeTab === undefined) {
-    return null;
-  }
 
   const failure = runner.failure;
   const failureExample =
@@ -745,7 +742,7 @@ export const EditorScreen = ({
             onSaveProject({ ...project, name });
           }}
           onOpen={(path) => {
-            openFile(path, project.files[path] ?? '');
+            openFile(path, project.files[path]);
             setMobilePanel('code');
           }}
           onCreateFile={createFile}
@@ -831,7 +828,7 @@ export const EditorScreen = ({
           )}
           {runner.status === 'paused' ? (
             <div className="debug-bar" role="status">
-              <span>{t('Paused on line {line}', { line: runner.pausedAt?.line ?? 0 })}</span>
+              <span>{t('Paused on line {line}', { line: (runner.pausedAt as { line: number }).line })}</span>
               <button
                 type="button"
                 className="button"

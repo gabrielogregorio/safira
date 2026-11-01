@@ -35,7 +35,7 @@ const isFixedText = (element: Element): boolean =>
 export const collectTextNodes = (root: Node): Text[] => {
   const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
     acceptNode: (node) => {
-      const isBlank = (node.nodeValue ?? '').trim() === '';
+      const isBlank = (node as Text).data.trim() === '';
       const parent = node.parentElement;
       const isIgnored = parent === null || parent.closest(IGNORED_ELEMENTS) !== null || isFixedText(parent);
 
@@ -53,7 +53,7 @@ export const collectTextNodes = (root: Node): Text[] => {
 
 export const scrambleDocument = (root: Node): (() => void) => {
   const targets = collectTextNodes(root).map((node) => {
-    const finalText = node.nodeValue ?? '';
+    const finalText = node.data;
 
     return { node, finalText, drawnText: finalText };
   });

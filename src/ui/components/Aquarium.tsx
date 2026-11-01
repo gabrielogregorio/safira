@@ -157,13 +157,7 @@ export const Aquarium = ({ origin, theme, isSoundOn, onClose }: AquariumProps) =
   const classes = isIdle ? 'aquarium is-idle' : 'aquarium';
 
   return (
-    <Dialog.Root
-      open
-      onOpenChange={(isOpen) => {
-        if (!isOpen) {
-          close();
-        }
-      }}>
+    <Dialog.Root open onOpenChange={close}>
       <Dialog.Portal>
         <Dialog.Content className={classes} style={originStyle} aria-describedby={undefined}>
           <Dialog.Title className="aquarium-title">{t('Aquarium')}</Dialog.Title>

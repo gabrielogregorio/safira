@@ -1,7 +1,6 @@
 import type { ConditionalBranch, Expression, Statement, StatementBody } from './ast';
 import { ExpressionParser } from './expressionParser';
 import type { CommandKey } from './phrases';
-import { ParseFailure } from './tokenCursor';
 import { tokenize } from './tokenizer';
 import { noteFrequency } from './notes';
 
@@ -108,7 +107,7 @@ export class Parser extends ExpressionParser {
     return {
       kind: 'invalid',
       messageKey: 'comando_desconhecido',
-      detail: `'${(this.sourceLines[line - 1] ?? '').trim()}'`,
+      detail: `'${this.sourceLines[line - 1].trim()}'`,
       line,
     };
   }
@@ -363,11 +362,12 @@ export class Parser extends ExpressionParser {
   }
 
   private parseClauseElse(): Statement[] | null {
-    if (this.peekAfterNewlines(() => this.peekPhrase('senao_der_erro')) !== null) {
-      return null;
-    }
+    const saved = this.position;
+    this.skipNewlines();
+    const isClauseOfTry = this.peekPhrase('senao_der_erro') !== null;
+    this.position = saved;
 
-    return this.parseClause('se_nao');
+    return isClauseOfTry ? null : this.parseClause('se_nao');
   }
 
   private parseBranch(): ConditionalBranch {
@@ -522,16 +522,6 @@ export class Parser extends ExpressionParser {
   }
 }
 
-export const parse = (source: string): Statement[] => {
-  try {
-    return new Parser(source).parseProgram();
-  } catch (error) {
-    if (error instanceof ParseFailure) {
-      return [{ kind: 'invalid', messageKey: 'comando_desconhecido', detail: '', line: 1 }];
-    }
-
-    throw error;
-  }
-};
+export const parse = (source: string): Statement[] => new Parser(source).parseProgram();
 
 export type { Expression };

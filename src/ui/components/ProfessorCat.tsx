@@ -552,9 +552,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
   }
 
   const runFromStone = (): void => {
-    if (root.current !== null && stone.current !== null) {
-      fleeFrom(root.current, stone.current.getBoundingClientRect());
-    }
+    fleeFrom(root.current as HTMLDivElement, (stone.current as HTMLButtonElement).getBoundingClientRect());
   };
 
   const pickUpStone = (): void => {
@@ -567,9 +565,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     pressedAt.current = null;
     setIsHoldingStone(false);
 
-    if (stone.current !== null) {
-      stone.current.style.transform = '';
-    }
+    (stone.current as HTMLButtonElement).style.transform = '';
   };
 
   const stoneButton = (

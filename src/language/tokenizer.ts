@@ -153,7 +153,7 @@ export const tokenize = (rawSource: string): TokenizedSource => {
     } else if (character === ' ' || character === '\t' || character === '\r') {
       position += 1;
     } else if (character === '#' && afterColorWord() && matchAt(COLOR_PATTERN, source, position) !== null) {
-      push('color', position + (matchAt(COLOR_PATTERN, source, position) ?? '').length);
+      push('color', position + (matchAt(COLOR_PATTERN, source, position) as string).length);
     } else if (character === '#' && isSharp()) {
       push('symbol', position + 1);
     } else if (character === '#' || source.startsWith('//', position)) {

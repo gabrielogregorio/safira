@@ -102,7 +102,7 @@ export const resolveColor = (text: string): string | null => {
   const zeroX = ZERO_X_COLOR.exec(color);
 
   if (zeroX !== null) {
-    return `#${zeroX[1] ?? ''}`;
+    return `#${zeroX[1]}`;
   }
 
   return HASH_COLOR.test(color) ? color : (NAMED_COLORS[color] ?? null);

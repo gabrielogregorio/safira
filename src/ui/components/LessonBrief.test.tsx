@@ -36,6 +36,19 @@ describe('LessonBrief', () => {
     expect(screen.getByText('Tip: Use o mostre')).toBeInTheDocument();
   });
 
+  it('gives no tip for a failure in a step without a check', () => {
+    render(
+      <LessonBrief
+        {...base}
+        step={{ ...step, check: null }}
+        verdict={{ status: 'failed', result: { passed: false, reason: 'limit', text: '', inputs: [] } }}
+      />,
+    );
+
+    expect(screen.getByRole('status')).toHaveTextContent('Your program never ends. Check your repetition.');
+    expect(screen.queryByText(/^Tip: /)).not.toBeInTheDocument();
+  });
+
   it('ends the course on the last step', () => {
     render(<LessonBrief {...base} isDone isLastStep verdict={{ status: 'idle' }} />);
 
@@ -56,9 +69,14 @@ describe('describeFailure', () => {
     ],
     [{ ...failed, reason: 'unexpected', text: 'par' }, 'Almost! "par" should not appear here.'],
     [{ ...failed, reason: 'error', text: 'Falhou', line: 2 }, 'Line 2: Falhou'],
+    [{ ...failed, reason: 'error', text: 'Falhou' }, 'Line 0: Falhou'],
     [{ ...failed, reason: 'limit', text: '' }, 'Your program never ends. Check your repetition.'],
     [{ ...failed, reason: 'command', text: '' }, ''],
   ] as const)('explains %j', (result, message) => {
     expect(describeFailure(t, { ...result, inputs: [...result.inputs] })).toBe(message);
+  });
+
+  it('has nothing to explain when the answer passed', () => {
+    expect(describeFailure(t, { passed: true })).toBe('');
   });
 });

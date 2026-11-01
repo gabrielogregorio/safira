@@ -72,6 +72,15 @@ describe('SettingsDialog', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('goes back to the settings when the confirmation is dismissed', async () => {
+    await open();
+    await userEvent.click(screen.getByRole('button', { name: 'Delete everything' }));
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog', { name: 'Delete everything?' })).not.toBeInTheDocument();
+    expect(screen.getByRole('dialog', { name: 'Settings' })).toBeInTheDocument();
+  });
+
   it('only erases after the confirmation', async () => {
     const onErase = vi.fn();
     render(<Harness onChange={vi.fn()} onErase={onErase} />);

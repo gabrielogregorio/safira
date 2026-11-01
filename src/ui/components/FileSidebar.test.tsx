@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from '@testing-library/react';
+import { createEvent, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { FileSidebar } from './FileSidebar';
 
@@ -28,6 +28,24 @@ const setup = (canRename = true) => {
 
 const rightClick = (name: string): void => {
   fireEvent.contextMenu(screen.getByRole('button', { name }));
+};
+
+const rowOf = (name: string): HTMLElement => screen.getByRole('button', { name }).parentElement as HTMLElement;
+
+const placeRow = (row: HTMLElement): void => {
+  vi.spyOn(row, 'getBoundingClientRect').mockReturnValue({ top: 100, height: 20 } as DOMRect);
+};
+
+// jsdom has no DragEvent, so the plain event it falls back to drops the height of the pointer.
+const fireAtHeight = (
+  create: typeof createEvent.dragOver,
+  row: HTMLElement,
+  dataTransfer: object,
+  clientY: number,
+): void => {
+  const event = create(row, { dataTransfer });
+  Object.defineProperty(event, 'clientY', { value: clientY });
+  fireEvent(row, event);
 };
 
 describe('FileSidebar', () => {
@@ -329,6 +347,150 @@ describe('FileSidebar', () => {
       expect.objectContaining({ path: 'dados/a.txt' }),
       expect.objectContaining({ target: 'a.txt' }),
     );
+  });
+
+  it('marks the edge of a file under the dragged item, and drops it there', () => {
+    const { onMove } = setup();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    const row = rowOf('new-file.safira');
+    placeRow(row);
+    fireEvent.dragStart(rowOf('main.safira'), { dataTransfer });
+
+    fireAtHeight(createEvent.dragOver, row, dataTransfer, 102);
+
+    expect(row).toHaveAttribute('data-drop', 'before');
+
+    fireAtHeight(createEvent.dragOver, row, dataTransfer, 118);
+
+    expect(row).toHaveAttribute('data-drop', 'after');
+
+    fireAtHeight(createEvent.drop, row, dataTransfer, 118);
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'main.safira' }),
+      expect.objectContaining({ target: 'main.safira' }),
+    );
+    expect(row).not.toHaveAttribute('data-drop');
+  });
+
+  it('keeps a wide middle on a folder for dropping inside it', () => {
+    setup();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    const row = rowOf('vazia');
+    placeRow(row);
+    fireEvent.dragStart(rowOf('main.safira'), { dataTransfer });
+
+    fireAtHeight(createEvent.dragOver, row, dataTransfer, 104);
+
+    expect(row).toHaveAttribute('data-drop', 'before');
+
+    fireAtHeight(createEvent.dragOver, row, dataTransfer, 110);
+
+    expect(row).toHaveAttribute('data-drop', 'inside');
+
+    fireAtHeight(createEvent.dragOver, row, dataTransfer, 116);
+
+    expect(row).toHaveAttribute('data-drop', 'after');
+  });
+
+  it('takes the mark away over a place that cannot receive the item', () => {
+    setup();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    const dragged = rowOf('main.safira');
+    const other = rowOf('vazia');
+    fireEvent.dragStart(dragged, { dataTransfer });
+    fireEvent.dragOver(other, { dataTransfer, clientY: 0 });
+
+    expect(other).toHaveAttribute('data-drop');
+
+    const isAllowed = !fireEvent.dragOver(dragged, { dataTransfer, clientY: 0 });
+
+    expect(isAllowed).toBe(false);
+    expect(other).not.toHaveAttribute('data-drop');
+  });
+
+  it('moves a file to the root when dropped outside the rows', () => {
+    const { onMove } = setup();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    const sidebar = screen.getByRole('navigation', { name: 'Files' });
+    fireEvent.dragStart(rowOf('a.txt'), { dataTransfer });
+
+    expect(fireEvent.dragOver(sidebar, { dataTransfer })).toBe(false);
+
+    fireEvent.drop(sidebar, { dataTransfer });
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'dados/a.txt' }),
+      expect.objectContaining({ target: 'a.txt' }),
+    );
+  });
+
+  it('refuses a drag that did not start in the tree', () => {
+    const { onMove } = setup();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    const sidebar = screen.getByRole('navigation', { name: 'Files' });
+
+    expect(fireEvent.dragOver(sidebar, { dataTransfer })).toBe(true);
+    expect(fireEvent.dragOver(rowOf('vazia'), { dataTransfer, clientY: 0 })).toBe(true);
+
+    fireEvent.drop(sidebar, { dataTransfer });
+
+    expect(onMove).not.toHaveBeenCalled();
+  });
+
+  it('moves the focused file down with Alt and the arrow', async () => {
+    const { onMove } = setup();
+    screen.getByRole('button', { name: 'main.safira' }).focus();
+    await userEvent.keyboard('{Alt>}{ArrowDown}{/Alt}');
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: 'main.safira' }),
+      expect.objectContaining({ target: 'main.safira' }),
+    );
+    expect(screen.getByRole('status')).toHaveTextContent('Moved: main.safira');
+  });
+
+  it('stays quiet when the arrow finds the edge of the list', async () => {
+    const { onMove } = setup();
+    screen.getByRole('button', { name: 'dados' }).focus();
+    await userEvent.keyboard('{Alt>}{ArrowUp}{/Alt}');
+
+    expect(onMove).not.toHaveBeenCalled();
+    expect(screen.getByRole('status')).toBeEmptyDOMElement();
+  });
+
+  it.each([
+    [/Move up/, 'new-file.safira'],
+    [/Move down/, 'main.safira'],
+  ])('steps with %s from the right click menu', async (item, name) => {
+    const { onMove } = setup();
+    rightClick(name);
+    await userEvent.click(await screen.findByRole('menuitem', { name: item }));
+
+    expect(onMove).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ path: name }),
+      expect.objectContaining({ target: name }),
+    );
+  });
+
+  it('closes the move modal without moving', async () => {
+    const { onMove } = setup();
+    screen.getByRole('button', { name: 'main.safira' }).focus();
+    await userEvent.keyboard('{Alt>}m{/Alt}');
+    await screen.findByRole('dialog');
+    await userEvent.keyboard('{Escape}');
+
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(onMove).not.toHaveBeenCalled();
+  });
+
+  it('finishes a new name at once when the focus leaves by keyboard', async () => {
+    const { onCreateFile } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'New file' }));
+    await userEvent.tab();
+
+    expect(onCreateFile).toHaveBeenCalledExactlyOnceWith(null, 'new-file-2.safira');
+    expect(screen.queryByLabelText('File name')).not.toBeInTheDocument();
   });
 
   it('says when there is nowhere to go', async () => {

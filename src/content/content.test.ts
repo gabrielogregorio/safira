@@ -3,7 +3,7 @@ import { parse } from '@/language/parser';
 import { runScript } from '@/language/testHarness';
 import { readScriptVersion } from '@/language/version';
 import { checkProgram } from '@/lessons/lessonCheck';
-import { examplesOf, findExampleByPrefix, lessonsOf } from './content';
+import { examplesOf, findExampleByPrefix, lessonsOf, toExample } from './content';
 
 const EXAMPLE_COUNT = 34;
 const LESSON_COUNT = 13;
@@ -119,6 +119,12 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
   it('finds the example that explains a command', () => {
     expect(findExampleByPrefix(locale, '16')?.id).toBe('16-listas');
     expect(findExampleByPrefix(locale, '99')).toBeUndefined();
+  });
+});
+
+describe('toExample', () => {
+  it('names an example after its file when it has no title', () => {
+    expect(toExample(['./pt-br/examples/01-sem-titulo.safira', 'mostre 1']).title).toBe('01-sem-titulo');
   });
 });
 

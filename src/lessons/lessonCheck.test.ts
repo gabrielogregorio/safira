@@ -1,3 +1,4 @@
+import { Interpreter } from '@/language/interpreter';
 import { runScript } from '@/language/testHarness';
 import type { CheckRequest, LessonCheck } from './lessonCheck';
 import { checkProgram, normalizeOutput } from './lessonCheck';
@@ -16,6 +17,39 @@ const check = (source: string, lessonCheck: Omit<LessonCheck, 'hint'>, files = {
 };
 
 describe('checkProgram', () => {
+  it('answers with an empty text when the case has no more inputs', async () => {
+    await expect(
+      check('n = o que o usuario digitar\nmostre "[" + n + "]"\nse n == "" entao mostre "vazio"', {
+        cases: [{ shows: ['vazio'] }],
+      }),
+    ).resolves.toEqual({ passed: true });
+  });
+
+  it('goes past a note without waiting for it', async () => {
+    await expect(check('toque C por 9 segundos\nmostre "a"', { cases: [{ shows: ['a'] }] })).resolves.toEqual({
+      passed: true,
+    });
+  });
+
+  it('treats a file that does not exist as a program without commands', async () => {
+    const request: CheckRequest = {
+      file: 'nada.safira',
+      files: {},
+      locale: 'pt-br',
+      check: { hint: 'Dica', uses: ['print'], cases: [] },
+    };
+
+    await expect(checkProgram(request)).resolves.toMatchObject({ passed: false, reason: 'command' });
+  });
+
+  it('does not hide an error that is not from the script', async () => {
+    vi.spyOn(Interpreter.prototype, 'run').mockImplementationOnce(() => {
+      throw new TypeError('quebrou');
+    });
+
+    await expect(check('mostre 1', { cases: [{}] })).rejects.toThrow(TypeError);
+  });
+
   it('accepts a program that shows the text', async () => {
     await expect(check('mostre "Olá, mundo!"', { cases: [{ shows: ['Olá, mundo!'] }] })).resolves.toEqual({
       passed: true,

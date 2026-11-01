@@ -30,7 +30,7 @@ const toId = (path: string): string => path.replace(NAME_OF_FILE, '');
 
 const isFromLocale = (path: string, locale: Locale): boolean => path.startsWith(`./${locale}/`);
 
-const toExample = ([path, text]: [string, string]): ContentEntry => ({
+export const toExample = ([path, text]: [string, string]): ContentEntry => ({
   id: toId(path),
   title: readTitle(text) ?? toId(path),
   text,

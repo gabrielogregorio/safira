@@ -170,12 +170,7 @@ export const CodeEditor = ({
   }, [onChange, onToggleBreakpoint, onCursorChange]);
 
   useEffect(() => {
-    const host = hostRef.current;
-
-    if (host === null) {
-      return undefined;
-    }
-
+    const host = hostRef.current as HTMLElement;
     const view = new EditorView({
       parent: host,
       state: EditorState.create({

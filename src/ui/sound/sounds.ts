@@ -464,8 +464,8 @@ export const createSoundPlayer = (createContext: () => AudioContext | null) => {
 
       loop.source.playbackRate.setTargetAtTime(rate, audio.currentTime, RATE_GLIDE_SECONDS);
 
-      // The press can end while the file is still loading.
-      if (!isLoopHeld) {
+      // The press can end, or the sound be turned off, while the file is still loading.
+      if (!isLoopHeld || !isEnabled) {
         fadeLoop();
       }
     },

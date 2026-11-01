@@ -32,9 +32,7 @@ export const LessonBar = ({ lessons, place, progress, onOpen }: LessonBarProps) 
         title={t('Previous step')}
         disabled={previous === null}
         onClick={() => {
-          if (previous !== null) {
-            onOpen(previous);
-          }
+          onOpen(previous as LessonPlace);
         }}>
         ‹
       </button>
@@ -93,9 +91,7 @@ export const LessonBar = ({ lessons, place, progress, onOpen }: LessonBarProps) 
         title={t('Next step')}
         disabled={next === null || !isStepDone(progress, place)}
         onClick={() => {
-          if (next !== null) {
-            onOpen(next);
-          }
+          onOpen(next as LessonPlace);
         }}>
         ›
       </button>

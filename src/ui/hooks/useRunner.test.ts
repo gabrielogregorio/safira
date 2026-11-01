@@ -1,6 +1,7 @@
 import { act, renderHook, waitFor } from '@testing-library/react';
 import { FakeWorker } from '@/ui/fakeWorker';
-import { useRunner } from './useRunner';
+import { soundPlayer } from '@/ui/sound/sounds';
+import { createRunnerWorker, useRunner } from './useRunner';
 
 const MAIN = 'main.safira';
 
@@ -26,6 +27,61 @@ const setup = () => {
 };
 
 describe('useRunner', () => {
+  afterEach(() => {
+    vi.restoreAllMocks();
+    vi.unstubAllGlobals();
+  });
+
+  it('creates the real worker as a module', () => {
+    const Worker = vi.fn(function WorkerStub(this: object) {
+      return this;
+    });
+    vi.stubGlobal('Worker', Worker);
+    const worker = createRunnerWorker();
+
+    expect(worker).toBeInstanceOf(Worker);
+    expect(Worker).toHaveBeenCalledExactlyOnceWith(expect.any(URL), { type: 'module' });
+    expect(String(Worker.mock.calls[0]?.at(0))).toContain('runner.worker');
+  });
+
+  it('empties the terminal when the program asks for it', async () => {
+    const { result, start } = setup();
+    start('mostre 1\nlimpe a tela\nmostre 2');
+
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle');
+    });
+    expect(result.current.terminal.lines.flat().map((item) => item.text)).toEqual(['2']);
+  });
+
+  it('plays the note of the program', async () => {
+    const tone = vi.spyOn(soundPlayer, 'tone').mockReturnValue(undefined);
+    const { result, start } = setup();
+    start('toque C por 1s');
+
+    await waitFor(() => {
+      expect(tone).toHaveBeenCalledOnce();
+    });
+    await waitFor(() => {
+      expect(result.current.status).toBe('idle');
+    });
+    expect(tone.mock.calls[0]?.[0]).toBeGreaterThan(0);
+  });
+
+  it('sends new breakpoints to the program that is running', async () => {
+    const { result, workers, start } = setup();
+    start('mostre 1\nmostre 2', 'step');
+    await waitFor(() => {
+      expect(result.current.status).toBe('paused');
+    });
+
+    act(() => {
+      result.current.updateBreakpoints({ [MAIN]: [2] });
+    });
+
+    expect(workers[0]?.requests.at(-1)).toEqual({ type: 'breakpoints', breakpoints: { [MAIN]: [2] } });
+  });
+
   it('goes back to idle and closes the worker at the end', async () => {
     const { result, workers, start } = setup();
     start('mostre 1');

@@ -49,3 +49,13 @@ describe('parseLesson', () => {
     });
   });
 });
+
+describe('parseLesson without the optional parts', () => {
+  it('uses the id as the title', () => {
+    expect(parseLesson('aula-01', 'Sem título').title).toBe('aula-01');
+  });
+
+  it('leaves the code empty in a step that has none', () => {
+    expect(parseLesson('aula-01', '# Título\n\n## Passo\n\nSó texto.').steps[0].code).toBe('');
+  });
+});

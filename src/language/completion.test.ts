@@ -135,3 +135,27 @@ describe('suggestCompletion of functions', () => {
     expect(suggest('do', '', '', scripts)).not.toContain('(');
   });
 });
+
+describe('suggestCompletion with nothing to offer', () => {
+  it('stays quiet on an empty line', () => {
+    expect(suggest('')).toBeNull();
+  });
+
+  it('stays quiet after a word too short to search', () => {
+    expect(suggest('xy z')).toBeNull();
+  });
+
+  it('offers no file to import in a project without scripts', () => {
+    expect(suggest('importe ')).toBeNull();
+  });
+
+  it('still suggests when the file nests too deep to read', () => {
+    expect(suggest('mos', '('.repeat(5_000))).toBe('tre "Olá!"');
+  });
+});
+
+describe('suggestCompletion with functions', () => {
+  it('offers the shortest function name', () => {
+    expect(suggest('so', 'funcao somar {\n}\nfuncao som {\n}\nfuncao somando {\n}')).toBe('m()');
+  });
+});

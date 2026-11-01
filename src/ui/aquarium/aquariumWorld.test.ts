@@ -399,6 +399,174 @@ describe('aquariumWorld', () => {
     expect(middle / distances.length).toBeGreaterThan(0.5);
   });
 
+  it('stops letting bubbles go when the water is full of them', () => {
+    const world = createWorld([], 800, 600, steady);
+    const [plant] = world.plants;
+    world.bubbles = Array.from({ length: 70 }, () => ({ x: 700, y: 100, radius: 8, speed: 1, sway: 0 }));
+
+    expect(click(world, plant.x, 590)).toEqual([{ kind: 'plant' }]);
+    expect(world.bubbles).toHaveLength(70);
+  });
+
+  it('goes after a prey that is closer than the food', () => {
+    const world = createWorld(
+      [
+        { id: 0, species: 0, mass: 6 },
+        { id: 1, species: 1, mass: 1 },
+      ],
+      800,
+      600,
+      steady,
+    );
+    const [big, small] = world.fishes;
+    big.x = 100;
+    big.y = 300;
+    small.x = 110;
+    small.y = 300;
+    world.food.push({ x: 200, y: 300, age: 0, sway: 0 });
+
+    expect(stepWorld(world, 1 / 30)).toContainEqual(expect.objectContaining({ kind: 'chomp' }));
+    expect(big.isFeeding).toBe(false);
+  });
+
+  it('swims away from a click and forgets the food until the fright passes', () => {
+    const world = createWorld(oneFish(), 800, 600, steady);
+    const [fish] = world.fishes;
+    fish.x = 300;
+    fish.y = 300;
+    world.food.push({ x: 220, y: 300, age: 0, sway: 0 });
+
+    expect(click(world, 290, 300)).toEqual([expect.objectContaining({ kind: 'flee' })]);
+
+    stepWorld(world, 1 / 30);
+
+    expect(fish.vx).toBeGreaterThan(0);
+    expect(fish.x).toBeGreaterThan(300);
+    expect(fish.isFeeding).toBe(false);
+  });
+
+  it('survives a held pointer exactly on top of a fish', () => {
+    const world = createWorld(oneFish(), 800, 600, steady);
+    const [fish] = world.fishes;
+    const { x, y } = fish;
+    world.pointer = { x, y, dragX: 0, dragY: 0, startX: x, startY: y, heldFor: 1, hasMoved: false, buttons: 1 };
+    stepWorld(world, 1 / 30);
+
+    expect(Number.isFinite(fish.x)).toBe(true);
+    expect(Number.isFinite(fish.y)).toBe(true);
+  });
+
+  it('pushes the fish near a drag and leaves the far ones alone', () => {
+    const swim = (isDragging: boolean) => {
+      const world = createWorld(
+        [
+          { id: 0, species: 0, mass: 1 },
+          { id: 1, species: 0, mass: 1 },
+        ],
+        1000,
+        600,
+        steady,
+      );
+      const [near, far] = world.fishes;
+      near.x = 300;
+      far.x = 900;
+      pressPointer(world, 250, 300);
+
+      if (isDragging) {
+        movePointer(world, 280, 300);
+      }
+
+      stepWorld(world, 1 / 30);
+
+      return { near, far };
+    };
+    const dragged = swim(true);
+    const still = swim(false);
+
+    expect(dragged.near.x - still.near.x).toBeGreaterThan(10);
+    expect(dragged.far.x).toBeCloseTo(still.far.x);
+  });
+
+  it('carries the bubbles near a drag, and the drag fades instead of turning into a hold', () => {
+    const world = createWorld([], 800, 600, steady);
+    world.plants = [];
+    world.bubbles.push(
+      { x: 120, y: 100, radius: 8, speed: 0, sway: 0 },
+      { x: 700, y: 100, radius: 8, speed: 0, sway: 0 },
+    );
+    pressPointer(world, 100, 100);
+    movePointer(world, 130, 100);
+    stepWorld(world, 0);
+
+    expect(world.bubbles.map((bubble) => bubble.x)).toEqual([150, 700]);
+    expect(world.pointer?.dragX).toBeCloseTo(24);
+
+    const events = Array.from({ length: 30 }, () => stepWorld(world, 1 / 30)).flat();
+
+    expect(events).toEqual([]);
+  });
+
+  it('lets feeding fish stay closer together than idle ones', () => {
+    const gapBetween = (hasFood: boolean): number => {
+      const world = createWorld(
+        [
+          { id: 0, species: 0, mass: 1 },
+          { id: 1, species: 0, mass: 1 },
+        ],
+        800,
+        600,
+        steady,
+      );
+      const [first, second] = world.fishes;
+      first.x = 400;
+      second.x = 410;
+      first.y = 300;
+      second.y = 300;
+
+      if (hasFood) {
+        world.food.push({ x: 405, y: 250, age: 0, sway: 0 });
+      }
+
+      stepWorld(world, 1 / 30);
+
+      return second.x - first.x;
+    };
+
+    expect(gapBetween(true)).toBeGreaterThan(10);
+    expect(gapBetween(false)).toBeGreaterThan(gapBetween(true) + 1);
+  });
+
+  it('ignores a pointer that moves without a press', () => {
+    const world = createWorld([], 800, 600, steady);
+    movePointer(world, 100, 100);
+
+    expect(world.pointer).toBeNull();
+    expect(world.ripples).toEqual([]);
+  });
+
+  it('still counts a small slip of the hand as a click', () => {
+    const world = createWorld([], 800, 600, steady);
+    pressPointer(world, 100, 100);
+    movePointer(world, 105, 100);
+
+    expect(world.pointer).toMatchObject({ x: 105, hasMoved: false });
+    expect(world.ripples).toEqual([]);
+    expect(releasePointer(world)).toEqual([{ kind: 'food' }]);
+  });
+
+  it('spaces the ripples of a drag', () => {
+    const world = createWorld([], 800, 600, steady);
+    pressPointer(world, 100, 100);
+    movePointer(world, 200, 100);
+    movePointer(world, 210, 100);
+
+    expect(world.ripples).toHaveLength(1);
+
+    movePointer(world, 260, 100);
+
+    expect(world.ripples).toHaveLength(2);
+  });
+
   it('opens with every fish already swimming and nobody eaten', () => {
     for (let attempt = 0; attempt < WARM_UP_ATTEMPTS; attempt += 1) {
       const fishes = [...oneFish(10), { id: 1, species: 1, mass: MINIMUM_MASS }];
