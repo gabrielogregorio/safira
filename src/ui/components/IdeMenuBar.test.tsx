@@ -41,12 +41,13 @@ describe('IdeMenuBar', () => {
     vi.restoreAllMocks();
   });
 
-  it('shows the five menus', () => {
+  it('shows the six menus', () => {
     setup();
 
     expect(screen.getAllByRole('menuitem').map((item) => item.textContent)).toEqual([
       'File',
       'Run',
+      'Learn',
       'Examples',
       'Interface',
       'Help',
@@ -96,7 +97,7 @@ describe('IdeMenuBar', () => {
 
   it('opens an example', async () => {
     const { onOpenExample } = setup();
-    await choose('Examples', 'Lists');
+    await choose('Learn', 'Lists');
 
     expect(onOpenExample).toHaveBeenCalledWith('16-listas', expect.stringContaining('list of'));
   });

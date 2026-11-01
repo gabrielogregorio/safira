@@ -1,0 +1,103 @@
+#safira 0.9
+# 🦖 Dinosaurio
+# Ejecuta y haz clic en la salida. Space o arriba saltan, Esc sale.
+
+marca = 0
+lista de arco recibe 1, 2, 2, 2, 1
+
+funcion reiniciar() {
+    cactus1 = 16
+    cactus2 = 26
+    nube = 14
+    salto = 0
+    altura = 0
+    puntos = 0
+    vivo = verdad
+    pausa = 90
+}
+
+funcion bloque(c, nivel) {
+    si c == 3 y nivel == altura entonces volver "🦖"
+    si nivel == 0 y c == cactus1 entonces volver "🌵"
+    si nivel == 0 y c == cactus2 entonces volver "🌵"
+    si nivel == 2 y c == nube entonces volver "☁️"
+    volver "⬛"
+}
+
+funcion hilera(nivel) {
+    texto = ""
+
+    para cada c desde 1 hasta 16 {
+        texto = texto + bloque(c, nivel)
+    }
+
+    muestra texto
+}
+
+funcion dibujar() {
+    limpiar la pantalla
+    muestra "🦖 Puntos: " + puntos + "   🏆 Récord: " + marca
+    hilera(2)
+    hilera(1)
+    hilera(0)
+    muestra "🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫"
+
+    si vivo == falso entonces muestra "💥 ¡Fin del juego! Pulsa Enter." na cor vermelho
+}
+
+funcion avanzar() {
+    cactus1 = cactus1 - 1
+    cactus2 = cactus2 - 1
+    nube = nube - 1
+    puntos = puntos + 1
+
+    si cactus1 < 1 entonces cactus1 = cactus2 + un número aleatorio entre 8 y 16
+    si cactus2 < 1 entonces cactus2 = cactus1 + un número aleatorio entre 8 y 16
+    si nube < 1 entonces nube = 16
+
+    si salto > 0 entonces {
+        altura = lista de arco en posición salto
+        salto = salto - 1
+    } si no {
+        altura = 0
+    }
+
+    si puntos % 50 == 0 y pausa > 40 entonces {
+        pausa = pausa - 10
+        tocar C6 por 40ms
+    }
+
+    si altura == 0 y cactus1 == 3 entonces vivo = falso
+    si altura == 0 y cactus2 == 3 entonces vivo = falso
+
+    si vivo == falso entonces {
+        si puntos > marca entonces marca = puntos
+        tocar E4, C4 por 120ms
+    }
+}
+
+reiniciar()
+dibujar()
+
+mientras verdad {
+    si presiona Esc entonces interrumpir
+
+    si presiona Space o presiona arriba entonces {
+        si vivo y salto == 0 y altura == 0 entonces {
+            salto = 5
+            tocar E5 por 30ms
+        }
+    }
+
+    si vivo entonces {
+        avanzar()
+        dibujar()
+    } si no {
+        si presiona Enter entonces {
+            reiniciar()
+            dibujar()
+        }
+    }
+
+    esperar pausa ms
+}

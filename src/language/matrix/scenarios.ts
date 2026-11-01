@@ -229,6 +229,27 @@ export const STATEMENTS: Statement[] = [
     code: '[se] 1 [logico_igual] 1 [se_final] [nao_faca_nada] [se_nao] [mostre] "s"',
     output: [],
   },
+  {
+    name: 'key not pressed',
+    code: '[se] [tecla_apertar] Enter [se_final] {\n  [mostre] "k"\n}\n[mostre] "n"',
+    output: ['n'],
+  },
+  {
+    name: 'key not held',
+    code: '[se] [tecla_segurar] Shift+Enter {\n  [mostre] "k"\n} [se_nao] {\n  [mostre] "h"\n}',
+    output: ['h'],
+  },
+  {
+    name: 'key not released',
+    code: '[ao_tecla] [tecla_soltar] ArrowUp {\n  [mostre] "k"\n}\n[mostre] "s"',
+    output: ['s'],
+  },
+  {
+    name: 'repeat forever',
+    code: 'c = 0\n[repita_sempre] {\n  c = c + 1\n  [se] c [logico_igual] 3 [se_final] [pare]\n}\n[mostre] c',
+    output: ['3'],
+  },
+  { name: 'repeat forever inline', code: '[repita_sempre] [pare]\n[mostre] "s"', output: ['s'] },
   { name: 'comment', code: '# nada\n[mostre] "x" # fim', output: ['x'] },
 ];
 

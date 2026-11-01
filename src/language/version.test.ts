@@ -28,7 +28,7 @@ describe('script version', () => {
   });
 
   it('declares every supported version', () => {
-    expect(SUPPORTED_VERSIONS).toEqual(['0.38', '0.9', '1.0']);
+    expect(SUPPORTED_VERSIONS).toEqual(['0.38', '0.9', '1.0', '1.1']);
   });
 
   it('accepts a declared version and refuses an unknown one', () => {

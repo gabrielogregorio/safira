@@ -64,14 +64,6 @@ const advance = (milliseconds: number): void => {
 
 const catElement = (container: HTMLElement): HTMLElement => container.querySelector<HTMLElement>('.cat') as HTMLElement;
 
-const pressStone = (): HTMLElement => {
-  const stone = screen.getByRole('button', { name: 'Drag the stone' });
-  stone.setPointerCapture = vi.fn();
-  fireEvent.pointerDown(stone, { clientX: 100, clientY: 100, pointerId: 1 });
-
-  return stone;
-};
-
 describe('ProfessorCat', () => {
   const boxes: HTMLElement[] = [];
 
@@ -150,52 +142,6 @@ describe('ProfessorCat', () => {
     await press('Next');
 
     expect(lesson.goToNext).toHaveBeenCalledTimes(1);
-  });
-
-  it('runs while the stone is held and continues when it drops', () => {
-    sessionStorage.setItem('safira.cat.met', 'true');
-    const { container } = render(
-      <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
-    );
-    const stone = screen.getByRole('button', { name: 'Drag the stone' });
-    stone.setPointerCapture = vi.fn();
-
-    fireEvent.pointerDown(stone, { clientX: 100, clientY: 100, pointerId: 1 });
-    fireEvent.pointerMove(stone, { clientX: 100, clientY: 60, pointerId: 1 });
-
-    expect(container.querySelector('.cat-bubble')).toBeNull();
-    expect(stone).toHaveAttribute('aria-pressed', 'true');
-
-    fireEvent.pointerUp(stone, { pointerId: 1 });
-
-    expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Drag the stone' })).toHaveAttribute('aria-pressed', 'false');
-  });
-
-  it('does not run from a plain click', () => {
-    const { container } = render(
-      <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
-    );
-    const stone = screen.getByRole('button', { name: 'Drag the stone' });
-    stone.setPointerCapture = vi.fn();
-    fireEvent.pointerDown(stone, { clientX: 100, clientY: 100, pointerId: 1 });
-    fireEvent.pointerUp(stone, { pointerId: 1 });
-
-    expect(container.querySelector('.cat-bubble')).not.toBeNull();
-  });
-
-  it('also works from the keyboard', async () => {
-    const { container } = render(
-      <ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />,
-    );
-    screen.getByRole('button', { name: 'Drag the stone' }).focus();
-    await userEvent.keyboard('{Enter}');
-
-    expect(container.querySelector('.cat-bubble')).toBeNull();
-
-    await userEvent.keyboard('{Enter}');
-
-    expect(container.querySelector('.cat-bubble')).not.toBeNull();
   });
 
   it.each<[string, Partial<LessonMode>, boolean, string]>([
@@ -277,7 +223,7 @@ describe('ProfessorCat', () => {
     vi.stubGlobal('innerHeight', 800);
     const { container } = renderCat();
 
-    expect(catElement(container).style.transform).toBe('translate(392px, 640px)');
+    expect(catElement(container).style.transform).toBe('translate(392px, 588px)');
   });
 
   it.each([
@@ -358,11 +304,11 @@ describe('ProfessorCat', () => {
     advance(3000);
     advance(2499);
 
-    expect(catElement(container)).not.toHaveClass('cat-fleeing');
+    expect(catElement(container)).not.toHaveClass('cat-leaving');
 
     advance(1);
 
-    expect(catElement(container)).toHaveClass('cat-fleeing');
+    expect(catElement(container)).toHaveClass('cat-leaving');
     expect(catElement(container).style.transform).toBe('translate(1120px, -96px)');
     expect(onAbandon).not.toHaveBeenCalled();
 
@@ -390,60 +336,6 @@ describe('ProfessorCat', () => {
 
     expect(firstAbandon).not.toHaveBeenCalled();
     expect(lastAbandon).toHaveBeenCalledTimes(1);
-  });
-
-  it('ignores the stone being moved without a press', () => {
-    const { container } = renderCat();
-    const stone = screen.getByRole('button', { name: 'Drag the stone' });
-
-    fireEvent.pointerMove(stone, { clientX: 300, clientY: 300, pointerId: 1 });
-
-    expect(stone.style.transform).toBe('');
-    expect(container.querySelector('.cat-bubble')).not.toBeNull();
-  });
-
-  it('does not mistake a shaky click for a drag', () => {
-    const { container } = renderCat();
-    const stone = pressStone();
-
-    fireEvent.pointerMove(stone, { clientX: 102, clientY: 101, pointerId: 1 });
-
-    expect(stone).toHaveAttribute('aria-pressed', 'false');
-    expect(container.querySelector('.cat-bubble')).not.toBeNull();
-  });
-
-  it('turns around when the held stone goes past him', () => {
-    const { container } = renderCat();
-    const stone = pressStone();
-
-    fireEvent.pointerMove(stone, { clientX: 100, clientY: 60, pointerId: 1 });
-
-    expect(catElement(container).dataset['facing']).toBe('right');
-
-    stone.getBoundingClientRect = () => new DOMRect(500, 0, 10, 10);
-    fireEvent.pointerMove(stone, { clientX: 600, clientY: 100, pointerId: 1 });
-
-    expect(catElement(container).dataset['facing']).toBe('left');
-    expect(stone.style.transform).toBe('translate(500px, 0px)');
-  });
-
-  it('runs to the right when the stone is exactly over him', () => {
-    const { container } = renderCat();
-    const stone = pressStone();
-    stone.getBoundingClientRect = () => new DOMRect(48, 48, 0, 0);
-
-    fireEvent.pointerMove(stone, { clientX: 100, clientY: 60, pointerId: 1 });
-
-    expect(catElement(container).dataset['facing']).toBe('right');
-    expect(catElement(container).style.transform).toBe('translate(1280px, 0px)');
-  });
-
-  it('ignores the click that ends a mouse press', () => {
-    const { container } = renderCat();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Drag the stone' }), { detail: 1 });
-
-    expect(container.querySelector('.cat-bubble')).not.toBeNull();
   });
 
   it('points at the code in a challenge', () => {

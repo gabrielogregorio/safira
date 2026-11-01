@@ -1,5 +1,7 @@
 import { resolveColor } from './colors';
-import type { Expression, Statement, StatementKind, Value } from './ast';
+import type { Expression, KeyPart, Statement, StatementKind, Value } from './ast';
+import type { KeyMode } from './keys';
+import { parseKeyCombo } from './keys';
 import type { Locale } from './messages';
 import { translateMessage } from './messages';
 import { parse } from './parser';
@@ -26,6 +28,7 @@ export type Effect =
   | { type: 'input' }
   | { type: 'sleep'; milliseconds: number }
   | { type: 'tone'; frequency: number; milliseconds: number }
+  | { type: 'key'; mode: KeyMode; keys: string[] }
   | { type: 'files' };
 
 export type Execution<Result> = Generator<Effect, Result, string | undefined>;
@@ -665,6 +668,8 @@ export class Interpreter {
         return yield* this.evaluateFileRead(expression.path);
       case 'fileExists':
         return (yield* this.evaluateFileExists(expression.path)) !== expression.negated;
+      case 'keyState':
+        return yield* this.evaluateKeyState(expression.mode, expression.parts);
       case 'slice':
         return yield* this.evaluateSlice(expression);
     }
@@ -889,6 +894,28 @@ export class Interpreter {
     }
 
     return value;
+  }
+
+  private *evaluateKeyState(mode: KeyMode, parts: KeyPart[]): Execution<Value> {
+    const names: string[] = [];
+
+    for (const part of parts) {
+      if (part.kind === 'value') {
+        names.push(String(yield* this.evaluate(part.value)));
+      } else {
+        const variable = this.variables.get(part.text);
+        names.push(typeof variable === 'string' ? variable : part.text);
+      }
+    }
+
+    const combo = names.join('+');
+    const keys = parseKeyCombo(combo);
+
+    if (keys === null) {
+      return this.failWithDetail('tecla_desconhecida', `'${combo}'`);
+    }
+
+    return (yield { type: 'key', mode, keys }) === 'true';
   }
 
   private *evaluateRandom(minimum: Expression, maximum: Expression): Execution<Value> {

@@ -13,10 +13,8 @@ import { useTypedText } from './TypedText';
 const MET_KEY = storageKey('cat.met');
 const CAT_SIZE = 96;
 const EDGE_MARGIN = 12;
-const PANIC_RATE = 1.6;
-const DRAG_START_PIXELS = 4;
 const PHONE_WIDTH = 768;
-const PHONE_BOTTOM_ROOM = 64;
+const PHONE_BOTTOM_ROOM = 116;
 const HAND_HEIGHT = 0.66;
 const POINT_REACH = 140;
 const HALF_TURN = 180;
@@ -250,25 +248,6 @@ const CatArt = ({ pose }: { pose: Pose }) => {
   );
 };
 
-const Stone = () => (
-  <svg viewBox="0 0 48 34" aria-hidden="true">
-    <defs>
-      <radialGradient id="cat-stone" cx="38%" cy="28%" r="80%">
-        <stop offset="0%" stopColor="#eef3f7" />
-        <stop offset="50%" stopColor="#9aa8b5" />
-        <stop offset="100%" stopColor="#566676" />
-      </radialGradient>
-    </defs>
-    <path
-      d="M4 26 C2 14 12 5 25 4 C38 3 46 13 44 24 C43 31 34 32 24 32 C14 32 5 32 4 26 Z"
-      fill="url(#cat-stone)"
-      stroke="#44525f"
-      strokeWidth="1.2"
-    />
-    <ellipse cx="18" cy="12" rx="9" ry="4" fill="#ffffff" fillOpacity="0.65" />
-  </svg>
-);
-
 interface ProfessorCatProps {
   lesson: LessonMode;
   hasError: boolean;
@@ -344,27 +323,9 @@ const placeOnScreen = (element: HTMLElement, scene: Scene, trip: Trip): void => 
   }
 };
 
-// He runs along the line from the stone to him, far enough to leave the screen.
-// Called on every move of the stone, so the transition turns him around in the middle of the run.
-const fleeFrom = (element: HTMLElement, stone: DOMRect): void => {
-  const cat = element.getBoundingClientRect();
-  const distanceX = cat.left + CAT_SIZE / 2 - (stone.left + stone.width / 2) || 1;
-  const distanceY = cat.top + CAT_SIZE / 2 - (stone.top + stone.height / 2);
-  const length = Math.hypot(distanceX, distanceY);
-  const reach = Math.hypot(window.innerWidth, window.innerHeight);
-  const x = cat.left + (distanceX / length) * reach;
-  const y = cat.top + (distanceY / length) * reach;
-
-  element.dataset['facing'] = distanceX < 0 ? 'left' : 'right';
-  element.style.transform = `translate(${String(x)}px, ${String(y)}px)`;
-};
-
 export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: ProfessorCatProps) => {
   const t = useTranslation();
   const root = useRef<HTMLDivElement>(null);
-  const stone = useRef<HTMLButtonElement>(null);
-  const pressedAt = useRef<{ x: number; y: number } | null>(null);
-  const [isHoldingStone, setIsHoldingStone] = useState(false);
   const [hasMet, setHasMet] = useState(() => readFlag(MET_KEY));
   const key = stepKey(lesson.place);
   const [codeReadAt, setCodeReadAt] = useState<string | null>(null);
@@ -410,7 +371,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
   const tripScene = useRef(scene);
 
   const reposition = useCallback(() => {
-    if (root.current !== null && !root.current.classList.contains('cat-fleeing')) {
+    if (root.current !== null && !root.current.classList.contains('cat-leaving')) {
       if (tripScene.current !== scene) {
         tripScene.current = scene;
         trip.current = planTrip();
@@ -446,10 +407,8 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     };
   }, [reposition]);
 
-  const isHere = !isHoldingStone;
-
   // The button lives in the toolbar, so the page carries the signal that lights it up.
-  const isAskingForRun = isHere && scene === 'play';
+  const isAskingForRun = scene === 'play';
 
   useEffect(() => {
     if (!isAskingForRun) {
@@ -483,10 +442,10 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
   }, [isSettled, stage]);
 
   useEffect(() => {
-    if (isHere && isSettled) {
+    if (isSettled) {
       void soundPlayer.play('catMeow', scene === 'farewell' ? ANGRY_RATE : 1);
     }
-  }, [isHere, isSettled, scene, stage]);
+  }, [isSettled, scene, stage]);
 
   const speech = ((): string => {
     if (!isSettled || lesson.step === undefined) {
@@ -551,152 +510,81 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
     return null;
   }
 
-  const runFromStone = (): void => {
-    fleeFrom(root.current as HTMLDivElement, (stone.current as HTMLButtonElement).getBoundingClientRect());
-  };
-
-  const pickUpStone = (): void => {
-    runFromStone();
-    void soundPlayer.play('catMeow', PANIC_RATE);
-    setIsHoldingStone(true);
-  };
-
-  const dropStone = (): void => {
-    pressedAt.current = null;
-    setIsHoldingStone(false);
-
-    (stone.current as HTMLButtonElement).style.transform = '';
-  };
-
-  const stoneButton = (
-    <button
-      ref={stone}
-      type="button"
-      className={isHoldingStone ? 'cat-stone cat-stone-held' : 'cat-stone'}
-      aria-label={t('Drag the stone')}
-      aria-pressed={isHoldingStone}
-      title={t('Drag the stone')}
-      onPointerDown={(event) => {
-        event.currentTarget.setPointerCapture(event.pointerId);
-        pressedAt.current = { x: event.clientX, y: event.clientY };
-      }}
-      onPointerMove={(event) => {
-        const start = pressedAt.current;
-
-        if (start === null) {
-          return;
-        }
-
-        const x = event.clientX - start.x;
-        const y = event.clientY - start.y;
-
-        if (Math.hypot(x, y) >= DRAG_START_PIXELS) {
-          event.currentTarget.style.transform = `translate(${String(x)}px, ${String(y)}px)`;
-
-          if (isHoldingStone) {
-            runFromStone();
-          } else {
-            pickUpStone();
-          }
-        }
-      }}
-      onPointerUp={dropStone}
-      onPointerCancel={dropStone}
-      onClick={(event) => {
-        // A click with no pointer comes from the keyboard, which has no way to drag.
-        if (event.detail === 0) {
-          if (isHoldingStone) {
-            dropStone();
-          } else {
-            pickUpStone();
-          }
-        }
-      }}>
-      <Stone />
-    </button>
-  );
-
-  if (isHoldingStone || isLeaving) {
+  if (isLeaving) {
     return (
-      <>
-        <div ref={root} className="cat cat-fleeing" data-pose="wave">
-          <div className="cat-bird">
-            <CatArt pose="wave" />
-          </div>
+      <div ref={root} className="cat cat-leaving" data-pose="wave">
+        <div className="cat-bird">
+          <CatArt pose="wave" />
         </div>
-        {isLeaving ? null : stoneButton}
-      </>
+      </div>
     );
   }
 
   const { step } = lesson;
 
   return (
-    <>
-      <div ref={root} className={`cat cat-at-${scene}`} data-pose={pose}>
-        {isSettled ? (
-          <section className="cat-bubble" aria-label={t('The cat')} aria-live="polite">
-            <div className="lesson-brief-text" data-fixed-text aria-hidden={typed.isDone ? undefined : true}>
-              <Markdown>{hideOpenCode(typed.shown)}</Markdown>
+    <div ref={root} className={`cat cat-at-${scene}`} data-pose={pose}>
+      {isSettled ? (
+        <section className="cat-bubble" aria-label={t('The cat')} aria-live="polite">
+          <div className="lesson-brief-text" data-fixed-text aria-hidden={typed.isDone ? undefined : true}>
+            <Markdown>{hideOpenCode(typed.shown)}</Markdown>
+          </div>
+          {typed.isDone ? null : (
+            <>
+              <div className="visually-hidden" data-fixed-text>
+                <Markdown>{speech}</Markdown>
+              </div>
+              <div className="lesson-actions">
+                <button type="button" className="button" onClick={typed.finish}>
+                  {t('Show it all')}
+                </button>
+              </div>
+            </>
+          )}
+          {scene === 'intro' && typed.isDone ? (
+            <div className="lesson-actions">
+              <button
+                type="button"
+                className="button button-primary"
+                data-autofocus
+                onClick={() => {
+                  writeFlag(MET_KEY);
+                  setHasMet(true);
+                }}>
+                {t('Continue')}
+              </button>
             </div>
-            {typed.isDone ? null : (
-              <>
-                <div className="visually-hidden" data-fixed-text>
-                  <Markdown>{speech}</Markdown>
-                </div>
-                <div className="lesson-actions">
-                  <button type="button" className="button" onClick={typed.finish}>
-                    {t('Show it all')}
-                  </button>
-                </div>
-              </>
-            )}
-            {scene === 'intro' && typed.isDone ? (
-              <div className="lesson-actions">
-                <button
-                  type="button"
-                  className="button button-primary"
-                  data-autofocus
-                  onClick={() => {
-                    writeFlag(MET_KEY);
-                    setHasMet(true);
-                  }}>
-                  {t('Continue')}
-                </button>
-              </div>
-            ) : null}
-            {scene === 'read' && typed.isDone ? (
-              <div className="lesson-actions">
-                <button
-                  type="button"
-                  className="button button-primary"
-                  onClick={() => {
-                    setCodeReadAt(key);
-                  }}>
-                  {t('Continue')}
-                </button>
-              </div>
-            ) : null}
-            {scene === 'result' && typed.isDone ? (
-              <LessonBrief
-                step={step}
-                verdict={lesson.verdict}
-                isDone={lesson.isDone}
-                isLastStep={lesson.isLastStep}
-                isOnStepFile={lesson.isOnStepFile}
-                onNext={lesson.goToNext}
-                onBack={lesson.backToStep}
-                onStartOver={lesson.startOver}
-                onShowSolution={lesson.showSolution}
-              />
-            ) : null}
-          </section>
-        ) : null}
-        <div className="cat-bird">
-          <CatArt pose={pose} />
-        </div>
+          ) : null}
+          {scene === 'read' && typed.isDone ? (
+            <div className="lesson-actions">
+              <button
+                type="button"
+                className="button button-primary"
+                onClick={() => {
+                  setCodeReadAt(key);
+                }}>
+                {t('Continue')}
+              </button>
+            </div>
+          ) : null}
+          {scene === 'result' && typed.isDone ? (
+            <LessonBrief
+              step={step}
+              verdict={lesson.verdict}
+              isDone={lesson.isDone}
+              isLastStep={lesson.isLastStep}
+              isOnStepFile={lesson.isOnStepFile}
+              onNext={lesson.goToNext}
+              onBack={lesson.backToStep}
+              onStartOver={lesson.startOver}
+              onShowSolution={lesson.showSolution}
+            />
+          ) : null}
+        </section>
+      ) : null}
+      <div className="cat-bird">
+        <CatArt pose={pose} />
       </div>
-      {stoneButton}
-    </>
+    </div>
   );
 };

@@ -1,0 +1,93 @@
+#safira 0.9
+# 🚀 Liftoff
+
+list of rocket receive "        /\", "       /  \", "      | ** |", "      | ** |", "     /|    |\", "    /_|____|_\"
+list of flame1 receive "       (**)", "        ()"
+list of flame2 receive "      ( ** )", "       (())", "        ()"
+list of stars receive "  *        .     *   .", "       .      *       ", " .     *          .   ", "    *       .        *"
+
+function sky(total) {
+    for each line from 1 to total {
+        show list of stars in position (line % 4 + 1) in color gray
+    }
+}
+
+function scene(above, fire) {
+    clear
+    sky(above)
+
+    scroll through the list of rocket assigning in piece {
+        show piece in color blue
+    }
+
+    if fire is equal to 1 then {
+        scroll through the list of flame1 assigning in piece {
+            show piece in color orange
+        }
+    } else {
+        scroll through the list of flame2 assigning in piece {
+            show piece in color yellow
+        }
+    }
+}
+
+function countdown(number) {
+    scene(6, 1)
+    show ""
+    show "        >> " + number + " <<" in color red
+    play C for 200ms
+    wait 700 ms
+}
+
+countdown(3)
+countdown(2)
+countdown(1)
+play C5, E5, G5 for 120ms
+
+repeat 2 times {
+    scene(6, 1)
+    play C3 for 90ms
+    scene(6, 2)
+    play C3 for 90ms
+}
+
+for each height from 6 to 0 {
+    scene(height, height % 2)
+    play G3, C4 for 60ms
+}
+
+play E5 for 90ms
+clear
+show ""
+show "        .  *  .        " in color white
+wait 120 ms
+clear
+show ""
+show "     *  . \ | / .  *   " in color yellow
+show "    .  --  ** --  .    " in color orange
+show "     *  . / | \ .  *   " in color yellow
+play G5, C6 for 100ms
+clear
+show ""
+show "  *   .   \  |  /   .   *" in color yellow
+show "   .   ---  ***  ---   . " in color red
+show "  *   .   /  |  \   .   *" in color yellow
+play E6, G6 for 100ms
+clear
+show ""
+show ""
+show on this line "   S" in color cyan
+play C5 for 120ms
+show on this line "  A" in color blue
+play E5 for 120ms
+show on this line "  F" in color purple
+play G5 for 120ms
+show on this line "  I" in color pink
+play A5 for 120ms
+show on this line "  R" in color orange
+play C6 for 120ms
+show on this line "  A" in color yellow
+play E6 for 400ms
+show ""
+show ""
+show "   Written in English. 💎" in color green

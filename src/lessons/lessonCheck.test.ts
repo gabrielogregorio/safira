@@ -25,6 +25,12 @@ describe('checkProgram', () => {
     ).resolves.toEqual({ passed: true });
   });
 
+  it('answers that no key is down', async () => {
+    await expect(
+      check('se apertar Enter entao mostre "sim" senao mostre "nao"', { cases: [{ shows: ['nao'] }] }),
+    ).resolves.toEqual({ passed: true });
+  });
+
   it('goes past a note without waiting for it', async () => {
     await expect(check('toque C por 9 segundos\nmostre "a"', { cases: [{ shows: ['a'] }] })).resolves.toEqual({
       passed: true,

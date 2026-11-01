@@ -1,0 +1,9 @@
+#safira 0.9
+# 🎶 Asa Branca
+# Asa Branca 的开头,Luiz Gonzaga 和 Humberto Teixeira 作品(1947)。
+
+显示 "🐦"
+播放 G4, A4 持续 150毫秒
+播放 B4, D5, D5, B4, C5, C5 持续 300毫秒
+
+显示 "结束 🎵"

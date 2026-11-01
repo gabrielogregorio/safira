@@ -22,6 +22,7 @@ export class Parser extends ExpressionParser {
     () => this.parseSimple('interrompa', { kind: 'halt' }),
     () => this.parseSimple('nao_faca_nada', { kind: 'noop' }),
     () => this.parseWhile(),
+    () => this.parseForever(),
     () => this.parseRepeat(),
     () => this.parseForRange(),
     () => this.parseWait(),
@@ -38,6 +39,7 @@ export class Parser extends ExpressionParser {
     () => this.parseOrphanElse('se_nao_se'),
     () => this.parseOrphanElse('se_nao'),
     () => this.parseIf(),
+    () => this.parseKeyEvent(),
     () => this.parseSaveAnswer(),
     () => this.parseAssignment(),
     () => this.parseIncrement('incremente', 1),
@@ -210,6 +212,12 @@ export class Parser extends ExpressionParser {
     return { kind: 'while', condition, body: this.parseBody() };
   }
 
+  private parseForever(): StatementBody {
+    this.expectPhrase('repita_sempre');
+
+    return { kind: 'while', condition: { kind: 'literal', value: true }, body: this.parseBody() };
+  }
+
   private parseRepeat(): StatementBody {
     this.expectPhrase('repita');
     const count = this.parseAdditive();
@@ -361,6 +369,14 @@ export class Parser extends ExpressionParser {
 
       branches.push(branch);
     }
+  }
+
+  private parseKeyEvent(): StatementBody {
+    this.expectPhrase('ao_tecla');
+    const condition = this.parseKeyState();
+    this.acceptPhrase('se_final');
+
+    return { kind: 'if', branches: [{ condition, body: this.parseBody() }], otherwise: null };
   }
 
   private parseClauseElse(): Statement[] | null {

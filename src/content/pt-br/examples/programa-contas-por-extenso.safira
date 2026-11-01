@@ -1,0 +1,13 @@
+#safira 0.9
+# ✍️ Contas por extenso
+
+função contas recebe parâmetros a, b {
+    mostre "% mais % dá %" inserindo a, b, a mais b
+    mostre "% menos % dá %" inserindo a, b, a menos b
+    mostre "% vezes % dá %" inserindo a, b, a multiplicado por b
+    mostre "% dividido por % dá %" inserindo a, b, a dividido por b
+    mostre "% elevado a % dá %" inserindo a, b, a elevado a b
+    mostre "Tudo isso é do tipo " + o tipo de a
+}
+
+contas passando parâmetros 8, 2

@@ -1,0 +1,33 @@
+#safira 0.9
+# 🏁 Largada
+
+mostre "Nome do piloto?"
+piloto = o que o usuário digitar
+luzes = ""
+
+função luz() {
+    luzes = luzes + "🔴"
+    limpe a tela
+    mostre luzes
+    toque C por 300ms
+    espere 1 segundo
+}
+
+repita 5 vezes {
+    luz()
+}
+
+pausa = um número aleatório entre 1 e 3
+espere pausa segundos
+limpe a tela
+
+se pausa for maior que 2 então mostre "Que demora!"
+mostre "🟢 VAI, " + piloto + "!" na cor verde
+toque C5, E5, G5 por 200ms
+
+lista de podio recebe "Max", "Lia"
+adicione piloto no início da lista de podio
+
+percorra a lista de podio atribuindo em carro {
+    mostre "🏆 " + carro
+}

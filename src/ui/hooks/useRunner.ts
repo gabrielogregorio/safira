@@ -32,6 +32,9 @@ export interface Runner {
   submitInput: (text: string) => void;
   updateBreakpoints: (breakpoints: Breakpoints) => void;
   dismissFailure: () => void;
+  isListeningKeys: boolean;
+  sendKey: (key: string, isDown: boolean) => void;
+  clearKeys: () => void;
 }
 
 const MILLISECONDS_PER_SECOND = 1000;
@@ -50,6 +53,7 @@ export const useRunner = (
   const [failure, setFailure] = useState<RunnerFailure | null>(null);
   const [duration, setDuration] = useState<number | null>(null);
   const [wasStopped, setWasStopped] = useState(false);
+  const [isListeningKeys, setIsListeningKeys] = useState(false);
 
   const closeWorker = useCallback(() => {
     workerRef.current?.terminate();
@@ -70,6 +74,9 @@ export const useRunner = (
         case 'tone':
           soundPlayer.tone(event.frequency, event.milliseconds);
           break;
+        case 'keys-listening':
+          setIsListeningKeys(true);
+          break;
         case 'input-request':
           setStatus('waiting-input');
           setVariables(event.variables);
@@ -84,6 +91,7 @@ export const useRunner = (
           break;
         case 'finished':
           closeWorker();
+          setIsListeningKeys(false);
           onFilesChanged(event.files);
           setVariables(event.variables);
           setFailure(event.failure);
@@ -111,6 +119,7 @@ export const useRunner = (
       setFailure(null);
       setDuration(null);
       setWasStopped(false);
+      setIsListeningKeys(false);
       setPausedAt(null);
       setStatus('running');
       worker.postMessage({ type: 'start', ...request });
@@ -120,6 +129,7 @@ export const useRunner = (
 
   const stop = useCallback(() => {
     closeWorker();
+    setIsListeningKeys(false);
     setPausedAt(null);
     setWasStopped(true);
     setStatus('idle');
@@ -141,6 +151,14 @@ export const useRunner = (
     workerRef.current?.postMessage({ type: 'breakpoints', breakpoints });
   }, []);
 
+  const sendKey = useCallback((key: string, isDown: boolean) => {
+    workerRef.current?.postMessage({ type: 'key', key, isDown });
+  }, []);
+
+  const clearKeys = useCallback(() => {
+    workerRef.current?.postMessage({ type: 'keys-clear' });
+  }, []);
+
   const dismissFailure = useCallback(() => {
     setFailure(null);
   }, []);
@@ -159,5 +177,8 @@ export const useRunner = (
     submitInput,
     updateBreakpoints,
     dismissFailure,
+    isListeningKeys,
+    sendKey,
+    clearKeys,
   };
 };

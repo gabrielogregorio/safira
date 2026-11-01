@@ -11,6 +11,15 @@ const colorOf = async (source: string): Promise<string | undefined> => {
 
 describe('resolveColor', () => {
   it.each([
+    ['オレンジ', '#ff9a3d'],
+    ['ピンク', '#ff7ac6'],
+    ['roxo', '#b277ff'],
+    ['lilás', '#b277ff'],
+  ])('finds %s, whose marks are taken off before comparing', (name, color) => {
+    expect(resolveColor(name)).toBe(color);
+  });
+
+  it.each([
     ['#ff1122', '#ff1122'],
     ['#FF1122', '#ff1122'],
     ['#331', '#331'],

@@ -1,11 +1,38 @@
 # Changelog
 
-## Unreleased
+## 1.1.0
+
+Fully compatible with 1.0.0: scripts of every earlier version keep running.
 
 ### Added
 
+- `repita pra sempre`, `repeat forever` and the same in the other languages, with variations such as `para sempre` and `loop forever`.
 - `não faça nada`, `do nothing` and the same in the other languages, for an empty branch of a condition.
 - `guarde a resposta em nota`, `save the answer in note` and the same in the other languages put what the user types in a variable, with natural variations such as `salve o que o usuário digitar na nota` and `save the response to note`.
+- Songs in the Examples menu: an original piece called Céu de Safira, Oh! Susanna, Malagueña, Mo Li Hua, Sakura Sakura and the opening of Asa Branca, in every language.
+- A race start program in the Examples menu, with five lights, a random hold and a podium.
+- A liftoff program in the Examples menu, an ASCII animation with color and sound.
+- Keyboard conditions: `se apertar Cima`, `se segurar Shift+Enter`, `ao soltar tecla Enter`, `if press ArrowUp`. The key can be a name in any case, a text or a variable. A program only hears the keys while the program area has the focus, and a phone shows keys on the screen.
+- A Mini RPG and a dinosaur game in the Examples menu, in every language.
+- A button that maximizes the program area over the whole screen.
+- Seven fun examples for commands that nothing used yet: crystal ball, secret code, backpack, pirate's chest, self-destructing letter, math in words and super jump.
+- A lesson about color and sound, so the course now has 14 lessons.
+
+### Changed
+
+- Learn is a menu of its own, and Examples only holds the ready-made programs.
+- Lesson mode has a switch beside Smart suggestions while it is on.
+- On a phone, lessons are chosen from numbered pages at the bottom of the screen.
+
+### Removed
+
+- The stone of lesson mode, and with it the cat running away from it.
+
+### Fixed
+
+- A click that opens a modal no longer plays two sounds together on a slow machine.
+- The Japanese colors `オレンジ` and `ピンク` are recognized.
+- The preview of a pull request is removed from `gh-pages` when the pull request closes.
 
 ## 1.0.0
 

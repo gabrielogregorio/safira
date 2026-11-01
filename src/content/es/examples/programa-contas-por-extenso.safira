@@ -1,0 +1,13 @@
+#safira 0.9
+# ✍️ Cuentas en palabras
+
+funcion cuentas recibe parametros a, b {
+    muestra "% más % es %" insertando a, b, a mas b
+    muestra "% menos % es %" insertando a, b, a menos b
+    muestra "% por % es %" insertando a, b, a multiplicado por b
+    muestra "% entre % es %" insertando a, b, a dividido por b
+    muestra "% elevado a % es %" insertando a, b, a elevado a b
+    muestra "Todo esto es del tipo " + tipo de a
+}
+
+cuentas pasando los 8, 2

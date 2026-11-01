@@ -43,7 +43,7 @@ The interface, lessons and examples come in English, Portuguese, Spanish, Simpli
 Every screen has an address: `#/new/16-listas`, `#/projects/<id>/dados%2Fnotas.txt`. Projects move between browsers as `.zip` files, which can be dropped on the home screen, and work saves itself while typing
 so that it comes back after a crash or a power cut.
 
-Every script keeps its language version on a hidden first line (`#safira 1.0`). The IDE only mentions it when the version
+Every script keeps its language version on a hidden first line (`#safira 1.1`). The IDE only mentions it when the version
 is not supported. A script without that line is treated as version 0.38, the last Python release.
 
 ## Documentation
@@ -91,7 +91,7 @@ branch into `main` creates the tag and the release; any other merge only deploys
 | Address | What it is | Workflow |
 |---|---|---|
 | `https://<owner>.github.io/<repository>/` | The site, published on each merge into `main` | `deploy.yml` |
-| `https://<owner>.github.io/<repository>/preview/<branch>/` | The site of a pull request, linked on it | `deploy-preview.yml` |
+| `https://<owner>.github.io/<repository>/preview/<branch>/` | The site of a pull request, linked on it and removed when it closes | `deploy-preview.yml`, `remove-preview.yml` |
 
 Both publish to the `gh-pages` branch through `.github/actions/publish-pages`, which GitHub Pages must be set to serve.
 Assets use relative paths and routes use the hash, so one build works at any address.

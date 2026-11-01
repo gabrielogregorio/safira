@@ -1,6 +1,6 @@
 {
   "name": "safira",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Safira, a programming language in natural language for first-time programmers, with a web IDE",
   "license": "MIT",
   "private": true,

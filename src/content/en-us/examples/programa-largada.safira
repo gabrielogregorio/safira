@@ -1,0 +1,33 @@
+#safira 0.9
+# 🏁 Race start lights
+
+show "Driver name?"
+driver = what the user types
+lamps = ""
+
+function light() {
+    lamps = lamps + "🔴"
+    clear
+    show lamps
+    play C for 300ms
+    wait 1 second
+}
+
+repeat 5 times {
+    light()
+}
+
+hold = a random number between 1 and 3
+wait hold seconds
+clear
+
+if hold is greater than 2 then show "Long wait!"
+show "🟢 GO, " + driver + "!" in color green
+play C5, E5, G5 for 200ms
+
+list of podium receive "Max", "Lia"
+add driver at the start of the list of podium
+
+scroll through the list of podium assigning in car {
+    show "🏆 " + car
+}

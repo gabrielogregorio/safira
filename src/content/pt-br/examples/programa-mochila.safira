@@ -1,0 +1,18 @@
+#safira 0.9
+# 🎒 Mochila do aventureiro
+
+lista de mochila com 3 posições
+lista de mochila na posição 1 = "🗡️ espada"
+lista de mochila na posição 2 = "🧪 poção"
+lista de mochila na posição 3 = "🍎 maçã"
+
+adicione "🗺️ mapa" no início da lista de mochila
+remova "🍎 maçã" da lista de mochila
+
+mostre "🎒 Você leva % itens:" inserindo o tamanho da lista de mochila
+
+percorra mochila atribuindo em item {
+    mostre "- " + item
+}
+
+se tiver "🧪 poção" na lista de mochila então mostre "Você pode se curar!" senão não faça nada

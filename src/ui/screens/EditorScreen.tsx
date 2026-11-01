@@ -30,6 +30,7 @@ import { downloadFile, downloadProject, readArchiveFile } from '@/ui/archiveFile
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { FileSidebar } from '@/ui/components/FileSidebar';
 import { LessonBar } from '@/ui/components/LessonBar';
+import { LessonPager } from '@/ui/components/LessonPager';
 import { LessonProgress } from '@/ui/components/LessonProgress';
 import { ProfessorCat } from '@/ui/components/ProfessorCat';
 import { IdeMenuBar } from '@/ui/components/IdeMenuBar';
@@ -691,8 +692,21 @@ export const EditorScreen = ({
               onChangeSettings({ suggestions: event.target.checked });
             }}
           />
-          {t('Smart suggestions')}
+          <span className="switch-text">{t('Smart suggestions')}</span>
         </label>
+        {settings.lessonMode ? (
+          <label className="suggestions-toggle">
+            <input
+              type="checkbox"
+              checked
+              onChange={() => {
+                void soundPlayer.play('suggestionsOff');
+                lesson.toggle();
+              }}
+            />
+            <span className="switch-text">{t('Lesson mode')}</span>
+          </label>
+        ) : null}
       </nav>
 
       {settings.lessonMode ? (
@@ -852,6 +866,9 @@ export const EditorScreen = ({
             footer={terminalFooter()}
             isWaitingInput={runner.status === 'waiting-input'}
             onSubmitInput={runner.submitInput}
+            isListeningKeys={runner.isListeningKeys}
+            onKey={runner.sendKey}
+            onKeysLost={runner.clearKeys}
           />
           <Splitter
             label={t('Resize the variables panel')}
@@ -882,6 +899,16 @@ export const EditorScreen = ({
           </button>
         ))}
       </nav>
+
+      {settings.lessonMode ? (
+        <LessonPager
+          key={lesson.place.lessonId}
+          lessons={lesson.lessons}
+          place={lesson.place}
+          progress={settings.lessonProgress}
+          onOpen={lesson.open}
+        />
+      ) : null}
 
       <footer className="status-bar">
         <span>{t('Line {line}, column {column}', cursor)}</span>

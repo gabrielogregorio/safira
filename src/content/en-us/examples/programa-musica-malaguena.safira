@@ -1,0 +1,43 @@
+#safira 0.9
+# 🎸 Malagueña
+# Traditional from Spain, on the Andalusian cadence.
+
+show "🎸"
+play A3, E4, A4, C5 for 110ms
+play E5 for 220ms
+play G3, D4, G4, B4 for 110ms
+play D5 for 220ms
+play F3, C4, F4, A4 for 110ms
+play C5 for 220ms
+play E3, B3, E4, G4# for 110ms
+play B4 for 220ms
+
+show "💃"
+play E5 for 220ms
+play F5, E5 for 110ms
+play D5 for 220ms
+play E5, D5 for 110ms
+play C5 for 220ms
+play D5, C5 for 110ms
+play B4 for 440ms
+
+show "🎸"
+play A4, B4, C5, D5 for 110ms
+play E5 for 220ms
+play D5, C5, B4, C5, A4, B4 for 110ms
+play G4# for 440ms
+
+show "💃"
+play E5 for 220ms
+play F5, E5 for 110ms
+play D5 for 220ms
+play E5, D5 for 110ms
+play C5 for 220ms
+play D5, C5 for 110ms
+play B4 for 440ms
+
+show "🎸"
+play E5, D5, C5, B4, A4, G4, F4 for 110ms
+play E4 for 550ms
+
+show "The end 🎵"

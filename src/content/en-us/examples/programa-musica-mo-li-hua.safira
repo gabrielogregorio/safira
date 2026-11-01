@@ -1,0 +1,53 @@
+#safira 0.9
+# 🌼 Mo Li Hua
+# Traditional song from China.
+
+show "🌼"
+play E4 for 320ms
+play E4, G4, A4, C5, C5, A4 for 160ms
+play G4 for 320ms
+play G4, A4 for 160ms
+play G4 for 640ms
+
+show "🌼"
+play E4 for 320ms
+play E4, G4, A4, C5, C5, A4 for 160ms
+play G4 for 320ms
+play G4, A4 for 160ms
+play G4 for 640ms
+
+show "🌿"
+play G4, G4, G4 for 320ms
+play E4, G4 for 160ms
+play A4, A4 for 320ms
+play G4 for 640ms
+
+show "🌿"
+play E4 for 320ms
+play D4, E4 for 160ms
+play G4 for 320ms
+play E4, D4 for 160ms
+play C4 for 320ms
+play C4, D4 for 160ms
+play C4 for 640ms
+
+show "🌼"
+play E4, D4, C4, E4 for 160ms
+play D4 for 480ms
+play E4 for 160ms
+play G4 for 320ms
+play A4, C5 for 160ms
+play G4 for 640ms
+
+show "🌼"
+play D4 for 320ms
+play E4, G4, D4, E4, C4, A3 for 160ms
+play G3 for 640ms
+
+show "🌿"
+play A3, C4 for 320ms
+play D4 for 480ms
+play E4, C4, D4, C4, A3 for 160ms
+play G3 for 640ms
+
+show "The end 🎵"

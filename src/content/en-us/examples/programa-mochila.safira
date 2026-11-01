@@ -1,0 +1,18 @@
+#safira 0.9
+# 🎒 Adventurer's backpack
+
+list of backpack with 3 positions
+list of backpack in position 1 = "🗡️ sword"
+list of backpack in position 2 = "🧪 potion"
+list of backpack in position 3 = "🍎 apple"
+
+add "🗺️ map" at the start of the list of backpack
+remove "🍎 apple" from the list of backpack
+
+show "🎒 You carry % things:" inserting the size of the list of backpack
+
+scroll through backpack assigning in thing {
+    show "- " + thing
+}
+
+if have "🧪 potion" in the list of backpack then show "You can heal!" else do nothing

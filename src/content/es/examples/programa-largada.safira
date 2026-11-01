@@ -1,0 +1,33 @@
+#safira 0.9
+# 🏁 Salida de carrera
+
+muestra "¿Nombre del piloto?"
+piloto = lo que escribe el usuario
+luces = ""
+
+funcion luz() {
+    luces = luces + "🔴"
+    limpiar la pantalla
+    muestra luces
+    tocar C por 300ms
+    esperar 1 segundo
+}
+
+repetir 5 veces {
+    luz()
+}
+
+pausa = un número aleatorio entre 1 y 3
+esperar pausa segundos
+limpiar la pantalla
+
+si pausa es mayor que 2 entonces muestra "¡Qué espera!"
+muestra "🟢 ¡YA, " + piloto + "!" en color verde
+tocar C5, E5, G5 por 200ms
+
+lista de podio recibe "Max", "Lia"
+añadir piloto al inicio de la lista de podio
+
+desplazar podio asignando en coche {
+    muestra "🏆 " + coche
+}

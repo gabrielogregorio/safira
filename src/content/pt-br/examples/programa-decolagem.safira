@@ -1,0 +1,93 @@
+#safira 0.9
+# 🚀 Decolagem
+
+lista de foguete recebe "        /\", "       /  \", "      | ** |", "      | ** |", "     /|    |\", "    /_|____|_\"
+lista de chama1 recebe "       (**)", "        ()"
+lista de chama2 recebe "      ( ** )", "       (())", "        ()"
+lista de estrelas recebe "  *        .     *   .", "       .      *       ", " .     *          .   ", "    *       .        *"
+
+função ceu(total) {
+    para cada linha de 1 até total {
+        mostre lista de estrelas na posição (linha % 4 + 1) na cor cinza
+    }
+}
+
+função quadro(acima, fogo) {
+    limpe a tela
+    ceu(acima)
+
+    percorra a lista de foguete atribuindo em parte {
+        mostre parte na cor azul
+    }
+
+    se fogo for igual a 1 então {
+        percorra a lista de chama1 atribuindo em parte {
+            mostre parte na cor laranja
+        }
+    } senão {
+        percorra a lista de chama2 atribuindo em parte {
+            mostre parte na cor amarelo
+        }
+    }
+}
+
+função contagem(numero) {
+    quadro(6, 1)
+    mostre ""
+    mostre "        >> " + numero + " <<" na cor vermelho
+    toque C por 200ms
+    espere 700 ms
+}
+
+contagem(3)
+contagem(2)
+contagem(1)
+toque C5, E5, G5 por 120ms
+
+repita 2 vezes {
+    quadro(6, 1)
+    toque C3 por 90ms
+    quadro(6, 2)
+    toque C3 por 90ms
+}
+
+para cada altura de 6 até 0 {
+    quadro(altura, altura % 2)
+    toque G3, C4 por 60ms
+}
+
+toque E5 por 90ms
+limpe a tela
+mostre ""
+mostre "        .  *  .        " na cor branco
+espere 120 ms
+limpe a tela
+mostre ""
+mostre "     *  . \ | / .  *   " na cor amarelo
+mostre "    .  --  ** --  .    " na cor laranja
+mostre "     *  . / | \ .  *   " na cor amarelo
+toque G5, C6 por 100ms
+limpe a tela
+mostre ""
+mostre "  *   .   \  |  /   .   *" na cor amarelo
+mostre "   .   ---  ***  ---   . " na cor vermelho
+mostre "  *   .   /  |  \   .   *" na cor amarelo
+toque E6, G6 por 100ms
+limpe a tela
+mostre ""
+mostre ""
+mostre nessa linha "   S" na cor ciano
+toque C5 por 120ms
+mostre nessa linha "  A" na cor azul
+toque E5 por 120ms
+mostre nessa linha "  F" na cor roxo
+toque G5 por 120ms
+mostre nessa linha "  I" na cor pink
+toque A5 por 120ms
+mostre nessa linha "  R" na cor laranja
+toque C6 por 120ms
+mostre nessa linha "  A" na cor amarelo
+toque E6 por 400ms
+mostre ""
+mostre ""
+mostre "   Escrito em português. 💎" na cor verde

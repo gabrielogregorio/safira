@@ -1,0 +1,43 @@
+#safira 0.9
+# 🌸 Sakura Sakura
+# Canción tradicional de Japón.
+
+muestra "🌸"
+tocar A4, A4 por 300ms
+tocar B4 por 600ms
+tocar A4, A4 por 300ms
+tocar B4 por 600ms
+
+muestra "🌸"
+tocar A4, B4, C5, B4, A4 por 300ms
+tocar B4, A4 por 150ms
+tocar F4 por 600ms
+
+muestra "🌸"
+tocar E4, C4, E4, F4, E4 por 300ms
+tocar E4, C4 por 150ms
+tocar B3 por 600ms
+
+muestra "🌸"
+tocar A4, B4, C5, B4, A4 por 300ms
+tocar B4, A4 por 150ms
+tocar F4 por 600ms
+
+muestra "🌸"
+tocar E4, C4, E4, F4, E4 por 300ms
+tocar E4, C4 por 150ms
+tocar B3 por 600ms
+
+muestra "🌸"
+tocar A4, A4 por 300ms
+tocar B4 por 600ms
+tocar A4, A4 por 300ms
+tocar B4 por 600ms
+
+muestra "🌸"
+tocar E4, F4 por 300ms
+tocar B4, A4 por 150ms
+tocar F4 por 300ms
+tocar E4 por 900ms
+
+muestra "Fin 🎵"

@@ -1,3 +1,5 @@
+import type { KeyMode } from './keys';
+
 export type Value = number | string | boolean | Value[] | null;
 
 export type BinaryOperator =
@@ -37,7 +39,11 @@ export type Expression =
   | { kind: 'random'; minimum: Expression; maximum: Expression }
   | { kind: 'fileRead'; path: Expression }
   | { kind: 'fileExists'; path: Expression; negated: boolean }
+  | { kind: 'keyState'; mode: KeyMode; parts: KeyPart[] }
   | { kind: 'slice'; name: string; start: Expression; end: Expression; step: Expression | null };
+
+/** A word is a key name, unless a variable with text has that name when the program runs. */
+export type KeyPart = { kind: 'name'; text: string } | { kind: 'value'; value: Expression };
 
 export interface ConditionalBranch {
   condition: Expression;

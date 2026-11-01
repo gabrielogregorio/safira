@@ -1,0 +1,179 @@
+#safira 0.9
+# ⚔️ Mini RPG
+# Clique na saída. Setas ou WASD andam, Esc sai.
+# Ande contra um monstro para atacar.
+
+lista de mapa recebe "###########", "#.........#", "#.##...##.#", "#.#..#..#.#", "#...###...#", "#.#.....#.#", "###########"
+lista de monstro_x recebe 0, 0, 0
+lista de monstro_y recebe 0, 0, 0
+lista de monstro_vida recebe 0, 0, 0
+
+função iniciar() {
+    heroi_x = 2
+    heroi_y = 2
+    vida = 10
+    tem_chave = falso
+    pocao_cheia = verdadeiro
+    jogando = verdadeiro
+    mensagem = "Ache a 🗝️ e fuja pela 🚪"
+    lista de monstro_x na posição 1 = 6
+    lista de monstro_y na posição 1 = 3
+    lista de monstro_vida na posição 1 = 3
+    lista de monstro_x na posição 2 = 10
+    lista de monstro_y na posição 2 = 2
+    lista de monstro_vida na posição 2 = 3
+    lista de monstro_x na posição 3 = 5
+    lista de monstro_y na posição 3 = 6
+    lista de monstro_vida na posição 3 = 5
+}
+
+função e_parede(px, py) {
+    fileira = lista de mapa na posição py
+    retorne fileira[px:px] == "#"
+}
+
+função monstro_em(px, py) {
+    para cada m de 1 até 3 {
+        vivo = lista de monstro_vida na posição m
+        mx = lista de monstro_x na posição m
+        my = lista de monstro_y na posição m
+
+        se vivo > 0 e mx == px e my == py então {
+            retorne m
+        }
+    }
+
+    retorne 0
+}
+
+função icone(cx, cy) {
+    se cx == heroi_x e cy == heroi_y então retorne "🧙"
+    se monstro_em(cx, cy) > 0 então retorne "👹"
+    se cx == 10 e cy == 6 e tem_chave == falso então retorne "🗝️"
+    se cx == 6 e cy == 2 e pocao_cheia então retorne "🧪"
+    se cx == 2 e cy == 6 então retorne "🚪"
+    se e_parede(cx, cy) então retorne "🧱"
+    retorne "⬛"
+}
+
+função desenhar() {
+    limpe a tela
+    chave_visivel = "❌"
+    se tem_chave então chave_visivel = "✅"
+    mostre "⚔️ Mini RPG   ❤️ " + vida + "   🗝️ " + chave_visivel
+
+    para cada cy de 1 até 7 {
+        fila = ""
+
+        para cada cx de 1 até 11 {
+            fila = fila + icone(cx, cy)
+        }
+
+        mostre fila
+    }
+
+    mostre mensagem na cor amarelo
+}
+
+função atacar(alvo) {
+    golpe = um número aleatório entre 1 e 3
+    restante = lista de monstro_vida na posição alvo
+    lista de monstro_vida na posição alvo = restante - golpe
+    toque C5 por 80ms
+
+    se restante - golpe > 0 então {
+        mensagem = "Golpe de " + golpe + "! O monstro resiste."
+    } senão {
+        mensagem = "Monstro derrotado! ⚔️"
+        toque E5, G5 por 80ms
+    }
+}
+
+função andar_monstros() {
+    para cada n de 1 até 3 {
+        forca = lista de monstro_vida na posição n
+
+        se forca > 0 então {
+            passo = um número aleatório entre 1 e 4
+            ox = lista de monstro_x na posição n
+            oy = lista de monstro_y na posição n
+            se passo == 1 então ox = ox + 1
+            se passo == 2 então ox = ox - 1
+            se passo == 3 então oy = oy + 1
+            se passo == 4 então oy = oy - 1
+
+            se ox == heroi_x e oy == heroi_y então {
+                vida = vida - 1
+                mensagem = "Um monstro te acertou! 💥"
+                toque C3 por 100ms
+            } senão se e_parede(ox, oy) == falso e monstro_em(ox, oy) == 0 então {
+                lista de monstro_x na posição n = ox
+                lista de monstro_y na posição n = oy
+            }
+        }
+    }
+}
+
+função mover(dx, dy) {
+    novo_x = heroi_x + dx
+    novo_y = heroi_y + dy
+    alvo = monstro_em(novo_x, novo_y)
+
+    se alvo > 0 então {
+        atacar(alvo)
+    } senão se e_parede(novo_x, novo_y) == falso então {
+        heroi_x = novo_x
+        heroi_y = novo_y
+        mensagem = "..."
+    }
+
+    se heroi_x == 6 e heroi_y == 2 e pocao_cheia então {
+        pocao_cheia = falso
+        vida = vida + 5
+        mensagem = "Poção! +5 de vida 🧪"
+        toque G5, C6 por 80ms
+    }
+
+    se heroi_x == 10 e heroi_y == 6 e tem_chave == falso então {
+        tem_chave = verdadeiro
+        mensagem = "Você pegou a chave! 🗝️"
+        toque E5, G5, C6 por 80ms
+    }
+
+    andar_monstros()
+
+    se vida <= 0 então {
+        jogando = falso
+        mensagem = "Você caiu... Aperte Enter para tentar de novo."
+        toque E4, C4, A3 por 200ms
+    }
+
+    se heroi_x == 2 e heroi_y == 6 e tem_chave então {
+        jogando = falso
+        mensagem = "Você escapou! 🏆 Aperte Enter para jogar de novo."
+        toque C5, E5, G5, C6 por 150ms
+    }
+
+    desenhar()
+}
+
+iniciar()
+desenhar()
+
+enquanto verdadeiro {
+    se apertar Esc então interrompa
+
+    se jogando então {
+        se apertar Cima ou apertar W então mover(0, -1)
+        se apertar Baixo ou apertar S então mover(0, 1)
+        se apertar Esquerda ou apertar A então mover(-1, 0)
+        se apertar Direita ou apertar D então mover(1, 0)
+    } senão {
+        ao soltar Enter {
+            iniciar()
+            desenhar()
+        }
+    }
+
+    espere 30 ms
+}

@@ -18,7 +18,9 @@ export type RunnerRequest =
   | StartRequest
   | { type: 'input'; text: string }
   | { type: 'resume'; mode: RunMode }
-  | { type: 'breakpoints'; breakpoints: Breakpoints };
+  | { type: 'breakpoints'; breakpoints: Breakpoints }
+  | { type: 'key'; key: string; isDown: boolean }
+  | { type: 'keys-clear' };
 
 export interface OutputItem {
   inline: boolean;
@@ -38,6 +40,7 @@ export type RunnerEvent =
   | { type: 'output'; items: OutputItem[] }
   | { type: 'clear' }
   | { type: 'tone'; frequency: number; milliseconds: number }
+  | { type: 'keys-listening' }
   | { type: 'input-request'; variables: VariableSnapshot[] }
   | { type: 'paused'; file: string; line: number; variables: VariableSnapshot[] }
   | { type: 'files'; files: Record<string, string> }

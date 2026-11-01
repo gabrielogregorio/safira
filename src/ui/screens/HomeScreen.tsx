@@ -116,7 +116,7 @@ export const HomeScreen = ({
         </div>
         <p>{t('Programming in natural language, right in the browser.')}</p>
         <div className="home-settings">
-          <button type="button" className="button button-primary" onClick={onStartCreating}>
+          <button type="button" className="button button-primary" data-sound="none" onClick={onStartCreating}>
             {t('Create project')}
           </button>
           <button

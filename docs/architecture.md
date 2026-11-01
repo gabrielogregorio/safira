@@ -59,7 +59,7 @@ A new command goes in `scenarios.ts` and in all five dictionaries. It runs with 
 
 ## Lessons
 
-The course is 13 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step.
+The course is 14 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step.
 
 ```json
 { "uses": ["repeat|while"], "exact": false, "hint": "Shown after a failure", "cases": [{ "inputs": ["4"], "shows": ["8"], "hides": ["9"] }] }
@@ -69,7 +69,7 @@ The course is 13 very short lessons, each with a program to run and then a chall
 - `shows` must appear in order and `hides` must not appear. Case, accents and punctuation are forgiven unless `exact` is set.
 - A run that ends without an error gives the check on a plain step. On a challenge, `useLessonMode` runs `checkProgram` over the files of that run, and gives up on endless programs after 200,000 steps or 4 seconds.
 - Each step is a real file, `aulas/03-sua-cidade-1.safira`, so saving, breakpoints and the inspector work as usual. The folder name is translated, so each language keeps its own scripts. Progress lives in the settings as `lesson:step` and survives a change of language.
-- The code teaches, in its comments, and `ProfessorCat` only points: scenes `intro`, `read`, `play`, `write`, `input`, `result`, `farewell`. He stays inside the code field and never covers the output, travels between heights with a small random change in speed and arrival, and the angle of the arm is computed from there to the target of the scene. The pose comes from the state: `wave`, `point`, `thumbs`, `facepalm`. He is the only guide: dragging the stone makes him run, and letting it go brings him back.
+- The code teaches, in its comments, and `ProfessorCat` only points: scenes `intro`, `read`, `play`, `write`, `input`, `result`, `farewell`. He stays inside the code field and never covers the output, travels between heights with a small random change in speed and arrival, and the angle of the arm is computed from there to the target of the scene. The pose comes from the state: `wave`, `point`, `thumbs`, `facepalm`. He is the only guide.
 - `Next` stays locked until the step is done, but the lesson list is free, so nobody gets stuck.
 - `content.test.ts` proves, for every language, that each solution passes its check, that the starting code fails it, and that every example runs.
 
@@ -101,7 +101,8 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 - There is no saving by hand. Open tabs reach the project 300 ms after typing stops, on `pagehide` and when leaving. Ctrl+S only forces it.
 - `importe` looks beside the importing file first, then from the root, with or without `.safira`.
 - Notes travel from the worker as `tone` events, and `soundPlayer.tone` plays them. A rest only waits.
-- Each sound is named in `sounds.ts`. A click plays `data-sound`, text fields share a focus and a typing sound, and any clickable element has a hover sound.
+- Keys travel from `Terminal` to the worker as messages, and only while the program area has the focus. `KeyTracker` in `keys.ts` keeps what is down. Each key condition yields a `key` effect, and `RunnerSession` gives the event loop a turn there, or the messages would never arrive during a loop. Only conditions read keys, in `parseComparison`: in `espere hold segundos`, `hold` is a variable.
+- Each sound is named in `sounds.ts`. A click plays `data-sound`, text fields share a focus and a typing sound, and any clickable element has a hover sound. `data-sound="none"` silences the click of a button whose result has its own sound and arrives after a route change, as the plain click cannot step aside in time.
 
 - The look is Frutiger Aero: glass panels, glossy buttons, sky, water and aurora, with no external images.
 - `SceneBackdrop` keeps the three scenes mounted and cross fades them, so a theme changes in the background.
@@ -127,7 +128,6 @@ Settings > Delete everything removes every key of this copy from both storages, 
 - Chinese and Japanese commands need spaces between words, because nothing segments those languages. The whole-line and phrase suggestions there are short.
 - Japanese commands come before their values, as in `もし n 大なり 5 なら`, because the grammar has one order for every language.
 - `print` and `display` keep the line open, because `legacyGolden.json` records that. English content uses `show`, which ends the line.
-- Previews are not removed from `gh-pages` when a pull request closes.
 - A `.zip` does not carry the order chosen in the sidebar.
 - `R` in a note list is a rest. That was a decision, not something asked for.
 - `localStorage` does not promise a disk write at the moment of a power cut, so the last seconds can be lost.

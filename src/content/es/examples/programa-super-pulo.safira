@@ -1,0 +1,27 @@
+#safira 0.9
+# 🦘 Súper salto
+# Haz clic en la salida. Mantén Space para cargar y suelta para saltar. Esc sale.
+
+fuerza = 0
+barra = ""
+muestra "¡Mantén Space para cargar el salto!"
+
+mientras verdad {
+    si presiona Esc entonces interrumpir
+
+    si mantiene Space entonces {
+        incrementar 1 em fuerza
+        barra = barra + "🟩"
+        limpiar la pantalla
+        muestra barra
+    }
+
+    al suelta Space {
+        muestra "🦘 ¡Salto de % metros!" insertando fuerza
+        tocar C5, E5, G5 por 100ms
+        fuerza = 0
+        barra = ""
+    }
+
+    esperar 100 milisegundos
+}

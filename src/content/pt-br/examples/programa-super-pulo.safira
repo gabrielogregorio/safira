@@ -1,0 +1,27 @@
+#safira 0.9
+# 🦘 Super pulo
+# Clique na saída. Segure Space para carregar e solte para pular. Esc sai.
+
+forca = 0
+barra = ""
+mostre "Segure Space para carregar o pulo!"
+
+enquanto verdadeiro {
+    se apertar Esc então interrompa
+
+    se segurar Space então {
+        incremente 1 em forca
+        barra = barra + "🟩"
+        limpe a tela
+        mostre barra
+    }
+
+    ao soltar Space {
+        mostre "🦘 Pulo de % metros!" inserindo forca
+        toque C5, E5, G5 por 100ms
+        forca = 0
+        barra = ""
+    }
+
+    espere 100 ms
+}

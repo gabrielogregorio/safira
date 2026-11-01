@@ -186,7 +186,7 @@ describe('EditorScreen', () => {
 
     it('opens an example in its own tab', async () => {
       openProject({ [MAIN]: '' });
-      await choose('Examples', 'Lists');
+      await choose('Learn', 'Lists');
 
       expect(activeTab()).toHaveTextContent('16-listas.safira');
       expect(shownText()).toContain('list of');

@@ -1,0 +1,43 @@
+#safira 0.9
+# 🎸 Malagueña
+# Tradicional de España, sobre la cadencia andaluza.
+
+muestra "🎸"
+tocar A3, E4, A4, C5 por 110ms
+tocar E5 por 220ms
+tocar G3, D4, G4, B4 por 110ms
+tocar D5 por 220ms
+tocar F3, C4, F4, A4 por 110ms
+tocar C5 por 220ms
+tocar E3, B3, E4, G4# por 110ms
+tocar B4 por 220ms
+
+muestra "💃"
+tocar E5 por 220ms
+tocar F5, E5 por 110ms
+tocar D5 por 220ms
+tocar E5, D5 por 110ms
+tocar C5 por 220ms
+tocar D5, C5 por 110ms
+tocar B4 por 440ms
+
+muestra "🎸"
+tocar A4, B4, C5, D5 por 110ms
+tocar E5 por 220ms
+tocar D5, C5, B4, C5, A4, B4 por 110ms
+tocar G4# por 440ms
+
+muestra "💃"
+tocar E5 por 220ms
+tocar F5, E5 por 110ms
+tocar D5 por 220ms
+tocar E5, D5 por 110ms
+tocar C5 por 220ms
+tocar D5, C5 por 110ms
+tocar B4 por 440ms
+
+muestra "🎸"
+tocar E5, D5, C5, B4, A4, G4, F4 por 110ms
+tocar E4 por 550ms
+
+muestra "Fin 🎵"

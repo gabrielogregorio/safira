@@ -1,11 +1,11 @@
-export const LANGUAGE_VERSION = '1.0';
+export const LANGUAGE_VERSION = '1.1';
 
 export const LEGACY_VERSION = '0.38';
 
-// The scripts of the 0.9 series, which the bundled examples and lessons still declare.
-const PREVIOUS_VERSION = '0.9';
+// The 0.9 series is what the bundled examples and lessons still declare.
+const PREVIOUS_VERSIONS = ['0.9', '1.0'];
 
-export const SUPPORTED_VERSIONS = [LEGACY_VERSION, PREVIOUS_VERSION, LANGUAGE_VERSION];
+export const SUPPORTED_VERSIONS = [LEGACY_VERSION, ...PREVIOUS_VERSIONS, LANGUAGE_VERSION];
 
 const HEADER_PATTERN = /^#safira (\S+)[ \t]*(?:\n|$)/;
 

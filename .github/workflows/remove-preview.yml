@@ -1,0 +1,45 @@
+name: remove preview
+
+on:
+  pull_request:
+    branches: [main, dev]
+    types: [closed]
+
+permissions:
+  contents: read
+
+# The same group as the deploy, so a publish still running for this branch is cancelled first.
+concurrency:
+  group: preview-${{ github.head_ref }}
+  cancel-in-progress: true
+
+jobs:
+  remove:
+    name: Remove the app of this branch
+    # forks and Dependabot never get a preview
+    if: github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'dependabot[bot]'
+    timeout-minutes: 5
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      # Only gh-pages is checked out and nothing is installed, so no code of the pull request runs with this token.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+
+      - name: Fetch the script from the base branch
+        env:
+          BASE_REF: ${{ github.base_ref }}
+          REPOSITORY: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          curl --fail --silent --show-error --header "Authorization: Bearer $GH_TOKEN" \
+            --header 'Accept: application/vnd.github.raw' \
+            "https://api.github.com/repos/$REPOSITORY/contents/.github/scripts/remove-preview.sh?ref=$BASE_REF" \
+            --output "$RUNNER_TEMP/remove-preview.sh"
+
+      - name: Remove the preview
+        env:
+          HEAD_REF: ${{ github.head_ref }}
+        run: bash "$RUNNER_TEMP/remove-preview.sh"

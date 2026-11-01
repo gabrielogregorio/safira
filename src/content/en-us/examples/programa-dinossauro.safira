@@ -1,0 +1,103 @@
+#safira 0.9
+# 🦖 Dinosaur
+# Run it and click the output. Space or Up jump, Esc leaves.
+
+record = 0
+list of arc receive 1, 2, 2, 2, 1
+
+function restart() {
+    cactus1 = 16
+    cactus2 = 26
+    cloud = 14
+    jump = 0
+    height = 0
+    score = 0
+    alive = true
+    delay = 90
+}
+
+function block(c, level) {
+    if c == 3 and level == height then return "🦖"
+    if level == 0 and c == cactus1 then return "🌵"
+    if level == 0 and c == cactus2 then return "🌵"
+    if level == 2 and c == cloud then return "☁️"
+    return "⬛"
+}
+
+function row(level) {
+    text = ""
+
+    for each c from 1 to 16 {
+        text = text + block(c, level)
+    }
+
+    show text
+}
+
+function draw() {
+    clear
+    show "🦖 Score: " + score + "   🏆 Record: " + record
+    row(2)
+    row(1)
+    row(0)
+    show "🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫🟫"
+
+    if alive == false then show "💥 Game over! Press Enter." na cor vermelho
+}
+
+function advance() {
+    cactus1 = cactus1 - 1
+    cactus2 = cactus2 - 1
+    cloud = cloud - 1
+    score = score + 1
+
+    if cactus1 < 1 then cactus1 = cactus2 + a random number between 8 and 16
+    if cactus2 < 1 then cactus2 = cactus1 + a random number between 8 and 16
+    if cloud < 1 then cloud = 16
+
+    if jump > 0 then {
+        height = list of arc in position jump
+        jump = jump - 1
+    } else {
+        height = 0
+    }
+
+    if score % 50 == 0 and delay > 40 then {
+        delay = delay - 10
+        play C6 for 40ms
+    }
+
+    if height == 0 and cactus1 == 3 then alive = false
+    if height == 0 and cactus2 == 3 then alive = false
+
+    if alive == false then {
+        if score > record then record = score
+        play E4, C4 for 120ms
+    }
+}
+
+restart()
+draw()
+
+while true {
+    if press Esc then interrupt
+
+    if press Space or press Up then {
+        if alive and jump == 0 and height == 0 then {
+            jump = 5
+            play E5 for 30ms
+        }
+    }
+
+    if alive then {
+        advance()
+        draw()
+    } else {
+        if press Enter then {
+            restart()
+            draw()
+        }
+    }
+
+    wait delay ms
+}

@@ -14,6 +14,7 @@ const createHost = () => ({
   onInput: vi.fn(() => Promise.resolve('digitado')),
   onSleep: vi.fn(() => Promise.resolve()),
   onTone: vi.fn(),
+  onKey: vi.fn(() => Promise.resolve(false)),
   onFilesChanged: vi.fn(),
 });
 

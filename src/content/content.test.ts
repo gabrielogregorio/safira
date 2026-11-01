@@ -5,11 +5,18 @@ import { readScriptVersion } from '@/language/version';
 import { checkProgram } from '@/lessons/lessonCheck';
 import { examplesOf, findExampleByPrefix, lessonsOf, toExample } from './content';
 
-const EXAMPLE_COUNT = 34;
-const LESSON_COUNT = 13;
+const EXAMPLE_COUNT = 51;
+const LESSON_COUNT = 14;
 const MAIN_FILE = 'main.safira';
 const PROGRAM_INPUTS = ['2', '2', '2', ...Array.from({ length: 20 }, () => '0')];
 const LONG_CODE_LINES = 16;
+const RPG_LONG_WALK = 20;
+const RPG_SHORT_WALK = 8;
+const RPG_MOST_CHECKS = 5_000;
+const pressesEscape = (_mode: string, keys: string[]): boolean => keys[0] === 'escape';
+const keyTimes = (key: string, times: number): string[] => Array.from({ length: times }, () => key);
+// A song or a full game cannot be a short lesson, and neither of them is one.
+const LONG_PROGRAM = /^programa-(musica-|largada|decolagem|rpg|super-pulo|dinossauro)/;
 const LATIN_COMMAND =
   /^\s*(show|print|if|else|repeat|while|for|wait|play|function|return|try|list|add|remove|create|read|mostre|se|repita)\b/;
 const LATIN_COMMAND_LINE: Partial<Record<(typeof LOCALES)[number]['id'], RegExp>> = {
@@ -64,13 +71,43 @@ describe.each(LOCALES.map((locale) => [locale.id] as const))('content in %s', (l
 
   it.each(examples.map((example) => [example.id, example.text] as const))('%s is short and valid', async (id, text) => {
     expect(readScriptVersion(text)).toMatchObject({ version: '0.9', isDeclared: true });
-    expect(scriptLines(text).length).toBeLessThanOrEqual(LONG_CODE_LINES);
+    if (!LONG_PROGRAM.test(id)) {
+      expect(scriptLines(text).length).toBeLessThanOrEqual(LONG_CODE_LINES);
+    }
 
     if (!id.startsWith('21')) {
       expect(invalidLines(text)).toEqual([]);
     }
 
-    expect((await runScript(text, PROGRAM_INPUTS)).error).toBeNull();
+    expect((await runScript(text, PROGRAM_INPUTS, {}, pressesEscape)).error).toBeNull();
+  });
+
+  it('has a mini RPG that a player can win', async () => {
+    const example = examples.find(({ id }) => id === 'programa-rpg') as { text: string };
+    const route = [
+      ...keyTimes('arrowright', RPG_LONG_WALK),
+      ...keyTimes('arrowdown', RPG_SHORT_WALK),
+      ...keyTimes('arrowup', RPG_SHORT_WALK),
+      ...keyTimes('arrowleft', RPG_LONG_WALK),
+      ...keyTimes('arrowdown', RPG_SHORT_WALK),
+    ];
+    let frame = 0;
+    let checks = 0;
+    const { texts, error } = await runScript(example.text, [], {}, (mode, keys) => {
+      checks += 1;
+
+      if (keys[0] === 'escape') {
+        return frame >= route.length || checks > RPG_MOST_CHECKS;
+      }
+
+      const isNext = mode === 'press' && keys[0] === route[frame];
+      frame += isNext ? 1 : 0;
+
+      return isNext;
+    });
+
+    expect(error).toBeNull();
+    expect(texts.at(-1)).toContain('🏆');
   });
 
   it('only teaches code that runs', async () => {
