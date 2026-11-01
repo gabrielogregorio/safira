@@ -2916,13 +2916,12 @@ html.snap-return #root {
     max-width: 56px;
   }
 
-  .modal-backdrop {
-    align-items: flex-end;
+  .modal-backdrop:has(.new-project),
+  .modal-backdrop:has(.vision-options) {
     padding: 0;
   }
 
   .modal {
-    border-radius: 18px 18px 0 0;
     max-height: 85dvh;
     max-width: none;
   }
