@@ -2700,6 +2700,18 @@ html.snap-return #root {
 }
 
 @media (max-width: 768px) {
+  .project-name {
+    flex: 0 0 100%;
+  }
+
+  .project-row > .button {
+    flex: 1 1 0;
+    justify-content: center;
+    min-width: 0;
+    padding-inline: 6px;
+    text-align: center;
+  }
+
   .home-settings > .button {
     flex: 1 1 0;
     font-size: 0.9rem;
