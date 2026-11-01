@@ -6,9 +6,10 @@ import { soundPlayer } from '@/ui/sound/sounds';
 import { visionHint, visionLabel } from '@/ui/visionLabels';
 import { Modal } from './Modal';
 
-interface VisionSettingsProps {
+interface SettingsDialogProps {
   vision: VisionMode;
   onChange: (vision: VisionMode) => void;
+  onEraseEverything: () => void;
 }
 
 const GEAR_TEETH = [0, 45, 90, 135];
@@ -48,11 +49,13 @@ const GearOrb = () => {
   );
 };
 
-export const VisionSettings = ({ vision, onChange }: VisionSettingsProps) => {
+export const SettingsDialog = ({ vision, onChange, onEraseEverything }: SettingsDialogProps) => {
   const t = useTranslation();
   const id = useId();
   const [isOpen, setIsOpen] = useState(false);
-  const label = t('Accessibility');
+  const [isConfirming, setIsConfirming] = useState(false);
+  const label = t('Settings');
+  const accessibility = t('Accessibility');
 
   return (
     <>
@@ -60,7 +63,7 @@ export const VisionSettings = ({ vision, onChange }: VisionSettingsProps) => {
         type="button"
         className="orb-toggle settings-orb"
         aria-label={label}
-        title={`${label}: ${visionLabel(t, vision)}`}
+        title={`${accessibility}: ${visionLabel(t, vision)}`}
         aria-haspopup="dialog"
         onClick={() => {
           setIsOpen(true);
@@ -73,7 +76,8 @@ export const VisionSettings = ({ vision, onChange }: VisionSettingsProps) => {
           onClose={() => {
             setIsOpen(false);
           }}>
-          <div className="vision-options" role="radiogroup" aria-label={label}>
+          <h3 className="settings-title">{accessibility}</h3>
+          <div className="vision-options" role="radiogroup" aria-label={accessibility}>
             {VISION_MODES.map((mode) => (
               <label key={mode} className="vision-option">
                 <input
@@ -98,6 +102,44 @@ export const VisionSettings = ({ vision, onChange }: VisionSettingsProps) => {
                 </span>
               </label>
             ))}
+          </div>
+          <h3 className="settings-title">{t('Data')}</h3>
+          <button
+            type="button"
+            className="button button-stop"
+            data-sound="alert"
+            onClick={() => {
+              setIsConfirming(true);
+            }}>
+            {t('Delete everything')}
+          </button>
+        </Modal>
+      ) : null}
+      {isConfirming ? (
+        <Modal
+          openSound="alert"
+          title={t('Delete everything?')}
+          onClose={() => {
+            setIsConfirming(false);
+          }}>
+          <p>
+            {t(
+              'All projects, settings, fish and lesson progress in this browser will be deleted. This cannot be undone.',
+            )}
+          </p>
+          <div className="form-row">
+            <button
+              type="button"
+              className="button"
+              data-autofocus
+              onClick={() => {
+                setIsConfirming(false);
+              }}>
+              {t('Cancel')}
+            </button>
+            <button type="button" className="button button-stop" data-sound="delete" onClick={onEraseEverything}>
+              {t('Delete everything')}
+            </button>
           </div>
         </Modal>
       ) : null}

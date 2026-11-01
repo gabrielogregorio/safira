@@ -16,7 +16,8 @@ import { CloseButton } from '@/ui/components/CloseButton';
 import { GlobeWallpaper } from '@/ui/components/GlobeWallpaper';
 import { LanguageToggle } from '@/ui/components/LanguageToggle';
 import { SceneBackdrop } from '@/ui/components/SceneBackdrop';
-import { VisionSettings } from '@/ui/components/VisionSettings';
+import { SettingsDialog } from '@/ui/components/SettingsDialog';
+import { eraseEverything } from '@/settings/eraseEverything';
 import { SoundToggle } from '@/ui/components/SoundToggle';
 import { themeAtPhase } from '@/ui/sky/skyClock';
 import { useSkyClock } from '@/ui/sky/useSkyClock';
@@ -341,8 +342,13 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
             }}
             preferenceToggles={preferenceToggles}
             settingsButton={
-              <VisionSettings
+              <SettingsDialog
                 vision={settings.vision}
+                onEraseEverything={() => {
+                  eraseEverything();
+                  window.location.hash = '#/';
+                  window.location.reload();
+                }}
                 onChange={(vision) => {
                   changeSettings({ vision });
                 }}

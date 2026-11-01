@@ -894,6 +894,15 @@ select {
   transform: rotate(90deg);
 }
 
+.settings-title {
+  font-size: 1rem;
+  margin: 12px 0 8px;
+}
+
+.settings-title:first-child {
+  margin-top: 0;
+}
+
 .vision-options {
   display: grid;
   gap: 10px;

@@ -64,7 +64,7 @@ const VISION_NAMES = [
 ];
 
 const chooseVision = async (page: Page, name: string): Promise<void> => {
-  await page.getByRole('button', { name: 'Accessibility' }).click();
+  await page.getByRole('button', { name: 'Settings' }).click();
   await page.getByRole('radio', { name }).check();
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();

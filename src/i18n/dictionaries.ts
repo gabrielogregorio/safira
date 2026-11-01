@@ -1,5 +1,11 @@
 export const dictionaries = {
   'pt-br': {
+    Settings: 'Configurações',
+    Data: 'Dados',
+    'Delete everything': 'Apagar tudo',
+    'Delete everything?': 'Apagar tudo?',
+    'All projects, settings, fish and lesson progress in this browser will be deleted. This cannot be undone.':
+      'Todos os projetos, configurações, peixes e o progresso das aulas neste navegador serão apagados. Isso não pode ser desfeito.',
     'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
       'Chega! Já ensinei demais. Se vira olhando os exemplos no menu. Adeus, para sempre.',
     'Type your answer here and press Enter.': 'Digite sua resposta aqui e aperte Enter.',
@@ -191,6 +197,12 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   es: {
+    Settings: 'Configuración',
+    Data: 'Datos',
+    'Delete everything': 'Borrar todo',
+    'Delete everything?': '¿Borrar todo?',
+    'All projects, settings, fish and lesson progress in this browser will be deleted. This cannot be undone.':
+      'Se borrarán todos los proyectos, configuraciones, peces y el progreso de las clases en este navegador. Esto no se puede deshacer.',
     'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
       '¡Basta! Ya enseñé demasiado. Arréglatelas con los ejemplos del menú. Adiós, para siempre.',
     'Type your answer here and press Enter.': 'Escribe tu respuesta aquí y pulsa Enter.',
@@ -383,6 +395,12 @@ export const dictionaries = {
     Programs: 'Programas',
   },
   'zh-cn': {
+    Settings: '设置',
+    Data: '数据',
+    'Delete everything': '全部删除',
+    'Delete everything?': '全部删除吗?',
+    'All projects, settings, fish and lesson progress in this browser will be deleted. This cannot be undone.':
+      '此浏览器中的所有项目、设置、鱼和课程进度都将被删除。此操作无法撤销。',
     'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
       '够了!我教得够多了。自己去看菜单里的示例吧。永别了。',
     'Type your answer here and press Enter.': '在这里输入答案,然后按 Enter。',
@@ -569,6 +587,12 @@ export const dictionaries = {
     Programs: '程序',
   },
   ja: {
+    Settings: '設定',
+    Data: 'データ',
+    'Delete everything': 'すべて削除',
+    'Delete everything?': 'すべて削除しますか?',
+    'All projects, settings, fish and lesson progress in this browser will be deleted. This cannot be undone.':
+      'このブラウザのプロジェクト、設定、魚、レッスンの進み具合がすべて削除されます。元に戻せません。',
     'Enough! I taught you too much already. Figure it out with the Examples menu. Goodbye, forever.':
       'もういい!教えすぎました。あとはメニューの例を見て自分でやりなさい。永遠にさようなら。',
     'Type your answer here and press Enter.': 'ここに答えを入力して Enter を押しましょう。',
