@@ -871,11 +871,19 @@ select {
 
 .home,
 .vision-options,
-.modal-header {
+.modal-header,
+.toolbar,
+.tab-bar,
+.file-sidebar,
+.inspector,
+.status-bar,
+.mobile-panels {
   user-select: none;
 }
 
-.home input {
+.home input,
+.file-sidebar input,
+.inspector input {
   user-select: text;
 }
 
