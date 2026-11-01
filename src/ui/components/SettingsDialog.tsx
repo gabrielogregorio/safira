@@ -137,7 +137,7 @@ export const SettingsDialog = ({ vision, onChange, onEraseEverything }: Settings
               }}>
               {t('Cancel')}
             </button>
-            <button type="button" className="button button-stop" data-sound="delete" onClick={onEraseEverything}>
+            <button type="button" className="button button-stop" data-sound="fingerSnap" onClick={onEraseEverything}>
               {t('Delete everything')}
             </button>
           </div>

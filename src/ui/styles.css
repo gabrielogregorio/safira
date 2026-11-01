@@ -894,6 +894,13 @@ select {
   transform: rotate(90deg);
 }
 
+.snap-devour {
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 195;
+}
+
 .snap-dust {
   inset: 0;
   pointer-events: none;
@@ -902,7 +909,7 @@ select {
 }
 
 .snap-dark {
-  animation: snap-dark 700ms ease-in both;
+  animation: snap-dark 300ms ease-in both;
   background: #000000;
   inset: 0;
   position: fixed;
@@ -910,7 +917,7 @@ select {
 }
 
 html.snap-return #root {
-  animation: snap-return 1600ms ease-out both;
+  animation: snap-return 5000ms ease-in-out both;
 }
 
 @keyframes snap-dark {

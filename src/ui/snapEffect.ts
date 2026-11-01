@@ -26,14 +26,36 @@ const GRAINS_PER_SQUARE_PIXEL = 0.012;
 const FEWEST_GRAINS = 6;
 const LONGEST_DELAY_MILLISECONDS = 1700;
 const FADE_MILLISECONDS = 800;
-const DARK_FADE_MILLISECONDS = 700;
-const DUST_MILLISECONDS = 3000;
+const DARK_FADE_MILLISECONDS = 300;
+const DUST_MILLISECONDS = 4200;
 const MILLISECONDS_PER_SECOND = 1000;
 const RETURN_KEY = 'safira.snap.return';
+const CELL_PIXELS = 18;
+const DEVOUR_MILLISECONDS = 2600;
+const HOLE_COUNT = 16;
+const DELAY_NOISE = 0.14;
+const GRAINS_PER_CELL = 0.5;
 
 const CONTAINERS = '.home-hero, .home-section, .modal, .scenery';
 
 const isPainted = (color: string): boolean => color !== 'transparent' && color !== 'rgba(0, 0, 0, 0)';
+
+/**
+ * When each cell of the screen goes black. Holes open at random places and grow until they meet,
+ * so the whole screen is eaten in parts and nothing is left. Values go from 0 to 1.
+ */
+export const planDevour = (columns: number, rows: number, random: () => number = Math.random): number[] => {
+  const holes = Array.from({ length: HOLE_COUNT }, () => ({ x: random() * columns, y: random() * rows }));
+  const distances = Array.from({ length: columns * rows }, (_cell, index) => {
+    const x = index % columns;
+    const y = Math.floor(index / columns);
+
+    return Math.min(...holes.map((hole) => Math.hypot(hole.x - x, hole.y - y))) + random() * DELAY_NOISE * columns;
+  });
+  const farthest = Math.max(...distances, 1);
+
+  return distances.map((distance) => distance / farthest);
+};
 
 /** Grains for one part of the page. Pure, so the amounts can be tested without a canvas. */
 export const planGrains = (part: Crumbling, room: number, random: () => number = Math.random): DustGrain[] => {
@@ -138,6 +160,70 @@ const blowDust = (grains: DustGrain[]): void => {
   requestAnimationFrame(draw);
 };
 
+const skyGrainColors = (): string[] => {
+  const style = getComputedStyle(document.documentElement);
+
+  return ['--color-accent', '--color-border', '--color-text'].map((name) => style.getPropertyValue(name).trim());
+};
+
+// The sky and everything else behind the panels goes too: a black canvas eats the screen cell by cell.
+const devourScreen = (): DustGrain[] => {
+  const canvas = document.createElement('canvas');
+  canvas.className = 'snap-devour';
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  document.body.append(canvas);
+  const context = canvas.getContext('2d');
+  const columns = Math.ceil(canvas.width / CELL_PIXELS);
+  const rows = Math.ceil(canvas.height / CELL_PIXELS);
+  const delays = planDevour(columns, rows).map((delay) => delay * DEVOUR_MILLISECONDS);
+  const cells = delays
+    .map((delay, index) => ({
+      delay,
+      x: (index % columns) * CELL_PIXELS,
+      y: Math.floor(index / columns) * CELL_PIXELS,
+    }))
+    .sort((first, second) => first.delay - second.delay);
+  const startedAt = performance.now();
+  let next = 0;
+
+  const draw = (now: number): void => {
+    if (context === null) {
+      return;
+    }
+
+    context.fillStyle = '#000000';
+
+    while (next < cells.length && cells[next].delay <= now - startedAt) {
+      context.fillRect(cells[next].x, cells[next].y, CELL_PIXELS, CELL_PIXELS);
+      next += 1;
+    }
+
+    if (next < cells.length) {
+      requestAnimationFrame(draw);
+    }
+  };
+
+  requestAnimationFrame(draw);
+  const colors = skyGrainColors();
+
+  return cells
+    .filter(() => Math.random() < GRAINS_PER_CELL)
+    .flatMap((cell, index) =>
+      planGrains(
+        {
+          left: cell.x,
+          top: cell.y,
+          width: CELL_PIXELS,
+          height: CELL_PIXELS,
+          color: colors[index % colors.length],
+          delay: cell.delay,
+        },
+        1,
+      ),
+    );
+};
+
 const wait = (milliseconds: number): Promise<void> =>
   new Promise((resolve) => {
     setTimeout(resolve, milliseconds);
@@ -150,7 +236,7 @@ const fallIntoTheDark = async (): Promise<void> => {
   await wait(DARK_FADE_MILLISECONDS);
 };
 
-/** Half of everything turns to dust, then the other half, and the screen goes dark. */
+/** Everything on the screen turns to dust in parts, and only black is left. */
 export const snapAway = async (): Promise<void> => {
   if (prefersMotion()) {
     const parts = pickParts();
@@ -163,8 +249,8 @@ export const snapAway = async (): Promise<void> => {
     });
 
     parts.forEach(crumble);
-    blowDust(grains);
-    await wait(LONGEST_DELAY_MILLISECONDS + FADE_MILLISECONDS);
+    blowDust([...grains, ...devourScreen()]);
+    await wait(DEVOUR_MILLISECONDS);
   }
 
   await fallIntoTheDark();

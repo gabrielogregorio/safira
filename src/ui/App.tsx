@@ -39,8 +39,9 @@ import { EditorScreen } from '@/ui/screens/EditorScreen';
 import { HomeScreen } from '@/ui/screens/HomeScreen';
 import { printConsoleInvite } from '@/ui/consoleInvite';
 
-// With the dust before it and the fade in after it, the site comes back in about 5 seconds.
-const DARK_PAUSE_MILLISECONDS = 1200;
+// A moment of plain black before the reset screen starts its fade in.
+const DARK_PAUSE_MILLISECONDS = 1000;
+const AFTER_SNAP_MILLISECONDS = 350;
 
 interface AppProps {
   createWorker?: WorkerFactory;
@@ -351,13 +352,16 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
                 onEraseEverything={() => {
                   eraseEverything();
                   markReturnFromSnap();
-                  void soundPlayer.play('snapDust');
-                  void snapAway().then(() => {
-                    setTimeout(() => {
-                      window.location.hash = '#/';
-                      window.location.reload();
-                    }, DARK_PAUSE_MILLISECONDS);
-                  });
+                  // The fingers snap first, and only then the screen starts to crumble.
+                  setTimeout(() => {
+                    void soundPlayer.play('snapDust');
+                    void snapAway().then(() => {
+                      setTimeout(() => {
+                        window.location.hash = '#/';
+                        window.location.reload();
+                      }, DARK_PAUSE_MILLISECONDS);
+                    });
+                  }, AFTER_SNAP_MILLISECONDS);
                 }}
                 onChange={(vision) => {
                   changeSettings({ vision });
