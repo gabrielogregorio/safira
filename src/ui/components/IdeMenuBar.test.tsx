@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { DEFAULT_SETTINGS } from '@/settings/settings';
+import { DEFAULT_SETTINGS, FONT_SIZE_STEP } from '@/settings/settings';
 import { IdeMenuBar } from './IdeMenuBar';
 
 const setup = (isRunning = false) => {
@@ -86,6 +86,6 @@ describe('IdeMenuBar', () => {
     const { onChangeSettings } = setup();
     await choose('Interface', 'Increase font');
 
-    expect(onChangeSettings).toHaveBeenCalledWith({ fontSize: DEFAULT_SETTINGS.fontSize + 1 });
+    expect(onChangeSettings).toHaveBeenCalledWith({ fontSize: DEFAULT_SETTINGS.fontSize + FONT_SIZE_STEP });
   });
 });

@@ -1375,6 +1375,7 @@ html.snap-return #root {
 }
 
 .tab-bar {
+  align-items: center;
   display: flex;
   flex: none;
   gap: 4px;
@@ -1674,8 +1675,9 @@ html.snap-return #root {
 }
 
 .font-steps {
-  display: none;
+  display: flex;
   gap: 6px;
+  margin-left: auto;
 }
 
 .font-step {
@@ -1707,10 +1709,6 @@ html.snap-return #root {
   font-weight: 600;
   gap: 6px;
   padding: 0 8px;
-}
-
-.suggestions-toggle-first {
-  margin-left: auto;
 }
 
 .suggestions-toggle input {
@@ -2730,11 +2728,11 @@ html.snap-return #root {
   }
 
   .font-steps {
-    display: flex;
+    margin-left: 0;
   }
 
-  .tab-bar {
-    align-items: center;
+  .suggestions-toggle-first {
+    margin-left: auto;
   }
 
   .project-name {
@@ -2811,8 +2809,9 @@ html.snap-return #root {
 
   input,
   select,
+  /* Below 16px the iPhone zooms into the field, so the font buttons stop there. */
   .code-editor .cm-content {
-    font-size: 16px;
+    font-size: max(16px, 1em);
   }
 
   .toolbar-actions {
