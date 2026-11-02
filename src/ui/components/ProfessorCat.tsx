@@ -2,7 +2,7 @@ import type { JSX } from 'react';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import Markdown from 'react-markdown';
 import { useTranslation } from '@/i18n/i18n';
-import { stepKey } from '@/lessons/lessonPlace';
+import { challengeStatement, stepKey } from '@/lessons/lessonPlace';
 import type { LessonMode } from '@/ui/hooks/useLessonMode';
 import { storageKey } from '@/settings/storageKey';
 import { prefersMotion } from '@/ui/motion';
@@ -35,7 +35,8 @@ const TRIP_VARIATION_MILLISECONDS = 750;
 const HEIGHT_IN_FIELD: Record<Scene, number> = {
   intro: 0.2,
   read: 0.2,
-  write: 0.2,
+  // Low in the field, to leave room for the answer under the challenge.
+  write: 0.75,
 
   play: 0.08,
   input: 0.08,
@@ -464,7 +465,7 @@ export const ProfessorCat = ({ lesson, hasError, isWaitingInput, onAbandon }: Pr
       case 'play':
         return t('Press ▶');
       case 'write':
-        return t('Write your answer and press ▶ Run.');
+        return challengeStatement(lesson.step.code);
       case 'input':
         return t('Type your answer here and press Enter.');
       case 'farewell':

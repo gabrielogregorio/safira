@@ -4,6 +4,14 @@ import type { LessonPlace } from '@/settings/settings';
 const SCRIPT_EXTENSION = '.safira';
 const LESSON_PREFIX = /^aula-/;
 
+/** The comments that open a challenge, as one sentence for the cat to say. */
+export const challengeStatement = (code: string): string =>
+  code
+    .split('\n')
+    .filter((_line, index, lines) => lines.slice(0, index + 1).every((line) => line.startsWith('#')))
+    .map((line) => line.replace(/^#\s*/, ''))
+    .join(' ');
+
 export const stepKey = ({ lessonId, step }: LessonPlace): string => `${lessonId}:${String(step)}`;
 
 export const isStepDone = (progress: string[], place: LessonPlace): boolean => progress.includes(stepKey(place));

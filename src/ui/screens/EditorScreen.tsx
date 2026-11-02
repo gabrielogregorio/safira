@@ -796,6 +796,7 @@ export const EditorScreen = ({
           errorLine={failure?.file === activeFile ? failure.line : null}
           onChange={updateActiveText}
           onToggleBreakpoint={toggleBreakpoint}
+          startAtEnd={lesson.isOnStepFile && lesson.step?.check !== null}
           onCursorChange={(line, column) => {
             setCursor({ line, column });
           }}

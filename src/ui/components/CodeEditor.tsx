@@ -24,6 +24,8 @@ interface CodeEditorProps {
   onChange: (value: string) => void;
   onToggleBreakpoint: (line: number) => void;
   onCursorChange: (line: number, column: number) => void;
+  /** Puts the cursor after the last line, where a lesson challenge is answered. */
+  startAtEnd?: boolean;
 }
 
 interface LineMarks {
@@ -158,6 +160,7 @@ export const CodeEditor = ({
   onChange,
   onToggleBreakpoint,
   onCursorChange,
+  startAtEnd = false,
 }: CodeEditorProps) => {
   const hostRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<EditorView | null>(null);
@@ -171,10 +174,16 @@ export const CodeEditor = ({
 
   useEffect(() => {
     const host = hostRef.current as HTMLElement;
+    const reportCursor = (state: EditorState): void => {
+      const head = state.selection.main.head;
+      const line = state.doc.lineAt(head);
+      callbacks.current.onCursorChange(line.number, head - line.from + 1);
+    };
     const view = new EditorView({
       parent: host,
       state: EditorState.create({
         doc: value,
+        selection: startAtEnd ? { anchor: value.length } : undefined,
         extensions: [
           ghostCompartment.current.of(suggestions ? ghostText(locale, scripts) : []),
           history(),
@@ -210,15 +219,17 @@ export const CodeEditor = ({
             }
 
             if (update.selectionSet || update.docChanged) {
-              const head = update.state.selection.main.head;
-              const line = update.state.doc.lineAt(head);
-              callbacks.current.onCursorChange(line.number, head - line.from + 1);
+              reportCursor(update.state);
             }
           }),
         ],
       }),
     });
     viewRef.current = view;
+
+    if (startAtEnd) {
+      reportCursor(view.state);
+    }
 
     if (!isTouchScreen()) {
       view.focus();
@@ -236,9 +247,16 @@ export const CodeEditor = ({
     const view = viewRef.current;
 
     if (view !== null && view.state.doc.toString() !== value) {
-      view.dispatch({ changes: { from: 0, to: view.state.doc.length, insert: value } });
+      view.dispatch({
+        changes: { from: 0, to: view.state.doc.length, insert: value },
+        selection: startAtEnd ? { anchor: value.length } : undefined,
+      });
+
+      if (startAtEnd && !isTouchScreen()) {
+        view.focus();
+      }
     }
-  }, [value]);
+  }, [startAtEnd, value]);
 
   useEffect(() => {
     viewRef.current?.dispatch({ effects: setBreakpoints.of(breakpoints) });

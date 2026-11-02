@@ -10,6 +10,7 @@
 - The home screen links to GitHub and to the wiki at the bottom, each with its own sound.
 - The top menu of the IDE has its own click sound.
 - Lesson files have numbers in their names, so no language shows names in Portuguese, and untouched lessons of another language leave the project when the language changes.
+- In a lesson challenge the cat says what to do, and the cursor waits on an empty line below the comment.
 
 ## 1.1.0
 

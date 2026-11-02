@@ -104,7 +104,7 @@ describe('lesson mode', () => {
   it('refuses a wrong answer, explains it, and accepts the solution', async () => {
     await enterLessonMode();
     await finishExample();
-    expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
+    expect(screen.getAllByText(/^Challenge: /).length).toBeGreaterThan(0);
 
     await run();
 

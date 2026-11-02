@@ -31,7 +31,8 @@ const parseStep = (section: string): LessonStep => {
   return {
     title: title.trim(),
     text: body.replace(FENCE, '').trim(),
-    code: readFence(body, 'safira') ?? '',
+    // A challenge ends on an empty line, where the answer starts.
+    code: `${readFence(body, 'safira') ?? ''}${check === null ? '' : '\n'}`,
     solution: readFence(body, 'solution'),
     check: check === null ? null : (JSON.parse(check) as LessonCheck),
   };

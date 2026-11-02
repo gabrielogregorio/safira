@@ -27,7 +27,7 @@ export const untouchedOldLessonFiles = (files: Record<string, string>, current: 
           paths.push(lessonFilePath(folder, place));
         }
 
-        return paths.filter((path) => files[path] === addScriptVersion(code));
+        return paths.filter((path) => files[path]?.trimEnd() === addScriptVersion(code).trimEnd());
       }),
     );
   });
