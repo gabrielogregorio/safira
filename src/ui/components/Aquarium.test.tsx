@@ -77,7 +77,35 @@ describe('Aquarium', () => {
     expect(screen.getByRole('dialog')).not.toHaveClass('is-idle');
 
     act(() => {
-      vi.advanceTimersByTime(3000);
+      vi.advanceTimersByTime(4999);
+    });
+
+    expect(screen.getByRole('dialog')).not.toHaveClass('is-idle');
+
+    act(() => {
+      vi.advanceTimersByTime(1);
+    });
+
+    expect(screen.getByRole('dialog')).toHaveClass('is-idle');
+    vi.useRealTimers();
+  });
+
+  it('brings the feed button back with a click and hides it again after 5 seconds without one', () => {
+    vi.useFakeTimers();
+    setup();
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
+    });
+
+    expect(screen.getByRole('dialog')).toHaveClass('is-idle');
+
+    fireEvent.pointerDown(window);
+
+    expect(screen.getByRole('dialog')).not.toHaveClass('is-idle');
+
+    act(() => {
+      vi.advanceTimersByTime(5000);
     });
 
     expect(screen.getByRole('dialog')).toHaveClass('is-idle');

@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 
-const IDLE_MILLISECONDS = 3000;
+const IDLE_MILLISECONDS = 5000;
 
-// For screens that can be a wallpaper: the close button leaves when nobody is moving the mouse.
+// For screens that can be a wallpaper: the buttons leave when nobody moves or clicks the mouse.
 export const useIdle = (): boolean => {
   const [isIdle, setIsIdle] = useState(false);
 
@@ -16,11 +16,13 @@ export const useIdle = (): boolean => {
     };
 
     window.addEventListener('pointermove', wake);
+    window.addEventListener('pointerdown', wake);
     window.addEventListener('keydown', wake);
 
     return () => {
       clearTimeout(timer);
       window.removeEventListener('pointermove', wake);
+      window.removeEventListener('pointerdown', wake);
       window.removeEventListener('keydown', wake);
     };
   }, []);

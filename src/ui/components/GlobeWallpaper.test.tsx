@@ -1,7 +1,7 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import { GlobeWallpaper } from './GlobeWallpaper';
 
-const IDLE_MILLISECONDS = 3000;
+const IDLE_MILLISECONDS = 5000;
 
 describe('GlobeWallpaper', () => {
   beforeEach(() => {
