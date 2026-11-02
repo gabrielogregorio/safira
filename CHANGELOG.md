@@ -11,6 +11,7 @@
 - The top menu of the IDE has its own click sound.
 - Lesson files have numbers in their names, so no language shows names in Portuguese, and untouched lessons of another language leave the project when the language changes.
 - In a lesson challenge the cat says what to do, and the cursor waits on an empty line below the comment.
+- In the aquarium and the globe wallpaper, Feed the fish and the close button leave after 5 seconds without moving or clicking the mouse.
 
 ## 1.1.0
 
