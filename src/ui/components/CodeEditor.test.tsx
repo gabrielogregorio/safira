@@ -37,6 +37,23 @@ describe('CodeEditor', () => {
     expect(content()).toHaveFocus();
   });
 
+  it('puts the cursor after the last line of a challenge, also when the code comes back', () => {
+    const onCursorChange = vi.fn();
+    const props = { ...baseProps, onCursorChange, startAtEnd: true };
+    const { rerender } = render(<CodeEditor {...props} value={'# Challenge\n'} />);
+    const view = EditorView.findFromDOM(content() as HTMLElement);
+
+    expect(view?.state.selection.main.head).toBe(12);
+    expect(onCursorChange).toHaveBeenCalledExactlyOnceWith(2, 1);
+
+    view?.dispatch({ selection: { anchor: 0 } });
+    (document.activeElement as HTMLElement).blur();
+    rerender(<CodeEditor {...props} value={'# Other challenge\n'} />);
+
+    expect(view?.state.selection.main.head).toBe(18);
+    expect(content()).toHaveFocus();
+  });
+
   it('does not open the keyboard on a touch screen', () => {
     vi.stubGlobal('matchMedia', () => ({ matches: true, addListener: vi.fn(), removeListener: vi.fn() }));
     render(<CodeEditor {...baseProps} value="" />);

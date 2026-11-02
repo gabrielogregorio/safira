@@ -15,8 +15,7 @@ show text
 ## Challenge: Diary
 
 ```safira
-# Challenge: Create the file diary.
-# txt and write Today I learned Safira in it.
+# Challenge: Create the file diary.txt and write Today I learned Safira in it.
 # Then read the file and show what is written.
 
 ```

@@ -55,6 +55,10 @@ describe('parseLesson without the optional parts', () => {
     expect(parseLesson('aula-01', 'Sem título').title).toBe('aula-01');
   });
 
+  it('ends a challenge on an empty line for the answer', () => {
+    expect(parseLesson('aula-01', SOURCE).steps[1].code).toBe('# aqui\n');
+  });
+
   it('leaves the code empty in a step that has none', () => {
     expect(parseLesson('aula-01', '# Título\n\n## Passo\n\nSó texto.').steps[0].code).toBe('');
   });

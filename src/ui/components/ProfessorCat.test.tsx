@@ -1,30 +1,11 @@
 import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { lessonsOf } from '@/content/content';
-import type * as i18n from '@/i18n/i18n';
-import type { Translate } from '@/i18n/i18n';
 import type { LessonMode } from '@/ui/hooks/useLessonMode';
 import { planTrip, ProfessorCat } from './ProfessorCat';
 
-const WRITE_SPEECH = 'Write your answer and press ▶ Run.';
-
-// No translated speech has code in it today, so the backtick handling needs its own line of text.
-const translation = vi.hoisted(() => ({ writeSpeech: null as string | null }));
-
-vi.mock('@/i18n/i18n', async (importOriginal) => {
-  const actual = await importOriginal<typeof i18n>();
-
-  return {
-    ...actual,
-    useTranslation: (): Translate => {
-      const t = actual.useTranslation();
-
-      return (text, values) => (text === WRITE_SPEECH ? (translation.writeSpeech ?? t(text, values)) : t(text, values));
-    },
-  };
-});
-
 const lessons = lessonsOf('en-us');
+const WRITE_SPEECH = 'Challenge: Show the text Hello, Safira! on the screen.';
 
 const lessonMode = (changes: Partial<LessonMode> = {}): LessonMode => ({
   lessons,
@@ -84,7 +65,6 @@ describe('ProfessorCat', () => {
     vi.useRealTimers();
     vi.unstubAllGlobals();
     vi.restoreAllMocks();
-    translation.writeSpeech = null;
     boxes.splice(0).forEach((element) => {
       element.remove();
     });
@@ -108,7 +88,7 @@ describe('ProfessorCat', () => {
     sessionStorage.setItem('safira.cat.met', 'true');
     render(<ProfessorCat lesson={lessonMode()} hasError={false} isWaitingInput={false} onAbandon={vi.fn()} />);
 
-    expect(screen.getByText('Write your answer and press ▶ Run.')).toBeInTheDocument();
+    expect(screen.getByText(WRITE_SPEECH)).toBeInTheDocument();
     expect(screen.queryByRole('heading')).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Continue' })).not.toBeInTheDocument();
   });
@@ -144,7 +124,7 @@ describe('ProfessorCat', () => {
     );
 
     expect(screen.getByText('Press ▶')).toBeInTheDocument();
-    expect(screen.queryByText('Write your answer and press ▶ Run.')).not.toBeInTheDocument();
+    expect(screen.queryByText(WRITE_SPEECH)).not.toBeInTheDocument();
     expect(document.documentElement.dataset['spotlight']).toBe('run');
   });
 
@@ -243,8 +223,8 @@ describe('ProfessorCat', () => {
   });
 
   it.each([
-    ['right', new DOMRect(1000, 400, 400, 20), '23deg'],
-    ['left', new DOMRect(100, 400, 100, 20), '12deg'],
+    ['right', new DOMRect(1000, 664, 400, 20), '23deg'],
+    ['left', new DOMRect(100, 664, 100, 20), '12deg'],
   ])('turns %s and aims the arm at the target', (facing, target, angle) => {
     sessionStorage.setItem('safira.cat.met', 'true');
     vi.spyOn(Math, 'random').mockReturnValue(0.5);
@@ -253,7 +233,7 @@ describe('ProfessorCat', () => {
     const { container } = renderCat();
     const cat = catElement(container);
 
-    expect(cat.style.transform).toBe('translate(769px, 208px)');
+    expect(cat.style.transform).toBe('translate(769px, 472px)');
     expect(cat.dataset['facing']).toBe(facing);
     expect(cat.style.getPropertyValue('--point-angle')).toBe(angle);
   });
@@ -298,9 +278,8 @@ describe('ProfessorCat', () => {
 
   it('hides a backtick until its pair is typed', () => {
     sessionStorage.setItem('safira.cat.met', 'true');
-    translation.writeSpeech = 'Use `show` now';
     withMotion();
-    const { container } = renderCat();
+    const { container } = renderCat({ step: { ...lessons[0].steps[1], code: '# Use `show` now' } });
     const typed = container.querySelector('.lesson-brief-text');
 
     advance(7 * 24);

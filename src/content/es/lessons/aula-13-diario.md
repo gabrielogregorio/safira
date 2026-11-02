@@ -15,8 +15,7 @@ muestra texto
 ## Desafío: Diario
 
 ```safira
-# Desafío: Crea el archivo diario.
-# txt y escribe en él Hoy aprendi Safira.
+# Desafío: Crea el archivo diario.txt y escribe en él Hoy aprendi Safira.
 # Después lee el archivo y muestra lo que dice.
 
 ```

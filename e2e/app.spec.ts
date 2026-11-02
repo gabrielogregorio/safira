@@ -910,7 +910,8 @@ test.describe('lesson mode', () => {
     await expect(page.locator('.cat-bubble')).toBeVisible({ timeout: TYPING_TIMEOUT });
     await page.getByRole('button', { name: 'Run', exact: true }).click();
     await page.getByRole('button', { name: 'Show the solution' }).click({ timeout: TYPING_TIMEOUT });
-    await page.getByRole('button', { name: 'Run', exact: true }).click();
+    // By keyboard: the cat lights the button, and its endless pulse never counts as stable for a click.
+    await page.keyboard.press('Control+Enter');
     await expect(page.locator('.cat-bubble')).toContainText('Correct! Challenge complete.', {
       timeout: TYPING_TIMEOUT,
     });

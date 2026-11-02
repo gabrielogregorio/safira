@@ -3,6 +3,7 @@ import {
   firstPlace,
   isLessonDone,
   isStepDone,
+  challengeStatement,
   legacyLessonFilePath,
   lessonFilePath,
   nextPlace,
@@ -21,6 +22,12 @@ const lessons: Lesson[] = [
 ];
 
 describe('lesson places', () => {
+  it('reads the challenge from the comments on top of the code', () => {
+    expect(challengeStatement('# Challenge: Do it\n# in two lines.\n\nshow 1\n# Not this one.')).toBe(
+      'Challenge: Do it in two lines.',
+    );
+  });
+
   it('names the file of a step', () => {
     expect(lessonFilePath('aulas', { lessonId: 'aula-01-um', step: 1 })).toBe('aulas/01-2.safira');
   });
