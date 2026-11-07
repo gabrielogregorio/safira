@@ -2,7 +2,7 @@ import { act, render, screen, waitFor, within, fireEvent } from '@testing-librar
 import userEvent from '@testing-library/user-event';
 import { strToU8, zipSync } from 'fflate';
 import { loadProjects } from '@/projects/projectStore';
-import { loadSettings } from '@/settings/settings';
+import { loadSettings, saveSettings } from '@/settings/settings';
 import { App } from './App';
 import { FakeWorker } from './fakeWorker';
 import { snapAway } from './snapEffect';
@@ -462,13 +462,36 @@ describe('App', () => {
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
   });
 
+  it('opens the page of a language in it, even with another language saved, and keeps the hash when it changes', async () => {
+    saveSettings({ ...loadSettings(), locale: 'en-us' });
+    window.history.replaceState(null, '', '/ja/?lang=ja#/');
+    renderApp();
+
+    expect(document.documentElement.lang).toBe('ja');
+
+    await userEvent.click(screen.getByRole('button', { name: /^言語: / }));
+
+    expect(window.location.pathname).toBe('/');
+    expect(window.location.search).toBe('');
+    expect(window.location.hash).toBe('#/');
+    expect(document.documentElement.lang).toBe('en');
+  });
+
   it('changes the language and the theme by clicking the icons on the home screen', async () => {
+    const description = document.createElement('meta');
+    description.name = 'description';
+    document.head.append(description);
     renderApp();
     await userEvent.click(screen.getByRole('button', { name: /^Language: / }));
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(document.documentElement.lang).toBe('pt-br');
+    expect(window.location.pathname).toBe('/pt-br/');
     expect(document.title).toBe('Safira: linguagem de programação em português para iniciantes');
+    expect(document.querySelector('meta[name="description"]')?.getAttribute('content')).toMatch(
+      /^Aprenda lógica de programação do zero com a Safira/,
+    );
+    description.remove();
 
     await userEvent.click(screen.getByRole('button', { name: /^Tema: / }));
 
