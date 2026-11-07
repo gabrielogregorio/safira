@@ -55,6 +55,8 @@ describe('SEO pages', () => {
     expect(intro?.querySelector('h1')?.textContent).toBe(SEO_PAGES['pt-br'].title);
     expect(intro?.querySelector('code')?.textContent).toBe('mostre "Olá, mundo!"');
     expect(intro?.querySelectorAll('nav a')).toHaveLength(5);
+    expect(intro?.querySelector('p a')?.getAttribute('href')).toBe(`${SITE_URL}pt-br/about/`);
+    expect(intro?.querySelector('p a')?.textContent).toBe('Sobre a Safira');
   });
 
   it('keeps the files of the English page beside it and reaches them from the folder of every other language', () => {
@@ -77,11 +79,15 @@ describe('SEO pages', () => {
     }
   });
 
-  it('lists every language in the sitemap, each with its alternates', () => {
-    const sitemap = new DOMParser().parseFromString(sitemapXml(), 'application/xml');
+  it('lists every language in the sitemap, each with its alternates, and then the other pages', () => {
+    const other = '  <url>\n    <loc>https://example.com/other/</loc>\n  </url>';
+    const sitemap = new DOMParser().parseFromString(sitemapXml([other]), 'application/xml');
     const urls = [...sitemap.getElementsByTagName('loc')].map((loc) => loc.textContent);
 
-    expect(urls).toEqual(SEO_LOCALES.map((locale) => SITE_URL + SEO_PAGES[locale].folder));
+    expect(urls).toEqual([
+      ...SEO_LOCALES.map((locale) => SITE_URL + SEO_PAGES[locale].folder),
+      'https://example.com/other/',
+    ]);
     expect(sitemap.getElementsByTagName('xhtml:link')).toHaveLength(25);
   });
 });

@@ -142,10 +142,31 @@ test('serves a sitemap and a preview image for every language', async ({ request
   const sitemap = await (await request.get('/sitemap.xml')).text();
 
   expect(sitemap).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/</loc>');
+  expect(sitemap).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/about/</loc>');
 
   for (const locale of ['en-us', 'pt-br', 'es', 'zh-cn', 'ja']) {
     expect((await request.get(`/og/${locale}.jpg`)).headers()['content-type']).toBe('image/jpeg');
   }
+});
+
+test('has an about page in every language, reachable from the home screen and back to the IDE', async ({ page }) => {
+  await page.goto('/pt-br/');
+  await page.getByRole('link', { name: 'Sobre a Safira' }).click();
+
+  await expect(page).toHaveURL(/\/pt-br\/about\/$/);
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Sobre a Safira');
+  await expect(page.locator('ol li')).toHaveCount(14);
+  await expect(page.locator('ol li').first()).toHaveText('Fale comigo');
+
+  await expectNoViolations(page);
+  await expectNoHorizontalScroll(page);
+
+  await page.getByRole('link', { name: '日本語' }).click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Safira について');
+
+  await page.getByRole('link', { name: 'IDE を開く' }).click();
+  await expect(page).toHaveURL(/\/ja\/$/);
+  await expect(page.getByRole('button', { name: 'プロジェクトを作成' })).toBeVisible();
 });
 
 test('mixes languages in the same script', async ({ page }) => {

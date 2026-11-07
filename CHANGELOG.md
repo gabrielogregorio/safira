@@ -1,5 +1,11 @@
 # Changelog
 
+## Unreleased
+
+### Added
+
+- Every language has an about page, at `/about/`, `/pt-br/about/`, `/es/about/`, `/zh-cn/about/` and `/ja/about/`, with what Safira is, who it is for, a short program and what it shows, the 14 lessons, common questions, its history and links to the wiki and the code. The home screen links to it.
+
 ## 1.3.0
 
 Fully compatible with 1.2.0: scripts of every earlier version keep running, and the language version stays 1.1.

@@ -101,6 +101,8 @@ The build turns `index.html` into one page per language: `/` in English and `/pt
 
 The texts live in `src/seo/seoPages.ts`, and every address points to `https://gabrielogregorio.github.io/safira/`, so previews never compete with the site. The folder decides the language, and only `?lang=` wins over it; at the root the saved language applies. Choosing a language in the app moves the address to the folder of that language and keeps the hash, so the address and the language never disagree. All folders share the same browser storage.
 
+Each language also gets an about page at `about/` inside its folder (`src/seo/aboutPages.ts`): plain HTML with no app, with what Safira is, a short program and what it prints, the lesson titles read from `src/content/<language>/lessons`, common questions and links to the wiki and the code. A test runs each example, so the output on the page is what Safira really prints. The GitHub wiki is not indexed by search engines, so what should be found lives on these pages. The about pages go in the sitemap with their own `hreflang` links, and the home screen links to the one of its language.
+
 `robots.txt` only counts at the root of a domain, which belongs to another repository on GitHub Pages, so the sitemap goes to Google through Search Console.
 
 ## Interface decisions

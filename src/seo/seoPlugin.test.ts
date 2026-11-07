@@ -1,5 +1,5 @@
 import type { Rollup } from 'vite';
-import { seoPages } from './seoPlugin';
+import { lessonTitles, seoPages } from './seoPlugin';
 
 interface Emitted {
   fileName: string;
@@ -30,13 +30,28 @@ describe('SEO pages plugin', () => {
     expect(index.source).toContain('<html lang="en">');
     expect(index.source).toContain('<title>Safira: a programming language in plain words for beginners</title>');
     expect(emitted.map((file) => file.fileName)).toEqual([
+      'about/index.html',
       'pt-br/index.html',
+      'pt-br/about/index.html',
       'es/index.html',
+      'es/about/index.html',
       'zh-cn/index.html',
+      'zh-cn/about/index.html',
       'ja/index.html',
+      'ja/about/index.html',
       'sitemap.xml',
     ]);
-    expect(emitted[0]?.source).toContain('<html lang="pt-BR">');
+    expect(emitted[1]?.source).toContain('<html lang="pt-BR">');
+    expect(emitted[2]?.source).toContain('<li>Fale comigo</li>');
+    expect(emitted.at(-1)?.source).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/about/</loc>');
+  });
+
+  it('reads the lesson titles of a language in their order', () => {
+    const titles = lessonTitles('en-us');
+
+    expect(titles).toHaveLength(14);
+    expect(titles[0]).toBe('Talk to me');
+    expect(titles.every((title) => title !== '' && !title.startsWith('#'))).toBe(true);
   });
 
   it.each([

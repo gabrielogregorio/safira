@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import type { ComponentProps } from 'react';
+import { LocaleContext } from '@/i18n/i18n';
 import { soundPlayer } from '@/ui/sound/sounds';
 import { HomeScreen } from './HomeScreen';
 
@@ -47,6 +48,33 @@ describe('HomeScreen', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('links to the about page of its language in the same tab', () => {
+    window.history.replaceState(null, '', '/safira/');
+    render(
+      <LocaleContext.Provider value="ja">
+        <HomeScreen
+          projects={[]}
+          isCreating={false}
+          initialExampleId={null}
+          preferenceToggles={null}
+          settingsButton={null}
+          onStartCreating={vi.fn()}
+          onCancelCreating={vi.fn()}
+          onCreate={vi.fn()}
+          onImportProject={vi.fn()}
+          onOpenAquarium={vi.fn()}
+          onExportProject={vi.fn()}
+          onRename={vi.fn()}
+          onDelete={vi.fn()}
+        />
+      </LocaleContext.Provider>,
+    );
+    const link = screen.getByRole('link', { name: 'About Safira' });
+
+    expect(link).toHaveAttribute('href', '/safira/ja/about/');
+    expect(link).not.toHaveAttribute('target');
   });
 
   it('opens the aquarium from the center of the orb', async () => {
