@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Fixed
+
+- In a one-line if, import no longer swallows the else into the file name: the else runs when the condition is false, and the import loads the right file when it is true.
+
 ### Changed
 
 - After Show the solution, the cat only says Press ▶ and lights the button.

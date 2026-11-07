@@ -303,7 +303,8 @@ export class Parser extends ExpressionParser {
     this.expectPhrase('importe');
     const parts: string[] = [];
 
-    while (!this.isStatementEnd()) {
+    // In a one-line if, the else is the next statement and not part of the file name.
+    while (!this.isStatementEnd() && !(this.inlineDepth > 0 && this.peekPhrase('se_nao') !== null)) {
       parts.push(this.advance().text);
     }
 

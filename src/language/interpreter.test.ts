@@ -92,6 +92,36 @@ describe('virtual files', () => {
     },
   );
 
+  describe('import as the only command of a one-line if', () => {
+    const files = { 'lib.safira': 'mostre "lib"', 'plano.safira': 'mostre "plano b"' };
+
+    it.each([
+      ['pt-br', 'se 1 == {0} entao importe "lib" senao mostre "fora"'],
+      ['en-us', 'if 1 == {0} then import "lib" else show "fora"'],
+      ['es', 'si 1 == {0} entonces incluir "lib" si no muestra "fora"'],
+      ['zh-cn', '如果 1 == {0} 那么 导入 "lib" 否则 显示 "fora"'],
+      ['ja', 'もし 1 == {0} ならば 読み込む "lib" そうでなければ 表示 "fora"'],
+    ])('stops the file name at the else in %s', async (_language, line) => {
+      expect((await runScript(line.replace('{0}', '1'), [], files)).texts).toEqual(['lib']);
+      expect((await runScript(line.replace('{0}', '2'), [], files)).texts).toEqual(['fora']);
+    });
+
+    it('imports in the else too, without quotes', async () => {
+      const line = 'se 1 == {0} entao importe lib senao importe plano';
+
+      expect((await runScript(line.replace('{0}', '1'), [], files)).texts).toEqual(['lib']);
+      expect((await runScript(line.replace('{0}', '2'), [], files)).texts).toEqual(['plano b']);
+    });
+
+    it('still reads a path with folders in a block', async () => {
+      const result = await runScript('se 1 == 1 {\n  importe ./pasta/lib\n}', [], {
+        'pasta/lib.safira': 'mostre "ok"',
+      });
+
+      expect(result.texts).toEqual(['ok']);
+    });
+  });
+
   it('imports beside the file that is importing, and from the root', async () => {
     const files = {
       'a/um.safira': 'importe "./dois"\nimporte "../raiz"',
