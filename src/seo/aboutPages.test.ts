@@ -1,24 +1,34 @@
 import { driveExecution } from '@/language/driver';
 import { Interpreter } from '@/language/interpreter';
 import { VirtualFileSystem } from '@/language/virtualFileSystem';
+import type { ShownText } from './aboutPages';
 import { ABOUT_PAGES, aboutHtml, aboutSitemapUrls } from './aboutPages';
 import { SEO_LOCALES, SEO_PAGES, SITE_URL } from './seoPages';
 
 const read = (html: string): Document => new DOMParser().parseFromString(html, 'text/html');
 
-const run = async (source: string): Promise<string[]> => {
-  let shown = '';
+// Builds the lines the terminal shows: a plain show ends its line, a show on the same line keeps it open.
+const run = async (source: string): Promise<ShownText[][]> => {
+  const lines: ShownText[][] = [];
+  let line: ShownText[] = [];
   const files = new VirtualFileSystem({ 'main.safira': `#safira 1.1\n${source}` });
   await driveExecution(
     new Interpreter({ files, locale: 'en-us', random: (minimum: number) => minimum }).run('main.safira'),
     {
-      onOutput: (inline: boolean, text: string) => {
-        shown += inline ? text : `${text}\n`;
+      onOutput: (inline: boolean, text: string, color: string) => {
+        if (text !== '') {
+          line.push(color === '' ? { text } : { text, color });
+        }
+
+        if (!inline) {
+          lines.push(line);
+          line = [];
+        }
       },
     } as unknown as Parameters<typeof driveExecution>[1],
   );
 
-  return shown.trimEnd().split('\n');
+  return lines;
 };
 
 describe('about pages', () => {
@@ -82,6 +92,15 @@ describe('about pages', () => {
         'https://github.com/gabrielogregorio/safira/blob/main/CONTRIBUTING.md',
       ],
     ]);
+  });
+
+  it('paints what the example shows with the colors it asked for', () => {
+    const terminal = read(aboutHtml('pt-br', [])).querySelector('pre.terminal');
+    const painted = [...(terminal?.querySelectorAll('span') ?? [])].map((span) => [span.textContent, span.style.color]);
+
+    expect(terminal?.textContent?.split('\n')[0]).toBe('Olá, Ana!');
+    expect(painted[0]).toEqual(['Olá, Ana!', 'rgb(77, 163, 255)']);
+    expect(terminal?.textContent).toContain('Você tem 12 anos.');
   });
 
   it('links each about page to every language and to a default', () => {

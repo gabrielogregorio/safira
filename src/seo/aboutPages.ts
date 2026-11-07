@@ -5,6 +5,12 @@ export const ABOUT_FOLDER = 'about/';
 
 const REPOSITORY_URL = 'https://github.com/gabrielogregorio/safira';
 
+/** A piece of what a program shows, with the color it asked for. */
+export interface ShownText {
+  text: string;
+  color?: string;
+}
+
 interface Question {
   question: string;
   answer: string;
@@ -22,7 +28,7 @@ interface AboutCopy {
   exampleText: string;
   outputLabel: string;
   example: string;
-  output: string[];
+  output: ShownText[][];
   lessonsTitle: string;
   lessonsText: string;
   questionsTitle: string;
@@ -60,14 +66,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     exampleText: 'Many ways to show a text, the same line, two languages mixed, a loop and a condition:',
     outputLabel: 'What it shows',
     example:
-      '# Many ways to say the same thing.\nname receives "Ana"\nage is worth 12\nshow "Hello, " + name + "!"\ndisplay on the screen "You are " + age + " years old."\nwrite on the screen "All of these show a text."\n\n# On the same line, and even in Portuguese.\nshow on this line "Safira "\nprint "speaks "\nmostre "Portuguese too."\n\nrepeat 3 times {\n    show on this line "⭐"\n}\nshow ""\n\nif age is greater than or equal to 10 then {\n    show "You can code already! 🎉"\n} else {\n    show "You can too, with help! 🎉"\n}',
+      '# Many ways to say the same thing, with color.\nname receives "Ana"\nage is worth 12\nshow "Hello, " + name + "!" in color blue\ndisplay on the screen "You are " + age + " years old."\nwrite on the screen "All of these show a text." in color green\n\n# On the same line, and even in Portuguese.\nshow on this line "Safira "\nprint "speaks "\nmostre "Portuguese too."\n\nrepeat 3 times {\n    show on this line "⭐" in color yellow\n}\nshow ""\n\nif age is greater than or equal to 10 then {\n    show "You can code already! 🎉" in color pink\n} else {\n    show "You can too, with help! 🎉"\n}',
     output: [
-      'Hello, Ana!',
-      'You are 12 years old.',
-      'All of these show a text.',
-      'Safira speaks Portuguese too.',
-      '⭐⭐⭐',
-      'You can code already! 🎉',
+      [{ text: 'Hello, Ana!', color: '#4da3ff' }],
+      [{ text: 'You are 12 years old.' }],
+      [{ text: 'All of these show a text.', color: '#35d07f' }],
+      [{ text: 'Safira ' }, { text: 'speaks ' }, { text: 'Portuguese too.' }],
+      [
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+      ],
+      [{ text: 'You can code already! 🎉', color: '#ff7ac6' }],
     ],
     lessonsTitle: 'The 14 lessons',
     lessonsText:
@@ -139,14 +149,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       'Várias formas de mostrar um texto, a mesma linha, dois idiomas misturados, uma repetição e uma condição:',
     outputLabel: 'O que ele mostra',
     example:
-      '# Várias formas de dizer a mesma coisa.\nnome recebe "Ana"\nidade vale 12\nmostre "Olá, " + nome + "!"\nexiba "Você tem " + idade + " anos."\nimprima na tela "Tudo isso mostra um texto."\n\n# Na mesma linha, e até em inglês.\nmostre nessa linha "A Safira "\nprint "fala "\nshow "inglês também."\n\nrepita 3 vezes {\n    mostre nessa linha "⭐"\n}\nmostre ""\n\nse idade for maior ou igual a 10 então {\n    mostre "Já dá para programar! 🎉"\n} senão {\n    mostre "Dá também, com ajuda! 🎉"\n}',
+      '# Várias formas de dizer a mesma coisa, com cor.\nnome recebe "Ana"\nidade vale 12\nmostre "Olá, " + nome + "!" na cor azul\nexiba "Você tem " + idade + " anos."\nimprima na tela "Tudo isso mostra um texto." na cor verde\n\n# Na mesma linha, e até em inglês.\nmostre nessa linha "A Safira "\nprint "fala "\nshow "inglês também."\n\nrepita 3 vezes {\n    mostre nessa linha "⭐" na cor amarelo\n}\nmostre ""\n\nse idade for maior ou igual a 10 então {\n    mostre "Já dá para programar! 🎉" na cor rosa\n} senão {\n    mostre "Dá também, com ajuda! 🎉"\n}',
     output: [
-      'Olá, Ana!',
-      'Você tem 12 anos.',
-      'Tudo isso mostra um texto.',
-      'A Safira fala inglês também.',
-      '⭐⭐⭐',
-      'Já dá para programar! 🎉',
+      [{ text: 'Olá, Ana!', color: '#4da3ff' }],
+      [{ text: 'Você tem 12 anos.' }],
+      [{ text: 'Tudo isso mostra um texto.', color: '#35d07f' }],
+      [{ text: 'A Safira ' }, { text: 'fala ' }, { text: 'inglês também.' }],
+      [
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+      ],
+      [{ text: 'Já dá para programar! 🎉', color: '#ff7ac6' }],
     ],
     lessonsTitle: 'As 14 aulas',
     lessonsText:
@@ -218,14 +232,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       'Varias formas de mostrar un texto, la misma línea, dos idiomas mezclados, una repetición y una condición:',
     outputLabel: 'Lo que muestra',
     example:
-      '# Muchas formas de decir lo mismo.\nnombre recibe "Ana"\nedad vale 12\nmuestra "¡Hola, " + nombre + "!"\nimprimir en la pantalla "Tienes " + edad + " años."\nescribe en la pantalla "Todo esto muestra un texto."\n\n# En la misma línea, y hasta en inglés.\nmostrar en esta linea "Safira "\nprint "habla "\nshow "inglés también."\n\nrepetir 3 veces {\n    mostrar en esta linea "⭐"\n}\nmuestra ""\n\nsi edad es mayor o igual a 10 entonces {\n    muestra "¡Ya puedes programar! 🎉"\n} si no {\n    muestra "¡También puedes, con ayuda! 🎉"\n}',
+      '# Muchas formas de decir lo mismo, con color.\nnombre recibe "Ana"\nedad vale 12\nmuestra "¡Hola, " + nombre + "!" en color azul\nimprimir en la pantalla "Tienes " + edad + " años."\nescribe en la pantalla "Todo esto muestra un texto." en color verde\n\n# En la misma línea, y hasta en inglés.\nmostrar en esta linea "Safira "\nprint "habla "\nshow "inglés también."\n\nrepetir 3 veces {\n    mostrar en esta linea "⭐" en color amarillo\n}\nmuestra ""\n\nsi edad es mayor o igual a 10 entonces {\n    muestra "¡Ya puedes programar! 🎉" en color rosa\n} si no {\n    muestra "¡También puedes, con ayuda! 🎉"\n}',
     output: [
-      '¡Hola, Ana!',
-      'Tienes 12 años.',
-      'Todo esto muestra un texto.',
-      'Safira habla inglés también.',
-      '⭐⭐⭐',
-      '¡Ya puedes programar! 🎉',
+      [{ text: '¡Hola, Ana!', color: '#4da3ff' }],
+      [{ text: 'Tienes 12 años.' }],
+      [{ text: 'Todo esto muestra un texto.', color: '#35d07f' }],
+      [{ text: 'Safira ' }, { text: 'habla ' }, { text: 'inglés también.' }],
+      [
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+      ],
+      [{ text: '¡Ya puedes programar! 🎉', color: '#ff7ac6' }],
     ],
     lessonsTitle: 'Las 14 lecciones',
     lessonsText:
@@ -295,14 +313,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     exampleText: '多种显示文字的写法、同一行输出、混用两种语言、一次重复和一个条件：',
     outputLabel: '运行结果',
     example:
-      '# 同一件事，有很多种说法。\n名字 设为 "小明"\n年龄 赋值 12\n显示 "你好，" + 名字 + "！"\n打印 "你今年 " + 年龄 + " 岁。"\n输出 "这些都能显示文字。"\n\n# 写在同一行，甚至可以用英语。\n同行显示 "Safira "\n同行打印 "也会说"\nshow "英语。"\n\n重复 3 次 {\n    同行显示 "⭐"\n}\n显示 ""\n\n如果 年龄 大于等于 10 那么 {\n    显示 "你已经可以编程了！🎉"\n} 否则 {\n    显示 "有人帮忙也可以！🎉"\n}',
+      '# 同一件事，有很多种说法，还能加颜色。\n名字 设为 "小明"\n年龄 赋值 12\n显示 "你好，" + 名字 + "！" 颜色 蓝色\n打印 "你今年 " + 年龄 + " 岁。"\n输出 "这些都能显示文字。" 颜色 绿色\n\n# 写在同一行，甚至可以用英语。\n同行显示 "Safira "\n同行打印 "也会说"\nshow "英语。"\n\n重复 3 次 {\n    同行显示 "⭐" 颜色 黄色\n}\n显示 ""\n\n如果 年龄 大于等于 10 那么 {\n    显示 "你已经可以编程了！🎉" 颜色 粉色\n} 否则 {\n    显示 "有人帮忙也可以！🎉"\n}',
     output: [
-      '你好，小明！',
-      '你今年 12 岁。',
-      '这些都能显示文字。',
-      'Safira 也会说英语。',
-      '⭐⭐⭐',
-      '你已经可以编程了！🎉',
+      [{ text: '你好，小明！', color: '#4da3ff' }],
+      [{ text: '你今年 12 岁。' }],
+      [{ text: '这些都能显示文字。', color: '#35d07f' }],
+      [{ text: 'Safira ' }, { text: '也会说' }, { text: '英语。' }],
+      [
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+      ],
+      [{ text: '你已经可以编程了！🎉', color: '#ff7ac6' }],
     ],
     lessonsTitle: '14 节课程',
     lessonsText:
@@ -358,14 +380,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     exampleText: '文字を表示するいろいろな書き方、同じ行への表示、2 つの言語の混在、くり返し、条件：',
     outputLabel: '表示される結果',
     example:
-      '# 同じことを、いろいろな言い方で。\n名前 は "さくら"\n年齢 は 12\n表示 "こんにちは、" + 名前 + "！"\n出力 "あなたは " + 年齢 + " 歳です。"\n表示 "どれも文字を表示します。"\n\n# 同じ行に、英語でも。\n続けて表示 "Safira は"\nprint "英語も"\nshow "話せます。"\n\n繰り返す 3 回 {\n    続けて表示 "⭐"\n}\n表示 ""\n\nもし 年齢 以上 10 なら {\n    表示 "もうプログラミングできます! 🎉"\n} そうでなければ {\n    表示 "手伝ってもらえばできます! 🎉"\n}',
+      '# 同じことを、いろいろな言い方で。色も付けられます。\n名前 は "さくら"\n年齢 は 12\n表示 "こんにちは、" + 名前 + "！" 色 青\n出力 "あなたは " + 年齢 + " 歳です。"\n表示 "どれも文字を表示します。" 色 緑\n\n# 同じ行に、英語でも。\n続けて表示 "Safira は"\nprint "英語も"\nshow "話せます。"\n\n繰り返す 3 回 {\n    続けて表示 "⭐" 色 黄色い\n}\n表示 ""\n\nもし 年齢 以上 10 なら {\n    表示 "もうプログラミングできます! 🎉" 色 ピンク\n} そうでなければ {\n    表示 "手伝ってもらえばできます! 🎉"\n}',
     output: [
-      'こんにちは、さくら！',
-      'あなたは 12 歳です。',
-      'どれも文字を表示します。',
-      'Safira は英語も話せます。',
-      '⭐⭐⭐',
-      'もうプログラミングできます! 🎉',
+      [{ text: 'こんにちは、さくら！', color: '#4da3ff' }],
+      [{ text: 'あなたは 12 歳です。' }],
+      [{ text: 'どれも文字を表示します。', color: '#35d07f' }],
+      [{ text: 'Safira は' }, { text: '英語も' }, { text: '話せます。' }],
+      [
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+        { text: '⭐', color: '#ffe14d' },
+      ],
+      [{ text: 'もうプログラミングできます! 🎉', color: '#ff7ac6' }],
     ],
     lessonsTitle: '14 のレッスン',
     lessonsText:
@@ -426,29 +452,47 @@ const escapeHtml = (text: string): string =>
 // The English page is one folder deep and the others two: links between pages go up to the site root first.
 const toRoot = (locale: Locale): string => (SEO_PAGES[locale].folder === '' ? '../' : '../../');
 
+// The same Frutiger Aero as the app: sky and hills behind, glass panels, glossy pill buttons and a dark terminal.
 const STYLE = `
       :root {
-        color-scheme: light dark;
-        --ink: #12395c;
-        --muted: #3d5f7d;
-        --page: #eef6fd;
-        --card: #ffffff;
-        --line: #c9def0;
-        --accent: #0b6bcb;
-        --code: #0f2a44;
-        --code-ink: #e8f2fc;
+        --ink: #0b2a4a;
+        --sky-color: #7fd1f7;
+        --muted: #234a6e;
+        --link: #0d4fae;
+        --panel: rgb(255 255 255 / 62%);
+        --border: rgb(255 255 255 / 85%);
+        --shadow: 0 8px 28px rgb(6 50 100 / 28%), inset 0 1px 0 rgb(255 255 255 / 85%);
+        --editor: linear-gradient(180deg, rgb(255 255 255 / 92%), rgb(232 245 255 / 88%));
+        --sky:
+          radial-gradient(circle at 12% 22%, rgb(255 255 255 / 55%) 0 2.2vmin, transparent 2.4vmin),
+          radial-gradient(circle at 86% 38%, rgb(255 255 255 / 55%) 0 1.2vmin, transparent 1.4vmin),
+          radial-gradient(circle at 70% 12%, rgb(255 255 255 / 45%) 0 1vmin, transparent 1.2vmin),
+          radial-gradient(90vmax 26vmax at 22% 118%, #9be86a 0 70%, transparent 71%),
+          radial-gradient(110vmax 24vmax at 82% 124%, #55c93b 0 70%, transparent 71%),
+          linear-gradient(180deg, #2f9fe8 0%, #7fd1f7 42%, #d6f4ff 72%, #eefcff 100%);
+        color-scheme: light;
       }
 
       @media (prefers-color-scheme: dark) {
         :root {
-          --ink: #e2eefa;
-          --muted: #a9c3dc;
-          --page: #0d1b2a;
-          --card: #132638;
-          --line: #24405a;
-          --accent: #6fb6ff;
-          --code: #08131f;
-          --code-ink: #e8f2fc;
+          --ink: #eaf6ff;
+          --sky-color: #082f5c;
+          --muted: #b9daf2;
+          --link: #8fd0ff;
+          --panel: rgb(8 32 66 / 66%);
+          --border: rgb(150 225 255 / 35%);
+          --shadow: 0 8px 28px rgb(0 0 0 / 45%), inset 0 1px 0 rgb(170 235 255 / 28%);
+          --editor: linear-gradient(180deg, rgb(14 44 84 / 92%), rgb(8 30 60 / 92%));
+          --sky:
+            radial-gradient(70vmax 22vmax at 40% 30%, rgb(90 255 200 / 26%), transparent 70%),
+            radial-gradient(circle at 12% 12%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 34% 22%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 62% 8%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 88% 18%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(90vmax 26vmax at 22% 118%, #0b6e5c 0 70%, transparent 71%),
+            radial-gradient(110vmax 24vmax at 82% 124%, #074c44 0 70%, transparent 71%),
+            linear-gradient(180deg, #04142f 0%, #082f5c 48%, #0a5a6a 82%, #0f8a6d 100%);
+          color-scheme: dark;
         }
       }
 
@@ -458,78 +502,108 @@ const STYLE = `
 
       body {
         margin: 0;
-        background: var(--page);
+        background: var(--sky-color);
         color: var(--ink);
         font-family: system-ui, sans-serif;
         line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* A layer of its own, because phones ignore a fixed background: the hills stay at the bottom of the screen. */
+      body::before {
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        background: var(--sky);
+        content: '';
       }
 
       main {
-        max-width: 760px;
+        max-width: 780px;
         margin: 0 auto;
-        padding: 32px 16px 48px;
+        padding: 20px 16px 48px;
+      }
+
+      .glass {
+        backdrop-filter: blur(14px) saturate(150%);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
       }
 
       header {
         display: flex;
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 12px;
         align-items: center;
         justify-content: space-between;
+        padding: 10px 12px 10px 16px;
+        border-radius: 999px;
       }
 
       .brand {
         display: flex;
-        gap: 12px;
+        gap: 10px;
         align-items: center;
         color: inherit;
         font-weight: 700;
-        font-size: 1.2rem;
+        font-size: 1.25rem;
         text-decoration: none;
+      }
+
+      .brand img {
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgb(6 50 100 / 30%);
       }
 
       .open {
         display: inline-block;
-        padding: 10px 18px;
+        padding: 9px 20px;
+        border: 1px solid #3fa52a;
         border-radius: 999px;
-        background: var(--accent);
-        color: #ffffff;
-        font-weight: 600;
+        background: linear-gradient(180deg, #e4ffd0 0%, #a8f07a 48%, #6fdc45 52%, #b4f58c 100%);
+        box-shadow:
+          0 2px 5px rgb(6 50 100 / 28%),
+          inset 0 1px 0 rgb(255 255 255 / 95%);
+        color: #07330b;
+        font-weight: 700;
         text-decoration: none;
+        transition:
+          filter 120ms ease,
+          transform 120ms ease;
       }
 
-      @media (prefers-color-scheme: dark) {
-        .open {
-          color: #08131f;
-        }
+      .open:hover {
+        filter: brightness(1.05) saturate(1.2);
+        transform: translateY(-1px);
+      }
+
+      .hero {
+        margin-top: 20px;
+        padding: 8px 24px 20px;
       }
 
       h1 {
-        margin: 32px 0 8px;
-        font-size: 2rem;
+        margin: 16px 0 8px;
+        font-size: 2.1rem;
         line-height: 1.2;
       }
 
-      h2 {
-        margin: 40px 0 12px;
-        font-size: 1.3rem;
-      }
-
       .lead {
+        margin: 0;
         color: var(--muted);
         font-size: 1.1rem;
       }
 
-      section h2 {
+      section {
         margin-top: 20px;
+        padding: 4px 24px 18px;
       }
 
-      section {
-        padding: 4px 20px 16px;
-        margin-top: 24px;
-        border: 1px solid var(--line);
-        border-radius: 16px;
-        background: var(--card);
+      h2 {
+        margin: 20px 0 12px;
+        font-size: 1.3rem;
       }
 
       pre {
@@ -537,9 +611,20 @@ const STYLE = `
         margin: 0;
         padding: 16px;
         border-radius: 12px;
-        background: var(--code);
-        color: var(--code-ink);
         font-size: 0.95rem;
+      }
+
+      .editor {
+        background: var(--editor);
+        border: 1px solid var(--border);
+        box-shadow: inset 0 1px 3px rgb(6 50 100 / 18%);
+      }
+
+      .terminal {
+        background: linear-gradient(180deg, #0c2340 0%, #050f20 100%);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        color: #dff4ff;
       }
 
       .label {
@@ -557,11 +642,17 @@ const STYLE = `
         ol {
           columns: 1;
         }
+
+        .hero,
+        section {
+          padding-right: 16px;
+          padding-left: 16px;
+        }
       }
 
       dt {
         margin-top: 16px;
-        font-weight: 600;
+        font-weight: 700;
       }
 
       dd {
@@ -570,16 +661,25 @@ const STYLE = `
       }
 
       a {
-        color: var(--accent);
+        color: var(--link);
       }
 
       footer {
-        margin-top: 40px;
-        color: var(--muted);
+        margin-top: 28px;
+        padding: 12px 16px;
+        border-radius: 999px;
         font-size: 0.95rem;
         text-align: center;
       }
 `;
+
+// The colors come from the program and are always a hex color, as the language resolves them.
+const shownLine = (pieces: ShownText[]): string =>
+  pieces
+    .map(({ text, color }) =>
+      color === undefined ? escapeHtml(text) : `<span style="color: ${color}">${escapeHtml(text)}</span>`,
+    )
+    .join('');
 
 const alternateLinks = (): string =>
   [
@@ -632,30 +732,32 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
   </head>
   <body>
     <main>
-      <header>
+      <header class="glass">
         <a class="brand" href="../"><img src="${toRoot(locale)}icone.png" alt="" width="40" height="40" />Safira</a>
         <a class="open" href="../">${escapeHtml(copy.openIde)}</a>
       </header>
 
-      <h1>${escapeHtml(copy.heading)}</h1>
-      <p class="lead">${escapeHtml(copy.lead)}</p>
+      <div class="hero glass">
+        <h1>${escapeHtml(copy.heading)}</h1>
+        <p class="lead">${escapeHtml(copy.lead)}</p>
+      </div>
 
-      <section aria-labelledby="who">
+      <section class="glass" aria-labelledby="who">
         <h2 id="who">${escapeHtml(copy.whoTitle)}</h2>
         <ul>
           ${list(copy.who)}
         </ul>
       </section>
 
-      <section aria-labelledby="example">
+      <section class="glass" aria-labelledby="example">
         <h2 id="example">${escapeHtml(copy.exampleTitle)}</h2>
         <p>${escapeHtml(copy.exampleText)}</p>
-        <pre><code>${escapeHtml(copy.example)}</code></pre>
+        <pre class="editor"><code>${escapeHtml(copy.example)}</code></pre>
         <p class="label">${escapeHtml(copy.outputLabel)}</p>
-        <pre><samp>${escapeHtml(copy.output.join('\n'))}</samp></pre>
+        <pre class="terminal"><samp>${copy.output.map(shownLine).join('\n')}</samp></pre>
       </section>
 
-      <section aria-labelledby="lessons">
+      <section class="glass" aria-labelledby="lessons">
         <h2 id="lessons">${escapeHtml(copy.lessonsTitle)}</h2>
         <p>${escapeHtml(copy.lessonsText)}</p>
         <ol>
@@ -663,19 +765,19 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
         </ol>
       </section>
 
-      <section aria-labelledby="questions">
+      <section class="glass" aria-labelledby="questions">
         <h2 id="questions">${escapeHtml(copy.questionsTitle)}</h2>
         <dl>
           ${questions}
         </dl>
       </section>
 
-      <section aria-labelledby="history">
+      <section class="glass" aria-labelledby="history">
         <h2 id="history">${escapeHtml(copy.historyTitle)}</h2>
         ${copy.history.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('\n        ')}
       </section>
 
-      <section aria-labelledby="contribute">
+      <section class="glass" aria-labelledby="contribute">
         <h2 id="contribute">${escapeHtml(copy.contributeTitle)}</h2>
         <p>${escapeHtml(copy.contributeText)}</p>
         <ul>
@@ -685,7 +787,7 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
         </ul>
       </section>
 
-      <section aria-labelledby="links">
+      <section class="glass" aria-labelledby="links">
         <h2 id="links">${escapeHtml(copy.linksTitle)}</h2>
         <ul>
           <li><a href="${REPOSITORY_URL}/wiki">${escapeHtml(copy.wiki)}</a></li>
@@ -694,7 +796,7 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
         </ul>
       </section>
 
-      <footer>
+      <footer class="glass">
         <nav aria-label="${escapeHtml(copy.languagesLabel)}">${languageLinks(locale)}</nav>
       </footer>
     </main>

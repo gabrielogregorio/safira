@@ -163,6 +163,8 @@ test('has an about page in every language, reachable from the home screen and ba
 
   await page.getByRole('link', { name: '日本語' }).click();
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Safira について');
+  await page.emulateMedia({ colorScheme: 'dark' });
+  await expectNoViolations(page);
 
   await page.getByRole('link', { name: 'IDE を開く' }).click();
   await expect(page).toHaveURL(/\/ja\/$/);
