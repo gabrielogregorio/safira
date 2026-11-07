@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
+
+Fully compatible with 1.1.0: scripts of every earlier version keep running, and the language version stays 1.1.
 
 ### Fixed
 
