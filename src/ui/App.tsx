@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
-import { createTranslator, detectLocale, LocaleContext, TranslationContext } from '@/i18n/i18n';
+import { createTranslator, detectLocale, LocaleContext, localePath, TranslationContext } from '@/i18n/i18n';
 import { SEO_PAGES } from '@/seo/seoPages';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
@@ -64,9 +64,14 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
   const skyTheme = themeAtPhase(phase);
   const shownTheme = useRef(skyTheme);
 
+  // The address takes part: choosing a language moves to its page even when that language was already saved.
+  const [address, setAddress] = useState(() => ({
+    pathname: window.location.pathname,
+    search: window.location.search,
+  }));
   const locale = useMemo(
-    () => detectLocale(window.location.search, window.location.pathname, settings.locale, navigator.language),
-    [settings.locale],
+    () => detectLocale(address.search, address.pathname, settings.locale, navigator.language),
+    [address, settings.locale],
   );
   const translate = useMemo(() => createTranslator(locale), [locale]);
   const shownLocale = useRef(locale);
@@ -75,6 +80,7 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
     const root = document.documentElement;
     root.lang = locale === 'en-us' ? 'en' : locale;
     document.title = SEO_PAGES[locale].title;
+    document.querySelector('meta[name="description"]')?.setAttribute('content', SEO_PAGES[locale].description);
 
     if (shownTheme.current !== skyTheme && prefersMotion()) {
       root.dataset['themeChanging'] = 'true';
@@ -182,6 +188,11 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
 
       if (changes.locale !== undefined && changes.locale !== null) {
         void soundPlayer.play(LANGUAGE_SOUNDS[changes.locale]);
+        const url = new URL(window.location.href);
+        url.pathname = localePath(url.pathname, changes.locale);
+        url.searchParams.delete('lang');
+        window.history.replaceState(window.history.state, '', url);
+        setAddress({ pathname: url.pathname, search: url.search });
       }
 
       if (changes.theme !== undefined) {

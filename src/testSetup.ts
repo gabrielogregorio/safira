@@ -18,3 +18,8 @@ Range.prototype.getBoundingClientRect = (): DOMRect => new DOMRect();
 
 // jsdom has no canvas, so the logo falls back to its flat version in tests.
 HTMLCanvasElement.prototype.getContext = (() => null) as typeof HTMLCanvasElement.prototype.getContext;
+
+// Choosing a language moves the address to the page of that language: every test starts back at the root.
+afterEach(() => {
+  window.history.replaceState(null, '', '/');
+});
