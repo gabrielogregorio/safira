@@ -7,6 +7,25 @@
     <link rel="icon" type="image/png" href="./icone.png" />
     <title>Safira</title>
     <style>
+      /* The sky of the saved theme from the first paint, so a reload never flashes white while the app loads. */
+      html {
+        min-height: 100%;
+        background: linear-gradient(180deg, #2f9fe8 0%, #7fd1f7 42%, #d6f4ff 72%, #eefcff 100%) fixed #7fd1f7;
+      }
+
+      html[data-theme='dark'] {
+        background: linear-gradient(180deg, #04142f 0%, #082f5c 48%, #0a5a6a 82%, #0f8a6d 100%) fixed #082f5c;
+      }
+
+      html[data-theme='simple'] {
+        background: linear-gradient(180deg, #05505c 0%, #087f86 50%, #16b39a 86%, #5fdc9f 100%) fixed #087f86;
+      }
+
+      html[data-theme='dark'] .seo-intro,
+      html[data-theme='simple'] .seo-intro {
+        color: #eaf6ff;
+      }
+
       html.snap-return {
         background: #000000;
       }
@@ -30,6 +49,20 @@
         color: inherit;
       }
     </style>
+    <script>
+      // The same key as src/settings/storageKey.ts and settings.ts: each preview keeps its own settings.
+      try {
+        var preview = /\/preview\/([^/]+)\//.exec(location.pathname);
+        var prefix = preview === null ? 'safira.' : 'safira-preview.' + preview[1] + '.';
+        var theme = JSON.parse(localStorage.getItem(prefix + 'settings.v1') || '{}').theme;
+
+        if (theme === 'light' || theme === 'dark' || theme === 'simple') {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {
+        // Without storage the page starts in the light sky.
+      }
+    </script>
     <script>
       try {
         if (sessionStorage.getItem('safira.snap.return') !== null) {

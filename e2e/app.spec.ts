@@ -171,6 +171,21 @@ test('has an about page in every language, reachable from the home screen and ba
   await expect(page.getByRole('button', { name: 'プロジェクトを作成' })).toBeVisible();
 });
 
+test('shows the sky of the saved theme before the app loads, so a reload never flashes white', async ({ page }) => {
+  await page.goto('/');
+  await page.evaluate(() => {
+    localStorage.setItem('safira.settings.v1', JSON.stringify({ theme: 'dark' }));
+  });
+  // Without the scripts of the app, what shows is only what the HTML paints on its own.
+  await page.route('**/assets/*.js', (route) => route.abort());
+  await page.goto('/pt-br/');
+
+  const background = await page.evaluate(() => getComputedStyle(document.documentElement).backgroundImage);
+
+  expect(background).toContain('rgb(4, 20, 47)');
+  await expect(page.getByRole('heading', { level: 1 })).toHaveCSS('color', 'rgb(234, 246, 255)');
+});
+
 test('mixes languages in the same script', async ({ page }) => {
   await createProjectWithCode(page, 'x recebe 1\nif x is equal to 1 { mostrar "um" }\nrepeat 2 vezes { show "z" }');
   await runCode(page);
