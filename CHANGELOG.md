@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.3.0
+
+Fully compatible with 1.2.0: scripts of every earlier version keep running, and the language version stays 1.1.
+
+### Added
+
+- Search engines and link previews find one page per language, at `/pt-br/`, `/es/`, `/zh-cn/` and `/ja/` beside the English one, each with its own title, description, preview image and links to the others, plus a sitemap.
+- The tab title and the page description follow the language of the app.
+- Choosing a language moves the address to the page of that language, and opening that page shows it in its language.
+
 ## 1.2.0
 
 Fully compatible with 1.1.0: scripts of every earlier version keep running, and the language version stays 1.1.

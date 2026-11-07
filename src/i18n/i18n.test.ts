@@ -1,5 +1,5 @@
 import { dictionaries } from './dictionaries';
-import { createTranslator, detectLocale } from './i18n';
+import { createTranslator, detectLocale, localePath } from './i18n';
 
 const sources = import.meta.glob<string>('../ui/**/*.tsx', { eager: true, query: '?raw', import: 'default' });
 
@@ -33,7 +33,37 @@ describe('i18n', () => {
     ['', null, 'fr-FR', 'en-us'],
     ['?lang=xx', 'nada', 'en-US', 'en-us'],
   ])('detects the language for %s, saved %s, browser %s', (search, saved, browser, expected) => {
-    expect(detectLocale(search, saved, browser)).toBe(expected);
+    expect(detectLocale(search, '/safira/', saved, browser)).toBe(expected);
+  });
+
+  it.each([
+    ['/safira/pt-br/', null, 'en-US', 'pt-br'],
+    ['/safira/ja/index.html', null, 'pt-BR', 'ja'],
+    ['/safira/preview/fix/zh-cn/', null, 'en-US', 'zh-cn'],
+    ['/safira/es/', 'pt-br', 'en-US', 'es'],
+    ['/safira/', 'ja', 'en-US', 'ja'],
+    ['/safira/en-us/', null, 'pt-BR', 'pt-br'],
+    ['/safira/fr/', null, 'ja-JP', 'ja'],
+    ['/safira/pt-br/assets/', null, 'en-US', 'en-us'],
+  ])('opens the page of %s, saved %s, browser %s, in its language', (pathname, saved, browser, expected) => {
+    expect(detectLocale('', pathname, saved, browser)).toBe(expected);
+  });
+
+  it.each([
+    ['/safira/', 'pt-br', '/safira/pt-br/'],
+    ['/safira/ja/', 'es', '/safira/es/'],
+    ['/safira/ja/', 'en-us', '/safira/'],
+    ['/safira/zh-cn/index.html', 'ja', '/safira/ja/'],
+    ['/safira/index.html', 'en-us', '/safira/'],
+    ['/safira/preview/fix/es/', 'zh-cn', '/safira/preview/fix/zh-cn/'],
+    ['/', 'ja', '/ja/'],
+    ['/ja/', 'en-us', '/'],
+  ])('moves %s to the page of %s at %s', (pathname, locale, expected) => {
+    expect(localePath(pathname, locale as Parameters<typeof localePath>[1])).toBe(expected);
+  });
+
+  it('lets ?lang= win over the page that was opened', () => {
+    expect(detectLocale('?lang=es', '/safira/pt-br/', null, 'en-US')).toBe('es');
   });
 
   it('has the same keys in every dictionary', () => {

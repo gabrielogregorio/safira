@@ -41,11 +41,40 @@ const fromBrowserLanguage = (language: string): Locale => {
   return match === undefined ? 'en-us' : match[1];
 };
 
-export const detectLocale = (search: string, saved: string | null, browserLanguage: string): Locale => {
+/** The page of each language lives in its own folder, like /safira/pt-br/, so search engines can list it. */
+const LOCALE_FOLDER = /(?:^|\/)(pt-br|es|zh-cn|ja)\/(?:index\.html)?$/;
+
+const fromPath = (pathname: string): Locale | null => {
+  const folder = LOCALE_FOLDER.exec(pathname)?.[1] ?? null;
+
+  return isLocale(folder) ? folder : null;
+};
+
+/** The address of the page of a language: English stays at the root of the site. */
+export const localePath = (pathname: string, locale: Locale): string => {
+  const root = pathname.replace(LOCALE_FOLDER, '/').replace(/index\.html$/, '');
+
+  return locale === 'en-us' ? root : `${root}${locale}/`;
+};
+
+// The address with ?lang= wins, then the page that was opened, then the language the person chose.
+// Choosing a language in the app moves to its page, so the address and the language never disagree.
+export const detectLocale = (
+  search: string,
+  pathname: string,
+  saved: string | null,
+  browserLanguage: string,
+): Locale => {
   const requested = new URLSearchParams(search).get('lang');
 
   if (isLocale(requested)) {
     return requested;
+  }
+
+  const opened = fromPath(pathname);
+
+  if (opened !== null) {
+    return opened;
   }
 
   return isLocale(saved) ? saved : fromBrowserLanguage(browserLanguage);
