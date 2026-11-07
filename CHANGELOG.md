@@ -10,6 +10,10 @@
 
 - A reload shows the sky of the saved theme right away, instead of a white screen while the app loads.
 
+### Changed
+
+- New logo: the dot and the arrow of Safira inside a glossy Frutiger Aero orb, used as the tab icon, the phone home screen icon and on the about pages. Its source is `docs/logo.svg`.
+
 ## 1.3.0
 
 Fully compatible with 1.2.0: scripts of every earlier version keep running, and the language version stays 1.1.

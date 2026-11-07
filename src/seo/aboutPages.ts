@@ -748,6 +748,7 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
     <title>${title}</title>
     <meta name="description" content="${description}" />
     <link rel="icon" type="image/png" href="${toRoot(locale)}icone.png" />
+    <link rel="apple-touch-icon" href="${toRoot(locale)}apple-touch-icon.png" />
     <link rel="canonical" href="${aboutUrl(locale)}" />
     ${alternateLinks()}
     <meta property="og:type" content="website" />

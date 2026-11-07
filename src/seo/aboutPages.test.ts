@@ -65,6 +65,9 @@ describe('about pages', () => {
 
     expect(english.querySelector('link[rel="icon"]')?.getAttribute('href')).toBe('../icone.png');
     expect(japanese.querySelector('link[rel="icon"]')?.getAttribute('href')).toBe('../../icone.png');
+    expect(japanese.querySelector('link[rel="apple-touch-icon"]')?.getAttribute('href')).toBe(
+      '../../apple-touch-icon.png',
+    );
     expect(languages(english)).toEqual([
       '../about/',
       '../pt-br/about/',

@@ -5,6 +5,7 @@ const BUILT = `<!doctype html>
   <head>
     <meta name="description" content="Safira, a programming language in natural language, with a web IDE" />
     <link rel="icon" type="image/png" href="./icone.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <title>Safira</title>
     <script type="module" crossorigin src="./assets/index.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index.css">
@@ -64,6 +65,7 @@ describe('SEO pages', () => {
     expect(pageHtml(BUILT, 'ja')).toContain('src="../assets/index.js"');
     expect(pageHtml(BUILT, 'ja')).toContain('href="../assets/index.css"');
     expect(pageHtml(BUILT, 'ja')).toContain('href="../icone.png"');
+    expect(pageHtml(BUILT, 'ja')).toContain('href="../apple-touch-icon.png"');
     expect(pageHtml(BUILT, 'ja')).not.toContain('"./');
   });
 
