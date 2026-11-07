@@ -1,4 +1,7 @@
+import type { SyntaxCategory } from '../language/highlight.ts';
+import { highlightCode } from '../language/highlight.ts';
 import type { Locale } from '../language/messages.ts';
+import { SYNTAX_PALETTES } from '../settings/syntaxPalettes.ts';
 import { SEO_LOCALES, SEO_PAGES, SITE_URL } from './seoPages.ts';
 
 export const ABOUT_FOLDER = 'about/';
@@ -452,11 +455,37 @@ const escapeHtml = (text: string): string =>
 // The English page is one folder deep and the others two: links between pages go up to the site root first.
 const toRoot = (locale: Locale): string => (SEO_PAGES[locale].folder === '' ? '../' : '../../');
 
+/** The code in the colors of the editor, from the same highlighter the IDE uses. */
+export const highlighted = (code: string): string => {
+  let html = '';
+  let position = 0;
+
+  for (const { start, end, category } of highlightCode(code)) {
+    html += escapeHtml(code.slice(position, start));
+    html += `<span class="syntax-${category}">${escapeHtml(code.slice(start, end))}</span>`;
+    position = end;
+  }
+
+  return html + escapeHtml(code.slice(position));
+};
+
+// One rule per category, painted with the light or the dark palette of the IDE.
+const syntaxRules = (): string =>
+  (Object.keys(SYNTAX_PALETTES.light) as SyntaxCategory[])
+    .map((category) => `.syntax-${category} { color: var(--syntax-${category}); }`)
+    .join('\n      ');
+
+const syntaxColors = (theme: 'light' | 'dark'): string =>
+  Object.entries(SYNTAX_PALETTES[theme])
+    .map(([category, color]) => `--syntax-${category}: ${color};`)
+    .join('\n          ');
+
 // The same Frutiger Aero as the app: sky and hills behind, glass panels, glossy pill buttons and a dark terminal.
 const STYLE = `
       :root {
         --ink: #0b2a4a;
         --sky-color: #7fd1f7;
+        ${syntaxColors('light')}
         --muted: #234a6e;
         --link: #0d4fae;
         --panel: rgb(255 255 255 / 62%);
@@ -477,6 +506,7 @@ const STYLE = `
         :root {
           --ink: #eaf6ff;
           --sky-color: #082f5c;
+          ${syntaxColors('dark')}
           --muted: #b9daf2;
           --link: #8fd0ff;
           --panel: rgb(8 32 66 / 66%);
@@ -620,6 +650,8 @@ const STYLE = `
         box-shadow: inset 0 1px 3px rgb(6 50 100 / 18%);
       }
 
+      ${syntaxRules()}
+
       .terminal {
         background: linear-gradient(180deg, #0c2340 0%, #050f20 100%);
         border: 1px solid var(--border);
@@ -752,7 +784,7 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
       <section class="glass" aria-labelledby="example">
         <h2 id="example">${escapeHtml(copy.exampleTitle)}</h2>
         <p>${escapeHtml(copy.exampleText)}</p>
-        <pre class="editor"><code>${escapeHtml(copy.example)}</code></pre>
+        <pre class="editor"><code>${highlighted(copy.example)}</code></pre>
         <p class="label">${escapeHtml(copy.outputLabel)}</p>
         <pre class="terminal"><samp>${copy.output.map(shownLine).join('\n')}</samp></pre>
       </section>

@@ -1,5 +1,5 @@
-import { getAllCommands } from './phrases';
-import { removeAccents, tokenize } from './tokenizer';
+import { getAllCommands } from './phrases.ts';
+import { removeAccents, tokenize } from './tokenizer.ts';
 
 export type SyntaxCategory =
   | 'numerico'

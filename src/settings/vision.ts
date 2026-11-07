@@ -1,6 +1,6 @@
 import type { SyntaxCategory } from '@/language/highlight';
 import type { ThemeId } from './settings';
-import { SYNTAX_PALETTES } from './settings';
+import { SYNTAX_PALETTES } from './syntaxPalettes';
 
 export type VisionMode =
   | 'default'

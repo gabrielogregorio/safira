@@ -2,7 +2,7 @@ import { driveExecution } from '@/language/driver';
 import { Interpreter } from '@/language/interpreter';
 import { VirtualFileSystem } from '@/language/virtualFileSystem';
 import type { ShownText } from './aboutPages';
-import { ABOUT_PAGES, aboutHtml, aboutSitemapUrls } from './aboutPages';
+import { ABOUT_PAGES, aboutHtml, aboutSitemapUrls, highlighted } from './aboutPages';
 import { SEO_LOCALES, SEO_PAGES, SITE_URL } from './seoPages';
 
 const read = (html: string): Document => new DOMParser().parseFromString(html, 'text/html');
@@ -101,6 +101,19 @@ describe('about pages', () => {
     expect(terminal?.textContent?.split('\n')[0]).toBe('Olá, Ana!');
     expect(painted[0]).toEqual(['Olá, Ana!', 'rgb(77, 163, 255)']);
     expect(terminal?.textContent).toContain('Você tem 12 anos.');
+  });
+
+  it('paints the code with the categories of the IDE and keeps the text intact', () => {
+    const code = read(aboutHtml('pt-br', [])).querySelector('pre.editor code');
+
+    expect(code?.textContent).toBe(ABOUT_PAGES['pt-br'].example);
+    expect(code?.querySelector('.syntax-comentario')?.textContent).toBe(
+      '# Várias formas de dizer a mesma coisa, com cor.',
+    );
+    expect(code?.querySelector('.syntax-exibicao')?.textContent).toBe('mostre');
+    expect(highlighted('x = "<b>"')).toBe(
+      'x <span class="syntax-atribuicao">=</span> <span class="syntax-string">&quot;&lt;b&gt;&quot;</span>',
+    );
   });
 
   it('links each about page to every language and to a default', () => {
