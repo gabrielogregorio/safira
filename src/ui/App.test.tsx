@@ -468,6 +468,7 @@ describe('App', () => {
 
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
     expect(document.documentElement.lang).toBe('pt-br');
+    expect(document.title).toBe('Safira: linguagem de programação em português para iniciantes');
 
     await userEvent.click(screen.getByRole('button', { name: /^Tema: / }));
 

@@ -95,6 +95,14 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 | `#/projects/<id>/<file>` | Project and file, with the file URL encoded |
 | `#/projects/<id>/aulas%2F03-1.safira` | A step of lesson mode is a file, so it has an address like any other |
 
+### Pages for search engines
+
+The build turns `index.html` into one page per language: `/` in English and `/pt-br/`, `/es/`, `/zh-cn/` and `/ja/` (`src/seo/seoPlugin.ts`). Each page carries, in its language, the title, the description, `hreflang` links to the others, a canonical address, Open Graph tags with its preview image (`public/og/<language>.jpg`) and a short text inside `#root` that the app replaces when it starts. Search engines and chat apps read that HTML without running the app. The build also writes `sitemap.xml`.
+
+The texts live in `src/seo/seoPages.ts`, and every address points to `https://gabrielogregorio.github.io/safira/`, so previews never compete with the site. The folder only picks the first language: a language the person chose, or `?lang=`, wins over it. All folders share the same browser storage.
+
+`robots.txt` only counts at the root of a domain, which belongs to another repository on GitHub Pages, so the sitemap goes to Google through Search Console.
+
 ## Interface decisions
 
 - Syntax colors follow the theme and the vision mode only. `applyVision` in `src/settings/vision.ts` writes them, with the interface tokens of the mode, as inline variables on `html`, so they win over the theme rules and leave no trace when the mode ends.

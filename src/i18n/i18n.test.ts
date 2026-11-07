@@ -33,7 +33,23 @@ describe('i18n', () => {
     ['', null, 'fr-FR', 'en-us'],
     ['?lang=xx', 'nada', 'en-US', 'en-us'],
   ])('detects the language for %s, saved %s, browser %s', (search, saved, browser, expected) => {
-    expect(detectLocale(search, saved, browser)).toBe(expected);
+    expect(detectLocale(search, '/safira/', saved, browser)).toBe(expected);
+  });
+
+  it.each([
+    ['/safira/pt-br/', null, 'en-US', 'pt-br'],
+    ['/safira/ja/index.html', null, 'pt-BR', 'ja'],
+    ['/safira/preview/fix/zh-cn/', null, 'en-US', 'zh-cn'],
+    ['/safira/es/', 'pt-br', 'en-US', 'pt-br'],
+    ['/safira/en-us/', null, 'pt-BR', 'pt-br'],
+    ['/safira/fr/', null, 'ja-JP', 'ja'],
+    ['/safira/pt-br/assets/', null, 'en-US', 'en-us'],
+  ])('opens the page of %s, saved %s, browser %s, in its language', (pathname, saved, browser, expected) => {
+    expect(detectLocale('', pathname, saved, browser)).toBe(expected);
+  });
+
+  it('lets ?lang= win over the page that was opened', () => {
+    expect(detectLocale('?lang=es', '/safira/pt-br/', null, 'en-US')).toBe('es');
   });
 
   it('has the same keys in every dictionary', () => {

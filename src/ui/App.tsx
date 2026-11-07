@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { createTranslator, detectLocale, LocaleContext, TranslationContext } from '@/i18n/i18n';
+import { SEO_PAGES } from '@/seo/seoPages';
 import { toProjectName } from '@/projects/projectArchive';
 import type { Project } from '@/projects/projectStore';
 import { createProject, loadProjects, removeProject, saveProjects, upsertProject } from '@/projects/projectStore';
@@ -64,7 +65,7 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
   const shownTheme = useRef(skyTheme);
 
   const locale = useMemo(
-    () => detectLocale(window.location.search, settings.locale, navigator.language),
+    () => detectLocale(window.location.search, window.location.pathname, settings.locale, navigator.language),
     [settings.locale],
   );
   const translate = useMemo(() => createTranslator(locale), [locale]);
@@ -73,6 +74,7 @@ export const App = ({ createWorker, createLessonCheckWorker }: AppProps) => {
   useEffect(() => {
     const root = document.documentElement;
     root.lang = locale === 'en-us' ? 'en' : locale;
+    document.title = SEO_PAGES[locale].title;
 
     if (shownTheme.current !== skyTheme && prefersMotion()) {
       root.dataset['themeChanging'] = 'true';

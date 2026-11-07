@@ -1,11 +1,12 @@
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
+import { seoPages } from './src/seo/seoPlugin.ts';
 
 export default defineConfig({
   base: './',
   build: { outDir: 'build', sourcemap: true },
   resolve: { tsconfigPaths: true },
-  plugins: [react()],
+  plugins: [react(), seoPages()],
   test: {
     globals: true,
     environment: 'jsdom',
@@ -17,7 +18,16 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text-summary', 'html'],
       include: ['src/**/*.{ts,tsx}'],
-      exclude: ['src/**/*.test.{ts,tsx}', 'src/testSetup.ts', 'src/main.tsx', 'src/ui/fakeWorker.ts', 'src/language/testHarness.ts', 'src/runtime/runner.worker.ts', 'src/lessons/lessonCheck.worker.ts', 'src/language/matrix/**'],
+      exclude: [
+        'src/**/*.test.{ts,tsx}',
+        'src/testSetup.ts',
+        'src/main.tsx',
+        'src/ui/fakeWorker.ts',
+        'src/language/testHarness.ts',
+        'src/runtime/runner.worker.ts',
+        'src/lessons/lessonCheck.worker.ts',
+        'src/language/matrix/**',
+      ],
       thresholds: { statements: 100, branches: 100, functions: 100, lines: 100 },
     },
   },

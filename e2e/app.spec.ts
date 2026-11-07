@@ -119,6 +119,35 @@ test('runs a program in the worker', async ({ page }) => {
   await expect(page.getByRole('log')).toContainText('Script finished');
 });
 
+test('opens the page of a language in its folder, with its title, and runs a program there', async ({ page }) => {
+  await page.goto('/pt-br/');
+
+  await expect(page).toHaveTitle('Safira: linguagem de programação em português para iniciantes');
+  await expect(page.locator('html')).toHaveAttribute('lang', 'pt-br');
+  await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+    'content',
+    'https://gabrielogregorio.github.io/safira/og/pt-br.jpg',
+  );
+
+  await page.getByRole('button', { name: 'Criar projeto' }).click();
+  await page.getByRole('button', { name: 'Seguir em frente' }).click();
+  await page.getByLabel('Editor de código').click();
+  await page.keyboard.insertText('mostre "oi"');
+  await page.getByRole('button', { name: 'Executar', exact: true }).click();
+
+  await expect(page.getByRole('log')).toContainText('oi');
+});
+
+test('serves a sitemap and a preview image for every language', async ({ request }) => {
+  const sitemap = await (await request.get('/sitemap.xml')).text();
+
+  expect(sitemap).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/</loc>');
+
+  for (const locale of ['en-us', 'pt-br', 'es', 'zh-cn', 'ja']) {
+    expect((await request.get(`/og/${locale}.jpg`)).headers()['content-type']).toBe('image/jpeg');
+  }
+});
+
 test('mixes languages in the same script', async ({ page }) => {
   await createProjectWithCode(page, 'x recebe 1\nif x is equal to 1 { mostrar "um" }\nrepeat 2 vezes { show "z" }');
   await runCode(page);

@@ -41,14 +41,31 @@ const fromBrowserLanguage = (language: string): Locale => {
   return match === undefined ? 'en-us' : match[1];
 };
 
-export const detectLocale = (search: string, saved: string | null, browserLanguage: string): Locale => {
+/** The page of each language lives in its own folder, like /safira/pt-br/, so search engines can list it. */
+const fromPath = (pathname: string): Locale | null => {
+  const folder = /\/([a-z-]+)\/(?:index\.html)?$/.exec(pathname)?.[1] ?? null;
+
+  return isLocale(folder) && folder !== 'en-us' ? folder : null;
+};
+
+// The address with ?lang= wins, then the language the person chose, then the page that was opened.
+export const detectLocale = (
+  search: string,
+  pathname: string,
+  saved: string | null,
+  browserLanguage: string,
+): Locale => {
   const requested = new URLSearchParams(search).get('lang');
 
   if (isLocale(requested)) {
     return requested;
   }
 
-  return isLocale(saved) ? saved : fromBrowserLanguage(browserLanguage);
+  if (isLocale(saved)) {
+    return saved;
+  }
+
+  return fromPath(pathname) ?? fromBrowserLanguage(browserLanguage);
 };
 
 export const TranslationContext = createContext<Translate>(createTranslator('en-us'));
