@@ -165,13 +165,26 @@ describe('lesson mode', () => {
     expect(Object.keys(loadProjects()[0].files)).toContain('lessons/03-1.safira');
   });
 
-  it('keeps the place after a reload', async () => {
+  it('opens the IDE without the cat after a reload, and keeps the place for when he is called again', async () => {
     await enterLessonMode();
     await finishExample();
     document.body.replaceChildren();
     renderApp();
 
+    expect(await screen.findByRole('menuitem', { name: 'Help' })).toBeInTheDocument();
+    expect(document.querySelector('.cat')).toBeNull();
+
+    await pressHelpItem();
+
     expect(await screen.findByRole('button', { name: /^Step 1: .* \(done\)$/ })).toBeInTheDocument();
+  });
+
+  it('ends the mode when leaving the IDE, so going back does not bring the cat', async () => {
+    await enterLessonMode();
+    await userEvent.click(screen.getByRole('button', { name: 'Back to projects' }));
+    await screen.findByRole('button', { name: 'Create project' });
+
+    expect(loadSettings().lessonMode).toBe(false);
   });
 
   it('gives the tabs back when the mode ends', async () => {

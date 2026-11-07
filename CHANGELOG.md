@@ -12,6 +12,7 @@
 
 ### Changed
 
+- Opening the IDE no longer brings the cat back by itself: lesson mode starts only from Help and lasts while the IDE is open, keeping the place and progress for the next time.
 - New logo: the dot and the arrow of Safira inside a glossy Frutiger Aero orb, used as the tab icon, the phone home screen icon and on the about pages. Its source is `docs/logo.svg`.
 
 ## 1.3.0

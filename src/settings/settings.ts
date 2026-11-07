@@ -76,7 +76,13 @@ export const loadSettings = (): Settings => {
   try {
     const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? '{}') as Partial<Settings>;
 
-    return { ...DEFAULT_SETTINGS, ...parsed, vision: isVisionMode(parsed.vision) ? parsed.vision : 'default' };
+    // Lesson mode never comes back by itself: opening the IDE starts without the cat, until someone calls him.
+    return {
+      ...DEFAULT_SETTINGS,
+      ...parsed,
+      vision: isVisionMode(parsed.vision) ? parsed.vision : 'default',
+      lessonMode: false,
+    };
   } catch {
     return DEFAULT_SETTINGS;
   }

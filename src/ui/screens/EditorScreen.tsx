@@ -475,6 +475,20 @@ export const EditorScreen = ({
     onReplaceCode: updateActiveText,
   });
 
+  // Lesson mode lasts while the IDE is open: leaving it ends the mode, so the cat only comes back when someone calls him.
+  const latestChangeSettings = useRef(onChangeSettings);
+
+  useEffect(() => {
+    latestChangeSettings.current = onChangeSettings;
+  }, [onChangeSettings]);
+
+  useEffect(
+    () => () => {
+      latestChangeSettings.current({ lessonMode: false });
+    },
+    [],
+  );
+
   // He leaves for good: only clearing the browser brings him back, like the eaten fish.
   const abandonLessons = useCallback(() => {
     onChangeSettings({ lessonMode: false, catLeft: true });

@@ -59,7 +59,7 @@ A new command goes in `scenarios.ts` and in all five dictionaries. It runs with 
 
 ## Lessons
 
-The course is 14 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step.
+The course is 14 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step. The mode lasts while the IDE is open: leaving the IDE or reloading ends it, so the cat only appears when someone turns it on in Help, and the place and progress wait for the next time.
 
 ```json
 { "uses": ["repeat|while"], "exact": false, "hint": "Shown after a failure", "cases": [{ "inputs": ["4"], "shows": ["8"], "hides": ["9"] }] }
