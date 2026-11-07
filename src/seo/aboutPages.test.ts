@@ -7,16 +7,18 @@ import { SEO_LOCALES, SEO_PAGES, SITE_URL } from './seoPages';
 const read = (html: string): Document => new DOMParser().parseFromString(html, 'text/html');
 
 const run = async (source: string): Promise<string[]> => {
-  const lines: string[] = [];
+  let shown = '';
   const files = new VirtualFileSystem({ 'main.safira': `#safira 1.1\n${source}` });
   await driveExecution(
     new Interpreter({ files, locale: 'en-us', random: (minimum: number) => minimum }).run('main.safira'),
     {
-      onOutput: (_inline: boolean, text: string) => lines.push(text),
+      onOutput: (inline: boolean, text: string) => {
+        shown += inline ? text : `${text}\n`;
+      },
     } as unknown as Parameters<typeof driveExecution>[1],
   );
 
-  return lines;
+  return shown.trimEnd().split('\n');
 };
 
 describe('about pages', () => {

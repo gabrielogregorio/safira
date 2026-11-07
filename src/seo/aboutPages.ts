@@ -57,11 +57,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       'People who do not read English: Safira also speaks Portuguese, Spanish, Chinese and Japanese.',
     ],
     exampleTitle: 'A short program',
-    exampleText: 'A variable, a loop and a condition:',
+    exampleText: 'Many ways to show a text, the same line, two languages mixed, a loop and a condition:',
     outputLabel: 'What it shows',
     example:
-      'name = "Ana"\nshow "Hello, " + name + "!"\n\nrepeat 3 times {\n    show "⭐"\n}\n\ngrade = 8\nif grade is greater than or equal to 6 then {\n    show "You passed! 🎉"\n} else {\n    show "Try again."\n}',
-    output: ['Hello, Ana!', '⭐', '⭐', '⭐', 'You passed! 🎉'],
+      '# Many ways to say the same thing.\nname receives "Ana"\nage is worth 12\nshow "Hello, " + name + "!"\ndisplay on the screen "You are " + age + " years old."\nwrite on the screen "All of these show a text."\n\n# On the same line, and even in Portuguese.\nshow on this line "Safira "\nprint "speaks "\nmostre "Portuguese too."\n\nrepeat 3 times {\n    show on this line "⭐"\n}\nshow ""\n\nif age is greater than or equal to 10 then {\n    show "You can code already! 🎉"\n} else {\n    show "You can too, with help! 🎉"\n}',
+    output: [
+      'Hello, Ana!',
+      'You are 12 years old.',
+      'All of these show a text.',
+      'Safira speaks Portuguese too.',
+      '⭐⭐⭐',
+      'You can code already! 🎉',
+    ],
     lessonsTitle: 'The 14 lessons',
     lessonsText:
       'Open a project and choose Lesson mode in the Help menu. Each lesson shows a program to run and then a challenge, which Safira checks by itself.',
@@ -128,11 +135,19 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       'Quem não lê inglês: a Safira fala português, e também inglês, espanhol, chinês e japonês.',
     ],
     exampleTitle: 'Um programa curto',
-    exampleText: 'Uma variável, uma repetição e uma condição:',
+    exampleText:
+      'Várias formas de mostrar um texto, a mesma linha, dois idiomas misturados, uma repetição e uma condição:',
     outputLabel: 'O que ele mostra',
     example:
-      'nome = "Ana"\nmostre "Olá, " + nome + "!"\n\nrepita 3 vezes {\n    mostre "⭐"\n}\n\nnota = 8\nse nota for maior ou igual a 6 então {\n    mostre "Você passou! 🎉"\n} senão {\n    mostre "Tente de novo."\n}',
-    output: ['Olá, Ana!', '⭐', '⭐', '⭐', 'Você passou! 🎉'],
+      '# Várias formas de dizer a mesma coisa.\nnome recebe "Ana"\nidade vale 12\nmostre "Olá, " + nome + "!"\nexiba "Você tem " + idade + " anos."\nimprima na tela "Tudo isso mostra um texto."\n\n# Na mesma linha, e até em inglês.\nmostre nessa linha "A Safira "\nprint "fala "\nshow "inglês também."\n\nrepita 3 vezes {\n    mostre nessa linha "⭐"\n}\nmostre ""\n\nse idade for maior ou igual a 10 então {\n    mostre "Já dá para programar! 🎉"\n} senão {\n    mostre "Dá também, com ajuda! 🎉"\n}',
+    output: [
+      'Olá, Ana!',
+      'Você tem 12 anos.',
+      'Tudo isso mostra um texto.',
+      'A Safira fala inglês também.',
+      '⭐⭐⭐',
+      'Já dá para programar! 🎉',
+    ],
     lessonsTitle: 'As 14 aulas',
     lessonsText:
       'Abra um projeto e escolha Modo aula no menu Ajuda. Cada aula mostra um programa para rodar e depois um desafio, que a Safira confere sozinha.',
@@ -199,11 +214,19 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       'Quien no lee inglés: Safira habla español, y también portugués, inglés, chino y japonés.',
     ],
     exampleTitle: 'Un programa corto',
-    exampleText: 'Una variable, una repetición y una condición:',
+    exampleText:
+      'Varias formas de mostrar un texto, la misma línea, dos idiomas mezclados, una repetición y una condición:',
     outputLabel: 'Lo que muestra',
     example:
-      'nombre = "Ana"\nmuestra "¡Hola, " + nombre + "!"\n\nrepetir 3 veces {\n    muestra "⭐"\n}\n\nnota = 8\nsi nota es mayor o igual a 6 entonces {\n    muestra "¡Aprobaste! 🎉"\n} si no {\n    muestra "Inténtalo de nuevo."\n}',
-    output: ['¡Hola, Ana!', '⭐', '⭐', '⭐', '¡Aprobaste! 🎉'],
+      '# Muchas formas de decir lo mismo.\nnombre recibe "Ana"\nedad vale 12\nmuestra "¡Hola, " + nombre + "!"\nimprimir en la pantalla "Tienes " + edad + " años."\nescribe en la pantalla "Todo esto muestra un texto."\n\n# En la misma línea, y hasta en inglés.\nmostrar en esta linea "Safira "\nprint "habla "\nshow "inglés también."\n\nrepetir 3 veces {\n    mostrar en esta linea "⭐"\n}\nmuestra ""\n\nsi edad es mayor o igual a 10 entonces {\n    muestra "¡Ya puedes programar! 🎉"\n} si no {\n    muestra "¡También puedes, con ayuda! 🎉"\n}',
+    output: [
+      '¡Hola, Ana!',
+      'Tienes 12 años.',
+      'Todo esto muestra un texto.',
+      'Safira habla inglés también.',
+      '⭐⭐⭐',
+      '¡Ya puedes programar! 🎉',
+    ],
     lessonsTitle: 'Las 14 lecciones',
     lessonsText:
       'Abre un proyecto y elige Modo clase en el menú Ayuda. Cada lección muestra un programa para ejecutar y después un desafío, que Safira revisa sola.',
@@ -269,11 +292,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       '不懂英语的人：Safira 会说中文，也会说英语、葡萄牙语、西班牙语和日语。',
     ],
     exampleTitle: '一个小程序',
-    exampleText: '一个变量、一次重复和一个条件：',
+    exampleText: '多种显示文字的写法、同一行输出、混用两种语言、一次重复和一个条件：',
     outputLabel: '运行结果',
     example:
-      '名字 = "小明"\n显示 "你好，" + 名字 + "！"\n\n重复 3 次 {\n    显示 "⭐"\n}\n\n成绩 = 8\n如果 成绩 大于等于 6 那么 {\n    显示 "你及格了！🎉"\n} 否则 {\n    显示 "再试一次。"\n}',
-    output: ['你好，小明！', '⭐', '⭐', '⭐', '你及格了！🎉'],
+      '# 同一件事，有很多种说法。\n名字 设为 "小明"\n年龄 赋值 12\n显示 "你好，" + 名字 + "！"\n打印 "你今年 " + 年龄 + " 岁。"\n输出 "这些都能显示文字。"\n\n# 写在同一行，甚至可以用英语。\n同行显示 "Safira "\n同行打印 "也会说"\nshow "英语。"\n\n重复 3 次 {\n    同行显示 "⭐"\n}\n显示 ""\n\n如果 年龄 大于等于 10 那么 {\n    显示 "你已经可以编程了！🎉"\n} 否则 {\n    显示 "有人帮忙也可以！🎉"\n}',
+    output: [
+      '你好，小明！',
+      '你今年 12 岁。',
+      '这些都能显示文字。',
+      'Safira 也会说英语。',
+      '⭐⭐⭐',
+      '你已经可以编程了！🎉',
+    ],
     lessonsTitle: '14 节课程',
     lessonsText:
       '打开一个项目，在「帮助」菜单中选择「课程模式」。每节课先给出一个可以运行的程序，然后是一个挑战，Safira 会自动检查你的答案。',
@@ -325,11 +355,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       '英語が読めない人：Safira は日本語のほか、英語、ポルトガル語、スペイン語、中国語も話します。',
     ],
     exampleTitle: '短いプログラム',
-    exampleText: '変数、くり返し、条件：',
+    exampleText: '文字を表示するいろいろな書き方、同じ行への表示、2 つの言語の混在、くり返し、条件：',
     outputLabel: '表示される結果',
     example:
-      '名前 = "さくら"\n表示 "こんにちは、" + 名前 + "！"\n\n繰り返す 3 回 {\n    表示 "⭐"\n}\n\n点数 = 8\nもし 点数 以上 6 なら {\n    表示 "合格です! 🎉"\n} そうでなければ {\n    表示 "もう一度がんばりましょう。"\n}',
-    output: ['こんにちは、さくら！', '⭐', '⭐', '⭐', '合格です! 🎉'],
+      '# 同じことを、いろいろな言い方で。\n名前 は "さくら"\n年齢 は 12\n表示 "こんにちは、" + 名前 + "！"\n出力 "あなたは " + 年齢 + " 歳です。"\n表示 "どれも文字を表示します。"\n\n# 同じ行に、英語でも。\n続けて表示 "Safira は"\nprint "英語も"\nshow "話せます。"\n\n繰り返す 3 回 {\n    続けて表示 "⭐"\n}\n表示 ""\n\nもし 年齢 以上 10 なら {\n    表示 "もうプログラミングできます! 🎉"\n} そうでなければ {\n    表示 "手伝ってもらえばできます! 🎉"\n}',
+    output: [
+      'こんにちは、さくら！',
+      'あなたは 12 歳です。',
+      'どれも文字を表示します。',
+      'Safira は英語も話せます。',
+      '⭐⭐⭐',
+      'もうプログラミングできます! 🎉',
+    ],
     lessonsTitle: '14 のレッスン',
     lessonsText:
       'プロジェクトを開いて、「ヘルプ」メニューから「レッスンモード」を選びます。各レッスンでは、まず動かすプログラムがあり、次にチャレンジがあります。答えは Safira が自動でチェックします。',

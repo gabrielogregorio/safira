@@ -4,7 +4,7 @@
 
 ### Added
 
-- Every language has an about page, at `/about/`, `/pt-br/about/`, `/es/about/`, `/zh-cn/about/` and `/ja/about/`, with what Safira is, who it is for, a short program and what it shows, the 14 lessons, common questions (no ads, nothing to install, free to change and fork), its history, how to suggest ideas or help build it on GitHub, and links to the wiki and the code. Each page also names the other languages. The home screen links to it.
+- Every language has an about page, at `/about/`, `/pt-br/about/`, `/es/about/`, `/zh-cn/about/` and `/ja/about/`, with what Safira is, who it is for, a short program showing the ways to print, mixed languages and what it shows, the 14 lessons, common questions (no ads, nothing to install, free to change and fork), its history, how to suggest ideas or help build it on GitHub, and links to the wiki and the code. Each page also names the other languages. The home screen links to it.
 
 ## 1.3.0
 
