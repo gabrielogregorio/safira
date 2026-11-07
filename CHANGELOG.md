@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
+
+Fully compatible with 1.1.0: scripts of every earlier version keep running, and the language version stays 1.1.
+
+### Fixed
+
+- In a one-line if, import no longer swallows the else into the file name: the else runs when the condition is false, and the import loads the right file when it is true.
 
 ### Changed
 
