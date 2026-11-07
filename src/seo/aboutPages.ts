@@ -28,7 +28,11 @@ interface AboutCopy {
   questionsTitle: string;
   questions: Question[];
   historyTitle: string;
-  history: string;
+  history: string[];
+  contributeTitle: string;
+  contributeText: string;
+  idea: string;
+  code: string;
   linksTitle: string;
   wiki: string;
   github: string;
@@ -44,7 +48,7 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     description:
       'What Safira is, who it is for, a short program, the 14 lessons, answers to common questions and links to the wiki and the code.',
     heading: 'About Safira',
-    lead: 'Safira is a programming language that reads like plain English, made for people who have never programmed. You write commands the way you would say them, and the program runs right in the browser, on a computer or on a phone.',
+    lead: 'Safira is a programming language in plain words, made for people who have never programmed. It works in English, Portuguese, Spanish, Chinese and Japanese, and you can even mix them in the same program. It runs right in the browser, on a computer or on a phone: nothing to install, no account and no ads.',
     openIde: 'Open the IDE',
     whoTitle: 'Who it is for',
     who: [
@@ -64,6 +68,12 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     questionsTitle: 'Questions',
     questions: [
       { question: 'Is it free?', answer: 'Yes. Safira is open source, under the MIT license.' },
+      { question: 'Are there ads?', answer: 'No. There are no ads and nothing tracks what you do.' },
+      {
+        question: 'Can I change Safira or make my own version?',
+        answer:
+          'Yes. The code is on GitHub under the MIT license: you can copy it, change it and publish your own version, as long as you keep the license notice.',
+      },
       {
         question: 'Do I need to install anything or create an account?',
         answer: 'No. Open the site in a current browser. There are no accounts.',
@@ -87,10 +97,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       },
     ],
     historyTitle: 'History',
-    history:
-      'Safira started in 2019 as a language and IDE in Python, installed on the computer. In 2026 it was rewritten for the web: now the first line of code is one link away, and scripts from the Python version still run the same.',
+    history: [
+      'Safira was born in August 2019, early in the career of Gabriel Gregorio, with one goal: letting people who had never programmed write their first program with the words they already use every day. The first version was a language and an IDE written in Python, installed on the computer, in Portuguese, English and Spanish.',
+      'Version 0.38, from May 2021, was the last one in Python. In 2026 Safira was rewritten from scratch for the web, in TypeScript: version 1.0.0 took the IDE to the browser and to phones, added Chinese and Japanese, projects with folders, breakpoints, a variables inspector and the lessons with the cat. Now the first line of code is one link away.',
+      'Before the Python code left the project, the output of its programs was recorded, and that recording became a test that still runs: scripts written for the Python version run the same on the web.',
+    ],
+    contributeTitle: 'Help build Safira',
+    contributeText:
+      'Safira is made in the open, on GitHub. Anyone can help: with an idea, a bug report, a translation fix or code.',
+    idea: 'Suggest an idea',
+    code: 'Contribute code: how to start',
     linksTitle: 'Learn more',
-    wiki: 'Wiki: guide, commands and recipes',
+    wiki: 'Wiki: guide, commands and ready examples',
     github: 'Source code on GitHub',
     changelog: 'What changed in each version',
     bug: 'Report a bug',
@@ -101,7 +119,7 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     description:
       'O que é a Safira, para quem ela é, um programa curto, as 14 aulas, respostas para as dúvidas comuns e links para a wiki e o código.',
     heading: 'Sobre a Safira',
-    lead: 'A Safira é uma linguagem de programação em português, feita para quem nunca programou. Você escreve os comandos do jeito que falaria, e o programa roda direto no navegador, no computador ou no celular.',
+    lead: 'A Safira é uma linguagem de programação em português, feita para quem nunca programou. Ela também existe em inglês, espanhol, chinês e japonês, e dá para misturar os idiomas no mesmo programa. Roda direto no navegador, no computador ou no celular: sem instalar nada, sem conta e sem anúncios.',
     openIde: 'Abrir a IDE',
     whoTitle: 'Para quem é',
     who: [
@@ -121,6 +139,12 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     questionsTitle: 'Dúvidas',
     questions: [
       { question: 'É grátis?', answer: 'Sim. A Safira é de código aberto, com licença MIT.' },
+      { question: 'Tem anúncio?', answer: 'Não. Não tem anúncio e nada rastreia o que você faz.' },
+      {
+        question: 'Posso modificar a Safira ou criar a minha versão?',
+        answer:
+          'Pode. O código está no GitHub com licença MIT: você pode copiar, modificar e publicar a sua versão, desde que mantenha o aviso da licença.',
+      },
       {
         question: 'Preciso instalar alguma coisa ou criar conta?',
         answer: 'Não. Abra o site num navegador atual. Não existe conta.',
@@ -144,10 +168,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       },
     ],
     historyTitle: 'História',
-    history:
-      'A Safira nasceu em 2019 como linguagem e IDE em Python, instalada no computador. Em 2026 ela foi reescrita para a web: agora a primeira linha de código está a um link de distância, e os scripts da versão em Python continuam rodando igual.',
+    history: [
+      'A Safira nasceu em agosto de 2019, no começo da carreira de Gabriel Gregorio, com um objetivo: deixar quem nunca programou escrever o primeiro programa com as palavras que já usa no dia a dia. A primeira versão era uma linguagem e uma IDE feitas em Python, instaladas no computador, em português, inglês e espanhol.',
+      'A versão 0.38, de maio de 2021, foi a última em Python. Em 2026 a Safira foi reescrita do zero para a web, em TypeScript: a versão 1.0.0 levou a IDE para o navegador e para o celular, trouxe chinês e japonês, projetos com pastas, pontos de parada, inspetor de variáveis e as aulas com o gato. Agora a primeira linha de código está a um link de distância.',
+      'Antes de o código em Python sair do projeto, a saída dos programas foi gravada, e essa gravação virou um teste que roda até hoje: os scripts feitos para a versão em Python rodam igual na web.',
+    ],
+    contributeTitle: 'Ajude a construir a Safira',
+    contributeText:
+      'A Safira é feita às claras, no GitHub. Qualquer pessoa pode ajudar: com uma ideia, um problema encontrado, uma correção de tradução ou código.',
+    idea: 'Sugerir uma ideia',
+    code: 'Contribuir com código: por onde começar',
     linksTitle: 'Saiba mais',
-    wiki: 'Wiki: guia, comandos e receitas',
+    wiki: 'Wiki: guia, comandos e exemplos prontos',
     github: 'Código no GitHub',
     changelog: 'O que mudou em cada versão',
     bug: 'Reportar um problema',
@@ -158,7 +190,7 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     description:
       'Qué es Safira, para quién es, un programa corto, las 14 lecciones, respuestas a las dudas comunes y enlaces a la wiki y al código.',
     heading: 'Sobre Safira',
-    lead: 'Safira es un lenguaje de programación en español, hecho para quien nunca programó. Escribes los comandos como los dirías, y el programa funciona directo en el navegador, en el ordenador o en el móvil.',
+    lead: 'Safira es un lenguaje de programación en español, hecho para quien nunca programó. También existe en inglés, portugués, chino y japonés, y se pueden mezclar los idiomas en el mismo programa. Funciona directo en el navegador, en el ordenador o en el móvil: sin instalar nada, sin cuenta y sin anuncios.',
     openIde: 'Abrir el IDE',
     whoTitle: 'Para quién es',
     who: [
@@ -178,6 +210,12 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     questionsTitle: 'Dudas',
     questions: [
       { question: '¿Es gratis?', answer: 'Sí. Safira es de código abierto, con licencia MIT.' },
+      { question: '¿Tiene anuncios?', answer: 'No. No hay anuncios y nada rastrea lo que haces.' },
+      {
+        question: '¿Puedo modificar Safira o crear mi propia versión?',
+        answer:
+          'Sí. El código está en GitHub con licencia MIT: puedes copiarlo, modificarlo y publicar tu propia versión, siempre que mantengas el aviso de la licencia.',
+      },
       {
         question: '¿Tengo que instalar algo o crear una cuenta?',
         answer: 'No. Abre el sitio en un navegador actual. No hay cuentas.',
@@ -201,10 +239,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       },
     ],
     historyTitle: 'Historia',
-    history:
-      'Safira nació en 2019 como lenguaje e IDE en Python, instalado en el ordenador. En 2026 fue reescrita para la web: ahora la primera línea de código está a un enlace, y los scripts de la versión en Python siguen funcionando igual.',
+    history: [
+      'Safira nació en agosto de 2019, al comienzo de la carrera de Gabriel Gregorio, con un objetivo: que quien nunca programó pudiera escribir su primer programa con las palabras que ya usa todos los días. La primera versión era un lenguaje y un IDE hechos en Python, instalados en el ordenador, en portugués, inglés y español.',
+      'La versión 0.38, de mayo de 2021, fue la última en Python. En 2026 Safira fue reescrita desde cero para la web, en TypeScript: la versión 1.0.0 llevó el IDE al navegador y al móvil, sumó chino y japonés, proyectos con carpetas, puntos de parada, inspector de variables y las lecciones con el gato. Ahora la primera línea de código está a un enlace.',
+      'Antes de que el código en Python saliera del proyecto, se grabó la salida de sus programas, y esa grabación se convirtió en una prueba que sigue funcionando: los scripts hechos para la versión en Python funcionan igual en la web.',
+    ],
+    contributeTitle: 'Ayuda a construir Safira',
+    contributeText:
+      'Safira se hace a la vista de todos, en GitHub. Cualquiera puede ayudar: con una idea, un problema encontrado, una corrección de traducción o código.',
+    idea: 'Sugerir una idea',
+    code: 'Contribuir con código: por dónde empezar',
     linksTitle: 'Saber más',
-    wiki: 'Wiki: guía, comandos y recetas',
+    wiki: 'Wiki: guía, comandos y ejemplos listos',
     github: 'Código en GitHub',
     changelog: 'Qué cambió en cada versión',
     bug: 'Reportar un problema',
@@ -214,7 +260,7 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     title: '关于 Safira：用中文学编程，免费，直接在浏览器中运行',
     description: 'Safira 是什么、适合谁、一个小程序、14 节课程、常见问题解答，以及维基和源代码的链接。',
     heading: '关于 Safira',
-    lead: 'Safira 是一门可以用中文书写的编程语言，专为从没写过代码的人设计。你像说话一样写命令，程序直接在浏览器里运行，电脑和手机都可以。',
+    lead: 'Safira 是一门可以用中文书写的编程语言，专为从没写过代码的人设计。它同样支持英语、葡萄牙语、西班牙语和日语，同一个程序里还能混用多种语言。程序直接在浏览器里运行，电脑和手机都可以：无需安装，无需注册，没有广告。',
     openIde: '打开 IDE',
     whoTitle: '适合谁',
     who: [
@@ -234,6 +280,11 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     questionsTitle: '常见问题',
     questions: [
       { question: '免费吗？', answer: '免费。Safira 是开源软件，采用 MIT 许可证。' },
+      { question: '有广告吗？', answer: '没有。没有广告，也不会追踪你的操作。' },
+      {
+        question: '我可以修改 Safira 或做自己的版本吗？',
+        answer: '可以。源代码在 GitHub 上，采用 MIT 许可证：你可以复制、修改并发布自己的版本，只需保留许可证声明。',
+      },
       { question: '需要安装软件或注册账号吗？', answer: '不需要。用较新的浏览器打开网站即可，没有账号系统。' },
       { question: '手机上能用吗？', answer: '能。在手机上，IDE 会分成代码、输出和变量三个面板。' },
       {
@@ -244,8 +295,15 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       { question: '能做游戏吗？', answer: '能。程序可以读取键盘。在「示例」菜单中打开恐龙或迷你 RPG 看看。' },
     ],
     historyTitle: '历史',
-    history:
-      'Safira 诞生于 2019 年，最初是用 Python 编写、安装在电脑上的语言和 IDE。2026 年它被重写为网页版：现在打开一个链接就能写下第一行代码，Python 版本的脚本也照样能运行。',
+    history: [
+      'Safira 诞生于 2019 年 8 月，那时 Gabriel Gregorio 刚开始职业生涯。它的目标只有一个：让从没写过代码的人，用日常说话的词语写出第一个程序。第一个版本是用 Python 编写、安装在电脑上的语言和 IDE，支持葡萄牙语、英语和西班牙语。',
+      '2021 年 5 月发布的 0.38 是最后一个 Python 版本。2026 年，Safira 用 TypeScript 为网页从头重写：1.0.0 版本把 IDE 带进了浏览器和手机，新增了中文和日语、带文件夹的项目、断点、变量查看器，以及由小猫带领的课程。现在，打开一个链接就能写下第一行代码。',
+      '在 Python 代码移出项目之前，所有程序的输出都被记录了下来，这份记录变成了一项至今仍在运行的测试：为 Python 版本写的脚本，在网页版上运行结果完全一样。',
+    ],
+    contributeTitle: '一起建设 Safira',
+    contributeText: 'Safira 在 GitHub 上公开开发。任何人都可以帮忙：提一个想法、报告一个问题、修正翻译或贡献代码。',
+    idea: '提出想法',
+    code: '贡献代码：从哪里开始',
     linksTitle: '了解更多',
     wiki: '维基：指南、命令和示例',
     github: 'GitHub 上的源代码',
@@ -258,7 +316,7 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     description:
       'Safira とは何か、誰のためのものか、短いプログラム、14 のレッスン、よくある質問への答え、ウィキとソースコードへのリンク。',
     heading: 'Safira について',
-    lead: 'Safira は日本語で書けるプログラミング言語で、プログラミングをしたことがない人のために作られました。話すように命令を書くと、プログラムがそのままブラウザで動きます。パソコンでもスマホでも使えます。',
+    lead: 'Safira は日本語で書けるプログラミング言語で、プログラミングをしたことがない人のために作られました。英語、ポルトガル語、スペイン語、中国語にも対応していて、同じプログラムの中で言語を混ぜることもできます。ブラウザでそのまま動き、パソコンでもスマホでも使えます。インストールも登録も不要で、広告もありません。',
     openIde: 'IDE を開く',
     whoTitle: '誰のためのもの',
     who: [
@@ -278,6 +336,12 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
     questionsTitle: 'よくある質問',
     questions: [
       { question: '無料ですか？', answer: 'はい。Safira はオープンソースで、MIT ライセンスです。' },
+      { question: '広告はありますか？', answer: 'いいえ。広告はなく、操作を追跡するものもありません。' },
+      {
+        question: 'Safira を改造したり、自分のバージョンを作ったりできますか？',
+        answer:
+          'はい。ソースコードは GitHub にあり、MIT ライセンスです。ライセンス表示を残せば、コピーして改造し、自分のバージョンを公開できます。',
+      },
       {
         question: 'インストールやアカウント登録は必要ですか？',
         answer: 'いいえ。新しめのブラウザでサイトを開くだけです。アカウントはありません。',
@@ -298,10 +362,18 @@ export const ABOUT_PAGES: Record<Locale, AboutCopy> = {
       },
     ],
     historyTitle: '歴史',
-    history:
-      'Safira は 2019 年に、パソコンにインストールする Python 製の言語と IDE として生まれました。2026 年にウェブ向けに書き直され、今ではリンクひとつで最初の一行が書けます。Python 版のスクリプトも同じように動きます。',
+    history: [
+      'Safira は 2019 年 8 月、Gabriel Gregorio のキャリアの初期に生まれました。目標はひとつ、プログラミングをしたことがない人が、ふだん使っている言葉で最初のプログラムを書けるようにすることです。最初のバージョンは Python で作られ、パソコンにインストールする言語と IDE で、ポルトガル語、英語、スペイン語に対応していました。',
+      '2021 年 5 月の 0.38 が最後の Python 版です。2026 年、Safira は TypeScript でウェブ向けに一から書き直されました。バージョン 1.0.0 で IDE がブラウザとスマホに移り、中国語と日本語、フォルダ付きのプロジェクト、ブレークポイント、変数インスペクター、猫と学ぶレッスンが加わりました。今ではリンクひとつで最初の一行が書けます。',
+      'Python のコードがプロジェクトから外れる前に、プログラムの出力がすべて記録され、その記録は今も動くテストになりました。Python 版のために書いたスクリプトは、ウェブでも同じように動きます。',
+    ],
+    contributeTitle: 'Safira づくりに参加する',
+    contributeText:
+      'Safira は GitHub で公開して作られています。アイデア、見つけた問題、翻訳の修正、コードなど、誰でも手伝えます。',
+    idea: 'アイデアを提案する',
+    code: 'コードで貢献する：はじめかた',
     linksTitle: 'もっと知る',
-    wiki: 'ウィキ：ガイド、命令、レシピ',
+    wiki: 'ウィキ：ガイド、命令、使用例',
     github: 'GitHub のソースコード',
     changelog: '各バージョンの変更点',
     bug: '問題を報告する',
@@ -563,7 +635,17 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
 
       <section aria-labelledby="history">
         <h2 id="history">${escapeHtml(copy.historyTitle)}</h2>
-        <p>${escapeHtml(copy.history)}</p>
+        ${copy.history.map((paragraph) => `<p>${escapeHtml(paragraph)}</p>`).join('\n        ')}
+      </section>
+
+      <section aria-labelledby="contribute">
+        <h2 id="contribute">${escapeHtml(copy.contributeTitle)}</h2>
+        <p>${escapeHtml(copy.contributeText)}</p>
+        <ul>
+          <li><a href="${REPOSITORY_URL}/issues/new?template=feature_request.yml">${escapeHtml(copy.idea)}</a></li>
+          <li><a href="${REPOSITORY_URL}/issues/new?template=bug_report.yml">${escapeHtml(copy.bug)}</a></li>
+          <li><a href="${REPOSITORY_URL}/blob/main/CONTRIBUTING.md">${escapeHtml(copy.code)}</a></li>
+        </ul>
       </section>
 
       <section aria-labelledby="links">
@@ -572,7 +654,6 @@ export const aboutHtml = (locale: Locale, lessonTitles: string[]): string => {
           <li><a href="${REPOSITORY_URL}/wiki">${escapeHtml(copy.wiki)}</a></li>
           <li><a href="${REPOSITORY_URL}">${escapeHtml(copy.github)}</a></li>
           <li><a href="${REPOSITORY_URL}/blob/main/CHANGELOG.md">${escapeHtml(copy.changelog)}</a></li>
-          <li><a href="${REPOSITORY_URL}/issues">${escapeHtml(copy.bug)}</a></li>
         </ul>
       </section>
 

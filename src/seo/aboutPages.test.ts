@@ -64,6 +64,24 @@ describe('about pages', () => {
     expect(japanese.querySelector('footer a[aria-current="page"]')?.textContent).toBe('日本語');
   });
 
+  it('tells the history in paragraphs and shows how to help on GitHub', () => {
+    const document = read(aboutHtml('pt-br', []));
+    const help = [...document.querySelectorAll('#contribute ~ ul a')].map((link) => [
+      link.textContent,
+      link.getAttribute('href'),
+    ]);
+
+    expect(document.querySelectorAll('#history ~ p')).toHaveLength(ABOUT_PAGES['pt-br'].history.length);
+    expect(help).toEqual([
+      ['Sugerir uma ideia', 'https://github.com/gabrielogregorio/safira/issues/new?template=feature_request.yml'],
+      ['Reportar um problema', 'https://github.com/gabrielogregorio/safira/issues/new?template=bug_report.yml'],
+      [
+        'Contribuir com código: por onde começar',
+        'https://github.com/gabrielogregorio/safira/blob/main/CONTRIBUTING.md',
+      ],
+    ]);
+  });
+
   it('links each about page to every language and to a default', () => {
     const links = [...read(aboutHtml('es', [])).querySelectorAll('link[rel="alternate"]')].map((link) =>
       link.getAttribute('hreflang'),
