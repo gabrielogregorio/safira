@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Safira: learn to code in plain words, free, in the browser</title>
+    <meta name="description" content="What Safira is, who it is for, a short program, the 14 lessons, answers to common questions and links to the wiki and the code." />
+    <link rel="icon" type="image/png" href="../icone.png" />
+    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+    <link rel="canonical" href="https://gabrielogregorio.github.io/safira/about/" />
+    <link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+    <link rel="alternate" hreflang="x-default" href="https://gabrielogregorio.github.io/safira/about/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Safira" />
+    <meta property="og:url" content="https://gabrielogregorio.github.io/safira/about/" />
+    <meta property="og:title" content="About Safira: learn to code in plain words, free, in the browser" />
+    <meta property="og:description" content="What Safira is, who it is for, a short program, the 14 lessons, answers to common questions and links to the wiki and the code." />
+    <meta property="og:image" content="https://gabrielogregorio.github.io/safira/og/en-us.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="en_US" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <style>
+      :root {
+        --ink: #0b2a4a;
+        --sky-color: #7fd1f7;
+        --syntax-numerico: #0c7a7a;
+          --syntax-atribuicao: #3f7a08;
+          --syntax-loops: #7a6108;
+          --syntax-lista: #1441b5;
+          --syntax-logico: #c4005e;
+          --syntax-entrada: #1441b5;
+          --syntax-exibicao: #1441b5;
+          --syntax-tempo: #1441b5;
+          --syntax-condicionais: #b84300;
+          --syntax-contas: #d00000;
+          --syntax-string: #c22f00;
+          --syntax-comentario: #127012;
+          --syntax-pare: #d00000;
+        --muted: #234a6e;
+        --link: #0d4fae;
+        --panel: rgb(255 255 255 / 62%);
+        --border: rgb(255 255 255 / 85%);
+        --shadow: 0 8px 28px rgb(6 50 100 / 28%), inset 0 1px 0 rgb(255 255 255 / 85%);
+        --editor: linear-gradient(180deg, rgb(255 255 255 / 92%), rgb(232 245 255 / 88%));
+        --sky:
+          radial-gradient(circle at 12% 22%, rgb(255 255 255 / 55%) 0 2.2vmin, transparent 2.4vmin),
+          radial-gradient(circle at 86% 38%, rgb(255 255 255 / 55%) 0 1.2vmin, transparent 1.4vmin),
+          radial-gradient(circle at 70% 12%, rgb(255 255 255 / 45%) 0 1vmin, transparent 1.2vmin),
+          radial-gradient(90vmax 26vmax at 22% 118%, #9be86a 0 70%, transparent 71%),
+          radial-gradient(110vmax 24vmax at 82% 124%, #55c93b 0 70%, transparent 71%),
+          linear-gradient(180deg, #2f9fe8 0%, #7fd1f7 42%, #d6f4ff 72%, #eefcff 100%);
+        color-scheme: light;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --ink: #eaf6ff;
+          --sky-color: #082f5c;
+          --syntax-numerico: #99ffcc;
+          --syntax-atribuicao: #aaff80;
+          --syntax-loops: #ffcc88;
+          --syntax-lista: #80d4ff;
+          --syntax-logico: #eb99ff;
+          --syntax-entrada: #eb99ff;
+          --syntax-exibicao: #00e68a;
+          --syntax-tempo: #80d4ff;
+          --syntax-condicionais: #ffcc88;
+          --syntax-contas: #eb99ff;
+          --syntax-string: #ffff68;
+          --syntax-comentario: #cfcfcf;
+          --syntax-pare: #fda0a0;
+          --muted: #b9daf2;
+          --link: #8fd0ff;
+          --panel: rgb(8 32 66 / 66%);
+          --border: rgb(150 225 255 / 35%);
+          --shadow: 0 8px 28px rgb(0 0 0 / 45%), inset 0 1px 0 rgb(170 235 255 / 28%);
+          --editor: linear-gradient(180deg, rgb(14 44 84 / 92%), rgb(8 30 60 / 92%));
+          --sky:
+            radial-gradient(70vmax 22vmax at 40% 30%, rgb(90 255 200 / 26%), transparent 70%),
+            radial-gradient(circle at 12% 12%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 34% 22%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 62% 8%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(circle at 88% 18%, #ffffff 0 1px, transparent 2px),
+            radial-gradient(90vmax 26vmax at 22% 118%, #0b6e5c 0 70%, transparent 71%),
+            radial-gradient(110vmax 24vmax at 82% 124%, #074c44 0 70%, transparent 71%),
+            linear-gradient(180deg, #04142f 0%, #082f5c 48%, #0a5a6a 82%, #0f8a6d 100%);
+          color-scheme: dark;
+        }
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--sky-color);
+        color: var(--ink);
+        font-family: system-ui, sans-serif;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* A layer of its own, because phones ignore a fixed background: the hills stay at the bottom of the screen. */
+      body::before {
+        position: fixed;
+        z-index: -1;
+        inset: 0;
+        background: var(--sky);
+        content: '';
+      }
+
+      main {
+        max-width: 780px;
+        margin: 0 auto;
+        padding: 20px 16px 48px;
+      }
+
+      .glass {
+        backdrop-filter: blur(14px) saturate(150%);
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      header {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 10px 12px 10px 16px;
+        border-radius: 999px;
+      }
+
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        color: inherit;
+        font-weight: 700;
+        font-size: 1.25rem;
+        text-decoration: none;
+      }
+
+      .brand img {
+        border-radius: 50%;
+        box-shadow: 0 2px 8px rgb(6 50 100 / 30%);
+      }
+
+      .open {
+        display: inline-block;
+        padding: 9px 20px;
+        border: 1px solid #3fa52a;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #e4ffd0 0%, #a8f07a 48%, #6fdc45 52%, #b4f58c 100%);
+        box-shadow:
+          0 2px 5px rgb(6 50 100 / 28%),
+          inset 0 1px 0 rgb(255 255 255 / 95%);
+        color: #07330b;
+        font-weight: 700;
+        text-decoration: none;
+        transition:
+          filter 120ms ease,
+          transform 120ms ease;
+      }
+
+      .open:hover {
+        filter: brightness(1.05) saturate(1.2);
+        transform: translateY(-1px);
+      }
+
+      .hero {
+        margin-top: 20px;
+        padding: 8px 24px 20px;
+      }
+
+      h1 {
+        margin: 16px 0 8px;
+        font-size: 2.1rem;
+        line-height: 1.2;
+      }
+
+      .lead {
+        margin: 0;
+        color: var(--muted);
+        font-size: 1.1rem;
+      }
+
+      section {
+        margin-top: 20px;
+        padding: 4px 24px 18px;
+      }
+
+      h2 {
+        margin: 20px 0 12px;
+        font-size: 1.3rem;
+      }
+
+      pre {
+        overflow-x: auto;
+        margin: 0;
+        padding: 16px;
+        border-radius: 12px;
+        font-size: 0.95rem;
+      }
+
+      .editor {
+        background: var(--editor);
+        border: 1px solid var(--border);
+        box-shadow: inset 0 1px 3px rgb(6 50 100 / 18%);
+      }
+
+      .syntax-numerico { color: var(--syntax-numerico); }
+      .syntax-atribuicao { color: var(--syntax-atribuicao); }
+      .syntax-loops { color: var(--syntax-loops); }
+      .syntax-lista { color: var(--syntax-lista); }
+      .syntax-logico { color: var(--syntax-logico); }
+      .syntax-entrada { color: var(--syntax-entrada); }
+      .syntax-exibicao { color: var(--syntax-exibicao); }
+      .syntax-tempo { color: var(--syntax-tempo); }
+      .syntax-condicionais { color: var(--syntax-condicionais); }
+      .syntax-contas { color: var(--syntax-contas); }
+      .syntax-string { color: var(--syntax-string); }
+      .syntax-comentario { color: var(--syntax-comentario); }
+      .syntax-pare { color: var(--syntax-pare); }
+
+      .terminal {
+        background: linear-gradient(180deg, #0c2340 0%, #050f20 100%);
+        border: 1px solid var(--border);
+        box-shadow: var(--shadow);
+        color: #dff4ff;
+      }
+
+      .label {
+        margin: 16px 0 6px;
+        color: var(--muted);
+        font-size: 0.9rem;
+      }
+
+      ol {
+        columns: 2;
+        column-gap: 32px;
+      }
+
+      @media (max-width: 520px) {
+        ol {
+          columns: 1;
+        }
+
+        .hero,
+        section {
+          padding-right: 16px;
+          padding-left: 16px;
+        }
+      }
+
+      dt {
+        margin-top: 16px;
+        font-weight: 700;
+      }
+
+      dd {
+        margin: 4px 0 0;
+        color: var(--muted);
+      }
+
+      a {
+        color: var(--link);
+      }
+
+      footer {
+        margin-top: 28px;
+        padding: 12px 16px;
+        border-radius: 999px;
+        font-size: 0.95rem;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="glass">
+        <a class="brand" href="../"><img src="../icone.png" alt="" width="40" height="40" />Safira</a>
+        <a class="open" href="../">Open the IDE</a>
+      </header>
+
+      <div class="hero glass">
+        <h1>About Safira</h1>
+        <p class="lead">Safira is a programming language in plain words, made for people who have never programmed. It works in English, Portuguese, Spanish, Chinese and Japanese, and you can even mix them in the same program. It runs right in the browser, on a computer or on a phone: nothing to install, no account and no ads.</p>
+      </div>
+
+      <section class="glass" aria-labelledby="who">
+        <h2 id="who">Who it is for</h2>
+        <ul>
+          <li>Anyone writing a first line of code, at any age.</li>
+          <li>Teachers who want a first class on logic without installing anything.</li>
+          <li>People who do not read English: Safira also speaks Portuguese, Spanish, Chinese and Japanese.</li>
+        </ul>
+      </section>
+
+      <section class="glass" aria-labelledby="example">
+        <h2 id="example">A short program</h2>
+        <p>Many ways to show a text, the same line, two languages mixed, a loop and a condition:</p>
+        <pre class="editor"><code><span class="syntax-comentario"># Many ways to say the same thing, with color.</span>
+name <span class="syntax-condicionais">receives</span> <span class="syntax-string">&quot;Ana&quot;</span>
+age <span class="syntax-atribuicao">is worth</span> <span class="syntax-numerico">12</span>
+<span class="syntax-exibicao">show</span> <span class="syntax-string">&quot;Hello, &quot;</span> <span class="syntax-contas">+</span> name <span class="syntax-contas">+</span> <span class="syntax-string">&quot;!&quot;</span> <span class="syntax-condicionais">in color</span> blue
+<span class="syntax-exibicao">display on the screen</span> <span class="syntax-string">&quot;You are &quot;</span> <span class="syntax-contas">+</span> age <span class="syntax-contas">+</span> <span class="syntax-string">&quot; years old.&quot;</span>
+<span class="syntax-exibicao">write on the screen</span> <span class="syntax-string">&quot;All of these show a text.&quot;</span> <span class="syntax-condicionais">in color</span> green
+
+<span class="syntax-comentario"># On the same line, and even in Portuguese.</span>
+<span class="syntax-exibicao">show on this line</span> <span class="syntax-string">&quot;Safira &quot;</span>
+<span class="syntax-exibicao">print</span> <span class="syntax-string">&quot;speaks &quot;</span>
+<span class="syntax-exibicao">mostre</span> <span class="syntax-string">&quot;Portuguese too.&quot;</span>
+
+<span class="syntax-condicionais">repeat</span> <span class="syntax-numerico">3</span> <span class="syntax-condicionais">times</span> {
+    <span class="syntax-exibicao">show on this line</span> <span class="syntax-string">&quot;⭐&quot;</span> <span class="syntax-condicionais">in color</span> yellow
+}
+<span class="syntax-exibicao">show</span> <span class="syntax-string">&quot;&quot;</span>
+
+<span class="syntax-condicionais">if</span> age <span class="syntax-logico">is greater than or equal to</span> <span class="syntax-numerico">10</span> <span class="syntax-condicionais">then</span> {
+    <span class="syntax-exibicao">show</span> <span class="syntax-string">&quot;You can code already! 🎉&quot;</span> <span class="syntax-condicionais">in color</span> pink
+} <span class="syntax-condicionais">else</span> {
+    <span class="syntax-exibicao">show</span> <span class="syntax-string">&quot;You can too, with help! 🎉&quot;</span>
+}</code></pre>
+        <p class="label">What it shows</p>
+        <pre class="terminal"><samp><span style="color: #4da3ff">Hello, Ana!</span>
+You are 12 years old.
+<span style="color: #35d07f">All of these show a text.</span>
+Safira speaks Portuguese too.
+<span style="color: #ffe14d">⭐</span><span style="color: #ffe14d">⭐</span><span style="color: #ffe14d">⭐</span>
+<span style="color: #ff7ac6">You can code already! 🎉</span></samp></pre>
+      </section>
+
+      <section class="glass" aria-labelledby="lessons">
+        <h2 id="lessons">The 14 lessons</h2>
+        <p>Open a project and choose Lesson mode in the Help menu. Each lesson shows a program to run and then a challenge, which Safira checks by itself.</p>
+        <ol>
+          <li>Talk to me</li>
+          <li>The math</li>
+          <li>Your city</li>
+          <li>Double it</li>
+          <li>First and last name</li>
+          <li>Count</li>
+          <li>Countdown</li>
+          <li>Traffic light</li>
+          <li>Blinking tree</li>
+          <li>Guess</li>
+          <li>Shout</li>
+          <li>Shopping list</li>
+          <li>Diary</li>
+          <li>Color and sound</li>
+        </ol>
+      </section>
+
+      <section class="glass" aria-labelledby="questions">
+        <h2 id="questions">Questions</h2>
+        <dl>
+          <dt>Is it free?</dt>
+          <dd>Yes. Safira is open source, under the MIT license.</dd>
+          <dt>Are there ads?</dt>
+          <dd>No. There are no ads and nothing tracks what you do.</dd>
+          <dt>Can I change Safira or make my own version?</dt>
+          <dd>Yes. The code is on GitHub under the MIT license: you can copy it, change it and publish your own version, as long as you keep the license notice.</dd>
+          <dt>Do I need to install anything or create an account?</dt>
+          <dd>No. Open the site in a current browser. There are no accounts.</dd>
+          <dt>Does it work on a phone?</dt>
+          <dd>Yes. On a phone the IDE splits into Code, Output and Variables panels.</dd>
+          <dt>Does my code go to a server?</dt>
+          <dd>No. Programs run in the browser and projects stay in this browser. Export a project as a .zip to keep a copy or move it to another device.</dd>
+          <dt>Can I mix languages in the same program?</dt>
+          <dd>Yes. Every language is active all the time, even on the same line.</dd>
+          <dt>Can I make a game?</dt>
+          <dd>Yes. Programs can read the keyboard. Open Dinosaur or Mini RPG in the Examples menu to see how.</dd>
+        </dl>
+      </section>
+
+      <section class="glass" aria-labelledby="history">
+        <h2 id="history">History</h2>
+        <p>Safira was born in August 2019, early in the career of Gabriel Gregorio, with one goal: letting people who had never programmed write their first program with the words they already use every day. The first version was a language and an IDE written in Python, installed on the computer, in Portuguese, English and Spanish.</p>
+        <p>Version 0.38, from May 2021, was the last one in Python. In 2026 Safira was rewritten from scratch for the web, in TypeScript: version 1.0.0 took the IDE to the browser and to phones, added Chinese and Japanese, projects with folders, breakpoints, a variables inspector and the lessons with the cat. Now the first line of code is one link away.</p>
+        <p>Before the Python code left the project, the output of its programs was recorded, and that recording became a test that still runs: scripts written for the Python version run the same on the web.</p>
+      </section>
+
+      <section class="glass" aria-labelledby="contribute">
+        <h2 id="contribute">Help build Safira</h2>
+        <p>Safira is made in the open, on GitHub. Anyone can help: with an idea, a bug report, a translation fix or code.</p>
+        <ul>
+          <li><a href="https://github.com/gabrielogregorio/safira/issues/new?template=feature_request.yml">Suggest an idea</a></li>
+          <li><a href="https://github.com/gabrielogregorio/safira/issues/new?template=bug_report.yml">Report a bug</a></li>
+          <li><a href="https://github.com/gabrielogregorio/safira/blob/main/CONTRIBUTING.md">Contribute code: how to start</a></li>
+        </ul>
+      </section>
+
+      <section class="glass" aria-labelledby="links">
+        <h2 id="links">Learn more</h2>
+        <ul>
+          <li><a href="https://github.com/gabrielogregorio/safira/wiki">Wiki: guide, commands and ready examples</a></li>
+          <li><a href="https://github.com/gabrielogregorio/safira">Source code on GitHub</a></li>
+          <li><a href="https://github.com/gabrielogregorio/safira/blob/main/CHANGELOG.md">What changed in each version</a></li>
+        </ul>
+      </section>
+
+      <footer class="glass">
+        <nav aria-label="Languages"><a href="../about/" hreflang="en" aria-current="page">English</a> · <a href="../pt-br/about/" hreflang="pt-BR">Português (Brasil)</a> · <a href="../es/about/" hreflang="es">Español</a> · <a href="../zh-cn/about/" hreflang="zh-CN">简体中文</a> · <a href="../ja/about/" hreflang="ja">日本語</a></nav>
+      </footer>
+    </main>
+  </body>
+</html>

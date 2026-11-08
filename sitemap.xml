@@ -40,4 +40,44 @@
     <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/" />
     <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/" />
   </url>
+  <url>
+    <loc>https://gabrielogregorio.github.io/safira/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+  </url>
+  <url>
+    <loc>https://gabrielogregorio.github.io/safira/pt-br/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+  </url>
+  <url>
+    <loc>https://gabrielogregorio.github.io/safira/es/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+  </url>
+  <url>
+    <loc>https://gabrielogregorio.github.io/safira/zh-cn/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+  </url>
+  <url>
+    <loc>https://gabrielogregorio.github.io/safira/ja/about/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/about/" />
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://gabrielogregorio.github.io/safira/pt-br/about/" />
+    <xhtml:link rel="alternate" hreflang="es" href="https://gabrielogregorio.github.io/safira/es/about/" />
+    <xhtml:link rel="alternate" hreflang="zh-CN" href="https://gabrielogregorio.github.io/safira/zh-cn/about/" />
+    <xhtml:link rel="alternate" hreflang="ja" href="https://gabrielogregorio.github.io/safira/ja/about/" />
+  </url>
 </urlset>

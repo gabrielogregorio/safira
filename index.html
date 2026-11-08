@@ -5,8 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description" content="Learn to code from zero with Safira: a free programming language in plain words, in the browser and on the phone, with no install, no account and 14 short lessons." />
     <link rel="icon" type="image/png" href="./icone.png" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
     <title>Safira: a programming language in plain words for beginners</title>
-    <style>html.snap-return{background:#000}.seo-intro{color:#12395c;text-align:center;max-width:640px;margin:15vh auto 0;padding:0 16px;font-family:system-ui,sans-serif;line-height:1.5}.seo-intro h1{font-size:1.6rem}.seo-intro a{color:inherit}</style>
+    <style>html{background:#7fd1f7 linear-gradient(#2f9fe8 0%,#7fd1f7 42%,#d6f4ff 72%,#eefcff 100%) fixed;min-height:100%}html[data-theme=dark]{background:#082f5c linear-gradient(#04142f 0%,#082f5c 48%,#0a5a6a 82%,#0f8a6d 100%) fixed}html[data-theme=simple]{background:#087f86 linear-gradient(#05505c 0%,#087f86 50%,#16b39a 86%,#5fdc9f 100%) fixed}html[data-theme=dark] .seo-intro,html[data-theme=simple] .seo-intro{color:#eaf6ff}html.snap-return{background:#000}.seo-intro{color:#12395c;text-align:center;max-width:640px;margin:15vh auto 0;padding:0 16px;font-family:system-ui,sans-serif;line-height:1.5}.seo-intro h1{font-size:1.6rem}.seo-intro a{color:inherit}</style>
+    <script>
+      // The same key as src/settings/storageKey.ts and settings.ts: each preview keeps its own settings.
+      try {
+        var preview = /\/preview\/([^/]+)\//.exec(location.pathname);
+        var prefix = preview === null ? 'safira.' : 'safira-preview.' + preview[1] + '.';
+        var theme = JSON.parse(localStorage.getItem(prefix + 'settings.v1') || '{}').theme;
+
+        if (theme === 'light' || theme === 'dark' || theme === 'simple') {
+          document.documentElement.dataset.theme = theme;
+        }
+      } catch {
+        // Without storage the page starts in the light sky.
+      }
+    </script>
     <script>
       try {
         if (sessionStorage.getItem('safira.snap.return') !== null) {
@@ -21,7 +36,7 @@
         // Without storage the page only skips the fade in.
       }
     </script>
-    <script type="module" crossorigin src="./assets/index-kT9nysKr.js"></script>
+    <script type="module" crossorigin src="./assets/index-CfPOdA3M.js"></script>
     <link rel="stylesheet" crossorigin href="./assets/index-3kzCCKYh.css">
   <link rel="canonical" href="https://gabrielogregorio.github.io/safira/" />
     <link rel="alternate" hreflang="en" href="https://gabrielogregorio.github.io/safira/" />
@@ -47,6 +62,7 @@
       <h1>Safira: a programming language in plain words for beginners</h1>
       <p>Learn to code from zero with Safira: a free programming language in plain words, in the browser and on the phone, with no install, no account and 14 short lessons.</p>
       <pre><code>show &quot;Hello, world!&quot;</code></pre>
+      <p><a href="https://gabrielogregorio.github.io/safira/about/">About Safira</a></p>
       <nav><a href="https://gabrielogregorio.github.io/safira/" hreflang="en">English</a> · <a href="https://gabrielogregorio.github.io/safira/pt-br/" hreflang="pt-BR">Português (Brasil)</a> · <a href="https://gabrielogregorio.github.io/safira/es/" hreflang="es">Español</a> · <a href="https://gabrielogregorio.github.io/safira/zh-cn/" hreflang="zh-CN">简体中文</a> · <a href="https://gabrielogregorio.github.io/safira/ja/" hreflang="ja">日本語</a></nav>
     </main></div>
   </body>
