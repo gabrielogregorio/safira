@@ -17,6 +17,10 @@ Fully compatible with 1.3.0: scripts of every earlier version keep running, and 
 - Opening the IDE no longer brings the cat back by itself: lesson mode starts only from Help and lasts while the IDE is open, keeping the place and progress for the next time.
 - New logo: the dot and the arrow of Safira inside a glossy Frutiger Aero orb, used as the tab icon, the phone home screen icon and on the about pages. Its source is `docs/logo.svg`.
 
+### Security
+
+- The development tools no longer install the minimatch (GHSA-g3hv-75wg-m249) and glob (GHSA-3g3m-2fjr-6pw4) versions with known flaws. Neither reaches the site.
+
 ## 1.3.0
 
 Fully compatible with 1.2.0: scripts of every earlier version keep running, and the language version stays 1.1.
