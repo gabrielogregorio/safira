@@ -1,5 +1,22 @@
 # Changelog
 
+## 1.4.0
+
+Fully compatible with 1.3.0: scripts of every earlier version keep running, and the language version stays 1.1.
+
+### Added
+
+- Every language has an about page, at `/about/`, `/pt-br/about/`, `/es/about/`, `/zh-cn/about/` and `/ja/about/`, with what Safira is, who it is for, a short program showing the ways to print, colors, mixed languages and what it shows in color, with the code in the colors of the editor, the 14 lessons, common questions (no ads, nothing to install, free to change and fork), its history, how to suggest ideas or help build it on GitHub, and links to the wiki and the code. Each page also names the other languages. The page has the Frutiger Aero look of the app, and the home screen links to it.
+
+### Fixed
+
+- A reload shows the sky of the saved theme right away, instead of a white screen while the app loads.
+
+### Changed
+
+- Opening the IDE no longer brings the cat back by itself: lesson mode starts only from Help and lasts while the IDE is open, keeping the place and progress for the next time.
+- New logo: the dot and the arrow of Safira inside a glossy Frutiger Aero orb, used as the tab icon, the phone home screen icon and on the about pages. Its source is `docs/logo.svg`.
+
 ## 1.3.0
 
 Fully compatible with 1.2.0: scripts of every earlier version keep running, and the language version stays 1.1.

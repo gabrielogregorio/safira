@@ -1,5 +1,5 @@
-import commands from './commands.json';
-import { removeAccents } from './tokenizer';
+import commands from './commands.json' with { type: 'json' };
+import { removeAccents } from './tokenizer.ts';
 
 export type CommandKey = keyof typeof commands;
 

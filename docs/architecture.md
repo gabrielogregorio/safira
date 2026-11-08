@@ -59,7 +59,7 @@ A new command goes in `scenarios.ts` and in all five dictionaries. It runs with 
 
 ## Lessons
 
-The course is 14 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step.
+The course is 14 very short lessons, each with a program to run and then a challenge, started from Help. After the last one the cat leaves and `settings.catLeft` removes lesson mode for good; clearing the browser is the only reset. A lesson is one Markdown file, read by `parseLesson`. The `# title` names it, and each `## section` is a step with one `safira` fence, whose comments carry the explanation. A step with `solution` and `check` fences is a challenge. Lesson mode shows it step by step. The mode lasts while the IDE is open: leaving the IDE or reloading ends it, so the cat only appears when someone turns it on in Help, and the place and progress wait for the next time.
 
 ```json
 { "uses": ["repeat|while"], "exact": false, "hint": "Shown after a failure", "cases": [{ "inputs": ["4"], "shows": ["8"], "hides": ["9"] }] }
@@ -100,6 +100,8 @@ An empty folder is a `.keep` file in `Project.files`. Screens hide it with `visi
 The build turns `index.html` into one page per language: `/` in English and `/pt-br/`, `/es/`, `/zh-cn/` and `/ja/` (`src/seo/seoPlugin.ts`). Each page carries, in its language, the title, the description, `hreflang` links to the others, a canonical address, Open Graph tags with its preview image (`public/og/<language>.jpg`) and a short text inside `#root` that the app replaces when it starts. Search engines and chat apps read that HTML without running the app. The build also writes `sitemap.xml`.
 
 The texts live in `src/seo/seoPages.ts`, and every address points to `https://gabrielogregorio.github.io/safira/`, so previews never compete with the site. The folder decides the language, and only `?lang=` wins over it; at the root the saved language applies. Choosing a language in the app moves the address to the folder of that language and keeps the hash, so the address and the language never disagree. All folders share the same browser storage.
+
+Each language also gets an about page at `about/` inside its folder (`src/seo/aboutPages.ts`): plain HTML with no app, with what Safira is, a short program and what it prints, the lesson titles read from `src/content/<language>/lessons`, common questions and links to the wiki and the code. A test runs each example, so the output on the page is what Safira really prints. The GitHub wiki is not indexed by search engines, so what should be found lives on these pages. The about pages go in the sitemap with their own `hreflang` links, and the home screen links to the one of its language.
 
 `robots.txt` only counts at the root of a domain, which belongs to another repository on GitHub Pages, so the sitemap goes to Google through Search Console.
 

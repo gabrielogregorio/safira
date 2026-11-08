@@ -11,6 +11,7 @@ interface SeoPage {
   description: string;
   example: string;
   label: string;
+  about: string;
 }
 
 // Each page is read before the app runs: by a search engine, or by a chat app building a link preview.
@@ -24,6 +25,7 @@ export const SEO_PAGES: Record<Locale, SeoPage> = {
       'Learn to code from zero with Safira: a free programming language in plain words, in the browser and on the phone, with no install, no account and 14 short lessons.',
     example: 'show "Hello, world!"',
     label: 'English',
+    about: 'About Safira',
   },
   'pt-br': {
     folder: 'pt-br/',
@@ -34,6 +36,7 @@ export const SEO_PAGES: Record<Locale, SeoPage> = {
       'Aprenda lógica de programação do zero com a Safira: linguagem em português, grátis, no navegador e no celular, sem instalar, sem conta e com 14 aulas curtas.',
     example: 'mostre "Olá, mundo!"',
     label: 'Português (Brasil)',
+    about: 'Sobre a Safira',
   },
   es: {
     folder: 'es/',
@@ -44,6 +47,7 @@ export const SEO_PAGES: Record<Locale, SeoPage> = {
       'Aprende a programar desde cero con Safira: un lenguaje en español, gratis, en el navegador y en el móvil, sin instalar nada, sin cuenta y con 14 lecciones cortas.',
     example: 'muestra "¡Hola, mundo!"',
     label: 'Español',
+    about: 'Sobre Safira',
   },
   'zh-cn': {
     folder: 'zh-cn/',
@@ -54,6 +58,7 @@ export const SEO_PAGES: Record<Locale, SeoPage> = {
       '用 Safira 从零开始学编程：免费的中文编程语言，直接在浏览器和手机上运行，无需安装，无需注册，附带 14 节简短课程。',
     example: '显示 "你好，世界！"',
     label: '简体中文',
+    about: '关于 Safira',
   },
   ja: {
     folder: 'ja/',
@@ -64,6 +69,7 @@ export const SEO_PAGES: Record<Locale, SeoPage> = {
       'Safira でゼロからプログラミングを学ぼう。日本語で書ける無料のプログラミング言語で、ブラウザやスマホでそのまま動き、インストールも登録も不要。14 の短いレッスン付き。',
     example: '表示 "こんにちは、世界！"',
     label: '日本語',
+    about: 'Safira について',
   },
 };
 
@@ -114,6 +120,7 @@ const introduction = (locale: Locale): string => {
       <h1>${escapeHtml(page.title)}</h1>
       <p>${escapeHtml(page.description)}</p>
       <pre><code>${escapeHtml(page.example)}</code></pre>
+      <p><a href="${pageUrl(locale)}about/">${escapeHtml(page.about)}</a></p>
       <nav>${languages}</nav>
     </main></div>`;
 };
@@ -134,7 +141,8 @@ export const pageHtml = (html: string, locale: Locale): string => {
     .replace('<div id="root"></div>', introduction(locale));
 };
 
-export const sitemapXml = (): string => {
+/** Each page of the app in every language, plus the other pages the build adds. */
+export const sitemapXml = (otherUrls: string[]): string => {
   const alternates = SEO_LOCALES.map(
     (locale) => `    <xhtml:link rel="alternate" hreflang="${SEO_PAGES[locale].htmlLang}" href="${pageUrl(locale)}" />`,
   ).join('\n');
@@ -142,7 +150,7 @@ export const sitemapXml = (): string => {
 
   return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
-${urls.join('\n')}
+${[...urls, ...otherUrls].join('\n')}
 </urlset>
 `;
 };

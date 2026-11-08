@@ -99,6 +99,14 @@ export const WikiIcon = () => (
   </svg>
 );
 
+export const AboutIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" strokeWidth="2.2" />
+    <path d="M12 11v6" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" />
+    <circle cx="12" cy="7.5" r="1.4" fill="currentColor" />
+  </svg>
+);
+
 export const MaximizeIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path

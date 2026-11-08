@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useTranslation } from '@/i18n/i18n';
+import { localePath, useLocale, useTranslation } from '@/i18n/i18n';
 import type { Project } from '@/projects/projectStore';
 import { routeToHash } from '@/routing/routes';
 import { ArchiveInput } from '@/ui/components/ArchiveInput';
 import { Modal } from '@/ui/components/Modal';
 import { NewProjectDialog } from '@/ui/components/NewProjectDialog';
-import { GitHubIcon, WikiIcon } from '@/ui/components/AeroIcons';
+import { AboutIcon, GitHubIcon, WikiIcon } from '@/ui/components/AeroIcons';
 import { AeroOrb } from '@/ui/components/AeroOrb';
 import type { ScreenPoint } from '@/ui/components/Aquarium';
 import { ProjectNameField } from '@/ui/components/ProjectNameField';
@@ -48,6 +48,7 @@ export const HomeScreen = ({
   settingsButton,
 }: HomeScreenProps) => {
   const t = useTranslation();
+  const locale = useLocale();
   const [deleting, setDeleting] = useState<Project | null>(null);
   const archiveInput = useRef<HTMLInputElement>(null);
   const [isDropping, setIsDropping] = useState(false);
@@ -182,6 +183,14 @@ export const HomeScreen = ({
       </section>
 
       <footer className="home-links">
+        <a
+          className="aero-button home-link"
+          data-sound="open"
+          href={`${localePath(window.location.pathname, locale)}about/`}
+          aria-label={t('About Safira')}
+          title={t('About Safira')}>
+          <AboutIcon />
+        </a>
         <a
           className="aero-button home-link"
           data-sound="linkGithub"

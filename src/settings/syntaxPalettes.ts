@@ -1,0 +1,51 @@
+import type { SyntaxCategory } from '../language/highlight.ts';
+import type { ThemeId } from './settings.ts';
+
+// In a file of its own, without the browser, so the build can paint the about pages with it too.
+export const SYNTAX_PALETTES: Record<ThemeId, Record<SyntaxCategory, string>> = {
+  light: {
+    numerico: '#0c7a7a',
+    atribuicao: '#3f7a08',
+    loops: '#7a6108',
+    lista: '#1441b5',
+    logico: '#c4005e',
+    entrada: '#1441b5',
+    exibicao: '#1441b5',
+    tempo: '#1441b5',
+    condicionais: '#b84300',
+    contas: '#d00000',
+    string: '#c22f00',
+    comentario: '#127012',
+    pare: '#d00000',
+  },
+  dark: {
+    numerico: '#99ffcc',
+    atribuicao: '#aaff80',
+    loops: '#ffcc88',
+    lista: '#80d4ff',
+    logico: '#eb99ff',
+    entrada: '#eb99ff',
+    exibicao: '#00e68a',
+    tempo: '#80d4ff',
+    condicionais: '#ffcc88',
+    contas: '#eb99ff',
+    string: '#ffff68',
+    comentario: '#cfcfcf',
+    pare: '#fda0a0',
+  },
+  simple: {
+    numerico: '#c48aff',
+    atribuicao: '#b8ff75',
+    loops: '#f94fff',
+    lista: '#91fdff',
+    logico: '#ff7d93',
+    entrada: '#ff7d93',
+    exibicao: '#78aeff',
+    tempo: '#91fdff',
+    condicionais: '#f94fff',
+    contas: '#ff7d93',
+    string: '#fff891',
+    comentario: '#8cbd7d',
+    pare: '#ff6b6b',
+  },
+};

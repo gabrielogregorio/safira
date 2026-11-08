@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><defs>
+    <linearGradient id="cyan" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7fe6ff"/><stop offset="0.55" stop-color="#00c8ff"/><stop offset="1" stop-color="#0098e0"/>
+    </linearGradient>
+    <filter id="glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feFlood flood-color="#00c8ff" flood-opacity="0.55"/><feComposite in2="b" operator="in" result="g"/>
+      <feMerge><feMergeNode in="g"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <radialGradient id="bg" cx="0.5" cy="0.32" r="0.72"><stop offset="0" stop-color="#1b4f8f"/><stop offset="0.65" stop-color="#0a2a58"/><stop offset="1" stop-color="#04142f"/></radialGradient>
+    <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.6"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <circle cx="256" cy="256" r="240" fill="url(#bg)"/>
+  <circle cx="256" cy="256" r="238" fill="none" stroke="#8fe4ff" stroke-opacity="0.5" stroke-width="3"/>
+  <g filter="url(#glow)">
+    <circle cx="176" cy="256" r="58" fill="url(#cyan)"/>
+    <path d="M250 136 L382 256 L250 376" fill="none" stroke="url(#cyan)" stroke-width="46" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <ellipse cx="256" cy="130" rx="170" ry="92" fill="url(#gloss)"/>
+</svg>
