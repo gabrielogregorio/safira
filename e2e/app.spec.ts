@@ -143,6 +143,8 @@ test('serves a sitemap and a preview image for every language', async ({ request
 
   expect(sitemap).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/</loc>');
   expect(sitemap).toContain('<loc>https://gabrielogregorio.github.io/safira/ja/about/</loc>');
+  // Google Search Console checks this file now and then: removing it loses the property.
+  expect(await (await request.get('/googlee43a5170c8476291.html')).text()).toContain('google-site-verification');
 
   for (const locale of ['en-us', 'pt-br', 'es', 'zh-cn', 'ja']) {
     expect((await request.get(`/og/${locale}.jpg`)).headers()['content-type']).toBe('image/jpeg');
