@@ -9,4 +9,8 @@ allowBuilds:
   esbuild: true
 
 # Security overrides. Keep the reason next to each one and drop it once the parent updates.
-overrides: {}
+overrides:
+  # GHSA-g3hv-75wg-m249: minimatch 7 to 11.0.0 grows glob patterns without limit. ESLint 10 and glob 13 still ask for 10.x.
+  'minimatch@>=7.0.0 <11.0.1': ^11.0.4
+  # GHSA-3g3m-2fjr-6pw4: glob 9 to 14.0.1 keeps walking the disk after its AbortSignal fires. Lighthouse still asks for 13.x.
+  'glob@>=9.0.0 <14.0.2': ^14.0.3
